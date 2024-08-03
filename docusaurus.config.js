@@ -19,7 +19,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'babylonlabs-io', // Usually your GitHub org/user name.
-  projectName: 'babylonlabs-io.github.io', // Usually your repo name.
+  projectName: 'babylonlabs.github.io', // Usually your repo name.
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
   // Even if you don't use internalization, you can use this field to set useful
