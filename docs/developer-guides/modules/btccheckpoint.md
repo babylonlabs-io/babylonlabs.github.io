@@ -53,9 +53,9 @@ in Babylon ledger.
 ### Submission Validation Rules
 
 Each submission is inserted into Babylon ledger by sending transaction which contains
-`MsgInsertBTCSpvProof` [msg](https://github.com/babylonchain/babylon/blob/dev/proto/babylon/btccheckpoint/tx.proto#L15).
+`MsgInsertBTCSpvProof` [msg](https://github.com/babylonlabs-io/babylon/blob/dev/proto/babylon/btccheckpoint/tx.proto#L15).
 This message must contain all necessary data required to validate that submissions is part of
-Bitcoin canonical chain. Message must contain two [BTCSpvProof](https://github.com/babylonchain/babylon/blob/dev/proto/babylon/btccheckpoint/btccheckpoint.proto#L23) objects.
+Bitcoin canonical chain. Message must contain two [BTCSpvProof](https://github.com/babylonlabs-io/babylon/blob/dev/proto/babylon/btccheckpoint/btccheckpoint.proto#L23) objects.
 Each `BTCSpvProof` contains:
 - Bitcoin transaction
 - Index of Bitcoin transaction in Bitcoin block

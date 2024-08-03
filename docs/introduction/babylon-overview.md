@@ -13,7 +13,7 @@ To this end, Babylon utilizes the three primary facets of Bitcoin: bitcoin the a
 Through inventing pioneering protocols, Babylon envisions a more secure and Bitcoin-centric decentralized world.
 
 <!-- Two protocols in Babylon. BTC timestamping is a building block for Bitcoin staking -->
-To realize the vision, we build [Babylon](https://github.com/babylonchain/babylon), a suite of Bitcoin security-sharing protocols.
+To realize the vision, we build [Babylon](https://github.com/babylonlabs-io/babylon), a suite of Bitcoin security-sharing protocols.
 Currently, it includes two protocols:
 
 - **Bitcoin timestamping:** This protocol sends succinct and verifiable timestamps of any data (such as PoS blockchains) to Bitcoin; and

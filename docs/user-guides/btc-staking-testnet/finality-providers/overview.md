@@ -50,11 +50,11 @@ the [official Go installation guide](https://golang.org/doc/install).
 To get started, clone the repository to your local machine from Github:
 
 ```bash
-git clone https://github.com/babylonchain/finality-provider.git
+git clone https://github.com/babylonlabs-io/finality-provider.git
 ```
 
 You can choose a specific version from
-the [official releases page](https://github.com/babylonchain/finality-provider/releases)
+the [official releases page](https://github.com/babylonlabs-io/finality-provider/releases)
 
 ```bash
 cd finality-provider # cd into the project directory
@@ -93,7 +93,7 @@ an operator must ensure a working connection with a Babylon full node.
 It is highly recommended that operators run their own node to avoid
 trusting third parties. Instructions on how to set up a full Babylon node
 can be found in 
-[the Babylon documentation](https://docs.babylonchain.io/docs/user-guides/btc-staking-testnet/setup-node).
+[the Babylon documentation](https://docs.babylonlabs.io/docs/user-guides/btc-staking-testnet/setup-node).
 
 ### 3.2. Setting up the EOTS Manager
 
@@ -118,5 +118,5 @@ A finality provider receives BTC delegations through delegators
 interacting with Babylon and choosing it as the recipient of their delegations.
 To perform a self-delegation,
 the operator can either visit the staking web app we provide,
-or run the Babylon [BTC Staker program](https://github.com/babylonchain/btc-staker) once.
+or run the Babylon [BTC Staker program](https://github.com/babylonlabs-io/btc-staker) once.
 The BTC staker connects to a Bitcoin wallet and Babylon to perform delegations.
