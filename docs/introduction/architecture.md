@@ -88,7 +88,7 @@ voting power is cast on it.
 The voting power of each finality provider is based on
 its Bitcoin stake retrieved from the BTC Staking module.
 Finality votes are performed using
-[Extractable-One-Time-Signatures (EOTS)](https://docs.babylonchain.io/assets/files/btc_staking_litepaper-32bfea0c243773f0bfac63e148387aef.pdf)
+[Extractable-One-Time-Signatures (EOTS)](https://docs.babylonlabs.io/assets/files/btc_staking_litepaper-32bfea0c243773f0bfac63e148387aef.pdf)
 and verified using
 the finality providers' committed public randomness.
 
@@ -138,7 +138,7 @@ A standalone program that monitors:
 - The timely inclusion of the Bitcoin checkpoints
   information in the Babylon ledger.
 
-### [BTC Staking Monitor](https://github.com/babylonchain/vigilante)
+### [BTC Staking Monitor](https://github.com/babylonlabs-io/vigilante)
 
 A standalone program that monitors:
 
@@ -170,27 +170,27 @@ Later, they can also on-demand unlock or
 withdraw their funds when their stake expires.
 The following set of standalone programs
 has been developed to enable these functionalities:
-- [BTC Staker Daemon](https://github.com/babylonchain/btc-staker):
+- [BTC Staker Daemon](https://github.com/babylonlabs-io/btc-staker):
   Daemon program connecting to a Bitcoin wallet and Babylon.
-- [BTC Staker Dashboard](https://github.com/babylonchain/btc-staking-dashboard):
+- [BTC Staker Dashboard](https://github.com/babylonlabs-io/btc-staking-dashboard):
   Web application connecting to a Bitcoin wallet extension and the Babylon API.
   Should only be used for testing purposes.
 - Wallet Integrations (TBD)
 
-### [Finality Provider](https://github.com/babylonchain/finality-provider)
+### [Finality Provider](https://github.com/babylonlabs-io/finality-provider)
 
 A standalone program that allows for the registration and
 maintenance of a finality provider.
 It monitors for a finality provider's inclusion in the active set, commits
-[Extractable One Time Signature (EOTS)](https://docs.babylonchain.io/assets/files/btc_staking_litepaper-32bfea0c243773f0bfac63e148387aef.pdf)
+[Extractable One Time Signature (EOTS)](https://docs.babylonlabs.io/assets/files/btc_staking_litepaper-32bfea0c243773f0bfac63e148387aef.pdf)
 public randomness, and
 submits finality votes for blocks.
 Finality votes are created through a connection to a standalone
-[EOTS manager daemon](https://github.com/babylonchain/finality-provider)
+[EOTS manager daemon](https://github.com/babylonlabs-io/finality-provider)
 responsible for securely maintaining the
 finality provider's private keys.
 
-### [Covenant Emulator](https://github.com/babylonchain/covenant-emulator)
+### [Covenant Emulator](https://github.com/babylonlabs-io/covenant-emulator)
 
 A standalone program utilised by the covenant emulation committee members.
 It emulates [covenant](https://covenants.info) functionality by monitoring
@@ -214,14 +214,14 @@ There are different IBC relayer implementations that can achieve
 this function. Most notably:
 - [Cosmos Relayer](https://github.com/cosmos/relayer):
   A fully functional relayer written in Go.
-- [Babylon Relayer](https://github.com/babylonchain/babylon-relayer/):
+- [Babylon Relayer](https://github.com/babylonlabs-io/babylon-relayer/):
   A wrapper of the Cosmos Relayer that can maintain a one-way IBC connection.
   It is recommended to be used when the Consumer Zone does not deploy the
   Babylon smart contract.
 - [Hermes Relayer](https://github.com/informalsystems/hermes):
   A fully functional relayer written in Rust.
 
-### [Babylon Contract](https://github.com/babylonchain/babylon-contract)
+### [Babylon Contract](https://github.com/babylonlabs-io/babylon-contract)
 
 A [CosmWasm](https://cosmwasm.com/) smart contract intended for
 deployment in a Consumer Zone.

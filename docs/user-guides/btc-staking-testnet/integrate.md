@@ -17,7 +17,7 @@ In the future, integrating Babylon will allows Cosmos zones to raise alarms upon
 dishonest majority attacks, and reduce the unbonding time.
 
 In order to integrate a Cosmos zone to Babylon,
-the first option would be sending an email to [the Babylon team](mailto:admin@babylonchain.io),
+the first option would be sending an email to [the Babylon team](mailto:admin@babylonlabs.io),
 then the Babylon team will deploy a relayer for your blockchain.
 Alternatively, anyone can integrate any Cosmos zone to Babylon
 by running an IBC relayer specialized for Babylon.
@@ -59,7 +59,7 @@ Running a Babylon IBC relayer consists of the following steps:
 
 ### Install the Babylon Relayer
 
-The Babylon relayer is located at [GitHub](https://github.com/babylonchain/babylon-relayer).
+The Babylon relayer is located at [GitHub](https://github.com/babylonlabs-io/babylon-relayer).
 Please follow the documentation for installing it.
 In summary, after cloning the repository,
 navigate to the folder in which you cloned it,
@@ -117,7 +117,7 @@ chains:
             #            Note that this chain ID should be the same one you used for creating the keyring.
             chain-id: bbn-test-3
             # REPLACEME: The RPC endpoint of a node that runs on the Babylon network you want to connect to.
-            rpc-addr: https://rpc.testnet3.babylonchain.io:443
+            rpc-addr: https://rpc.testnet3.babylonlabs.io:443
             account-prefix: bbn
             # The backend of the keyring you're using. Recall that this should always be `test`.
             keyring-backend: test
@@ -202,7 +202,7 @@ where `$INTERVAL` is the interval for relaying a header (e.g., `10m` to denote 1
 After the above steps, the Cosmos zone has been integrated to Babylon.
 You can do the following things to check the status of the integration:
 - Check the Babylon node API
-  `http://lcd.testnet3.babylonchain.io/babylon/zoneconcierge/v1/chain_info/<your_chain_id>`
+  `http://lcd.testnet3.babylonlabs.io/babylon/zoneconcierge/v1/chain_info/<your_chain_id>`
   that shows the information of the Cosmos zone in the Babylon blockchain's view.
 - Check whether [BabylonScan](https://babylonscan.io) shows
   the information of the Cosmos zone or not.

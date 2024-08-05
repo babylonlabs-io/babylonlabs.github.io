@@ -41,7 +41,7 @@ You need to clone Babylon’s GitHub repository to install the `babylond` execut
 ```console
 sudo apt install git build-essential curl jq --yes
 ```
-2. Retrieve the Babylon source code either through the [releases page](https://github.com/babylonchain/babylon/releases) or by cloning the [source code](https://github.com/babylonchain/babylon).
+2. Retrieve the Babylon source code either through the [releases page](https://github.com/babylonlabs-io/babylon/releases) or by cloning the [source code](https://github.com/babylonlabs-io/babylon).
 3. Navigate to the directory that contains the Babylon source code. From there build and install the babylond executable
 ```console
 git checkout <version_to_install>

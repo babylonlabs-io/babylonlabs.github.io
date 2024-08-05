@@ -89,7 +89,7 @@ go run $VIGILANTE_PATH/cmd/main.go monitor \
 
 ### Reporter
 
-Initially, build a Docker image named `babylonchain/vigilante-reporter`
+Initially, build a Docker image named `babylonlabs-io/vigilante-reporter`
 ```shell
 cp sample-vigilante-docker.yml $VIGILANTE_PATH/vigilante.yml
 make reporter-build
@@ -103,29 +103,29 @@ docker run --rm \
          -v $TESTNET_PATH/bitcoin:/bitcoin \
          -v $BABYLON_NODE_PATH:/babylon \
          -v $VIGILANTE_PATH:/vigilante \
-         babylonchain/vigilante-reporter
+         babylonlabs-io/vigilante-reporter
 ```
 
 ### Submitter
 
-Follow the same steps as above, but with the `babylonchain/vigilante-submitter` Docker image.
+Follow the same steps as above, but with the `babylonlabs-io/vigilante-submitter` Docker image.
 ```shell
 docker run --rm \
          -v $TESTNET_PATH/bitcoin:/bitcoin \
          -v $BABYLON_NODE_PATH:/babylon \
          -v $VIGILANTE_PATH:/vigilante \
-         babylonchain/vigilante-submitter
+         babylonlabs-io/vigilante-submitter
 ```
 
 ### Monitor
 
-Follow the same steps as above, but with the `babylonchain/vigilante-monitor` Docker image.
+Follow the same steps as above, but with the `babylonlabs-io/vigilante-monitor` Docker image.
 ```shell
 docker run --rm \
          -v $TESTNET_PATH/bitcoin:/bitcoin \
          -v $BABYLON_NODE_PATH:/babylon \
          -v $VIGILANTE_PATH:/vigilante \
-         babylonchain/vigilante-monitor
+         babylonlabs-io/vigilante-monitor
 ```
 
 ### Buildx

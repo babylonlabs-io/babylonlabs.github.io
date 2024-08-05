@@ -278,11 +278,11 @@ sudo apt install build-essential
 To get started, clone the repository to your local machine from Github:
 
 ```bash
-git clone https://github.com/babylonchain/btc-staker.git
+git clone https://github.com/babylonlabs-io/btc-staker.git
 ```
 
 You can choose a specific version from
-the [official releases page](https://github.com/babylonchain/btc-staker/releases)
+the [official releases page](https://github.com/babylonlabs-io/btc-staker/releases)
 
 ```bash
 cd btc-staker # cd into the project directory
@@ -315,7 +315,7 @@ echo 'export PATH=$HOME/go/bin:$PATH' >> ~/.profile
 
 The `stakerd` daemon requires a keyring with loaded Babylon tokens to pay for the
 transactions. Follow this
-[guide](https://docs.babylonchain.io/docs/user-guides/btc-staking-testnet/getting-funds)
+[guide](https://docs.babylonlabs.io/docs/user-guides/btc-staking-testnet/getting-funds)
 to create a keyring and request funds.
 
 ## 4. BTC Staker Setup
@@ -362,8 +362,8 @@ In the following, we go through important parameters of the `stakerd.conf` file.
 5. To change the Babylon RPC/GRPC address, update the following:
 
     ```bash
-    RPCAddr = https://rpc.devnet.babylonchain.io:443 # rpc node address
-    GRPCAddr = https://grpc.devnet.babylonchain.io:443 # grpc node address
+    RPCAddr = https://rpc.devnet.babylonlabs.io:443 # rpc node address
+    GRPCAddr = https://grpc.devnet.babylonlabs.io:443 # grpc node address
     ```
    The above addresses are for Babylon devnet.
 6. If you encounter any gas-related errors while performing staking operations,
@@ -579,7 +579,7 @@ stakercli daemon stake \
 ```
 
 **Note**: You can self delegate i.e. stake to your own finality provider. Follow
-the [finality provider registration guide](https://github.com/babylonchain/finality-provider/blob/dev/docs/finality-provider.md#4-create-and-register-a-finality-provider)
+the [finality provider registration guide](https://github.com/babylonlabs-io/finality-provider/blob/dev/docs/finality-provider.md#4-create-and-register-a-finality-provider)
 to create and register a finality provider to Babylon. Once the finality provider is
 registered, you can use your finality provider BTC public key in
 the `--finality-providers-pks` flag of the `stake`

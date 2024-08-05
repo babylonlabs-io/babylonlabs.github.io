@@ -30,8 +30,8 @@ github.com/cosmos/cosmos-sdk/server.interceptConfigs(0xc000feb520, {0x2228f87, 0
         github.com/cosmos/cosmos-sdk@v0.46.6/server/util.go:204 +0x354
 github.com/cosmos/cosmos-sdk/server.InterceptConfigsPreRunHandler(0x0?, {0x2228f87, 0x2ae1}, {0x1ec6660, 0xc0014ed8c0}, 0x0?)
         github.com/cosmos/cosmos-sdk@v0.46.6/server/util.go:137 +0x305
-github.com/babylonchain/babylon/cmd/babylond/cmd.NewRootCmd.func1(0xc000fb0900, {0x1?, 0x2bbbeb0?, 0x1?})
-        github.com/babylonchain/babylon/cmd/babylond/cmd/root.go:79 +0x2ae
+github.com/babylonlabs-io/babylon/cmd/babylond/cmd.NewRootCmd.func1(0xc000fb0900, {0x1?, 0x2bbbeb0?, 0x1?})
+        github.com/babylonlabs-io/babylon/cmd/babylond/cmd/root.go:79 +0x2ae
 github.com/tendermint/tendermint/libs/cli.concatCobraCmdFuncs.func1(0xc000fb0900?, {0x3cc75e0, 0x0, 0x0})
         github.com/tendermint/tendermint@v0.34.24/libs/cli/setup.go:118 +0x62
 github.com/spf13/cobra.(*Command).execute(0xc000fb0900, {0x3cc75e0, 0x0, 0x0})
@@ -45,7 +45,7 @@ github.com/spf13/cobra.(*Command).ExecuteContext(...)
 github.com/cosmos/cosmos-sdk/server/cmd.Execute(0xdd3c638e3ea023cf?, {0x0, 0x0}, {0xc001133a00, 0x19})
         github.com/cosmos/cosmos-sdk@v0.46.6/server/cmd/execute.go:36 +0x20f
 main.main()
-        github.com/babylonchain/babylon/cmd/babylond/main.go:18 +0x35
+        github.com/babylonlabs-io/babylon/cmd/babylond/main.go:18 +0x35
 kakakepan@DESKTOP-58G3HHU:/mnt/c/Users/kakakepan/Documents/Babylond/babylon$ ./build/babylond tx checkpointing create-validator -p
 Error: unknown shorthand flag: 'p' in -p
 Usage:

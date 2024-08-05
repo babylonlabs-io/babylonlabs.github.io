@@ -10,7 +10,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Babylon Blockchain',
   tagline: 'Unlocking 21 Million Bitcoin to Secure the Decentralized Economy',
-  url: 'https://docs.babylonchain.io',
+  url: 'https://docs.babylonlabs.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -18,8 +18,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'babylonchain', // Usually your GitHub org/user name.
-  projectName: 'babylonchain.github.io', // Usually your repo name.
+  organizationName: 'babylonlabs-io', // Usually your GitHub org/user name.
+  projectName: 'babylonlabs.github.io', // Usually your repo name.
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
   // Even if you don't use internalization, you can use this field to set useful
@@ -107,17 +107,17 @@ const config = {
           },
           //{to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/babylonchain',
+            href: 'https://github.com/babylonlabs-io',
             label: 'GitHub',
             position: 'right',
           },
           {
-            href: 'https://babylonchain.io/about',
+            href: 'https://babylonlabs.io/about',
             label: 'About',
             position: 'right',
           },
           {
-            href: 'https://babylonchain.io/contact',
+            href: 'https://babylonlabs.io/contact',
             label: 'Contact',
             position: 'right',
           },
@@ -157,7 +157,7 @@ const config = {
             items: [
               {
                 label: 'Blog',
-                to: 'https://babylonchain.io/blog',
+                to: 'https://babylonlabs.io/blog',
               },
             ],
           },
