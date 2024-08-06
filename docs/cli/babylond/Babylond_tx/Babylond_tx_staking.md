@@ -6,8 +6,8 @@ hide_table_of_contents: true
 ---
 
 :::info
-Please use the wrapped messages in the [epoching](/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching) and 
-[checkpointing](/docs/cli/babylond/Babylond_tx/Babylond_tx_checkpointing) module to perform
+Please use the wrapped messages in the [epoching](../Babylond_tx//Babylond_tx_epoching.md) and 
+[checkpointing](../Babylond_tx/Babylond_tx_checkpointing.md) module to perform
 staking-related operations.
 
 In order to keep the validator set unchanged in the middle of epochs, the epoching
