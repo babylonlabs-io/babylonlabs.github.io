@@ -8,14 +8,12 @@ custom_edit_url: null
 
 # Frequently Asked Questions
 
-## Questions about Bitcoin Staking
+- [Questions about Bitcoin Staking](#questions-about-bitcoin-staking)
+  - [Will my bitcoins be bridged to other blockchains?](#will-my-bitcoins-be-bridged-to-other-blockchains)
+  - [As a bitcoin staker, do I have to run a validator by myself?](#as-a-bitcoin-staker-do-i-have-to-run-a-validator-by-myself)
+  - [When slashing happens, will all my staked bitcoins be burned?](#when-slashing-happens-will-all-my-staked-bitcoins-be-burned)
 
-- [Frequently Asked Questions](#frequently-asked-questions)
-  - [Questions about Bitcoin Staking](#questions-about-bitcoin-staking)
-    - [Will my bitcoins be bridged to other blockchains?](#will-my-bitcoins-be-bridged-to-other-blockchains)
-    - [As a bitcoin staker, do I have to run a validator by myself?](#as-a-bitcoin-staker-do-i-have-to-run-a-validator-by-myself)
-    - [When slashing happens, will all my staked bitcoins be burned?](#when-slashing-happens-will-all-my-staked-bitcoins-be-burned)
-  - [Questions about Bitcoin Timestamping](#questions-about-bitcoin-timestamping)
+## Questions about Bitcoin Staking
 
 ### Will my bitcoins be bridged to other blockchains?
 
