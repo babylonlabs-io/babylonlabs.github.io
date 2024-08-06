@@ -23,7 +23,7 @@ When the epoch that stores this header's metadata is finalized by Bitcoin, the h
 
 Babylon aims at providing Bitcoin security to other Cosmos zones.
 To this end, Babylon needs to checkpoint itself to Bitcoin, and checkpoint other Cosmos zones to itself.
-The {epoching, checkpointing, BTCCheckpoint, BTCLightclient} modules jointly provide the functionality of checkpointing Babylon to Bitcoin.
+The {"epoching, checkpointing, BTCCheckpoint, BTCLightclient"} modules jointly provide the functionality of checkpointing Babylon to Bitcoin.
 The zone concierge module and the IBC modules jointly provide the functionality of checkpointing Cosmos zones to Babylon.
 
 In order to checkpoint Cosmos zones to Babylon, Babylon needs to receive, verify headers of Cosmos zones.
@@ -35,14 +35,14 @@ Zone concierge will not checkpoint any header that does not have a quorum certif
 Specifically, the zone concierge module aims at providing the following guarantees
 
 - **Timestamping headers:** Babylon timestamps all Cosmos zones' headers with a valid quorum certificate from the IBC relayer, regardless whether they are on CZ canonical chains or not.
-- **Verifiability of timestamps:** For any CZ header, Babylon can provide a proof that the CZ header is checkpointed by {Babylon, BTC}, where the proof is verifiable assuming access to Babylon/BTC light clients.
+- **Verifiability of timestamps:** For any CZ header, Babylon can provide a proof that the CZ header is checkpointed by {"Babylon, BTC"}, where the proof is verifiable assuming access to Babylon/BTC light clients.
 
 under the following assumptions:
 
 - BTC is always secure with the k-deep confirmation rule
 - Babylon might have dishonest majority
 - Cosmos zones might have dishonest majority
-- There exists >=1 honest IBC relayer and >=1 vigilante {submitter, reporter}
+- There exists >=1 honest IBC relayer and >=1 vigilante {"submitter, reporter"}
 - The network is synchronous (i.e., messages are delivered within a known time bound)
 
 

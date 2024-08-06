@@ -1,9 +1,10 @@
+// @ts-check
+// `@type` JSDoc annotations allow editor autocompletion and type checking
+// (when paired with `@ts-check`).
+// There are various equivalent ways to declare your Docusaurus config.
+// See: https://docusaurus.io/docs/api/docusaurus-config
 
-// @ts-nocheck
-// Note: type annotations allow type checking and IDEs autocompletion
-
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+import {themes as prismThemes} from 'prism-react-renderer';
 
 
 /** @type {import('@docusaurus/types').Config} */
@@ -54,26 +55,7 @@ const config = {
           customCss: require.resolve('./src/css/custom.css'),
         },
       }),
-    ],
-    [
-      'redocusaurus',
-      {
-        // Plugin Options for loading OpenAPI files
-        specs: [
-          {
-            id: 'grpc',
-            spec: 'swagger.yaml',
-            route: 'docs/developer-guides/grpcrestapi',
-          },
-        ],
-        // Theme Options for modifying how redoc renders them
-        theme: {
-          // Change with your site colors
-          primaryColor: '#000000',
-          
-        },
-      },
-    ],
+    ]
   ],
 
   themeConfig:
@@ -165,10 +147,10 @@ const config = {
         
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
       },
     }),
 };
 
-module.exports = config;
+export default config;
