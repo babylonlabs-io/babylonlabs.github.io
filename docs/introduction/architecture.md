@@ -14,7 +14,7 @@ communication with Bitcoin and other Consumer Zones.
 
 ## Babylon Node Modules
 
-### [Epoching](../developer-guides/modules/epoching)
+### [Epoching](../developer-guides/modules/epoching.md)
 
 The Babylon blockchain is divided into epochs
 that consist of a parameterized number of blocks.
@@ -25,7 +25,7 @@ The epoching module achieves this by delaying the execution
 of transactions that affect the validator set to the last block
 of each epoch.
 
-### [BTC Light Client](../developer-guides/modules/btclightclient)
+### [BTC Light Client](../developer-guides/modules/btclightclient.md)
 
 The BTC Light Client module receives Bitcoin headers
 reported by the Vigilante Reporter and
@@ -34,14 +34,14 @@ It exposes information about the canonical Bitcoin chain,
 the depth of headers, and
 whether the inclusion evidence for a Bitcoin transaction is valid.
 
-### [BTC Checkpoint](../developer-guides/modules/btccheckpoint)
+### [BTC Checkpoint](../developer-guides/modules/btccheckpoint.md)
 
 The BTC Checkpoint module verifies Babylon’s BTC checkpoints
 reported by the Vigilante Reporter, and
 provides the confirmation status of these checkpoints to the Checkpointing
 module based on their depth according to the BTC Light Client module.
 
-### [Checkpointing](../developer-guides/modules/checkpointing)
+### [Checkpointing](../developer-guides/modules/checkpointing.md)
 
 The checkpointing module is responsible for creating Babylon checkpoints
 to be submitted to Bitcoin and maintaining their confirmation status.
@@ -53,7 +53,7 @@ The confirmation status of each checkpoint is determined by
 Bitcoin checkpoint inclusion information retrieved from the
 BTC checkpoint module.
 
-### [ZoneConcierge](../developer-guides/modules/zoneconcierge)
+### [ZoneConcierge](../developer-guides/modules/zoneconcierge.md)
 
 The Zone Concierge module
 extracts verified Consumer Zone headers from
@@ -109,14 +109,14 @@ operator of each of the programs exist.
 Otherwise,
 an alarm will be raised by the monitor program.
 
-### [Vigilante Submitter](../developer-guides/modules/submitter)
+### [Vigilante Submitter](../developer-guides/modules/submitter.md)
 
 A standalone program that submits
 Babylon checkpoints to Bitcoin as
 Bitcoin transactions embedding data
 utilising the `OP_RETURN` Bitcoin script code.
 
-### [Vigilante Reporter](../developer-guides/modules/reporter)
+### [Vigilante Reporter](../developer-guides/modules/reporter.md)
 
 A standalone program that scans
 the Bitcoin ledger for Bitcoin headers and Babylon checkpoints,
@@ -128,7 +128,7 @@ The monitor programs suite is responsible for
 monitoring the consistency between the state of Babylon and
 Bitcoin.
 
-### [Checkpointing Monitor](../developer-guides/modules/monitor)
+### [Checkpointing Monitor](../developer-guides/modules/monitor.md)
 
 A standalone program that monitors:
 

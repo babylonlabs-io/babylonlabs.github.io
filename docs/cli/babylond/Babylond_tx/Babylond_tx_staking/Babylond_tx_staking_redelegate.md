@@ -7,7 +7,7 @@ hide_table_of_contents: true
 
 :::warning
 This message is disabled in Babylon. Please use the wrapped message 
-[redelegate](/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching/babylond_tx_epoching_redelegate)
+[redelegate](/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching/Babylond_tx_epoching_redelegate.md)
 in the epoching module instead.
 :::
 
