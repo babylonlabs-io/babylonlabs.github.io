@@ -38,7 +38,7 @@ const sidebars = {
       },
       collapsed: false,
       items: [
-        'user-guides/installation',
+        'user-guides/mainnet',
         'user-guides/testnet4',
         {
           type: 'category',
@@ -48,6 +48,7 @@ const sidebars = {
             id: 'user-guides/btc-staking-testnet/overview',
           },
           items: [
+            'user-guides/installation',
             'user-guides/btc-staking-testnet/deployment-overview',
             'user-guides/btc-staking-testnet/network-information',
             'user-guides/btc-staking-testnet/setup-node',
