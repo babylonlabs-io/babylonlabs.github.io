@@ -28,6 +28,8 @@ which is for those who want to build their frontend and backend staking system.
 
 - [Specification of all the transactions](https://github.com/babylonlabs-io/babylon/blob/v0.9.x/docs/transaction-impl-spec.md),
 which is for those who want to construct Bitcoin staking related transactions by themselves instead of using our code or dapps.
+Note that such transactions should be using the correct [global
+parameters](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/parameters).
 
 ## For Finality Providers <a id="finality-providers"></a>
 
@@ -42,6 +44,8 @@ which is for those who want to construct Bitcoin staking related transactions by
 - [Specification of all the transactions](https://github.com/babylonlabs-io/babylon/blob/v0.9.x/docs/transaction-impl-spec.md),
 which is for those who want to construct Bitcoin staking related transactions by
 themselves instead of using our code or dapps.
+Note that such transactions should be using the correct [global
+parameters](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/parameters).
 
 - [Swagger API doc](https://staking-api.babylonlabs.io/swagger/index.html#),
 which is for those who want to build their own BTC staking frontend but want to
