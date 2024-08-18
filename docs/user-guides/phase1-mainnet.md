@@ -39,7 +39,7 @@ which is for those who want to construct Bitcoin staking related transactions by
 
 ## For LST Projects and Custodies <a id="lst-custodies"></a>
 
-- [Specification of all the transactions](https://github.com/babylonlabs-io/babylon/blob/dev/v0.9.x/transaction-impl-spec.md),
+- [Specification of all the transactions](https://github.com/babylonlabs-io/babylon/blob/v0.9.x/docs/transaction-impl-spec.md),
 which is for those who want to construct Bitcoin staking related transactions by
 themselves instead of using our code or dapps.
 
