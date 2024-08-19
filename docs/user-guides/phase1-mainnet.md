@@ -16,7 +16,8 @@ Mainnet.
 
 ## For Wallets <a id="wallets"></a>
 
-- [Our staking web dapp](https://github.com/babylonlabs-io/simple-staking).
+- [Our staking web
+  dapp](https://github.com/babylonlabs-io/simple-staking/tree/main).
 
 - [Wallet integration guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/integration/wallet.md).
 
@@ -51,7 +52,7 @@ parameters](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/parameter
 which is for those who want to build their own BTC staking frontend but want to
 use our backend.
 
-- Our staking web dapp as a [reference implementation](https://github.com/babylonlabs-io/simple-staking).
+- Our staking web dapp as a [reference implementation](https://github.com/babylonlabs-io/simple-staking/tree/main).
 
 ## Staking via CLI
 
