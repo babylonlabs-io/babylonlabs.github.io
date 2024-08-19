@@ -38,7 +38,7 @@ const sidebars = {
       },
       collapsed: false,
       items: [
-        'user-guides/mainnet',
+        'user-guides/phase1-mainnet',
         'user-guides/testnet4',
         {
           type: 'category',
