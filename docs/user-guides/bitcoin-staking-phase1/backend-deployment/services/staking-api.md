@@ -19,13 +19,13 @@ The API can be utilised by user facing applications, such as staking dApps.
 ### 2.1 Clone the repository to your local machine from Github
 
 ```bash
-git clone git@github.com:babylonchain/staking-api-service.git
+git clone git@github.com:babylonlabs-io/staking-api-service.git
 ```
 
 ### 2.2 Check out the desired version
 
 You can find the latest release
-[here](https://github.com/babylonchain/staking-api-service/releases).
+[here](https://github.com/babylonlabs-io/staking-api-service/releases).
 
 ```bash
 cd staking-api-service
