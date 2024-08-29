@@ -1,5 +1,5 @@
 ---
-id: phase1-mainnet
+id: overview
 sidebar_label: Bitcoin Staking Phase-1 Mainnet
 hide_table_of_contents: true
 pagination_prev: null
@@ -57,3 +57,7 @@ use our backend.
 ## Staking via CLI
 
 - [Instructions of staking via CLI](https://github.com/babylonlabs-io/btc-staker/blob/v0.5.x/docs/create-phase1-staking.md).
+
+## Babylon Bitcoin Staking Phase-1 Backend Deployment
+
+- [Instructions of how to deploy the Babylon Bitcoin Staking Phase-1 Backend](./backend-deployment/overview.md)
