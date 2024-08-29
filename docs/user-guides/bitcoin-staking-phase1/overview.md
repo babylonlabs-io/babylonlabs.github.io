@@ -1,5 +1,5 @@
 ---
-id: phase1-mainnet
+id: overview
 sidebar_label: Bitcoin Staking Phase-1 Mainnet
 hide_table_of_contents: true
 pagination_prev: null

@@ -26,7 +26,7 @@ Periodically checks MongoDB for expired BTC Stake Delegations and Unbondings.
 - [**Unbonding Pipeline**](./services/staking-expiry-checker.md):
 Forwards unbonding requests for signing to a Covenant Emulator committee
 and submits them to the BTC network
-- [**Staking Dashboard**](https://github.com/babylonlabs-io/btc-staking-dashboard):
+- [**Staking Dashboard**](https://github.com/babylonlabs-io/simple-staking):
 UI that allows for creating BTC Staking transactions.
 Connects to the API to retrieve information about the system and historical delegations.
 - [**Covenant Signer**](https://github.com/babylonlabs-io/covenant-signer/blob/dev/docs/deployment.md#covenant-signer-setup-deployment):
