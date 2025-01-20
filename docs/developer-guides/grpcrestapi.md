@@ -7,9 +7,13 @@ hide_table_of_contents: true
 
 # GRPC Gateway API 
 
-Babylond's GRPC implmentation is identical to CometBFT RPC. 
+Babylond's implementation is based on CometBFT node rpcs. In addition, some custom modules also allow Babylon specific methods. 
 
-Please refer to API specification [here](https://docs.cometbft.com/v1.0/rpc/). 
+Please refer to both Babylon gRPC API and CometBFT API specifications for details. 
+
+[Babylon Custom gRPC](https://app.swaggerhub.com/apis-docs/jvssptyltd/babylon_g_rpc_gateway_docs/1.0.0)
+
+[Babylon Standard gRPC (CometBFT v0.83)](https://app.swaggerhub.com/apis-docs/jvssptyltd/comet-bft_rpc/v0.38.x)
 
 
 Phase 3: Devnet Endpoints
