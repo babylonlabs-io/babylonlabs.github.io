@@ -17,6 +17,6 @@ Please refer to both Babylon gRPC API and CometBFT API specifications:
 
 ## Endpoints
 
-Babylon Phase 2 Testnet (bbn-test-5) RPCs endpoints are hosted by community node providers Node Guru & Polkachu. 
+Babylon Phase 2 Testnet (bbn-test-5) RPCs endpoints are hosted by several community node operators. 
 
 For the most up-to-date list refer to [here](https://github.com/babylonlabs-io/networks/tree/main/bbn-test-5). 
