@@ -5,26 +5,18 @@ hide_table_of_contents: true
 
 ---
 
-# GRPC Gateway API 
+# gRPC Gateway API 
+Babylond's implementation is based on CometBFT node rpcs. 
+In addition, some custom modules also allow Babylon specific methods. 
 
-Babylond's implementation is based on CometBFT node rpcs. In addition, some custom modules also allow Babylon specific methods. 
+## Specifications
 
-Please refer to both Babylon gRPC API and CometBFT API specifications for details. 
+Please refer to both Babylon gRPC API and CometBFT API specifications:  
+- [Babylon Custom gRPC](https://app.swaggerhub.com/apis-docs/jvssptyltd/babylon_g_rpc_gateway_docs/1.0.0)
+- [Babylon Application Layer gRPC (CometBFT v0.38)](https://app.swaggerhub.com/apis-docs/jvssptyltd/comet-bft_rpc/v0.38.x)
 
-[Babylon Custom gRPC](https://app.swaggerhub.com/apis-docs/jvssptyltd/babylon_g_rpc_gateway_docs/1.0.0)
+## Endpoints
 
-[Babylon Standard gRPC (CometBFT v0.38)](https://app.swaggerhub.com/apis-docs/jvssptyltd/comet-bft_rpc/v0.38.x)
+Babylon Phase 2 Testnet (bbn-test-5) RPCs endpoints are hosted by community node providers Node Guru & Polkachu. 
 
-
-Phase 3: Devnet Endpoints
-
-| Provider      | RPC Endpoint                          | LCD Nodes Endpoint                     | gRPC Endpoint                          |
-|---------------|---------------------------------------|---------------------------------------|----------------------------------------|
-| Babylon Labs  | https://rpc.devnet.babylonlabs.io    | https://lcd.devnet.babylonlabs.io    | https://grpc.devnet.babylonlabs.io    |
-
-Phase 2: Testnet Endpoints
-
-| Provider      | RPC Endpoint                          | LCD Nodes Endpoint                     | gRPC Endpoint                          |
-|---------------|---------------------------------------|---------------------------------------|----------------------------------------|
-| Nodes Guru    | https://babylon-testnet-rpc.nodes.guru | https://babylon-testnet-api.nodes.guru | https://babylon-testnet-grpc.nodes.guru |
-| Polkachu      | https://babylon-testnet-rpc.polkachu.com | https://babylon-testnet-api.polkachu.com | http://babylon-testnet-grpc.polkachu.com:20690 |
+For the most up-to-date list refer to [here](https://github.com/babylonlabs-io/networks/tree/main/bbn-test-5). 
