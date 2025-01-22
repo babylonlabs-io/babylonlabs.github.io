@@ -6,8 +6,8 @@ hide_table_of_contents: true
 ---
 
 # gRPC Gateway API 
-Babylond's implementation is based on CometBFT node rpcs. 
-In addition, some custom modules also allow Babylon specific methods. 
+The Babylon node implementation includes the built-in CometBFT node RPCs. 
+In addition, Babylon implements custom modules that have dedicated RPC methods.
 
 ## Specifications
 
