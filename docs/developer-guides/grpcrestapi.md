@@ -13,7 +13,7 @@ Please refer to both Babylon gRPC API and CometBFT API specifications for detail
 
 [Babylon Custom gRPC](https://app.swaggerhub.com/apis-docs/jvssptyltd/babylon_g_rpc_gateway_docs/1.0.0)
 
-[Babylon Standard gRPC (CometBFT v0.83)](https://app.swaggerhub.com/apis-docs/jvssptyltd/comet-bft_rpc/v0.38.x)
+[Babylon Standard gRPC (CometBFT v0.38)](https://app.swaggerhub.com/apis-docs/jvssptyltd/comet-bft_rpc/v0.38.x)
 
 
 Phase 3: Devnet Endpoints
