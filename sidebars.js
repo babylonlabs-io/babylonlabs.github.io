@@ -46,44 +46,45 @@ const sidebars = {
             id: 'user-guides/bitcoin-staking-phase1/overview',
           },
           items: [
-            {
-              type: 'category',
-              label: 'Backend Deployment',
-              link: {
-                type: 'doc',
-                id: 'user-guides/bitcoin-staking-phase1/backend-deployment/overview',
-              },
-              items: [
-                'user-guides/bitcoin-staking-phase1/backend-deployment/deployment-overview',
-                {
-                  type: 'category',
-                  label: 'Required Infrastructure Services',
-                  link: {
-                    type: 'doc',
-                    id: 'user-guides/bitcoin-staking-phase1/backend-deployment/infra/overview',
-                  },
-                  items: [
-                    'user-guides/bitcoin-staking-phase1/backend-deployment/infra/mongodb',
-                    'user-guides/bitcoin-staking-phase1/backend-deployment/infra/rabbitmq',
-                    'user-guides/bitcoin-staking-phase1/backend-deployment/infra/bitcoind',
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Backend Services',
-                  link: {
-                    type: 'doc',
-                    id: 'user-guides/bitcoin-staking-phase1/backend-deployment/services/overview',
-                  },
-                  items: [
-                    'user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-indexer',
-                    'user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-api',
-                    'user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-expiry-checker',
-                  ],
-                },
-                'user-guides/bitcoin-staking-phase1/backend-deployment/global-params',
-              ]
-            }
+            // temporarily removal of backend deployment sidebar item
+            // {
+            //   type: 'category',
+            //   label: 'Backend Deployment',
+            //   link: {
+            //     type: 'doc',
+            //     id: 'user-guides/bitcoin-staking-phase1/backend-deployment/overview',
+            //   },
+            //   items: [
+            //     'user-guides/bitcoin-staking-phase1/backend-deployment/deployment-overview',
+            //     {
+            //       type: 'category',
+            //       label: 'Required Infrastructure Services',
+            //       link: {
+            //         type: 'doc',
+            //         id: 'user-guides/bitcoin-staking-phase1/backend-deployment/infra/overview',
+            //       },
+            //       items: [
+            //         'user-guides/bitcoin-staking-phase1/backend-deployment/infra/mongodb',
+            //         'user-guides/bitcoin-staking-phase1/backend-deployment/infra/rabbitmq',
+            //         'user-guides/bitcoin-staking-phase1/backend-deployment/infra/bitcoind',
+            //       ],
+            //     },
+            //     {
+            //       type: 'category',
+            //       label: 'Backend Services',
+            //       link: {
+            //         type: 'doc',
+            //         id: 'user-guides/bitcoin-staking-phase1/backend-deployment/services/overview',
+            //       },
+            //       items: [
+            //         'user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-indexer',
+            //         'user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-api',
+            //         'user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-expiry-checker',
+            //       ],
+            //     },
+            //     'user-guides/bitcoin-staking-phase1/backend-deployment/global-params',
+            //   ]
+            // }
           ]
         },
         'user-guides/testnet4',
