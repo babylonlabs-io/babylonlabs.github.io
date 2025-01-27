@@ -216,4 +216,4 @@ reducing the unbonding time period.
 Such integrations will need IBC packets,
 thus require using the original IBC relayer
 rather than the above specialized one.
-Please see [Zone Concierge](/docs/developer-guides/modules/zoneconcierge) for more details.
+Please see [Zone Concierge](/docs/developer-guides/modules/zoneconcierge.md) for more details.
