@@ -57,3 +57,7 @@ use our backend.
 ## Staking via CLI
 
 - [Instructions of staking via CLI](https://github.com/babylonlabs-io/btc-staker/blob/v0.5.x/docs/create-phase1-staking.md).
+
+## Babylon Bitcoin Staking Phase-1 Backend Deployment
+
+- [Instructions of how to deploy the Babylon Bitcoin Staking Phase-1 Backend](./backend-deployment/overview.md)
