@@ -42,7 +42,11 @@ BTC allows users to store arbitrary data in the Bitcoin blockchain via `OP_RETUR
 To avoid abuse of `OP_RETURN`, the data size carried in `OP_RETURN` is limited to less than 80 bytes.
 
 A raw checkpoint consists of `epoch_num` (8 bytes), `last_commit_hash` (32 bytes), `bitmap` (13 bytes), and `bls_multi_sig` (48 bytes), which is 101 bytes.
-Besides a raw checkpoint, we also need to include Babylon identifier (4 bytes) and the submitter's Babylon address (20 bytes) for claiming reward.
+Besides a raw checkpoint, the checkpoint data includes
+a Babylon identifier (4 bytes) and the submitter's Babylon address (20 bytes).
+While this address is not used for any purposes at the moment, it could be used
+in future upgrades to potentially reward vigilante submitters for the
+submission.
 
 Therefore, we need at least two BTC transactions to carry a raw checkpoint.
 The structure of the two `OP_RETURN` entries is shown as the following:
