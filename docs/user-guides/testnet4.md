@@ -19,7 +19,7 @@ custom_edit_url: null
 
 - [Wallet integration guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-4/integration/wallet.md).
 
-- [Swagger API doc](https://staking-api.testnet.babylonlabs.io/swagger/index.html#),
+- [Swagger API doc](https://babylonlabs-io.github.io/babylon-openapi-spec/public/babylon-staking/),
 which is for those who want to build their own BTC staking frontend but want to use our backend.
 
 - [Staking backend service build guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-4/integration/staking-backend.md),

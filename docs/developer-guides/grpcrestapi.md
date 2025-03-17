@@ -11,9 +11,8 @@ In addition, Babylon implements custom modules that have dedicated RPC methods.
 
 ## Specifications
 
-Please refer to both Babylon gRPC API and CometBFT API specifications:  
-- [Babylon Custom gRPC](https://app.swaggerhub.com/apis-docs/jvssptyltd/babylon_g_rpc_gateway_docs/1.0.0)
-- [Babylon Application Layer gRPC (CometBFT v0.38)](https://app.swaggerhub.com/apis-docs/jvssptyltd/comet-bft_rpc/v0.38.x)
+[Babylon gRPC Gateway APIs](https://babylonlabs-io.github.io/babylon-openapi-spec/public/babylon-rpc/)
+
 
 ## Endpoints
 
