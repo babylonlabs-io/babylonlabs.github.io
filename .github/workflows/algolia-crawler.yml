@@ -18,7 +18,7 @@ jobs:
         env:
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
-        working-directory: ./doc-babylonlabs-io
+        working-directory: ./
         run: |
           docker run --rm \
             -v $(pwd):/app \
