@@ -1,0 +1,100 @@
+---
+sidebar_label: "Overview"
+sidebar_position: 0
+---
+
+# Babylon Operators
+
+Babylon Labs offers babylon cli, babylon node and a list of peripheral services to operators to who would 
+like to participate in the Babylon network. 
+
+Some example user stories: 
+* I am a experienced PoS chain Validator and want to help secure the Babylon network and earn block rewards.
+* I want to run a Finality Provider node to receive BTC delegation and earn mult-staking rewards commission.
+* I am a serious institutional staker and want to enable scallable access to the 
+* I am a infrastructure provider and want to build a explorer and RPC service for Babylon network. 
+* I am a BSN builder and want to be able achieve new real-time data availability with Babylon for my users.
+
+## Node Types
+### Full Node
+A full node downloads the entire blockchain history and verifies all transactions. Full nodes:
+- Serve RPC/gRPC requests for blockchain data
+- Send transactions and sync blocks
+- Can be upgraded to Validator nodes or Finality Provider nodes
+
+### Babbylon Genesis Validator Node
+Validator nodes are full nodes that participate in consensus by:
+- Proposing new blocks
+- Voting on blocks
+- Securing the network through BTC staking
+- Earning rewards and transaction fees
+
+### Finality Provider Node
+Finality Provider nodes are specialized nodes that participate in BSN finalization by:
+- Committing public randomness for BSN blocks
+- Signing blocks using EOTS (Extractable One-Time Signatures)
+- Submitting finality signatures to BSNs
+- Securing BSNs through BTC staking
+- Earning rewards from BSNs
+
+:::note
+The difference between Validator and Finality Provider is that Validator nodes are responsible 
+for proposing blocks and voting on Babbylon Genesis, while Finality Provider nodes are responsible for 
+committing public randomness and signing blocks for BSNs.
+:::
+
+### Archive Node
+Archive nodes maintain the complete state history and are useful for:
+- Data analytics
+- Block explorers
+- Historical queries
+- API services
+
+## Getting Started
+* [Install babylond](/operators/babylon_node/installation_guide)
+
+## Networks
+Babylon network is currently running following public facing networks: 
+* Phase 1 Mainnet (Locking on Bitcoin Chain)
+* Phase 2 testnet (Staking on Babbylon Genesis)
+* Phase 3 devnet (Multi-staking on BSNs)
+
+## CLI Reference
+Babylon binary is available for multiple platforms and can be downloaded from the [releases page](https://github.com/babylonlabs-io/babylon/releases).  
+
+:::note
+For Phase 2 testnet users, pleas use the [`v1.0.0-rc.3`](https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.0-rc.3) tag for babylon binary.
+:::
+
+## API References
+Babylon nodes provides following RPC/gRPC APIs: 
+* [Babylon gRPC APIs](/api/babylon-gRPC/babylon-grpc-api-docs)
+
+## Key Management
+Types of keys important to node operators: 
+* Bitcoin schnorr private key (critical for staking and EOTS signing)
+* BSN Validator account private key (critical for proposing blocks)
+* BSN Finality Provider account private keys (critical for signing finality of BSNs)
+
+Operators should use`hardware security modules (HSMs) when possible, maintain physical security 
+for key storage, keep backups in separate locations.
+
+## Monitoring & Backup Requirements
+Node operators should implement comprehensive monitoring and backup systems to ensure reliable 
+operation.
+
+### Monitoring
+* System: CPU, memory, disk usage, network metrics
+* Node: sync status, block height, peer connections
+* Validator: transaction monitoring, gas consumption monitoring, retries, consensus/voting participation
+* Finality Provider: EOTS status, signature submissions, slashing conditions
+* API/RPC endpoint health
+
+### Backups
+* Daily state sync snapshots
+* Weekly data archives
+* Store all configuration files after changes
+* Secure key management backups
+* Regular recovery testing
+
+

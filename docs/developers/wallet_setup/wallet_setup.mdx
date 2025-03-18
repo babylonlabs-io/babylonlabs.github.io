@@ -1,0 +1,86 @@
+# Babylon Wallet Setup Guide
+
+## Overview
+
+Developers can set up a Babylon wallet using two primary methods:
+1. Babylon CLI (Recommended for Power Users)
+2. Keplr Browser Extension (Easy Setup)
+
+## Method 1: Babylon CLI Wallet Setup
+
+### Prerequisites
+- Go 1.21+
+- Git
+- Rust 1.84+
+
+### Installation Steps
+
+1. Clone the Babylon Repository
+```bash
+git clone https://github.com/babylonlabs-io/babylon.git
+cd babylon
+git checkout v1.0.0-rc.3
+```
+
+2. Install Babylon Binary
+```bash
+make install
+```
+
+3. Verify Installation
+```bash
+babylond version
+# Expected output: v1.0.0-rc.3
+```
+
+4. Create Wallet
+```bash
+babylond keys add my-babylon-key \
+  --keyring-backend file \
+  --home /path/to/babylon/home
+```
+
+**Security Note:** 
+- Securely store the generated mnemonic phrase
+- This is your ONLY way to recover the wallet
+
+## Method 2: Keplr Browser Extension
+
+1. Install Keplr Wallet
+   - Visit [Keplr Website](https://keplr.app/)
+   - Follow browser extension installation instructions
+
+2. Add Babylon Network
+   - Open Keplr
+   - Navigate to network settings
+   - Select "Add Chain"
+   - Choose `Babylon Phase 2 Testnet` configuration
+   - Click "Save"
+
+3. Create a Wallet
+   - Open Keplr
+   - Click "Create Wallet"
+   - Follow the on-screen instructions
+
+## Obtaining Test Tokens
+
+### Faucet Options
+- [Babylon Discord Faucet](https://discord.gg/babylonglobal)
+- [L2Scan Testnet Faucet](https://babylon-testnet.l2scan.co/faucet)
+
+## Testnet Details
+- **Chain ID:** `bbn-test-5`
+- **Token Symbol:** BABY
+- **Token Denom:** ubbn
+- **Network Type:** Cosmos SDK-based
+
+## Best Practices
+- Never share your mnemonic phrase
+- Regularly backup wallet credentials
+- Use strong, unique passphrases for your keyring
+
+## Need Help?
+- [Babylon Documentation](https://docs.babylonchain.io)
+- [Developer Support Discord](https://discord.gg/babylonglobal)
+
+Happy Building! 🚀

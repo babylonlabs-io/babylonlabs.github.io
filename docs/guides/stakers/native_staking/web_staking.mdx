@@ -1,0 +1,78 @@
+---
+sidebar_class_name: bitcoin_self_custodial_staking_sidebar
+sidebar_label: Web Staking
+sidebar_position: 1
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# Bitcoin Native Staking via Web App
+
+Self-custodial staking is a process where users can stake their Bitcoin without relying 
+on a third party. The staker can participate in another network's validating activity 
+whilst: 
+- Maintaining direct control of their Bitcoin through their private keys
+- Never transferring custody to third parties
+- Using Bitcoin transactions to create time-locked, self-controlled staking contracts
+
+The Bitcoin remains on the Bitcoin network and never leaves the staker's wallet. Only 
+the voting power is delegated to the validator/Finality Provider. The staker can withdraw, 
+or in other words unbond, their staked Bitcoin anytime without having to wait for a 
+lengthy period. This gives freedom to Bitcoin holders to react to market conditions. 
+
+This contrasts with custodial staking, wrapped or bridged Bitcoin where users must 
+trust third parties with their Bitcoin. 
+
+## Staking on Babylon
+
+A Babylon-compatible Bitcoin wallet allows users to stake their Bitcoin directly 
+on the Babylon Bitcoin Staking Protocol. Users will need to select a Finality Provider 
+to delegate their voting power to and send the Bitcoin transaction through via the 
+help of a staking web app or CLI. 
+
+## Staking via web app
+Staking via the Babylon web app is a simple process. 
+
+1. Visit the [Babylon Staking](https://btcstaking.babylonlabs.io) app hosted by Babylon Labs.
+2. Connect your Babylon-compatible Bitcoin wallet to the web app.
+3. Select the Finality Provider you want to delegate your voting power to.
+4. Sign all transactions related to staking.
+
+<ThemedImage
+  alt="Optimism L2 Integrations Architecture"
+  sources={{
+    light: useBaseUrl('/img/guides/stakers/staking_app.png'),
+    dark: useBaseUrl('/img/guides/stakers/staking_app_dark.png'),
+  }}
+/>
+
+
+### Compatible Wallets
+
+List of compatible Bitcoin wallets:
+
+| Name | Type | Link |
+|------|------|------|
+| OKX | Software Wallet | [https://www.okx.com/web3/wallet/bitcoin](https://www.okx.com/web3/wallet/bitcoin) |
+| Bitget | Software Wallet | [https://web3.bitget.com/en](https://web3.bitget.com/en) |
+| KeyStone | Hardware Wallet | [https://keyst.one/](https://keyst.one/) |
+| Onekey | Software & Hardware Wallet | [https://onekey.so/](https://onekey.so/) |
+| Tomo | Software Wallet | [https://tomo.inc/](https://tomo.inc/) |
+
+
+List of compatible Cosmos wallets:
+
+| Name | Type | Link |
+|------|------|------|
+| Keplr | Software Wallet | [https://www.keplr.app/](https://www.keplr.app/) |
+| OKX | Software Wallet | [https://www.okx.com/web3/wallet/bitcoin](https://www.okx.com/web3/wallet/bitcoin) |
+| Bitget | Software Wallet | [https://web3.bitget.com/en](https://web3.bitget.com/en) |
+| Onekey | Software & Hardware Wallet | [https://onekey.so/](https://onekey.so/) |
+
+### Staking via CLI
+
+Babylon created the stakers-cli tool to allow users to stake via the command line 
+interface and programmatic control in any operating system. 
+
+For details check out [BTC Staker](/guides/stakers/native_staking/staking_via_cli)

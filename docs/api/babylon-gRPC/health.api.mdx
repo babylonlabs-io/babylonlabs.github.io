@@ -1,0 +1,64 @@
+---
+id: health
+title: "Node heartbeat"
+description: "Get node health. Returns empty result (200 OK) on success, no response - in case of an error."
+sidebar_label: "Node heartbeat"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVV21v2zYQ/iuHywB3gyw7AdICAoohTdM2G5oEiQsMCP2Bps4WG4pUScqp4eq/D6Tkl8Ta2mHAgOVDDJPHe3nuuRev0fOFw+weL/Xc4DRBU5HlXhp9mWOGBXHlC0wwJyesrMIFZviePGiTE7T3KdySr612QGXlV2DJ1crDi5PxGK5//xmMBlcLQc4loE24rox2BEOQGgR3BGYOXANZa2zKNCa4kXGYrfFkPA4fBz44uApOfNg4KYz2pH2Q5VWlpIiBjD678GCNThRU8kNNF9Hp284iJsiVup5jdr9Gv6oIMzSzzyQ8JljZgI+XrV8yD/87Gak9LchigvSVl5UizMZNgsG4rcSeoPNW6sW+HJ6kY2yaBL308ftvd9dXtzfn2CTfc6GFek/7Vo7nuQwBcnWz/6Jpmma6sxRj34YeLhM87YO7zWzM0L9AOjz/nyLdhv63yt/ugg2MnnOpahtR3Uc86HmCeJNgSb4woeAWFC1zX2CGo235ObJLsi4iVVsVKtP7ymWjka1EKowrjUtzaUl4Y1ej9qCoZweVe6k9WS48PEpfgC8Izk1J/s27CdzenMPcmhI4VPVMSdGWuNSdWFAJlhbSebuKgO08yUYjZQRXhXE+O3n58vTVdyw/sRrt2FprqRcQ9agVBsxkaEoB8g67N3y2UkbDIrw6u7mEt0Y4TDBg01o5Tsfp+MD2N6bh2d8ZPFH2nnt65CuQDjjcXtxNILDMzrkgmBu7ER64KJ7CocJJIV37vCS7oBxcRULOu9IIfAgw9hrlOu9R+Dw56aHI4cldXVXGesojsJU13gijXMb0oewv8On2EsySLHyYTG76BLry+AdCjzRzRjyQdz/i7tERnBs9l4u6HTp9bgbVgmuYEYhOlnKYrcDXkTAVt7wkT9ZBrXOywPDeVmLKEDyfqQ2De9zBn84/Tj5cf7wYtYq7j9SbUjGEuVQExgZTtQuWQkYYDoeh5v5gCMKUJdf5UEndo36u+MKlfRFNCoKc5jwMyRCdks6TBp7nllwkEUMvQlEdn7wKhE6P26Ji+EMkODoKmR21+eqjfiS4kg+0Y3kKDEVtFTyr49FMGfHwa0FyUfjXpwz7NB4dbUjwl0Y3JLH0pSbn3SalN9d3k0EO3kR0rTEtJKTzykjtYSl5JF5f4K3Dw2FBvM37eTuWhpNVRRk8n0wMYTjs7Ee7MBzm3HMYrFnXgRlmwDCGzDABhpFcLhzfMzxlOA2HMsodN4PnYH0Xnf3q+HGMuHIGSp5TRGOroweSwKzt/Q7E0JY8MNzZD9FRughZf57wPZkeC2dupUVhjTa1a0dGrUWA2LWEoiXpYMrVs9CBZ8Sw7W9Y6ydntqdkjFYr4EsuVSzcJ9H2l9I7Y6EbwHtFet++4n76YjMnF9IX9SwVphwt5Whz/zN4Y1QCK1NHsLcexqY/uKLHN4ELgzasnpa2HaNzo5R5DA50XaG35TIkURgYrIFt9pWWcifpmGHylIZ7cCUb0o2TfU6uGX6pya5aeV+m0c3XA4Y71xkOGDbQDOAbbMKGoYahh0d32GL203/oPzYJVsb5ksc9T/MyjOWr7qeA9TPi/vn0Xe+2xf/gh0O3nXn66keV4lIHl+Oisu7WqvvNr5ppgoH24WS9nnFHn6xqmnAcQcXsfprgklsZyBi+NQm2rSbuYQ+0wgzPhKAqxLzkqg6WD/bhsMhs97v3FxNsmj8BM6AwTQ==
+sidebar_class_name: "get api-method"
+info_path: api/babylon-gRPC/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Node heartbeat"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/health"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get node health. Returns empty result (200 OK) on success, no response - in case of an error.
+
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Gets Node Health","content":{"application/json":{"schema":{"description":"Empty Response","allOf":[{"type":"object","properties":{"id":{"type":"integer","example":0},"jsonrpc":{"type":"string","example":"2.0"}},"title":"JSONRPC"},{"type":"object","properties":{"result":{"type":"object","additionalProperties":{}}}}],"title":"EmptyResponse"}}}},"500":{"description":"empty error","content":{"application/json":{"schema":{"description":"Error Response","allOf":[{"type":"object","properties":{"id":{"type":"integer","example":0},"jsonrpc":{"type":"string","example":"2.0"}},"title":"JSONRPC"},{"type":"object","properties":{"error":{"type":"string","example":"Description of failure"}}}],"title":"ErrorResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

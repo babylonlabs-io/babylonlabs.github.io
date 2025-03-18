@@ -1,0 +1,73 @@
+---
+id: check-delegation-v-1
+title: "checkDelegationV1"
+description: "Check if a staker has an active delegation by the staker BTC address (Taproot or Native Segwit)."
+sidebar_label: "checkDelegationV1"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVk1v2zgQ/SvEnFpAtpNgTz6tYysLA6ndtZUARRIYI3FssZFJhaScGob/ezGUlCibDxTtdU+WyRnyzZuZxzmAKcmiV0ZPJQwhyym7n1BBm7B2fQoRlGhxS56sg+HNASS5zKqSt2EIS4/3ZMV5MhYopSXnhNIiwdIa4wcz9GpHYkmbR+XF2tgteohAsedDRXYPEWjcEgyh8YYILD1UypKEobcVReCynLYIwwP4fcmmzlulN3A8Rv9FM2b4Qq2Fz0nIpzCEcgKzAOVR+VzpsF9as1OSpPBqS2uO8R1o3f1nMKSrLQxvwBuJe7iLXqG741BcabQjxw5nJyf8kxntSXv+xLIsVBYgDr47juDQuaC0nBuvau/MSOpwoLSnDVk4RiDRd9lJjSkINdPTLpn0O2VMvFe+4IXdaY5aFmRd/znZgbyvVVqobNHghiOf8pLjZwcRqkVYclXhGclffxQhWQvDwzHiD2PHTbwtzdNZEi9mo8vVMl5cT8fxKl4s5guI4Hp0OZ2Mkul89rQ0myeri/nVbAIRnI8mq0X871W8TCCCi/nifDqZxDOI4Gr2dTEfx8vl6PwyXsWzZJp8gwga41Uy/RLPr5LXmY3gR49R9XZouUJcgKc9WY3FkuxOZRRzCAwOCyVD+O3KzPgLU2nJ0FAu6KEix6m5MDZVUpJmZLq0JiPnMC0o1l55rsbGNlFbMpUPuJp0Mj7Xj59oO0bgPPrKjd8pmg9KY6N8XqWrzGxXKab7wugCU9dTZuU83iu96WGpeq4Oc6WasFcuR0ty1UHyVu2EjaE4RynayAMW3AQS60M4snfaGoWr9SZHJ1C3Td3p9HQfetu9lqVPjSgJY8ULXfrcv9XzcBUWxT4Se1OJDHWrDwKfBUJ40xT9b2vMrU5yErhDVXB2O2crJ25rNbkF8ZirLK/vcgLXnqy4Ssbi9Gz0RZj67qyylrQXLD8RbMnnhiV8Qz6Its9hCIPd6aDmYvAMdRCOZTEju6tl/Y6Vb23a7sUsdC9tURX8KtRLf3cKoq8MvEovR3Ze24hlXS1i9HUqzHpNlh+G+gVgtjA1lW9T5amNqfXmxLUnuL3ztO3f6m+msgIzbgyBWorKBdI2ZkdWk2xzzzeOaqtLlZF2JAql7zkJRqRUmMc+RFDUWxxmI/Ov/SCCyjIBufelGw4G0mSu/5KFATpH3g3WqiA34N6oEfaaC/qlXDNTbX+9wQ9EwGmoOTzrn7B5aZzfou7Aq+uuo77hcX6RgI70/t8zv9AzjQZ6+uEHZYFKM/Mh44emgW5gxyzX1AS6W+wQ1RlhtcqN82x7OKTo6MoWxyMv12NEmJlUkHIJwzUWjj5I26dFM/18Fr81Wr0Z0j3tX0xYOywqtoIwQf0ytj+frj5A1zV7xnfHf6xigKxSxwhyQkk2sFo7csuWvuP1aubgU57k8Z84gePxJxJ7zqs=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"checkDelegationV1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/staker/delegation/check"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Check if a staker has an active delegation by the staker BTC address (Taproot or Native Segwit).
+Optionally, you can provide a timeframe to check if the delegation is active within the provided timeframe
+The available timeframe is "today" which checks after UTC 12AM of the current day
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Staker BTC address in Taproot/Native Segwit format","in":"query","name":"address","required":true,"schema":{"type":"string"}},{"description":"Check if the delegation is active within the provided timeframe","in":"query","name":"timeframe","schema":{"enum":["today"],"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"code":{"type":"integer"},"data":{"type":"boolean"}},"type":"object","title":"v1handlers.DelegationCheckPublicResponse"}}},"description":"Delegation check result"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,53 @@
+---
+sidebar_position: 1
+sidebar_label: Mint Module
+---
+
+# Mint Module
+
+`/babylon/x/mint`
+
+The mint module is responsible for managing the Babylon Genesis's token supply and inflation.
+It controls the minting of new tokens based on pre-defined infaltion schedules. 
+
+This module has a few key functions in implementing economic policies: 
+
+- Token supply management and inflation control
+- Network security and economic stability
+
+The module is important because it:
+
+- controls network-wide token emission and inflation
+- provides sustanable rewards for validators and stakers
+- enable monetary policy flexibility via governance processes
+
+The module is the key to long-term economic sustainability of the network.
+
+## Token Supply Management
+
+The mint module manages network's token supply via: 
+- calculate new token issurance based on inflation rate
+- Tracking annual provisions to maintain target inflation rate
+- Adjust token supply based on network parameters
+- Manage bond denomination of minted tokens
+
+Note that this module requires initial state configuration at genesis, including bond 
+denomination and minting parameters.
+
+## State Management
+
+The mint module maintains the following state variables: 
+
+- `inflation_rate`: current inflation rate (e.g. 10% per year)
+- `annual_provisions`: current annual token provision to be minted
+- `pre_vious_block_time`: timestamp of the last block
+- `bond_denom`: denomination of toekns. A genesis state of determins the initial 
+denomination for miniting.
+
+## Endpoints
+
+The mint module exposes the following endpoint: 
+
+- `GET /cosmos/mint/v1beta1/inflation_rate` - to query current inflation rate
+- `GET /cosmos/mint/v1beta1/annual_provisions` - to query current annual token provisions
+- `GET /cosmos/mint/v1beta1/genesis_time` - to query chain's genesis timestamp

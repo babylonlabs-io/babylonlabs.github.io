@@ -1,0 +1,102 @@
+---
+sidebar_class_name: bitcoin_secured_networks_sidebar
+sidebar_position: 4
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# Bitcoin Secured Networks (BSNs)
+
+A BSN is any PoS chain that needs to ensure its blocks are final and 
+unchangeable using Bitcoin as stake. To integrate with Babylon, BSNs 
+need to implement several key modules: 
+* a Bitcoin light client for verifying Bitcoin transactions, 
+* a BTC timestamping module for securing data with Bitcoin-based timestamps, 
+* a BTC staking module for managing staked Bitcoin and finality providers, 
+* a finality module for handling the consensus process, 
+* a relayer for facilitating communication between Babylon and the BSN,  ensuring timely message delivery. 
+
+
+<div className="flex flex-col items-center justify-center" id="bsn_overview">
+  <ThemedImage
+    alt="Overview of BSNs"
+    sources={{
+      light: useBaseUrl('/img/guides/bsn.png'),
+      dark: useBaseUrl('/img/guides/bsn_dark.png'),
+    }}
+  />
+</div>
+
+BSNs have several advantages: 
+- *Security*: BSNs inherit Bitcoin's security without relying on third parties or bridges.
+- *Decentralization*: BSNs tap into Bitcoin, the most decentralized network to become more 
+resilient and resistant to censorship.
+- *Liquidity*: BSNs can benefit from Bitcoin's trillions of dollars in idle liquidity.
+- *Fast finality*: Transactions on BSNs can benefit from quicker finality times.
+
+## Who are BSNs?
+Upon the mainnet launch of Babylon's Phase 2, Babylon Genesis (built on Cosmos SDK) will be 
+the first BSN. Accepting delegations from Bitcoin stakers, Babylon Genesis will be able to 
+provide blockchain finality to itself and to any decentralized applications (dApps) that 
+are built on it.
+
+In [Phase 3](/guides/overview/phases_of_the_launch/phase-3) of Babylon mainnet, Babylon will gradually and carefully 
+introduce new BSNs to the ecosytem. This will allow other PoS blockchains to enhance their 
+security and decentralization. 
+
+Babylon developed solutions for: 
+* Cosmos-based networks
+* OP Stack L2 networks
+* Arbitrum L2 networks
+
+and many more in the pipeline. PoS chains are the most common type of BSNs that will understand
+the value of economic security Bitcoin can provide. 
+
+## Building a BSN
+Building a BSN takes a considerable amount of time and resources. It requires 
+understanding of Bitcoin chain, inter-chain communication, and the existing consensus 
+and reward mechanisms. Babylon Labs provides a comprehensive suite of tools, documentation, 
+reference implementation and business support to help you become a BSN.
+
+Before integration starts, there will be research, integration and development work needed. 
+Discussions on economic impact and social impact of the integration should also be in place. 
+The BSNs, if it is an existing chain, will likely need to go through a governance process to 
+accept the integration. Likewise, the Babylon committee will also need to go through a 
+governance process to accept the integration.
+
+## BSN Categories
+BSN architecture is flexible and allows for a wide range of chains to be integrated. 
+Examples of these chains include layer 1 public blockchains, permissioned blockchains, 
+layer 2 rollup chains, privacy preserving zkp chains, and more.
+
+The key categories of BSNs are:
+
+<div className="flex flex-col items-center justify-center" id="bsn_categories">
+  <ThemedImage
+    alt="Categories of BSNs"
+    sources={{
+      light: useBaseUrl('/img/guides/bsn_categories.png'),
+      dark: useBaseUrl('/img/guides/bsn_categories_dark.png'),
+    }}
+  />
+  <em>Categories of BSNs</em><br/>
+</div>
+
+Each BSN can modify its consensus mechanism by using Babylon as an additional 
+security layer through Bitcoin staking. The modular design allows for 
+flexible integration with various system architectures without requiring fundamental 
+changes to the core application of a chain, thus allowing Bitcoin security to be more ubiquitous in 
+blockchain networks.
+
+
+## Get in Touch
+Email us at [build@babylonlabs.io](mailto:build@babylonlabs.io) to get started.
+
+import Link from '@docusaurus/Link';
+
+<Link
+  to="mailto:build@babylonlabs.io"
+>
+    Email Us
+</Link>

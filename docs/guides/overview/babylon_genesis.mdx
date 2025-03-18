@@ -1,0 +1,184 @@
+---
+sidebar_class_name: bitcoin_staking_babylon_genesis_chain_sidebar
+sidebar_label: Babylon Genesis
+sidebar_position: 3
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Link from '@docusaurus/Link';
+import ThemedImage from '@theme/ThemedImage';
+
+# Babylon Genesis Overview
+
+## Introduction
+
+Babylon Genesis is the first Bitcoin Secured Network (BSN) to leverage Bitcoin's security 
+and serves as the control plane for security and liquidity orchestration for future BSNs. 
+Built on the Cosmos SDK framework, Babylon Genesis introduces key innovations for enhanced 
+PoS security and interoperability, unlocking Bitcoin's potential beyond its traditional role 
+as a store of value.
+
+## Consensus & Security Model
+
+Babylon Genesis introduces a multi-staked CometBFT (Tendermint) consensus mechanism:
+
+1. **Bitcoin Staked**: BTC holders can stake their assets directly on the Bitcoin network 
+in a self-custodial manner without wrapping or bridging. These BTC stakers delegate to a 
+Finality Provider who enhances the security of the Proof-of-Stake (PoS) chain.
+
+2. **BABY Staked**: BABY token stakers delegate to CometBFT validators who oversee block 
+production and consensus operations.
+
+This dual approach combines Bitcoin's security with Cosmos's flexibility, creating a 
+robust and interoperable blockchain ecosystem. 
+
+## Bitcoin Timestamping & Checkpointing
+
+Babylon Genesis leverages Bitcoin's blockchain to timestamp events from other blockchains, providing an additional layer of security and data integrity. This process:
+
+* Creates immutable anchoring between Bitcoin's ledger and Babylon Genesis
+* Mitigates vulnerabilities in PoS chains, such as long-range attacks and double-signing
+* Enhances overall security through Bitcoin's proven consensus mechanism
+
+
+<div className="flex flex-col items-center justify-center mx-auto">
+  <ThemedImage
+    alt="Three Facets of Babylon Genesis"
+    sources={{
+      light: useBaseUrl('/img/guides/babylon_genesis_facets.png'),
+      dark: useBaseUrl('/img/guides/babylon_genesis_facets_dark.png'),
+    }}
+  />
+</div>
+
+
+## Unique Value Proposition
+
+Babylon Genesis is uniquely positioned to deliver value to the web3 ecosystem because:
+
+1. Allows massive economic security from Bitcoin to be used on BSNs
+2. Plays a key role in reward distribution from BSNs to BTC stakers
+3. Enables trust-minimized bridges that will unlock liquidity from LSTs
+4. Bitcoin's role extends beyond a store of value, unlocking shared-security and other possibilities
+
+Just as ancient Babylon was a vibrant center for trade, culture, and innovation, Babylon Genesis aims to unlock the best of Bitcoin security, liquidity, and community, extending it to the wider web3 ecosystem.
+
+## Features Overview
+The chain has a unique set of features that make it a powerful network with unique properties: 
+- **Bitcoin Integration:** Direct connection to Bitcoin for staking and timestamping via bitcoin scripts
+- **Bitcoin Staking:** Native BTC staking and timestamping mechanisms, and Extractable One-Time Signature (EOTS)
+- **Multi-staking:** Enables multiple BSNs to leverage Bitcoin's security simultaneously
+- **Scaling Transactions:** Aggregates timestamps and checkpoints to minimize Bitcoin transaction costs
+- **Multichain Communications:** Seamless communication with other chains via the IBC protocol
+
+## Native Token: BABY
+
+BABY is the native token of Babylon Genesis with the following specifications:
+
+* **Name**: BABY
+* **Total Supply**: 10,000,000,000 BABY
+* **Decimals**: 6
+
+BABY works alongside staked Bitcoin, with BTC providing the economic security guarantees 
+while BABY enables protocol operations and governance.
+
+### Token Utility
+
+1. **Transaction & Governance**:
+2. **Staking & Security**:
+3. **Data Storage and Programmability**:
+
+## Development Phases
+
+### Phase 1: Bitcoin Staking
+
+* Enabled Bitcoin holders to stake their BTC using a secure, self-custodial staking script directly on the Bitcoin
+* Over 57,000 BTC were staked, demonstrating significant community enthusiasm
+* Established Bitcoin as a top 10 staking asset by market cap, with only ~0.3% of all Bitcoin staked
+
+### Phase 2: Babylon Genesis Launch
+
+* BTC stakers actively provide security to Babylon Genesis
+* Demonstrates the security features (e.g. slashing) of Babylon Staking Protocol
+* Serves as a reference implementation for future BSNs
+* Provides base staking rewards to BTC stakers
+
+### Phase 3: Expanded BSN Ecosystem
+
+* L1s and rollups can integrate the Babylon Bitcoin Staking Protocol to become Bitcoin Secured Networks
+* Babylon Genesis serves as the control plane for orchestrating security
+* Babylon Genesis will also become a Bitcoin liquidity hub via trustless bridges
+* Implementation of Bitcoin multi-staking to allow Bitcoin's to secure multiple networks
+
+Learn more about the Babylon Genesis network launch sequence below: 
+
+<Link
+  to="./phases_of_the_launch"
+  id="phases_of_the_launch"
+>
+  Phases of the Launch
+</Link>
+
+# Chain Governance
+
+Babylon Genesis is governed by the native token BABY. BABY holders can actively engage in the decision-making process, influencing the direction and development of Babylon Genesis and the BSN cohorts. This participatory model ensures that the network always reflects the collective will of its token holders. 
+
+Proposals are critical function in the governance process. These proposals can cover a range of topics, from software upgrades to smart contract deployments during the permissioned phase, and the creation of new BSNs. It is a structured framework for submitting, discussing, and voting on these proposals, ensuring transparency and accountability.
+
+The governance system is designed to balance the need for efficient governance with the need for decentralization and community participation. Deposits and voting periods are required to submit proposals, ensuring that the proposals are taken seriously and are worth the resources to implement. There are also mechanisms for expedited proposals and safeguards against potential harmful ones. 
+
+Learn more about the governance process below: 
+
+<Link
+  to="https://forum.babylonlabs.io/c/governance-proposals"
+  id="governance_forum"
+>
+  Governance Proposals Forum
+</Link>
+
+# Babylon Genesis Validators
+
+BGC's block production process is safeguarded by Genesis Chain Validators. They are nodes that validate transactions, produce blocks, and help secure the Babylon Genesis Chain.
+
+### Become a Validator
+To become a validator, you must follow the guides to apply to join the Babylon Genesis 
+Validator set.
+
+:::note
+Validators are accepted from Phase 2 of Babylon network. Phase 2 network is currently in 
+testnet. 
+:::
+
+<Link
+  to="https://github.com/babylonlabs-io/networks/tree/main/bbn-test-5/babylon-validators"
+  id="validators"
+>
+    Become a Validator
+</Link>
+
+# Finality Providers
+
+Finality Providers play a crucial role in securing not only PoS blockchains 
+but also decentralized systems that require data validation. These entities participate in 
+finality rounds, acting as impartial arbiters to ensure rule adherence, much like referees 
+in a football game.
+
+They manage their Extractable One-Time Signature (EOTS) keys, submitting signatures using 
+public randomness. This process contributes to the security of the target system. The 
+reliable and honest computation is backed by staked Bitcoin, leveraging its economic 
+value to provide robust protection across various digital ecosystems.
+
+## Become a Finality Provider
+To become a Finality Provider, you don't need to stake on Babylon.
+
+:::note
+Finality Providers are accepted from Phase 3 of Babylon network. Phase 3 network is still 
+in devnet.  
+:::
+
+<Link
+  to="https://github.com/babylonlabs-io/networks/tree/main/bbn-1/finality-providers"
+  id="finality_providers"
+>
+    Become a Finality Provider
+</Link>

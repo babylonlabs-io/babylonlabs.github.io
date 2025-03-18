@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="856530e1-20ce-4b87-a82e-cc6306a99e25" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.nvmrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CNAME" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/2019-05-28-first-blog-post.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/2019-05-29-long-blog-post.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/2021-08-01-mdx-blog-post.mdx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/2021-08-26-welcome/docusaurus-plushie-banner.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/2021-08-26-welcome/index.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/authors.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylon_query_freegrant.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylon_query_ibc.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_account.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth/Babylond_query_auth_account.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth/Babylond_query_auth_accounts.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth/Babylond_query_auth_address_by_acc_num.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth/Babylond_query_auth_module_account.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth/Babylond_query_auth_module_accounts.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_auth/Babylond_query_auth_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_authz.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_authz/Babylond_query_authz_grants.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_authz/Babylond_query_authz_grants/Babylond_query_authz_grants_by_grantee.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_authz/Babylond_query_authz_grants/Babylond_query_authz_grants_by_granter.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_bank.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_bank/Babylond_query_bank_balances.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_bank/Babylond_query_bank_denom_metadata.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_bank/Babylond_query_bank_total.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_block.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btccheckpoint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btccheckpoint/Babylond_query_btccheckpoint_btc-height.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btccheckpoint/Babylond_query_btccheckpoint_epoch_submissions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btccheckpoint/Babylond_query_btccheckpoint_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient/babylond_query_btclightclient_base-header.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient/babylond_query_btclightclient_contains.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient/babylond_query_btclightclient_hashes.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient/babylond_query_btclightclient_main-chain.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient/babylond_query_btclightclient_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_btclightclient/babylond_query_btclightclient_tip.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_checkpointing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_checkpointing/Babylond_query_checkpointing_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_checkpointing/Babylond_query_checkpointing_raw-checkpoint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_checkpointing/Babylond_query_checkpointing_raw-checkpoint/Babylond_query_checkpointing_raw-checkpoint_list.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution/Babylond_query_distribution_commission.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution/Babylond_query_distribution_community-pool.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution/Babylond_query_distribution_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution/Babylond_query_distribution_rewards.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution/Babylond_query_distribution_slashes.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_distribution/Babylond_query_distribution_validator_outstanding_rewards.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_epoching.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_epoching/Babylond_query_epoching_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_evidence.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_freegrant/Babylond_query_freegrant_grant.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_freegrant/Babylond_query_freegrant_grants-by-grantee.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_freegrant/Babylond_query_freegrant_grants-by-granter.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_deposit.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_deposits.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_param.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_proposal.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_proposals.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_proposer.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_tally.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_vote.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_gov/Babylond_query_gov_votes.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_channels.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_client-state.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_connections.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_end.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_next-sequence-receive.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_packet-ack.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_packet-commitment.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_packet-commitments.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_packet-receipt.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_unreceived-acks.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_channel/Babylond_query_ibc_channel_unreceived-packets.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_consensus-state-heights.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_consensus-state.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_consensus-states.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_header.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_self-consensus-state.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_state.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_states.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_client/Babylond_query_ibc_client_status.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_connection.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_connection/Babylond_query_ibc_connection_connections.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_connection/Babylond_query_ibc_connection_end.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_connection/Babylond_query_ibc_connection_path.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_transfer.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_transfer_denom-hash.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_transfer_denom-trace.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_transfer_denom-traces.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_transfer_escrow-address.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_ibc/Babylond_query_ibc_transfer_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_mint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_mint/Babylond_query_mint_annual-provisions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_mint/Babylond_query_mint_inflation.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_mint/Babylond_query_mint_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_params/Babylond_query_params_subspace.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_slashing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_slashing/Babylond_query_slashing_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_slashing/Babylond_query_slashing_signing-info.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_slashing/Babylond_query_slashing_signing-infos.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_delegation.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_delegations-to.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_delegations.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_historical-info.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_pool.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_redelegation-from.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_redelegation.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_redelegations.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_unbounding-delegation.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_unbounding-delegations-from.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_unbounding-delegations.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_validator.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_staking/Babylond_query_staking_validators.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_tendermint-validator-set.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_tx.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_txs.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_upgrade.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_upgrade/Babylond_query_upgrade_applied.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_upgrade/Babylond_query_upgrade_module_versions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_upgrade/Babylond_query_upgrade_plan.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_zoneconcierge.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/BabylondQuery/Babylond_query_zoneconcierge/Babylond_query_zoneconcierge_params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_query.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_rollback.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_rosetta.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_start.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_status.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint/Babylond_tendermint_reset-state.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint/Babylond_tendermint_show-address.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint/Babylond_tendermint_show-node-id.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint/Babylond_tendermint_show-validator.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint/Babylond_tendermint_unsafe-reset-all.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tendermint/Babylond_tendermint_version.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_testnet.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylon_tx_authz.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylon_tx_decode.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_authz/Babylond_tx_authz_exec.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_authz/Babylond_tx_authz_grant.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_authz/Babylond_tx_authz_revoke.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_bank.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_bank/Babylond_tx_bank_multi-send.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_bank/Babylond_tx_bank_send.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_broadcast.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_btccheckpoint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_btclightclient.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_btclightclient/Babylond_tx_btclightclient_insert-header.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_checkpointing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_checkpointing/Babylond_tx_checkpointing_create-validator.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_checkpointing/Babylond_tx_checkpointing_submit.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_crisis.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_crisis/Babylond_tx_crisis_invariant-broken.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_distribution.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_distribution/Babylond_tx_distribution_fund-community-pool.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_distribution/Babylond_tx_distribution_set-withdraw-addr.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_distribution/Babylond_tx_distribution_withdraw-all-rewards.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_distribution/Babylond_tx_distribution_withdraw-rewards.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_encode.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching/Babylond_tx_epoching_cancel-unbond.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching/Babylond_tx_epoching_delegate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching/Babylond_tx_epoching_redelegate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_epoching/Babylond_tx_epoching_unbond.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_evidence.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_feegrant.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_feegrant/Babylond_tx_feegrant_grant.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_feegrant/Babylond_tx_feegrant_revoke.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/Babylond_tx_gov_deposit.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/Babylond_tx_gov_draft-proposal.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/Babylond_tx_gov_submit-legacy-proposal.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/Babylond_tx_gov_submit-proposal.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/Babylond_tx_gov_vote.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/Babylond_tx_gov_weighted-vote.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/submit-legacy/Babylond_tx_gov_submit-legacy-proposal_cancel.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/submit-legacy/Babylond_tx_gov_submit-legacy-proposal_community.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/submit-legacy/Babylond_tx_gov_submit-legacy-proposal_param.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_gov/submit-legacy/Babylond_tx_gov_submit-legacy-proposal_software-upgrade.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc-transfer.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc-transfer/Babylond_tx_ibc-transfer_transfer.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc/Babylond_tx_ibc_channel.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc/Babylond_tx_ibc_client.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc/client/Babylond_tx_ibc_client_create.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc/client/Babylond_tx_ibc_client_misbehaviour.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc/client/Babylond_tx_ibc_client_update.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_ibc/client/Babylond_tx_ibc_client_upgrade.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_multi-sign.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_multi-sign/Babylond_tx_multi-sign-batch.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_sign.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_sign/Babylond_tx_sign-batch.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_slashing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_slashing/Babylond_tx_slashing_unjail.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking/Babylond_tx_staking_cancel-unbond.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking/Babylond_tx_staking_create-validator.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking/Babylond_tx_staking_delegate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking/Babylond_tx_staking_edit-validator.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking/Babylond_tx_staking_redelegate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_staking/Babylond_tx_staking_unbond.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_validate-signatures.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_vesting.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_vesting/Babylond_tx_vesting_create-periodic-vesting-account.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_vesting/Babylond_tx_vesting_create-permanent-locked-account.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_vesting/Babylond_tx_vesting_create-vesting-account.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_tx/Babylond_tx_zoneconcierge.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_validate-genesis.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/Babylond_version.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylond.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondaddgenesisaccount.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondaddgenesisbls.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondcollectgentxs.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondconfig.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondcreatebls.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondcreategenesiskey.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondexport.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondgentx.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondhelp.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/babylondinit.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/cli.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/debug/babylonddebug.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/debug/babylonddebugaddr.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/debug/babylonddebugpubkeyraw.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/debug/babylonddebugrawbytes.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/debug/babylondebugpubkey.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeys.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysdd.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysdelete.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysimport.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeyslist.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysmigrate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysmnemonic.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysparse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysrename.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylondkeysshow.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/keys/babylonkeysexport.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/migrate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cli/babylond/preparegenesis.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/grpcrestapi.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/btccheckpoint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/btclightclient.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/checkpointing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/epoching.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/images/architecture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/monitor.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/reporter.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/submitter.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/modules/zoneconcierge.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/vigilantes/monitor.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/vigilantes/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/vigilantes/reporter.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/developer-guides/vigilantes/submitter.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/faq/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/architecture.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/babylon-overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/btc-staking.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/btc-timestamping.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/images/HowUseCase.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/images/arch.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/images/babylonoverview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/images/forking.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/images/longrange.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/images/securepos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/introduction/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/papers.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btccheckpoint/epochnum.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btccheckpoint/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btccheckpoint/params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btccheckpoint/submissions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/contains.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/containsbytes.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/hashes.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/header.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/mainchain.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/btclightclient/tip.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/checkpointing/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/checkpointing/rawcheckpoint.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/checkpointing/rawcheckpointlistepochnum.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/checkpointing/rawcheckpointliststatus.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/currentepoch.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/delegationlifecycle.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/epoch.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/epochinfomod.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/epochmsgs.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/latestepochmsgs.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/epoching/validatorlifecycle.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/zcconcierge/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rpc-gateway/zcconcierge/params.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/support.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/deployment-overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/global-system-configuration.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/images/phase-1-overview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/infra/bitcoind.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/infra/mongodb.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/infra/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/infra/rabbitmq.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/services/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-api.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-expiry-checker.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/backend-deployment/services/staking-indexer.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/bitcoin-staking-phase1/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/become-btc-staker.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/become-validator.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/become-vigilante.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/deployment-overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/finality-providers/eots-manager.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/finality-providers/finality-provider.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/finality-providers/images/finality-toolset.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/finality-providers/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/getting-funds.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/images/validator-deployment-overview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/integrate.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/network-information.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/btc-staking-testnet/setup-node.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/image/installationguide.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/installation.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/overview.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guides/testnet4.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docusaurus.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sidebars.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomepageFeatures/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomepageFeatures/styles.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/custom.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/markdown-page.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/DocCard/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/DocCard/styles.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/DocSidebar/Desktop/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/DocSidebar/Desktop/styles.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/.nojekyll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/CNAME" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/api-access-license.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/babylon-ecosystem-participant-agreement.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/babylon-ecosystem-participant-license.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/btc_staking_litepaper-32bfea0c243773f0bfac63e148387aef.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/cantina-phase1-competition.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/coinspect-phase1-audit-incremental.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/coinspect-phase1-audit.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/marketing-terms.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/files/zellic-phase1-audit.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/10.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/11.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/2.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/4.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/5.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/6.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/7.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/8.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/9.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/Group-1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/Group-2.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/Group-3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/Group-4.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/banner-btc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/banner.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/cli.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/docusaurus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/error.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/favicon_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/favicon_black.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/favicon_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/favicon_white.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/firstgif.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/grpc.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/image9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/installationgif.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/installationguide.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/logo_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/logo_black.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/logo_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/logo_white.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/modules.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/node.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/nodeoperatorsgif.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/number1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/number2.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/number3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/number4.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/paperclip.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/resources.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/restapi.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/settingnode.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/supp.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/support.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/team-svgrepo-com.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/undraw_docusaurus_mountain.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/undraw_docusaurus_react.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/undraw_docusaurus_tree.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/videoguides.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/work-svgrepo-com.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/working-time-work-svgrepo-com.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/papers/btc_staking_litepaper(CN).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/papers/btc_staking_litepaper(EN).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/papers/btc_staking_litepaper.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger.yaml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2uUEev7tq0Bferp8iFu86GE6m9r" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "D:/Projects/babylonlabs.github.io",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.tools",
+    "ts.external.directory.path": "D:\\Projects\\babylonlabs.github.io\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="856530e1-20ce-4b87-a82e-cc6306a99e25" name="Changes" comment="" />
+      <created>1742294852127</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742294852127</updated>
+      <workItem from="1742294853732" duration="6390000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

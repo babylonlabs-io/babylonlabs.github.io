@@ -1,0 +1,71 @@
+---
+id: get-delegation-v-2
+title: "Get a delegation"
+description: "Retrieves a delegation by a given transaction hash"
+sidebar_label: "Get a delegation"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWN9v2zgM/lcEPt0BbjIUu5c8XdK4m3G9pOckHYZdYcg2E+vqSJ4kZw2C/O8Hynbi5le77XVPraWPFEl9pBhuQBWouRVKBin0YIF2iDku3MrDNXhQcM2XaFEb6H3ZQIom0aKgbejBxPInIRfMai4NT2iVZdxkTEiW4TObK73kFjwQhP5aol6DB5IvEXpgKuHIPkckE2X4DB5o/FoKjSn0rC7RA5NkuOTQ24BdF5WYFnIB2+0jgU2hpEFD+9fv3tGfREmL0tK/vChykThfuv8ZsnjT0ldo8t2KSjrl9tTqLhhRbe4xJo5lJGSCLihRhmKR2Za9QlpcoIatd4C0gsJw5JcHKNOLakzOTXbSlGbHxRSfT2o3BcqUMOeP2HrNkor/w4Qu0Aqb08Lq2qBeiQQ79d1PGmNIdX2jfKlKec745tbFEnOVPL2CanHjpDMt3HmItj/r7D4pardJc4scpYyVi+rxnSRqhZJLu8dERiwkt6WuAMLi0lyQi20SFU/n/WuUnUG8yb+b+rBJowz2Ylxrvn6Fd69zyoOW/6/S9E1GzxqFbQ7uT7nMsBbuhw3Ys2JnCqmeC8lzYddRodVKpKjrKzSNs7sbP7rMw5C76muiFWojqvp1Old2Z1xKA+vKDcpyCb0vcO+PhsHoA3jw4IfBbeAPwYP+zTR48MGDyV1/8tEtTYO//bvxzV/RbDQYNyJ+P7z7/GJlB/sUTD8Ow/6n/uDOP0Yebu/E3IEnAIfy53BH548uHD66ePIpyROgR+8gyh48X1F0r1Zc0xtHLyY9kRbvq/SguNLnA2oxF5g23/3EihU2X47N+81pTeM9xeoNn+t8fbTawD8Jm6Waf+NxjqclTiEa6SajXtdyCXloi7xsiHzNijPyx7DHdrbSJZmXFdzid2f4fRnnIqlyciEkt3U+viyEEp9t9ITr76soGZdpjrqz1xzWjc2bxCrTGpGrnfXRsfVb92wdtnCo2f4tIxff/1QrhVpDb0ONjNZK36j0Rd0JRlM/HPXvookfPgQ3fuSH4TikMtS/C4b9aTAe7ZZG42l0O56NqA4N+sMo9P+Z+ZMpeHA7DgfBcOhTrs5G9+H4xp9MqBRE/mgaTD+DBzU4okQfz6ZvzNdAWtSS55Mqhj65QMbxXKTO/WZlpOytKiXl6YCnIX4t0dDt3CodizRFIutMFlolaAxlhS+tsNT/1lhiuSptm6wVVf1d2Oq6XZomiN/RvCyEzco4StQyinm8zpXMeWyuhGo62SteiKuGKqJ2OzIZ15hGLUtOscZt9NiAp6zx3NHm/S/a/KLNq7QZKcuqIGw9+ONXrflFmjeQpgkWo2ihZg3eA8sXLpyra/LvpXCIVgtcoWG89caxeM04W4gVyqPZBXiwRJupehziRiA2gx50V9fd1jPpgXGG0NGPNOGYq4bHPHE8xiUXOfSapT9boekIBUeOTjNkgwrDmslK/z5gaj5HbRidQOMUMpTHqrTMZshcX8/U3H000oPpzU6DWRuLy86/8rMqNeMJUYRxmbLSIBOGLdQKtcSUYkI66MR+hboTCUqDLBfyCVNmFYsxV9864EFebbmepxrnHMuBB6WmAGTWFqbX7aYqMZ2XUehyY9Ca7lzkaLrEksrCq/qATpHO3Q+jmmkn4gMe7H4fwXXnnevRlLFLLlvmfUD7ggJwEP1WBfox0tS5YfHZdoucC9dIOf83NYMcQ9tjA6Jrpoylrc0m5gZnOt9uabmalbmJm3AZnUJvznODF8z+LaxnZ7+zNw/mTlrtGtgz87kVz0uSAJq/rbgWruHvfXncepAhT1E7qysVxIfCtqSOSjtp2aXbB38K2+3/Wkcj6Q==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get a delegation"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/delegation"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieves a delegation by a given transaction hash
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Staking transaction hash in hex format","in":"query","name":"staking_tx_hash_hex","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"delegation_staking":{"properties":{"bbn_inception_height":{"type":"integer"},"bbn_inception_time":{"type":"string"},"end_height":{"type":"integer"},"slashing":{"properties":{"slashing_tx_hex":{"type":"string"},"spending_height":{"type":"integer"}},"type":"object","title":"v2service.StakingSlashing"},"staking_amount":{"type":"integer"},"staking_timelock":{"type":"integer"},"staking_tx_hash_hex":{"type":"string"},"staking_tx_hex":{"type":"string"},"start_height":{"type":"integer"}},"type":"object","title":"v2service.DelegationStaking"},"delegation_unbonding":{"properties":{"covenant_unbonding_signatures":{"items":{"properties":{"covenant_btc_pk_hex":{"type":"string"},"signature_hex":{"type":"string"}},"type":"object","title":"v2service.CovenantSignature"},"type":"array"},"slashing":{"properties":{"spending_height":{"type":"integer"},"unbonding_slashing_tx_hex":{"type":"string"}},"type":"object","title":"v2service.UnbondingSlashing"},"unbonding_timelock":{"type":"integer"},"unbonding_tx":{"type":"string"}},"type":"object","title":"v2service.DelegationUnbonding"},"finality_provider_btc_pks_hex":{"items":{"type":"string"},"type":"array"},"params_version":{"type":"integer"},"staker_btc_pk_hex":{"type":"string"},"state":{"enum":["PENDING","VERIFIED","ACTIVE","SLASHED","TIMELOCK_UNBONDING","EARLY_UNBONDING","TIMELOCK_WITHDRAWABLE","EARLY_UNBONDING_WITHDRAWABLE","TIMELOCK_SLASHING_WITHDRAWABLE","EARLY_UNBONDING_SLASHING_WITHDRAWABLE","TIMELOCK_WITHDRAWN","EARLY_UNBONDING_WITHDRAWN","TIMELOCK_SLASHING_WITHDRAWN","EARLY_UNBONDING_SLASHING_WITHDRAWN"],"type":"string","x-enum-varnames":["StatePending","StateVerified","StateActive","StateSlashed","StateTimelockUnbonding","StateEarlyUnbonding","StateTimelockWithdrawable","StateEarlyUnbondingWithdrawable","StateTimelockSlashingWithdrawable","StateEarlyUnbondingSlashingWithdrawable","StateTimelockWithdrawn","StateEarlyUnbondingWithdrawn","StateTimelockSlashingWithdrawn","StateEarlyUnbondingSlashingWithdrawn"],"title":"v2types.DelegationState"}},"type":"object","title":"v2service.DelegationPublic"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v2service_DelegationPublic"}}},"description":"Staker delegation"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"},"404":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Not Found"},"500":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Internal Server Error"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,48 @@
+---
+sidebar_position: 11 
+sidebar_label: Monitor
+---
+
+# Monitor
+
+`/babylon/x/monitor`
+
+The monitor module serves as a monitoring and tracking system for two key aspects
+of Babylon Bitcoin Staking Protocol: 
+
+1. Ensure the BTC Light Client's height tracking is consistent
+2. Ensure the Babylon Genesis's liveness and safety
+
+This module is particularly important because it: 
+
+- helps track the synchronization status between Babylon Genesis and Bitcoin
+- provides visibility into the checkpoint reporting process
+- enables verification of checkpoint integrity and liveness using checpoint hasehes
+
+## BTC Light Client Height Tracking
+
+In this function, the monitor module will track the Bitcoin Light Client's height
+at specific epoch boundaries. Monitor when epochs end and records the corresponding
+BTC block height. It will also allow querying of the historical BTC block height for
+any given epoch. 
+
+## Babylon Genesis' Liveness and Safety
+
+The monitor module also ensures the Babylon Genesis's liveness and safety.
+
+In this function, the monitor module will track when checkpoint are reported back to 
+Babylon Genesis. Records the BTC Light Client's height at which a  specific checkpointing
+were reported. It will also allow querying of checkpoint reporting using checpoint hashes. 
+
+Note that this module does not any initial state at genesis but rather accumulates data as 
+the Babylon Genesis runs. 
+
+## Endpoints
+
+The monitor module provides the following endpoints:
+
+- `GET /btc/lightclient/epochs/{epoch_num}` - to query the BTC Light Client's height at a specific epoch
+- `GET /btc/lightclient/checkpoints/{ckpt_hash}` - to query the checkpoint reporting history using checkpoint hashes
+
+
+

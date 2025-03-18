@@ -1,0 +1,7 @@
+{
+    "position": 4,
+    "label": "Stakers",
+    "collapsible": true, 
+    "collapsed": true,
+    "className": "stakers_sidebar_header"
+  }

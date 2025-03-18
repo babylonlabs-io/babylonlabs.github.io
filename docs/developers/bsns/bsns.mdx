@@ -1,0 +1,57 @@
+---
+title: Bitcoin Secured Networks
+sidebar_class_name: bitcoin_self_custodial_staking_sidebar
+sidebar_label: Bitcoin Secured Networks
+sidebar_position: 1
+---
+
+import Link from '@docusaurus/Link';
+
+# Building Bitcoin Secured Networks
+
+Bitcoin Secured Blockchains (BSNs) are a type of blockchain that uses Bitcoin as the 
+underlying security layer or additional security layer.
+
+
+## Cosmos Chains
+
+Cosmos chains can integrate with Babylon to get security from BTC stake. This is made more 
+important for new Cosmos chains with less staking TVL. In addition, the staked BTC 
+achieves *slashable safety*, a strong security property that the equivocations by 
+BTC-backed finality providers are held accountable, even 
+when equivocating finality providers constitute a majority.
+
+<Link
+  to="/developers/bsns/cosmos_chains"
+>
+    Cosmos Chain Integration Guide
+</Link>
+
+## OP-stack Chains
+
+OP-stack chains can integrate with the Babylon BTC staking protocol to get Bitcoin 
+security. 
+
+This has a few benefits: 
+
+- **Better economic security:** There is native BTC staked to protect the rollup and 
+improve its economic security. This is made more important for new OP-stack chains with 
+fewer adoption. In addition, the staked BTC achieves *slashable safety*, a strong 
+security property that equivocations by L2 sequencers are held accountable and the BTC 
+stake is slashable, even when equivocating L2 sequencers constitute a majority.
+- **Fast finality:** The improved economic security will benefit the OP stack chains for 
+fast finality. If the user is willing to trust the votes backed by the BTC stake, then 
+the user can confirm transactions and make decisions without waiting for the lengthy 
+challenging period in optimistic rollups.
+- **Reorg resilience of L2 transactions:** Once a transaction is included in an L2 block 
+signed by the majority of BTC-backed finality providers, the sequencer cannot publish a 
+different L2 block at the same height on L1.
+
+The [Forkless Rollups with Bitcoin staking](https://babylonchain.io/blog/forkless-rollups-with-bitcoin-staking) 
+blog post provides more details.
+
+<Link
+  to="/developers/bsns/op_stack_chains"
+>
+    OP-stack L2 Chain Integration Guide
+</Link>
