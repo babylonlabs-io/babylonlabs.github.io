@@ -43,7 +43,7 @@ jobs:
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
           ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
-          TRACKING_ID: ${{ secrets.TRACKING_ID }}
+          TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
         run: |
           export NODE_OPTIONS="--max-old-space-size=4096"
           npm run build
