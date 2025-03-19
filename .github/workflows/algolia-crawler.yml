@@ -16,12 +16,12 @@ jobs:
 
       - name: Set environment variables
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
             echo "CONFIG_FILE=docsearch.config.json" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+          elif [ "${GITHUB_REF}" == "refs/heads/dev" ]; then
             echo "CONFIG_FILE=docsearch.config.dev.json" >> $GITHUB_ENV
           else
-            echo "Unknown branch: ${{ github.ref }}"
+            echo "Unknown branch: ${GITHUB_REF}"
             exit 1
           fi
 
@@ -29,11 +29,12 @@ jobs:
         env:
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          CONFIG_FILE: ${{ env.CONFIG_FILE }}
         working-directory: ./
         run: |
           docker run --rm \
             -v $(pwd):/app \
-            -e "CONFIG=/app/docsearch.config.json" \
+            -e "CONFIG=/app/${CONFIG_FILE}" \
             -e "ALGOLIA_APP_ID=${ALGOLIA_APP_ID}" \
             -e "ALGOLIA_API_KEY=${ALGOLIA_API_KEY}" \
             algolia/docsearch-scraper
