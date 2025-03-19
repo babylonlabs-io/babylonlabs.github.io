@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { themes } = require('prism-react-renderer');
 const { languageTabs } = require('./static/languageTabs.mjs');
+const isDev = process.env.NODE_ENV === 'development';
 const code_themes = {
   light: themes.github,
   dark: themes.dracula,
@@ -289,7 +290,7 @@ const config = {
       algolia: {
         appId: process.env.ALGOLIA_APP_ID,
         apiKey: process.env.ALGOLIA_API_KEY,
-        indexName: 'dev_babylonlabs_doc',
+        indexName:  isDev ? 'doc_dev_babylonlabs_io' : 'doc_babylonlabs_io',
         contextualSearch: true,
         searchParameters: {},
         contextualSearchFilters: [],
