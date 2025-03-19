@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: '20.14'
 
+      # Inject BRANCH_NAME into environment variables
+      - name: Set BRANCH_NAME
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       # Navigate to the correct working directory and install dependencies
       - name: Install dependencies
