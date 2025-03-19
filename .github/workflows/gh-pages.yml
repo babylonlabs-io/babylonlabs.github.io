@@ -19,24 +19,21 @@ jobs:
         with:
           node-version: '20.14'
 
-      # Inject BRANCH_NAME into environment variables
-      - name: Set BRANCH_NAME
-        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == "refs/pull/"* ]]; then
+            echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=unknown" >> $GITHUB_ENV
+          fi
 
       # Navigate to the correct working directory and install dependencies
       - name: Install dependencies
         working-directory: ./
         run: npm install
-
-      - name: Replace password placeholder
-        working-directory: ./
-        run: |
-          echo "Rewriting password-config.json..."
-          if [ ! -f ./static/password-config.json ]; then
-          echo "File not found, creating a new one."
-          echo '{"password": "PLACEHOLDER"}' > ./static/password-config.json
-          fi
-          sed -i "s/PLACEHOLDER/${{ secrets.DOCUSAURUS_PASSWORD }}/g" ./static/password-config.json
 
       # Build the project
       - name: Build project
@@ -44,7 +41,6 @@ jobs:
         env:
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
-          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
           TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
         run: |
