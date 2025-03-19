@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { themes } = require('prism-react-renderer');
 const { languageTabs } = require('./static/languageTabs.mjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
