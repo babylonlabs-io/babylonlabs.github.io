@@ -93,5 +93,8 @@ jobs:
           AWS_REGION: ${{ vars.AWS_S3_REGION }}
         run: |
           tar -czf docs-${{ github.sha }}.tar.gz -C artifact .
-          aws s3 cp docs-${{ github.sha }}.tar.gz s3://devnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
-          aws s3 cp docs-${{ github.sha }}.tar.gz s3://mainnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            aws s3 cp docs-${{ github.sha }}.tar.gz s3://devnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            aws s3 cp docs-${{ github.sha }}.tar.gz s3://mainnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+          fi
