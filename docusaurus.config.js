@@ -126,7 +126,7 @@ const config = {
   ...meta,
   plugins,
 
-  trailingSlash: false,
+  trailingSlash: true,
   themes: [
     '@docusaurus/theme-live-codeblock',
     '@docusaurus/theme-mermaid',
