@@ -4,9 +4,9 @@ sidebar_class_name: smart_contract_deployment_sidebar
 sidebar_position: 1
 ---
 
-# Babbylon Genesis Smart Contracts Deployment Guide
+# Babylon Genesis Smart Contracts Deployment Guide
 
-This guide walks you through deploying a smart contract on the Babylon blockchain. The example contract we'll deploy is a storage contract that allows saving data with Bitcoin timestamps and verifying Bitcoin finalization status.
+This guide walks you through deploying a smart contract on the Babylon Genesis blockchain. The example contract we'll deploy is a storage contract that allows saving data with Bitcoin timestamps and verifying Bitcoin finalization status.
 
 ## Prerequisites
 
@@ -23,10 +23,10 @@ Clone and update the submodules:
 ```bash
 git submodule update --init --recursive
 ```
-This command initializes and fetches all necessary submodule code: `babyon` binary and `storage_contract`. It might take a few minutes to complete as close to 1GB of data will be downloaded.
+This command initializes and fetches all necessary submodule code: `babylond` binary and `storage_contract`. It might take a few minutes to complete as close to 1GB of data will be downloaded.
 
 ### 2. Babylond CLI Installation
-The Babylond CLI is your primary tool for interacting with the Babylon blockchain.
+The Babylond CLI is your primary tool for interacting with the Babylon Genesis blockchain.
 
 Verify your Rust installation first:
 ```bash
@@ -52,7 +52,7 @@ main-112821536b0ada40aa29e34b53206f56c61bf631
 
 Load network-specific variables:
 ```bash
-# For Phase 2 testnet (Babbylon Genesis)
+# For Phase 2 testnet (Babylon Genesis)
 source env-phase2-testnet.sh
 
 # OR for Phase 3 devnet (multi-staking)
@@ -100,7 +100,7 @@ babylond keys list --keyring-backend=test
 ```
 
 #### Fund Your Wallet
-You need test tokens (tBBN) to deploy contracts. Get them through:
+You need test tokens (tBABY) to deploy contracts. Get them through:
 
 L2Scan Babylon testnet Faucet:
 1. Visit [L2Scan Faucet](https://babylon-testnet.l2scan.co/faucet)
