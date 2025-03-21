@@ -2,22 +2,22 @@
   "index_name": "doc_babylonlabs_io",
   "start_urls": [
     {
-      "url": "https://docs.babylonlabs.io/guides",
+      "url": "https://docs.babylonlabs.io/guides/",
       "tags": "guides",
       "selectors_key": "guides"
     },
     {
-      "url": "https://docs.babylonlabs.io/api",
+      "url": "https://docs.babylonlabs.io/api/",
       "tags": "api",
       "selectors_key": "api"
     },
     {
-      "url": "https://docs.babylonlabs.io/operators",
+      "url": "https://docs.babylonlabs.io/operators/",
       "tags": "operators",
       "selectors_key": "operators"
     },
     {
-      "url": "https://docs.babylonlabs.io/developers",
+      "url": "https://docs.babylonlabs.io/developers/",
       "tags": "developers",
       "selectors_key": "developers"
     }
