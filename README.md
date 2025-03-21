@@ -1,4 +1,4 @@
-# Babylon Labs Documentation
+# Babylon Labs Documentation 
 
 This repository contains the official documentation for Babylon Labs, built using [Docusaurus](https://docusaurus.io/).
 
