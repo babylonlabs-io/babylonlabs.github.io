@@ -1,0 +1,225 @@
+---
+sidebar_label: "FAQs"
+sidebar_position: 9
+---
+
+# Operator Frequently Asked Questions
+
+## Babbylon Genesis Validators
+
+## Recommendations
+
+- Regularly monitor your node's status
+- Keep your node software and configurations up to date
+- Maintain secure and reliable deployment infrastructure
+- Participate in community channels for the latest updates and changes
+
+### FAQs
+
+#### Q: How can I retrieve the correct genesis file?
+**A:**
+You can download the genesis file from
+[Babylon Labs' networks repository](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/genesis.json).
+Ensure you're using the correct version of the Babylon binary specified in the documentation.
+
+#### Q: What are the hardware requirements for running Babylon nodes and finality providers?
+**A:**
+An instance with at least 8 GB of RAM should be sufficient to host both a
+Babylon node and a finality provider. However, for better reliability, it is recommended
+to run them on separate instances.
+
+#### Q: How do I set up my Babylon validator?
+**A:**
+Follow these steps:
+- Install the required Babylon binary.
+- Initialize your node with `babylond init`.
+- Sync from the correct genesis file or a snapshot.
+- Configure `config.toml` and add persistent peers.
+- Register your validator with `babylond tx staking create-validator`.
+Refer to the [official setup guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/babylon-node/README.md)
+for details.
+
+#### Q: What ports should I open for my Babylon node?
+**A:**
+Open the following ports:
+- **RPC Port:** 26657
+- **gRPC Port:** 9090
+- **P2P Port:** 26656
+Ensure proper firewall rules if your validator and finality provider are on different instances.
+
+#### Q: How can I check my validator’s status?
+**A:**
+Use:
+```bash
+babylond q staking validator <your-valoper-address>
+```
+Alternatively, check your status on an explorer such as [Mintscan](https://www.mintscan.io/babylon-testnet/validators)
+or [L2Scan](https://babylon-testnet.l2scan.co/).
+
+#### Q: How do I upgrade my Babylon validator node?
+**A:**
+Try the following:
+- Stop your node.
+- Download and install the latest binary.
+- Restart your node with the updated version.
+- Ensure proper synchronization by checking logs.
+
+#### Q: How do I recover from a failed upgrade?
+**A:**
+
+If your node fails to start after an upgrade:
+- Check logs for error messages.
+- Ensure you're using the correct genesis file or state snapshot.
+- Run `unsafe-reset-all` and resync the node.
+- If necessary, reinitialize the validator and restore from a backup.
+
+
+#### Q: What should I do if my validator is jailed?
+**A:**
+Try the following:
+- Check logs for issues related to missed votes or incorrect configurations.
+- Run `babylond tx slashing unjail` to attempt unjailing.
+- Ensure your validator is active and signing correctly before attempting unjailing.
+
+#### Q: How do I stake and delegate tokens to a validator?
+**A:**
+Use the following command:
+```bash
+babylond tx staking delegate <validator-address> <amount>ubbn --from <your-wallet>
+```
+Ensure your wallet has sufficient balance to cover transaction fees.
+
+
+#### Q: How do I withdraw validator rewards?
+**A:**
+Use the following command:
+```bash
+babylond tx distribution withdraw-rewards <your-valoper-address> --from <your-wallet>
+```
+Add `--commission` if you want to withdraw validator commission as well.
+
+#### Q: How do I redelegate my stake to another validator?
+**A:**
+Use:
+```bash
+babylond tx staking redelegate <src-validator> <dest-validator> <amount>ubbn --from <your-wallet>
+```
+Wait for the redelegation cooldown period before performing another redelegation.
+
+#### Q: What should I do if my node stops syncing?
+**A:**
+Try the following:
+- Restart your node and check logs for errors.
+- Verify that your peers and seeds are correctly set in `config.toml`.
+- If necessary, resync from a trusted snapshot.
+
+#### Q: What precautions should I take when resetting my node?
+**A:**
+Read the following:
+- **CAUTION:** Avoid using `unsafe-reset-all` without proper preparation
+- This command may remove BLS keys stored in `priv_validator_key.json`
+- Always create a backup of `priv_validator_key.json` before any reset
+- Wait for future updates that will separate BLS keys for improved safety
+
+#### Q: How can I safely reset my Babylon node?
+**A:**
+Try the following:
+- Create a full backup of all critical configuration files
+- Specifically, backup `priv_validator_key.json`
+- Consult the latest Babylon documentation for recommended reset procedures
+- Consider reaching out to Babylon support if you're unsure about the reset process
+
+
+## Finality Providers
+
+### Recommendations
+
+**Connection Suggestions**
+   - Do not use multiple nodes behind a load balancer
+   - Always connect to a single, trusted Babylon RPC node
+   - Enable transaction indexing on your RPC node
+
+**Voting Mechanism Suggestions**
+   - The jailing mechanism is similar to Cosmos SDK's native approach, Babylon
+Chain is built with the Cosmos SDK and uses the [x/slashing module](https://docs.cosmos.network/main/build/modules/slashing).
+   - It is designed to protect network integrity and prevent malicious activities
+
+### Q&A
+
+#### Q: How do I register my Finality Provider (FP)?
+**A:**
+Check and run following steps:
+- Ensure you have an existing EOTS key from previous testnets.
+- Run `fpd keys add` to create a Babylon key.
+- Use `fpd create-finality-provider` to register your FP.
+- Ensure `fpd start --eots-pk <your-eots-pk>` is running.
+- Verify your FP status on an explorer or with `babylond q finality`.
+
+#### Q: How do I check if my Finality Provider is active?
+**A:**
+Run:
+```bash
+babylond q finality provider <your-provider-address>
+```
+Your provider should have active status and be voting on finality.
+
+#### Q: What are the key recommendations for running a Finality Provider daemon?
+**A:**
+
+Follow these critical guidelines:
+- Connect your finality provider daemon to a trusted Babylon RPC node
+- Ensure you're connected to a single Babylon node (avoid load balancers)
+- Verify that your RPC node has transaction indexing enabled
+
+#### Q: How can I prevent duplicate finality votes?
+**A:**
+Try the following:
+- Use a single, dedicated Babylon RPC node with transaction indexing enabled
+- Monitor your daemon's connection and status regularly
+- Check logs for any duplicate vote warnings
+
+#### Q: What should I do if my Finality Provider is jailed?
+**A:**
+Follow these steps:
+- Immediately check the status using `fpd finality-provider-info [eots-pk-hex]`
+- Verify your daemon's status on the Babylon staking dashboard
+- Investigate and resolve the underlying issue causing the jailing
+- Follow the official Babylon unjailing guide to restore your provider's status
+
+#### Q: What are the key recommendations for running a Finality Provider daemon?
+**A:**
+Follow these critical guidelines:
+- Connect your finality provider daemon to a trusted Babylon RPC node.
+- Ensure you're connected to a single Babylon node (avoid load balancers).
+- Verify that your RPC node has transaction indexing enabled.
+
+#### Q: My EOTS daemon is not working correctly. What should I do?
+**A:**
+Check if your eotsd is returning the following logs:
+```bash
+[eotsd] failed to create db backend: timeout
+```
+If you see this log, it means that your EOTS daemon is not working correctly due to
+BD lock. Try to remove the process causing the lock on .bd file and restart.
+
+#### Q: How do I reset my EOTS daemon configuration?
+**A:**
+If there is something wrong with your current config and the following error pops up:
+Run:
+```bash
+[eotsd] failed to load config at...
+```
+This is probably due to a new parameter appeared in the config and you could create a
+new default config with `eotsd init`, just remember to update the values to your key name and directory path
+
+
+
+## Contact and Support
+
+For further assistance, please reach out to the Babbylon Genesis Validator and Finality Provider slack support channels (invit-only).
+
+:::warning
+This guide is based on the observation of current Babylon network
+operators in testnet. Always refer to the most recent official documentation for the most
+up-to-date information.
+:::

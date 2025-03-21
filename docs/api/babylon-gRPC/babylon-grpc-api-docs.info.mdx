@@ -1,0 +1,74 @@
+---
+id: babylon-grpc-api-docs
+title: "Babylon gRPC API Docs"
+description: "|"
+sidebar_label: Introduction
+sidebar_position: 0
+hide_title: true
+custom_edit_url: null
+---
+
+import ApiLogo from "@theme/ApiLogo";
+import Heading from "@theme/Heading";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
+import Export from "@theme/ApiExplorer/Export";
+
+<span
+  className={"theme-doc-version-badge badge badge--secondary"}
+  children={"Version: 1.0.0"}
+>
+</span>
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Babylon gRPC API Docs"}
+>
+</Heading>
+
+
+
+|
+                A Babylon gRPC Gateway is a REST interface for Babylon's gRPC. 
+                This is a merged specification of the Babylon gRPC Gateway and 
+                the CometBFT RPC.
+                
+                Supported RPC protocols:
+
+                * URI over HTTP
+                * JSONRPC over HTTP
+                * JSONRPC over websockets
+                
+                ## Configuration
+
+                RPC can be configured by tuning parameters under "[rpc]" table in the
+                "$CMTHOME/config/config.toml" file or by using the "--rpc.X" command-line
+                flags.
+
+                The default RPC listen address is "tcp://127.0.0.1:26657".
+                
+                ## URI/HTTP
+
+                A REST like interface. "curl localhost:26657/block?height=5"
+
+                ## JSONRPC/HTTP
+
+                JSONRPC requests can be POST'd to the root RPC endpoint via HTTP.
+                "curl --header "Content-Type: application/json" --request POST --data '\{"method": "block", "params": ["5"], "id": 1\}' localhost:26657"
+
+                ## JSONRPC/websockets
+
+                JSONRPC requests can be also made via websocket.
+                The websocket endpoint is at "/websocket", e.g. "localhost:26657/websocket".
+                Asynchronous RPC functions like event "subscribe" and "unsubscribe" are
+                only available via websockets.
+
+                For example using the [websocat](https://github.com/vi/websocat) tool, you can subscribe for 'NewBlock' events
+                with the following command:
+
+                "echo '\{ "jsonrpc": "2.0","method": "subscribe","id": 0,"params": \{"query": "tm.event='"'NewBlock'"'"\} \}' | websocat -n -t ws://127.0.0.1:26657/websocket"
+                
+
+
+      

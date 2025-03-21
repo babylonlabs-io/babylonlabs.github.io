@@ -1,0 +1,83 @@
+---
+title: Cosmos Chains
+sidebar_class_name: cosmost_chains_sidebar
+sidebar_label: Cosmos Chains
+sidebar_position: 1
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# Integrating BTC Staking to Cosmos Chains
+
+## System architecture
+
+The following figure depicts the system architecture. The "→" arrow denotes data flow;
+for example, X→ Y means "Y queries data from X and the data flows from X to Y".
+
+<ThemedImage
+  alt="Cosmos Chains Integrations Architecture"
+  sources={{
+    light: useBaseUrl('/img/cosmos-integration.png'),
+    dark: useBaseUrl('/img/cosmos-integration.png'),
+  }}
+/>
+
+The design involves the following main components:
+
+- **Finality Provider:** a daemon program that receives BTC stake and keeps submitting
+finality signatures over blocks to the BSN chain.
+  - It connects to a BSN chain node to query block metadata.
+  - It connects to the Babylon contracts on the BSN chain for querying voting
+power and submitting finality signatures.
+
+Upon a new block in the BSN chain, It:
+
+  - Gets the block metadata.
+  - Queries the Babylon contracts on the BSN chain to determine whether it has
+voting power at this height.
+  - If yes, sign and submit a finality signature to the Babylon contracts.
+- **Babylon Contracts:** a set of CosmWasm smart contracts that maintains IBC channels
+with Babylon and handles finality signatures submitted from finality providers
+  - It will be deployed on the BSN chain.
+  - It establishes an IBC channel with Babylon. The IBC channel relays information
+about BTC light clients, BTC timestamps and BTC staking.
+  - It determines voting power of BSN finality providers based on the IBC packets.
+
+Upon a finality signature, the Babylon contracts verify it:
+
+  - If invalid, reject.
+  - If valid and non-conflicting with any existing ones, accept.
+  - If valid but conflicting with an existing finality signature, it sends an IBC
+packet to Babylon. Then Babylon emits an event so anyone can slash the finality
+provider and the BTC stake under it.
+- **Babylon-SDK:** a small Cosmos SDK module serving as a thin layer between Babylon
+contracts and Cosmos SDK level of the BSN chain.
+  - It sends a sudo message to the Babylon contracts upon each `BeginBlock` , so that
+Babylon contracts can update voting power table and tally blocks.
+  - It moves a part of the reward from the fee collector account to Babylon contracts,
+so that Babylon contracts can transfer the rewards to Babylon.
+
+## Implementation
+
+We have finished the reference implementation. The codebases include:
+
+- [babylon](https://github.com/babylonlabs-io/babylon/):
+Babylon node with BTC staking integration support to Cosmos SDK chains.
+- [finality-provider](https://github.com/babylonlabs-io/finality-provider/tree/base/consumer-chain-support):
+The Finality Provider program
+- [btc-staker](https://github.com/babylonlabs-io/btc-staker/tree/base/consumer-chain-support):
+The BTC staker program
+- [babylon-contract](https://github.com/babylonlabs-io/babylon-contract): The CosmWasm
+contracts deployed on the BSN chain for integration.
+- [babylon-sdk](https://github.com/babylonlabs-io/babylon-sdk): The Cosmos SDK module
+serving as a thin layer between Babylon contracts and Cosmos SDK level of the BSN
+chain
+
+## Local deployments
+
+We have developed local deployment scripts for the Cosmos integration
+
+- https://github.com/babylonlabs-io/babylon-integration-deployment
+
+---

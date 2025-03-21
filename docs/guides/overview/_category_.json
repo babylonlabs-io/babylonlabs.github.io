@@ -1,0 +1,11 @@
+{
+  "position": 1,
+  "label": "Overview",
+  "collapsible": true,
+  "collapsed": false,
+  "className": "overview_sidebar_header",
+  "link": {
+    "type": "doc",
+    "id": "guides/overview/overview"
+  }
+}

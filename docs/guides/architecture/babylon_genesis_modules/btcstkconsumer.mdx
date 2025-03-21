@@ -1,0 +1,63 @@
+---
+sidebar_position: 2
+
+---
+
+# BTCSTK Consumer
+
+`/babylon/x/btcstkconsumer`
+
+
+The `btcstkconsumer` module manages Bitcoin Secure Networks (BSNs) as consumers
+registrations and finality provider relationships in Babylon's Bitcoin staking protocol. 
+
+Here is a functional breakdown:
+
+- BSN Registration (handles permissioned or permissionless settings)
+- Finality Provider Relationship Management
+- BTC Staking and Delegation Management
+- Reward Distribution Configuration
+
+## Core functions
+
+1. BSN Registration
+- Manages registration of different types of BSNs
+- Tracks BSN metadata and provider information
+- Controls the permissioned or permissionless settings for registration process
+
+
+2. Finality Provider Relationship Management
+- Tracks finality provider list for each BSN
+- Manages voting power of the finality providers
+- Monitors slashing status
+
+
+3. BTC Staking and Delegation Management    
+
+
+BSN registration data consists of "Consumer Id", Consumer Name and description, 
+Chain-specific metadata (e.g. IBC channel ID). 
+
+## State
+
+The module maintains the following state:
+
+- BSN Registry State
+- Finality Provider State
+- Slashing State
+
+The btcstkconsumer module implements a state management system that uses 
+prefix-based keys and maintains separate stores for different types of data. 
+It implements CRUD operations utilizing protocol buffers for serialization, and 
+supports iteration over state collections. All this state data is persisted in 
+the chain's underlying database and can be accessed through keeper methods.
+
+## Endpoints
+
+The module exposes these gRPC queries: 
+
+- `GET /babylon/btcstkconsumer/v1/params` - Query module parameters
+- `GET /babylon/btcstkconsumer/v1/consumers_registry/{consumer_ids}` - Query BSN registration details
+- `GET /babylon/btcstkconsumer/v1/finality_providers/{consumer_id}` - Query finality providers for a given BSN
+- `GET /babylon/btcstkconsumer/v1/finality_provider/{consumer_id}/{fp_btc_pk_hex}` - Query finality provider details
+- `GET /babylon/btcstkconsumer/v1/finality_provider_consumer/{fp_btc_pk_hex}` - Query BSNs for a given finality provider

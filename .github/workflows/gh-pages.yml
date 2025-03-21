@@ -1,0 +1,100 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.14'
+
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == "refs/pull/"* ]]; then
+            echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=unknown" >> $GITHUB_ENV
+          fi
+
+      # Navigate to the correct working directory and install dependencies
+      - name: Install dependencies
+        working-directory: ./
+        run: npm install
+
+      # Build the project
+      - name: Build project
+        working-directory: ./
+        env:
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+          TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          npm run build
+
+      # Upload build files as artifact
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./build
+          name: build_artifact
+
+  deploy-gh-pages:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      # Download the artifact
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build_artifact
+          path: ./artifact
+
+  deploy-s3:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      # Download the artifact
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build_artifact
+          path: ./artifact
+
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ vars.AWS_S3_REGION }}
+        run: |
+          tar -czf docs-${{ github.sha }}.tar.gz -C artifact .
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            aws s3 cp docs-${{ github.sha }}.tar.gz s3://devnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            aws s3 cp docs-${{ github.sha }}.tar.gz s3://mainnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+          fi

@@ -1,0 +1,57 @@
+---
+sidebar_class_name: roadmap_sidebar
+sidebar_title: Phases of The Launch
+sidebar_position: 1
+---
+
+import DocCardList from '@theme/DocCardList';
+
+# Phases of The Launch
+
+:::info
+Babylon is launching Phase 2 with a stable testnet (bbn-test-5) released on Jan 8, 2025.
+:::
+
+Babylon network is launching in three strategic phases.
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+
+<div className="flex flex-col items-center justify-center">
+  <ThemedImage
+    alt="Babylon Launch Sequence"
+    sources={{
+      light: useBaseUrl('/img/guides/the_launch.png'),
+      dark: useBaseUrl('/img/guides/the_launch_dark.png'),
+    }}
+  />
+  <em>Babylon Launch Sequence</em><br/>
+</div>
+
+
+
+<CardSection
+  id="launch-phases"
+  title=""
+  description="Details of each phase of the Babylon network launch:"
+>
+  <Card
+    title="Phase 1: Bitcoin Locking"
+    to="/guides/overview/phases_of_the_launch/phase-1/"
+  />
+  <Card
+    title="Phase 2: Babylon Genesis Launch"
+    to="/guides/overview/phases_of_the_launch/phase-2/"
+  />
+  <Card
+    title="Phase 3: Bitcoin Multi-staking"
+    to="/guides/overview/phases_of_the_launch/phase-3/"
+  />
+</CardSection>
+
+Security assurances are the most important to Bitcoin stakers. We take the following measures in each phase to ensure this:
+- Multiple audits in each phase
+- Progressive onboarding of TVL with caps
+- Covenant committee oversees all phases
+- Ensuring all designs are self-custodial

@@ -1,0 +1,67 @@
+---
+id: get-stats-v-1
+title: "Get Overall Stats (Deprecated)"
+description: "[DEPRECATED] Fetches overall stats for babylon staking including tvl, total delegations, active tvl, active delegations and total stakers. Please use /v2/stats instead."
+sidebar_label: "Get Overall Stats (Deprecated)"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVU1v2zAM/SsCTxvg2m2PPq1fGwYMaNF2A4YsCGiZjrXKkifRXoMg/32Q5GRZm3a77hSFIh/Jx0d5DbYnh6ys+VhDCUviO0b2X04gA0e+t8aTh3INp8fH4Udaw2Q4HLHvtZIxtvjurQk2L1vqMJx6F5BZpega+YAVJauRFjVpWkacaOVVT1CCMkxLcrDJtn486sP3FctF75SkxeDrmI68dKoPkFDCdTygFo0iXUO2RTBDVyWAnkytzPLlDGwZ9d8LTW6e8YHcqy4vJhqMtKZRrqP6JafNrgFbfSfJoSHFOhjGE09uVJLy65Ecah2HeTNUWsnYJy6VwUTL02EYeuTFA632Unp2yixfzdiiqTW5/Dfy7aSafwpLpW1Djnb1Lw7VHwCfTDZ5CR/cRGOdqLBaaWuC5WFXOy49lDMYT2AeEHpHEplqKNkN9BRzdnl1c3t1cXZ/dTkX74llS17YvyUSykg9BBEJHnUm4pjFnmAykVScrqfz3r1AU09Rk35ycaMJPYnBkyjG0yIlV8YzYZ1DBh1xa6e1hTBdbqGEYjxJrpBBoDNKcTbPQJnGbncYZdxh6lBpKLemd1NXGiufKwvPCL9vSZxPnd9NnZ/dfBS2aciF2hrrutiQwMoOLLilSBoJ28Q/2+jz+4sdgl95pi7/Zr7awQmUknziI3SuvFgG+g3VolpFjJDxLHl9UpKMJ6GVeaBAoKhI25+BHZ2uoraxC6p7HgcZDC4Q0DL3viyK2kqf/8lCgd4T+6JRmnyBvTpKFR5NCfK+buJmT9o+wA9kEMaQODzNj+MuWs8dmr3yPhCLraKj8MWby51Y38KTWey9xf+TZqcXgemRi16jMvHVc/GlSwKOi5pBkvA8g9Z6Dtb1ukJPn53ebIL5x0BulYQ9olNYBfJn800GLWFNDsrZGuJ7BmHmfdiQEfUQsj/7dG3me9v04eoeNptfmvR//A==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Overall Stats (Deprecated)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/stats"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Fetches overall stats for babylon staking including tvl, total delegations, active tvl, active delegations and total stakers. Please use /v2/stats instead.
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_price_usd":{"description":"Optional field","type":"number"},"pending_tvl":{"type":"integer"},"total_delegations":{"type":"integer"},"total_stakers":{"type":"integer"},"total_tvl":{"type":"integer"},"unconfirmed_tvl":{"type":"integer"}},"type":"object","title":"v1service.OverallStatsPublic"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v1service_OverallStatsPublic"}}},"description":"Overall stats for babylon staking"}}}
+>
+  
+</StatusCodes>
+
+
+      

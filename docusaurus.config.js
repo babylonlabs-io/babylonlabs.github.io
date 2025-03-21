@@ -1,156 +1,327 @@
-// @ts-check
-// `@type` JSDoc annotations allow editor autocompletion and type checking
-// (when paired with `@ts-check`).
-// There are various equivalent ways to declare your Docusaurus config.
-// See: https://docusaurus.io/docs/api/docusaurus-config
-
-import {themes as prismThemes} from 'prism-react-renderer';
-
+require('dotenv').config();
+const { themes } = require('prism-react-renderer');
+const { languageTabs } = require('./static/languageTabs.mjs');
+const BRANCH_NAME = process.env.BRANCH_NAME;
+const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const code_themes = {
+  light: themes.github,
+  dark: themes.dracula,
+};
 
 /** @type {import('@docusaurus/types').Config} */
-const config = {
-  title: 'Babylon Blockchain',
-  tagline: 'Unlocking 21 Million Bitcoin to Secure the Decentralized Economy',
+const meta = {
+  title: 'Babylon Docs',
+  tagline:
+    'Where developers bring programmable economnic security to the decentralized world.',
   url: 'https://docs.babylonlabs.io',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon_black.png',
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'babylonlabs-io', // Usually your GitHub org/user name.
-  projectName: 'babylonlabs.github.io', // Usually your repo name.
-  deploymentBranch: 'gh-pages',
-  trailingSlash: false,
-  // Even if you don't use internalization, you can use this field to set useful
-  // metadata like html lang. For example, if your site is Chinese, you may want
-  // to replace "en" with "zh-Hans".
+  favicon: '/favicon.ico',
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
+};
+
+/** @type {import('@docusaurus/plugin-content-docs').Options[]} */
+const docs = [];
+
+const openapiPlugins = [
+  [
+    'docusaurus-plugin-openapi-docs',
+    {
+      id: 'api',
+      docsPluginId: 'classic',
+      config: {
+        petstore: {
+          specPath: 'static/swagger/babylon-staking-api-openapi3.yaml',
+          outputDir: 'docs/api/staking-api',
+          sidebarOptions: {
+            groupPathsBy: 'tag',
+            categoryLinkSource: 'tag',
+          },
+          hideSendButton: false,
+          showSchemas: false,
+
+        },
+        babylonGrpc: {
+          specPath: 'static/swagger/babylon-merged-rpc-openapi3.yaml',
+          outputDir: 'docs/api/babylon-gRPC',
+          sidebarOptions: {
+            groupPathsBy: 'tag',
+            categoryLinkSource: 'tag',
+          },
+          hideSendButton: false,
+          showSchemas: false,
+        },
+      },
+    },
+  ],
+];
+
+
+const analyticsPlugins = [
+  [
+    '@docusaurus/plugin-google-analytics',
+    {
+      trackingID: process.env.TRACKING_ID,
+      anonymizeIP: true,
+    },
+  ],
+];
+
+/** @type {import('@docusaurus/plugin-content-docs').Options} */
+const defaultSettings = {
+  breadcrumbs: true,
+  showLastUpdateTime: true,
+  sidebarCollapsible: true,
+  remarkPlugins: [
+    [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
+  ],
+  sidebarPath: require.resolve('./sidebars-default.js'),
+};
+
+/**
+ * Create a section
+ * @param {import('@docusaurus/plugin-content-docs').Options} options
+ */
+function create_doc_plugin({
+                             sidebarPath = require.resolve('./sidebars-default.js'),
+                             ...options
+                           }) {
+  return [
+    '@docusaurus/plugin-content-docs',
+    /** @type {import('@docusaurus/plugin-content-docs').Options} */
+    ({
+      ...defaultSettings,
+      sidebarPath,
+      ...options,
+    }),
+  ];
+}
+
+const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
+const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
+const authPlugins = [
+  function myPlugin(context, options) {
+    return {
+      name: 'docusaurus-plugin-auth',
+      async contentLoaded({ actions }) {
+        const { setGlobalData } = actions;
+        setGlobalData({ authenticated: false });
+      }
+    };
+  },
+];
+const plugins = [
+  tailwindPlugin,
+  ...docs_plugins,
+  ...openapiPlugins,
+  ...authPlugins,
+  ...analyticsPlugins
+];
+
+// @ts-ignore
+/** @type {import('@docusaurus/types').Config} */
+const config = {
+  ...meta,
+  plugins,
+
+  trailingSlash: true,
+  themes: [
+    '@docusaurus/theme-live-codeblock',
+    '@docusaurus/theme-mermaid',
+    'docusaurus-theme-openapi-docs',
+  ],
+
+  markdown: {
+    mermaid: true,
+  },
+
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
 
   presets: [
     [
-      'classic',
+      '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          includeCurrentVersion: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          routeBasePath: '/',
+          ...defaultSettings,
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/babylonlabs-io/babylonlabs.github.io/tree/main/',
+          showLastUpdateAuthor: false,
+          showLastUpdateTime: false,
+          docItemComponent: '@theme/ApiItem',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
+        blog: false,
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: [
+            require.resolve('./src/css/custom.css')
+          ],
+        },
+        sitemap: {
+          ignorePatterns: ['**/tags/**', '/api/*'],
+        },
+        gtag: {
+          trackingID: process.env.TRACKING_ID,
+          anonymizeIP: true,
         },
       }),
-    ]
+    ],
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: '/logo/babylon.svg',
+      colorMode: {
+        defaultMode: 'dark',
+      },
       docs: {
         sidebar: {
-          hideable: true,
           autoCollapseCategories: true,
+          hideable: true,
         },
       },
       navbar: {
-        title: '',
-        hideOnScroll: true,
         logo: {
-          alt: 'Babylon',
-          srcDark: 'img/logo_white.svg',
-          src: 'img/logo_black.svg',
+          href: '/',
+          src: '/logo/light.svg',
+          srcDark: '/logo/dark.svg',
+          alt: 'Babylon Documentation | Babylon Docs',
+          height: '40px',
+          width: '101px',
         },
         items: [
           {
-            type: 'doc',
-            position: 'left',
-            docId: 'introduction/overview',
             label: 'Docs',
+            to: '/guides/overview/',
+            className: 'guides-top-header',
           },
           {
-            to: 'docs/developer-guides/grpcrestapi',
-            position: 'left',
+            label: 'Operators',
+            to: '/operators/',
+            className: 'operators-top-header',
+          },
+          {
+            label: 'Developers',
+            to: '/developers/',
+            className: 'developers-top-header',
+          },
+          {
             label: 'API',
+            items: [
+              {
+                label: 'Staking API',
+                to: '/api/staking-api/babylon-staking-api',
+              },
+              {
+                label: 'Babylon gRPC',
+                to: '/api/babylon-gRPC/babylon-grpc-api-docs',
+              },
+            ],
           },
-          //{to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/babylonlabs-io',
-            label: 'GitHub',
+            label: 'Participate',
+            to: 'https://babylonlabs.io/community',
+          },
+          {
+            href: 'https://discord.com/invite/babylonglobal',
             position: 'right',
+            className: 'header-discord-link',
           },
           {
-            href: 'https://babylonlabs.io/about',
-            label: 'About',
+            href: 'https://github.com/babylonlabs-io/',
             position: 'right',
+            className: 'header-github-link',
           },
           {
-            href: 'https://babylonlabs.io/contact',
-            label: 'Contact',
+            type: 'search',
             position: 'right',
           },
         ],
       },
       footer: {
-        style: 'dark',
+        logo: {
+          href: '/',
+          src: '/logo/light.svg',
+          srcDark: '/logo/dark.svg',
+          alt: 'Babylon Documentation | Babylon Docs',
+          height: '36px',
+        },
         links: [
           {
-            title: 'Docs',
+            title: 'Product',
             items: [
               {
                 label: 'Documentation',
-                to: '/docs/introduction/overview',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'LinkedIn',
-                href: 'https://www.linkedin.com/company/babylon-chain',
+                href: 'https://docs.babylonlabs.io',
               },
               {
-                label: 'Twitter',
-                href: 'https://www.twitter.com/babylon_chain',
+                label: 'Developer Events',
+                href: 'https://linktr.ee/buildonbabylon',
               },
               {
-                label: 'Youtube',
-                href: 'https://www.youtube.com/channel/UCmnied_wAVVa2ECVLQH2OLQ',
-              }
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'Blog',
-                to: 'https://babylonlabs.io/blog',
+                label: 'Project Showcase',
+                href: 'https://dorahacks.io/projects/babylon-labs',
               },
             ],
           },
         ],
-        
+        copyright: 'Copyright © Babylon Labs since 2023. All rights reserved.',
       },
       prism: {
-        theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
+        theme: code_themes.light,
+        darkTheme: code_themes.dark,
+        additionalLanguages: ['rust', 'swift', 'objectivec', 'json', 'bash'],
+        magicComments: [
+          {
+            className: 'theme-code-block-highlighted-line',
+            line: 'highlight-next-line',
+            block: { start: 'highlight-start', end: 'highlight-end' },
+          },
+          {
+            className: 'code-block-error-line',
+            line: 'highlight-next-line-error',
+          },
+        ],
+      },
+      languageTabs: [...languageTabs],
+      algolia: {
+        appId: process.env.ALGOLIA_APP_ID,
+        apiKey: process.env.ALGOLIA_API_KEY,
+        indexName:  ALGOLIA_INDEX_NAME,
+        contextualSearch: true,
+        searchParameters: {},
+        contextualSearchFilters: [],
+      },
+      search: {
+        algolia: {
+          contextualSearch: true,
+          searchParameters: {
+            facetFilters: ['language:en'],
+          },
+        },
       },
     }),
-};
 
-export default config;
+  webpack: {
+    jsLoader: (isServer) => ({
+      loader: require.resolve('swc-loader'),
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
+          },
+          target: 'es2017',
+        },
+        module: {
+          type: isServer ? 'commonjs' : 'es6',
+        },
+      },
+    }),
+  },
+};
+module.exports = config;

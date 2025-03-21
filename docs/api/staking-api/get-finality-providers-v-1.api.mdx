@@ -1,0 +1,75 @@
+---
+id: get-finality-providers-v-1
+title: "Get Active Finality Providers (Deprecated)"
+description: "[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead."
+sidebar_label: "Get Active Finality Providers (Deprecated)"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVsFu2zgQ/RViTi2gWEmOOm3aJEWBHoyud4FF1zAoaWSxpkguZ6xWMPzvC1KS7URqNsWeerLN4cw8Pr955AGsQy9ZWfOxhAy2yI/KSK24W3rbqhI9/XkDCTjpZYOMniD7coASqfDKhTzIYLnPtSrEDjthK8E1imooItxQRbAVFXJRQwIq5PyzR99BAkY2CBlUbpNzsXE7SICKGhsJ2QG4cyFI7JXZwvGYTDrLrTIRfuw+NokYDH5n4eQWA6gJIPoBEHequNlh9yKadQIeyVlDSCF+e30dPgprGA2Hr9I5rYpYLf1KAfHhop7zgXxWfXYpOa4qxoamYVmwanFTosZtLEgXkJRh3KKHYzLu41bPxweWp8dJoLBNo4hUj3MSfsL8BD2yVJpmE1WJhhV3s8HGGrVDPxsjLPZecbcJlMqCZzd9w5wU46xcxhWbf8WCIQFWrMNCe0PoW1Xg4tHdn8/VCzlUZctS/zfb/bYfkP3q/pG6i959kvReduH3WZJT3oPIo1B/6vi1NKVGvzhX/jwI+VVpPdQx5SoC3ZyOtJkc6fhcPXAntCKeH0xB1jOWIu/EXRTzqtVCGREqoCmV2Qrry5FguQ2OBO0NrEMT57GQjCVk7Pf4vO2X+4fl54f3d6uH+7V4DE6BJAbpBjBSa9EP0Mu4uEblx51RA6KVeo9C22KHpXhzAv52DvlCLDVKQrEnFGl7m47Nrs7NlCFGWS4ggQa5toM7RyvmGjJI25uZvGBY6Nvep9fB4io7mtIwQdhIpSEbl37LZd5pa7TMaaHsZNJhVaN41+8Rv7PchWPcLT8KW1U90Mr6pvdgmds9R/MllozjbTBmv1u9P1Wgjhibxd/mL7sPVBZIJKQpIyeKxNa26M2J7tjxrt/1SRVoCIVWJpDNVuSo7bdAle5DcTJ6P5/mQQJ7HwiomR1laVraghZPWUglETKlldJIqXTqqkd4NTRYuLKKozpMxgw/kED4G3oObxfXcZItcSPNBbwPyIPKxXjxitPNK97cnwT9FiYOfLpoflFdDzbD+J1Tp6UygaL41xwGkce5TmBG5usEakscthwOuST8w+vjMSz393l8pCiSuQ5eUElNz83gkr+ffMDMAo8m/OQdE6mDDCC+W14P5n+9aV7ANnnanAGuww+vAsLgG8cEapTBYwOPfXYYIscXWZPHTahy8qoPDys4Hv8F8Oqnlg==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Active Finality Providers (Deprecated)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/finality-providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Public key of the finality provider to fetch","in":"query","name":"fp_btc_pk","schema":{"type":"string"}},{"description":"Pagination key to fetch the next page of finality providers","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"v1service.FpDescriptionPublic"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.FpDetailsPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v1service_FpDetailsPublic"}}},"description":"A list of finality providers sorted by ActiveTvl in descending order"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,104 @@
+---
+sidebar_position: 2
+sidebar_label: Bitcoin Staking
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# Bitcoin Staking
+
+Bitcoin staking in Babylon protocol enables BTC holders to lock their assets in a 
+time-bound contract as security collateral, earning rewards for securing any networks. 
+The protocol implements a slashing mechanism where staked assets may be forfeited if 
+protocol security rules are violated, similar to traditional security deposits but 
+with protocol-enforced penalties. Networks consuming such a security are called 
+Bitcoin Secured Networks (BSNs).
+
+## Native Bitcoin Staking Implementation
+
+Babylon's staking mechanism is built directly on Bitcoin's UTXO model and native 
+scripting capabilities. This differs from traditional cross-chain staking solutions 
+that require wrapping or bridging Bitcoin to external networks.
+
+### Core Requirements
+
+For protocol security, Bitcoin staking implements the following attributes:
+- Self-custody: Stakers maintain direct control of their Bitcoin
+- Trustless execution: No reliance on third parties
+- Native operation: Direct integration with Bitcoin blockchain
+- Slashing capability: Protocol-enforced penalties for malicious behavior
+
+### Technical Implementation
+
+The staking mechanism leverages Bitcoin's UTXO model, allowing holders to create 
+multiple UTXOs with distinct spending conditions defined through Bitcoin scripts. 
+These scripts form the basis of staking contracts with the following conditions:
+
+1. Holder's cryptographic signature
+2. Time-lock expiration
+3. Covenant committee consensus (for slashing)
+
+The protocol introduces Extractable One-Time Signatures (EOTS) and a covenant 
+committee to enable slashing functionality. The committee can execute slashing 
+through majority consensus if malicious behavior is detected, resulting in partial 
+or complete forfeiture of staked assets.
+
+<div className="flex flex-col items-center justify-center">
+  <ThemedImage
+    alt="Staking Contract"
+    sources={{
+      light: useBaseUrl('/img/guides/staking.png'),
+      dark: useBaseUrl('/img/guides/staking_dark.png'),
+    }}
+  />
+  <em>Babylon Staking Protocol Architecture</em><br/>
+</div>
+
+The Babylon Staking Protocol maintains an index of staked Bitcoin by monitoring 
+and validating transactions between Bitcoin Chain and Babylon Genesis, enabling 
+programmatic security for connected BSNs.
+
+## Multi-Staking Architecture
+
+Bitcoin Multi-Staking enables BTC holders to delegate their assets across multiple 
+Finality Providers and BSNs. This architecture forms the foundation of Babylon's 
+shared security model, allowing stakers to diversify their delegation while 
+maximizing rewards from multiple BSNs.
+
+<div className="flex flex-col items-center justify-center max-w-md mx-auto">
+  <ThemedImage
+    alt="Multi-staking Contract"
+    sources={{
+      light: useBaseUrl('/img/guides/multi-staking.png'),
+      dark: useBaseUrl('/img/guides/multi-staking_dark.png'),
+    }}
+  />
+  <em>Multi-Staking Architecture</em><br/>
+</div>
+
+### System Components
+
+The multi-staking architecture consists of:
+1. Staking Contract: Bitcoin script-based security mechanism with covenant committee 
+   integration, facilitated via Babylon Genesis
+2. Finality Provider: Delegated validators for BSN chain or data validation
+3. BSNs: Bitcoin Secured Networks utilizing the multi-staking infrastructure
+
+### Security Properties
+
+The shared security model provides:
+1. Slashable PoS Security: Guaranteed partial stake forfeiture upon safety 
+   violations, with chain-specific slashing isolation
+2. Asset Safety: Guaranteed withdrawal capability for honest stakers and validators
+3. Liquidity Assurance: Secure, efficient unbonding without social consensus 
+   requirements
+4. Security Isolation: Chain-specific security boundaries prevent cross-chain 
+   contamination
+
+### Protocol Benefits
+
+This architecture optimizes Bitcoin's utility as security collateral without 
+requiring additional capital allocation. It addresses the cold-start problem faced 
+by new blockchain networks in bootstrapping security capital and trust. The shared 
+slashing mechanism across networks creates strong security incentives, as malicious 
+behavior results in stake loss across all delegated networks.
