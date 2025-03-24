@@ -9,9 +9,9 @@ sidebar_position: 2
 
 ## **Overview**
 
-Euphrates 0.5.0 is the 5th version of a Babylon devnet that supports integration with other BSNs. On top of Euphrates 0.2.0 where BSN can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN, Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalisation status, and Euphrates 0.5.0 supports finality provider slashing and slashing propagation to Babylon and other BSNs.
+Euphrates 0.5.0 is the 5th version of a Babylon devnet that supports integration with other BSNs (Bitcoin Staking Networks). On top of Euphrates 0.2.0 where BSNs can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN. Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalization status, and Euphrates 0.5.0 supports Finality Provider slashing and slashing propagation to Babylon and other BSNs.
 
-This page provides a guide for PoS systems to integrate with Euphrates 0.5.0. The integration allows a BSN system to get economic security from BTC stake.
+This page provides a guide for PoS systems to integrate with Euphrates 0.5.0. The integration allows a BSN system to get economic security from BTC staking.
 
 Euphrates 0.5.0 is currently in a highly experimental phase, and unexpected issues may arise. We welcome any feedback on the integration process and this document.
 
@@ -26,14 +26,14 @@ Euphrates 0.5.0 is currently in a highly experimental phase, and unexpected issu
 1. Babylon receives registrations of BSN systems, BSN Finality Providers, and BTC delegations (shipped in Euphrates v0.1.0).
 2. Babylon propagates BSN Finality Providers and BTC delegations to BSN systems (shipped in Euphrates v0.2.0).
 3. BSN Finality Providers submit finality signatures to their BSN systems (shipped in Euphrates v0.3.0).
-4. BSN systems tally blocks and determine their finalisation status (shipped in Euphrates v0.4.0).
-5. Finality providers who double sign blocks are slashed, their associated slashing transactions are executed, and delegations are unbonded (shipped in Euphrates v0.5.0, current version).
+4. BSN systems tally blocks and determine their finalization status (shipped in Euphrates v0.4.0).
+5. Finality Providers who double sign blocks are slashed, their associated slashing transactions are executed, and delegations are unbonded (shipped in Euphrates v0.5.0, current version).
 
 ## BSN system requirements
 
 The BSN system integrating with Euphrates 0.5.0 needs to support IBC and CosmWasm smart contracts. This is because Babylon sends information about Finality Providers and BTC delegations as IBC packets. The BSN system needs to deploy CosmWasm smart contracts to process these IBC packets, and then store the Finality Providers and BTC delegations information.
 
-The Babylon team is developing a specialised relayer to support BSN systems without IBC, and is developing BSN side software for various types of BSN systems.
+The Babylon team is developing a specialized relayer to support BSN systems without IBC, and is developing BSN side software for various types of BSN systems.
 
 ## **Prerequisites**
 
@@ -77,11 +77,11 @@ make install
 
 The above command will build and install the `babylond` binary to `$GOPATH/bin`.
 
-### Finality provider
+### Finality Provider
 
-Finality providers are responsible for voting at a finality round on top of [CometBFT](https://github.com/cometbft/cometbft). Similar to any native PoS validator, a finality provider can receive voting power delegations from BTC stakers, and can earn commission from the staking rewards denominated in Babylon tokens.
+Finality pPoviders are responsible for voting at a finality round on top of [CometBFT](https://github.com/cometbft/cometbft). Similar to any native PoS validator, a Finality Provider can receive voting power delegations from BTC stakers, and can earn commission from the staking rewards denominated in Babylon tokens.
 
-To install finality provider software, clone the repository to your local machine from Github:
+To install Finality Provider software, clone the repository to your local machine from Github:
 
 ```
 git clone https://github.com/babylonlabs-io/finality-provider.git
@@ -105,9 +105,9 @@ The above command will build and install the following binaries to `$GOPATH/bin`
 - `fpd`: The daemon and CLI program for the finality-provider.
 - `eotsd`: The daemon program for the EOTS manager.
 
-### BTC staker
+### BTC Staker
 
-To get started, clone the repository to your local machine from Github, check out
+To get started, clone the repository to your local machine from GitHub, check out
 
 ```
 git clone https://github.com/babylonlabs-io/btc-staker.git
@@ -159,7 +159,7 @@ $ . ./env_euphrates.sh
 
 ### Getting test tokens
 
-**Babylon tBABY tokens.** One can get Babylon tBABY tokens on Euphrates devnet by the following.
+**Babylon tBABY tokens.** One can get Babylon tBABY tokens on Euphrates devnet by the following:
 
 1. Create a Babylon account by using
 
@@ -167,7 +167,7 @@ $ . ./env_euphrates.sh
 $ babylond keys add $key $keyringBackend
 ```
 
-1. Then get some BBN test tokens. If you have access, you can by example contact Spyros Kekos (@Spyros) in BabylonLabs’s Slack workspace, or directly use the [#faucet-euphrates-bbn](https://discord.com/channels/1046686458070700112/1242731520720900116) channel on [Babylon discord server](https://discord.com/invite/babylonglobal).
+2. Then get some tBABY test tokens. If you have access, you can for example contact Spyros Kekos (@Spyros) in BabylonLabs’s Slack workspace, or directly use the [#faucet-euphrates-bbn](https://discord.com/channels/1046686458070700112/1242731520720900116) channel on [Babylon discord server](https://discord.com/invite/babylonglobal).
 Alternatively, you can try **hitting the faucet endpoint** directly:
 
 ```bash
@@ -176,19 +176,19 @@ $ curl $faucetUrl/claim \
   -d '{ "address": "<your_bbn_address>"}'
 ```
 
-1. You can verify the account’s balance by using
+3. You can verify the account’s balance by using
 
 ```bash
 $ babylond query bank balances <your_bbn_address> --node $nodeUrl
 ```
 
-**Getting signet BTC tokens.** The Euphrates devnet is connected to BTC Signet. There’s information on how to connect to Signet in the [BTC Signet wiki](https://en.bitcoin.it/wiki/Signet). After creating a wallet and a new BTC address in the signet network, you can visit Bitcoin’s signet faucets (e.g., [https://signetfaucet.com](https://signetfaucet.com/)) for signet BTC. Babylon also provides a BTC signet faucet in [Babylon discord server](https://discord.gg/babylonglobal).
+**Getting signet BTC tokens.** The Euphrates devnet is connected to BTC Signet. There’s information on how to connect to Signet in the [BTC Signet wiki](https://en.bitcoin.it/wiki/Signet). After creating a wallet and a new BTC address in the signet network, you can visit Bitcoin’s signet faucets (e.g., [https://signetfaucet.com](https://signetfaucet.com/)) for signet BTC. Babylon also provides a BTC signet faucet in the [Babylon discord server](https://discord.gg/babylonglobal).
 
 ### Installing Babylon SDK
 
-For Cosmos based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base. Other BSN systems are not supported at the moment.
+For Cosmos-based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base. Other BSN systems are not supported at the moment.
 
-The `x/babylon` module acts as a thin layer between the Cosmos SDK layer and the CosmWasm smart contracts. It allows the BSN system to notify the Babylon contracts upon `BeginBlock` and `EndBlock`, such that the contracts can index blocks in the BSN system upon `BeginBlock` , and tally blocks to determine their finalisation status upon `EndBlock`.
+The `x/babylon` module acts as a thin layer between the Cosmos SDK layer and the CosmWasm smart contracts. It allows the BSN system to notify the Babylon contracts upon `BeginBlock` and `EndBlock`, such that the contracts can index blocks in the BSN system upon `BeginBlock`, and tally blocks to determine their finalization status upon `EndBlock`.
 
 Installing the `x/babylon` module is no different compared to installing other modules. We have provided a demo Cosmos SDK chain that integrates with the `x/babylon` module. Please refer to [https://github.com/babylonlabs-io/babylon-sdk/tree/v0.5.0-rc.1/demo](https://github.com/babylonlabs-io/babylon-sdk/tree/v0.5.0-rc.1/demo) for the implementation.
 
@@ -204,12 +204,12 @@ After setting up the software, address and tokens, please follow the steps below
 
 You need to deploy Babylon CosmWasm contracts on the BSN system. The contracts are responsible for receiving IBC packets of Finality Providers and BTC delegations from Babylon, and maintaining their status.
 
-They also implement block indexing, and bote tallying / block finalisation.
+They also implement block indexing, and vote tallying / block finalization.
 
 You can obtain the Babylon contracts by one of the following methods:
 
 1. Download `babylon_contract.wasm` and  `btc_staking.wasm` from the corresponding release tag: [https://github.com/babylonlabs-io/babylon-contract/releases/tag/v0.9.0-rc.1](https://github.com/babylonlabs-io/babylon-contract/releases/tag/v0.9.0-rc.1).
-2. Alternatively, you can clone the [Babylon Contracts](https://github.com/babylonlabs-io/babylon-contract) repository to your local machine, check out the`v0.9.0-rc.1` tag, install cargo [run-script](https://crates.io/crates/cargo-run-script), and build the optimised CosmWasm contracts yourself.
+2. Alternatively, you can clone the [Babylon Contracts](https://github.com/babylonlabs-io/babylon-contract) repository to your local machine, check out the`v0.9.0-rc.1` tag, install cargo [run-script](https://crates.io/crates/cargo-run-script), and build the optimized CosmWasm contracts yourself.
 
 ```bash
 $ git clone https://github.com/babylonlabs-io/babylon-contract.git
@@ -348,7 +348,7 @@ You’ll need the following information:
 - The port ID is `zoneconcierge` for Babylon, and `wasm.<babylon_contract_address>` for the BSN system.
 - The GRPC endpoint of the Euphrates devnet is `https://grpc-euphrates.devnet.babylonlabs.io` .
 - For gas prices, both for the IBC relayer setup and sending TXs, you can just use `1ubbn`.
-- Channel ordering must be specified as `“ordered"` ,
+- Channel ordering must be specified as `“ordered"`.
 - and channel version is `"zoneconcierge-1”`.
 
 ### Register your BSN system on Babylon
@@ -359,7 +359,7 @@ Starting with this version v0.5.0, the BSN system is registered automatically du
 
 - If you encounter error like **`ERR** failure when running app err="rpc error: code = InvalidArgument desc = rpc error: code = InvalidArgument desc = Address cannot be empty: invalid request"` , try to add a flag `--from <key_name>` where `<key_name>` is the key name associated with your address.
 - If you encounter error like `chain ID required but not specified`, try to add a flag `--chain-id <chain_id>` where `<chain_id>` can be obtained from [`https://rpc-euphrates.devnet.babylonlabs.io/block?height=1`](https://rpc-euphrates.devnet.babylonlabs.io/block?height=1)
-Then, you can query the Babylon node to see the blockchain is registered to Babylon.
+Then, you can query the Babylon node to see the blockchain registered to Babylon.
 
 ```bash
 $ babylond query btcstkBSN registered-BSNs -o json --node https://rpc-euphrates.devnet.babylonlabs.io
@@ -375,27 +375,27 @@ $ babylond query btcstkBSN registered-BSNs -o json --node https://rpc-euphrates.
 $
 ```
 
-### Become a finality provider for your BSN system
+### Become a Finality Provider for your BSN system
 
-**Set up EOTS manager.** To become a finality provider, you need to set up a EOTS manager that manages the key pairs for your finality provider. Please follow steps at [EOTS Manager | Babylon Labs](https://docs.babylonlabs.io/guides/architecture/btc_staking_program/eots_manager) and adapt the configuration file attached in the appendix.
+**Set up EOTS manager.** To become a Finality Provider, you need to set up a EOTS manager that manages the key pairs for your Finality Provider. Please follow steps at [EOTS Manager | Babylon Labs](https://docs.babylonlabs.io/guides/architecture/btc_staking_program/eots_manager) and adapt the configuration file attached in the appendix.
 
-**Set up finality provider daemon.** Then you can set up a finality provider. It will call EOTS manager for signing messages, and interact with Babylon. Please follow steps at [Finality Provider | Babylon Labs](https://docs.babylonlabs.io/guides/architecture/btc_staking_program/finality_providers) and adapt the configuration file attached in the appendix.
+**Set up Finality Provider daemon.** Then you can set up a Finality Provider. It will call EOTS manager for signing messages, and interact with Babylon. Please follow steps at [Finality Provider | Babylon Labs](https://docs.babylonlabs.io/guides/architecture/btc_staking_program/finality_providers) and adapt the configuration file attached in the appendix.
 
 **Note**: Mind to use your BSN system id as `chain-id` for the CLI commands.
 
-**Create and register your finality provider on Babylon.** After that, you can create a finality provider instance through the `fpd create-finality-provider` or `fpd cfp` command. The created instance is associated with a BTC public key which serves as its unique identifier and a Babylon account to which staking rewards will be directed.
+**Create and register your Finality Provider on Babylon.** After that, you can create a Finality Provider instance through the `fpd create-finality-provider` or `fpd cfp` command. The created instance is associated with a BTC public key which serves as its unique identifier and a Babylon account to which staking rewards will be directed.
 
 ```
 $ fpd create-finality-provider --key-name my-finality-provider --chain-id <your_chain_id> --moniker my-name
 ```
 
-You can register a created finality provider in Babylon through the `fpd register-finality-provider`. Note that one needs to obtain some tBABY tokens from [L2Scan Babylon Testnet Faucet](https://babylon-testnet.l2scan.co/faucet) first. The output contains the hash of the Babylon finality provider registration transaction.
+You can register a created Finality Provider in Babylon through the `fpd register-finality-provider`. Note that one needs to obtain some tBABY tokens from [L2Scan Babylon Testnet Faucet](https://babylon-testnet.l2scan.co/faucet) first. The output contains the hash of the Babylon Finality Provider registration transaction.
 
 ```
 $ fpd register-finality-provider d0fc4db48643fbb4339dc4bbf15f272411716b0d60f18bdfeb3861544bf5ef63
 ```
 
-Then, you can query the Babylon node to see the finality provider is registered on Babylon
+Then, you can query the Babylon node to see the Finality Provider registered on Babylon
 
 ```
 $ babylond query btcstkBSN finality-providers <your_chain_id>
@@ -436,9 +436,9 @@ $
 
 ### Stake BTC to your Finality Providers
 
-**Set up BTC staker daemon.** To stake BTC to your Finality Providers, you need to set up a BTC staker daemon that generates Bitcoin staking transactions and sends staking requests to Babylon. Please follow steps at [Stake with BTC Staker CLI | Babylon Blockchain](https://docs.babylonlabs.io/guides/stakers) and adapt the configuation file attached in the appendix.
+**Set up BTC Staker daemon.** To stake BTC to your Finality Providers, you need to set up a BTC Staker daemon that generates Bitcoin staking transactions and sends staking requests to Babylon. Please follow steps at [Stake with BTC Staker CLI | Babylon Blockchain](https://docs.babylonlabs.io/guides/stakers) and adapt the configuation file attached in the appendix.
 
-**Staking BTC to your Finality Providers.** When staking, specify the BTC public keys of Finality Providers using the `--finality-providers-pks` flag in the `stake` command. Note that **Babylon requires a BTC delegation to restake to at least 1 Babylon finality provider, apart from Finality Providers of other BSN systems.**
+**Staking BTC to your Finality Providers.** When staking, specify the BTC public keys of Finality Providers using the `--finality-providers-pks` flag in the `stake` command. Note that **Babylon requires a BTC delegation to restake to at least 1 Babylon Finality Provider, apart from Finality Providers of other BSN systems.**
 
 First, you could use the following command to list all Babylon Finality Providers.
 
@@ -458,7 +458,7 @@ Then, find the BTC address that has sufficient Bitcoin balance that you want to 
 stakercli daemon list-outputs
 ```
 
-After that, stake Bitcoin to the finality provider of your choice. The `--staking-time` flag specifies the timelock of the staking transaction in BTC blocks. The `--staking-amount` flag specifies the amount in Satoshis to stake. For example, `<pk1>` could be the Bitcoin public key of your finality provider, while `<pk2>` is a Babylon finality provider of your choice.
+After that, stake Bitcoin to the Finality Provider of your choice. The `--staking-time` flag specifies the timelock of the staking transaction in BTC blocks. The `--staking-amount` flag specifies the amount in Satoshis to stake. For example, `<pk1>` could be the Bitcoin public key of your Finality Provider, while `<pk2>` is a Babylon Finality Provider of your choice.
 
 ```
 stakercli daemon stake \
@@ -469,7 +469,7 @@ stakercli daemon stake \
   --staking-time 10000 # ~70 days
 ```
 
-Note that among public keys specified in `--finality-providers-pks`, at least one of them should be a Babylon finality provider. For example, you can let the BTC delegation to restake to a Babylon finality provider as well as a finality provider for your BSN system.
+Note that among public keys specified in `--finality-providers-pks`, at least one of them should be a Babylon Finality Provider. For example, you can let the BTC delegation to restake to a Babylon Finality Provider as well as a Finality Provider for your BSN system.
 
 Then, you can query the Babylon node to see the BTC delegation
 
@@ -512,7 +512,7 @@ babylond query btcstaking btc-delegations any --node https://rpc-euphrates.devne
 
 ### Wait until BSN system receives IBC packets
 
-After some time, Babylon contract on the BSN side is supposed to receive IBC packets about these Finality Providers and BTC delegations, and store them in the local KV store. If the BSN system is based on Cosmos SDK, then you can query Finality Providers via
+After some time, the Babylon contract on the BSN side is supposed to receive IBC packets about these Finality Providers and BTC delegations, and store them in the local KV store. If the BSN system is based on Cosmos SDK, then you can query Finality Providers via
 
 ```bash
 <BSN_system_binary> query wasm contract-state smart <btc_staker_contract_address> '{ "finality_providers": {} }'
@@ -526,15 +526,15 @@ and query BTC delegation with a given staking tx hash `<staking_tx_hash_hex>` vi
 
 ### Wait until Finality Providers start submitting finality signatures
 
-Once the BSN system receives IBC packets of Finality Providers and BTC delegations, the finality provider daemon will automatically start submitting finality signatures to the BTC staking contract on the BSN system. One can query the finality signature at a given block signed by a given finality provider via the following query
+Once the BSN system receives IBC packets of Finality Providers and BTC delegations, the Finality Provider daemon will automatically start submitting finality signatures to the BTC staking contract on the BSN system. One can query the finality signature at a given block signed by a given Finality Provider via the following query
 
 ```bash
 <BSN_system_binary> query wasm contract-state smart <btc_staker_contract_address> '{"finality_signature":{"btc_pk_hex":"<cz_btc_pk>","height":<last_block_height>}}'
 ```
 
-### Wait until blocks are finalised
+### Wait until blocks are finalized
 
-The Babylon contracts will tally BSN chain blocks and determine their finalisation status upon each `EndBlock`. One can query the finalisation status of a given block via the below query.
+The Babylon contracts will tally BSN chain blocks and determine their finalization status upon each `EndBlock`. One can query the finalization status of a given block via the below query.
 
 ```bash
 <BSN_system_binary> query wasm contract-state smart <btc_staker_contract_address> '{"block":{"height":<block_height>}}'
@@ -588,7 +588,7 @@ AutoCompactMinAge = 168h0m0s
 DBTimeout = 1m0s
 ```
 
-### Finality provider (`fpd.conf`)
+### Finality Provider (`fpd.conf`)
 
 ```
 [Application Options]
