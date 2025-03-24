@@ -103,13 +103,19 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/babylon-gRPC/finality-provider-delegations",
-          label: "FinalityProviderDelegations queries all BTC delegations of the given finality provider",
+          label: "FinalityProviderDelegations queries all BTC delegations of the given\nfinality provider",
           className: "api-method get",
         },
         {
           type: "doc",
           id: "api/babylon-gRPC/finality-provider",
           label: "FinalityProvider info about one finality provider",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/largest-btc-re-org",
+          label: "LargestBtcReOrg retrieves the largest BTC reorg",
           className: "api-method get",
         },
         {
@@ -121,13 +127,19 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/babylon-gRPC/params-by-btc-height",
-          label: "ParamsByBTCHeight queries the parameters of the module for a specific BTC height",
+          label: "ParamsByBTCHeight queries the parameters of the module for a specific BTC\nheight",
           className: "api-method get",
         },
         {
           type: "doc",
           id: "api/babylon-gRPC/params-by-version",
-          label: "ParamsByVersion queries the parameters of the module for a specific version of past params.",
+          label: "ParamsByVersion queries the parameters of the module for a specific version\nof past params.",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/params-versions",
+          label: "ParamsVersions queries all the parameters of the module with version.",
           className: "api-method get",
         },
         {
@@ -366,6 +378,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/babylon-gRPC/delegation-rewards",
+          label: "DelegationRewards queries the delegation rewards of given finality provider\nand delegator addresses",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/babylon-gRPC/incentive-params",
           label: "Parameters queries the parameters of the module.",
           className: "api-method get",
@@ -458,7 +476,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Tx",
+      label: "CometBFT",
       items: [
         {
           type: "doc",
@@ -484,12 +502,6 @@ const sidebar: SidebarsConfig = {
           label: "Checks the transaction without executing it.",
           className: "api-method get",
         },
-      ],
-    },
-    {
-      type: "category",
-      label: "Info",
-      items: [
         {
           type: "doc",
           id: "api/babylon-gRPC/health",
@@ -506,6 +518,18 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/babylon-gRPC/net-info",
           label: "Network information",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/dial-seeds",
+          label: "Dial Seeds (Unsafe)",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/dial-peers",
+          label: "Add Peers/Persistent Peers (unsafe)",
           className: "api-method get",
         },
         {
@@ -618,36 +642,6 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "api/babylon-gRPC/broadcast-evidence",
-          label: "Broadcast evidence of the misbehavior.",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "Unsafe",
-      items: [
-        {
-          type: "doc",
-          id: "api/babylon-gRPC/dial-seeds",
-          label: "Dial Seeds (Unsafe)",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "api/babylon-gRPC/dial-peers",
-          label: "Add Peers/Persistent Peers (unsafe)",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "ABCI",
-      items: [
-        {
-          type: "doc",
           id: "api/babylon-gRPC/abci-info",
           label: "Get info about the application.",
           className: "api-method get",
@@ -656,6 +650,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/babylon-gRPC/abci-query",
           label: "Query the application for some information.",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/broadcast-evidence",
+          label: "Broadcast evidence of the misbehavior.",
           className: "api-method get",
         },
       ],

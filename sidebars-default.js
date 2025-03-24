@@ -8,7 +8,7 @@
 
  Create as many sidebars as you want.
  */
-import petstoreSidebar from './docs/api/staking-api/sidebar';
+import stakingApiSidebar from './docs/api/staking-api/sidebar';
 import babylongRpcSidebar from './docs/api/babylon-gRPC/sidebar';
 
 // @ts-check
@@ -27,7 +27,7 @@ const sidebars = {
         type: 'doc',
         id: 'api/staking-api/babylon-staking-api',
       },
-      items: petstoreSidebar,
+      items: stakingApiSidebar,
     },
   ],
   babylonRpc: [
