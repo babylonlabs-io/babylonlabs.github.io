@@ -32,7 +32,7 @@ const openapiPlugins = [
       id: 'api',
       docsPluginId: 'classic',
       config: {
-        petstore: {
+        stakingApi: {
           specPath: 'static/swagger/babylon-staking-api-openapi3.yaml',
           outputDir: 'docs/api/staking-api',
           sidebarOptions: {
@@ -40,8 +40,7 @@ const openapiPlugins = [
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,
-          showSchemas: false,
-
+          showSchemas: true,
         },
         babylonGrpc: {
           specPath: 'static/swagger/babylon-merged-rpc-openapi3.yaml',
@@ -85,9 +84,9 @@ const defaultSettings = {
  * @param {import('@docusaurus/plugin-content-docs').Options} options
  */
 function create_doc_plugin({
-                             sidebarPath = require.resolve('./sidebars-default.js'),
-                             ...options
-                           }) {
+  sidebarPath = require.resolve('./sidebars-default.js'),
+  ...options
+}) {
   return [
     '@docusaurus/plugin-content-docs',
     /** @type {import('@docusaurus/plugin-content-docs').Options} */

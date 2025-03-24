@@ -12,7 +12,9 @@ info:
     url: 'https://docs.babylonlabs.io/assets/files/api-access-license.pdf'
   title: Babylon Staking API
   version: '2.0'
-servers: []
+servers:
+  - url: 'https://staking-api.testnet.babylonlabs.io'
+    description: 'Babylon Staking API Testnet'
 paths:
   /address/screening:
     get:
