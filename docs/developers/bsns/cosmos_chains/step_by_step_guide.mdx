@@ -9,7 +9,7 @@ sidebar_position: 2
 
 ## **Overview**
 
-Euphrates 0.5.0 is the 5th version of a Babylon devnet that supports integration with other BSNs (Bitcoin Staking Networks). On top of Euphrates 0.2.0 where BSNs can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN. Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalization status, and Euphrates 0.5.0 supports Finality Provider slashing and slashing propagation to Babylon and other BSNs.
+Euphrates 0.5.0 is the 5th version of a Babylon devnet that supports integration with other BSNs (Bitcoin Secured Networks). On top of Euphrates 0.2.0 where BSNs can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN. Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalization status, and Euphrates 0.5.0 supports Finality Provider slashing and slashing propagation to Babylon and other BSNs.
 
 This page provides a guide for PoS systems to integrate with Euphrates 0.5.0. The integration allows a BSN system to get economic security from BTC staking.
 
@@ -79,7 +79,7 @@ The above command will build and install the `babylond` binary to `$GOPATH/bin`.
 
 ### Finality Provider
 
-Finality pPoviders are responsible for voting at a finality round on top of [CometBFT](https://github.com/cometbft/cometbft). Similar to any native PoS validator, a Finality Provider can receive voting power delegations from BTC stakers, and can earn commission from the staking rewards denominated in Babylon tokens.
+Finality Providers are responsible for voting at a finality round on top of [CometBFT](https://github.com/cometbft/cometbft). Similar to any native PoS validator, a Finality Provider can receive voting power delegations from BTC stakers, and can earn commission from the staking rewards denominated in Babylon tokens.
 
 To install Finality Provider software, clone the repository to your local machine from Github:
 
