@@ -1,0 +1,116 @@
+---
+title: Proposal Templates
+---
+
+# Proposal Templates and Examples
+
+This page offers templates for different types of governance proposals. These templates serve as suggestions; feel free to include additional relevant sections to strengthen your proposal.
+
+## Step by Step Guides for Submission
+- Submit on-chain proposal via CLI [here](./submit_proposals/submit_via_cli.mdx)
+- Submit on-chain proposal via Web [here](./submit_proposals/submit_via_web.mdx)
+
+## Text Proposal Template
+
+```json
+{
+  "title": "[TEXT] Concise descriptive title",
+  "gov version": "V1",
+  "description": "Detailed proposal description that includes:
+  ## Background
+  [Context and relevant history]
+  ## Proposal
+  [Specific details of what is being proposed]
+  ## Rationale
+  [Reasoning and benefits of the proposal]
+  ## Discussion
+  [Summary of community feedback and how it was addressed]
+  ## IPFS Link
+  [Link to IPFS-hosted detailed proposal: ipfs://...]
+  ## Forum Link
+  [Link to official forum discussion: URL]
+  ## Additional Link
+  [Link to other relevant resources: URL]
+  ## Additional Info
+  [Any supplementary information that doesn't fit in the categories above
+  This can include technical specifications, background research, comparative analysis,
+  or any other information that would be helpful for proposal evaluation but doesn't
+  naturally fit in other sections.]",
+  "deposit": "50000ubbn"
+}
+```
+
+## Parameter Change Proposal Template
+
+```json
+{
+  "title": "[PARAM] Parameter Change for [Module/Function]",
+  "gov version": "V1",
+  "description": "Detailed description including:
+  ## Background
+  [Context and relevant history]
+  ## Changes
+  [Current parameter values and proposed new values with units]
+  ## Rationale
+  [Reasoning for each parameter change and expected effects]
+  ## Risk Assessment
+  [Potential risks and mitigation strategies]
+  ## Discussion
+  [Summary of community feedback and how it was addressed]
+  ## Links
+  [Forum discussion: URL]
+  [Additional links: URL]",
+  "messages": [
+    {
+      "@type": "/cosmwasm.wasm.v1.MsgUpdateParams",
+      "authority": "bbn10d07y265gmmuvt4z0w9aw880jnsr700jdufnyd",
+      "params": {
+      }
+    }
+  ],
+  "deposit": "50000000000ubbn"
+}
+```
+
+## Software Upgrade Proposal Template
+
+```json
+{
+  "title": "[UPGRADE] Software Upgrade to [Version]",
+  "gov version": "V1",
+  "description": "Detailed description including:
+  ## Overview
+  [Summary of the upgrade and its purpose]
+  ## Features
+  [New features and improvements]
+  ## Technical Details
+  [Implementation details and requirements]
+  ## Testing Results
+  [Results of testnet deployment and testing]
+  ## Upgrade Timeline
+  [Specific schedule for the upgrade]
+  ## Validator Instructions
+  [Steps validators need to take]
+  ## Rollback Plan
+  [Procedure if issues arise]
+  ## Discussion
+  [Summary of community feedback and how it was addressed]
+  ## IPFS Link
+  [Link to IPFS-hosted detailed proposal: ipfs://...]
+  ## Forum Link
+  [Link to official forum discussion: URL]
+  ## Additional Link
+  [Link to other relevant resources: URL]
+  ## Additional Info
+  [Any supplementary information that doesn't fit in the categories above
+  This can include technical specifications, background research, comparative analysis,
+  or any other information that would be helpful for proposal evaluation but doesn't
+  naturally fit in other sections.]",
+  "plan": {
+    "name": "v2.2.0",
+    "height": "1000000",
+    "info": "https://github.com/babylonlabs-io/babylon/releases/tag/v2.2.0"
+  },
+  "deposit": "50000000000ubbn"
+}
+```
