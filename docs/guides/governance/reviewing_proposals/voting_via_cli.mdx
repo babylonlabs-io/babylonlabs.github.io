@@ -1,0 +1,77 @@
+---
+id: voting-via-cli
+title: Voting via CLI
+---
+
+# Voting on Proposals via CLI
+
+## Prerequisites
+
+Before voting, ensure that:
+1. You have reviewed the proposal details and understand what you're voting on
+2. Your node has voting power
+3. You have sufficient funds for transaction fees
+
+## Checking Your Voting Power
+
+Check your delegations to see your voting power:
+
+```bash
+babylond q staking delegations <your_baby_address>
+```
+
+This command shows:
+- Validator Address: The validator(s) you're delegating to
+- Shares: Your delegated token amount
+- Voting Power: Your effective voting power
+
+Check your account balance:
+
+```bash
+babylond q bank balances <your_baby_address>
+```
+
+## Viewing Proposals
+
+List all proposals with their IDs and statuses:
+
+```bash
+babylond q gov proposals
+```
+
+## Casting Your Vote
+
+Use the following command to vote:
+
+```bash
+babylond tx gov vote <proposal_id> <voting_option> \
+  --from <your_baby_address> \
+  --fees <amount> \
+  --chain-id <chain_id> \
+  --keyring-backend test
+```
+
+### Parameters:
+- `<proposal_id>`: The ID of the proposal
+- `<voting_option>`: Your vote choice:
+  - `yes`
+  - `no`
+  - `no-with-veto`
+  - `abstain`
+- `<amount>`: Transaction fee (e.g., `5000ubabylon`)
+- `<chain_id>`: Your Babylond network chain ID
+
+## Verifying Your Vote
+
+Check your transaction status:
+
+```bash
+babylond q tx <transaction_hash>
+```
+
+View updated proposal results:
+
+```bash
+babylond q gov proposals
+```
+```
