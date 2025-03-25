@@ -1,0 +1,33 @@
+---
+id: v-2-service-finalityproviderstatspublic
+title: "v2service.FinalityProviderStatsPublic"
+description: ""
+sidebar_label: "v2service.FinalityProviderStatsPublic"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"active_delegations":0,"active_tvl":0,"btc_pk":"string","commission":"string","description":{"details":"string","identity":"string","moniker":"string","security_contact":"string","website":"string"},"state":"active"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"v2service.FinalityProviderStatsPublic"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"types.FinalityProviderDescription"},"state":{"enum":["active","standby"],"type":"string","x-enum-varnames":["FinalityProviderStateActive","FinalityProviderStateStandby"],"title":"types.FinalityProviderQueryingState"}},"type":"object","title":"v2service.FinalityProviderStatsPublic"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            
