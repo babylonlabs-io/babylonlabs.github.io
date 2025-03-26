@@ -13,7 +13,7 @@ import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 const PRODUCTS = [
   {
     title: 'Stake BTC',
-    link: '/guides/stakers',
+    link: '/guides/btc_stakers',
     icon: WalletCreditCardRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
