@@ -162,7 +162,7 @@ const config = {
         sitemap: {
           ignorePatterns: ['**/tags/**', '/api/*'],
         },
-        gtag: {
+        gtag: process.env.TRACKING_ID ? {
           trackingID: process.env.TRACKING_ID,
           anonymizeIP: true,
         },
