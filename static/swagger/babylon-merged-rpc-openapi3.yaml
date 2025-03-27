@@ -2421,7 +2421,7 @@ paths:
                             on. If it's missing / empty, it's assumed the
                             finality provider is
 
-                            operating in the Babylon chain.
+                            operating in the Babylon Genesis chain.
                           type: string
                         description:
                           description: >-
@@ -3417,7 +3417,7 @@ paths:
                           on. If it's missing / empty, it's assumed the finality
                           provider is
 
-                          operating in the Babylon chain.
+                          operating in the Babylon Genesis chain.
                         type: string
                       description:
                         description: >-
@@ -4026,7 +4026,7 @@ paths:
                           the allow list expires
 
                           i.e all staking transactions are allowed to enter
-                          Babylon chain afterwards
+                          Babylon Genesis chain afterwards
 
                           setting it to 0 means allow list is disabled
                         type: string
@@ -4386,7 +4386,7 @@ paths:
                           the allow list expires
 
                           i.e all staking transactions are allowed to enter
-                          Babylon chain afterwards
+                          Babylon Genesis chain afterwards
 
                           setting it to 0 means allow list is disabled
                         type: string
@@ -4756,7 +4756,7 @@ paths:
                           the allow list expires
 
                           i.e all staking transactions are allowed to enter
-                          Babylon chain afterwards
+                          Babylon Genesis chain afterwards
 
                           setting it to 0 means allow list is disabled
                         type: string
@@ -5201,7 +5201,7 @@ paths:
                                 which the allow list expires
 
                                 i.e all staking transactions are allowed to
-                                enter Babylon chain afterwards
+                                enter Babylon Genesis chain afterwards
 
                                 setting it to 0 means allow list is disabled
                               type: string
@@ -19674,7 +19674,7 @@ components:
 
         - PENDING -> VERIFIED -> UNBONDED i.e the staker unbonded before
 
-        activating delegation on Babylon chain.
+        activating delegation on Babylon Genesis chain.
 
         In valid transition paths, the delegation becomes UNBONDED when:
 
@@ -20167,7 +20167,7 @@ components:
 
             on. If it's missing / empty, it's assumed the finality provider is
 
-            operating in the Babylon chain.
+            operating in the Babylon Genesis chain.
           type: string
         description:
           description: description defines the description terms for the finality provider.
@@ -20261,7 +20261,7 @@ components:
             allow_list_expiration_height is the height at which the allow list
             expires
 
-            i.e all staking transactions are allowed to enter Babylon chain
+            i.e all staking transactions are allowed to enter Babylon Genesis chain
             afterwards
 
             setting it to 0 means allow list is disabled
@@ -21258,7 +21258,7 @@ components:
                 on. If it's missing / empty, it's assumed the finality provider
                 is
 
-                operating in the Babylon chain.
+                operating in the Babylon Genesis chain.
               type: string
             description:
               description: >-
@@ -21411,7 +21411,7 @@ components:
                   on. If it's missing / empty, it's assumed the finality
                   provider is
 
-                  operating in the Babylon chain.
+                  operating in the Babylon Genesis chain.
                 type: string
               description:
                 description: >-
@@ -21603,7 +21603,7 @@ components:
                 allow_list_expiration_height is the height at which the allow
                 list expires
 
-                i.e all staking transactions are allowed to enter Babylon chain
+                i.e all staking transactions are allowed to enter Babylon Genesis chain
                 afterwards
 
                 setting it to 0 means allow list is disabled
@@ -21746,7 +21746,7 @@ components:
                 allow_list_expiration_height is the height at which the allow
                 list expires
 
-                i.e all staking transactions are allowed to enter Babylon chain
+                i.e all staking transactions are allowed to enter Babylon Genesis chain
                 afterwards
 
                 setting it to 0 means allow list is disabled
@@ -21885,7 +21885,7 @@ components:
                 allow_list_expiration_height is the height at which the allow
                 list expires
 
-                i.e all staking transactions are allowed to enter Babylon chain
+                i.e all staking transactions are allowed to enter Babylon Genesis chain
                 afterwards
 
                 setting it to 0 means allow list is disabled
@@ -22210,7 +22210,7 @@ components:
                 allow_list_expiration_height is the height at which the allow
                 list expires
 
-                i.e all staking transactions are allowed to enter Babylon chain
+                i.e all staking transactions are allowed to enter Babylon Genesis chain
                 afterwards
 
                 setting it to 0 means allow list is disabled
