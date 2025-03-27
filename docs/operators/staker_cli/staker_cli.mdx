@@ -14,14 +14,14 @@ nodes.
 
 2. `stakercli` - The `stakercli` is a command line interface (CLI) to facilitate
 interaction with the `stakerd` daemon . It enables users to stake funds, withdraw
-funds, unbond staked funds, retrieve the active finality providers set in Babylon,
+funds, unbond staked funds, retrieve the active Finality Providers set in Babylon,
 and more. It serves as an intuitive interface for effortless control and
 monitoring of your Bitcoin staking activities.
 
 ## Setting up a Bitcoin node
 
-The `stakerd` daemon requires a running Bitcoin node and a **legacy** wallet loaded
-with signet Bitcoins to perform staking operations.
+The `stakerd` daemon requires running a Bitcoin node and a **legacy** wallet loaded
+with signet bitcoin to perform staking operations.
 
 You can configure `stakerd` daemon to connect to either
 `bitcoind` or `btcd` node types. While both are compatible, we recommend
@@ -147,7 +147,7 @@ created.
 
 #### 2.3.3 Generate a new address for the wallet
 
-You can generate a btc address through the `getnewaddress` command:
+You can generate a BTC address through the `getnewaddress` command:
 
 ```bash
 ~/bitcoin-26.0/bin/bitcoin-cli -signet \
@@ -191,7 +191,7 @@ using `gettransaction`
 
 where `$TXID` is the transaction id that you received from the faucet.
 
-Once the tx is confirmed you can check the funds using `getbalance`
+Once the transaction is confirmed you can check the funds using the `getbalance`
 command
 
 ```bash
@@ -205,8 +205,8 @@ command
 **Notes**:
 
 1. Ensure to run the Bitcoin node on the same network as the one the Babylon node
-connects to. For the Babylon testnet, we are using the BTC Signet.
-2. Expected sync times for the BTC node are as follows: Signet takes less than 20
+connects to. For the Babylon testnet, we are using BTC signet.
+2. Expected sync times for the BTC node are as follows: signet takes less than 20
 minutes, testnet takes a few hours, and mainnet could take a few days.
 3. You can check the sync progress in bitcoind systemd logs
 using `journalctl -u bitcoind -f`. It should show you the progress percentage for
@@ -218,7 +218,7 @@ height=169100 version=0x20000000 log2_work=40.925924 tx=2319364
 date='2023-11-12T19:42:53Z' progress=0.936446
 cache=255.6MiB(1455996txo)
    ```
-Alternatively, you can also check the latest block in a btc explorer like
+Alternatively, you can also check the latest block in a Bitcoin explorer like
 https://mempool.space/signet and compare it with the latest block in your node.
 4. Ensure that you use a legacy (non-descriptor) wallet, as BTC Staker doesn't
 currently support descriptor wallets. You can check the wallet format using
@@ -275,7 +275,7 @@ sudo apt install build-essential
 
 ### Downloading the code
 
-To get started, clone the repository to your local machine from Github:
+To get started, clone the repository to your local machine from GitHub:
 
 ```bash
 git clone https://github.com/babylonlabs-io/btc-staker.git
@@ -314,7 +314,7 @@ echo 'export PATH=$HOME/go/bin:$PATH' >> ~/.profile
 ### Create a Babylon keyring (keyring backend: test) with funds
 
 The `stakerd` daemon requires a keyring with loaded Babylon tokens to pay for the
-transactions. Follow instructions to create baby key-ring,
+transactions. Follow instructions to create a Babylon key-ring,
 then go to [L2Scan Babylon Testnet Faucet](https://babylon-testnet.l2scan.co/faucet)
 to request funds.
 
@@ -353,10 +353,10 @@ In the following, we go through important parameters of the `stakerd.conf` file.
 
 1. The `Key` parameter in the config below is the name of the key in the keyring to
 use for signing transactions. Use the key name you created
-in [Create a Babylon keyring with funds](#create-a-babylon-keyring-keyring-backend-test-with-funds)
+in [Create a Babylon keyring with funds](#create-a-babylon-keyring-keyring-backend-test-with-funds).
 2. Ensure that the `KeyDirectory` is set to the location where the keyring is
 stored.
-3. Ensure to use the `test` keyring backend
+3. Ensure to use the `test` keyring backend.
 4. Ensure you use the correct `ChainID` for the network you're connecting to. For
 example, for Babylon devnet, the chain ID is `bbn-dev-5`.
 5. To change the Babylon RPC/GRPC address, update the following:
@@ -366,6 +366,7 @@ example, for Babylon devnet, the chain ID is `bbn-dev-5`.
  GRPCAddr = https://grpc.devnet.babylonlabs.io:443 # grpc node address
     ```
 The above addresses are for Babylon devnet.
+
 6. If you encounter any gas-related errors while performing staking operations,
 consider adjusting the `GasAdjustment` and `GasPrices` parameters. For example,
 you can set:
@@ -504,18 +505,18 @@ can also be set in the configuration file.
 
 ## 5. Staking operations with stakercli
 
-The following guide will show how to stake, withdraw, and unbond Bitcoin.
+The following guide will show how to stake, withdraw, and unbond bitcoin.
 
 ### Stake Bitcoin
 
-#### 1. List active BTC finality providers on Babylon
+#### 1. List active BTC Finality Provider on Babylon
 
-Find the BTC public key of the finality provider you intend to stake to.
+Find the BTC public key of the Finality Provider you intend to stake to.
 
-When staking, specify the BTC public key of a single finality provider using the
+When staking, specify the BTC public key of a single Finality Provider using the
 `--finality-providers-pks` flag in the `stake` command.
 
-**Note** Make sure to use only one finality provider BTC public key in
+**Note** Make sure to use only one Finality Provider BTC public key in
 the `--finality-providers-pks` flag of the
 `stake`
 command, as multiple providers are not currently supported.
@@ -535,7 +536,7 @@ stakercli daemon babylon-finality-providers
 
 #### 2. Obtain the BTC address from the BTC wallet
 
-Find the BTC address that has sufficient Bitcoin balance that you want to stake from.
+Find the BTC address that has sufficient bitcoin balance that you want to stake from.
 
 **Note**: In case you don't have addresses with adequate balances, you can use the
 faucet to receive signet BTC.
@@ -558,10 +559,10 @@ stakercli daemon list-outputs
 }
 ```
 
-#### 3. Stake Bitcoin
+#### 3. Stake BTC
 
-Stake Bitcoin to the finality provider of your choice. The `--staking-time` flag
-specifies the timelock of the staking transaction in BTC blocks.
+Stake BTC to the Finality Provider of your choice. The `--staking-time` flag
+specifies the timelock of the staking transaction in Bitcoin blocks.
 The `--staking-amount`
 flag specifies the amount in satoshis to stake.
 
@@ -578,21 +579,21 @@ stakercli daemon stake \
 }
 ```
 
-**Note**: You can self delegate i.e. stake to your own finality provider. Follow
+**Note**: You can self delegate i.e. stake to your own Finality Provider. Follow
 the [finality provider registration guide](https://github.com/babylonlabs-io/finality-provider/blob/dev/docs/finality-provider.md#4-create-and-register-a-finality-provider)
-to create and register a finality provider to Babylon. Once the finality provider is
-registered, you can use your finality provider BTC public key in
+to create and register a Finality Provider to Babylon. Once the Finality Providerr is
+registered, you can use your Finality Provider BTC public key in
 the `--finality-providers-pks` flag of the `stake`
 command.
 
 ### Unbond staked funds
 
-The `unbond` cmd initiates the unbonding flow which involves communication with the
-Babbylon Genesis, Covenant emulators, and the BTC chain. It
+The `unbond` cmd initiates the unbonding flow which involves communication with
+Babylon Genesis, Covenant Emulators, and the Bitcoin chain. It
 
-1. Build the unbonding transaction and send it to the Babbylon Genesis
-2. Wait for the signatures from the covenant emulators
-3. Send the unbonding transaction to the BTC chain
+1. Build the unbonding transaction and send it to the Babylon Genesis
+2. Wait for the signatures from the Covenant Emulators
+3. Send the unbonding transaction to the Bitcoin chain
 
 `--staking-transaction-hash` is the transaction hash from the response of the `stake`
 command.
@@ -632,5 +633,5 @@ db.
 stakercli daemon withdrawable-transactions
 ```
 
-In order to `unstake` you'll need to wait for your staking/unbonding tx to be deep
+In order to `unstake` you'll need to wait for your staking/unbonding transaction to be deep
 enough in btc so that timelock expires.
