@@ -57,17 +57,6 @@ const openapiPlugins = [
   ],
 ];
 
-
-const analyticsPlugins = [
-  [
-    '@docusaurus/plugin-google-analytics',
-    {
-      trackingID: process.env.TRACKING_ID,
-      anonymizeIP: true,
-    },
-  ],
-];
-
 /** @type {import('@docusaurus/plugin-content-docs').Options} */
 const defaultSettings = {
   breadcrumbs: true,
@@ -115,8 +104,7 @@ const plugins = [
   tailwindPlugin,
   ...docs_plugins,
   ...openapiPlugins,
-  ...authPlugins,
-  ...analyticsPlugins
+  ...authPlugins
 ];
 
 // @ts-ignore
@@ -165,7 +153,7 @@ const config = {
         gtag: process.env.TRACKING_ID ? {
           trackingID: process.env.TRACKING_ID,
           anonymizeIP: true,
-        },
+        } : false,
       }),
     ],
   ],
