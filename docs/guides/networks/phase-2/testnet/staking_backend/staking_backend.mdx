@@ -6,18 +6,82 @@ sidebar_position: 1
 
 # Bitcoin Staking Backend System
 
-Implementation details for integrating Bitcoin staking into your staking application. 
-
-## Overview
+The Bitcoin Staking Backend is a robust system designed to facilitate Bitcoin
+staking operations on the Babylon network. It comprises specialized services that
+extract, validate, and transform blockchain data from both the Bitcoin and
+Babylon chains. These services provide performant, API-friendly interfaces for
+decentralized applications (dApps), manage staking lifecycle states, and ensure
+secure and efficient handling of staking transactions such as withdrawal
+processes.
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import ThemedImage from '@theme/ThemedImage';
 
 <ThemedImage
-  alt="Cosmos Chains Integrations Architecture"
+  alt="Staking Backend Architecture"
   sources={{
     light: useBaseUrl('/img/guides/staking_backend.png'),
     dark: useBaseUrl('/img/guides/staking_backend_dark.png'),
   }}
 />
 
+
+## Deployment Overview
+
+This guide outlines the deployment process for the Phase-2 Bitcoin Staking
+Backend system. Follow the steps in sequence for successful installation or
+upgrade from the corresponding Phase-1 system.
+
+### Prerequisites
+
+Before deploying the staking services, ensure the following components are
+properly set up:
+
+- **Bitcoin Full Node** - [Setup Guide](https://bitcoin.org/en/full-node)  
+  _Powers transaction verification on the Bitcoin network_
+
+- **Babylon Node** - [Setup Guide](/operators/babylon_node/installation_guide/)  
+  _Connects to the Babylon blockchain for monitoring staking events_
+
+- **MongoDB Clusters** - [Setup Guide](https://www.mongodb.com/docs/manual/installation/)  
+  _Stores all staking data and transaction history_
+
+- **RabbitMQ** - [Setup Guide](https://www.rabbitmq.com/download.html)  
+  _Handles message queuing between system components_
+
+- **Global Configuration** - [Setup Guide](./services/global_config)  
+  _Defines system-wide parameters for all services_
+
+{/* Database Migration (Optional) - Clone Phase-1 database snapshot, apply snapshot to new MongoDB clusters.
+Required only if supporting Phase-1 registration data */}
+
+> **Note:** If upgrading an existing deployment, ensure you gracefully shut down
+> any legacy indexer services before proceeding.
+
+{/* ## Upgrade Process
+
+TODO */}
+
+### Launching Services
+
+Once all prerequisites are checked off, deploy these services in the following
+order:
+
+#### 1. Deploy Staking Indexer
+- [Staking Indexer Setup Guide](./services/staking_indexer)
+- _This service monitors both blockchains and processes all staking events_
+
+#### 2. Deploy Staking Expiry Checker
+- [Staking Expiry Checker Setup Guide](./services/staking_expiry_checker)
+- _Manages expired delegations and state transitions_
+
+#### 3. Deploy Staking API Service
+- [Staking API Service Setup Guide](./services/staking_api_service)
+- _Provides the API endpoints for all staking operations_
+- ✓ Test the API endpoints after deployment
+
+### Verification
+
+After completing all steps, verify your deployment by:
+1. Checking service logs for any errors
+2. Using the `/healthcheck` endpoint to verify API service health
