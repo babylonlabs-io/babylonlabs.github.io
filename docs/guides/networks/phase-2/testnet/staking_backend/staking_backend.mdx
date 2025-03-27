@@ -8,14 +8,16 @@ sidebar_position: 1
 
 Implementation details for integrating Bitcoin staking into your staking application. 
 
-import RemoteMD from '@site/src/components/RemoteMD';
+## Overview
 
-export const rawUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-test-5/integration/staking-backend/README.md";
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
 
-<RemoteMD
-  networkVersions={{
-    mainnet: rawUrl
+<ThemedImage
+  alt="Cosmos Chains Integrations Architecture"
+  sources={{
+    light: useBaseUrl('/img/guides/staking_backend.png'),
+    dark: useBaseUrl('/img/guides/staking_backend_dark.png'),
   }}
-  hideEnv={true}
-  hideRelease={true}
 />
+
