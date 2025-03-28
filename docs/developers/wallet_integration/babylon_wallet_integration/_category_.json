@@ -1,0 +1,8 @@
+{
+  "label": "Babylon Wallet Integration",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Guides for wallets to integrate with Babylon Genesis chain."
+  }
+}
