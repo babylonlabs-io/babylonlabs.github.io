@@ -1,0 +1,59 @@
+---
+sidebar_label: Mobile App Wallets
+sidebar_position: 3
+---
+
+# Bitcoin Staking for Mobile App Wallets
+
+This guide outlines the various options for integrating Babylon bitcoin staking 
+functionality into mobile app wallets. 
+
+## Option 1
+
+Embed a third-party Bitcoin staking website to your mobile app
+wallet, which interacts with the Bitcoin and Babylon signers inside your wallet via
+the application window interface.
+To embed on the Babylon hosted staking website, please ensure
+that the interface of your mobile wallet (or a wrapper of it)
+adheres to the
+[Injectable Wallet interface](https://github.com/babylonlabs-io/wallet-connector?tab=readme-ov-file#wallet-integration).
+
+
+## Option 2
+
+Host your own Bitcoin staking website that connects to your
+extension wallet that retrieves staking information from a backend you
+operate. Then embed your own Bitcoin staking website to your mobile app wallet.
+* For information about developing/hosting your own Bitcoin staking website,
+  please check:
+    * our reference web application
+      [implementation](https://github.com/babylonlabs-io/simple-staking/).
+    * our
+      [TypeScript](https://github.com/babylonlabs-io/btc-staking-ts/)
+      and [Golang](https://github.com/babylonlabs-io/babylon/tree/main/btcstaking/)
+      Bitcoin Staking libraries for creating bitcoin Staking transactions.
+    * our [documentation](https://github.com/babylonlabs-io/babylon/tree/main/x/btcstaking)
+      on the flow of bitcoin Staking transaction creation and submission in
+      conjunction with Bitcoin and Babylon blockchains.
+* For information about the reference Babylon staking backend, please read this
+  [document](/guides/networks/phase-2/testnet/staking_backend/).
+
+## Option 3
+
+Develop bitcoin staking as a feature of your mobile wallet,
+  which connects to either third party APIs
+  (such as the Babylon
+  [Staking API](/api/staking-api/babylon-staking-api/)) or a backend you operate.
+
+* For information about developing your own bitcoin staking as a feature,
+  please check:
+    * our reference web application [implementation](https://github.com/babylonlabs-io/simple-staking/tree/main).
+    * our
+      [TypeScript](https://github.com/babylonlabs-io/btc-staking-ts/)
+      and [Golang](https://github.com/babylonlabs-io/babylon/tree/main/btcstaking/)
+      Bitcoin Staking libraries.
+    * our [documentation](https://github.com/babylonlabs-io/babylon/tree/main/x/btcstaking)
+      on the flow of bitcoin staking transaction creation and submission in
+      conjunction with Bitcoin and Babylon blockchains.
+* For information about the reference Babylon staking backend, please read this
+  [document](/guides/networks/phase-2/testnet/staking_backend/).
