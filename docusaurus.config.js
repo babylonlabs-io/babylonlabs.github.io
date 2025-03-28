@@ -89,22 +89,10 @@ function create_doc_plugin({
 
 const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
 const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
-const authPlugins = [
-  function myPlugin(context, options) {
-    return {
-      name: 'docusaurus-plugin-auth',
-      async contentLoaded({ actions }) {
-        const { setGlobalData } = actions;
-        setGlobalData({ authenticated: false });
-      }
-    };
-  },
-];
 const plugins = [
   tailwindPlugin,
   ...docs_plugins,
-  ...openapiPlugins,
-  ...authPlugins
+  ...openapiPlugins
 ];
 
 // @ts-ignore
