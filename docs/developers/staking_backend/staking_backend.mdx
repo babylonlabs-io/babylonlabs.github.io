@@ -55,12 +55,29 @@ properly set up:
 {/* Database Migration (Optional) - Clone Phase-1 database snapshot, apply snapshot to new MongoDB clusters.
 Required only if supporting Phase-1 registration data */}
 
-> **Note:** If upgrading an existing deployment, ensure you gracefully shut down
-> any legacy indexer services before proceeding.
+## Migrating from phase-1 stack
 
-{/* ## Upgrade Process
+The migration from phase-1 to phase-2 involves several critical steps to ensure
+a smooth transition while maintaining service availability. Here's the detailed
+migration process:
 
-TODO */}
+1. **Shut down phase-1 services**:
+   - Stop the phase-1 indexer service with `systemctl stop $SERVICE_NAME`. This 
+     allows the service to finish current tasks and shut down gracefully.
+
+2. **Database preparation**:
+   - Create a complete backup of your MongoDB databases
+   - Verify backup integrity before proceeding
+
+3. **Deploy phase-2 services**:
+   - Continue with the steps outlined in the "Launching Services" section below
+   - The phase-2 API service is fully backward compatible, ensuring users won't
+     notice any service disruption
+
+**Important notes**:
+- The phase-2 indexer can be deployed earlier (even while legacy services are
+  running) to give it time to synchronize with the Babylon network
+
 
 ### Launching Services
 
