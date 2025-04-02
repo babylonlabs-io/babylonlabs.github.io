@@ -20,9 +20,9 @@ interface Guide {
 
 const guides: Guide[] = [
   {
-    title: 'Babylon Chain Basics',
+    title: 'Babylon Genesis Chain Basics',
     icon: ArrowRightFilled,
-    text: 'Learn about the Babylon Chain architecture and how it works.',
+    text: 'Learn about the Babylon Genesis Chain architecture and how it works.',
     link: '/developers/babylon_genesis_chain',
   },
   {
@@ -34,13 +34,13 @@ const guides: Guide[] = [
   {
     title: 'Babylon Smart Contracts',
     icon: OpenRegular,
-    text: 'The CosmWASM contracts that are deployed on the Babylon Chain.',
+    text: 'The CosmWASM contracts that are deployed on the Babylon Genesis chain.',
     link: '/developers/dapps/smart_contract_deployment',
   },
   {
     title: 'Staking Transactions Specifications',
     icon: AppsAddInRegular,
-    text: "Learn details of the staking transactions that are executed on the Bitcoin Chain.",
+    text: "Learn details of the staking transactions that are executed on the Bitcoin chain.",
     link: '/guides/specifications/staking_transactions',
   },
 ];
