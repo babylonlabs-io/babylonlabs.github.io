@@ -29,6 +29,23 @@ This approach is ideal for large and complex projects that require a certain lev
 
 A code repository, which includes a local deployment demonstration of this process, is available [here](https://github.com/babylonlabs-io/babylon-demo/tree/main/whitelisting-address-gov-prop).  
 
+##### Commitments to Account Whitelisting Method
+
+Whitelisted addresses pose elevated security risks to Babylon Genesis during the permissioned phase. Therefore, proposers granted whitelisting privileges must adhere to the following commitments:
+
+Whitelisted addresses shall be used exclusively for:
+- Deploying contracts explicitly specified in the approved governance proposal
+- Implementing patches for those approved contracts
+
+For any new smart contract deployment not covered in the original proposal:
+- The team must obtain prior approval via a governance signaling proposal
+- Only after proposal passage may the team deploy the new contract and its subsequent patches
+
+For whitelisted address that need to upgrade their contract:
+- Major contract upgrades (e.g., significant new releases) require explicit governance approval before implementation
+
+Non-compliance with these guidelines may result in governance revoking the whitelisting privileges for the address in question.
+
 ## Before You Submit  
 
 Before initiating a forum discussion, ensure you meet the following prerequisites:  
