@@ -1,0 +1,181 @@
+---
+sidebar_class_name: baby_stakers_sidebar
+sidebar_label: Staking Mechanism
+sidebar_position: 1
+---
+
+# A Guide to BABY Staking Mechanisms
+
+The Babylon Genesis implements an epochised staking mechanism that is distinct
+from conventional Cosmos SDK implementations. This architectural approach
+provides higher security guarantees and reliable voting power transitions.
+
+## Epoch Definition
+
+An epoch is defined as a block height range demarcated by the `x/epoching`
+module. Throughout each epoch's duration, staking operations are aggregated in
+a message queue rather than modifying validator state immediately. At the last
+block of each epoch, all accumulated staking messages are atomically processed
+in a deterministic batch execution sequence.
+
+## The Delayed Execution Queue
+
+The core of the epochised staking approach is the delayed execution queue:
+
+- **Message Submission**: When users submit staking transactions (delegate,
+  undelegate, redelegate), these messages are immediately acknowledged and
+  added to the queue.
+
+- **Pending Status**: The transactions remain in a pending state until the
+  current epoch ends.
+
+- **Batch Processing**: At the epoch boundary, all queued messages are processed
+  together.
+
+- **Voting Power Update**: Validator voting power updates occur only at epoch
+  transitions.
+
+## UX Considerations for Epochised Staking
+
+This mechanism introduces important considerations that stakers should
+understand:
+
+- **Delayed Staking Activation**: While staking transactions are confirmed
+  immediately, the actual staking operation only takes effect at the epoch's
+  end.
+
+- **Delayed Funds Locking**: User funds remain liquid until staking activation
+  occurs at epoch conclusion.
+
+- **Potential for Failure**: If users transfer or spend their funds before the
+  epoch ends, the staking transaction will fail when processed.
+
+- **Visibility into Pending Messages**: Users can view pending staking messages
+  using the LastEpochMsgs query in the `x/epoching` module.
+
+## The `x/epoching` Module
+
+Babylon Genesis replaces the standard Cosmos SDK `x/staking` module with a custom
+`x/epoching` module that:
+
+- Wraps standard staking functionality to enforce epoch-based voting power
+  transitions.
+
+- Implements similar messages to the default `x/staking` module but with
+  epochised processing.
+
+- Maintains compatibility with Cosmos SDK while adding the security benefits
+  of epochised staking.
+
+The epoch interval is set to 360 blocks, which makes it 1 hour (with 10s block
+speed). For more information on this module and exact staking operations,
+please refer to `x/epoching` module.
+
+## End-of-Epoch Processing
+
+After user’s staking transaction submission, when the current epoch ends, the
+system will conduct the following actions:
+
+- **Queue Processing**: All queued staking requests are processed together.
+
+- **Validator Updates**: Validator power and delegations are refreshed and
+  updated.
+
+- **Fund Locking**: Your staked BABY tokens are now locked and earning rewards.
+
+- **Rewards Begin**: You start earning staking rewards from this point.
+
+## Viewing Pending Staking Transactions
+
+To monitor pending staking transactions that will be processed at epoch end:
+
+- Use [Babylon Genesis Explorers](/developers/babylon_genesis_chain/#chain-explorer) that support epochised staking, or
+
+- Use [Babylon Node](/operators/babylon_node/installation_guide/) or [RPC Endpoints](/developers/babylon_genesis_chain/#network-information) to query the `LastEpochMsgs` endpoint in the
+  `x/epoching` module.
+
+- Check with compatible wallet interfaces.
+
+## Fast Unbonding
+
+Babylon's Genesis chain introduces a groundbreaking fast unbonding feature that
+significantly enhances the staking experience for users, allowing them to
+unstake their BABY tokens in a fraction of the time compared to traditional
+Cosmos SDK chains. This feature is made possible through a cryptographically
+secured accelerated unbonding protocol, which reduces the standard 21-day
+unbonding time to approximately 2 days by utilizing Bitcoin checkpoint
+verification and timestamping technology.
+
+### The Unbonding Process
+
+When a user decides to unstake their BABY tokens, the process involves several
+key steps:
+
+- **Submission**: The user submits a request to unstake (undelegate) their tokens.
+
+- **Epoch Processing**: The unbonding request is queued until the end of the
+  current epoch.
+
+- **Bitcoin Checkpointing**: The epoch state is recorded on the Bitcoin blockchain.
+
+- **Confirmation Wait**: The system waits for 300 Bitcoin block confirmations
+  (~50 hours).
+
+- **Token Release**: Once confirmed, BABY tokens are fully released and become
+  transferable.
+
+### Benefits of Fast Unbonding
+
+The accelerated unbonding process offers several advantages:
+
+- **Improved Liquidity**: Users can access their funds much faster, reducing opportunity costs.
+
+- **Capital Efficiency**: Faster capital recycling enables more dynamic staking strategies.
+
+- **Security Retention**: The process maintains security by leveraging Bitcoin's proven security model.
+
+### Practical Considerations
+
+When planning to unbond BABY tokens, users should consider the following:
+
+- **Timing**: Unbonding near the end of an epoch may minimize waiting time.
+
+- **Bitcoin’s Network Conditions**: Network congestion could extend the unbonding process.
+
+- **Monitoring**: Utilize blockchain explorers such as [Mempool](https://mempool.space/) to track Bitcoin confirmation speed.
+
+## Slashing Mechanisms
+
+Babylon Genesis chain enforces slashing to maintain network integrity and
+security. Specifically, this occurs when a validator signs or votes two
+distinct blocks at the same height. This situation represents a severe security
+breach that can potentially lead to network forks. The consensus mechanism
+automatically identifies double signing by detecting conflicting signatures,
+ensuring that such misbehavior is promptly addressed.
+
+### Slashing Implementation
+
+- **Enforced via `x/evidenc`e module**: Double Signing: The protocol accepts and
+  verifies cryptographic evidence of equivocation of a validator.
+
+- **Enforced via `x/slashing` module**:
+
+  - **Jailing**: Validators that trigger slashing events are temporarily
+    removed from the active set to "jailed".
+
+  - **Unjailing**: Validators must submit an unjail transaction and wait for a
+    specific period before rejoining.
+
+### Slashing Parameters for BABY
+
+| Parameter                 | Description                                             | Value         |
+|---------------------------|---------------------------------------------------------|---------------|
+| **Signed Blocks Window**  | The number of blocks over which validator performance is measured | 10,000 blocks |
+| **Minimum Signed Blocks** | The percentage of blocks a validator must sign within the window to avoid jailing | 60% (6,000 blocks) |
+| **Slash Fraction for Doublesign** | The percentage of staked tokens slashed for equivocation (signing conflicting blocks) | 0.05 (5%)     |
+| **Downtime Jail Duration** | The period a validator is jailed after failing to meet minimum signed blocks | 300s          |
+
+The slashing conditions and the protections in place is crucial for delegators
+as it adds to the risk premium of the staking strategy. These measures are
+designed to maintain the integrity of the network while providing safeguards
+for delegators against potential losses due to validator misbehavior.
