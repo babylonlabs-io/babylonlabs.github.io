@@ -8,6 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import HardwareBadge from '@site/src/components/badge/hardware';
 
 # Bitcoin Native Staking via Web App
 
@@ -49,60 +50,53 @@ Staking via the Babylon web app is a simple process.
   }}
 />
 
-export const Badge = ({ children }) => (
-  <span style={{ backgroundColor: '#d8a0f7', padding: '2px', borderRadius: '4px', color: 'black', fontWeight: 'bold', fontSize: '0.8em' }}>
-    {children}
-  </span>
-);
-
-
 ### Compatible Wallets
 
 <Tabs>
   <TabItem value="extension" label="Browser Extension Wallets" default>
 
-| Wallet Name | BTC | BABY |
-|:--|:-:|:-:|
-| OKX | ✅ | ✅ |
-| Unisat | ✅ | ✅ |
-| OneKey | ✅ | ✅ |
-| BitGet | ✅ | ✅ |
-| Cactus Link | ✅ | ✅ |
-| Leap | ✅ | ✅ |
-| Keplr | ❌ | ✅ |
-| Cosmostation | ✅ | ✅ |
-| Tomo | ✅ | ❌ |
-| Fordefi | ❌ | ❌ |
-| Xverse | ❌ | ❌ |
-| Gate Web3 | ❌ | ❌ |
-| Keystone <Badge>Hardware</Badge> | ✅ | ❌ |
-| Ledger (via Keplr app) <Badge>Hardware</Badge> | ❌ | ✅ |
-| OneKey (Pro & Classic 1S) <Badge>Hardware</Badge> | ✅ | ❌ |
+| Wallet Name | BTC |
+|:--|:-:|
+| OKX | ✅ |
+| Unisat | ✅ |
+| OneKey | ✅ |
+| BitGet | ✅ |
+| Cactus Link | ✅ |
+| Leap | ✅ |
+| Keplr | ❌ |
+| Cosmostation | ✅ |
+| Tomo | ✅ |
+| Fordefi | ❌ |
+| Xverse | ❌ |
+| Gate Web3 | ❌ |
+| Keystone <HardwareBadge>Hardware</HardwareBadge> | ✅ |
+| Ledger (via Keplr app) <HardwareBadge>Hardware</HardwareBadge> | ❌ |
+| OneKey (Pro & Classic 1S) <HardwareBadge>Hardware</HardwareBadge> | ✅ |
 
   </TabItem>
   <TabItem value="mobile" label="Mobile App Wallets">
 
-| Wallet Name | BTC | BABY |
-|:--|:-:|:-:|
-| OKX | ✅ | ✅ |
-| Unisat | ✅ | ✅ |
-| OneKey | ✅ | ✅ |
-| BitGet | ✅ | ✅ |
-| Leap | ✅ | ✅ |
-| Keplr | ❌ | ❌ |
-| Cosmostation | ✅ | ✅ |
-| Tomo | ❌ | ❌ |
-| Xverse | ❌ | ❌ |
-| Gate Web3 | ❌ | ❌ |
-| Coldlar <Badge>Hardware</Badge>  | ✅ | ✅ |
+| Wallet Name | BTC |
+|:--|:-:|
+| OKX | ✅ |
+| Unisat | ✅ |
+| OneKey | ✅ |
+| BitGet | ✅ |
+| Leap | ✅ |
+| Keplr | ❌ |
+| Cosmostation | ✅ |
+| Tomo | ❌ |
+| Xverse | ❌ |
+| Gate Web3 | ❌ |
+| Coldlar <HardwareBadge>Hardware</HardwareBadge>  | ✅ |
 
   </TabItem>
 </Tabs>
 
-Where: 
+Where:
 * ✅ - indicates that the wallet is supported by the Babylon Staking web app.
 * ❌ - indicates that the wallet is not supported.
-* <Badge>Hardware</Badge> - indicates that the wallet is a hardware wallet.
+* <HardwareBadge>Hardware</HardwareBadge> - indicates that the wallet is a hardware wallet.
 
 ### Staking via CLI
 
