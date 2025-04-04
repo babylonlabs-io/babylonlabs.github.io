@@ -42,59 +42,53 @@ Staking via the Babylon web app is a simple process.
 3. Select the Finality Provider you want to delegate your voting power to.
 4. Sign all transactions related to staking.
 
-[//]: # (<ThemedImage)
-
-[//]: # (  alt="Optimism L2 Integrations Architecture")
-
-[//]: # (  sources={{)
-
-[//]: # (    light: useBaseUrl&#40;'/img/guides/btc_stakers/staking_app.png'&#41;,)
-
-[//]: # (    dark: useBaseUrl&#40;'/img/guides/btc_stakers/staking_app_dark.png'&#41;,)
-
-[//]: # (  }})
-
-[//]: # (/>)
+<ThemedImage
+  alt="Babylon Staking Web App"
+  sources={{
+    light: useBaseUrl('/img/guides/btc_stakers/staking_app.png'),
+    dark: useBaseUrl('/img/guides/btc_stakers/staking_app_dark.png'),
+  }}
+/>
 
 ### Compatible Wallets
 
 <Tabs>
   <TabItem value="extension" label="Browser Extension Wallets" default>
 
-| Wallet Name | BTC |
-|:--|:-:|
-| OKX | ✅ |
-| Unisat | ✅ |
-| OneKey | ✅ |
-| BitGet | ✅ |
-| Cactus Link | ✅ |
-| Leap | ✅ |
-| Keplr | ❌ |
-| Cosmostation | ✅ |
-| Tomo | ✅ |
-| Fordefi | ❌ |
-| Xverse | ❌ |
-| Gate Web3 | ❌ |
-| Keystone <HardwareBadge>Hardware</HardwareBadge> | ✅ |
-| Ledger (via Keplr app) <HardwareBadge>Hardware</HardwareBadge> | ❌ |
-| OneKey (Pro & Classic 1S) <HardwareBadge>Hardware</HardwareBadge> | ✅ |
+| Wallet Name | BTC | BABY |
+|:--|:-:|:-:|
+| OKX | ✅ | ✅ |
+| Unisat | ✅ | ✅ |
+| OneKey | ✅ | ✅ |
+| BitGet | ✅ | ✅ |
+| Cactus Link | ✅ | ✅ |
+| Leap | ✅ | ✅ |
+| Keplr | ❌ | ✅ |
+| Cosmostation | ✅ | ✅ |
+| Tomo | ✅ | ❌ |
+| Fordefi | ❌ | ❌ |
+| Xverse | ❌ | ❌ |
+| Gate Web3 | ❌ | ❌ |
+| Keystone <HardwareBadge>Hardware</HardwareBadge> | ✅ | ❌ |
+| Ledger (via Keplr app) <HardwareBadge>Hardware</HardwareBadge> | ❌ | ✅ |
+| OneKey (Pro & Classic 1S) <HardwareBadge>Hardware</HardwareBadge> | ✅ | ❌ |
 
   </TabItem>
   <TabItem value="mobile" label="Mobile App Wallets">
 
-| Wallet Name | BTC |
-|:--|:-:|
-| OKX | ✅ |
-| Unisat | ✅ |
-| OneKey | ✅ |
-| BitGet | ✅ |
-| Leap | ✅ |
-| Keplr | ❌ |
-| Cosmostation | ✅ |
-| Tomo | ❌ |
-| Xverse | ❌ |
-| Gate Web3 | ❌ |
-| Coldlar <HardwareBadge>Hardware</HardwareBadge>  | ✅ |
+| Wallet Name | BTC | BABY |
+|:--|:-:|:-:|
+| OKX | ✅ | ✅ |
+| Unisat | ✅ | ✅ |
+| OneKey | ✅ | ✅ |
+| BitGet | ✅ | ✅ |
+| Leap | ✅ | ✅ |
+| Keplr | ❌ | ❌ |
+| Cosmostation | ✅ | ✅ |
+| Tomo | ❌ | ❌ |
+| Xverse | ❌ | ❌ |
+| Gate Web3 | ❌ | ❌ |
+| Coldlar <HardwareBadge>Hardware</HardwareBadge>  | ✅ | ✅ |
 
   </TabItem>
 </Tabs>
@@ -103,6 +97,10 @@ Where:
 * ✅ - indicates that the wallet is supported by the Babylon Staking web app.
 * ❌ - indicates that the wallet is not supported.
 * <HardwareBadge>Hardware</HardwareBadge> - indicates that the wallet is a hardware wallet.
+
+:::note
+The above list is not exhaustive and is subject to change. Please check the official documentation of the staking wallets for the latest information.
+:::
 
 ### Staking via CLI
 
