@@ -9,7 +9,7 @@ sidebar_position: 2
 
 ## **Overview**
 
-Euphrates 0.6.0 is the 6th version of a Babylon devnet that supports integration with other BSNs (Bitcoin Secured Networks). On top of Euphrates 0.2.0 where BSNs can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN. Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalization status. Euphrates 0.5.0 supports Finality Provider slashing and slashing propagation to Babylon and other BSNs and Euphrates 0.6.0 supports reward distributions.
+Euphrates 0.6.0 is the 6th version of a Babylon devnet that supports integration with other BSNs (Bitcoin Secured Networks). On top of Euphrates 0.2.0 where BSNs can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN. Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalization status. Euphrates 0.5.0 supports Finality Provider slashing and slashing propagation to Babylon and other BSNs and Euphrates 0.6.0 supports reward distribution.
 
 This page provides a guide for PoS systems to integrate with Euphrates 0.6.0. The integration allows a BSN system to get economic security from BTC staking.
 
@@ -18,17 +18,17 @@ Euphrates 0.6.0 is currently in a highly experimental phase, and unexpected issu
 **System components.** The integration involves three blockchains:
 
 - **A Bitcoin blockchain.** In this specific case, we’re using Bitcoin Signet.
-- **A Babylon blockchain.** This is the Euphrates devnet, presented below.
-- **A BSN system.** This is the system that we aim to integrate with Babylon.
+- **A Babylon Genesis blockchain.** This is the Euphrates devnet, presented below.
+- **A BSN system (sometimes referred to as a consumer system).** This is the system that we aim to integrate with Babylon.
 
 **User stories.** The integration provides the following user stories for BSN systems:
 
-1. Babylon receives registrations of BSN systems, BSN Finality Providers, and BTC delegations (shipped in Euphrates v0.1.0).
-2. Babylon propagates BSN Finality Providers and BTC delegations to BSN systems (shipped in Euphrates v0.2.0).
+1. Babylon Genesis receives registrations of BSN systems, BSN Finality Providers, and BTC delegations (shipped in Euphrates v0.1.0).
+2. Babylon Genesis propagates BSN Finality Providers and BTC delegations to BSN systems (shipped in Euphrates v0.2.0).
 3. BSN Finality Providers submit finality signatures to their BSN systems (shipped in Euphrates v0.3.0).
 4. BSN systems tally blocks and determine their finalization status (shipped in Euphrates v0.4.0).
 5. Finality Providers who double sign blocks are slashed, their associated slashing transactions are executed, and delegations are unbonded (shipped in Euphrates v0.5.0, current version).
-6. Reward distributions to Finality Providers and BTC stakers when blocks are finalized (shipped in Euphrates v0.6.0, current version).
+6. Reward distributed to Finality Providers and BTC stakers when blocks are finalized (shipped in Euphrates v0.6.0, current version).
 
 ## BSN system requirements
 
