@@ -8,6 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import HardwareBadge from '@site/src/components/badge/hardware';
 
 # Bitcoin Native Staking via Web App
 
@@ -42,19 +43,12 @@ Staking via the Babylon web app is a simple process.
 4. Sign all transactions related to staking.
 
 <ThemedImage
-  alt="Optimism L2 Integrations Architecture"
+  alt="Babylon Staking Web App"
   sources={{
-    light: useBaseUrl('/img/guides/stakers/staking_app.png'),
-    dark: useBaseUrl('/img/guides/stakers/staking_app_dark.png'),
+    light: useBaseUrl('/img/guides/btc_stakers/staking_app.png'),
+    dark: useBaseUrl('/img/guides/btc_stakers/staking_app_dark.png'),
   }}
 />
-
-export const Badge = ({ children }) => (
-  <span style={{ backgroundColor: '#d8a0f7', padding: '2px', borderRadius: '4px', color: 'black', fontWeight: 'bold', fontSize: '0.8em' }}>
-    {children}
-  </span>
-);
-
 
 ### Compatible Wallets
 
@@ -75,9 +69,9 @@ export const Badge = ({ children }) => (
 | Fordefi | ❌ | ❌ |
 | Xverse | ❌ | ❌ |
 | Gate Web3 | ❌ | ❌ |
-| Keystone <Badge>Hardware</Badge> | ✅ | ❌ |
-| Ledger (via Keplr app) <Badge>Hardware</Badge> | ❌ | ✅ |
-| OneKey (Pro & Classic 1S) <Badge>Hardware</Badge> | ✅ | ❌ |
+| Keystone <HardwareBadge>Hardware</HardwareBadge> | ✅ | ❌ |
+| Ledger (via Keplr app) <HardwareBadge>Hardware</HardwareBadge> | ❌ | ✅ |
+| OneKey (Pro & Classic 1S) <HardwareBadge>Hardware</HardwareBadge> | ✅ | ❌ |
 
   </TabItem>
   <TabItem value="mobile" label="Mobile App Wallets">
@@ -94,19 +88,23 @@ export const Badge = ({ children }) => (
 | Tomo | ❌ | ❌ |
 | Xverse | ❌ | ❌ |
 | Gate Web3 | ❌ | ❌ |
-| Coldlar <Badge>Hardware</Badge>  | ✅ | ✅ |
+| Coldlar <HardwareBadge>Hardware</HardwareBadge>  | ✅ | ✅ |
 
   </TabItem>
 </Tabs>
 
-Where: 
+Where:
 * ✅ - indicates that the wallet is supported by the Babylon Staking web app.
 * ❌ - indicates that the wallet is not supported.
-* <Badge>Hardware</Badge> - indicates that the wallet is a hardware wallet.
+* <HardwareBadge>Hardware</HardwareBadge> - indicates that the wallet is a hardware wallet.
+
+:::note
+The above list is not exhaustive and is subject to change. Please check the official documentation of the staking wallets for the latest information.
+:::
 
 ### Staking via CLI
 
 Babylon created the stakers-cli tool to allow users to stake via the command line
 interface and programmatic control in any operating system.
 
-For details check out [BTC Staker](/guides/stakers/native_staking/staking_via_cli)
+For details check out [BTC Staker](/guides/btc_stakers/native_staking/staking_via_cli)

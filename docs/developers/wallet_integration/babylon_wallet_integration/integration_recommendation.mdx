@@ -1,0 +1,88 @@
+---
+sidebar_class_name: babylon_wallet_integration_sidebar
+sidebar_label: Integration Recommendation
+sidebar_position: 1
+---
+
+# Wallet Integration Recommendation  
+
+To provide the best experience for users here are some suggestions to wallet  
+developers:  
+
+1.  **Epochised Staking UI**:  
+    
+    *   Show a clear indication that staking operations are queued for  
+        end-of-epoch execution  
+        
+    *   Display estimated time until the end of current epoch  
+        
+    *   Provide a way to view all pending staking operations  
+        
+2.  **Fast Unbonding UI**:  
+    
+    *   Accurately communicate the unbonding period  
+        
+    *   Indicate that unbonding leverages Bitcoin security  
+        
+    *   If possible, show progress of Bitcoin confirmations for unbonding  
+        requests  
+        
+3.  **Slashing Warnings**:  
+    
+    *   Include clear warnings about the slashing risk  
+        
+    *   Highlight the importance of choosing reliable validators  
+        
+
+## Implementation Best Practices  
+
+1.  **Proper Error Handling**:  
+    
+    *   Handle epoch transition edge cases  
+        
+    *   Manage potential failures due to users spending funds before epoch  
+        processing  
+        
+2.  **Refresh Strategies**:  
+    
+    *   Implement proper cache refreshing after expected epoch boundaries  
+        
+    *   Update delegation status after expected unbonding completion times  
+        
+3.  **Testing**:  
+    
+    *   Test thoroughly against Babylon testnet before mainnet integration  
+        
+    *   Verify all epoch-based operations complete as expected  
+        
+4.  **User Communication**:  
+    
+    *   Clearly explain the unique aspects of BABY staking (epochised staking,  
+        fast unbonding)  
+        
+    *   Provide educational content about the relationship between Bitcoin  
+        security and BABY staking  
+        
+
+## Common Integration Challenges  
+
+1.  **Epochised Staking Transition**:  
+    
+    *   Users transferring funds after staking transaction but before epoch  
+        processing  
+        
+    *   Solution: Clear warnings about not transferring funds until end of epoch  
+        
+2.  **Fast Unbonding Expectations**:  
+    
+    *   Managing user expectations around unbonding times, which depend on  
+        Bitcoin block times  
+        
+    *   Solution: Provide estimated time ranges rather than exact times  
+        
+3.  **Validator Selection**:  
+    
+    *   Helping users choose reliable validators to minimize slashing risk  
+        
+    *   Solution: Display validator uptime, commission rates, and voting power  
+        
