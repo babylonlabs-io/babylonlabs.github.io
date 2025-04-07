@@ -13,13 +13,25 @@ Babylon Genesis is a Cosmos SDK chain that is backed by Bitcoin staking.
 It is also a chain that facilitate other BSNs to integrate Babylon staking to their protocol. 
 Babylon Genesis itself is also a BSN.
 
-| Component | Technology |
-|-----------|------------|
-| Consensus | CometBFT (a Tendermint fork) |
-| Framework | Cosmos SDK |
-| Smart Contracts | CosmWasm |
-| Relayer | IBC |
-| State Machine | Custom modules for BTC staking, BTC Checkpointing, Finality Validation & Incentive Distribution |
+| Component | Technology | Version | 
+|-----------|------------|---------|
+| Consensus | CometBFT (a Tendermint fork) | `v0.50.9` |
+| Framework | Cosmos SDK | `v0.50.9` |
+| Smart Contracts | CosmWasm | `v2.1.3` |
+| Relayer | IBC | `v1.0.1` |
+
+[Custom Modules Documentation](/guides/architecture/babylon_genesis_modules/epoching)
+
+[Smart Contract Deployment Guide](/developers/dapps/smart_contract_deployment)
+
+**Network Participants**
+
+| Role | Documentation |
+|------|--------------|
+| Babylon Node Operators | [Setup Guide](/operators/babylon_node/installation_guide/) |
+| Validators | [Setup Guide](/operators/babylon_validators/installation_guide/) |
+| Finality Providers | [Overview](/operators/finality_providers/) |
+| Covenant Committee | [Overview](/operators/covenant_emulator/) |
 
 
 ## Chain Information
@@ -29,28 +41,46 @@ Babylon Genesis itself is also a BSN.
 
   | Property | Value |
   |----------|-------|
-  | Chain ID | `euphrates` |
+  | Chain ID | `euphrates-0.6.0` |
   | Chain Name | `Babylon Euphrates Devnet` |
   | Binary Name | `babylond` |
-  | Version | `v0.5.0` |
+  | Version | `v0.6.0` |
   | Genesis Date | `2024-10-15` |
 
   </TabItem>
-<TabItem value="phase2-testnet" label="Phase 2: Testnet" default>
+  <TabItem value="phase2-testnet" label="Phase 2: Testnet" default>
 
-| Property | Value |
-|----------|-------|
-| Chain ID | `bbn-test-5` |
-| Chain Name | `Babylon Phase-2 testnet-5` |
-| Binary Name | `babylond` |
-| Version | `v0.5.0` |
-| Genesis Date | `2025-01-09` |
-| Genesis File | `https://github.com/babylon-chain/babylon-chain/blob/main/genesis.json` |
+  | Property | Value |
+  |----------|-------|
+  | Chain ID | `bbn-test-5` |
+  | Chain Name | `Babylon Testnet` |
+  | Binary Name | `babylond` |
+  | Version | `v0.5.0` |
+  | Genesis Date | `2025-01-09` |
+  | Genesis File | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/genesis.json) |
+  | State Snapshot | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/bbn-test-5.tar.gz) |
+  | Seed Nodes | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/seeds.txt) |
+  | Peers | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/peers.txt) |
 
-</TabItem>
+  </TabItem>
+  <TabItem value="phase2-mainnet" label="Phase 2: Mainnet">
+
+  | Property | Value |
+  |----------|-------|
+  | Chain ID | `bbn-1` |
+  | Chain Name | `Babylon Genesis Mainnet` |
+  | Binary Name | `babylond` |
+  | Version | `v1.0.1` |
+  | Genesis Date | `2025-03-15` |
+  | Genesis File | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/genesis.json) |
+  | State Snapshot | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/bbn-1.tar.gz) (height 226) |
+  | Seed Nodes | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/seeds.txt) |
+  | Peers | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/peers.txt) |
+
+  </TabItem>
 </Tabs>
 
-## Network Information
+## Node Information
 
 <Tabs>
 <TabItem value="phase3-devnet" label="Phase 3: Devnet">
@@ -95,6 +125,32 @@ Babylon Genesis itself is also a BSN.
 | LCD | `https://babylon-testnet-api.contributiondao.com` |
 
 </TabItem>
+<TabItem value="phase2-mainnet" label="Phase 2: Mainnet">
+
+**Nodes Guru**
+| Endpoint Type | URL |
+|-------------|----------|
+| RPC (Pruned) | `https://babylon.nodes.guru/rpc` |
+| RPC (Archive) | `https://babylon-archive.nodes.guru/rpc` |
+| LCD (Pruned) | `https://babylon.nodes.guru/api` |
+| LCD (Archive) | `https://babylon-archive.nodes.guru/api` |
+| gRPC (Pruned) | `babylon.nodes.guru:443` |
+
+**Polkachu**
+| Endpoint Type | URL |
+|-------------|----------|
+| RPC (Pruned) | `https://babylon-rpc.polkachu.com` |
+| RPC (Archive) | `https://babylon-archive-rpc.polkachu.com` |
+| LCD (Pruned) | `https://babylon-api.polkachu.com` |
+| LCD (Archive) | `https://babylon-archive-api.polkachu.com` |
+| gRPC (Pruned) | `babylon-grpc.polkachu.com:20690` |
+| gRPC (Archive) | `babylon-archive-grpc.polkachu.com:20690` |
+
+:::warning
+Above endpoints will be live shortly after mainnet launch. 
+:::
+
+</TabItem>
 </Tabs>
 
 ## Chain Explorer
@@ -116,24 +172,17 @@ Babylon Genesis itself is also a BSN.
 | [Node Guru](https://testnet.babylon.explorers.guru/) | `https://testnet.babylon.explorers.guru/` | `https://testnet.babylon.explorers.guru/transaction/548E930B4656B976C00A0D163E4FE944BEF93A4EBFFB4C1CC45E5924C1C419D4?height=587661` |
 
 </TabItem>
+<TabItem value="phase2-mainnet" label="Phase 2: Mainnet">
+
+| Service | URL | Example |
+|---------|-----|---------|
+| [MintScan](https://www.mintscan.io/babylon) | `https://www.mintscan.io/babylon` | `https://www.mintscan.io/babylon/tx/F644F97AC47859A059EF0254364DD8E48517CFC5C6B5B38F5EE1C730F335F2A0?height=539808` |
+| [L2Scan](https://babylon.l2scan.co/) | `https://babylon.l2scan.co/` | `https://babylon.l2scan.co/tx/F2822E21CDFA0E3AF8740AA527723090553851704730C8202C05E6919867228B` |
+| [Node Guru](https://babylon.explorers.guru/) | `https://babylon.explorers.guru/` | `https://babylon.explorers.guru/transaction/548E930B4656B976C00A0D163E4FE944BEF93A4EBFFB4C1CC45E5924C1C419D4?height=587661` |
+
+:::warning
+Explorer will be live shortly after mainnet launch. 
+:::
+
+</TabItem>
 </Tabs>
-
-## Deployment Resources
-
-Cosmos SDK Version: `v0.50.9`
-
-CosmWasm Version: `v2.1.3`
-
-IBC Version: `v1.0.1`
-
-[Custom Modules Documentation](/guides/architecture/babylon_genesis_modules/epoching)
-
-[Smart Contract Deployment Guide](/developers/dapps/smart_contract_deployment)
-
-# Token Information
-
-- **Token Name**: Babylon
-- **Token Symbol**: BABY
-- **Base Denomination**: ubaby
-- **Display Denomination**: baby
-- **Decimals**: 6 (1 baby = 1,000,000 ubaby)
