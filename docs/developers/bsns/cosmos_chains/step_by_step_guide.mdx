@@ -11,7 +11,7 @@ sidebar_position: 2
 
 Euphrates 0.6.0 is the 6th version of a Babylon devnet that supports integration with other BSNs (Bitcoin Secured Networks). On top of Euphrates 0.2.0 where BSNs can receive registration messages of Finality Providers and BTC delegations, Euphrates 0.3.0 allows Finality Providers to submit finality signatures to the BSN. Euphrates 0.4.0 allows the BSN to tally its blocks and check their finalization status. Euphrates 0.5.0 supports Finality Provider slashing and slashing propagation to Babylon and other BSNs and Euphrates 0.6.0 supports reward distribution.
 
-This page provides a guide for PoS systems to integrate with Euphrates 0.6.0. The integration allows a BSN system to get economic security from BTC staking.
+This page provides a guide for PoS systems to integrate with Euphrates 0.6.0. The integration allows a BSN to get economic security from BTC staking.
 
 Euphrates 0.6.0 is currently in a highly experimental phase, and unexpected issues may arise. We welcome any feedback on the integration process and this document.
 
@@ -19,22 +19,22 @@ Euphrates 0.6.0 is currently in a highly experimental phase, and unexpected issu
 
 - **A Bitcoin blockchain.** In this specific case, we’re using Bitcoin Signet.
 - **A Babylon Genesis blockchain.** This is the Euphrates devnet, presented below.
-- **A BSN system (sometimes referred to as a consumer system).** This is the system that we aim to integrate with Babylon.
+- **A BSN (sometimes referred to as a consumer system in code).** This is the system that we aim to integrate with Babylon Bitcoin Staking Protocol.
 
-**User stories.** The integration provides the following user stories for BSN systems:
+**User stories.** The integration provides the following user stories for BSNs:
 
-1. Babylon Genesis receives registrations of BSN systems, BSN Finality Providers, and BTC delegations (shipped in Euphrates v0.1.0).
-2. Babylon Genesis propagates BSN Finality Providers and BTC delegations to BSN systems (shipped in Euphrates v0.2.0).
-3. BSN Finality Providers submit finality signatures to their BSN systems (shipped in Euphrates v0.3.0).
-4. BSN systems tally blocks and determine their finalization status (shipped in Euphrates v0.4.0).
+1. Babylon Genesis receives registrations of BSNs, BSN Finality Providers, and BTC delegations (shipped in Euphrates v0.1.0).
+2. Babylon Genesis propagates BSN Finality Providers and BTC delegations to BSNs (shipped in Euphrates v0.2.0).
+3. BSN Finality Providers submit finality signatures to their BSNs (shipped in Euphrates v0.3.0).
+4. BSNs tally blocks and determine their finalization status (shipped in Euphrates v0.4.0).
 5. Finality Providers who double sign blocks are slashed, their associated slashing transactions are executed, and delegations are unbonded (shipped in Euphrates v0.5.0, current version).
 6. Reward distributed to Finality Providers and BTC stakers when blocks are finalized (shipped in Euphrates v0.6.0, current version).
 
-## BSN system requirements
+## BSN requirements
 
-The BSN system integrating with Euphrates 0.6.0 needs to support IBC and CosmWasm smart contracts. This is because Babylon sends information about Finality Providers and BTC delegations as IBC packets. The BSN system needs to deploy CosmWasm smart contracts to process these IBC packets, and then store the Finality Providers and BTC delegations information.
+The BSN integrating with Euphrates 0.6.0 needs to support IBC and CosmWasm smart contracts. This is because Babylon sends information about Finality Providers and BTC delegations as IBC packets. The BSN needs to deploy CosmWasm smart contracts to process these IBC packets, and then store the Finality Providers and BTC delegations information.
 
-The Babylon team is developing a specialized relayer to support BSN systems without IBC, and is developing BSN side software for various types of BSN systems.
+The Babylon team is developing a specialized relayer to support BSNs without IBC, and is developing BSN side software for various types of BSNs.
 
 ## **Prerequisites**
 
@@ -187,9 +187,9 @@ $ babylond query bank balances <your_bbn_address> --node $nodeUrl
 
 ### Installing Babylon SDK
 
-For Cosmos-based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base. Other BSN systems are not supported at the moment.
+For Cosmos-based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base. Other BSNs are not supported at the moment.
 
-The `x/babylon` module acts as a thin layer between the Cosmos SDK layer and the CosmWasm smart contracts. It allows the BSN system to notify the Babylon contracts upon `BeginBlock` and `EndBlock`, such that the contracts can index blocks in the BSN system upon `BeginBlock`, and tally blocks to determine their finalization status upon `EndBlock`.
+The `x/babylon` module acts as a thin layer between the Cosmos SDK layer and the CosmWasm smart contracts. It allows the BSN to notify the Babylon contracts upon `BeginBlock` and `EndBlock`, such that the contracts can index blocks in the BSN upon `BeginBlock`, and tally blocks to determine their finalization status upon `EndBlock`.
 
 Installing the `x/babylon` module is no different compared to installing other modules. We have provided a demo Cosmos SDK chain that integrates with the `x/babylon` module. Please refer to [https://github.com/babylonlabs-io/babylon-sdk/tree/v0.8.0-rc.0/demo](https://github.com/babylonlabs-io/babylon-sdk/tree/v0.8.0-rc.0/demo) for the implementation.
 
@@ -201,9 +201,9 @@ If you do not wish to install Babylon SDK in your code base, you could still pro
 
 After setting up the software, address and tokens, please follow the steps below to integrate with Euphrates 0.6.0.
 
-### Deploy Babylon contracts on the BSN system
+### Deploy Babylon contracts on the BSN
 
-You need to deploy Babylon CosmWasm contracts on the BSN system. The contracts are responsible for receiving IBC packets of Finality Providers and BTC delegations from Babylon, and maintaining their status.
+You need to deploy Babylon CosmWasm contracts on the BSN. The contracts are responsible for receiving IBC packets of Finality Providers and BTC delegations from Babylon, and maintaining their status.
 
 They also implement block indexing, and vote tallying / block finalization.
 
@@ -225,7 +225,7 @@ After that, you will have two contracts in the `artifacts/` folder:
 - `babylon_contract.wasm`: Contract for handling IBC packets.
 - `btc_staking.wasm`: Contract for maintaining Finality Providers and BTC delegations.
 
-If the BSN system is based on Cosmos SDK, you can then deploy the two contracts.
+If the BSN is based on Cosmos SDK, you can then deploy the two contracts.
 
 **Note**: The following examples are based on `bcd`, our toy blockchain binary that is part of `babylon-sdk`, and that we use for development and testing. You’ll need to adapt these instructions accordingly, for your BSN chain devnet or testnet.
 First, this assumes there’s a `bcd` instance, running locally at the moment through a docker container.
@@ -240,7 +240,7 @@ $ make build-bcd
 $ docker run babylonlabs-io/local-bcd
 ```
 
-1. In another terminal or session, set the environment to access the BSN system. For `bcd`, and assuming you’re using the `bash` shell:
+1. In another terminal or session, set the environment to access the BSN. For `bcd`, and assuming you’re using the `bash` shell:
 
 ```bash
 $ cat <<EOF >env_bsn.sh
@@ -268,7 +268,7 @@ EOF
 $ . ./env_bsn.sh
 ```
 
-1. Upload the contracts to the BSN system.
+1. Upload the contracts to the BSN.
 
 ```bash
 <bsn_binary> tx wasm store <path_to_babylon_contract.wasm>
@@ -282,7 +282,7 @@ $ bcd tx wasm store "$testData/babylon_contract.wasm" $keyringBackend --from $ke
 $ bcd tx wasm store "$testData/btc_staking.wasm" $keyringBackend --from $key --chain-id $chainId --gas 20000000000 --gas-prices 0.01u$feeToken --node $nodeUrl -y
 ```
 
-The BSN system will return the contract code IDs for them.
+The BSN will return the contract code IDs for them.
 In the `bcd` example, you can use
 
 ```bash
@@ -323,7 +323,7 @@ $ instantiateMsg='{
 $ bcd tx wasm instantiate 1 "$instantiateMsg" --admin=$(bcd keys show user $keyringBackend -a) --label "v0.9.0" $keyringBackend --from $key --chain-id $chainId --gas 20000000000 --gas-prices 0.001u$feeToken --node $nodeUrl -y --amount 100000$feeToken
 ```
 
-The BSN system will return the `<babylon_contract_address>` of the Babylon contract.
+The BSN will return the `<babylon_contract_address>` of the Babylon contract.
 In the `bcd` example, you can run
 
 ```bash
@@ -340,21 +340,21 @@ In order to send notifications to Babylon contracts upon `BeginBlock` and `EndBl
 
 Since the contract addresses are known only after spinning up the BSN chain, we need to update the addresses in the module parameters on the fly. We can do so via submitting a parameter change governance proposal. [Here](https://hub.cosmos.network/main/governance/submitting.html) provides detailed instructions on how to submit such a governance proposal. Note that `gaiad` binary needs to be replaced by the binary of the BSN chain.
 
-### Create an IBC channel between Babylon and the BSN system
+### Create an IBC channel between Babylon and the BSN
 
 You can create an IBC channel by following the instructions [here](https://hermes.informal.systems/tutorials/local-chains/add-a-new-relay-path.html) (if using [Hermes](https://github.com/informalsystems/hermes)) or [here](https://github.com/cosmos/relayer) (if using [Go relayer](https://github.com/cosmos/relayer)). Please ensure to use the latest versions of them for full compatibility.
 
 You’ll need the following information:
 
-- The port ID is `zoneconcierge` for Babylon, and `wasm.<babylon_contract_address>` for the BSN system.
+- The port ID is `zoneconcierge` for Babylon, and `wasm.<babylon_contract_address>` for the BSN.
 - The GRPC endpoint of the Euphrates devnet is `https://grpc-euphrates.devnet.babylonlabs.io` .
 - For gas prices, both for the IBC relayer setup and sending TXs, you can just use `1ubbn`.
 - Channel ordering must be specified as `“ordered"`.
 - and channel version is `"zoneconcierge-1”`.
 
-### Register your BSN system on Babylon
+### Register your BSN on Babylon
 
-Starting with this version v0.5.0, the BSN system is registered automatically during IBC channel establishment. That’s what the `consumer_name` and `consumer_description` parameters of the Babylon Contract instantiation message are for.
+Starting with this version v0.5.0, the BSN is registered automatically during IBC channel establishment. That’s what the `consumer_name` and `consumer_description` parameters of the Babylon Contract instantiation message are for.
 
 **FAQs (these apply to all `babylond tx` commands):**
 
@@ -376,13 +376,13 @@ $ babylond query btcstkconsumer registered-consumers -o json --node https://rpc-
 $
 ```
 
-### Become a Finality Provider for your BSN system
+### Become a Finality Provider for your BSN
 
 **Set up EOTS manager.** To become a Finality Provider, you need to set up a EOTS manager that manages the key pairs for your Finality Provider. Please follow steps at [EOTS Manager | Babylon Labs](https://docs.babylonlabs.io/guides/architecture/btc_staking_program/eots_manager) and adapt the configuraftion file attached in the appendix.
 
 **Set up Finality Provider daemon.** Then you can set up a Finality Provider. It will call EOTS manager for signing messages, and interact with Babylon. Please follow steps at [Finality Provider | Babylon Labs](https://docs.babylonlabs.io/guides/architecture/btc_staking_program/finality_providers) and adapt the configuration file attached in the appendix.
 
-**Note**: Mind to use your BSN system id as `chain-id` for the CLI commands.
+**Note**: Mind to use your BSN id as `chain-id` for the CLI commands.
 
 **Create and register your Finality Provider on Babylon.** After that, you can create a Finality Provider instance through the `fpd create-finality-provider` or `fpd cfp` command. The created instance is associated with a BTC public key which serves as its unique identifier and a Babylon account to which staking rewards will be directed.
 
@@ -439,7 +439,7 @@ $
 
 **Set up BTC Staker daemon.** To stake BTC to your Finality Providers, you need to set up a BTC Staker daemon that generates Bitcoin staking transactions and sends staking requests to Babylon. Please follow steps at [Stake with BTC Staker CLI | Babylon Blockchain](https://docs.babylonlabs.io/guides/stakers) and adapt the configuation file attached in the appendix.
 
-**Staking BTC to your Finality Providers.** When staking, specify the BTC public keys of Finality Providers using the `--finality-providers-pks` flag in the `stake` command. Note that **Babylon requires a BTC delegation to restake to at least 1 Babylon Finality Provider, apart from Finality Providers of other BSN systems.**
+**Staking BTC to your Finality Providers.** When staking, specify the BTC public keys of Finality Providers using the `--finality-providers-pks` flag in the `stake` command. Note that **Babylon requires a BTC delegation to restake to at least 1 Babylon Finality Provider, apart from Finality Providers of other BSNs.**
 
 First, you could use the following command to list all Babylon Finality Providers.
 
@@ -470,7 +470,7 @@ stakercli daemon stake \
   --staking-time 10000 # ~70 days
 ```
 
-Note that among public keys specified in `--finality-providers-pks`, at least one of them should be a Babylon Finality Provider. For example, you can let the BTC delegation to restake to a Babylon Finality Provider as well as a Finality Provider for your BSN system.
+Note that among public keys specified in `--finality-providers-pks`, at least one of them should be a Babylon Finality Provider. For example, you can let the BTC delegation to restake to a Babylon Finality Provider as well as a Finality Provider for your BSN.
 
 Then, you can query the Babylon node to see the BTC delegation
 
@@ -511,9 +511,9 @@ babylond query btcstaking btc-delegations any --node https://rpc-euphrates.devne
 }
 ```
 
-### Wait until BSN system receives IBC packets
+### Wait until BSN receives IBC packets
 
-After some time, the Babylon contract on the BSN side is supposed to receive IBC packets about these Finality Providers and BTC delegations, and store them in the local KV store. If the BSN system is based on Cosmos SDK, then you can query Finality Providers via
+After some time, the Babylon contract on the BSN side is supposed to receive IBC packets about these Finality Providers and BTC delegations, and store them in the local KV store. If the BSN is based on Cosmos SDK, then you can query Finality Providers via
 
 ```bash
 <bsn_binary> query wasm contract-state smart <btc_staker_contract_address> '{ "finality_providers": {} }'
@@ -527,7 +527,7 @@ and query BTC delegation with a given staking tx hash `<staking_tx_hash_hex>` vi
 
 ### Wait until Finality Providers start submitting finality signatures
 
-Once the BSN system receives IBC packets of Finality Providers and BTC delegations, the Finality Provider daemon will automatically start submitting finality signatures to the BTC staking contract on the BSN system. One can query the finality signature at a given block signed by a given Finality Provider via the following query
+Once the BSN receives IBC packets of Finality Providers and BTC delegations, the Finality Provider daemon will automatically start submitting finality signatures to the BTC staking contract on the BSN. One can query the finality signature at a given block signed by a given Finality Provider via the following query
 
 ```bash
 <bsn_binary> query wasm contract-state smart <btc_staker_contract_address> '{"finality_signature":{"btc_pk_hex":"<cz_btc_pk>","height":<last_block_height>}}'
@@ -576,7 +576,7 @@ babylond tx incentive withdraw-reward finality_provider --from <your-bech32-addr
 
 ## **Current iteration**
 
-In this iteration, Babylon supports reward distribution that occurs in the BSN system.
+In this iteration, Babylon supports reward distribution that occurs in the BSN.
 
 ---
 
