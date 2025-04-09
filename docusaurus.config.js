@@ -265,7 +265,7 @@ const config = {
       languageTabs: [...languageTabs],
       algolia: {
         appId: process.env.ALGOLIA_APP_ID,
-        apiKey: process.env.ALGOLIA_API_KEY,
+        apiKey: process.env.ALGOLIA_API_KEY_READONLY,
         indexName:  ALGOLIA_INDEX_NAME,
         contextualSearch: true,
         searchParameters: {},
