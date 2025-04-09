@@ -7,12 +7,14 @@ sidebar_position: 0
 
 import RemoteMD from '@site/src/components/RemoteMD';
 
-export const rawUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-test-5/babylon-node/README.md";
+export const testnetUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-test-5/babylon-node/README.md";
+export const mainnetUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/babylon-node/README.md";
 
 <RemoteMD
   networkVersions={{
-    testnet: rawUrl
+    testnet: testnetUrl,
+    mainnet: mainnetUrl
   }}
   hideEnv={false}
-  hideRelease={false}
+  hideRelease={true}
 />

@@ -5,10 +5,10 @@ import {Globe} from '@styled-icons/boxicons-regular/Globe';
 import Admonition from '@theme/Admonition';
 
 function RemoteMD({
-                    networkVersions = {},
-                    hideEnv = true,
-                    hideRelease = true,
-                  }) {
+  networkVersions = {},
+  hideEnv = false,
+  hideRelease = false,
+}) {
   const [markdown, setMarkdown] = React.useState('');
   const [releases, setReleases] = React.useState([]);
   const [selectedVersion, setSelectedVersion] = React.useState('');
@@ -16,7 +16,7 @@ function RemoteMD({
     Object.keys(networkVersions)[0]
   );
   const [errorMessage, setErrorMessage] = React.useState('');
-  const [showReleaseSelector, setShowReleaseSelector] = React.useState('');
+  const [showReleaseSelector, setShowReleaseSelector] = React.useState(true);
   const [loading, setLoading] = React.useState(true); // Track loading state
   const lastH2 = React.useRef('');
 
@@ -57,27 +57,55 @@ function RemoteMD({
       }
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0) {
-        const latestReleases = data.slice(0, 3).map((release) => release.tag_name);
-        const firstReleaseUrl = networkVersions[selectedNetwork].replace(/refs\/heads\/[^/]+/, `${latestReleases[0]}`);
-        const firstReleaseResponse = await fetch(firstReleaseUrl);
-        if (!firstReleaseResponse.ok) {
+        // Filter out pre-releases (rc, alpha, beta versions)
+        let stableReleases = data
+          .map((release) => release.tag_name)
+          .filter(tag => !tag.includes('-'));  // Excludes tags with '-' like rc, alpha, beta
+        
+        if (stableReleases.length === 0) {
+          // If no stable releases, fall back to all releases
+          stableReleases = data.map((release) => release.tag_name);
+        }
+        
+        // Sort releases by version number
+        const sortedReleases = stableReleases.sort((a, b) => {
+          const [aMajor, aMinor, aPatch] = a.replace('v', '').split('.').map(Number);
+          const [bMajor, bMinor, bPatch] = b.replace('v', '').split('.').map(Number);
+          if (bMajor !== aMajor) return bMajor - aMajor;
+          if (bMinor !== aMinor) return bMinor - aMinor;
+          return bPatch - aPatch;
+        });
+
+        const latestMajorRelease = sortedReleases[0];
+        const latestMajorReleaseUrl = networkVersions[selectedNetwork].replace(/refs\/heads\/[^/]+/, `${latestMajorRelease}`);
+        const latestMajorReleaseResponse = await fetch(latestMajorReleaseUrl);
+        
+        if (!latestMajorReleaseResponse.ok) {
           return;
         }
-        if (latestReleases.length === 1) {
-          setReleases([latestReleases[0]]);
-          setSelectedVersion(latestReleases[0]);
-          setShowReleaseSelector(false);
+
+        // Get all releases with the same major version
+        const [currentMajor] = latestMajorRelease.replace('v', '').split('.').map(Number);
+        const sameMajorReleases = sortedReleases.filter(release => {
+          const [major] = release.replace('v', '').split('.').map(Number);
+          return major === currentMajor;
+        });
+
+        if (sameMajorReleases.length === 1) {
+          setReleases([latestMajorRelease]);
+          setSelectedVersion(latestMajorRelease);
+          setShowReleaseSelector(true);
         } else {
-          const secondReleaseUrl = networkVersions[selectedNetwork].replace(/refs\/heads\/[^/]+/, `${latestReleases[1]}`);
+          const secondReleaseUrl = networkVersions[selectedNetwork].replace(/refs\/heads\/[^/]+/, `${sameMajorReleases[1]}`);
           const secondReleaseResponse = await fetch(secondReleaseUrl);
           if (secondReleaseResponse.ok) {
-            setReleases(latestReleases);
-            setSelectedVersion(latestReleases[0]);
+            setReleases(sameMajorReleases);
+            setSelectedVersion(sameMajorReleases[0]);
             setShowReleaseSelector(true);
           } else {
-            setReleases([latestReleases[0]]);
-            setSelectedVersion(latestReleases[0]);
-            setShowReleaseSelector(false);
+            setReleases([sameMajorReleases[0]]);
+            setSelectedVersion(sameMajorReleases[0]);
+            setShowReleaseSelector(true);
           }
         }
       } else {
