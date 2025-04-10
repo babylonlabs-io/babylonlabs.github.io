@@ -20,6 +20,14 @@ const PRODUCTS = [
     text: 'BTC holders that delegate their BTC stake to Bitcoin Secured Networks for rewards.',
   },
   {
+    title: 'Stake BABY',
+    link: '/guides/baby_stakers',
+    icon: WalletCreditCardRegular,
+    lightImage: 'img/landing-page/hero/btc_stakers.png',
+    darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
+    text: 'BABY holders can delegate their toekn to Babylon Genesis to participate governance.',
+  },
+  {
     title: 'Become Operators',
     link: '/operators',
     icon: TetrisAppRegular,
