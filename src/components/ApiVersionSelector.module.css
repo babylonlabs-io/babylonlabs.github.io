@@ -1,0 +1,22 @@
+.versionSelector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: 0.5rem;
+}
+
+.versionSelectorLabel {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.versionSelectorSelect {
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background-color: var(--ifm-background-color);
+  font-size: 0.875rem;
+  color: var(--ifm-font-color-base);
+}
