@@ -1,4 +1,4 @@
-import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
+/* import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 const sidebar: SidebarsConfig = {
   apisidebar: [
@@ -367,7 +367,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/babylon-gRPC/btc-staking-gauge",
-          label: "BTCStakingGauge queries the BTC staking gauge of a given height",
+          label: "btc_staking_gauge",
           className: "api-method get",
         },
         {
@@ -643,7 +643,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/babylon-gRPC/abci-info",
-          label: "Get info about the application.",
+          label: "abci_info",
           className: "api-method get",
         },
         {
@@ -664,3 +664,252 @@ const sidebar: SidebarsConfig = {
 };
 
 export default sidebar.apisidebar;
+ */
+
+import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
+
+const sidebar: SidebarsConfig = {
+  apisidebar: [
+    {
+      type: "doc",
+      id: "api/babylon-gRPC/babylon-grpc-api-docs", // Overview/Introduction
+      label: "Overview",
+    },
+    {
+      type: "category",
+      label: "Babylon Modules",
+      items: [
+        // BTC Checkpoint Module
+        {
+          type: "category",
+          label: "BTC Checkpoint",
+          items: [
+            { type: "doc", id: "api/babylon-gRPC/btc-checkpoint/btc-checkpoint-params", label: "Parameters" },
+            { type: "doc", id: "api/babylon-gRPC/btc-checkpoint/btc-checkpoint-info", label: "Checkpoint Info (Single Epoch)" },
+            { type: "doc", id: "api/babylon-gRPC/btc-checkpoint/btc-checkpoints-info", label: "Checkpoint Info (Epoch Range)" },
+            { type: "doc", id: "api/babylon-gRPC/epoch-submissions", label: "Epoch Submissions" },
+            { type: "doc", id: "api/babylon-gRPC/reported-checkpoint-btc-height", label: "Reported Checkpoint BTC Height" },
+            { type: "doc", id: "api/babylon-gRPC/ended-epoch-btc-height", label: "Ended Epoch BTC Height" },
+          ],
+        },
+        // BTC Light Client Module
+        {
+          type: "category",
+          label: "BTC Light Client",
+          items: [
+            { type: "doc", id: "api/babylon-gRPC/btc-light-client-params", label: "Parameters" },
+            { type: "doc", id: "api/babylon-gRPC/base-header", label: "Base Header" },
+            { type: "doc", id: "api/babylon-gRPC/tip", label: "Tip Header" },
+            { type: "doc", id: "api/babylon-gRPC/contains", label: "Contains Hash" },
+            { type: "doc", id: "api/babylon-gRPC/contains-bytes", label: "Contains Hash (Bytes)" },
+            { type: "doc", id: "api/babylon-gRPC/header-depth", label: "Header Depth" },
+            { type: "doc", id: "api/babylon-gRPC/hashes", label: "Stored Hashes" },
+            { type: "doc", id: "api/babylon-gRPC/main-chain", label: "Main Chain Headers" },
+          ],
+        },
+        // BTC Staking Module
+        {
+          type: "category",
+          label: "BTC Staking",
+          items: [
+             // BTC Staking General Params/Queries
+            { type: "doc", id: "api/babylon-gRPC/params", label: "Parameters (Current)" },
+            { type: "doc", id: "api/babylon-gRPC/params-by-btc-height", label: "Parameters by BTC Height" },
+            { type: "doc", id: "api/babylon-gRPC/params-by-version", label: "Parameters by Version" },
+            { type: "doc", id: "api/babylon-gRPC/params-versions", label: "Parameters Versions List" },
+            { type: "doc", id: "api/babylon-gRPC/largest-btc-re-org", label: "Largest BTC ReOrg" },
+            { type: "doc", id: "api/babylon-gRPC/activated-height", label: "Activation Height" },
+             // Delegations
+            { type: "doc", id: "api/babylon-gRPC/btc-delegation", label: "Delegation Info" },
+            { type: "doc", id: "api/babylon-gRPC/btc-delegations", label: "List Delegations by Status" },
+            { type: "doc", id: "api/babylon-gRPC/finality-provider-delegations", label: "Provider Delegations List" },
+            { type: "doc", id: "api/babylon-gRPC/delegation-lifecycle", label: "Delegation Lifecycle" },
+             // Finality Providers
+            { type: "doc", id: "api/babylon-gRPC/finality-provider", label: "Provider Info" },
+            { type: "doc", id: "api/babylon-gRPC/finality-providers", label: "List Providers" },
+          ],
+        },
+         // BTC Staking Consumer Module
+        {
+            type: "category",
+            label: "BTC Staking Consumer",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/btc-stk-consumer-params", label: "Parameters" },
+                { type: "doc", id: "api/babylon-gRPC/consumer-registry-list", label: "List Registered Consumers" },
+                { type: "doc", id: "api/babylon-gRPC/consumers-registry", label: "Consumer Info" },
+                { type: "doc", id: "api/babylon-gRPC/finality-provider-consumer", label: "Provider's Consumer Info" }, // Needs clarification or distinct ID if labels were identical
+                { type: "doc", id: "api/babylon-gRPC/finality-providers-consumer", label: "List Providers for Consumer" },
+            ]
+        },
+        // Checkpoint Module (General Checkpointing Logic)
+        {
+          type: "category",
+          label: "Checkpointing",
+          items: [
+            { type: "doc", id: "api/babylon-gRPC/bls-public-key-list", label: "BLS Public Keys (Epoch)" },
+            { type: "doc", id: "api/babylon-gRPC/raw-checkpoint", label: "Raw Checkpoint (Single Epoch)" },
+            { type: "doc", id: "api/babylon-gRPC/raw-checkpoints", label: "Raw Checkpoints (Epoch Range)" },
+            { type: "doc", id: "api/babylon-gRPC/raw-checkpoint-list", label: "Raw Checkpoints (by Status)" },
+            { type: "doc", id: "api/babylon-gRPC/epoch-status", label: "Epoch Status" },
+            { type: "doc", id: "api/babylon-gRPC/recent-epoch-status-count", label: "Recent Epoch Status Count" },
+            { type: "doc", id: "api/babylon-gRPC/last-checkpoint-with-status", label: "Last Checkpoint by Status" },
+          ],
+        },
+        // Epoching Module
+        {
+          type: "category",
+          label: "Epoching",
+          items: [
+            { type: "doc", id: "api/babylon-gRPC/epoching-params", label: "Parameters" },
+            { type: "doc", id: "api/babylon-gRPC/current-epoch", label: "Current Epoch" },
+            { type: "doc", id: "api/babylon-gRPC/epoch-info", label: "Epoch Info (Single)" },
+            { type: "doc", id: "api/babylon-gRPC/epochs-info", label: "Epoch Info (Range)" },
+            { type: "doc", id: "api/babylon-gRPC/epoch-msgs", label: "Epoch Messages" },
+            { type: "doc", id: "api/babylon-gRPC/epoch-val-set", label: "Epoch Validator Set" },
+            { type: "doc", id: "api/babylon-gRPC/latest-epoch-msgs", label: "Latest Epoch Messages" },
+            { type: "doc", id: "api/babylon-gRPC/validator-lifecycle", label: "Validator Lifecycle" },
+          ],
+        },
+        // Finality Provider Module
+        {
+            type: "category",
+            label: "Finality Provider",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/finality-params", label: "Parameters" },
+                { type: "doc", id: "api/babylon-gRPC/list-blocks", label: "List Blocks by Status" },
+                { type: "doc", id: "api/babylon-gRPC/block", label: "Block Info" }, // Finality block
+                { type: "doc", id: "api/babylon-gRPC/list-evidences", label: "List Evidences" },
+                { type: "doc", id: "api/babylon-gRPC/evidence", label: "Evidence Info" },
+                { type: "doc", id: "api/babylon-gRPC/active-finality-providers-at-height", label: "Active Providers at Height" },
+                { type: "doc", id: "api/babylon-gRPC/finality-provider-current-power", label: "Provider Current Power" },
+                { type: "doc", id: "api/babylon-gRPC/finality-provider-power-at-height", label: "Provider Power at Height" },
+                { type: "doc", id: "api/babylon-gRPC/list-pub-rand-commit", label: "List Public Randomness Commits" },
+                { type: "doc", id: "api/babylon-gRPC/list-public-randomness", label: "List Revealed Public Randomness" },
+                { type: "doc", id: "api/babylon-gRPC/signing-info", label: "Signing Info (Single Provider)" },
+                { type: "doc", id: "api/babylon-gRPC/signing-infos", label: "Signing Infos (All Active)" },
+                { type: "doc", id: "api/babylon-gRPC/votes-at-height", label: "Votes at Height" },
+            ]
+        },
+        // Incentive Module
+        {
+          type: "category",
+          label: "Incentives",
+          items: [
+            { type: "doc", id: "api/babylon-gRPC/incentive-params", label: "Parameters" },
+            { type: "doc", id: "api/babylon-gRPC/reward-gauges", label: "Reward Gauges" },
+            { type: "doc", id: "api/babylon-gRPC/btc-staking-gauge", label: "BTC Staking Gauge" },
+            { type: "doc", id: "api/babylon-gRPC/delegator-withdraw-address", label: "Delegator Withdraw Address" },
+            { type: "doc", id: "api/babylon-gRPC/delegation-rewards", label: "Delegation Rewards" },
+          ],
+        },
+        // Zone Concierge Module
+        {
+          type: "category",
+          label: "Zone Concierge",
+          items: [
+            { type: "doc", id: "api/babylon-gRPC/zone-concierge-params", label: "Parameters" },
+            { type: "doc", id: "api/babylon-gRPC/chain-list", label: "List Checkpointed Chains" },
+            { type: "doc", id: "api/babylon-gRPC/chains-info", label: "Chains Info" },
+            { type: "doc", id: "api/babylon-gRPC/epoch-chains-info", label: "Epoch Chains Info" },
+            { type: "doc", id: "api/babylon-gRPC/finalized-chain-info-until-height", label: "Finalized Chain Info (Until Height)" },
+            { type: "doc", id: "api/babylon-gRPC/finalized-chains-info", label: "Finalized Chains Info (by ID)" },
+            { type: "doc", id: "api/babylon-gRPC/header", label: "Chain Header" }, // ZoneConcierge header
+            { type: "doc", id: "api/babylon-gRPC/list-headers", label: "List Chain Headers" },
+            { type: "doc", id: "api/babylon-gRPC/list-epoch-headers", label: "List Chain Headers (Epoch)" },
+          ],
+        },
+        // Mint Module (Inflation)
+        {
+            type: "category",
+            label: "Mint",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/genesis-time", label: "Genesis Time" },
+                { type: "doc", id: "api/babylon-gRPC/inflation-rate", label: "Inflation Rate" },
+                { type: "doc", id: "api/babylon-gRPC/annual-provisions", label: "Annual Provisions" },
+            ]
+        }
+      ],
+    },
+    {
+      type: "category",
+      label: "CometBFT RPC",
+      items: [
+         // Transaction RPC
+        {
+            type: "category",
+            label: "Transactions",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/broadcast-tx-async", label: "Broadcast Tx Async" },
+                { type: "doc", id: "api/babylon-gRPC/broadcast-tx-sync", label: "Broadcast Tx Sync" },
+                { type: "doc", id: "api/babylon-gRPC/broadcast-tx-commit", label: "Broadcast Tx Commit" },
+                { type: "doc", id: "api/babylon-gRPC/check-tx", label: "Check Tx" },
+                { type: "doc", id: "api/babylon-gRPC/tx", label: "Get Tx by Hash" },
+                { type: "doc", id: "api/babylon-gRPC/tx-search", label: "Search Txs" },
+                { type: "doc", id: "api/babylon-gRPC/unconfirmed-txs", label: "List Unconfirmed Txs" },
+                { type: "doc", id: "api/babylon-gRPC/num-unconfirmed-txs", label: "Number of Unconfirmed Txs" },
+            ]
+        },
+         // Node & Network RPC
+        {
+            type: "category",
+            label: "Node & Network",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/health", label: "Health Check" },
+                { type: "doc", id: "api/babylon-gRPC/status", label: "Node Status" },
+                { type: "doc", id: "api/babylon-gRPC/net-info", label: "Network Info" },
+                { type: "doc", id: "api/babylon-gRPC/dial-seeds", label: "Dial Seeds (Unsafe)" },
+                { type: "doc", id: "api/babylon-gRPC/dial-peers", label: "Dial Peers (Unsafe)" },
+            ]
+        },
+         // Block & Chain RPC
+        {
+            type: "category",
+            label: "Block & Chain",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/blockchain", label: "Get Block Headers (Range)" },
+                { type: "doc", id: "api/babylon-gRPC/header", label: "Get Header by Height" }, // CometBFT header
+                { type: "doc", id: "api/babylon-gRPC/header-by-hash", label: "Get Header by Hash" },
+                { type: "doc", id: "api/babylon-gRPC/block", label: "Get Block by Height" }, // CometBFT block
+                { type: "doc", id: "api/babylon-gRPC/block-by-hash", label: "Get Block by Hash" },
+                { type: "doc", id: "api/babylon-gRPC/block-results", label: "Get Block Results by Height" },
+                { type: "doc", id: "api/babylon-gRPC/block-search", label: "Search Blocks" },
+                { type: "doc", id: "api/babylon-gRPC/commit", label: "Get Commit by Height" },
+                { type: "doc", id: "api/babylon-gRPC/validators", label: "Get Validators by Height" },
+                { type: "doc", id: "api/babylon-gRPC/genesis", label: "Get Genesis" },
+                { type: "doc", id: "api/babylon-gRPC/genesis-chunked", label: "Get Genesis (Chunked)" },
+            ]
+        },
+         // Consensus RPC
+        {
+            type: "category",
+            label: "Consensus",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/dump-consensus-state", label: "Dump Consensus State" },
+                { type: "doc", id: "api/babylon-gRPC/consensus-state", label: "Get Consensus State" },
+                { type: "doc", id: "api/babylon-gRPC/consensus-params", label: "Get Consensus Parameters" },
+            ]
+        },
+         // ABCI RPC
+        {
+            type: "category",
+            label: "ABCI",
+            items: [
+                { type: "doc", id: "api/babylon-gRPC/abci-info", label: "ABCI Info" },
+                { type: "doc", id: "api/babylon-gRPC/abci-query", label: "ABCI Query" },
+            ]
+        },
+         // Evidence RPC
+        {
+            type: "category",
+            label: "Evidence",
+            items: [
+                 { type: "doc", id: "api/babylon-gRPC/broadcast-evidence", label: "Broadcast Evidence" },
+            ]
+        }
+      ],
+    },
+  ],
+};
+
+export default sidebar.apisidebar;
+
