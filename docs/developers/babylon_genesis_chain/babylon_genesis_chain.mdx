@@ -10,8 +10,8 @@ import TabItem from '@theme/TabItem';
 # Babylon Genesis Chain
 
 Babylon Genesis is a Cosmos SDK chain, backed by Bitcoin staking. 
-It also facilitates other BSNs in integrating Babylon staking into their protocol. 
-Babylon Genesis itself is also a BSN.
+It also facilitates other BSNs in integrating Babylon staking into their protocols. 
+Babylon Genesis is itself a BSN.
 
 | Component | Technology | Version | 
 |-----------|------------|---------|
@@ -20,9 +20,9 @@ Babylon Genesis itself is also a BSN.
 | Smart Contracts | CosmWasm | `v2.1.3` |
 | Relayer | IBC | `v1.0.1` |
 
-[Custom Modules Documentation](/guides/architecture/babylon_genesis_modules/epoching)
+To learn more about custom modules, please refer to the [Custom Modules Documentation](/guides/architecture/babylon_genesis_modules/epoching).
 
-[Smart Contract Deployment Guide](/developers/dapps/smart_contract_deployment)
+To deploy a smart contract on Babylon Genesis, follow the [Smart Contract Deployment Guide](/developers/dapps/smart_contract_deployment).
 
 **Network Participants**
 
@@ -33,156 +33,3 @@ Babylon Genesis itself is also a BSN.
 | Finality Providers | [Overview](/operators/finality_providers/) |
 | Covenant Committee | [Overview](/operators/covenant_emulator/) |
 
-
-## Chain Information
-
-<Tabs>
-  <TabItem value="phase3-devnet" label="Phase 3: Devnet">
-
-  | Property | Value |
-  |----------|-------|
-  | Chain ID | `euphrates-0.6.0` |
-  | Chain Name | `Babylon Euphrates Devnet` |
-  | Binary Name | `babylond` |
-  | Version | `v0.6.0` |
-  | Genesis Date | `2024-10-15` |
-
-  </TabItem>
-  <TabItem value="phase2-testnet" label="Phase 2: Testnet" default>
-
-  | Property | Value |
-  |----------|-------|
-  | Chain ID | `bbn-test-5` |
-  | Chain Name | `Babylon Testnet` |
-  | Binary Name | `babylond` |
-  | Version | `v0.5.0` |
-  | Genesis Date | `2025-01-09` |
-  | Genesis File | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/genesis.json) |
-  | State Snapshot | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/bbn-test-5.tar.gz) |
-  | Seed Nodes | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/seeds.txt) |
-  | Peers | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/peers.txt) |
-
-  </TabItem>
-  <TabItem value="phase2-mainnet" label="Phase 2: Mainnet">
-
-  | Property | Value |
-  |----------|-------|
-  | Chain ID | `bbn-1` |
-  | Chain Name | `Babylon Genesis Mainnet` |
-  | Binary Name | `babylond` |
-  | Version | `v1.0.1` |
-  | Genesis Date | `2025-03-15` |
-  | Genesis File | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/genesis.json) |
-  | State Snapshot | [Download](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/bbn-1.tar.gz) (height 226) |
-  | Seed Nodes | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/seeds.txt) |
-  | Peers | [View](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/network-artifacts/peers.txt) |
-
-  </TabItem>
-</Tabs>
-
-## Node Information
-
-<Tabs>
-<TabItem value="phase3-devnet" label="Phase 3: Devnet">
-
-**Babylon Labs**
-| Endpoint Type | URL |
-|--------------|-----|
-| RPC Endpoint | `https://rpc.devnet.babylonlabs.io` |
-| LCD Nodes Endpoint | `https://lcd.devnet.babylonlabs.io` |
-| gRPC Endpoint | `https://grpc.devnet.babylonlabs.io` |
-
-</TabItem>
-<TabItem value="phase2-testnet" label="Phase 2: Testnet" default>
-
-**Nodes Guru**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC | `https://babylon-testnet-rpc.nodes.guru` |
-| RPC Archive | `https://babylon-testnet-rpc-archive-1.nodes.guru` |
-| LCD | `https://babylon-testnet-api.nodes.guru` |
-| LCD Archive | `https://babylon-testnet-api-archive-1.nodes.guru` |
-| gRPC | `https://babylon-testnet-grpc.nodes.guru` |
-
- **Polkachu**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC | `https://babylon-testnet-rpc.polkachu.com` |
-| LCD | `https://babylon-testnet-api.polkachu.com` |
-| gRPC | `http://babylon-testnet-grpc.polkachu.com:20690` |
-
-**Imperator**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC | `https://rpc-babylon-testnet.imperator.co` |
-| LCD | `https://lcd-babylon-testnet.imperator.co` |
-| gRPC | `grpc-babylon-testnet.imperator.co:443` |
-
-**ContributionDAO**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC | `https://babylon-testnet-rpc.contributiondao.com` |
-| LCD | `https://babylon-testnet-api.contributiondao.com` |
-
-</TabItem>
-<TabItem value="phase2-mainnet" label="Phase 2: Mainnet">
-
-**Nodes Guru**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC (Pruned) | `https://babylon.nodes.guru/rpc` |
-| RPC (Archive) | `https://babylon-archive.nodes.guru/rpc` |
-| LCD (Pruned) | `https://babylon.nodes.guru/api` |
-| LCD (Archive) | `https://babylon-archive.nodes.guru/api` |
-| gRPC (Pruned) | `babylon.nodes.guru:443` |
-
-**Polkachu**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC (Pruned) | `https://babylon-rpc.polkachu.com` |
-| RPC (Archive) | `https://babylon-archive-rpc.polkachu.com` |
-| LCD (Pruned) | `https://babylon-api.polkachu.com` |
-| LCD (Archive) | `https://babylon-archive-api.polkachu.com` |
-| gRPC (Pruned) | `babylon-grpc.polkachu.com:20690` |
-| gRPC (Archive) | `babylon-archive-grpc.polkachu.com:20690` |
-
-:::warning
-Above endpoints will be live shortly after mainnet launch. 
-:::
-
-</TabItem>
-</Tabs>
-
-## Chain Explorer
-
-<Tabs>
-<TabItem value="phase3-devnet" label="Phase 3: Devnet">
-
-| Service | URL | Example |
-|---------|-----|---------|
-| [L2 Scan](https://babylon-devnet.l2scan.co/) | `https://babylon-devnet.l2scan.co/` | `https://babylon-devnet.l2scan.co/tx/F824FFF6BCA930CDDA87B63AA1D0BDB001E78E8635143CB2AA7332F595777443` |
-
-</TabItem>
-<TabItem value="phase2-testnet" label="Phase 2: Testnet" default>
-
-| Service | URL | Example |
-|---------|-----|---------|
-| [MintScan](https://www.mintscan.io/babylon-testnet) | `https://www.mintscan.io/babylon-testnet` | `https://www.mintscan.io/babylon-testnet/tx/F644F97AC47859A059EF0254364DD8E48517CFC5C6B5B38F5EE1C730F335F2A0?height=539808` |
-| [L2Scan](https://babylon-testnet.l2scan.co/) | `https://babylon-testnet.l2scan.co/` | `https://babylon-testnet.l2scan.co/tx/F2822E21CDFA0E3AF8740AA527723090553851704730C8202C05E6919867228B` |
-| [Node Guru](https://testnet.babylon.explorers.guru/) | `https://testnet.babylon.explorers.guru/` | `https://testnet.babylon.explorers.guru/transaction/548E930B4656B976C00A0D163E4FE944BEF93A4EBFFB4C1CC45E5924C1C419D4?height=587661` |
-
-</TabItem>
-<TabItem value="phase2-mainnet" label="Phase 2: Mainnet">
-
-| Service | URL | Example |
-|---------|-----|---------|
-| [MintScan](https://www.mintscan.io/babylon) | `https://www.mintscan.io/babylon` | `https://www.mintscan.io/babylon/tx/F644F97AC47859A059EF0254364DD8E48517CFC5C6B5B38F5EE1C730F335F2A0?height=539808` |
-| [L2Scan](https://babylon.l2scan.co/) | `https://babylon.l2scan.co/` | `https://babylon.l2scan.co/tx/F2822E21CDFA0E3AF8740AA527723090553851704730C8202C05E6919867228B` |
-| [Node Guru](https://babylon.explorers.guru/) | `https://babylon.explorers.guru/` | `https://babylon.explorers.guru/transaction/548E930B4656B976C00A0D163E4FE944BEF93A4EBFFB4C1CC45E5924C1C419D4?height=587661` |
-
-:::warning
-Explorer will be live shortly after mainnet launch. 
-:::
-
-</TabItem>
-</Tabs>
