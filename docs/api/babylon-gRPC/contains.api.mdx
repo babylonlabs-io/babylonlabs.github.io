@@ -1,0 +1,71 @@
+---
+id: contains
+title: "Contains checks whether a hash is maintained by the module."
+description: "Contains checks whether a hash is maintained by the module."
+sidebar_label: "Contains checks whether a hash is maintained by the module."
+hide_title: true
+hide_table_of_contents: true
+api: eJylVm1v2zYQ/isHYoC3wJacDGlRA8WQZOnLgLZZ4gIDomCmJMpiQ5EqSdk1svz33ZGyFSdBV2BfbJG81+ee4/GOtdzyRnhhHZtd3zGp2Yx97YTdsDHTeILLmrsaV1Z87aQVJZtVXDkxZq6oRcPZ7I5Vxjbco2i+8QJF/aYlReet1Et2f39D2q412glH8kfTKf0VRnuhPX0epAf0N5gshSusbL00FNGfFNEZinOp3WVvCqSDrVkgl4BxgK8FBPF0Kw+XF2eAOdamTDC41ppWWC9jKEUvRN992LkxSnCNce8yMfkXUXjcwa39yE7AdUUhnKs6tYsmYUGu4p3y/5Xo43BKsYeo1P7XowFSXIqlsNE+Bq6ClvSicU+Nkc7fnVUPctuWZMxWXHXiR4r3BITdBreWb2gtrDX2WS8NIsOX4pmzHwJXQ6fFtxaPRQnBy0OMyQRfEnHZKc83CnWQaYQAJwPvkapsSwL22PaOHViJ4tbBukaGCAsciO/ErQaPSQRd55vAq8aUnRJEokgnNLMUnjjFfY2LNI9hpLkvlFzW9It1T1eHaTHE4YRdbfstVIfV3rezNFWm4Ko2zs9eTV9Nn0R82Wno84Qlcfot92LNNxD01AbW0tfQ0w5aYz2QHQQKUZG6MqEK0isCfc/QycV7+N0UFBxFFt0dJtPkaRAnz4eAcHG4PL+aAzHUVryI3dgLj1wQTzI9r1E0SDfCLhFah9WVlSxCycBUAehnfXBdhsMzg+ifvplDtJjpg4OrrqV80RwpYBd4UxjlZgcHeAoAny/fg8HU4N18fhG3/rj69JGEv7e9Frkzxa3wLrpBzlRy2UV6kW2SLLiGXEDRn/Vs6TSyHIbbFYlcosWMXdu2uMkYeJ4rvMI0pZTpxU9nH+bvPn04T6Od/i/xplELqCSKIppouHNkl2BYTCZoKvlrga6bBsGZKORqpiuFPRGQFjsyUJxKOryEgJcltlCowcIXRLvDo5dU6uRwdvTixfHLRY8pYpYSLpTnSaytkrdiKHACiwL5CwNtg36a48btb7WgBnh9vIjWelx3Frc401QRzrstjBefruYjrLMJOVpjYvBCl61Bz7CSPFQLg4zeJ5Na8AjtWbxmJ3O8V2bA21b1tEq/OKMRc0QsugtucFlyz2F0l/X9nLEZmgnxZ2yMn6F+jravM3ac4fWCmzLIHd6PHmf+KNWBPd9LGGepwaumFCG1nU5fwN16QICax8NiML8Yg0iWWI3HhRgk0NqJ2+iitkabLk7EqtMFgeNiWcUKocPsXJdTv+cC8aKOy1in9/YscsxovG74CudPYPFe5C7w5w3SVXzjTYvHA2evoxT3Nz/TneeQfUu8tLo8QQ6nK5luz39BBhg1ho3pAlC7CMKtMvoo1qdUpVEMG9sz3H3kojJKmTU57NtiRuEsRFEbrDSmQ1zAxom1PkqmWOn9+j/Idryt9nT8kAxImPBGivK+SUIUr0cZGyLD74zdA7LkH9hmBRMNEw9r97TrHhQr0zQ5W6wjhk93dv8O+38Ta+8a301jL775tFWoQz77t0KcZtesn2aovD/PaEwc4s9upuF8IdqRzt1dzp34bNX9PW3HpyRNulI64srwfLwVm+Fx2b9GWJhVK24lyaLeDUYV+zsYiTon+OBq/QMtelSR4m4qvz2f4/PgX7wksp4=
+sidebar_class_name: "get api-method"
+info_path: api/babylon-gRPC/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Contains checks whether a hash is maintained by the module."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/babylon/btclightclient/v1/contains"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Contains checks whether a hash is maintained by the module.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"in":"query","name":"hash","required":false,"schema":{"format":"byte","type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryContainsResponse is response type for the Query/Contains RPC method.","properties":{"contains":{"type":"boolean"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

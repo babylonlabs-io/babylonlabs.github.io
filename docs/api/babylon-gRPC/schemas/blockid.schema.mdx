@@ -1,0 +1,33 @@
+---
+id: blockid
+title: "BlockID"
+description: ""
+sidebar_label: "BlockID"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"hash":"112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7","parts":{"total":1,"hash":"38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"BlockID"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"required":["hash","parts"],"properties":{"hash":{"type":"string","example":"112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7"},"parts":{"required":["total","hash"],"properties":{"total":{"type":"integer","example":1},"hash":{"type":"string","example":"38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD"}},"type":"object"}},"title":"BlockID"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

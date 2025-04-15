@@ -1,0 +1,33 @@
+---
+id: babylon-finality-v-1-queryparamsresponse
+title: "babylon.finality.v1.QueryParamsResponse"
+description: "QueryParamsResponse is response type for the Query/Params RPC method."
+sidebar_label: "babylon.finality.v1.QueryParamsResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"params":{"finality_activation_height":"string","finality_sig_timeout":"string","jail_duration":"string","max_active_finality_providers":0,"min_pub_rand":"string","min_signed_per_window":"string","signed_blocks_window":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.finality.v1.QueryParamsResponse"}
+>
+</Heading>
+
+
+
+QueryParamsResponse is response type for the Query/Params RPC method.
+
+<Schema
+  schema={{"description":"QueryParamsResponse is response type for the Query/Params RPC method.","properties":{"params":{"description":"params holds all the parameters of this module.","properties":{"finality_activation_height":{"description":"finality_activation_height is the babylon block height which the finality module will\nstart to accept finality voting and the minimum allowed value for the public randomness\ncommit start height.","format":"uint64","type":"string"},"finality_sig_timeout":{"format":"int64","title":"finality_sig_timeout defines how much time (in terms of blocks) finality providers have to cast a finality\nvote before being judged as missing their voting turn on the given block","type":"string"},"jail_duration":{"title":"jail_duration is the minimum period of time that a finality provider remains jailed","type":"string"},"max_active_finality_providers":{"format":"int64","title":"max_active_finality_providers is the maximum number of active finality providers in the BTC staking protocol","type":"integer"},"min_pub_rand":{"format":"uint64","title":"min_pub_rand is the minimum number of public randomness each\nmessage should commit","type":"string"},"min_signed_per_window":{"format":"byte","title":"min_signed_per_window defines the minimum number of blocks that a finality provider is required to sign\nwithin the sliding window to avoid being jailed","type":"string"},"signed_blocks_window":{"format":"int64","title":"signed_blocks_window defines the size of the sliding window for tracking finality provider liveness","type":"string"}},"type":"object"}},"type":"object","title":"babylon.finality.v1.QueryParamsResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

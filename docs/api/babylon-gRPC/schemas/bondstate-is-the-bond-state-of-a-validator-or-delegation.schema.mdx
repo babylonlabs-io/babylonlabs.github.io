@@ -1,0 +1,37 @@
+---
+id: bondstate-is-the-bond-state-of-a-validator-or-delegation
+title: "BondState is the bond state of a validator or delegation"
+description: "- CREATED: CREATED is when the validator/delegation has been created"
+sidebar_label: "BondState is the bond state of a validator or delegation"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: "CREATED"
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"BondState is the bond state of a validator or delegation"}
+>
+</Heading>
+
+
+
+- CREATED: CREATED is when the validator/delegation has been created
+ - BONDED: CREATED is when the validator/delegation has become bonded
+ - UNBONDING: CREATED is when the validator/delegation has become unbonding
+ - UNBONDED: CREATED is when the validator/delegation has become unbonded
+ - REMOVED: CREATED is when the validator/delegation has been removed
+
+<Schema
+  schema={{"default":"CREATED","description":"- CREATED: CREATED is when the validator/delegation has been created\n - BONDED: CREATED is when the validator/delegation has become bonded\n - UNBONDING: CREATED is when the validator/delegation has become unbonding\n - UNBONDED: CREATED is when the validator/delegation has become unbonded\n - REMOVED: CREATED is when the validator/delegation has been removed","enum":["CREATED","BONDED","UNBONDING","UNBONDED","REMOVED"],"title":"BondState is the bond state of a validator or delegation","type":"string"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

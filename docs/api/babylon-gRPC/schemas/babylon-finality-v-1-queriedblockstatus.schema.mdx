@@ -1,0 +1,37 @@
+---
+id: babylon-finality-v-1-queriedblockstatus
+title: "babylon.finality.v1.QueriedBlockStatus"
+description: "QueriedBlockStatus is the status of blocks that the querier wants to query."
+sidebar_label: "babylon.finality.v1.QueriedBlockStatus"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: "NON_FINALIZED"
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.finality.v1.QueriedBlockStatus"}
+>
+</Heading>
+
+
+
+QueriedBlockStatus is the status of blocks that the querier wants to query.
+
+ - NON_FINALIZED: NON_FINALIZED means the block is not finalised
+ - FINALIZED: FINALIZED means the block is finalized
+ - ANY: ANY means the block can be in any status
+
+<Schema
+  schema={{"default":"NON_FINALIZED","description":"QueriedBlockStatus is the status of blocks that the querier wants to query.\n\n - NON_FINALIZED: NON_FINALIZED means the block is not finalised\n - FINALIZED: FINALIZED means the block is finalized\n - ANY: ANY means the block can be in any status","enum":["NON_FINALIZED","FINALIZED","ANY"],"type":"string","title":"babylon.finality.v1.QueriedBlockStatus"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

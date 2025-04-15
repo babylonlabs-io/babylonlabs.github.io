@@ -1,0 +1,33 @@
+---
+id: babylon-btccheckpoint-v-1-queryparamsresponse
+title: "babylon.btccheckpoint.v1.QueryParamsResponse"
+description: "QueryParamsResponse is response type for the Query/Params RPC method."
+sidebar_label: "babylon.btccheckpoint.v1.QueryParamsResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"params":{"btc_confirmation_depth":0,"checkpoint_finalization_timeout":0,"checkpoint_tag":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.btccheckpoint.v1.QueryParamsResponse"}
+>
+</Heading>
+
+
+
+QueryParamsResponse is response type for the Query/Params RPC method.
+
+<Schema
+  schema={{"description":"QueryParamsResponse is response type for the Query/Params RPC method.","properties":{"params":{"description":"params holds all the parameters of this module.","properties":{"btc_confirmation_depth":{"format":"int64","title":"btc_confirmation_depth is the confirmation depth in BTC.\nA block is considered irreversible only when it is at least k-deep in BTC\n(k in research paper)","type":"integer"},"checkpoint_finalization_timeout":{"format":"int64","title":"checkpoint_finalization_timeout is the maximum time window (measured in BTC\nblocks) between a checkpoint\n- being submitted to BTC, and\n- being reported back to BBN\nIf a checkpoint has not been reported back within w BTC blocks, then BBN\nhas dishonest majority and is stalling checkpoints (w in research paper)","type":"integer"},"checkpoint_tag":{"title":"4byte tag in hex format, required to be present in the OP_RETURN transaction\nrelated to babylon","type":"string"}},"type":"object"}},"type":"object","title":"babylon.btccheckpoint.v1.QueryParamsResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

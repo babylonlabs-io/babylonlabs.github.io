@@ -1,0 +1,34 @@
+---
+id: babylon-finality-v-1-queryevidenceresponse
+title: "babylon.finality.v1.QueryEvidenceResponse"
+description: "QueryEvidenceResponse is the response type for the"
+sidebar_label: "babylon.finality.v1.QueryEvidenceResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"evidence":{"block_height":"string","canonical_app_hash":"string","canonical_finality_sig":"string","fork_app_hash":"string","fork_finality_sig":"string","fp_btc_pk_hex":"string","pub_rand":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.finality.v1.QueryEvidenceResponse"}
+>
+</Heading>
+
+
+
+QueryEvidenceResponse is the response type for the
+Query/Evidence RPC method.
+
+<Schema
+  schema={{"description":"QueryEvidenceResponse is the response type for the\nQuery/Evidence RPC method.","properties":{"evidence":{"properties":{"block_height":{"format":"uint64","title":"block_height is the height of the conflicting blocks","type":"string"},"canonical_app_hash":{"format":"byte","title":"canonical_app_hash is the AppHash of the canonical block","type":"string"},"canonical_finality_sig":{"format":"byte","title":"canonical_finality_sig is the finality signature to the canonical block\nwhere finality signature is an EOTS signature, i.e.,\nthe `s` in a Schnorr signature `(r, s)`\n`r` is the public randomness that is already committed by the finality provider","type":"string"},"fork_app_hash":{"format":"byte","title":"fork_app_hash is the AppHash of the fork block","type":"string"},"fork_finality_sig":{"format":"byte","title":"fork_finality_sig is the finality signature to the fork block\nwhere finality signature is an EOTS signature","type":"string"},"fp_btc_pk_hex":{"title":"fp_btc_pk_hex is the BTC PK of the finality provider that casts this vote","type":"string"},"pub_rand":{"format":"byte","title":"pub_rand is the public randomness the finality provider has committed to","type":"string"}},"title":"Evidence is the evidence that a finality provider has signed finality\nsignatures with correct public randomness on two conflicting Babylon headers","type":"object"}},"type":"object","title":"babylon.finality.v1.QueryEvidenceResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

@@ -1,0 +1,33 @@
+---
+id: blockresultsresponse
+title: "BlockResultsResponse"
+description: ""
+sidebar_label: "BlockResultsResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"jsonrpc":"2.0","id":0,"result":{"height":"12","txs_results":[{"code":"0","data":"","log":"not enough gas","info":"","gas_wanted":"100","gas_used":"100","events":[{"type":"app","attributes":[{"key":"action","value":"send","index":false}]}],"codespace":"ibc"}],"finalize_block_events":[{"type":"app","attributes":[{"key":"action","value":"send","index":false}]}],"validator_updates":[{"pub_key":{"type":"tendermint/PubKeyEd25519","value":"9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM="},"power":"300"}],"consensus_param_updates":{"block":{"max_bytes":"22020096","max_gas":"1000","time_iota_ms":"1000"},"evidence":{"max_age":"100000"},"validator":{"pub_key_types":["ed25519"]}}}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"BlockResultsResponse"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","required":["jsonrpc","id","result"],"properties":{"jsonrpc":{"type":"string","example":"2.0"},"id":{"type":"integer","example":0},"result":{"type":"object","required":["height"],"properties":{"height":{"type":"string","example":"12"},"txs_results":{"type":"array","nullable":true,"items":{"type":"object","properties":{"code":{"type":"string","example":"0"},"data":{"type":"string","example":""},"log":{"type":"string","example":"not enough gas"},"info":{"type":"string","example":""},"gas_wanted":{"type":"string","example":"100"},"gas_used":{"type":"string","example":"100"},"events":{"type":"array","nullable":true,"items":{"type":"object","properties":{"type":{"type":"string","example":"app"},"attributes":{"type":"array","nullable":false,"items":{"type":"object","properties":{"key":{"type":"string","example":"action"},"value":{"type":"string","example":"send"},"index":{"type":"boolean","example":false}},"title":"Event"}}}}},"codespace":{"type":"string","example":"ibc"}}}},"finalize_block_events":{"type":"array","nullable":true,"items":{"type":"object","properties":{"type":{"type":"string","example":"app"},"attributes":{"type":"array","nullable":false,"items":{"type":"object","properties":{"key":{"type":"string","example":"action"},"value":{"type":"string","example":"send"},"index":{"type":"boolean","example":false}},"title":"Event"}}}}},"validator_updates":{"type":"array","nullable":true,"items":{"type":"object","properties":{"pub_key":{"type":"object","required":["type","value"],"properties":{"type":{"type":"string","example":"tendermint/PubKeyEd25519"},"value":{"type":"string","example":"9tK9IT+FPdf2qm+5c2qaxi10sWP+3erWTKgftn2PaQM="}}},"power":{"type":"string","example":"300"}}}},"consensus_param_updates":{"type":"object","nullable":true,"required":["block","evidence","validator"],"properties":{"block":{"type":"object","required":["max_bytes","max_gas","time_iota_ms"],"properties":{"max_bytes":{"type":"string","example":"22020096"},"max_gas":{"type":"string","example":"1000"},"time_iota_ms":{"type":"string","example":"1000"}}},"evidence":{"type":"object","required":["max_age"],"properties":{"max_age":{"type":"string","example":"100000"}}},"validator":{"type":"object","required":["pub_key_types"],"properties":{"pub_key_types":{"type":"array","items":{"type":"string"},"example":["ed25519"]}}}},"title":"ConsensusParams"}}}},"title":"BlockResultsResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

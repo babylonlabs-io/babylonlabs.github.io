@@ -1,0 +1,33 @@
+---
+id: numunconfirmedtransactionsresponse
+title: "NumUnconfirmedTransactionsResponse"
+description: ""
+sidebar_label: "NumUnconfirmedTransactionsResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"jsonrpc":"2.0","id":0,"result":{"n_txs":"31","total":"82","total_bytes":"19974"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"NumUnconfirmedTransactionsResponse"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","required":["jsonrpc","id","result"],"properties":{"jsonrpc":{"type":"string","example":"2.0"},"id":{"type":"integer","example":0},"result":{"required":["n_txs","total","total_bytes"],"properties":{"n_txs":{"type":"string","example":"31"},"total":{"type":"string","example":"82"},"total_bytes":{"type":"string","example":"19974"}},"type":"object"}},"title":"NumUnconfirmedTransactionsResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

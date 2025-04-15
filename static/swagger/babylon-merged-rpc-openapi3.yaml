@@ -1,7 +1,26 @@
 openapi: 3.0.0
+# openapi.yaml
+x-tagGroups:
+  - name: Authentication
+    tags: [OAuth2, API Keys]
+    description: Security and access control
+  - name: Content
+    tags: [Articles, Media]
+    description: Content management operations
+
+tags:
+  - name: OAuth2
+    description: OAuth2 authentication flows
+  - name: API Keys
+    description: API key management
+  - name: Articles
+    description: Blog post operations
+
+
 info:
   title: Babylon gRPC API Docs
   version: 1.0.0
+  
   description: >
     A Babylon gRPC Gateway is a REST interface for Babylon's gRPC.
 
@@ -289,7 +308,6 @@ paths:
       tags:
         - Babylon
       operationId: BtcCheckpointsInfo
-      summary: BtcCheckpointsInfo returns checkpoint info for a range of epochs
   /babylon/btccheckpoint/v1/params:
     get:
       responses:
@@ -1247,9 +1265,13 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - tag1
+      tagGroups:
+        - BB 
       operationId: Tip
-      summary: Tip return best header on canonical chain
+      summary: TEST SIDEBAR GEN TITLE
+      description: TEST SIDEBAR GEN DESCRIPTION
+      sidebar_label: TEST SIDEBAR GEN LABEL
   /babylon/btcstaking/v1/btc_delegation/{staking_tx_hash_hex}:
     get:
       parameters:

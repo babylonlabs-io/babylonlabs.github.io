@@ -1,0 +1,33 @@
+---
+id: broadcasttxcommitresponse
+title: "BroadcastTxCommitResponse"
+description: ""
+sidebar_label: "BroadcastTxCommitResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"error":"","result":{"height":"26682","hash":"75CA0F856A4DA078FC4911580360E70CEFB2EBEE","deliver_tx":{"log":"","data":"","code":"0"},"check_tx":{"log":"","data":"","code":"0"}},"id":0,"jsonrpc":"2.0"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"BroadcastTxCommitResponse"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","required":["error","result","id","jsonrpc"],"properties":{"error":{"type":"string","example":""},"result":{"required":["height","hash","deliver_tx","check_tx"],"properties":{"height":{"type":"string","example":"26682"},"hash":{"type":"string","example":"75CA0F856A4DA078FC4911580360E70CEFB2EBEE"},"deliver_tx":{"required":["log","data","code"],"properties":{"log":{"type":"string","example":""},"data":{"type":"string","example":""},"code":{"type":"string","example":"0"}},"type":"object"},"check_tx":{"required":["log","data","code"],"properties":{"log":{"type":"string","example":""},"data":{"type":"string","example":""},"code":{"type":"string","example":"0"}},"type":"object"}},"type":"object"},"id":{"type":"integer","example":0},"jsonrpc":{"type":"string","example":"2.0"}},"title":"BroadcastTxCommitResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

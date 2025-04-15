@@ -1,0 +1,33 @@
+---
+id: peer
+title: "Peer"
+description: ""
+sidebar_label: "Peer"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"node_info":{"protocol_version":{"p2p":"7","block":"10","app":"0"},"id":"5576458aef205977e18fd50b274e9b5d9014525a","listen_addr":"tcp:0.0.0.0:26656","network":"cosmoshub-2","version":"0.32.1","channels":"4020212223303800","moniker":"moniker-node","other":{"tx_index":"on","rpc_address":"tcp:0.0.0.0:26657"}},"is_outbound":true,"connection_status":{"Duration":"168901057956119","SendMonitor":{"Active":true,"Start":"2019-07-31T14:31:28.66Z","Duration":"168901060000000","Idle":"168901040000000","Bytes":"5","Samples":"1","InstRate":"0","CurRate":"0","AvgRate":"0","PeakRate":"0","BytesRem":"0","TimeRem":"0","Progress":0},"RecvMonitor":{"Active":true,"Start":"2019-07-31T14:31:28.66Z","Duration":"168901060000000","Idle":"168901040000000","Bytes":"5","Samples":"1","InstRate":"0","CurRate":"0","AvgRate":"0","PeakRate":"0","BytesRem":"0","TimeRem":"0","Progress":0},"Channels":[{"ID":48,"SendQueueCapacity":"1","SendQueueSize":"0","Priority":"5","RecentlySent":"0"}]},"remote_ip":"95.179.155.35"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Peer"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","properties":{"node_info":{"type":"object","properties":{"protocol_version":{"type":"object","properties":{"p2p":{"type":"string","example":"7"},"block":{"type":"string","example":"10"},"app":{"type":"string","example":"0"}},"title":"ProtocolVersion"},"id":{"type":"string","example":"5576458aef205977e18fd50b274e9b5d9014525a"},"listen_addr":{"type":"string","example":"tcp:0.0.0.0:26656"},"network":{"type":"string","example":"cosmoshub-2"},"version":{"type":"string","example":"0.32.1"},"channels":{"type":"string","example":"4020212223303800"},"moniker":{"type":"string","example":"moniker-node"},"other":{"type":"object","properties":{"tx_index":{"type":"string","example":"on"},"rpc_address":{"type":"string","example":"tcp:0.0.0.0:26657"}}}},"title":"NodeInfo"},"is_outbound":{"type":"boolean","example":true},"connection_status":{"type":"object","properties":{"Duration":{"type":"string","example":"168901057956119"},"SendMonitor":{"type":"object","properties":{"Active":{"type":"boolean","example":true},"Start":{"type":"string","example":"2019-07-31T14:31:28.66Z"},"Duration":{"type":"string","example":"168901060000000"},"Idle":{"type":"string","example":"168901040000000"},"Bytes":{"type":"string","example":"5"},"Samples":{"type":"string","example":"1"},"InstRate":{"type":"string","example":"0"},"CurRate":{"type":"string","example":"0"},"AvgRate":{"type":"string","example":"0"},"PeakRate":{"type":"string","example":"0"},"BytesRem":{"type":"string","example":"0"},"TimeRem":{"type":"string","example":"0"},"Progress":{"type":"integer","example":0}},"title":"Monitor"},"RecvMonitor":{"type":"object","properties":{"Active":{"type":"boolean","example":true},"Start":{"type":"string","example":"2019-07-31T14:31:28.66Z"},"Duration":{"type":"string","example":"168901060000000"},"Idle":{"type":"string","example":"168901040000000"},"Bytes":{"type":"string","example":"5"},"Samples":{"type":"string","example":"1"},"InstRate":{"type":"string","example":"0"},"CurRate":{"type":"string","example":"0"},"AvgRate":{"type":"string","example":"0"},"PeakRate":{"type":"string","example":"0"},"BytesRem":{"type":"string","example":"0"},"TimeRem":{"type":"string","example":"0"},"Progress":{"type":"integer","example":0}},"title":"Monitor"},"Channels":{"type":"array","items":{"type":"object","properties":{"ID":{"type":"integer","example":48},"SendQueueCapacity":{"type":"string","example":"1"},"SendQueueSize":{"type":"string","example":"0"},"Priority":{"type":"string","example":"5"},"RecentlySent":{"type":"string","example":"0"}},"title":"Channel"}}},"title":"ConnectionStatus"},"remote_ip":{"type":"string","example":"95.179.155.35"}},"title":"Peer"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

@@ -1,0 +1,33 @@
+---
+id: txresponse
+title: "TxResponse"
+description: ""
+sidebar_label: "TxResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"jsonrpc":"2.0","id":0,"result":{"hash":"D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED","height":"1000","index":0,"tx_result":{"log":"[{\"msg_index\":\"0\",\"success\":true,\"log\":\"\"}]","gas_wanted":"200000","gas_used":"28596","tags":[{"key":"action","value":"send","index":false}]},"tx":"5wHwYl3uCkaoo2GaChQmSIu8hxpJxLcCuIi8fiHN4TMwrRIU/Af1cEG7Rcs/6LjTl7YjRSymJfYaFAoFdWF0b20SCzE0OTk5OTk1MDAwEhMKDQoFdWF0b20SBDUwMDAQwJoMGmoKJuta6YchAwswBShaB1wkZBctLIhYqBC3JrAI28XGzxP+rVEticGEEkAc+khTkKL9CDE47aDvjEHvUNt+izJfT4KVF2v2JkC+bmlH9K08q3PqHeMI9Z5up+XMusnTqlP985KF+SI5J3ZOIhhNYWRlIGJ5IENpcmNsZSB3aXRoIGxvdmU="}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"TxResponse"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","required":["jsonrpc","id","result"],"properties":{"jsonrpc":{"type":"string","example":"2.0"},"id":{"type":"integer","example":0},"result":{"required":["hash","height","index","tx_result","tx"],"properties":{"hash":{"type":"string","example":"D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED"},"height":{"type":"string","example":"1000"},"index":{"type":"integer","example":0},"tx_result":{"required":["log","gas_wanted","gas_used","tags"],"properties":{"log":{"type":"string","example":"[{\"msg_index\":\"0\",\"success\":true,\"log\":\"\"}]"},"gas_wanted":{"type":"string","example":"200000"},"gas_used":{"type":"string","example":"28596"},"tags":{"type":"array","items":{"type":"object","properties":{"key":{"type":"string","example":"action"},"value":{"type":"string","example":"send"},"index":{"type":"boolean","example":false}},"title":"Event"}}},"type":"object"},"tx":{"type":"string","example":"5wHwYl3uCkaoo2GaChQmSIu8hxpJxLcCuIi8fiHN4TMwrRIU/Af1cEG7Rcs/6LjTl7YjRSymJfYaFAoFdWF0b20SCzE0OTk5OTk1MDAwEhMKDQoFdWF0b20SBDUwMDAQwJoMGmoKJuta6YchAwswBShaB1wkZBctLIhYqBC3JrAI28XGzxP+rVEticGEEkAc+khTkKL9CDE47aDvjEHvUNt+izJfT4KVF2v2JkC+bmlH9K08q3PqHeMI9Z5up+XMusnTqlP985KF+SI5J3ZOIhhNYWRlIGJ5IENpcmNsZSB3aXRoIGxvdmU="}},"type":"object"}},"title":"TxResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

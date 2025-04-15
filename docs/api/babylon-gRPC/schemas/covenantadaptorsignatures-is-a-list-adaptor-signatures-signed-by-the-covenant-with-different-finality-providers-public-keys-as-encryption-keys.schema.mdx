@@ -1,0 +1,35 @@
+---
+id: covenantadaptorsignatures-is-a-list-adaptor-signatures-signed-by-the-covenant-with-different-finality-providers-public-keys-as-encryption-keys
+title: "CovenantAdaptorSignatures is a list adaptor signatures signed by the
+covenant with different finality provider's public keys as encryption keys"
+description: ""
+sidebar_label: "CovenantAdaptorSignatures is a list adaptor signatures signed by the
+covenant with different finality provider's public keys as encryption keys"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"adaptor_sigs":["string"],"cov_pk":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"CovenantAdaptorSignatures is a list adaptor signatures signed by the\ncovenant with different finality provider's public keys as encryption keys"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"adaptor_sigs":{"items":{"format":"byte","type":"string"},"title":"adaptor_sigs is a list of adaptor signatures, each encrypted by a restaked\nBTC finality provider's public key","type":"array"},"cov_pk":{"format":"byte","title":"cov_pk is the public key of the covenant emulator, used as the public key\nof the adaptor signature","type":"string"}},"title":"CovenantAdaptorSignatures is a list adaptor signatures signed by the\ncovenant with different finality provider's public keys as encryption keys","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

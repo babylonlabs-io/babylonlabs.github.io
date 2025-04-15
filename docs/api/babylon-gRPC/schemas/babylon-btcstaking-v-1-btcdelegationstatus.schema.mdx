@@ -1,0 +1,53 @@
+---
+id: babylon-btcstaking-v-1-btcdelegationstatus
+title: "babylon.btcstaking.v1.BTCDelegationStatus"
+description: "BTCDelegationStatus is the status of a delegation."
+sidebar_label: "babylon.btcstaking.v1.BTCDelegationStatus"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: "PENDING"
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.btcstaking.v1.BTCDelegationStatus"}
+>
+</Heading>
+
+
+
+BTCDelegationStatus is the status of a delegation.
+There are two possible valid state transition paths for a BTC delegation:
+- PENDING -&gt; VERIFIED -&gt; ACTIVE -&gt; UNBONDED -&gt; EXPIRED
+- PENDING -&gt; VERIFIED -&gt; ACTIVE -&gt; UNBONDED/EXPIRED
+and one invalid state transition path:
+- PENDING -&gt; VERIFIED -&gt; UNBONDED i.e the staker unbonded before
+activating delegation on Babylon Genesis chain.
+In valid transition paths, the delegation becomes UNBONDED when:
+- either the staking transaction timelock expires
+- or the staker requests early undelegation through MsgBTCUndelegate message.
+
+ - PENDING: PENDING defines a delegation that is waiting for covenant signatures.
+ - VERIFIED: VERIFIED defines a delegation that has covenant signatures but is not yet
+included in the BTC chain.
+ - ACTIVE: ACTIVE defines a delegation that has voting power
+ - UNBONDED: UNBONDED defines a delegation no longer has voting power
+by receiving unbonding tx with signatures from staker and covenant
+committee
+ - EXPIRED: EXPIRED defines a delegation no longer has voting power
+for reaching the end of staking transaction timelock
+ - ANY: ANY is any of the above status
+
+<Schema
+  schema={{"default":"PENDING","description":"BTCDelegationStatus is the status of a delegation.\nThere are two possible valid state transition paths for a BTC delegation:\n- PENDING -> VERIFIED -> ACTIVE -> UNBONDED -> EXPIRED\n- PENDING -> VERIFIED -> ACTIVE -> UNBONDED/EXPIRED\nand one invalid state transition path:\n- PENDING -> VERIFIED -> UNBONDED i.e the staker unbonded before\nactivating delegation on Babylon Genesis chain.\nIn valid transition paths, the delegation becomes UNBONDED when:\n- either the staking transaction timelock expires\n- or the staker requests early undelegation through MsgBTCUndelegate message.\n\n - PENDING: PENDING defines a delegation that is waiting for covenant signatures.\n - VERIFIED: VERIFIED defines a delegation that has covenant signatures but is not yet\nincluded in the BTC chain.\n - ACTIVE: ACTIVE defines a delegation that has voting power\n - UNBONDED: UNBONDED defines a delegation no longer has voting power\nby receiving unbonding tx with signatures from staker and covenant\ncommittee\n - EXPIRED: EXPIRED defines a delegation no longer has voting power\nfor reaching the end of staking transaction timelock\n - ANY: ANY is any of the above status","enum":["PENDING","VERIFIED","ACTIVE","UNBONDED","EXPIRED","ANY"],"type":"string","title":"babylon.btcstaking.v1.BTCDelegationStatus"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

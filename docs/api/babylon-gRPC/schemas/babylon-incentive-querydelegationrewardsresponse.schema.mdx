@@ -1,0 +1,34 @@
+---
+id: babylon-incentive-querydelegationrewardsresponse
+title: "babylon.incentive.QueryDelegationRewardsResponse"
+description: "QueryDelegationRewardsResponse is the response type for the"
+sidebar_label: "babylon.incentive.QueryDelegationRewardsResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"rewards":[{"amount":"string","denom":"string"}]}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.incentive.QueryDelegationRewardsResponse"}
+>
+</Heading>
+
+
+
+QueryDelegationRewardsResponse is the response type for the
+Query/DelegationRewards RPC method.
+
+<Schema
+  schema={{"description":"QueryDelegationRewardsResponse is the response type for the\nQuery/DelegationRewards RPC method.","properties":{"rewards":{"items":{"description":"Coin defines a token with a denomination and an amount.\n\nNOTE: The amount field is an Int which implements the custom method\nsignatures required by gogoproto.","properties":{"amount":{"type":"string"},"denom":{"type":"string"}},"type":"object"},"title":"rewards are the delegation reward coins\nCan have multiple coin denoms","type":"array"}},"type":"object","title":"babylon.incentive.QueryDelegationRewardsResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

@@ -1,0 +1,63 @@
+---
+id: btc-light-client-params
+title: "Params queries the parameters of the module."
+description: "Params queries the parameters of the module."
+sidebar_label: "Params queries the parameters of the module."
+hide_title: true
+hide_table_of_contents: true
+api: eJyVVm1v2zYQ/isHYoC3wLacDG1RA8WQZH0b+pIlLjAgCmJKoiw2FKmSlF0h83/fHSnbcWJ02ydJp+O9PPfcHe+ZFa4x2gnHpvfsZDKhR260F9rT61FyRA+XV6Lm9FYIl1vZeGk0m7I/W2G7C2557S57QyAd+ErAxjD4rhFQGhuk4UAST8DlxTnUwlemGLMha6xphPUyhtIElaceoxwqowoHXKlgNQiFF9aBKVGCIdSmaJV4aldiSNbfVoIXqH6LFszqVkkXspVeRJ8UMzpz3kq9YOsh89IrknxATfLBiwITRNhgVcm8Am4FBFuiAG8geoHeC0kyn4OSi8pDriSCm2pZhtjJN2Em6sZ3Q+C62xiHnOtHljCdPjRuLe/Yer0VmOyryP1BCYr2QTwF1+Y5uihbtS3UmAW9krfK/xsL9jHNTSHoiUWuOR5AkP2vJ7tY8VMshI32PZfK7YG9b4zO3LZWHSzDkqt231XWebHztNF8CsJj4IZMWGvsQS81IsMX4sC//wSuhlaL7w3+RjIELw8xJhN8galeszOedQrP3AwZIcDJwPsCTZz5/ANx5TxQJXYLe+ynb6Jv2FEI3cE+EA/aIDYanlsIT13BfYUfSRZjSJCfgZ6RncnyOGk2bpGAS+Le9PqehcKwyvtmmiTK5FxVxvnpy8nLyZMAL1sNfYqwoF5/y71Y8Q7COdXBSvoKesZBY5DmZAcxQkCkLk0oQN94e4ZOL97D7yan4Ciy6O54PBk/DeL0cAjYcBwuX1/NgMhpS57HGdUrD1xQH6d6RsMkaNfCLrCgDgsrS5mHam1gPuiD6yL8PDeI/dmbGUSLqT46umobyhfN0QFsAG9yo9z06Aj/AsCXy/dgMDV4N5tdRNEfV58/kfKPxCuROZPfCe+im3OjS7loI7PINmnSVMkE5P0/jCHrwLcaCf6QQK3GgQMpu7ZNfpMy8DxTONw1pZTq+U/nH2fvPn98nUQ7/WPsTa3mUEpURTTRcOvILsEwH43Q1PivObquawRnpKRGU6XCdghIiy0ZKE4ajEJvhyHWYO5zot3xyQsq9fh4evL8+bMX8x5TxCwhXCjP01hbJe/ErsBjmOfIX9jRNpxPMhTc/VYJov+rZ/Norcd1a3GDsxXYcM67DYwXn69mgzDzw9IzJgYvdNEY9AxLyUO1MMjofTSKsxyhPY8TdjTDkTIF3jSqp1Xy1RmNmCNi0V1wg58F9xwG92nfzSmbopkQf8qG+Bp7lsTXKXuW4mRBoQx6x+vB48wfpbpjz48S5soZqDGDkNr2TF/A7fcOAWoeD/Od+fkQxHiB1XhciJ0GWjt1nc4ra7Rp402hbHVO4LhYVrFE6DA712bU75lAvKjjUtbqPZlFjhmN44YvcfUEFu9F7gJ/3iBdxXdeN/h7x9nrqMX9zc808xyyb4FDq83GyOFkKZPN/1+QAUYNoTNtAGobQZgqg09idUZVGsSwsT3D7CMXpaFrAzns22JK4cxFXhmsNKZDXMDGibU+GU+w0vv1f5DtcFPtyfAhGZAwtCa6qO/rcYji1SBlu8jwPWVrQJb8DZusYKRh5GHlnnbdg2KlmpZmg3XE8Glma5wh/39B7c3t7eb14rtPGsVlcNLfC+Lyumb98sLD++uL9sJxWHJhheE6IZbRifv7jDvxxar1msQBFZTf0NXCSiIHfaGn2KRh592JjhYJXpiaYDneQcKliDbVdrG+fT3D9f4PgJjg6g==
+sidebar_class_name: "get api-method"
+info_path: api/babylon-gRPC/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Params queries the parameters of the module."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/babylon/btclightclient/v1/params"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Params queries the parameters of the module.
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryParamsResponse is the response type for the Query/Params RPC method.","properties":{"params":{"description":"params holds all the parameters of this module.","properties":{"insert_headers_allow_list":{"items":{"type":"string"},"title":"List of addresses which are allowed to insert headers to btc light client\nif the list is empty, any address can insert headers","type":"array"}},"type":"object"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

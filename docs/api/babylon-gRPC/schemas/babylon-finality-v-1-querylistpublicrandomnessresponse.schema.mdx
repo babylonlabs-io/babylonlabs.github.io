@@ -1,0 +1,34 @@
+---
+id: babylon-finality-v-1-querylistpublicrandomnessresponse
+title: "babylon.finality.v1.QueryListPublicRandomnessResponse"
+description: "QueryListPublicRandomnessResponse is the response type for the"
+sidebar_label: "babylon.finality.v1.QueryListPublicRandomnessResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"pagination":{"next_key":"string","total":"string"},"pub_rand_map":{}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.finality.v1.QueryListPublicRandomnessResponse"}
+>
+</Heading>
+
+
+
+QueryListPublicRandomnessResponse is the response type for the
+Query/ListPublicRandomness RPC method.
+
+<Schema
+  schema={{"description":"QueryListPublicRandomnessResponse is the response type for the\nQuery/ListPublicRandomness RPC method.","properties":{"pagination":{"description":"pagination defines the pagination in the response.","properties":{"next_key":{"description":"next_key is the key to be passed to PageRequest.key to\nquery the next page most efficiently. It will be empty if\nthere are no more results.","format":"byte","type":"string"},"total":{"format":"uint64","title":"total is total number of results available if PageRequest.count_total\nwas set, its value is undefined otherwise","type":"string"}},"type":"object"},"pub_rand_map":{"additionalProperties":{"format":"byte","type":"string"},"title":"pub_rand_map is the map where the key is the height and the value\nis the public randomness at this height for the given finality provider","type":"object"}},"type":"object","title":"babylon.finality.v1.QueryListPublicRandomnessResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

@@ -1,0 +1,34 @@
+---
+id: babylon-finality-v-1-queryblockresponse
+title: "babylon.finality.v1.QueryBlockResponse"
+description: "QueryBlockResponse is the response type for the"
+sidebar_label: "babylon.finality.v1.QueryBlockResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"block":{"app_hash":"string","finalized":true,"height":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.finality.v1.QueryBlockResponse"}
+>
+</Heading>
+
+
+
+QueryBlockResponse is the response type for the
+Query/Block RPC method.
+
+<Schema
+  schema={{"description":"QueryBlockResponse is the response type for the\nQuery/Block RPC method.","properties":{"block":{"properties":{"app_hash":{"format":"byte","title":"app_hash is the AppHash of the block","type":"string"},"finalized":{"title":"finalized indicates whether the IndexedBlock is finalised by 2/3\nfinality providers or not","type":"boolean"},"height":{"format":"uint64","title":"height is the height of the block","type":"string"}},"title":"IndexedBlock is the necessary metadata and finalization status of a block","type":"object"}},"type":"object","title":"babylon.finality.v1.QueryBlockResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

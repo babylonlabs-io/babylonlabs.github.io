@@ -1,0 +1,35 @@
+---
+id: queuedmessageresponse-is-a-message-that-can-change-the-validator-set-and-is-delayed-to-the-end-of-an-epoch
+title: "QueuedMessageResponse is a message that can change the validator set and is delayed
+to the end of an epoch"
+description: ""
+sidebar_label: "QueuedMessageResponse is a message that can change the validator set and is delayed
+to the end of an epoch"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"block_height":"string","block_time":"2024-07-29T15:51:28.071Z","msg":"string","msg_id":"string","tx_id":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"QueuedMessageResponse is a message that can change the validator set and is delayed\nto the end of an epoch"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"block_height":{"format":"uint64","title":"block_height is the height when this msg is submitted to Babylon","type":"string"},"block_time":{"format":"date-time","title":"block_time is the timestamp when this msg is submitted to Babylon","type":"string"},"msg":{"description":"msg is the actual message that is sent by a user and is queued by the\nepoching module as string.","type":"string"},"msg_id":{"description":"msg_id is the original message ID, i.e., hash of the marshaled message as hex.","type":"string"},"tx_id":{"description":"tx_id is the ID of the tx that contains the message as hex.","type":"string"}},"title":"QueuedMessageResponse is a message that can change the validator set and is delayed\nto the end of an epoch","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

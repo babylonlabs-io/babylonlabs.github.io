@@ -1,0 +1,33 @@
+---
+id: proofops-is-merkle-proof-defined-by-the-list-of-proofops
+title: "ProofOps is Merkle proof defined by the list of ProofOps"
+description: ""
+sidebar_label: "ProofOps is Merkle proof defined by the list of ProofOps"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"ops":[{"data":"string","key":"string","type":"string"}]}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"ProofOps is Merkle proof defined by the list of ProofOps"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"ops":{"items":{"properties":{"data":{"format":"byte","type":"string"},"key":{"format":"byte","type":"string"},"type":{"type":"string"}},"title":"ProofOp defines an operation used for calculating Merkle root\nThe data could be arbitrary format, providing nessecary data\nfor example neighbouring node hash","type":"object"},"type":"array"}},"title":"ProofOps is Merkle proof defined by the list of ProofOps","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

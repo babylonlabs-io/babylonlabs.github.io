@@ -1,0 +1,33 @@
+---
+id: validator
+title: "Validator"
+description: ""
+sidebar_label: "Validator"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"pub_key":{"type":"tendermint/PubKeyEd25519","value":"A6DoBUypNtUAyEHWtQ9bFjfNg8Bo9CrnkUGl6k6OHN4="},"voting_power":0,"address":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Validator"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","properties":{"pub_key":{"type":"object","properties":{"type":{"type":"string","example":"tendermint/PubKeyEd25519"},"value":{"type":"string","example":"A6DoBUypNtUAyEHWtQ9bFjfNg8Bo9CrnkUGl6k6OHN4="}},"title":"PubKey"},"voting_power":{"type":"integer"},"address":{"type":"string"}},"title":"Validator"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

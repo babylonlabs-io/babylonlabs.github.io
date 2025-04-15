@@ -1,0 +1,33 @@
+---
+id: broadcasttxresponse
+title: "BroadcastTxResponse"
+description: ""
+sidebar_label: "BroadcastTxResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"jsonrpc":"2.0","id":0,"result":{"code":"0","data":"","log":"","codespace":"ibc","hash":"0D33F2F03A5234F38706E43004489E061AC40A2E"},"error":""}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"BroadcastTxResponse"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"type":"object","required":["jsonrpc","id","result","error"],"properties":{"jsonrpc":{"type":"string","example":"2.0"},"id":{"type":"integer","example":0},"result":{"required":["code","data","log","hash"],"properties":{"code":{"type":"string","example":"0"},"data":{"type":"string","example":""},"log":{"type":"string","example":""},"codespace":{"type":"string","example":"ibc"},"hash":{"type":"string","example":"0D33F2F03A5234F38706E43004489E061AC40A2E"}},"type":"object"},"error":{"type":"string","example":""}},"title":"BroadcastTxResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

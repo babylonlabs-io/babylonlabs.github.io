@@ -1,0 +1,33 @@
+---
+id: queryepochsinforesponse-is-the-response-type-for-the-query-epochinfos-method
+title: "QueryEpochsInfoResponse is the response type for the Query/EpochInfos method"
+description: ""
+sidebar_label: "QueryEpochsInfoResponse is the response type for the Query/EpochInfos method"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"epochs":[{"current_epoch_interval":"string","epoch_number":"string","first_block_height":"string","last_block_time":"2024-07-29T15:51:28.071Z","sealer_app_hash_hex":"string","sealer_block_hash":"string"}],"pagination":{"next_key":"string","total":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"QueryEpochsInfoResponse is the response type for the Query/EpochInfos method"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"epochs":{"items":{"properties":{"current_epoch_interval":{"format":"uint64","title":"current_epoch_interval is the epoch interval at the time of this epoch","type":"string"},"epoch_number":{"format":"uint64","title":"epoch_number is the number of this epoch","type":"string"},"first_block_height":{"format":"uint64","title":"first_block_height is the height of the first block in this epoch","type":"string"},"last_block_time":{"description":"last_block_time is the time of the last block in this epoch.\nBabylon needs to remember the last header's time of each epoch to complete\nunbonding validators/delegations when a previous epoch's checkpoint is\nfinalised. The last_block_time field is nil in the epoch's beginning, and\nis set upon the end of this epoch.","format":"date-time","type":"string"},"sealer_app_hash_hex":{"description":"sealer is the last block of the sealed epoch\nsealer_app_hash points to the sealer but stored in the 1st header\nof the next epoch as hex string.","type":"string"},"sealer_block_hash":{"description":"sealer_block_hash is the hash of the sealer\nthe validator set has generated a BLS multisig on the hash,\ni.e., hash of the last block in the epoch as hex string.","type":"string"}},"title":"EpochResponse is a structure that contains the metadata of an epoch","type":"object"},"type":"array"},"pagination":{"description":"PageResponse is to be embedded in gRPC response messages where the\ncorresponding request message has used PageRequest.\n\n message SomeResponse {\n         repeated Bar results = 1;\n         PageResponse page = 2;\n }","properties":{"next_key":{"description":"next_key is the key to be passed to PageRequest.key to\nquery the next page most efficiently. It will be empty if\nthere are no more results.","format":"byte","type":"string"},"total":{"format":"uint64","title":"total is total number of results available if PageRequest.count_total\nwas set, its value is undefined otherwise","type":"string"}},"title":"pagination defines the pagination in the response","type":"object"}},"title":"QueryEpochsInfoResponse is the response type for the Query/EpochInfos method","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

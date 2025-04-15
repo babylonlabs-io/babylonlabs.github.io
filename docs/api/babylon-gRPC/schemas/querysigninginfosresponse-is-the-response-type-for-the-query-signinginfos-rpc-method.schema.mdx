@@ -1,0 +1,35 @@
+---
+id: querysigninginfosresponse-is-the-response-type-for-the-query-signinginfos-rpc-method
+title: "QuerySigningInfosResponse is the response type for the Query/SigningInfos RPC
+method"
+description: ""
+sidebar_label: "QuerySigningInfosResponse is the response type for the Query/SigningInfos RPC
+method"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"pagination":{"next_key":"string","total":"string"},"signing_infos":[{"fp_btc_pk_hex":"string","jailed_until":"2024-07-29T15:51:28.071Z","missed_blocks_counter":"string","start_height":"string"}]}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"QuerySigningInfosResponse is the response type for the Query/SigningInfos RPC\nmethod"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"pagination":{"description":"PageResponse is to be embedded in gRPC response messages where the\ncorresponding request message has used PageRequest.\n\n message SomeResponse {\n         repeated Bar results = 1;\n         PageResponse page = 2;\n }","properties":{"next_key":{"description":"next_key is the key to be passed to PageRequest.key to\nquery the next page most efficiently. It will be empty if\nthere are no more results.","format":"byte","type":"string"},"total":{"format":"uint64","title":"total is total number of results available if PageRequest.count_total\nwas set, its value is undefined otherwise","type":"string"}},"type":"object"},"signing_infos":{"items":{"description":"SigningInfoResponse defines the API response containing a finality provider's signing info\nfor monitoring their liveness activity.","properties":{"fp_btc_pk_hex":{"title":"fp_btc_pk is the BTC PK of the finality provider that casts this vote","type":"string"},"jailed_until":{"description":"Timestamp until which the validator is jailed due to liveness downtime.","format":"date-time","type":"string"},"missed_blocks_counter":{"description":"missed_blocks_counter defines a counter to avoid unnecessary array reads.\nNote that `Sum(MissedBlocksBitArray)` always equals `MissedBlocksCounter`.","format":"int64","type":"string"},"start_height":{"format":"int64","title":"start_height is the block height at which finality provider become active","type":"string"}},"type":"object"},"title":"info is the signing info of all finality providers with signing info","type":"array"}},"title":"QuerySigningInfosResponse is the response type for the Query/SigningInfos RPC\nmethod","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

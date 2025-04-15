@@ -1,0 +1,35 @@
+---
+id: rewardgaugesresponse-is-an-object-that-stores-rewards-distributed-to-a-btc-staking-stakeholder
+title: "RewardGaugesResponse is an object that stores rewards distributed to a BTC
+staking stakeholder"
+description: ""
+sidebar_label: "RewardGaugesResponse is an object that stores rewards distributed to a BTC
+staking stakeholder"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"coins":[{"amount":"string","denom":"string"}],"withdrawn_coins":[{"amount":"string","denom":"string"}]}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"RewardGaugesResponse is an object that stores rewards distributed to a BTC\nstaking stakeholder"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"coins":{"items":{"description":"Coin defines a token with a denomination and an amount.\n\nNOTE: The amount field is an Int which implements the custom method\nsignatures required by gogoproto.","properties":{"amount":{"type":"string"},"denom":{"type":"string"}},"type":"object"},"title":"coins are coins that have been in the gauge\nCan have multiple coin denoms","type":"array"},"withdrawn_coins":{"items":{"description":"Coin defines a token with a denomination and an amount.\n\nNOTE: The amount field is an Int which implements the custom method\nsignatures required by gogoproto.","properties":{"amount":{"type":"string"},"denom":{"type":"string"}},"type":"object"},"title":"withdrawn_coins are coins that have been withdrawn by the stakeholder\nalready","type":"array"}},"title":"RewardGaugesResponse is an object that stores rewards distributed to a BTC\nstaking stakeholder","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

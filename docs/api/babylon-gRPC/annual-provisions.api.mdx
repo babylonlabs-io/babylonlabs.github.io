@@ -1,0 +1,63 @@
+---
+id: annual-provisions
+title: "AnnualProvisions returns the current annual provisions."
+description: "AnnualProvisions returns the current annual provisions."
+sidebar_label: "AnnualProvisions returns the current annual provisions."
+hide_title: true
+hide_table_of_contents: true
+api: eJylVm1v2zYQ/isHYoC3wJbsDGlRA8WQZOkb0CZLXGBAFNSUTFtsKFIlKTuG5/++O1K24zjoAuyTxCN5L889d8cVs8LVRjvh2HDFjvt9+hRGe6E9/R6lR/RxRSkqTn8T4Qoray+NZkP2VyPs8lTrhqsra+bSodhdtypBOvClgI0J8MtawNRYkmY63E2fXobrq3OohC/NJGFdVltTC+tl9I+Hw9/q7elDjw70tU4UjbUYE0QVsFNBVtCnimO8LF96gWtyFFfOW6lnbL3eSkz+XRQeJSh6YhdcUxTCuWmjthEnLJyb8kb5/wJ2P9LCTAR9t55J7X8/3rmGSzETNur3XKpwS3pRuUNldOdbY9Xm/1FoXTbnqtk39VIQtgJuLV/SWlhr7LNWKkSGz8Qzey8CV0OjxUON22ICwcpjjEkFn2Got+yM50uFd+66jBDgpODj5BlesEMbT4hjhW+sfgF7IltRxUx4oiz3JS7SwrjKuLTCVKXzQY5ZGqSHBO4yJ+xcWPJ+xUKSWOl9PUxTZQquSuP88E3/Tf/A4etGQxsuzKhq3nMvFnwJ4Z5awkL6Elr2QW2sB9KDeCE4Uk9NSIb0irDfU3R69RH+NAU5R55Fc4Oknxw6cfq8C1h0HK4vbkZARLVTXsTCbw93XDieZHpUShdPV8LOMLkOkyynsgiZAzMN8D9rg+tJ2Dw3mICzdyOIGjN9dHTT1BQvqqMLiLY3hVFueHSEuwDw9fojGAwNPoxGV1H06ebyCx3+mXghcmeKe+FdNHNu9FTOmsgy0k0nC64hR8a0e+hDvgTfaCQ71NxydBYxRT5PUGPGbm1d3GUMPM8Vdkwde+P4l/PPow+Xny/SqKf9JN5UagxTiUcRTVTcONJLMIx7PVSV/D1G01WF4PSU1KhqqrA0AtJiSwbyU0mHvQj4ZIKVFHIw9gXRbnD8mlKdDIbHr16dvB63mCJmKeFCcZ7G3Cp5L3YJTmCMZaJgR9twP81RcP9HKeSs9G9PxlFbi+tW4wZnK340wnm3gfHq8mbUwTybOEmMic4LPakNWoa55CFb6GS03uuVgkdoz2O37Y2wvQyB17VqaZV+d0Yj5ohYNBfM4HLCPYfOKmtLOmNDVBP8z1gXf0P+HIlvM3aSYZdBoQznBuvO08ifhLpjz88C5soZqDCCENr2TpvA7XqHABWPh/FO/bgLIplhNp4mYncCtZ26pS5Ka7Rp4sydNrrwofGFtIo59buMuSanes8F4kUVl7FG78kscsxobDd8jmMosHjPcxf48w7pKh54VeP2jrO38RT3d79Sz3PIvhk2rSZPkMPpXKab/d+QAUZ1YWmaANTWg9BVOl/E4oyy1IluY3mG3kcmpkYpsyCDbVkMyZ2xKEqDmcZwiAtYODHXx0kfM72f/0fRdjfZ7ncfkwEJ84MeM/G8r5LgxdtOxnae4X/G1oAs+Qc2UUFPQ8/Dwh1W3aNkZZoGaI15RPepZ2vsIf9rYO218O1A9uLBp7XiMthrnwtxmN2yOMxo2CHnaC7EgYZ/hyMNxwuxjq6tVjl34qtV6zWJA0oov6Nnh5VEFlqhuVi0YQbeiyVFh4+pOliK75PwYKLJtZ227y9GOPr/BcW+sl4=
+sidebar_class_name: "get api-method"
+info_path: api/babylon-gRPC/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"AnnualProvisions returns the current annual provisions."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cosmos/mint/v1beta1/annual_provisions"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+AnnualProvisions returns the current annual provisions.
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryAnnualProvisionsResponse is the response type for the\nQuery/AnnualProvisions RPC method.","properties":{"annual_provisions":{"description":"AnnualProvisions is the current annual provisions.","format":"byte","type":"string"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,41 @@
+---
+id: transactioninforesponse-is-the-info-of-a-tx-on-bitcoin-including-the-position-of-the-tx-on-btc-blockchain-the-full-tx-content-the-merkle-proof-that-this-tx-is-on-the-above-position
+title: "TransactionInfoResponse is the info of a tx on Bitcoin,
+including
+- the position of the tx on BTC blockchain
+- the full tx content
+- the Merkle proof that this tx is on the above position"
+description: ""
+sidebar_label: "TransactionInfoResponse is the info of a tx on Bitcoin,
+including
+- the position of the tx on BTC blockchain
+- the full tx content
+- the Merkle proof that this tx is on the above position"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"hash":"string","index":0,"proof":"string","transaction":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"TransactionInfoResponse is the info of a tx on Bitcoin,\nincluding\n- the position of the tx on BTC blockchain\n- the full tx content\n- the Merkle proof that this tx is on the above position"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"hash":{"description":"Hash BTC Header hash as hex.","type":"string"},"index":{"description":"Index Bitcoin Transaction index in block.","format":"int64","type":"integer"},"proof":{"title":"proof is the Merkle proof that this tx is included in the position in `key`","type":"string"},"transaction":{"description":"transaction is the full transaction data as str hex.","type":"string"}},"title":"TransactionInfoResponse is the info of a tx on Bitcoin,\nincluding\n- the position of the tx on BTC blockchain\n- the full tx content\n- the Merkle proof that this tx is on the above position","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

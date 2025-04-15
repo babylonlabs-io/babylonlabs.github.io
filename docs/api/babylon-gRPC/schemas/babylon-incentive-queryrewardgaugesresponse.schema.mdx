@@ -1,0 +1,34 @@
+---
+id: babylon-incentive-queryrewardgaugesresponse
+title: "babylon.incentive.QueryRewardGaugesResponse"
+description: "QueryRewardGaugesResponse is response type for the Query/RewardGauges RPC"
+sidebar_label: "babylon.incentive.QueryRewardGaugesResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"reward_gauges":{}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.incentive.QueryRewardGaugesResponse"}
+>
+</Heading>
+
+
+
+QueryRewardGaugesResponse is response type for the Query/RewardGauges RPC
+method.
+
+<Schema
+  schema={{"description":"QueryRewardGaugesResponse is response type for the Query/RewardGauges RPC\nmethod.","properties":{"reward_gauges":{"additionalProperties":{"properties":{"coins":{"items":{"description":"Coin defines a token with a denomination and an amount.\n\nNOTE: The amount field is an Int which implements the custom method\nsignatures required by gogoproto.","properties":{"amount":{"type":"string"},"denom":{"type":"string"}},"type":"object"},"title":"coins are coins that have been in the gauge\nCan have multiple coin denoms","type":"array"},"withdrawn_coins":{"items":{"description":"Coin defines a token with a denomination and an amount.\n\nNOTE: The amount field is an Int which implements the custom method\nsignatures required by gogoproto.","properties":{"amount":{"type":"string"},"denom":{"type":"string"}},"type":"object"},"title":"withdrawn_coins are coins that have been withdrawn by the stakeholder\nalready","type":"array"}},"title":"RewardGaugesResponse is an object that stores rewards distributed to a BTC\nstaking stakeholder","type":"object"},"title":"reward_gauges is the map of reward gauges, where key is the stakeholder\ntype and value is the reward gauge holding all rewards for the stakeholder\nin that type","type":"object"}},"type":"object","title":"babylon.incentive.QueryRewardGaugesResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

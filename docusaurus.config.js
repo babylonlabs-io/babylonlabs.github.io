@@ -29,7 +29,7 @@ const openapiPlugins = [
   [
     'docusaurus-plugin-openapi-docs',
     {
-      id: 'api',
+      id: 'apiDocs',
       docsPluginId: 'classic',
       config: {
         stakingApi: {
@@ -46,7 +46,7 @@ const openapiPlugins = [
           specPath: 'static/swagger/babylon-merged-rpc-openapi3.yaml',
           outputDir: 'docs/api/babylon-gRPC',
           sidebarOptions: {
-            groupPathsBy: 'tag',
+            groupPathsBy: 'tagGroup',
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,

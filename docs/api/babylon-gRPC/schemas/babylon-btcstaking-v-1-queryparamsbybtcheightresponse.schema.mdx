@@ -1,0 +1,34 @@
+---
+id: babylon-btcstaking-v-1-queryparamsbybtcheightresponse
+title: "babylon.btcstaking.v1.QueryParamsByBTCHeightResponse"
+description: "QueryParamsByBTCHeightResponse is response type for the"
+sidebar_label: "babylon.btcstaking.v1.QueryParamsByBTCHeightResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"params":{"allow_list_expiration_height":"string","btc_activation_height":0,"covenant_pks":["string"],"covenant_quorum":0,"delegation_creation_base_gas_fee":"string","max_staking_time_blocks":0,"max_staking_value_sat":"string","min_commission_rate":"string","min_slashing_tx_fee_sat":"string","min_staking_time_blocks":0,"min_staking_value_sat":"string","slashing_pk_script":"string","slashing_rate":"string","unbonding_fee_sat":"string","unbonding_time_blocks":0},"version":0}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.btcstaking.v1.QueryParamsByBTCHeightResponse"}
+>
+</Heading>
+
+
+
+QueryParamsByBTCHeightResponse is response type for the
+Query/QueryParamsByBTCHeightResponse RPC method.
+
+<Schema
+  schema={{"description":"QueryParamsByBTCHeightResponse is response type for the\nQuery/QueryParamsByBTCHeightResponse RPC method.","properties":{"params":{"description":"params holds all the parameters of this module.","properties":{"allow_list_expiration_height":{"format":"uint64","title":"allow_list_expiration_height is the height at which the allow list expires\ni.e all staking transactions are allowed to enter Babylon Genesis chain afterwards\nsetting it to 0 means allow list is disabled","type":"string"},"btc_activation_height":{"format":"int64","title":"btc_activation_height is the btc height from which parameters are activated\n(inclusive)","type":"integer"},"covenant_pks":{"items":{"format":"byte","type":"string"},"title":"PARAMETERS COVERING STAKING\ncovenant_pks is the list of public keys held by the covenant committee\neach PK follows encoding in BIP-340 spec on Bitcoin","type":"array"},"covenant_quorum":{"format":"int64","title":"covenant_quorum is the minimum number of signatures needed for the covenant\nmultisignature","type":"integer"},"delegation_creation_base_gas_fee":{"format":"uint64","title":"base gas fee for delegation creation","type":"string"},"max_staking_time_blocks":{"format":"int64","title":"max_staking_time_blocks is the maximum lock time time specified in staking\noutput script","type":"integer"},"max_staking_value_sat":{"format":"int64","title":"max_staking_value_sat is the maximum of satoshis locked in staking output","type":"string"},"min_commission_rate":{"title":"PARAMETERS COVERING FINALITY PROVIDERS\nmin_commission_rate is the chain-wide minimum commission rate that a\nfinality provider can charge their delegators expressed as a decimal (e.g.,\n0.5 for 50%). Maximal precion is 2 decimal places","type":"string"},"min_slashing_tx_fee_sat":{"format":"int64","title":"min_slashing_tx_fee_sat is the minimum amount of tx fee (quantified\nin Satoshi) needed for the pre-signed slashing tx. It covers both:\nstaking slashing transaction and unbonding slashing transaction","type":"string"},"min_staking_time_blocks":{"format":"int64","title":"min_staking_time is the minimum lock time specified in staking output\nscript","type":"integer"},"min_staking_value_sat":{"format":"int64","title":"min_staking_value_sat is the minimum of satoshis locked in staking output","type":"string"},"slashing_pk_script":{"format":"byte","title":"PARAMETERS COVERING SLASHING\nslashing_pk_script is the pk_script expected in slashing output ie. the\nfirst output of slashing transaction","type":"string"},"slashing_rate":{"title":"slashing_rate determines the portion of the staked amount to be slashed,\nexpressed as a decimal (e.g., 0.5 for 50%). Maximal precion is 2 decimal\nplaces","type":"string"},"unbonding_fee_sat":{"format":"int64","title":"unbonding_fee exact fee required for unbonding transaction","type":"string"},"unbonding_time_blocks":{"format":"int64","title":"PARAMETERS COVERING UNBONDING\nunbonding_time is the exact unbonding time required from unbonding\ntransaction it must be larger than `checkpoint_finalization_timeout` from\n`btccheckpoint` module","type":"integer"}},"type":"object"},"version":{"format":"int64","title":"version is the version of the params for the given BTC height","type":"integer"}},"type":"object","title":"babylon.btcstaking.v1.QueryParamsByBTCHeightResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

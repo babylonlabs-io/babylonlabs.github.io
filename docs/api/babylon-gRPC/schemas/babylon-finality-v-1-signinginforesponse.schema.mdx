@@ -1,0 +1,34 @@
+---
+id: babylon-finality-v-1-signinginforesponse
+title: "babylon.finality.v1.SigningInfoResponse"
+description: "SigningInfoResponse defines the API response containing a finality provider's signing info"
+sidebar_label: "babylon.finality.v1.SigningInfoResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"fp_btc_pk_hex":"string","jailed_until":"2024-07-29T15:51:28.071Z","missed_blocks_counter":"string","start_height":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.finality.v1.SigningInfoResponse"}
+>
+</Heading>
+
+
+
+SigningInfoResponse defines the API response containing a finality provider's signing info
+for monitoring their liveness activity.
+
+<Schema
+  schema={{"description":"SigningInfoResponse defines the API response containing a finality provider's signing info\nfor monitoring their liveness activity.","properties":{"fp_btc_pk_hex":{"title":"fp_btc_pk is the BTC PK of the finality provider that casts this vote","type":"string"},"jailed_until":{"description":"Timestamp until which the validator is jailed due to liveness downtime.","format":"date-time","type":"string"},"missed_blocks_counter":{"description":"missed_blocks_counter defines a counter to avoid unnecessary array reads.\nNote that `Sum(MissedBlocksBitArray)` always equals `MissedBlocksCounter`.","format":"int64","type":"string"},"start_height":{"format":"int64","title":"start_height is the block height at which finality provider become active","type":"string"}},"type":"object","title":"babylon.finality.v1.SigningInfoResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

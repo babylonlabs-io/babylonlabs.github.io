@@ -1,0 +1,35 @@
+---
+id: checkpointaddressesresponse-contains-the-addresses-of-the-submitter-and-reporter-of-a-given-checkpoint
+title: "CheckpointAddressesResponse contains the addresses of the submitter and reporter of a
+given checkpoint"
+description: ""
+sidebar_label: "CheckpointAddressesResponse contains the addresses of the submitter and reporter of a
+given checkpoint"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"reporter":"string","submitter":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"CheckpointAddressesResponse contains the addresses of the submitter and reporter of a\ngiven checkpoint"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"reporter":{"title":"reporter is the address of the reporter who reported the submissions,\ncalculated from submission message MsgInsertBTCSpvProof itself","type":"string"},"submitter":{"description":"submitter is the address of the checkpoint submitter to BTC, extracted from\nthe checkpoint itself.","type":"string"}},"title":"CheckpointAddressesResponse contains the addresses of the submitter and reporter of a\ngiven checkpoint","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

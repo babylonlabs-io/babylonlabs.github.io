@@ -1,0 +1,36 @@
+---
+id: btcsigtype-indicates-the-type-of-btc-sig-in-a-pop
+title: "BTCSigType indicates the type of btc_sig in a pop"
+description: "- BIP340: BIP340 means the btc_sig will follow the BIP-340 encoding"
+sidebar_label: "BTCSigType indicates the type of btc_sig in a pop"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: "BIP340"
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"BTCSigType indicates the type of btc_sig in a pop"}
+>
+</Heading>
+
+
+
+- BIP340: BIP340 means the btc_sig will follow the BIP-340 encoding
+ - BIP322: BIP322 means the btc_sig will follow the BIP-322 encoding
+ - ECDSA: ECDSA means the btc_sig will follow the ECDSA encoding
+ref: https://github.com/okx/js-wallet-sdk/blob/a57c2acbe6ce917c0aa4e951d96c4e562ad58444/packages/coin-bitcoin/src/BtcWallet.ts#L331
+
+<Schema
+  schema={{"default":"BIP340","description":"- BIP340: BIP340 means the btc_sig will follow the BIP-340 encoding\n - BIP322: BIP322 means the btc_sig will follow the BIP-322 encoding\n - ECDSA: ECDSA means the btc_sig will follow the ECDSA encoding\nref: https://github.com/okx/js-wallet-sdk/blob/a57c2acbe6ce917c0aa4e951d96c4e562ad58444/packages/coin-bitcoin/src/BtcWallet.ts#L331","enum":["BIP340","BIP322","ECDSA"],"title":"BTCSigType indicates the type of btc_sig in a pop","type":"string"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

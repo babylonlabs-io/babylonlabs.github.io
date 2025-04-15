@@ -1,0 +1,33 @@
+---
+id: commit
+title: "Commit"
+description: ""
+sidebar_label: "Commit"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"type":2,"height":"1262085","round":0,"block_id":{"hash":"112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7","parts":{"total":1,"hash":"38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD"}},"timestamp":"2019-08-01T11:39:38.867269833Z","validator_address":"000001E443FD237E4B616E2FA69DF4EE3D49A94F","validator_index":0,"signature":"DBchvucTzAUEJnGYpNvMdqLhBAHG4Px8BsOBB3J3mAFCLGeuG7uJqy+nVngKzZdPhPi8RhmE/xcw/M9DOJjEDg=="}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Commit"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"required":["type","height","round","block_id","timestamp","validator_address","validator_index","signature"],"properties":{"type":{"type":"integer","example":2},"height":{"type":"string","example":"1262085"},"round":{"type":"integer","example":0},"block_id":{"required":["hash","parts"],"properties":{"hash":{"type":"string","example":"112BC173FD838FB68EB43476816CD7B4C6661B6884A9E357B417EE957E1CF8F7"},"parts":{"required":["total","hash"],"properties":{"total":{"type":"integer","example":1},"hash":{"type":"string","example":"38D4B26B5B725C4F13571EFE022C030390E4C33C8CF6F88EDD142EA769642DBD"}},"type":"object"}},"title":"BlockID"},"timestamp":{"type":"string","example":"2019-08-01T11:39:38.867269833Z"},"validator_address":{"type":"string","example":"000001E443FD237E4B616E2FA69DF4EE3D49A94F"},"validator_index":{"type":"integer","example":0},"signature":{"type":"string","example":"DBchvucTzAUEJnGYpNvMdqLhBAHG4Px8BsOBB3J3mAFCLGeuG7uJqy+nVngKzZdPhPi8RhmE/xcw/M9DOJjEDg=="}},"title":"Commit"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

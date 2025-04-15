@@ -1,0 +1,63 @@
+---
+id: inflation-rate
+title: "InflationRate returns the current inflation rate."
+description: "InflationRate returns the current inflation rate."
+sidebar_label: "InflationRate returns the current inflation rate."
+hide_title: true
+hide_table_of_contents: true
+api: eJydVm1v2zYQ/isHYoA3w5bsDGlRA8WQZGmbAW0yxwUGREFNybSlhiJVkrJjeP7vuyNlOXaCttgniUfyXp577o4bZoSttLLCstGGnQwG9Mm0ckI5+u3GXfrYLBclp7+ZsJkpKldoxUbs71qY9ZWaS06CMXdi3OiDwoLLBez0g1tXAubaeKm/Fx9cTNT45gJK4XI9i1iPVUZXwrgieFbsjn4xePa5Iweqdraz2hiMA9rLQJdJOfpRcgyQpWvU1mPkHK6sM4VasO22lej0q8gcSlB0aPEMbJ1lwtp5LdsoI+bPzXkt3Y+QPAww0zMfVutZodzvJ3vXcCkWwgT9jhcywOJEaZ8roztfaiN3/09C67Ell/WhqZ8FoRVwY/ia1sIYbV60UiIyfCFe2PspcBXUSjxWuC1m4K08xZhU8AWGesfOebqWeOe+xwgBn+ar2TEj2LGBQ74Y4WqjfkSawE28vBCOCMpdjos407bUNi4xQ/FymGJyhvERXXvMCrMUhjzeMJ8YljtXjeJY6ozLXFs3ejN4M3jm57hW0IQICyqQ96hvxdfg78k1rAqXQ8M4qLRxQHoQIwQEvdA+AYWThPeBorObK/hTZxZNkmfB3DAaRM+dOHvZBawyDuPL2wkQOc2cZ6HAm8Md649HiZrkeNSfLoVZYEItJraYF1nAV8898C/a4GrmNy80on/+bgJBY6K63du6onhRHV3AAnA609KOul3cBYDP4yvQGBp8mExuguiv2+tPdPh74pVIrc4ehLPBzIVW82JRB2aRbjqZcQUpcqXZQx/SNbhaIcGh4oajs4gpcniGGhN2Z6rsPmHgeCqxOykKKVHTXy4+Tj5cf7yMg57mEzldyinMCzyKaKLi2pJegmHa76Oq6J8pmi5LBKcvC4WqkG0L65EWLRnIT1lY7D/AZzOsHp+DqcuIdsOT15TqaDg6efXq9PW0wRQxiwkXivMs5FYWD2Kf4AimWCAS9rT19+MUBQ9/5KJY5O7t6TRoa3BtNe5wNuJbLayzOxhvrm8nHcyzDhND6+C8ULNKo2VYFtxnC50M1vv9XPAA7UXosP0JtpQR8KqSDa3ir1YrxBwRC+a8GVzOuOPQ2SRNPSdshGq8/wnr4a/PnyXxXcJOE+wsKCz8ueG2cxz5Uah79nwvYC6thhIj8KG1d5oEtus9AlQ8DqZ79dMeiGiB2ThOxP4Eajuza5XlRitdWw/pvFYZgWNDWsWSOl3CbJ1SvacC8aKKS1itDmQGOaYVthu+xNHjWXzgufX8eYd0FY+8rHB7z9m7cIq7+1+p51lk3wKbVp1GyOF4WcS7/d+QAVr2YK1rD1Trge8qnU9idU5Z6gS3sTx97yMTcy2lXpHBpixG5M5UZLnGTGM4xAUsnJDrk2iAmT7M/5Noe7tsD3pPyYCE+UavlnDelZH34m0nYXvP8D9hW0CW/Au7qKCvoO9gZZ9X3ZNkJYqGZoV5RPepZyvsIf9zTh0073b8OvHo4krywltqHgdhht2xMMNoxiHbaCKEOcZ6xw8vnCpENrqz2aTcis9Gbrck9uCg/J5eGKYgjtAKbYVa9aPvQaxpnuC7qfJmwlPEv41oYLUT9v3lBKf8fxq8oVo=
+sidebar_class_name: "get api-method"
+info_path: api/babylon-gRPC/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"InflationRate returns the current inflation rate."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cosmos/mint/v1beta1/inflation_rate"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+InflationRate returns the current inflation rate.
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryInflationRateResponse is the response type for the Query/InflationRate\nRPC method.","properties":{"inflation_rate":{"description":"InflationRate is the current inflation rate.","format":"byte","type":"string"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

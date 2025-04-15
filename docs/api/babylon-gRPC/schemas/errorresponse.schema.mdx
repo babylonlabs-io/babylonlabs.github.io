@@ -1,0 +1,33 @@
+---
+id: errorresponse
+title: "ErrorResponse"
+description: "Error Response"
+sidebar_label: "ErrorResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"id":0,"jsonrpc":"2.0","error":"Description of failure"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"ErrorResponse"}
+>
+</Heading>
+
+
+
+Error Response
+
+<Schema
+  schema={{"description":"Error Response","allOf":[{"type":"object","properties":{"id":{"type":"integer","example":0},"jsonrpc":{"type":"string","example":"2.0"}},"title":"JSONRPC"},{"type":"object","properties":{"error":{"type":"string","example":"Description of failure"}}}],"title":"ErrorResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

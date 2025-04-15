@@ -1,0 +1,35 @@
+---
+id: queryepochsubmissionsresponse-defines-a-response-to-get-all-submissions-in-given-epoch-queryepochsubmissionsrequest
+title: "QueryEpochSubmissionsResponse defines a response to get all submissions in
+given epoch (QueryEpochSubmissionsRequest)"
+description: ""
+sidebar_label: "QueryEpochSubmissionsResponse defines a response to get all submissions in
+given epoch (QueryEpochSubmissionsRequest)"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"keys":[{"first_tx_block_hash":"string","first_tx_index":0,"second_tx_block_hash":"string","second_tx_index":0}]}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"QueryEpochSubmissionsResponse defines a response to get all submissions in\ngiven epoch (QueryEpochSubmissionsRequest)"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"keys":{"description":"Keys All submissions transactions key saved during an epoch.","items":{"properties":{"first_tx_block_hash":{"description":"FirstTxBlockHash is the BTCHeaderHashBytes in hex.","type":"string"},"first_tx_index":{"format":"int64","type":"integer"},"second_tx_block_hash":{"description":"SecondBlockHash is the BTCHeaderHashBytes in hex.","type":"string"},"second_tx_index":{"format":"int64","type":"integer"}},"title":"SubmissionKeyResponse Checkpoint can be composed from multiple transactions,\nso to identify whole submission we need list of transaction keys.\nEach submission can generally be identified by this list of (txIdx,\nblockHash) tuples. Note: this could possibly be optimized as if transactions\nwere in one block they would have the same block hash and different indexes,\nbut each blockhash is only 33 (1  byte for prefix encoding and 32 byte hash),\nso there should be other strong arguments for this optimization","type":"object"},"type":"array"}},"title":"QueryEpochSubmissionsResponse defines a response to get all submissions in\ngiven epoch (QueryEpochSubmissionsRequest)","type":"object"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

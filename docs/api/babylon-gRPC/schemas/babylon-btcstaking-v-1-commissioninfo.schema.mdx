@@ -1,0 +1,34 @@
+---
+id: babylon-btcstaking-v-1-commissioninfo
+title: "babylon.btcstaking.v1.CommissionInfo"
+description: "CommissionInfo defines the information related to the commission of"
+sidebar_label: "babylon.btcstaking.v1.CommissionInfo"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"max_change_rate":"string","max_rate":"string","update_time":"2024-07-29T15:51:28.071Z"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"babylon.btcstaking.v1.CommissionInfo"}
+>
+</Heading>
+
+
+
+CommissionInfo defines the information related to the commission of
+a finality provider.
+
+<Schema
+  schema={{"description":"CommissionInfo defines the information related to the commission of\na finality provider.","properties":{"max_change_rate":{"description":"max_change_rate defines the maximum daily increase of the validator commission, as a fraction.","type":"string"},"max_rate":{"description":"max_rate defines the maximum commission rate which validator can ever charge, as a fraction.","type":"string"},"update_time":{"description":"update_time is the last time the commission rate was changed.","format":"date-time","type":"string"}},"type":"object","title":"babylon.btcstaking.v1.CommissionInfo"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            
