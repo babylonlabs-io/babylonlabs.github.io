@@ -8,26 +8,101 @@ sidebar_position: 1
 
 Babylon Genesis follows the Cosmos SDK and CometBFT consensus protocol. 
 
-In Phase 2 Testnet, Babylon accepts chain Validators to join the network. 
-The upper bound of active Validators is 100. However there is no limit 
+In Phase 2, Babylon accepts CometBFT Validators to join the network. 
+The upper bound of active Validators is 100. However, there is no limit 
 on the total number of Validators.
 
 ## Prerequisites
 
 - A synced Bitcoin full node
-- At least 1.0 tBABY in your wallet for Phase 2 Testnet
+- At least 1 tBABY in your wallet for Phase 2 Testnet and 1 BABY for Mainnet
 - A system that satisfies the system requirements
 for validator nodes
 
+Anyone can join the Babylon Genesis network as a validator. However, you need to 
+be in the top 60 in delegation to be actively participating in the consensus.
+
+## Foundation Delegation Program
+
+[Babylon Foundation](https://babylon.foundation) is running a delegation program to support high-quality and early 
+infrastructure supporters of the Babylon Genesis chain. 
+
+For details of the program, please refer to the [Foundation Delegation Program](https://babylonlabs.io/blog/announcing-babylon-foundation-s-delegation-program) blog page.
+
+:::note
+To help cover transaction fees and meet the minimum self-delegation requirement, foundation delegated 
+validator's account will receive a small amount of BABY tokens on 8 April 2025 
+to cover Initial gas fees.
+:::
+
+For future foundation delegations, please keep watching the [Babylon Foundation 
+Website](https://babylon.foundation) for announcements.
+
+## Quick Start Guide
+
+### 1. Install Babylon Genesis node
+Follow the [installation guide](/operators/babylon_validators/installation_guide) 
+to install Babylon Genesis node.
+
+### 2. Create a Validator Key
+Initialize your validator key with `babylond init` will create the BABY key you 
+need for consensus participation and a BLS key used in checkpointing and timestamping 
+to Bitcoin blockchain.
+
+See [3. Key Management](/operators/babylon_validators/installation_guide/#3-key-management) 
+for more details.
+
+### 3. Create a Validator
+Instead of using `staking` module of Cosmos SDK, Babylon Genesis uses `checkpointing` 
+module for validator registration and management. 
+
+To create a validator, use `babylond tx checkpointing create-validator` command.
+
+See [4. Create a Validator](/operators/babylon_validators/installation_guide/#4-create-a-validator) 
+for more details.
+
+### 4. Verify Your Validator
+
+To verify your validator, first get your validator's operator address with 
+`babylond keys show <your-key-name>` command. Then, use `babylond query 
+checkpointing validator-registration-request` command to check if your validator 
+registration request is in the queue.
+
+Initially, your status will be `0 - BOND_STATUS_UNBONDED`. When active, your 
+status will change to `3 - BOND_STATUS_BONDED`.
+
+See [5. Verify Your Validator](/operators/babylon_validators/installation_guide/#5-verify-your-validator) 
+for more details and rules.
+
+## Communication
+
+Join the `#finality-providers` channel in the `- tech-zone -` section of our 
+[Discord server](https://discord.com/invite/babylonglobal) for all communications.
+Testnet announcements will also be made there. 
+
+## CosmWasm Governance Proposals
+
+The Babylon Genesis chain will initially use permissioned CosmWasm. After public 
+launch on 10 April 2025, dApp developers are expected to submit governance proposals 
+for either (a) deploying CosmWasm smart contracts or (b) whitelisting addresses to 
+deploy such contracts. These proposals can be expedited (24-hour voting) or standard 
+(72-hour voting). **It is important that all validators with voting power actively 
+monitor on-chain proposals, review them (**[Governance guidelines](https://docs.babylonlabs.io/guides/governance/))**
+, and participate in governance.**
+
+## Version Information
+
+- **Babylon Genesis node**: Version [v1.0.1](https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.1)([Releases page](https://github.com/babylonlabs-io/babylon/releases))
+
 ## Faucets 
 
-There are two was to get tBABY for Phase 2 Testnet:
+There are two ways to get tBABY for Phase 2 Testnet:
 
 1. [Babylon Labs Discord Faucet](https://discord.com/channels/1266159481218457600/1266159481218457600)
-2. [L2Scan Faucet (0.01 tBABY each request)](https://babylon-testnet.l2scan.co/faucet)
-3. Request it from a Babylon Labs supporting staff or message us on [discord](https://discord.com/channels/1046686458070700112/1282600119346270281n). 
+2. [L2Scan Faucet](https://babylon-testnet.l2scan.co/faucet) (0.01 tBABY each request)  
 
-## Get Started
+## Documentation
 
-Follow the [installation guide](/operators/babylon_validators/installation_guide) to install and start your 
-Babylon Genesis Validator journey.
+- [Node Setup guide](https://github.com/babylonlabs-io/networks/tree/main/bbn-1/babylon-node)
+- [Validator Setup Guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/babylon-validators/README.md)
+- [Governance guidelines](https://docs.babylonlabs.io/guides/governance/)
