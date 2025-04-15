@@ -25,7 +25,7 @@ const PRODUCTS = [
     icon: WalletCreditCardRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
-    text: 'BABY holders can delegate their toekn to Babylon Genesis to participate governance.',
+    text: 'BABY holders can delegate their token to Babylon Genesis chain to participate in governance.',
   },
   {
     title: 'Become Operators',
@@ -33,7 +33,7 @@ const PRODUCTS = [
     icon: TetrisAppRegular,
     lightImage: 'img/landing-page/hero/infra_providers.png',
     darkImage: 'img/landing-page/hero/infra_providers_dark.png',
-    text: 'The operators that provide the data validation infrastructure for Bitcoin Secured networks.',
+    text: 'The operators that provide the data validation infrastructure for Bitcoin Secured Networks (BSNs).',
   },
   {
     title: 'Build dApps',
@@ -41,7 +41,7 @@ const PRODUCTS = [
     icon: DocumentChevronDoubleRegular,
     lightImage: 'img/landing-page/hero/dapp_developers.png',
     darkImage: 'img/landing-page/hero/dapp_developers_dark.png',
-    text: 'Smart contracts developers that want to build Bitcoin secured decentralized applications.',
+    text: 'Smart contract developers that want to build Bitcoin secured decentralized applications.',
   },
   {
     title: 'Build BSNs',
@@ -49,7 +49,7 @@ const PRODUCTS = [
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
-    text: 'Integrate economic security into your PoS blockchain, by incorporating Babylon\'s BTC staking protocol.',
+    text: 'Integrate economic security into your PoS blockchain by incorporating Babylon\'s BTC staking protocol.',
   },
 ];
 
@@ -110,7 +110,7 @@ export default function HeroSection() {
           Make unbreakable chains & dApps
           </h2>
           <p className="max-w-xl text-center text-text-400">
-            At Babylon Labs, we're building a more economically secured
+            At Babylon Labs, we're building a more economically secure
             decentralized future. Learn concepts, create dApps and build Bitcoin Secured Networks.
           </p>
         </div>
