@@ -268,8 +268,8 @@ OutputFormat = json
 ; sign mode to use
 SignModeStr = direct
 
-; TODO(euphrates): fetching this from bcd node?
-BtcStakingContractAddress = <babylon_btc_staking_contract_address>
+BtcStakingContractAddress = "bbnc1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqgn0kq0"
+BtcFinalityContractAddress = "bbnc17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgssg3nft"
 ```
 
 Adjust this configuration according to your setup, particularly changing the placeholder values (like `<BSN_id>`, `<BSN_system_rpc_addr>`, etc.) to match your specific BSN configuration.
@@ -333,19 +333,3 @@ The Babylon contracts will slash Finality Providers who equivocate blocks upon e
 ```bash
 $ <bsn_binary> query wasm contract-state smart <btc_staker_contract_address> '{"slashing": {}}'
 ```
-
-## Reward Distribution
-
-The Babylon contracts distribute rewards to Finality Providers upon each `EndBlock`. 
-
-You can query the reward distribution via:
-
-```bash
-$ babylond query incentive reward-gauges <your-bech32-address> # of finality provider 
-```
-
-To withdraw the reward as a Finality Provider:
-
-```bash
-$ babylond tx incentive withdraw-reward finality_provider --from <your-bech32-address>
-``` 
