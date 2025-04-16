@@ -1,0 +1,351 @@
+---
+title: Running a Finality Provider for a Cosmos Chain
+sidebar_label: Running a Finality Provider
+sidebar_position: 2
+---
+
+# Running a Finality Provider for a Cosmos Chain
+
+This guide explains how to set up and run a Finality Provider for a Cosmos chain integrated with Babylon.
+
+## Prerequisites
+
+### Finality Provider
+
+Finality Providers are responsible for voting at a finality round on top of [CometBFT](https://github.com/cometbft/cometbft). Similar to any native PoS validator, a Finality Provider can receive voting power delegations from BTC stakers, and can earn commission from the staking rewards denominated in Babylon tokens.
+
+To install Finality Provider software, clone the repository to your local machine from Github:
+
+```
+git clone https://github.com/babylonlabs-io/finality-provider.git
+```
+
+Then, check out the `v1.99.0-devnet.6` tag:
+
+```
+cd finality-provider
+git checkout v1.99.0-devnet.6
+```
+
+At the top-level directory of the project:
+
+```
+make install
+```
+
+The above command will build and install the following binaries to `$GOPATH/bin`:
+
+- `fpd`: The daemon and CLI program for the finality-provider.
+- `eotsd`: The daemon program for the EOTS manager.
+
+## Setting Up EOTS Manager
+
+To become a Finality Provider, you need to set up an EOTS (Embedded Off-chain Trusted Service) manager that manages the key pairs for your Finality Provider.
+
+### Configuration File
+
+Create an EOTS configuration file (`eotsd.conf`):
+
+```
+[Application Options]
+; Logging level for all subsystems
+LogLevel = debug
+; Type of keyring to use
+KeyringBackend = test
+; the listener for RPC connections, e.g., localhost:1234
+RpcListener = 0.0.0.0:15813
+[metrics]
+; IP of the Prometheus server
+Host = 127.0.0.1
+; Port of the Prometheus server
+Port = 2112
+; The interval of Prometheus metrics updated
+UpdateInterval = 1m0s
+[dbconfig]
+; The directory path in which the database file should be stored.
+DBPath = /home/finality-provider/.eotsd/data
+; The name of the database file.
+DBFileName = eots.db
+; Prevents the database from syncing its freelist to disk, resulting in improved performance at the expense of increased startup time.
+NoFreelistSync = true
+; Specifies if a Bolt based database backend should be automatically compacted on startup (if the minimum age of the database file is reached). This will require additional disk space for the compacted copy of the database but will result in an overall lower database size after the compaction.
+AutoCompact = false
+; Specifies the minimum time that must have passed since a bolt database file was last compacted for the compaction to be considered again.
+AutoCompactMinAge = 168h0m0s
+; Specifies the timeout value to use when opening the wallet database.
+DBTimeout = 1m0s
+```
+
+Adjust this configuration according to your setup.
+
+## Setting Up Finality Provider Daemon
+
+After setting up the EOTS manager, you need to set up the Finality Provider daemon. The Finality Provider will call EOTS manager for signing messages and interact with Babylon.
+
+### Configuration File
+
+Create a Finality Provider configuration file (`fpd.conf`):
+
+```
+[Application Options]
+; Logging level for all subsystems {trace, debug, info, warn, error, fatal}
+LogLevel = debug
+
+; the type of the BSN chain
+ChainType = wasm
+
+; The number of Schnorr public randomness for each commitment
+NumPubRand = 100
+
+; The upper bound of the number of Schnorr public randomness for each commitment
+NumPubRandMax = 1000
+
+; The minimum gap between the last committed rand height and the current Babylon block height
+MinRandHeightGap = 10
+
+; The interval between each update of finality-provider status
+StatusUpdateInterval = 5s
+
+; The interval between each attempt to commit public randomness
+RandomnessCommitInterval = 5s
+
+; The interval between each attempt to submit finality signature or public randomness after a failure
+; TODO: how to make fpd to not submit randomness/finality signatures for the 1st devnet?
+SubmissionRetryInterval = 300s
+
+; The maximum number of retries to submit finality signature or public randomness
+MaxSubmissionRetries = 100
+
+; The interval between each try of fast sync, which is disabled if the value is 0
+FastSyncInterval = 20s
+
+; The maximum number of blocks to catch up for each fast sync
+FastSyncLimit = 10
+
+; The block gap that will trigger the fast sync
+FastSyncGap = 6
+
+; The address of the remote EOTS manager; Empty if the EOTS manager is running locally
+EOTSManagerAddress = BSN-eotsmanager:15813
+
+; Bitcoin network to run on
+BitcoinNetwork = signet
+
+; the listener for RPC connections, e.g., localhost:1234
+RpcListener = 127.0.0.1:12581
+
+; The maximum number of finality-provider instances running concurrently within the daemon
+MaxNumFinalityProviders = 10
+
+; The interval between each attempt to update the finality-provider status
+SyncFpStatusInterval = 10s
+
+[chainpollerconfig]
+; The maximum number of Babylon blocks that can be stored in the buffer
+BufferSize = 1000
+
+; The interval between each polling of Babylon blocks
+PollInterval = 5s
+
+; The static height from which we start polling the chain
+StaticChainScanningStartHeight = 1
+
+; Automatically discover the height from which to start polling the chain
+AutoChainScanningMode = true
+
+[metrics]
+; IP of the Prometheus server
+Host = 127.0.0.1
+
+; Port of the Prometheus server
+Port = 2112
+
+; The interval of Prometheus metrics updated
+UpdateInterval = 1m0s
+
+[dbconfig]
+; The directory path in which the database file should be stored.
+DBPath = /home/finality-provider/.fpd/data
+
+; The name of the database file.
+DBFileName = finality-provider.db
+
+; Prevents the database from syncing its freelist to disk, resulting in improved performance at the expense of increased startup time.
+NoFreelistSync = true
+
+; Specifies if a Bolt based database backend should be automatically compacted on startup (if the minimum age of the database file is reached). This will require additional disk space for the compacted copy of the database but will result in an overall lower database size after the compaction.
+AutoCompact = false
+
+; Specifies the minimum time that must have passed since a bolt database file was last compacted for the compaction to be considered again.
+AutoCompactMinAge = 168h0m0s
+
+; Specifies the timeout value to use when opening the wallet database.
+DBTimeout = 1m0s
+
+[babylon]
+; name of the key to sign transactions with
+Key = finality-provider
+
+; chain id of the chain to connect to
+ChainID = chain-test
+
+; address of the rpc server to connect to
+RPCAddr = https://rpc-euphrates.devnet.babylonlabs.io:443
+
+; address of the grpc server to connect to
+GRPCAddr = https://rpc-euphrates.devnet.babylonlabs.io:9090
+
+; account prefix to use for addresses
+AccountPrefix = bbn
+
+; type of keyring to use
+KeyringBackend = test
+
+; adjustment factor when using gas estimation
+GasAdjustment = 3
+
+; comma separated minimum gas prices to accept for transactions
+GasPrices = 0.01ubbn
+
+; directory to store keys in
+KeyDirectory = /home/finality-provider/.fpd
+
+; flag to print debug output
+Debug = true
+
+; client timeout when doing queries
+Timeout = 20s
+
+; block timeout when waiting for block events
+BlockTimeout = 1m0s
+
+; default output when printint responses
+OutputFormat = json
+
+; sign mode to use
+SignModeStr = direct
+
+[wasm]
+; name of the key to sign transactions with
+Key = BSN-fp
+
+; chain id of the chain to connect to
+ChainID = <BSN_id>
+
+; address of the rpc server to connect to
+RPCAddr = <BSN_system_rpc_addr>
+
+; address of the grpc server to connect to
+GRPCAddr = <BSN_system_grpc_addr>
+
+; account prefix to use for addresses
+AccountPrefix = <BSN_system_account_prefix>
+
+; type of keyring to use
+KeyringBackend = test
+
+; adjustment factor when using gas estimation
+GasAdjustment = 3
+
+; comma separated minimum gas prices to accept for transactions
+GasPrices = 0.01ustake
+
+; directory to store keys in
+KeyDirectory = /home/finality-provider/.fpd
+
+; flag to print debug output
+Debug = true
+
+; client timeout when doing queries
+Timeout = 20s
+
+; block timeout when waiting for block events
+BlockTimeout = 1m0s
+
+; default output when printint responses
+OutputFormat = json
+
+; sign mode to use
+SignModeStr = direct
+
+; TODO(euphrates): fetching this from bcd node?
+BtcStakingContractAddress = <babylon_btc_staking_contract_address>
+```
+
+Adjust this configuration according to your setup, particularly changing the placeholder values (like `<BSN_id>`, `<BSN_system_rpc_addr>`, etc.) to match your specific BSN configuration.
+
+## Creating and Registering a Finality Provider
+
+After setting up both the EOTS manager and Finality Provider daemon, you can create and register your Finality Provider on Babylon.
+
+### Create a Finality Provider
+
+Create a Finality Provider instance through the `fpd create-finality-provider` or `fpd cfp` command. The created instance is associated with a BTC public key which serves as its unique identifier and a Babylon account to which staking rewards will be directed.
+
+```
+$ fpd create-finality-provider --key-name my-finality-provider --chain-id <your_chain_id> --moniker my-name
+```
+
+Replace `<your_chain_id>` with your BSN chain ID.
+
+### Register a Finality Provider
+
+Register the created Finality Provider in Babylon through the `fpd register-finality-provider` command. Note that you need to obtain some tBABY tokens from the Babylon faucet first.
+
+```
+$ fpd register-finality-provider <btc_pub_key_hex>
+```
+
+Replace `<btc_pub_key_hex>` with your Finality Provider's BTC public key.
+
+### Verify Registration
+
+Query the Babylon node to see the Finality Provider registered on Babylon:
+
+```
+$ babylond query btcstkconsumer finality-providers <your_chain_id>
+```
+
+This will show details about your registered Finality Provider.
+
+## Submitting Finality Signatures
+
+Once your Finality Provider is registered and has received BTC delegations, it will automatically start submitting finality signatures to the BTC staking contract on the BSN.
+
+You can query the finality signature at a given block signed by a given Finality Provider via:
+
+```bash
+$ <bsn_binary> query wasm contract-state smart <btc_staker_contract_address> '{"finality_signature":{"btc_pk_hex":"<fp_btc_pk_hex>","height":<block_height>}}'
+```
+
+## Block Finalization
+
+The Babylon contracts will tally BSN chain blocks and determine their finalization status upon each `EndBlock`. You can query the finalization status of a given block via:
+
+```bash
+$ <bsn_binary> query wasm contract-state smart <btc_staker_contract_address> '{"block":{"height":<block_height>}}'
+```
+
+## Slashing
+
+The Babylon contracts will slash Finality Providers who equivocate blocks upon each `EndBlock`. You can query the slashing status via:
+
+```bash
+$ <bsn_binary> query wasm contract-state smart <btc_staker_contract_address> '{"slashing": {}}'
+```
+
+## Reward Distribution
+
+The Babylon contracts distribute rewards to Finality Providers upon each `EndBlock`. 
+
+You can query the reward distribution via:
+
+```bash
+$ babylond query incentive reward-gauges <your-bech32-address> # of finality provider 
+```
+
+To withdraw the reward as a Finality Provider:
+
+```bash
+$ babylond tx incentive withdraw-reward finality_provider --from <your-bech32-address>
+``` 

@@ -1,0 +1,285 @@
+---
+title: Integrating as a Cosmos Chain
+sidebar_label: Integrating as a Cosmos Chain
+sidebar_position: 1
+---
+
+# Integrating as a Cosmos Chain
+
+## Overview
+
+This page provides a guide for PoS systems to integrate Babylon phase-3 devnet, called Euphrates. The integration allows a BSN to get economic security from BTC staking.
+
+Euphrates devnet is currently in a highly experimental phase, and unexpected issues may arise. We welcome any feedback on the integration process and this document.
+
+## System components
+
+The integration involves three blockchains:
+
+- **A Babylon blockchain.** This is the Babylon phase-3 devnet, called Euphrates. Please refer to the [Cosmos Chains](./cosmos_chains.mdx) page for setting up the environment variables needed to interact with the devnet.
+- **A Bitcoin blockchain.** In this specific case, Babylon blockchain is interacting with Bitcoin Signet.
+- **A BSN (sometimes referred to as a consumer system in code).** This is the system that we aim to integrate with Babylon Bitcoin Staking Protocol.
+
+**Accessing the Euphrates devnet.** The Phase-3 devnet environment (Euphrates) is defined in the [Cosmos Chains](./cosmos_chains.mdx) page. Please refer to that section for setting up the environment variables needed to interact with the devnet.
+
+## BSN requirements
+
+The BSN integrating with Euphrates devnet needs to support IBC and CosmWasm smart contracts. This is because Babylon sends information about Finality Providers and BTC delegations as IBC packets. The BSN needs to deploy CosmWasm smart contracts to process these IBC packets, and then store the Finality Providers and BTC delegations information.
+
+The Babylon team is developing a specialized relayer to support BSNs without IBC, and is developing BSN side software for various types of BSNs.
+
+## Prerequisites
+
+To integrate with Euphrates devnet, you need to install and set up the following software:
+
+### Golang / Rust
+
+This project requires Go version 1.23 and Rust `stable` version. You can install Go by following [https://go.dev/doc/install](https://go.dev/doc/install), and install Rust by following [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install).
+
+Also install essential tools and packages that might be needed to compile and build the binaries. In Ubuntu / Debian systems:
+
+```
+sudo apt install build-essential
+```
+
+### Babylon node
+
+Babylon node software provides CLI commands and queries for Finality Providers and BTC delegations. Note that you don't need to run a Babylon node for integration purposes.
+
+```
+git clone https://github.com/babylonlabs-io/babylon.git
+```
+
+Then, check out the `v1.99.0-devnet.6-3` tag.
+
+```
+cd babylon
+git checkout v1.99.0-devnet.6-3
+```
+
+At the top-level directory of the project
+
+```
+make install
+```
+
+The above command will build and install the `babylond` binary to `$GOPATH/bin`.
+
+### Installing Babylon SDK
+
+For Cosmos-based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base. Other BSNs are not supported at the moment.
+
+The `x/babylon` module acts as a thin layer between the Cosmos SDK layer and the CosmWasm smart contracts. It allows the BSN to notify the Babylon contracts upon `BeginBlock` and `EndBlock`, such that the contracts can index blocks in the BSN upon `BeginBlock`, and tally blocks to determine their finalization status upon `EndBlock`.
+
+Installing the `x/babylon` module is no different compared to installing other modules. We have provided a demo Cosmos SDK chain that integrates with the `x/babylon` module. Please refer to [https://github.com/babylonlabs-io/babylon-sdk/tree/v0.8.0-rc.0/demo](https://github.com/babylonlabs-io/babylon-sdk/tree/v0.8.0-rc.0/demo) for the implementation.
+
+Please note that the corresponding version tag of the Babylon SDK is [https://github.com/babylonlabs-io/babylon-sdk/tree/v0.8.0-rc.0/demo](https://github.com/babylonlabs-io/babylon-sdk/tree/v0.8.0-rc.0/demo).
+
+## Integration Steps
+
+### Getting test tokens
+
+**Babylon tBABY tokens.** One can get Babylon tBABY tokens on Euphrates devnet by the following:
+
+1. Create a Babylon account by using
+
+```bash
+$ babylond keys add $key $keyringBackend
+```
+
+2. Then get some tBABY test tokens. If you have access, you can for example contact Spyros Kekos (@Spyros) in BabylonLabs's Slack workspace, or directly use the [#faucet-euphrates-bbn](https://discord.com/channels/1046686458070700112/1242731520720900116) channel on [Babylon discord server](https://discord.com/invite/babylonglobal).
+Alternatively, you can try **hitting the faucet endpoint** directly:
+
+```bash
+$ curl $faucetUrl/claim \
+  -H "Content-Type: multipart/form-data" \
+  -d '{ "address": "<your_bbn_address>"}'
+```
+
+3. You can verify the account's balance by using
+
+```bash
+$ babylond query bank balances <your_bbn_address> --node $nodeUrl
+```
+
+### Deploy Babylon contracts on the BSN
+
+You need to deploy Babylon CosmWasm contracts on the BSN. The contracts are responsible for receiving IBC packets of Finality Providers and BTC delegations from Babylon, and maintaining their status.
+
+They also implement block indexing, and vote tallying / block finalization.
+
+You can obtain the Babylon contracts by one of the following methods:
+
+1. Download `babylon_contract.wasm`,  `btc_staking.wasm` and ``btc_finality.wasm` from the corresponding release tag: [https://github.com/babylonlabs-io/babylon-contract/releases/tag/v0.13.0-rc.0](https://github.com/babylonlabs-io/babylon-contract/releases/tag/v0.13.0-rc.0).
+2. Alternatively, you can clone the [Babylon Contracts](https://github.com/babylonlabs-io/babylon-contract) repository to your local machine, check out the`v0.9.0-rc.1` tag, install cargo [run-script](https://crates.io/crates/cargo-run-script), and build the optimized CosmWasm contracts yourself.
+
+```bash
+$ git clone https://github.com/babylonlabs-io/babylon-contract.git
+$ cd babylon-contract
+$ git checkout v0.13.0-rc.0
+$ cargo install cargo-run-script
+$ cargo optimize
+```
+
+After that, you will have two contracts in the `artifacts/` folder:
+
+- `babylon_contract.wasm`: Contract for handling IBC packets.
+- `btc_staking.wasm`: Contract for maintaining Finality Providers and BTC delegations.
+- `btc_finality.wasm`: Contract for maintaining BTC staking finalization status of blocks.
+
+If the BSN is based on Cosmos SDK, you can then deploy the two contracts.
+
+**Note**: The following examples are based on `bcd`, our toy blockchain binary that is part of `babylon-sdk`, and that we use for development and testing. You'll need to adapt these instructions accordingly, for your BSN chain devnet or testnet.
+First, this assumes there's a `bcd` instance, running locally at the moment through a docker container.
+If you want to follow these instructions to the letter, you can use the docker image built with the `build-bcd` make target, part of the https://github.com/babylonlabs-io/babylon-sdk repository, to reproduce this setup.
+
+1. Start the integration deployment setup
+
+```bash
+$ git clone [https://github.com/babylonlabs-io/babylon-sdk.git](https://github.com/babylonlabs-io/babylon-integration-deployment.git)
+$ cd babylon-sdk
+$ make build-bcd
+$ docker run babylonlabs-io/local-bcd
+```
+
+2. In another terminal or session, set the environment to access the BSN. For `bcd`, and assuming you're using the `bash` shell:
+
+```bash
+$ cat <<EOF >env_bsn.sh
+:
+
+export binary="bcd"
+export chainId="$binary-test"
+export homeDir="/data/$binary/$chainId"
+export key="user"
+export keyringBackend="--keyring-backend=test"
+export feeToken="stake"
+
+export rpcUrl="http://localhost:26657"
+export nodeUrl="tcp://localhost:26657"
+export p2pUrl="tcp://localhost:26656"
+export profilingUrl="localhost:6060"
+export grpcUrl="localhost:9090"
+export apiUrl="http://localhost:5183"
+
+export dockerImage="ibcsim-$binary"
+export testData="/$dockerImage"
+
+alias bcd='docker exec $dockerImage $binary --home=$homeDir'
+EOF
+$ . ./env_bsn.sh
+```
+
+3. Upload the contracts to the BSN.
+
+```bash
+<bsn_binary> tx wasm store <path_to_babylon_contract.wasm>
+<bsn_binary> tx wasm store <path_to_btc_staking.wasm>
+```
+
+In the `bcd` example:
+
+```bash
+$ bcd tx wasm store "$testData/babylon_contract.wasm" $keyringBackend --from $key --chain-id $chainId --gas 20000000000 --gas-prices 0.01u$feeToken --node $nodeUrl -y
+$ bcd tx wasm store "$testData/btc_staking.wasm" $keyringBackend --from $key --chain-id $chainId --gas 20000000000 --gas-prices 0.01u$feeToken --node $nodeUrl -y
+$ bcd tx wasm store "$testData/btc_finality.wasm" $keyringBackend --from $key --chain-id $chainId --gas 20000000000 --gas-prices 0.01u$feeToken --node $nodeUrl -y
+```
+
+The BSN will return the contract code IDs for them.
+In the `bcd` example, you can use
+
+```bash
+$ bcd query wasm list-code
+```
+
+to get the latest code IDs.
+
+Then, instantiate the Babylon contract via
+
+```bash
+$ ADMIN=$(bcd --home $CHAINDIR/$CHAINID keys show user --keyring-backend test -a)
+$ STAKING_MSG='{
+  "admin": "'"$ADMIN"'"
+}'
+$ FINALITY_MSG='{
+  "params": {
+    "max_active_finality_providers": 100,
+    "min_pub_rand": 1,
+    "finality_inflation_rate": "0.035",
+    "epoch_length": 10
+  },
+  "admin": "'"$ADMIN"'"
+}'
+
+$ bcd --home $CHAINDIR/$CHAINID tx babylon instantiate-babylon-contracts \
+    1 2 3 \
+    "regtest" \
+    "01020304" \
+    1 2 false \
+    "$STAKING_MSG" \
+    "$FINALITY_MSG" \
+    test-consumer \
+    test-consumer-description \
+    --admin=$ADMIN \
+    --keyring-backend="test" \
+    --from user \
+    --chain-id $CHAINID \
+    --gas 20000000000 \
+    --gas-prices 0.001ustake \
+    --node $rpcUrl \
+    -y \
+    --ibc-transfer-channel-id=channel-0
+```
+
+You can then run
+
+```bash
+$ bcd query babylon params
+```
+
+to get the code IDs and addresses of the Babylon contracts.
+
+Once instantiated, the Babylon contract will reserve the `wasm.<babylon_contract_address>` IBC port.
+
+### Create an IBC light clients on Babylon and the BSN
+
+Following the IBC security model, Babylon considers each IBC light client inside Babylon as a unique blockchain. Each consumer chain is registered in Babylon using its corresponding IBC light client.
+
+If there is no IBC light client of the consumer inside Babylon currently, you will need to create one first. You can use either Hermes or the Go relayer to create the light clients and connection. Please refer to our [IBC relaying guide](https://github.com/babylonlabs-io/babylon/blob/main/docs/ibc-relayer.md).
+
+The client ID of the consumer chain will be used as the consumer ID, denoted as `$CONSUMER_ID` variable.
+
+### Register your BSN on Babylon
+
+With the client ID of the consumer chain, you can register it on the BSN, by using
+
+```bash
+$ babylond tx btcstkconsumer egister-consumer $CONSUMER_ID consumer-name consumer-description --node https://rpc-euphrates.devnet.babylonlabs.io
+```
+
+Then you can query the registered consumer by using
+
+```bash
+$ babylond query btcstkconsumer registered-consumers -o json --node https://rpc-euphrates.devnet.babylonlabs.io
+{
+  "chain_ids": [
+    "test-bsn-chain"
+  ],
+  "pagination": {
+    "next_key": null,
+    "total": "0"
+  }
+}
+```
+
+### Create an IBC channel between Babylon and the BSN
+
+You can create an IBC channel by following the instructions [here](https://hermes.informal.systems/tutorials/local-chains/add-a-new-relay-path.html) (if using [Hermes](https://github.com/informalsystems/hermes)) or [here](https://github.com/cosmos/relayer) (if using [Go relayer](https://github.com/cosmos/relayer)). Please ensure to use the latest versions of them for full compatibility.
+
+You'll need the following information:
+
+- The port ID is `zoneconcierge` for Babylon, and `wasm.<babylon_contract_address>` for the BSN.
+- The GRPC endpoint of the Euphrates devnet is `https://grpc-euphrates.devnet.babylonlabs.io` .
+- For gas prices, both for the IBC relayer setup and sending TXs, you can just use `1ubbn`.
+- Channel ordering must be specified as `"ordered"`.
+- and channel version is `"zoneconcierge-1"`.
