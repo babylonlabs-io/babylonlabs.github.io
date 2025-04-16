@@ -55,8 +55,13 @@ interface Sample {
 
 const samples: Sample[] = [
   {
+    title: 'Phase 2 Finality Provider Guides',
+    platform: 'Navigate phase transition as a Finality Provider',
+    demo: '/operators/finality_providers/phase_2_registration_guide/',
+  },
+  {
     title: 'PoS Integrations Guides',
-    platform: 'Cosmos',
+    platform: 'For Cosmos chains',
     source:
       'https://github.com/babylonlabs-io/babylon-integration-deployment/tree/main/deployments/btc-staking-integration-bitcoind',
     blog: 'https://babylonlabs.io/blog/babylon-bitcoin-security-for-cosmos-and-beyond',
@@ -64,21 +69,19 @@ const samples: Sample[] = [
   },
   {
     title: 'L2 Integrations Guides',
-    platform: 'Optimism',
+    platform: 'For OP Stacks chains',
     blog: '/developers/bsns/op_stack_chains',
     source: 'https://babylonlabs.io/blog/forkless-rollups-with-bitcoin-staking',
     demo: '/developers/bsns/op_stack_chains',
   },
   {
     title: 'CosmWasm Contract Deployment Guides',
-    platform: 'Cosmos',
-    blog: '/developers/dapps/smart_contract_deployment',
+    platform: 'For dApp developers',
     source: 'https://github.com/babylonlabs-io/storage-contract',
     demo: '/developers/dapps/smart_contract_deployment',
   },
   {
     title: 'Wallet Integrations Guides',
-    platform: 'Wallets',
     blog: '/developers/wallet_integration',
     source:
       'https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/integration/wallet/babylon-wallet.md',
