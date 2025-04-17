@@ -64,7 +64,7 @@ The above command will build and install the `babylond` binary to `$GOPATH/bin`.
 
 ### Installing Babylon SDK
 
-For Cosmos-based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base. Other BSNs are not supported at the moment.
+For Cosmos-based blockchains, one needs to add the `x/babylon` [module](https://github.com/babylonlabs-io/babylon-sdk/tree/main/x) from the [Babylon SDK](https://github.com/babylonlabs-io/babylon-sdk) to the BSN blockchain code base.
 
 The `x/babylon` module acts as a thin layer between the Cosmos SDK layer and the CosmWasm smart contracts. It allows the BSN to notify the Babylon contracts upon `BeginBlock` and `EndBlock`, such that the contracts can index blocks in the BSN upon `BeginBlock`, and tally blocks to determine their finalization status upon `EndBlock`.
 
@@ -84,8 +84,7 @@ Please note that the corresponding version tag of the Babylon SDK is [https://gi
 $ babylond keys add $key $keyringBackend
 ```
 
-2. Then get some tBABY test tokens. If you have access, you can for example contact Spyros Kekos (@Spyros) in BabylonLabs's Slack workspace, or directly use the [#faucet-euphrates-bbn](https://discord.com/channels/1046686458070700112/1242731520720900116) channel on [Babylon discord server](https://discord.com/invite/babylonglobal).
-Alternatively, you can try **hitting the faucet endpoint** directly:
+2. To fund your devnet account with some tBABY, you can use the [#developer](https://discord.com/channels/1046686458070700112/1282600119346270281) channel on [Babylon discord server](https://discord.com/invite/babylonglobal). Alternatively, you can try **hitting the faucet endpoint** directly:
 
 ```bash
 $ curl $faucetUrl/claim \
@@ -93,7 +92,7 @@ $ curl $faucetUrl/claim \
   -d '{ "address": "<your_bbn_address>"}'
 ```
 
-3. You can verify the account's balance by using
+1. You can verify the account's balance by using
 
 ```bash
 $ babylond query bank balances <your_bbn_address> --node $nodeUrl
