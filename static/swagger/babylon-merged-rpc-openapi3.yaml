@@ -1,21 +1,31 @@
 openapi: 3.0.0
 # openapi.yaml
 x-tagGroups:
-  - name: Authentication
-    tags: [OAuth2, API Keys]
+  - name: btccheckpoint
+    tags: [btc-checkpoint-info, btc-checkpoint-params,btc-checkpoints-info, ended-epoch-btc-height, epoch-submissions, reported-checkpoint-btc]
     description: Security and access control
-  - name: Content
-    tags: [Articles, Media]
-    description: Content management operations
-
+ 
+  
 tags:
-  - name: OAuth2
-    description: OAuth2 authentication flows
-  - name: API Keys
-    description: API key management
-  - name: Articles
-    description: Blog post operations
 
+  - name: btccheckpoint
+    description: BTC Checkpoint module queries and Txs
+  - name: btclightclient
+    description: BTC Light Client module queries and Txs
+  - name: btcstaking
+    description: BTC Checkpoint module queries and Txs
+  - name: btcstkconsumer
+    description: BTC Light Client module queries and Txs
+  - name: checkpointing
+    description: BTC Light Client module queries and Txs
+  - name: epoching
+    description: BTC Light Client module queries and Txs
+  - name: finalityprovider
+    description: BTC Light Client module queries and Txs
+  - name: incentive
+    description: BTC Light Client module queries and Txs
+  - name: mint
+    description: BTC Light Client module queries and Txs
 
 info:
   title: Babylon gRPC API Docs
@@ -306,7 +316,7 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btccheckpoint
       operationId: BtcCheckpointsInfo
   /babylon/btccheckpoint/v1/params:
     get:
@@ -386,9 +396,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btccheckpoint
       operationId: BtcCheckpointParams
-      summary: Parameters queries the parameters of the module.
+      summary: BtcCheckpointParams
+      description: Parameters queries the parameters of the module.
+
   /babylon/btccheckpoint/v1/{epoch_num}:
     get:
       parameters:
@@ -522,9 +534,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btccheckpoint
       operationId: BtcCheckpointInfo
-      summary: BtcCheckpointInfo returns checkpoint info for a given epoch
+      summary: BtcCheckpointInfo
+      description: BtcCheckpointInfo returns checkpoint info for a given epoch
+
   /babylon/btccheckpoint/v1/{epoch_num}/submissions:
     get:
       parameters:
@@ -614,9 +628,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btccheckpoint
       operationId: EpochSubmissions
-      summary: EpochSubmissions returns all submissions for a given epoch
+      summary: EpochSubmissions
+      description: EpochSubmissions returns all submissions for a given epoch
+
   /babylon/btclightclient/v1/baseheader:
     get:
       responses:
@@ -681,9 +697,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: BaseHeader
-      summary: >-
+      summary: BaseHeader
+      description: >-
         BaseHeader returns the base BTC header of the chain. This header is
         defined
 
@@ -735,9 +752,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: Contains
-      summary: Contains checks whether a hash is maintained by the module.
+      summary: Contains
+      description: Contains checks whether a hash is maintained by the module.
+
   /babylon/btclightclient/v1/containsBytes:
     get:
       parameters:
@@ -787,9 +806,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: ContainsBytes
-      summary: |-
+      summary: ContainsBytes
+      description: |-
         ContainsBytes is a temporary method that
         checks whether a hash is maintained by the module.
         See discussion at https://github.com/babylonlabs-io/babylon/pull/132
@@ -843,9 +863,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: HeaderDepth
-      summary: >-
+      summary: HeaderDepth
+      description: >-
         HeaderDepth returns the depth of the header in main chain or error if
         the
 
@@ -986,9 +1007,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: Hashes
-      summary: Hashes retrieves the hashes maintained by the module.
+      summary: Hashes
+      description: Hashes retrieves the hashes maintained by the module.
+
   /babylon/btclightclient/v1/mainchain:
     get:
       parameters:
@@ -1146,9 +1169,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: MainChain
-      summary: MainChain returns the canonical chain
+      summary: MainChain
+      description: MainChain returns the canonical chain
+
   /babylon/btclightclient/v1/params:
     get:
       responses:
@@ -1200,9 +1225,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btclightclient
       operationId: BtcLightClientParams
-      summary: Params queries the parameters of the module.
+      summary: BtcLightClientParams
+      description: Params queries the parameters of the module.
+
   /babylon/btclightclient/v1/tip:
     get:
       responses:
@@ -1265,13 +1292,12 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - tag1
-      tagGroups:
-        - BB 
+        - btclightclient
+   
       operationId: Tip
-      summary: TEST SIDEBAR GEN TITLE
-      description: TEST SIDEBAR GEN DESCRIPTION
-      sidebar_label: TEST SIDEBAR GEN LABEL
+      summary: Tip
+      description: Tip return best header on canonical chain
+
   /babylon/btcstaking/v1/btc_delegation/{staking_tx_hash_hex}:
     get:
       parameters:
@@ -1740,9 +1766,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: BTCDelegation
-      summary: BTCDelegation retrieves delegation by corresponding staking tx hash
+      summary: BTCDelegation
+      description: BTCDelegation retrieves delegation by corresponding staking tx hash
+
   /babylon/btcstaking/v1/btc_delegations/{status}:
     get:
       parameters:
@@ -2308,9 +2336,12 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: BTCDelegations
-      summary: BTCDelegations queries all BTC delegations under a given status
+      summary: BTCDelegations
+      description: BTCDelegations queries all BTC delegations under a given status
+
+      
   /babylon/btcstaking/v1/finality_providers:
     get:
       parameters:
@@ -2775,9 +2806,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: FinalityProviders
-      summary: FinalityProviders queries all finality providers
+      summary: FinalityProviders
+      description: FinalityProviders queries all finality providers
+
   /babylon/btcstaking/v1/finality_providers/{fp_btc_pk_hex}/delegations:
     get:
       parameters:
@@ -3360,9 +3393,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: FinalityProviderDelegations
       summary: |-
+        FinalityProviderDelegations
+      description: |-
         FinalityProviderDelegations queries all BTC delegations of the given
         finality provider
   /babylon/btcstaking/v1/finality_providers/{fp_btc_pk_hex}/finality_provider:
@@ -3749,9 +3784,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: FinalityProvider
-      summary: FinalityProvider info about one finality provider
+      summary: FinalityProvider
+      description: FinalityProvider info about one finality provider
   /babylon/btcstaking/v1/largest_btc_reorg:
     get:
       responses:
@@ -4024,9 +4060,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: LargestBtcReOrg
-      summary: LargestBtcReOrg retrieves the largest BTC reorg
+      summary: LargestBtcReOrg
+      description: LargestBtcReOrg retrieves the largest BTC reorg
+
   /babylon/btcstaking/v1/params:
     get:
       responses:
@@ -4377,9 +4415,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: Params
-      summary: Parameters queries the parameters of the module.
+      summary: Params
+      description: Parameters queries the parameters of the module.
+
   /babylon/btcstaking/v1/params/btc_height/{btc_height}:
     get:
       parameters:
@@ -4743,9 +4783,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: ParamsByBTCHeight
       summary: >-
+        ParamsByBTCHeight
+      description: >-
         ParamsByBTCHeight queries the parameters of the module for a specific
         BTC
 
@@ -5107,9 +5149,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: ParamsByVersion
-      summary: >-
+      summary: ParamsByVersion
+      description: >-
         ParamsByVersion queries the parameters of the module for a specific
         version
 
@@ -5568,9 +5611,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstaking
       operationId: ParamsVersions
-      summary: ParamsVersions queries all the parameters of the module with version.
+      summary: ParamsVersions
+      description: ParamsVersions queries all the parameters of the module with version.
+
   /babylon/btcstkconsumer/v1/consumer_registry_list:
     get:
       parameters:
@@ -5923,9 +5968,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstkconsumer
       operationId: ConsumerRegistryList
-      summary: >-
+      summary: ConsumerRegistryList
+      description: >-
         ConsumerRegistryList queries the list of consumers that are registered
         to Babylon
   /babylon/btcstkconsumer/v1/consumers_registry/{consumer_ids}:
@@ -6193,9 +6239,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstkconsumer
       operationId: ConsumersRegistry
-      summary: >-
+      summary: ConsumersRegistry
+      description: >-
         ConsumersRegistry queries the latest info for a given list of consumers
         in Babylon's view
   /babylon/btcstkconsumer/v1/finality_provider/{consumer_id}/{fp_btc_pk_hex}:
@@ -6543,9 +6590,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstkconsumer
       operationId: FinalityProviderConsumer
-      summary: FinalityProvider info about one finality provider
+      summary: FinalityProviderConsumer
+      description: FinalityProvider info about one finality provider
+
   /babylon/btcstkconsumer/v1/finality_provider_consumer/{fp_btc_pk_hex}:
     get:
       parameters:
@@ -6769,9 +6818,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstkconsumer
       operationId: FinalityProviderConsumer
-      summary: FinalityProviderConsumer info about one finality provider's consumer id
+      summary: FinalityProviderConsumer
+      description: FinalityProviderConsumer info about one finality provider's consumer id
   /babylon/btcstkconsumer/v1/finality_providers/{consumer_id}:
     get:
       parameters:
@@ -7191,9 +7241,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstkconsumer
       operationId: FinalityProvidersConsumer
-      summary: FinalityProviders queries all finality providers for a given consumer
+      summary: FinalityProvidersConsumer
+      description: FinalityProviders queries all finality providers for a given consumer
   /babylon/btcstkconsumer/v1/params:
     get:
       responses:
@@ -7418,9 +7469,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - btcstkconsumer
       operationId: BtcStkConsumerParams
-      summary: Parameters queries the parameters of the module.
+      summary: BtcStkConsumerParams
+      description: Parameters queries the parameters of the module.
   /babylon/checkpointing/v1/bls_public_keys/{epoch_num}:
     get:
       parameters:
@@ -7572,12 +7624,12 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: BlsPublicKeyList
-      summary: >-
+      summary: BlsPublicKeyList
+      description: >-
         BlsPublicKeyList queries a list of bls public keys of the validators at
         a
-
         given epoch number.
   /babylon/checkpointing/v1/epochs/{epoch_num}/status:
     get:
@@ -7643,9 +7695,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: EpochStatus
-      summary: EpochStatus queries the status of the checkpoint at a given epoch
+      summary: EpochStatus
+      description: EpochStatus queries the status of the checkpoint at a given epoch
+
   /babylon/checkpointing/v1/epochs:status_count:
     get:
       parameters:
@@ -7709,9 +7763,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: RecentEpochStatusCount
-      summary: |-
+      summary: RecentEpochStatusCount
+      description: |-
         RecentEpochStatusCount queries the number of epochs with each status in
         recent epochs
   /babylon/checkpointing/v1/last_raw_checkpoint/{status}:
@@ -7800,9 +7855,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: LastCheckpointWithStatus
-      summary: >-
+      summary: LastCheckpointWithStatus
+      description: >-
         LastCheckpointWithStatus queries the last checkpoint with a given status
         or
 
@@ -7983,9 +8039,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: RawCheckpoint
-      summary: RawCheckpoint queries a checkpoints at a given epoch number.
+      summary: RawCheckpoint
+      description: RawCheckpoint queries a checkpoints at a given epoch number.
+
   /babylon/checkpointing/v1/raw_checkpoints:
     get:
       parameters:
@@ -8246,9 +8304,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: RawCheckpoints
-      summary: >-
+      summary: RawCheckpoints
+      description: >-
         RawCheckpoints queries checkpoints for a epoch range specified in
         pagination params.
   /babylon/checkpointing/v1/raw_checkpoints/{status}:
@@ -8521,9 +8580,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - checkpointing
       operationId: RawCheckpointList
-      summary: RawCheckpointList queries all checkpoints that match the given status.
+      summary: RawCheckpointList
+      description: RawCheckpointList queries all checkpoints that match the given status.
+
   /babylon/epoching/v1/current_epoch:
     get:
       responses:
@@ -8746,9 +8807,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: CurrentEpoch
-      summary: CurrentEpoch queries the current epoch
+      summary: CurrentEpoch
+      description: CurrentEpoch queries the current epoch
+
   /babylon/epoching/v1/delegation_lifecycle/{del_addr}:
     get:
       parameters:
@@ -9030,9 +9093,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: DelegationLifecycle
-      summary: DelegationLifecycle queries the lifecycle of a given delegation
+      summary: DelegationLifecycle
+      description: DelegationLifecycle queries the lifecycle of a given delegation
+
   /babylon/epoching/v1/epochs:
     get:
       parameters:
@@ -9399,9 +9464,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: EpochsInfo
-      summary: >-
+      summary: EpochsInfo 
+      description: >-
         EpochsInfo queries the metadata of epochs in a given range, depending on
 
         the parameters in the pagination request. Th main use case will be
@@ -9685,9 +9751,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: EpochInfo
-      summary: EpochInfo queries the information of a given epoch
+      summary: EpochInfo
+      description: EpochInfo queries the information of a given epoch
+
   /babylon/epoching/v1/epochs/{epoch_num}/messages:
     get:
       parameters:
@@ -10043,9 +10111,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: EpochMsgs
-      summary: EpochMsgs queries the messages of a given epoch
+      summary: EpochMsgs
+      description: EpochMsgs queries the messages of a given epoch
+
   /babylon/epoching/v1/epochs/{epoch_num}/validator_set:
     get:
       parameters:
@@ -10376,9 +10446,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: EpochValSet
       summary: EpochValSet queries the validator set of a given epoch
+      description: EpochValSet queries the validator set of a given epoch
+
   /babylon/epoching/v1/epochs:latest/messages:
     get:
       parameters:
@@ -10755,9 +10827,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: LatestEpochMsgs
-      summary: >-
+      summary: LatestEpochMsgs
+      description: >-
         LatestEpochMsgs queries the messages within a given number of most
         recent
 
@@ -10984,9 +11057,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: EpochingParams
-      summary: Params queries the parameters of the module.
+      summary: EpochingParams
+      description: Params queries the parameters of the module.
+
   /babylon/epoching/v1/validator_lifecycle/{val_addr}:
     get:
       parameters:
@@ -11224,9 +11299,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - epoching
       operationId: ValidatorLifecycle
-      summary: ValidatorLifecycle queries the lifecycle of a given validator
+      summary: ValidatorLifecycle
+      description: ValidatorLifecycle queries the lifecycle of a given validator
+
   /babylon/finality/v1/activated_height:
     get:
       responses:
@@ -11268,9 +11345,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: ActivatedHeight
-      summary: >-
+      summary: ActivatedHeight
+      description: >-
         ActivatedHeight queries the height when BTC staking protocol is
         activated, i.e., the first height when
 
@@ -11438,9 +11516,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: ListBlocks
-      summary: ListBlocks is a range query for blocks at a given status
+      summary: ListBlocks
+      description: ListBlocks is a range query for blocks at a given status
+
   /babylon/finality/v1/blocks/{height}:
     get:
       parameters:
@@ -11508,9 +11588,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: Block
-      summary: Block queries a block at a given height
+      summary: Block
+      description: Block queries a block at a given height
+
   /babylon/finality/v1/evidences:
     get:
       parameters:
@@ -11700,9 +11782,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: ListEvidences
-      summary: ListEvidences queries is a range query for evidences
+      summary: ListEvidences
+      description: ListEvidences queries is a range query for evidences
+
   /babylon/finality/v1/finality_providers/{fp_btc_pk_hex}/evidence:
     get:
       parameters:
@@ -11805,9 +11889,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: Evidence
-      summary: >-
+      summary: Evidence
+      description: >-
         Evidence queries the first evidence which can be used for extracting the
         BTC SK
   /babylon/finality/v1/finality_providers/{fp_btc_pk_hex}/power:
@@ -11871,9 +11956,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: FinalityProviderCurrentPower
-      summary: >-
+      summary: FinalityProviderCurrentPower
+      description: >-
         FinalityProviderCurrentPower queries the voting power of a finality
         provider at the current height
   /babylon/finality/v1/finality_providers/{fp_btc_pk_hex}/power/{height}:
@@ -11942,9 +12028,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: FinalityProviderPowerAtHeight
-      summary: >-
+      summary: FinalityProviderPowerAtHeight
+      description: >-
         FinalityProviderPowerAtHeight queries the voting power of a finality
         provider at a given height
   /babylon/finality/v1/finality_providers/{fp_btc_pk_hex}/pub_rand_commit_list:
@@ -12107,9 +12194,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: ListPubRandCommit
-      summary: >-
+      summary: ListPubRandCommit
+      description: >-
         ListPubRandCommit is a range query for public randomness commitments of
         a given finality provider
   /babylon/finality/v1/finality_providers/{fp_btc_pk_hex}/public_randomness_list:
@@ -12253,9 +12341,9 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: ListPublicRandomness
-      summary: >-
+      description: >-
         ListPublicRandomness is a range query for public randomness of a given
         finality provider
 
@@ -12266,6 +12354,8 @@ paths:
         finality signature
 
         at the corresponding height
+      summary: >-
+        ListPublicRandomness
   /babylon/finality/v1/finality_providers/{height}:
     get:
       parameters:
@@ -12457,9 +12547,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: ActiveFinalityProvidersAtHeight
       summary: >-
+        ActiveFinalityProvidersAtHeight
+      description: >-
         ActiveFinalityProvidersAtHeight queries finality providers with non zero
         voting power at given height.
   /babylon/finality/v1/params:
@@ -12557,9 +12649,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: FinalityParams
-      summary: Parameters queries the parameters of the module.
+      summary: FinalityParams
+      description: Parameters queries the parameters of the module.
+
   /babylon/finality/v1/signing_infos:
     get:
       parameters:
@@ -12732,9 +12826,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: SigningInfos
-      summary: >-
+      summary: SigningInfos
+      description: >-
         SigningInfos queries the signing info of all the active finality
         providers
   /babylon/finality/v1/signing_infos/{fp_btc_pk_hex}:
@@ -12820,9 +12915,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: SigningInfo
-      summary: >-
+      summary: SigningInfo
+      description: >-
         SigningInfo queries the signing info of given finality provider BTC
         public key
   /babylon/finality/v1/votes/{height}:
@@ -12881,9 +12977,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - finality
       operationId: VotesAtHeight
       summary: >-
+        VotesAtHeight
+      description: >-
         VotesAtHeight queries finality providers who have signed the block at
         given height.
   /babylon/incentive/address/{address}/reward_gauge:
@@ -12995,9 +13093,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - incentive
       operationId: RewardGauges
-      summary: RewardGauge queries the reward gauge of a given stakeholder address
+      summary: RewardGauge
+      description: RewardGauge queries the reward gauge of a given stakeholder address
+
   /babylon/incentive/btc_staking_gauge/{height}:
     get:
       parameters:
@@ -13076,9 +13176,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - incentive
       operationId: BTCStakingGauge
-      summary: BTCStakingGauge queries the BTC staking gauge of a given height
+      summary: BTCStakingGauge
+      description: BTCStakingGauge queries the BTC staking gauge of a given height
+
   /babylon/incentive/delegators/{delegator_address}/withdraw_address:
     get:
       parameters:
@@ -13131,9 +13233,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - incentive
       operationId: DelegatorWithdrawAddress
-      summary: DelegatorWithdrawAddress queries withdraw address of a delegator.
+      summary: DelegatorWithdrawAddress
+      description: DelegatorWithdrawAddress queries withdraw address of a delegator.
+
   /babylon/incentive/finality_providers/{finality_provider_address}/delegators/{delegator_address}/delegation_rewards:
     get:
       parameters:
@@ -13209,9 +13313,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - incentive
       operationId: DelegationRewards
-      summary: >-
+      summary: DelegationRewards
+      description: >-
         DelegationRewards queries the delegation rewards of given finality
         provider
 
@@ -13283,9 +13388,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - incentive
       operationId: IncentiveParams
-      summary: Parameters queries the parameters of the module.
+      summary: IncentiveParams
+      description: Parameters queries the parameters of the module.
+
   /babylon/monitor/v1/checkpoints/{ckpt_hash}:
     get:
       parameters:
@@ -13337,9 +13444,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - monitor
       operationId: ReportedCheckpointBtcHeight
-      summary: |-
+      summary: ReportedCheckpointBtcHeight
+      description: |-
         ReportedCheckpointBtcHeight returns the BTC light client height at which
         the checkpoint with the given hash is reported back to Babylon
   /babylon/monitor/v1/epochs/{epoch_num}:
@@ -13391,9 +13499,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - monitor
       operationId: EndedEpochBtcHeight
-      summary: >-
+      summary: EndedEpochBtcHeight
+      description: >-
         EndedEpochBtcHeight returns the BTC light client height at provided
         epoch
 
@@ -13788,9 +13897,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: Header
-      summary: Header queries the CZ header and fork headers at a given height.
+      summary: Header
+      description: Header queries the CZ header and fork headers at a given height.
+
   /babylon/zoneconcierge/v1/chains:
     get:
       parameters:
@@ -14104,9 +14215,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: ChainList
-      summary: ChainList queries the list of chains that checkpoint to Babylon
+      summary: ChainList
+      description: ChainList queries the list of chains that checkpoint to Babylon
+
   /babylon/zoneconcierge/v1/chains_info:
     get:
       parameters:
@@ -14520,9 +14633,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: ChainsInfo
       summary: >-
+        ChainsInfo
+      description: >-
         ChainsInfo queries the latest info for a given list of chains in
         Babylon's view
   /babylon/zoneconcierge/v1/epoch_chains_info:
@@ -14947,9 +15062,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: EpochChainsInfo
-      summary: |-
+      summary: EpochChainsInfo
+      description: |-
         EpochChainsInfo queries the latest info for a list of chains
         in a given epoch in Babylon's view
   /babylon/zoneconcierge/v1/finalized_chain_info/{consumer_id}/height/{height}:
@@ -15697,9 +15813,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: FinalizedChainInfoUntilHeight
-      summary: >-
+      summary: FinalizedChainInfoUntilHeight
+      description: >-
         FinalizedChainInfoUntilHeight queries the BTC-finalised info no later
         than
 
@@ -16459,9 +16576,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: FinalizedChainsInfo
-      summary: >-
+      summary: FinalizedChainsInfo
+      description: >-
         FinalizedChainsInfo queries the BTC-finalised info of chains with given
         IDs, with proofs
   /babylon/zoneconcierge/v1/headers/{consumer_id}:
@@ -16843,9 +16961,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: ListHeaders
-      summary: |-
+      summary: ListHeaders
+      description: |-
         ListHeaders queries the headers of a chain in Babylon's view, with
         pagination support
   /babylon/zoneconcierge/v1/headers/{consumer_id}/epochs/{epoch_num}:
@@ -17140,11 +17259,12 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: ListEpochHeaders
-      summary: |-
+      description: |-
         ListEpochHeaders queries the headers of a chain timestamped in a given
         epoch of Babylon, with pagination support
+      summary: ListEpochHeaders
   /babylon/zoneconcierge/v1/params:
     get:
       responses:
@@ -17369,9 +17489,10 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - zoneconcierge
       operationId: ZoneConciergeParams
-      summary: Params queries the parameters of the module.
+      summary: ZoneConciergeParams
+      description: Params queries the parameters of the module.
   /cosmos/mint/v1beta1/annual_provisions:
     get:
       responses:
@@ -17414,9 +17535,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - mint
       operationId: AnnualProvisions
-      summary: AnnualProvisions returns the current annual provisions.
+      summary: AnnualProvisions
+      description: AnnualProvisions returns the current annual provisions.
+
   /cosmos/mint/v1beta1/genesis_time:
     get:
       responses:
@@ -17463,9 +17586,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - mint
       operationId: GenesisTime
-      summary: GenesisTime returns the genesis time.
+      summary: GenesisTime
+      description: GenesisTime returns the genesis time.
+
   /cosmos/mint/v1beta1/inflation_rate:
     get:
       responses:
@@ -17510,9 +17635,11 @@ paths:
                 type: object
           description: An unexpected error response.
       tags:
-        - Babylon
+        - mint
       operationId: InflationRate
-      summary: InflationRate returns the current inflation rate.
+      summary: InflationRate
+      description: InflationRate returns the current inflation rate.
+
   /broadcast_tx_sync:
     get:
       summary: >-

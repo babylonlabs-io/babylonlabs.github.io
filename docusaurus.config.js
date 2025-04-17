@@ -46,7 +46,7 @@ const openapiPlugins = [
           specPath: 'static/swagger/babylon-merged-rpc-openapi3.yaml',
           outputDir: 'docs/api/babylon-gRPC',
           sidebarOptions: {
-            groupPathsBy: 'tagGroup',
+            groupPathsBy: 'tag',
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,
