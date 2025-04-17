@@ -17654,13 +17654,13 @@ paths:
 
   /broadcast_tx_sync:
     get:
-      summary: >-
-        Returns with the response from CheckTx. Does not wait for DeliverTx
-        result.
+      summary: broadcast_tx_sync
       tags:
         - CometBFT
       operationId: broadcast_tx_sync
       description: >
+        Returns with the response from CheckTx. Does not wait for DeliverTx
+        result.
         If you want to be sure that the transaction is included in a block, you
         can
 
@@ -18586,7 +18586,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /block_search:
     get:
-      summary: Search for blocks by FinalizeBlock events
+      summary: block_search
       description: |
         Search for blocks by FinalizeBlock events.
 
