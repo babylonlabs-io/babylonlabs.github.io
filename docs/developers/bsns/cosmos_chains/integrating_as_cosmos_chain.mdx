@@ -1,7 +1,7 @@
 ---
 title: Integrating as a Cosmos Chain
 sidebar_label: Integrating as a Cosmos Chain
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Integrating as a Cosmos Chain
@@ -135,7 +135,7 @@ If you want to follow these instructions to the letter, you can use the docker i
 1. Start the integration deployment setup
 
 ```bash
-$ git clone [https://github.com/babylonlabs-io/babylon-sdk.git](https://github.com/babylonlabs-io/babylon-integration-deployment.git)
+$ git clone https://github.com/babylonlabs-io/babylon-integration-deployment.git
 $ cd babylon-sdk
 $ make build-bcd
 $ docker run babylonlabs-io/local-bcd
@@ -172,8 +172,8 @@ $ . ./env_bsn.sh
 3. Upload the contracts to the BSN.
 
 ```bash
-<bsn_binary> tx wasm store <path_to_babylon_contract.wasm>
-<bsn_binary> tx wasm store <path_to_btc_staking.wasm>
+bcd tx wasm store <path_to_babylon_contract.wasm>
+bcd tx wasm store <path_to_btc_staking.wasm>
 ```
 
 In the `bcd` example:
@@ -185,13 +185,7 @@ $ bcd tx wasm store "$testData/btc_finality.wasm" $keyringBackend --from $key --
 ```
 
 The BSN will return the contract code IDs for them.
-In the `bcd` example, you can use
-
-```bash
-$ bcd query wasm list-code
-```
-
-to get the latest code IDs.
+In the `bcd` example, you can use `$ bcd query wasm list-code` to get the latest code IDs.
 
 Then, you can instantiate the Babylon contract via the following (in the `bcd` example):
 
@@ -230,13 +224,7 @@ $ bcd --home $CHAINDIR/$CHAINID tx babylon instantiate-babylon-contracts \
     --ibc-transfer-channel-id=channel-0
 ```
 
-You can then run
-
-```bash
-$ bcd query babylon params
-```
-
-to get the code IDs and addresses of the Babylon contracts.
+You can then run `$ bcd query babylon params` to get the code IDs and addresses of the Babylon contracts.
 
 Once instantiated, the Babylon contract will reserve the `wasm.<babylon_contract_address>` IBC port.
 

@@ -1,7 +1,7 @@
 ---
 title: Running a Finality Provider for a Cosmos Chain
 sidebar_label: Running a Finality Provider
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Running a Finality Provider for a Cosmos Chain
@@ -230,16 +230,16 @@ SignModeStr = direct
 Key = BSN-fp
 
 ; chain id of the chain to connect to
-ChainID = <BSN_id>
+ChainID = <bsn_chain_id>
 
 ; address of the rpc server to connect to
-RPCAddr = <BSN_system_rpc_addr>
+RPCAddr = <bsn_system_rpc_addr>
 
 ; address of the grpc server to connect to
-GRPCAddr = <BSN_system_grpc_addr>
+GRPCAddr = <bsn_system_grpc_addr>
 
 ; account prefix to use for addresses
-AccountPrefix = <BSN_system_account_prefix>
+AccountPrefix = <bsn_system_account_prefix>
 
 ; type of keyring to use
 KeyringBackend = test
@@ -272,7 +272,7 @@ BtcStakingContractAddress = "bbnc1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt
 BtcFinalityContractAddress = "bbnc17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgssg3nft"
 ```
 
-Adjust this configuration according to your setup, particularly changing the placeholder values (like `<BSN_id>`, `<BSN_system_rpc_addr>`, etc.) to match your specific BSN configuration.
+Adjust this configuration according to your setup, particularly changing the placeholder values (like `<bsn_chain_id>`, `<bsn_system_rpc_addr>`, etc.) to match your specific BSN configuration.
 
 ## Creating and Registering a Finality Provider
 
