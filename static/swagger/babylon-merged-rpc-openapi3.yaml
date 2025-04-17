@@ -13,19 +13,19 @@ tags:
   - name: btclightclient
     description: BTC Light Client module queries and Txs
   - name: btcstaking
-    description: BTC Checkpoint module queries and Txs
+    description: Manages BTC staking, finality providers, and delegations.
   - name: btcstkconsumer
-    description: BTC Light Client module queries and Txs
+    description: Manages consumer chain registration and interaction with BTC-staked finality providers.
   - name: checkpointing
-    description: BTC Light Client module queries and Txs
+    description: Handles the creation, signing, and status tracking of Babylon checkpoints submitted to Bitcoin.
   - name: epoching
-    description: BTC Light Client module queries and Txs
+    description: Manages Babylon's epoch lifecycle, validator sets per epoch, and related messages.
   - name: finalityprovider
-    description: BTC Light Client module queries and Txs
+    description: Queries specifically related to finality provider registration and status.
   - name: incentive
-    description: BTC Light Client module queries and Txs
+    description: Manages reward calculation and distribution for staking participants.
   - name: mint
-    description: BTC Light Client module queries and Txs
+    description: Queries related to token inflation and minting parameters.
 
 info:
   title: Babylon gRPC API Docs
@@ -67,8 +67,13 @@ info:
 
     JSONRPC requests can be POST'd to the root RPC endpoint via HTTP.
 
-    `curl --header "Content-Type: application/json" --request POST --data
-    '{"method": "block", "params": ["5"], "id": 1}' localhost:26657`
+    ```bash
+
+    curl --header "Content-Type: application/json" \
+        --request POST \
+        --data '{"method": "block", "params": ["5"], "id": 1}' \
+        localhost:26657
+    ```
 
 
     **JSONRPC/websockets**
@@ -87,10 +92,17 @@ info:
 
     with the following command:
 
+    ```bash
 
-    `echo '{ "jsonrpc": "2.0","method": "subscribe","id": 0,"params": {"query":
-    "tm.event='"'NewBlock'"'"} }' | websocat -n -t
-    ws://127.0.0.1:26657/websocket`
+    echo '{ \
+      "jsonrpc": "2.0", \
+      "method": "subscribe", \
+      "id": 0, \
+      "params": {"query": "tm.event='"'NewBlock'"'"} \
+    }' | websocat -n -t ws://127.0.0.1:26657/websocket  
+
+    ```
+ 
 servers:
   - url: http://localhost:9090
     description: Run Babylon gRPC Gateway locally with default port 9090.
@@ -17704,12 +17716,13 @@ paths:
   /broadcast_tx_async:
     get:
       summary: >-
-        Returns right away, with no response. Does not wait for CheckTx nor
-        DeliverTx results.
+        broadcast_tx_async
       tags:
         - CometBFT
       operationId: broadcast_tx_async
       description: >
+        Returns right away, with no response. Does not wait for CheckTx nor
+        DeliverTx results.
         If you want to be sure that the transaction is included in a block, you
         can
 
@@ -17765,11 +17778,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /broadcast_tx_commit:
     get:
-      summary: Returns with the responses from CheckTx and DeliverTx.
+      summary: broadcast_tx_commit
       tags:
         - CometBFT
       operationId: broadcast_tx_commit
       description: >
+        Returns with the responses from CheckTx and DeliverTx.
         IMPORTANT: use only for testing and development. In production, use
 
         BroadcastTxSync or BroadcastTxAsync. You can subscribe for the
@@ -17818,11 +17832,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /check_tx:
     get:
-      summary: Checks the transaction without executing it.
+      summary: check_tx
       tags:
         - CometBFT
       operationId: check_tx
       description: >
+        Checks the transaction without executing it.
         The transaction won't be added to the mempool.
 
 
@@ -17858,7 +17873,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /health:
     get:
-      summary: Node heartbeat
+      summary: health
       tags:
         - CometBFT
       operationId: health
@@ -17880,12 +17895,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /status:
     get:
-      summary: Node Status
+      summary: status
       operationId: status
       tags:
         - CometBFT
       description: >
-        Get CometBFT status including node info, pubkey, latest block hash, app
+        Get CometBFT node status including node info, pubkey, latest block hash, app
         hash, block height and time.
       responses:
         '200':
@@ -17902,12 +17917,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /net_info:
     get:
-      summary: Network information
+      summary: net_info
       operationId: net_info
       tags:
         - CometBFT
       description: |
-        Get network info.
+        Get network information.
       responses:
         '200':
           description: empty answer
@@ -17923,7 +17938,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /dial_seeds:
     get:
-      summary: Dial Seeds (Unsafe)
+      summary: dial_seeds (unsafe)
       operationId: dial_seeds
       tags:
         - CometBFT
@@ -17956,11 +17971,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /dial_peers:
     get:
-      summary: Add Peers/Persistent Peers (unsafe)
+      summary: dial_peers (unsafe)
       operationId: dial_peers
       tags:
         - CometBFT
       description: >
+        Add Peers/Persistent Peers.
         Set a persistent peer, this route in under unsafe, and has to manually
         enabled to use.
 
@@ -18009,7 +18025,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /blockchain:
     get:
-      summary: 'Get block headers (max: 20) for minHeight <= height <= maxHeight.'
+      summary: blockchain
       operationId: blockchain
       parameters:
         - in: query
@@ -18027,7 +18043,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get block headers for minHeight <= height <= maxHeight.
+        Get block headers (max: 20) for minHeight <= height <= maxHeight.
 
         At most 20 items will be returned.
 
@@ -18048,7 +18064,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /header:
     get:
-      summary: Get header at a specified height
+      summary: header
       operationId: header
       parameters:
         - in: query
@@ -18063,7 +18079,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get Header.
+        Get Header at a specified height.
 
         If the `height` field is set to a non-default value, upon success, the
         `Cache-Control` header will be set with the default maximum age.
@@ -18082,7 +18098,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /header_by_hash:
     get:
-      summary: Get header by hash
+      summary: header_by_hash
       operationId: header_by_hash
       parameters:
         - in: query
@@ -18114,7 +18130,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /block:
     get:
-      summary: Get block at a specified height
+      summary: block
       operationId: block
       parameters:
         - in: query
@@ -18129,7 +18145,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get Block.
+        Get block at a specified height.
 
         If the `height` field is set to a non-default value, upon success, the
         `Cache-Control` header will be set with the default maximum age.
@@ -18148,7 +18164,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /block_by_hash:
     get:
-      summary: Get block by hash
+      summary: block_by_hash
       operationId: block_by_hash
       parameters:
         - in: query
@@ -18180,7 +18196,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /block_results:
     get:
-      summary: Get block results at a specified height
+      summary: block_results
       operationId: block_results
       parameters:
         - in: query
@@ -18195,7 +18211,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get block_results.
+       Get block results at a specified height.
 
         If the `height` field is set to a non-default value, upon success, the
         `Cache-Control` header will be set with the default maximum age.
@@ -18214,7 +18230,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /commit:
     get:
-      summary: Get commit results at a specified height
+      summary: commit
       operationId: commit
       parameters:
         - in: query
@@ -18229,7 +18245,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get Commit.
+        Get commit results at a specified height.
 
         If the `height` field is set to a non-default value, upon success, the
         `Cache-Control` header will be set with the default maximum age.
@@ -18254,7 +18270,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /validators:
     get:
-      summary: Get validator set at a specified height
+      summary: validators
       operationId: validators
       parameters:
         - in: query
@@ -18285,7 +18301,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get Validators. Validators are sorted first by voting power
+        Get validator set at a specified height. Validators are sorted first by voting power
         (descending), then by address (ascending).
 
         If the `height` field is set to a non-default value, upon success, the
@@ -18305,7 +18321,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /genesis:
     get:
-      summary: Get Genesis
+      summary: genesis
       operationId: genesis
       tags:
         - CometBFT
@@ -18329,7 +18345,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /genesis_chunked:
     get:
-      summary: Get Genesis in multiple chunks
+      summary: genesis_chunked
       operationId: genesis_chunked
       tags:
         - CometBFT
@@ -18364,7 +18380,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /dump_consensus_state:
     get:
-      summary: Get consensus state
+      summary: dump_consensus_state
       operationId: dump_consensus_state
       tags:
         - CometBFT
@@ -18395,7 +18411,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /consensus_state:
     get:
-      summary: Get consensus state
+      summary: consensus_state
       operationId: consensus_state
       tags:
         - CometBFT
@@ -18420,7 +18436,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /consensus_params:
     get:
-      summary: Get consensus parameters
+      summary: consensus_params
       operationId: consensus_params
       parameters:
         - in: query
@@ -18454,7 +18470,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /unconfirmed_txs:
     get:
-      summary: Get the list of unconfirmed transactions
+      summary: unconfirmed_txs
       operationId: unconfirmed_txs
       parameters:
         - in: query
@@ -18468,7 +18484,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get list of unconfirmed transactions
+        Get the list of unconfirmed transactions
       responses:
         '200':
           description: List of unconfirmed transactions
@@ -18484,7 +18500,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /num_unconfirmed_txs:
     get:
-      summary: Get data about unconfirmed transactions
+      summary: num_unconfirmed_txs
       operationId: num_unconfirmed_txs
       tags:
         - CometBFT
@@ -18505,7 +18521,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /tx_search:
     get:
-      summary: Search for transactions
+      summary: tx_search
       description: |
         Search for transactions w/ their results.
 
@@ -18627,7 +18643,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /tx:
     get:
-      summary: Get transactions by hash
+      summary: tx
       operationId: tx
       parameters:
         - in: query
@@ -18648,7 +18664,7 @@ paths:
       tags:
         - CometBFT
       description: |
-        Get a transaction
+        Get a transaction by hash
 
         Upon success, the `Cache-Control` header will be set with the default
         maximum age.
@@ -18667,7 +18683,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /abci_info:
     get:
-      summary: Get info about the application.
+      summary: abci_info
       operationId: abci_info
       tags:
         - CometBFT
@@ -18691,7 +18707,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /abci_query:
     get:
-      summary: Query the application for some information.
+      summary: abci_query
       operationId: abci_query
       parameters:
         - in: query
@@ -18743,7 +18759,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /broadcast_evidence:
     get:
-      summary: Broadcast evidence of the misbehavior.
+      summary: broadcast_evidence
       operationId: broadcast_evidence
       parameters:
         - in: query
