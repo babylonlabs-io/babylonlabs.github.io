@@ -573,7 +573,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/babylon-gRPC/broadcast-tx-sync",
-          label: "Returns with the response from CheckTx. Does not wait for DeliverTx result.",
+          label: "broadcast_tx_sync",
           className: "api-method get",
         },
         {
@@ -723,7 +723,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/babylon-gRPC/block-search",
-          label: "Search for blocks by FinalizeBlock events",
+          label: "block_search",
           className: "api-method get",
         },
         {
