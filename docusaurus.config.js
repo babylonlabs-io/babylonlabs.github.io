@@ -147,7 +147,7 @@ const config = {
   ],
 
   themeConfig:
-  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: '/logo/babylon.svg',
       colorMode: {
@@ -266,7 +266,7 @@ const config = {
       algolia: {
         appId: process.env.ALGOLIA_APP_ID,
         apiKey: process.env.ALGOLIA_API_KEY_READONLY,
-        indexName:  ALGOLIA_INDEX_NAME,
+        indexName: ALGOLIA_INDEX_NAME,
         contextualSearch: true,
         searchParameters: {},
         contextualSearchFilters: [],
