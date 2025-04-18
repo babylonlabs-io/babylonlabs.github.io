@@ -13,14 +13,15 @@ To set up the Bitcoin node:
 Download and Extract:
 ```shell
 # Download Bitcoin Core binary
-wget https://bitcoincore.org/bin/bitcoin - core - 26.0/bitcoin - 26.0 - x86_64 - linux - gnu.tar.gz
+wget https://bitcoincore.org/bin/bitcoin-core-26.0/bitcoin-26.0-x86_64-linux-gnu.tar.gz
 
 # Extract the downloaded archive
-tar -xvf bitcoin - 26.0 - x86_64 - linux - gnu.tar.gz
+tar -xvf bitcoin-26.0-x86_64-linux-gnu.tar.gz
 
 # Provide execution permissions to binaries
-chmod +x bitcoin - 26.0/bin/bitcoind
-chmod +x bitcoin - 26.0/bin/bitcoin - cli
+chmod +x bitcoin-26.0/bin/bitcoind
+chmod +x bitcoin-26.0/bin/bitcoin-cli
+
 ```
 Create and Start Systemd Service: Update the following configurations in the provided file. Replace ```your_rpc_username``` and ```your_rpc_password``` with your own values. Set ```user``` to the machine user (e.g., ubuntu). Note that deprecatedrpc = create_bdb is necessary for creating a legacy wallet. You can add rpcallowip = 0.000.0/0 and rpcbind = 0.000.0 to enable remote connections and start bitcoind with -txindex option.
 ```shell
@@ -33,7 +34,7 @@ After=network.target
 [Service]
 User=<user>
 Type=simple
-ExecStart=/home/ubuntu/bitcoin - 26.0/bin/bitcoind \
+ExecStart=/home/ubuntu/bitcoin-26.0/bin/bitcoind \
     -deprecatedrpc=create_bdb \
     -mainnet \
     -server \
@@ -45,10 +46,10 @@ Restart=on - failure
 LimitNOFILE=65535
 
 [Install]
-WantedBy=multi - user.target
+WantedBy=multi-user.target
 EOF
 # Start the service
-sudo systemctl daemon - reload
+sudo systemctl daemon-reload
 sudo systemctl enable bitcoind
 sudo systemctl start bitcoind
 # Check the status and logs of the service
@@ -57,7 +58,7 @@ journalctl -u bitcoind -f
 ```
 Create Legacy Wallet:
 ```shell
-~/bitcoin - 26.0/bin/bitcoin - cli - mainnet \
+~/bitcoin-26.0/bin/bitcoin-cli -mainnet \
     -rpcuser=<your_rpc_username> \
     -rpcpassword=<your_rpc_password> \
     -rpcport=8332 \
@@ -69,7 +70,7 @@ Create Legacy Wallet:
 ```
 Load Wallet:
 ```shell
-~/bitcoin - 26.0/bin/bitcoin - cli - mainnet \
+~/bitcoin-26.0/bin/bitcoin-cli -mainnet \
     -rpcuser=<your_rpc_username> \
     -rpcpassword=<your_rpc_password> \
     -rpcport=8332 \
@@ -79,13 +80,13 @@ BTC Staker Installation
 This project requires Go version 1.21 or later. Install Go by following the official Go installation guide.
 Install essential tools:
 ```shell
-sudo apt install build - essential
+sudo apt install build-essential
 ```
 Download the code:
 ```shell
-git clone https://github.com/babylonlabs - io/btc - staker.git
-cd btc - staker
-git checkout <release - tag>
+git clone https://github.com/babylonlabs-io/btc-staker.git
+cd btc-staker
+git checkout <release-tag>
 ```
 Build and install the binary:
 ```shell
@@ -101,16 +102,17 @@ The stakerd daemon requires a keyring with loaded Babylon tokens to pay for tran
 BTC Staker Setup
 Staker Daemon Configuration: Initialize the home directory and dump the default configuration file:
 ```shell
-stakercli admin dump - config --config - file - dir /path/to/stakerd - home/
+stakercli admin dump-config --config-file-dir /path/to/stakerd-home/
+```
 Important Configuration Parameters:
 Babylon Configuration:
-<plaintext>
+```plaintext
 [babylon]
 # Name of the key in the keyring to use for signing transactions
-Key = btc - staker
+Key = btc-staker
 
 # Chain id of the chain (Babylon)
-ChainID = bbn - main
+ChainID = bbn-1
 
 # Address of the chain's RPC server (Babylon)
 RPCAddr = http://localhost:26657
@@ -119,10 +121,10 @@ RPCAddr = http://localhost:26657
 GRPCAddr = https://localhost:9090
 
 # Directory to store staker keys in
-KeyDirectory = /path/to/stakerd - home/
-</plaintext>
+KeyDirectory = /path/to/stakerd-home/
+```
 BTC Node Configuration:
-<plaintext>
+```plaintext
 [chain]
 # btc network to run on
 Network = mainnet
@@ -136,9 +138,9 @@ WalletType = bitcoind
 
 # fee mode to use for fee estimation {static, dynamic}. In dynamic mode fee will be estimated using backend node
 FeeMode = static
-</plaintext>
+```
 BTC Wallet Configuration:
-<plaintext>
+```plaintext
 [walletconfig]
 # name of the wallet to sign Bitcoin transactions.
 # this should be the same as set in createwallet command in bitcoind.
@@ -162,9 +164,9 @@ Pass = your_rpc_password
 
 # disables tls for the wallet rpc client
 DisableTls = true
-</plaintext>
+```
 BTC Node Type Specific Configuration:
-<plaintext>
+```plaintext
 [bitcoind]
 # The daemon's rpc listening address
 # note: P2P port for mainnet is 8332/8333
@@ -182,9 +184,9 @@ ZMQPubRawBlock = tcp://127.0.0.1:29001
 
 # The address listening for ZMQ connections to deliver raw transaction notifications
 ZMQPubRawTx = tcp://127.0.0.1:29002
-</plaintext>
+```
 Metrics Configuration:
-<plaintext>
+```plaintext
 [metricsconfig]
 # if it should be enabled.
 Enabled = false
@@ -194,11 +196,10 @@ Host = 127.0.0.1
 
 # port of prometheus server.
 ServerPort = 2112
-</plaintext>
-BTC Staker Environment Configuration:
-```shell
-Create a .env file in the same directory as the binaries with BTCSTAKER_USERNAME and BTCSTAKER_PASSWORD for secure communication between the Staker Daemon and stakercli.
 ```
+BTC Staker Environment Configuration:
+Create a .env file in the same directory as the binaries with BTCSTAKER_USERNAME and BTCSTAKER_PASSWORD for secure communication between the Staker Daemon and stakercli.
+
 ## 2. Unbonding BTC Stakes
 The unbond command initiates the unbonding procedure, which involves communication with the Babylon chain, Covenant Emulators, and the Bitcoin blockchain. It builds the unbonding transaction, sends it to the Babylon Genesis chain, waits for signatures from the Covenant Emulators, and then sends the transaction to the Bitcoin blockchain.
 
@@ -211,7 +212,7 @@ stakercli daemon unbond \
 Replace `your_staking_transaction_hash` with the actual transaction hash you received when you staked your Bitcoin. For example:
 ```shell
 stakercli daemon unbond \
-  --staking - transaction - hash 6bf442a2e864172cba73f642ced10c178f6b19097abde41608035fb26a601b10
+  --staking -transaction -hash 6bf442a2e864172cba73f642ced10c178f6b19097abde41608035fb26a601b10
 ```
 
 ## 3. Additional Functionality
@@ -219,7 +220,7 @@ stakercli daemon unbond \
 ### List Staking Transactions
 You can use the following command to get the list of all staking transactions in the database:
 ```shell
-stakercli daemon list - staking - transactions
+stakercli daemon list -staking -transactions
 ```
 ### Minimum Unbonding Time
 There is a minimum unbonding time currently set to 1008 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the Bitcoin blocks in the `bitcoind` systemd logs using `journalctl -u bitcoind -f` or by comparing the latest block in your node with a BTC explorer like `https://mempool.space/mainnet`.
@@ -228,10 +229,10 @@ There is a minimum unbonding time currently set to 1008 BTC blocks. After this p
 Gas - related Errors
 If you encounter gas - related errors during the unbonding operation, consider adjusting the `GasAdjustment` and `GasPrices` parameters in the `stakerd.conf` file. For example:
 
-<plaintext>
+```plaintext
 GasAdjustment = 1.5
 GasPrices = 0.002ubbn
-</plaintext>
+```
 
 ### Communication Issues
 Ensure all configuration settings in the `stakerd.conf` file are correct, including RPC and GRPC addresses, wallet credentials, and network settings.
@@ -241,16 +242,16 @@ The staker can withdraw the staked funds after the timelock of the staking or un
 
 ```shell
 stakercli daemon unstake \
-  --staking - transaction - hash `your_staking_transaction_hash`
+  --staking -transaction -hash `your_staking_transaction_hash`
 ```
 Replace `your_staking_transaction_hash` with the actual transaction hash. For example:
 ```shell
 stakercli daemon unstake \
-  --staking - transaction - hash 6bf442a2e864172cba73f642ced10c178f6b19097abde41608035fb26a601b10
+  --staking -transaction -hash 6bf442a2e864172cba73f642ced10c178f6b19097abde41608035fb26a601b10
 ```
 Note: You can also use this command to get the list of all withdrawable staking transactions in the database.
 ```shell
-stakercli daemon withdrawable - transactions
+stakercli daemon withdrawable -transactions
 ```
 
 To unstake, you need to wait for your staking/unbonding transaction to be deep enough in the Bitcoin blockchain so that the timelock expires.
