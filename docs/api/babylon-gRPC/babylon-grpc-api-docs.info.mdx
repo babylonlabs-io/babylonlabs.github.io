@@ -48,7 +48,12 @@ A REST like interface. `curl localhost:26657/block?height=5`
 
 **JSONRPC/HTTP**
 JSONRPC requests can be POST'd to the root RPC endpoint via HTTP.
-`curl --header "Content-Type: application/json" --request POST --data '{"method": "block", "params": ["5"], "id": 1}' localhost:26657`
+```bash
+curl --header "Content-Type: application/json" \
+    --request POST \
+    --data '{"method": "block", "params": ["5"], "id": 1}' \
+    localhost:26657
+```
 
 **JSONRPC/websockets**
 JSONRPC requests can be also made via websocket.
@@ -58,8 +63,14 @@ only available via websockets.
 
 For example using the [websocat](https://github.com/vi/websocat) tool, you can subscribe for 'NewBlock' events
 with the following command:
-
-`echo '{ "jsonrpc": "2.0","method": "subscribe","id": 0,"params": {"query": "tm.event='"'NewBlock'"'"} }' | websocat -n -t ws://127.0.0.1:26657/websocket`
+```bash
+echo '{ \
+  "jsonrpc": "2.0", \
+  "method": "subscribe", \
+  "id": 0, \
+  "params": {"query": "tm.event='"'NewBlock'"'"} \
+}' | websocat -n -t ws://127.0.0.1:26657/websocket  
+```
 
 
 
