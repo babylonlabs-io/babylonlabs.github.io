@@ -21,6 +21,7 @@ tar -xvf bitcoin-26.0-x86_64-linux-gnu.tar.gz
 # Provide execution permissions to binaries
 chmod +x bitcoin-26.0/bin/bitcoind
 chmod +x bitcoin-26.0/bin/bitcoin-cli
+
 ```
 Create and Start Systemd Service: Update the following configurations in the provided file. Replace ```your_rpc_username``` and ```your_rpc_password``` with your own values. Set ```user``` to the machine user (e.g., ubuntu). Note that deprecatedrpc = create_bdb is necessary for creating a legacy wallet. You can add rpcallowip = 0.000.0/0 and rpcbind = 0.000.0 to enable remote connections and start bitcoind with -txindex option.
 ```shell
@@ -197,7 +198,6 @@ Host = 127.0.0.1
 ServerPort = 2112
 ```
 BTC Staker Environment Configuration:
-
 Create a .env file in the same directory as the binaries with BTCSTAKER_USERNAME and BTCSTAKER_PASSWORD for secure communication between the Staker Daemon and stakercli.
 
 ## 2. Unbonding BTC Stakes
