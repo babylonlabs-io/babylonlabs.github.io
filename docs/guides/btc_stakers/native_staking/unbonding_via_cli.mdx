@@ -6,8 +6,10 @@ sidebar_position: 5
 # Unbond via CLI
 ## 1. Prerequisites
 Bitcoin Node Setup
-You need to have a running Bitcoin node. It is recommended to use bitcoind. You should also have a legacy wallet loaded with mainnet Bitcoins. The node must be on the same network as the Babylon node; for the Babylon mainnet, the BTC mainnet is used. You can configure the stakerd daemon to connect to either bitcoind or btcd node types, but bitcoind is preferred.
+You need to have a running Bitcoin node `bitcoind`. You should also have a legacy wallet loaded on Bitcoin mainnet. Babylond will also need to be on the same network. You can configure the stakerd daemon to connect to either `bitcoind` or `btcd` node types, but `bitcoind` is preferred.
+
 To set up the Bitcoin node:
+
 Download and Extract:
 ```shell
 # Download Bitcoin Core binary
@@ -197,37 +199,46 @@ BTC Staker Environment Configuration:
 ```shell
 Create a .env file in the same directory as the binaries with BTCSTAKER_USERNAME and BTCSTAKER_PASSWORD for secure communication between the Staker Daemon and stakercli.
 ```
-## 2. Unbonding Staked Funds
-The unbond command initiates the unbonding process, which involves communication with the Babylon chain, Covenant emulators, and the BTC chain. It builds the unbonding transaction, sends it to the Babylon chain, waits for signatures from the covenant emulators, and then sends the transaction to the BTC chain.
-To use the unbond command, you need the --staking - transaction - hash, which is the transaction hash from the response of the stake command.
+## 2. Unbonding BTC Stakes
+The unbond command initiates the unbonding procedure, which involves communication with the Babylon chain, Covenant Emulators, and the Bitcoin blockchain. It builds the unbonding transaction, sends it to the Babylon Genesis chain, waits for signatures from the Covenant Emulators, and then sends the transaction to the Bitcoin blockchain.
+
+To use the unbond command, you need the `--staking-transaction-hash`, which is the transaction hash from the response of the stake command.
+
 ```shell
 stakercli daemon unbond \
-  --staking - transaction - hash `your_staking_transaction_hash`
+  --staking-transaction-hash `your_staking_transaction_hash`
 ```
 Replace `your_staking_transaction_hash` with the actual transaction hash you received when you staked your Bitcoin. For example:
 ```shell
 stakercli daemon unbond \
   --staking - transaction - hash 6bf442a2e864172cba73f642ced10c178f6b19097abde41608035fb26a601b10
 ```
+
 ## 3. Additional Functionality
-List Staking Transactions
+
+### List Staking Transactions
 You can use the following command to get the list of all staking transactions in the database:
 ```shell
 stakercli daemon list - staking - transactions
 ```
-## 4. Minimum Unbonding Time
-There is a minimum unbonding time currently set to 1008 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the BTC blocks in the bitcoind systemd logs using journalctl -u bitcoind -f or by comparing the latest block in your node with a BTC explorer like https://mempool.space/mainnet.
+### Minimum Unbonding Time
+There is a minimum unbonding time currently set to 1008 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the Bitcoin blocks in the `bitcoind` systemd logs using `journalctl -u bitcoind -f` or by comparing the latest block in your node with a BTC explorer like `https://mempool.space/mainnet`.
+
 ## 5. Troubleshooting
 Gas - related Errors
-If you encounter gas - related errors during the unbonding operation, consider adjusting the GasAdjustment and GasPrices parameters in the stakerd.conf file. For example:
+If you encounter gas - related errors during the unbonding operation, consider adjusting the `GasAdjustment` and `GasPrices` parameters in the `stakerd.conf` file. For example:
+
 <plaintext>
 GasAdjustment = 1.5
 GasPrices = 0.002ubbn
 </plaintext>
-Communication Issues
-Ensure all configuration settings in the stakerd.conf file are correct, including RPC and GRPC addresses, wallet credentials, and network settings.
-Withdraw staked funds
-The staker can withdraw the staked funds after the timelock of the staking or unbonding transaction expires. Use the --staking - transaction - hash from the response of the stake command.
+
+### Communication Issues
+Ensure all configuration settings in the `stakerd.conf` file are correct, including RPC and GRPC addresses, wallet credentials, and network settings.
+
+### Withdraw staked BTC
+The staker can withdraw the staked funds after the timelock of the staking or unbonding transaction expires. Use the `--staking-transaction-hash` from the response of the stake command.
+
 ```shell
 stakercli daemon unstake \
   --staking - transaction - hash `your_staking_transaction_hash`
@@ -241,10 +252,13 @@ Note: You can also use this command to get the list of all withdrawable staking 
 ```shell
 stakercli daemon withdrawable - transactions
 ```
-To unstake, you need to wait for your staking/unbonding transaction to be deep enough in the BTC blockchain so that the timelock expires.
 
-## Note
+To unstake, you need to wait for your staking/unbonding transaction to be deep enough in the Bitcoin blockchain so that the timelock expires.
+
+:::note
 Unbonding before completing the 100 - day period will make you ineligible for the bonus airdrop. Make sure to carefully consider your decision to unbond, especially if you are aiming to receive the bonus airdrop as part of your staking rewards.
+:::
 
-## Additional Precautions
+## Getting Help
+
 If you encounter any issues and the unbonding fails, please contact our [Babylon Discord](https://discord.com/channels/1046686458070700112/1257918935848849460) for support.
