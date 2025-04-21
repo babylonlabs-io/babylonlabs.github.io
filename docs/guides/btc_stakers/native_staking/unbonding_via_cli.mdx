@@ -4,7 +4,215 @@ sidebar_label: Unbonding via CLI
 sidebar_position: 5
 ---
 # Unbond via CLI
-## 1. Prerequisites
+## Phase 1 Unbonding
+### Prerequisites
+- Environment Setup
+
+    - Go Installation: Ensure that Go version 1.20 or earlier is installed on your system. You can check the installed Go version using the go version command.
+
+    - Install btc-staker: Clone the btc-staker code from the official repository and install it:
+```bash
+git clone https://github.com/babylonlabs-io/btc-staker.git
+cd btc-staker
+git checkout <phase1_release_tag>
+make install
+```
+If the shell cannot find the installed binaries after installation, add $GOPATH/bin to the system's PATH environment variable:
+```bash
+export PATH=$HOME/go/bin:$PATH
+echo 'export PATH=$HOME/go/bin:$PATH' >> ~/.profile
+source ~/.profile
+```
+- Run Bitcoin Node: Run a bitcoind Bitcoin node and load a legacy wallet on the Bitcoin mainnet. Ensure that Babylond is on the same network as the Bitcoin node. Refer to the following steps to set up the Bitcoin node:
+
+    - Download and Extract:
+```bash
+wget https://bitcoincore.org/bin/bitcoin-core-<phase1_version>/bitcoin-<phase1_version>-x86_64-linux-gnu.tar.gz
+tar -xvf bitcoin-<phase1_version>-x86_64-linux-gnu.tar.gz
+chmod +x bitcoin-<phase1_version>/bin/bitcoind
+chmod +x bitcoin-<phase1_version>/bin/bitcoin-cli
+```
+- Create and Start Systemd Service:
+```bash
+sudo tee /etc/systemd/system/bitcoind.service >/dev/null <<EOF
+[Unit]
+Description=bitcoin mainnet node
+After=network.target
+
+[Service]
+User=<user>
+Type=simple
+ExecStart=/home/ubuntu/bitcoin-<phase1_version>/bin/bitcoind \
+    -mainnet \
+    -server \
+    -rpcport=8332 \
+    -rpcuser=<your_rpc_username> \
+    -rpcpassword=<your_rpc_password>
+Restart=on-failure
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable bitcoind
+sudo systemctl start bitcoind
+```
+- Create Legacy Wallet:
+```bash
+~/bitcoin-<phase1_version>/bin/bitcoin-cli -mainnet \
+    -rpcuser=<your_rpc_username> \
+    -rpcpassword=<your_rpc_password> \
+    -rpcport=8332 \
+    -named createwallet \
+    wallet_name=btcstaker \
+    passphrase="<passphrase>" \
+    load_on_startup=true \
+    descriptors=false
+```
+- Load Wallet:
+```bash
+~/bitcoin-<phase1_version>/bin/bitcoin-cli -mainnet \
+    -rpcuser=<your_rpc_username> \
+    -rpcpassword=<your_rpc_password> \
+    -rpcport=8332 \
+    loadwallet "btcstaker"
+ ```
+- Configure Keyring: Create a keyring loaded with Babylon tokens to pay for transactions. Refer to the official documentation or relevant guides for the specific creation method.
+Parameter File Preparation
+
+Prepare a ```parameters.json``` file containing global parameters. This file must meet specific format and parameter requirements:
+
+- File Structure: The file should contain a Versions field, whose value is an array. Each element in the array corresponds to the global parameters of a version, with the following format:
+```json
+{
+    "Versions": [
+        {
+            "Version": 3,
+            "ActivationHeight": 874088,
+            "StakingCap": 3,
+            "CapHeight": 875090,
+            "Tag": "bbn1",
+            "CovenantPks": ["d45c70d28f169e1f0c7f4a78e2bc73497afe585b70aa897955989068f3350aaa",
+                            "4b15848e495a3a62283daaadb3f458a00859fe48e321f0121ebabbdd6698f9fa",
+                            "23b29f89b45f4af41588dcaf0ca572ada32872a88224f311373917f1b37d08d1",
+                            "d3c79b99ac4d265c2f97ac11e3232c07a598b020cf56c6f055472c893c0967ae",
+                            "8242640732773249312c47ca7bdb50ca79f15f2ecc32b9c83ceebba44fb74df7",
+                            "e36200aaa8dce9453567bba108bdc51f7f1174b97a65e4dc4402fc5de779d41c",
+                            "cbdd028cfe32c1c1f2d84bfec71e19f92df509bba7b8ad31ca6c1a134fe09204",
+                            "f178fcce82f95c524b53b077e6180bd2d779a9057fdff4255a0af95af918cee0",
+                            "de13fc96ea6899acbdc5db3afaa683f62fe35b60ff6eb723dad28a11d2b12f8c"],
+            "CovenantQuorum": 6,
+            "UnbondingTime": 1008,
+            "UnbondingFee": 10000,
+            "MaxStakingAmount": 500000000000,
+            "MinStakingAmount": 500000,
+            "MaxStakingTime": 64000,
+            "MinStakingTime": 64000,
+            "ConfirmationDepth": 30
+        },
+        // Parameters of other versions...
+    ]
+}
+```
+- Parameter Explanation:
+  - Version: The parameter version number must increase monotonically.
+  - ActivationHeight: The parameter version takes effect when the Bitcoin blockchain reaches this height.
+  - StakingCap and CapHeight: Only one of them can be set. StakingCap represents the staking cap (in satoshis), and CapHeight represents the Bitcoin block height at which the staking cap takes effect.
+  - Tag: A 4-byte hexadecimal string used to mark transactions.
+  - CovenantPks: A list of Bitcoin public keys of covenant members. Each public key should be in a valid 33-byte format.
+  - CovenantQuorum: The quorum of the covenant. It cannot exceed the length of CovenantPks and must be a positive integer.
+  - UnbondingTime: The time lock for unbonding (in Bitcoin blocks).
+  - UnbondingFee: The fee required for unbonding (in satoshis).
+  - MaxStakingAmount and MinStakingAmount: Represent the maximum and minimum staking amounts (in satoshis), respectively. MaxStakingAmount must be greater than or equal to MinStakingAmount.
+  - MaxStakingTime and MinStakingTime: Represent the maximum and minimum staking times (in Bitcoin blocks), respectively. MaxStakingTime must be greater than or equal to MinStakingTime.
+  - ConfirmationDepth: The confirmation depth to ensure that the transaction is confirmed by enough blocks. It must be greater than 1.
+
+### Create Unsigned Unbonding Transaction
+
+Command Format
+```bash
+stakercli transaction create-phase1-unbonding-transaction [fullpath/to/parameters.json] \
+--staking-transaction <staking_tx_hex> \
+--tx-inclusion-height <height> \
+--network <network_name> \
+--staking-daemon-address <daemon_address>
+```
+Parameter Explanation
+
+- Required Parameters:
+    - [fullpath/to/parameters.json]: Specify the full path of the JSON file containing global parameters to obtain parameter information related to the transaction.
+    - --staking-transaction: Specify the hexadecimal-encoded Phase 1 staking transaction, which will serve as the basis for creating the unbonding transaction.
+    - --network: Specify the Bitcoin network. Available values are mainnet (main network), testnet3 (test network 3), regtest (regression test network), simnet (simulation test network), signet (signal test network).
+    - Optional Parameters:
+    - --tx-inclusion-height: Specify the inclusion height of the staking transaction to select the correct version of global parameters. If this parameter is not provided, the command will attempt to obtain the height by communicating with the stakerd daemon.
+    - --staking-daemon-address: Specify the full address of the stakerd daemon in the format ```tcp://<host>:<port>```. The default value is helpers.DefaultStakingDaemonAddress.
+Operation Steps
+- Prepare Staking Transaction Hash: Obtain the hexadecimal-encoded hash value of a valid Phase 1 staking transaction. This hash value can be found in the records of previous staking operations or obtained through relevant query commands.
+
+- Execute Unbonding Transaction Command: For example, in a mainnet environment, if the parameter file is located at /home/user/params.json and the staking transaction hash is abcdef1234567890..., execute the following command:
+```bash
+stakercli transaction create-phase1-unbonding-transaction /home/user/params.json \
+--staking-transaction abcdef1234567890... \
+--network mainnet
+```
+If the inclusion height of the staking transaction is known, you can add the --tx-inclusion-height parameter to improve the transaction creation efficiency. For example:
+```bash
+stakercli transaction create-phase1-unbonding-transaction /home/user/params.json \
+--staking-transaction abcdef1234567890... \
+--tx-inclusion-height 123456 \
+--network mainnet
+```
+Check Transaction Creation Result: After the command executes successfully, it will output the relevant information of the created unsigned unbonding transaction in JSON format:
+```json
+{
+    "UnbondingTxHex": "010203...", // Hexadecimal encoding of the unsigned unbonding transaction
+    "UnbondingPsbtPacketBase64": "base64_encoded_data..." // Base64-encoded PSBT packet
+}
+```
+### Create Unsigned Withdrawal Transaction
+Command Format:
+```bash
+stakercli transaction create-phase1-withdrawal-transaction [fullpath/to/parameters.json] \
+--staking-transaction <staking_tx_hex> \
+--tx-inclusion-height <height> \
+--network <network_name> \
+--staking-daemon-address <daemon_address>
+```
+Parameter Explanation:
+The parameters for the withdrawal transaction command are similar to those of the unbonding transaction command.
+- Required Parameters:
+    - [fullpath/to/parameters.json]: The full path to the JSON file containing global parameters, which is used to retrieve transaction - related parameter information.
+    - --staking-transaction: The hexadecimal-encoded Phase 1 staking transaction, which is the basis for creating the withdrawal transaction.
+    - --network: The Bitcoin network, with available options including mainnet, testnet3, regtest, simnet, and signet.
+- Optional Parameters:
+    - --tx-inclusion-height: The inclusion height of the staking transaction. It helps to select the appropriate version of global parameters. If not provided, the command will try to obtain this height by communicating with the stakerd daemon.
+    - --staking-daemon-address: The full address of the stakerd daemon, formatted as ```tcp://<host>:<port>```, with the default value being helpers.DefaultStakingDaemonAddress.
+Operation Steps:
+- Prepare Staking Transaction Hash: Similar to the unbonding process, you need to have the hexadecimal hash of the valid Phase 1 staking transaction at hand.
+- Execute Withdrawal Transaction Command: For instance, in a mainnet environment, if the parameter file is at /home/user/params.json and the staking transaction hash is abcdef1234567890..., run the following command:
+```bash
+stakercli transaction create-phase1-withdrawal-transaction /home/user/params.json \
+--staking-transaction abcdef1234567890... \
+--network mainnet
+```
+If you know the inclusion height of the staking transaction, you can enhance the transaction creation efficiency by adding the --tx-inclusion-height parameter. For example:
+```bash
+stakercli transaction create-phase1-withdrawal-transaction /home/user/params.json \
+--staking-transaction abcdef1234567890... \
+--tx-inclusion-height 123456 \
+--network mainnet
+```
+Check Transaction Creation Result: Once the command executes successfully, it will output the details of the created unsigned withdrawal transaction in JSON format:
+```json
+{
+    "WithdrawalTxHex": "010203...", // Hexadecimal encoding of the unsigned withdrawal transaction
+    "WithdrawalPsbtPacketBase64": "base64_encoded_data..." // Base64-encoded PSBT packet for withdrawal
+}
+```
+## Phase 2 Unbonding
+
+### Prerequisites
 Bitcoin Node Setup
 You need to have a running Bitcoin node `bitcoind`. You should also have a legacy wallet loaded on Bitcoin mainnet. Babylond will also need to be on the same network. You can configure the stakerd daemon to connect to either `bitcoind` or `btcd` node types, but `bitcoind` is preferred.
 
@@ -200,7 +408,7 @@ ServerPort = 2112
 BTC Staker Environment Configuration:
 Create a .env file in the same directory as the binaries with BTCSTAKER_USERNAME and BTCSTAKER_PASSWORD for secure communication between the Staker Daemon and stakercli.
 
-## 2. Unbonding BTC Stakes
+###  Unbonding BTC Stakes
 The unbond command initiates the unbonding procedure, which involves communication with the Babylon chain, Covenant Emulators, and the Bitcoin blockchain. It builds the unbonding transaction, sends it to the Babylon Genesis chain, waits for signatures from the Covenant Emulators, and then sends the transaction to the Bitcoin blockchain.
 
 To use the unbond command, you need the `--staking-transaction-hash`, which is the transaction hash from the response of the stake command.
@@ -215,9 +423,9 @@ stakercli daemon unbond \
   --staking -transaction -hash 6bf442a2e864172cba73f642ced10c178f6b19097abde41608035fb26a601b10
 ```
 
-## 3. Additional Functionality
+### Additional Functionality
 
-### List Staking Transactions
+#### List Staking Transactions
 You can use the following command to get the list of all staking transactions in the database:
 ```shell
 stakercli daemon list -staking -transactions
@@ -225,7 +433,7 @@ stakercli daemon list -staking -transactions
 ### Minimum Unbonding Time
 There is a minimum unbonding time currently set to 1008 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the Bitcoin blocks in the `bitcoind` systemd logs using `journalctl -u bitcoind -f` or by comparing the latest block in your node with a BTC explorer like `https://mempool.space/mainnet`.
 
-## 5. Troubleshooting
+### Troubleshooting
 Gas - related Errors
 If you encounter gas - related errors during the unbonding operation, consider adjusting the `GasAdjustment` and `GasPrices` parameters in the `stakerd.conf` file. For example:
 
