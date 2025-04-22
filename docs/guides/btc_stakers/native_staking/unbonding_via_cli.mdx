@@ -410,6 +410,7 @@ BTC Staker Environment Configuration:
 Create a .env file in the same directory as the binaries with BTCSTAKER_USERNAME and BTCSTAKER_PASSWORD for secure communication between the Staker Daemon and stakercli.
 
 ###  Unbonding BTC Stakes
+
 The unbond command initiates the unbonding procedure, which involves communication with the Babylon chain, Covenant Emulators, and the Bitcoin blockchain. It builds the unbonding transaction, sends it to the Babylon Genesis chain, waits for signatures from the Covenant Emulators, and then sends the transaction to the Bitcoin blockchain.
 
 To use the unbond command, you need the `--staking-transaction-hash`, which is the transaction hash from the response of the stake command.
@@ -435,6 +436,7 @@ stakercli daemon list -staking -transactions
 There is a minimum unbonding time currently set to 1008 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the Bitcoin blocks in the `bitcoind` systemd logs using `journalctl -u bitcoind -f` or by comparing the latest block in your node with a BTC explorer like `https://mempool.space/mainnet`.
 
 ### Troubleshooting
+
 Gas - related Errors
 If you encounter gas - related errors during the unbonding operation, consider adjusting the `GasAdjustment` and `GasPrices` parameters in the `stakerd.conf` file. For example:
 
