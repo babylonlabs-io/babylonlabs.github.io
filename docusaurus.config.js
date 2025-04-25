@@ -29,7 +29,7 @@ const openapiPlugins = [
   [
     'docusaurus-plugin-openapi-docs',
     {
-      id: 'api',
+      id: 'apiDocs',
       docsPluginId: 'classic',
       config: {
         stakingApi: {
