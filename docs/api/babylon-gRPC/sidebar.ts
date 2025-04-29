@@ -190,14 +190,14 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "api/babylon-gRPC/finality-provider-consumer",
-          label: "FinalityProviderConsumer",
+          id: "api/babylon-gRPC/finality-provider-consumer-consumer-id",
+          label: "finality_provider/{consumer_id}",
           className: "api-method get",
         },
         {
           type: "doc",
           id: "api/babylon-gRPC/finality-provider-consumer",
-          label: "FinalityProviderConsumer",
+          label: "finality_provider_consumer",
           className: "api-method get",
         },
         {
@@ -632,20 +632,8 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "api/babylon-gRPC/header",
-          label: "header",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
           id: "api/babylon-gRPC/header-by-hash",
           label: "header_by_hash",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "api/babylon-gRPC/block",
-          label: "block",
           className: "api-method get",
         },
         {

@@ -6599,8 +6599,8 @@ paths:
           description: An unexpected error response.
       tags:
         - btcstkconsumer
-      operationId: FinalityProviderConsumer
-      summary: FinalityProviderConsumer
+      operationId: FinalityProviderConsumer/consumer_id
+      summary: finality_provider/{consumer_id}
       description: FinalityProvider info about one finality provider
 
   /babylon/btcstkconsumer/v1/finality_provider_consumer/{fp_btc_pk_hex}:
@@ -6828,7 +6828,7 @@ paths:
       tags:
         - btcstkconsumer
       operationId: FinalityProviderConsumer
-      summary: FinalityProviderConsumer
+      summary: finality_provider_consumer
       description: FinalityProviderConsumer info about one finality provider's consumer id
   /babylon/btcstkconsumer/v1/finality_providers/{consumer_id}:
     get:
@@ -18058,40 +18058,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /header:
-    get:
-      summary: header
-      operationId: header
-      parameters:
-        - in: query
-          name: height
-          schema:
-            type: integer
-            default: 0
-            example: 1
-          description: >-
-            height to return. If no height is provided, it will fetch the latest
-            header.
-      tags:
-        - CometBFT
-      description: |
-        Get Header at a specified height.
-
-        If the `height` field is set to a non-default value, upon success, the
-        `Cache-Control` header will be set with the default maximum age.
-      responses:
-        '200':
-          description: Header informations.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BlockHeader'
-        '500':
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /header_by_hash:
     get:
       summary: header_by_hash
@@ -18118,40 +18084,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlockHeader'
-        '500':
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /block:
-    get:
-      summary: block
-      operationId: block
-      parameters:
-        - in: query
-          name: height
-          schema:
-            type: integer
-            default: 0
-            example: 1
-          description: >-
-            height to return. If no height is provided, it will fetch the latest
-            block.
-      tags:
-        - CometBFT
-      description: |
-        Get block at a specified height.
-
-        If the `height` field is set to a non-default value, upon success, the
-        `Cache-Control` header will be set with the default maximum age.
-      responses:
-        '200':
-          description: Block informations.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BlockResponse'
         '500':
           description: Error
           content:
