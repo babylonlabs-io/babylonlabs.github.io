@@ -1,0 +1,71 @@
+---
+id: contains
+title: "Contains"
+description: "Contains checks whether a hash is maintained by the module."
+sidebar_label: "Contains"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVmFv2zYQ/SsEMcBbEEtOhrSogWJIsrRNgTZZ4gIDomCipJOlhiJVkrJjZPnvuyNly06yrsC+2CJ5d3x893jHB94KIxpwYCyf3jzwWvEp/9aBWfF9rnAFh5WwFY4MfOtqAwWflkJa2Oc2r6ARfPrAS20a4dA0WzlAU7dqydE6U6s5f3y8JW/bamXBkv3hZEJ/uVYOlKPPvXiP/oaQBdjc1K2rNSH6gxCdormolb3qQ7HasnVYRlsyxMFcBcybx2t7dnV5yvCMlS4iBNca3YJxdYCS90b03cPOtJYgFOLenERnXyF3OINTu8iOme3yHKwtO7lBE3FvV4pOuv866FM4BewwWiv36+FAKQ5hDibER+DSe9UOGvs8GPn81Rm5dbZ1Svb5QsgOfiR5z0jYTAhjxIrGYIw2L+7SIDNiDi+s/RC5inUK7ltchoL5XbY5phBiTsLlmctlPa/ol4hGwRERguKco2L5Wgv86RYbkWBC8jvLlhUKBQwTjGRPEmtwmUwQQbby8mp00UkgLQVVYZg5OJKWcBUO4kxkK6lVvIsqXhzE+YDDglmsr51PEq+ca6dxLHUuZKWtm76ZvJk8Q3zVKXYSNmBzkvZ74WApVsz7yRVb1q5ivfpYq41jFAf5QlZqVWqfjNpJ4n4n0PHlOftd5wSOkIXtDqJJ9BzE8csQkC7Brs6uZ4yEakqRh0vZG4+sN48SNavQ1Fs3YOZIrcUk12Wd+5QxXXqiX9xDqMIvnmpk/+TdjIWIidrbu+5aOi+GIwe8DE7nWtrp3h6uMsa+XJ0zjUdjH2azyzD18friMxl/b3oJmdX5HTgbtkHNlPW8C/Ki2GSZC8UyYHm/1qulUyh2NhRZ1HOBERN+Y9r8NuHMiUxiJVN0pESlP51+mn24+HQWhzj9X+R0I1NW1miKbGLgzlJcoiEdjzFU9GeKWzcNkjOWqNVElRKvhmcaNmIgnLK2WIuYKAq8ST4HqctJdgeHrynV0cH08NWro9dpzylyFhMvdM7jkFtZ38GQ4IilOeqXDbL1/nGGE3e/VUAX4O1RGqL1vG4irnmm5gLW2TWNlxfXsxHmWfszGq0DeFBFq3FntqiFzxaCTNM0w6uaKI9iPK5ABIpPQ9Udz7DMTJloW9nLK/5qtULukyRRmGv06bf3225NF8IJNnpI+nue8CmG9edK+D5++rxamr5J+FGCZQcna2938DjaBHrCjIe8S8egsO+Rgm1XYzkqwB9/49MneTMeWKIL5lg6hE/3GURzzNjTZA0WGO3YrlReGa10F5pn2amciLMh9bBAWvGktsuoJmSAXNKtTHinduYM6lArLEliga3KK30HufUae4eShnvRtLg86PomWAl3+zPVRYsKnWNh67IIdR4v6ni9/guqRMt9ttKdJ2qDwFee0WdYnlDGRgE2XmFfH2mLUkupl7Rhf3WmW2qCvNKY+z6JCSfN4EULGjiMJl4B/dq2PLYIGAyCJibDxKAcVJd/bwVv10Qe5ttRwgfo+J3wR++MsvqbrY/OxoqNHVva59d3yChuFwRH/bjFlONJqQX0r7t/64xbr5b/2ST7Nu/g3sWtRCMC0j9LQsfE/h0qPVo/6eTYig7wZ9M3sYeRbMnn4QEzBV+MfHyk6fBqpW5a1Ja0NrxU72A1vGP7hw/3/XAhTE226HeLqELt8EGCzzG+7Vq35UXvN3LcdP73ZzN8ifwDvnbUmQ==
+sidebar_class_name: "get api-method"
+info_path: api/comet-bft/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Contains"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/babylon/btclightclient/v1/contains"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Contains checks whether a hash is maintained by the module.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"in":"query","name":"hash","required":false,"schema":{"format":"byte","type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryContainsResponse is response type for the Query/Contains RPC method.","properties":{"contains":{"type":"boolean"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,63 @@
+---
+id: genesis-time
+title: "GenesisTime"
+description: "GenesisTime returns the genesis time."
+sidebar_label: "GenesisTime"
+hide_title: true
+hide_table_of_contents: true
+api: eJyNVm1v2zYQ/isEMcBbYEtOhraogWJIs74NaJslLjAgCipKpi02EqmSlFMjy3/fc6Ri2U2Q5ZOo4/Fennt4xxtupWuNdtLx2Q0/mk7pUxrtpfa0PEgP6OPKSjaCVgvpSqtar4zmM/53J+3mndTSKTdXjTzrrTHlmK8ku7PO/KaVbGlskIZT6c4xdnZ6kulG+sosEj7mrTWttF7FqFZR8auH5v0Qds30XknRedG0TDhnSiW8XLBr5auwu1TWeVbUprwiXwiqEciVL6A2CT7GnMKFyHmr9Irf3m4lpvgmSw8JRPtxHDPXlaV0btnV27wTHvSWoqv9/yG7n3RpFiHZbXhK+9+PhtDwK1fSRvteqDqcUl427r4xOvO1s/Xdeie1MV+Lutt3VWz8k0DYCoS1YkP/0lpjH/SCijixkg/sPQlczTotf7TYRimDl12MyYRYIdUL3gAYfjnmlL6g0x8W+yThP9veJZCVvrM6sqinXWATESXSEwdW0hNHha/wk5bGNcal5DddHxaoxWG6x9gxd9KupaXwbnioAq+8b2dpCg6KujLOz15OX07vRXbWafZaFJvaaLbCFWHvQNFrsWHhXL2JnO7pxVpjPSM7AAQAKL00AW3lawJ3z9Dx6Qf2pykdXFJk0d1hMk3uB3H8cAgARrCzN+dzRky0S1HG+90rj1xQTzI9r6AatBtpV6ieQxXVUpWhOswsA9gP+hB6ETZPDLB//XbOosVMHxycdy3lC3N0AGz3pjS1mx0cYJcx9uXsAzNIjb2fz0+j6K/zz59I+THxtSzQMK6kd9HNidFLteoik8g2aZZCs0Kyst9DDMWG+U6DzawVViBYYArCLmAx4xe2LS8zzrwoarQoTSllOv/l5OP8/eePb9Jop/8k3jR1jh4FVaAJw50juwRDPpnAVPJPDtdNA3AmtdIwtazB/YC03JKB4qyVQ7NhYrHAVQk1yH1JtDs8ekGlTg5nR8+fP3uR95gCs5RwoTyPY21rdSWHAicsL8FfNtA2nE9DL/2jkmpV+VfP8mitx3Vr8Q5nK7936M7uDsbTz+fzEeps4sAwJgYv9aI18MzWSoRqIcg8zwvhqkyHKCaTSooI8Ulsq5M5+siMibate3ql35zRwD7LMo1a40zvPrjdEaP5Cza6yfpbnvEZzIa8Mj7GMtTVkfgi488ydBgIVdA7vB1tDf2ETAh5H46BYY+BImpnWIPsQvrbM32Rt/8DSnTBPMsH8/mYyWSFiv1crEED1o7dRpeVNdp0LsC+7HRJwLlYerkGrMjUdQX1hEICS7qVGe/0nsyCh0ajJYk1ZlFg+l7kLnDsLSgtf2AwY3vg9UXUEv7yV+qLDgxdobF1RQKep2uV3u3/BpaYesw2pgtAbSMInWf0SV6/poqNYti4wsPMN3Vtrslhf3VmO2ySZWVQ+76IGSfO4KJFDhwl08CAfm+XHjsADAqRE9NBMDAH7PpOL5942jdJCPPVKOND6Fhn/DYcBq3+ZXeps4lmE8+u3f3rO1QU7iLhaOC2KDkypRGgBT2cHhuCOy+TJ8/Dfmh7+cOnbS1U8No/MuJwvOBxONLwpLGMYRMHJFZ7IxLjihhKJ25uUBT5xda3tyQOgEF+Se8Uq4hY9AdP8fKHmXolNzSo8Ppqg5P4oAkvLJqE28H97s0cb4X/AHuBuds=
+sidebar_class_name: "get api-method"
+info_path: api/comet-bft/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"GenesisTime"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/cosmos/mint/v1beta1/genesis_time"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+GenesisTime returns the genesis time.
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryGenesisTimeResponse is the response type for the Query/GenesisTime RPC\nmethod.","properties":{"genesis_time":{"description":"GenesisTime is the timestamp associated with the first block.","format":"date-time","type":"string"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

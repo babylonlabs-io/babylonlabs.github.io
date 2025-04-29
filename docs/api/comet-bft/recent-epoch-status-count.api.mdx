@@ -1,0 +1,72 @@
+---
+id: recent-epoch-status-count
+title: "RecentEpochStatusCount"
+description: "RecentEpochStatusCount queries the number of epochs with each status in"
+sidebar_label: "RecentEpochStatusCount"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1V21v2zYQ/isEMcBbEEtOtqaogWJIs7TNgDZZ4gIDoqCiKEpiI5EqSTk1svz33ZGyZSVely/9YknkvT733JG+py0zrBFOGEvn1/c0F5Yb2TqpFZ1T0Wpefea6U45IS1wliOqaTBiiC//VaOuIEVyAgBcGIU2k4nWXC3iiUKJYWRpRMjQa0X0q0fTXTpgVfCjwPvYEi0Z87aQROZ0XrLZin1peiYbR+T0ttGmYA41OKnf0Gwi7VYsWrDNSlfTh4Qb1bauVFRY1DmczfHCtHISJr3vxHj4Go+Os/8LQLn1SpxjWlWOusycY22VveI3G2hHBIAjEFhL2FuLHyuTy4oQA1pXOEYbW6FYYJ0OU2wA8J03AxFseVFieS8yA1Rcjy88w1S/o7Ivgzi/I9rOP6HmQP7GAS2NQj4ntOBfWFl29gS2iXq5gXe3+r0ZjuLjOxSg2CO3XwyE0+BSlMMG+Y7L2WtKJxj41hjqfO1Ov30fYLFndjV1lKyeeA8JmgRnDVvgtjNFmp5cGkGGl2LH3LHAV6ZT41sK2yIn3so0xmmAlNjgFOPltqwEeNA6tgjj4zjyDbqO7WU8f+9stRrCnAdJHc6KfC3fSVUQwXpFAXJgOiRqNDoowYHeAh1Kg15Y5YCCNM5ataq3iUfTx8iAOivNRK0BnCLNcDzRfVlo5187juNac1RXMrPmr2avZ07Q6Rd4EV6TEZn3HnLhjK+L16lXIoecrabVxBO0Awjc41QrtyyddjdUaGTq+OCN/aI4pYmTB3UE0i54Gcbw7BBg4jFyeXi0IUtsUjId50wtPrBePErWoQNRLN8KUQAcLtJCF5L7K68G90wdTud880VCHN28XJFhM1N7eVddivmAOFaB9nOa6tvO9PdglhHy6PCMaUiPvF4uLsPTn1flHFP7e8p3IrOa3wtng5kSrQpZdYCTaRknOFMkE4f0exJCtiOsUcIAMxxd0QA4WE3ptWn6TUOJYVg9nUPrTyYfF+/MPp3Gw0z8ip5s6JYUEUUATDHcW7SIM6XQKpqK/U3DdNADOtJYKTBU1NJNHWmzIgHHW0sL0IjCHofd8DVLHkXYHhy+x1NHB/PDo6MXLtMcUMIsRF8zzONS2lrdiKHBEUg78JQNtvX6cwcLt75WQZeVev0iDtR7XjcU1zniWCuvsGsaL86vFJMdj2h9gWofghcp9Y5GlZL5aEGSaphmzVaJ8FNNpJViA+CTM6ekCBtOcsLate3rFX6xWgH2SJApqDTq9e+92azlnjpHJfdJ3fELnYNbnldB9ePV1tbh8ndAXCUwqWJRe7uBhsjH0CBkf8hiOgWHfAwVuGZo0kJ1Pf6PTF3nzPaCEDeZIOphP94mISqjY42INEmDt2K4Ur4xWGgYgBlJ0iiNwNpReLHEcJtR2Gc6ETACW2JUJ7dRozQAPtYKRxJZwuHmmjyK3nmNvgdLiG2ta2B54fR2kmLv5GeeiBYaWMNi6LAKex0sZr/d/AZboep+sdOeB2kTgJ8/ko7h7gxWbhLChhf18RBeFrmt9hw771plvsUnwSkPt+yImFDkDjRY4cBjNPAP6vW16bAEwCAROzIaFgTnALn/LDNquiXyYrycJHUKH94Q+eGWg1T9knTqZKjJ15M4+bd+houAuEA5P8BZKDpniEdDfaZ93mG7den7cudrfIJz45uK2ZtJH3N94wiF7TftDFqTHlwQ4sg7gZ9dRC8ceMh217++huOKTqR8ecDlc7/0/CmmRnsNd/j+z/zH/NnamfitWT/509Bc96k/zJTMSw4YUbkA+TD6fT1A9hrtsu62F91VU3Nxg3p0u4Ob1Lyiemss=
+sidebar_class_name: "get api-method"
+info_path: api/comet-bft/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"RecentEpochStatusCount"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/babylon/checkpointing/v1/epochs:status_count"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+RecentEpochStatusCount queries the number of epochs with each status in
+recent epochs
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"epoch_count is the number of the most recent epochs to include in the\naggregation.","in":"query","name":"epoch_count","required":false,"schema":{"format":"uint64","type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"description":"QueryRecentEpochStatusCountResponse is the response type for the\nQuery/EpochStatusCount RPC method.","properties":{"epoch_count":{"format":"uint64","type":"string"},"status_count":{"additionalProperties":{"format":"uint64","type":"string"},"type":"object"},"tip_epoch":{"format":"uint64","type":"string"}},"type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      

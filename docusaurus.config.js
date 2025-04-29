@@ -43,7 +43,7 @@ const openapiPlugins = [
           showSchemas: true,
         },
         babylonGrpc: {
-          specPath: 'static/swagger/babylon-merged-rpc-openapi3.yaml',
+          specPath: 'static/swagger/babylon-grpc-openapi3.yaml',
           outputDir: 'docs/api/babylon-gRPC',
           sidebarOptions: {
             groupPathsBy: 'tag',
@@ -52,6 +52,18 @@ const openapiPlugins = [
           hideSendButton: false,
           showSchemas: false,
         },
+        
+          cometBFT:{
+            specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml'
+          ,outputDir: 'docs/api/comet-bft',
+          sidebarOptions: {
+            groupPathsBy: 'tag',
+            categoryLinkSource: 'tag',
+          },
+          hideSendButton: false,
+          showSchemas: false,
+
+          }
       },
     },
   ],
@@ -195,6 +207,9 @@ const config = {
                 label: 'Babylon gRPC',
                 to: '/api/babylon-gRPC/babylon-grpc-api-docs',
               },
+              {label: 'CometBFT',
+                to:'/api/babylon-gRPC/comet-bft-api-docs'
+              }
             ],
           },
           {

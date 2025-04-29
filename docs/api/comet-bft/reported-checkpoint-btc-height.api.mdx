@@ -1,0 +1,72 @@
+---
+id: reported-checkpoint-btc-height
+title: "ReportedCheckpointBtcHeight"
+description: "ReportedCheckpointBtcHeight returns the BTC light client height at which"
+sidebar_label: "ReportedCheckpointBtcHeight"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNV21v2zYQ/isHYoDbwLacbG1RAcWQeH0F2maJCwyIgpiSKYuNTKok5cTw/N93R8qSnRjBCuzDvtgSea/PPXek1qzihi+EE8ay+GrNZsJmRlZOasVilt1W7qbgtgBpoRD3IFSmZ2IG6coJsM5INQedgysEeLHmOSsEqmqpHOszSZYq7gp8Vuhr1y4uGfGjlkbMWOxMLfrMovKCs3jN3Koi4eCGbTbXJGwrraywtH8yGtFfppUT6Akfj6Ij+utMVEZXwjgZFFKX3ZRyXribrJSoclMIeqOtXJsFxyeM1r38DcNy0pXkPYhQYqgNXhuCNtwVQu2kShgZUWnjMJn+NnrcEHNhMPzO5p+1MKuLRnTcGjhz2Qfv7aLJEmYil0pY4LBNHMgsYLSJesIAXJyPAata6J1IdPpdZA4DwUj2y3wKts4yYW1el62nIfNyOa9L93MwE0UeYvrryQFIyL7jsvRa0omFfWyMdG5qUx4gRJ8teVnvuyJidp5a6jwCoV3gxvAVvQtjtDnoZYHI8Lk4RMl/A66CWon7CrexcbyXXYzJBJ9T87GFVtJhDMhzQoCTgY/YF+yJSrOH7p5ihRGuNsr6Fj2bjPfZ3BCdE69lViRqv5HhTrrCa87lEnm/nQpbxkPKs1twGs54uioxFMLNEzBmc0Fx+hEQsygNAlGTbrQ8jjo3Nlq3w2GDSlaY5XY2eRawwrkqjqJSZ7wstHXx69Hr0WMYarWNBObUDe+5E3d8BV6vXIV0GnoDpQBkBwtyTRMr177aTb/uGTo9/wh/6MyiS4osuDsejoaPgzg9HIKkhr54ezkB6gST88x39Fa4Z734MFGTAkW99EKYOWJskUUyl5mnxnbYHvTB1cxvjjVW4ezdBILFRB0dXdZVUzJSwG5zOtOljY+OcBcAvl18BI2pwYfJ5Dwsfbr8+oWEn1q+E6nV2a1wNrgZa5XLeR1oTLZJMuMKUqRVs+dPEnC1onOkO4mwYWZoMWFXpsquEwaOp6VAtCilRE1/GX+efPj6+W0U7DR/Q6cX5RRyiaKIJhquLdklGKaDAZoa/jVF14sFgjMocbAmKi+x9zzSoiUDxVlKi8MO+GyGreprMHUZ0e745BWVengcn7x8+eLVtMEUMYsIF8rzNNS2lLeiK/AQphnyFzraev0oxYXb30PvvXkxDdYaXFuLW5zpqBTW2S2M518vJ70ZNR3laLQOwQs1Cy27lNxXC4OcTqcptlSifBSDQSF4gHgcxvpggnMsBl5VZUOv6LvVCrFPkkRhrVGnce/d7izPuOPQWydNvycsRrM+r4T18dHX1dLyVcJeJDjecFF6ueNNrzX0ABkf8j4cHcOeAoWXVsMCs/PptzpNkdv3DiVqMAfTzvy0D2I4x4o9LFYngdZO7UplhdFK19bDntcqI+BsKL1Y0lRNmK1TmgmpQCypKxNWq701gzzUCkcSX+JZ6Jm+F7n1HHuHlBb3fFHhdsfrqyDF3fUzmosWGTrHwVanQ+R5tJTRdv85skSXfVjp2gPVRuAnT++LuDujivVC2NjC7bjPdVnqO3LYtE68wyaRFRpr3xQxYcQZbLTAgZPhyDOg2dulxw4AnUDgxKhb6JiD7PpBl6ag7RZDH+abXsK60PE5YRuvjLT6G7apw0DBAM8v+7h9u4qiu0A4OvArLDlmSkdAc2H9iRN456b0fzqMm3uKE/cuqkoufaLNvSqczFcs7Y7u5iqCZ9wx/uycz/gWd9d3PCypP0h5vUZKiG+m3Gxo2ZcL16/plmYk0Tp8YEhLz3gtyLFTxRPgPbtovgyew3/yHXIQge0tUK1Ye51k+HgrVnvfKZtrFA5D06cR9k/x1ly5HU26GdMNor36vH87wTveP04/nAo=
+sidebar_class_name: "get api-method"
+info_path: api/comet-bft/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"ReportedCheckpointBtcHeight"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/babylon/monitor/v1/checkpoints/{ckpt_hash}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+ReportedCheckpointBtcHeight returns the BTC light client height at which
+the checkpoint with the given hash is reported back to Babylon
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"ckpt_hash is hex encoded byte string of the hash of the checkpoint","in":"path","name":"ckpt_hash","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"*/*":{"schema":{"properties":{"btc_light_client_height":{"format":"int64","title":"height of btc light client when checkpoint is reported","type":"integer"}},"title":"QueryReportedCheckpointBtcHeightResponse defines a response type for\nReportedCheckpointBtcHeight RPC method","type":"object"}}},"description":"A successful response."},"default":{"content":{"*/*":{"schema":{"properties":{"code":{"format":"int32","type":"integer"},"details":{"items":{"properties":{"type_url":{"type":"string"},"value":{"format":"byte","type":"string"}},"type":"object"},"type":"array"},"error":{"type":"string"},"message":{"type":"string"}},"type":"object"}}},"description":"An unexpected error response."}}}
+>
+  
+</StatusCodes>
+
+
+      
