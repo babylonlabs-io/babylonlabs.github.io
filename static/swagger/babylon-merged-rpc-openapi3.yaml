@@ -1,10 +1,6 @@
 openapi: 3.0.0
 # openapi.yaml
-x-tagGroups:
-  - name: btccheckpoint
-    tags: [btc-checkpoint-info, btc-checkpoint-params,btc-checkpoints-info, ended-epoch-btc-height, epoch-submissions, reported-checkpoint-btc]
-    description: Security and access control
- 
+
   
 tags:
 
