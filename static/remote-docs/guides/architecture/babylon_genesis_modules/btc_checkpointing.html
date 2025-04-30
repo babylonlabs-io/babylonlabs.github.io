@@ -1,0 +1,215 @@
+<html><body><article><h1>BTCCheckpoint</h1>
+<p>The BTC Checkpoint module is responsible for receiving and managing the checkpoints of Babylon's state on the Bitcoin blockchain. This includes:</p>
+<ul>
+<li>handling requests for submitting raw checkpoints</li>
+<li>processing Bitcoin SPV proofs for submitted checkpoints</li>
+<li>managing the lifecycle of checkpoints (SEALED, SUBMITTED, CONFIRMED, FINALIZED)</li>
+<li>handling the verification and finalization of checkpoints</li>
+<li>distributing rewards for successful checkpoint submissions, and</li>
+<li>proactively updating the status of checkpoints based on Bitcoin blockchain confirmations</li>
+</ul>
+<h2>Table of contents</h2>
+<ul>
+<li><a href="#table-of-contents">Table of contents</a></li>
+<li><a href="#concepts">Concepts</a></li>
+<li><a href="#states">States</a>
+<ul>
+<li><a href="#parameters">Parameters</a></li>
+<li><a href="#epoch-data">Epoch data</a></li>
+<li><a href="#latest-finalized-epoch">Latest Finalized Epoch</a></li>
+<li><a href="#submission-data">Submission data</a></li>
+<li><a href="#transient-states">Transient States</a></li>
+</ul>
+</li>
+<li><a href="#messages">Messages</a>
+<ul>
+<li><a href="#msginsertbtcspvproof">MsgInsertBTCSpvProof</a></li>
+<li><a href="#msgupdateparams">MsgUpdateParams</a></li>
+</ul>
+</li>
+<li><a href="#endblocker">EndBlocker</a></li>
+<li><a href="#queries">Queries</a></li>
+</ul>
+<h2>Concepts</h2>
+<p>Babylon's BTC Checkpoint module allows Babylon chain to periodically checkpoint its state onto the Bitcoin blockchain whilst simultaneously verifying the checkpoints. The process involves two main components:</p>
+<p>Checkpoint Submission:</p>
+<ol>
+<li>When a new checkpoint for a specific epoch is available, the <a href="https://github.com/babylonlabs-io/vigilante">vigilante</a> collects the necessary proof from the Bitcoin blockchain and submits raw transactions containing the checkpoint to the Babylon chain.</li>
+<li>This proof is called an <code>SPVProof</code> (Simplified Payment Verification Proof), consisting of the Bitcoin transaction, Index of the transaction, the Merkle path and the Bitcoin header that confirms the transaction.</li>
+<li>The <a href="https://github.com/babylonlabs-io/vigilante/blob/47956edbb72112162e4cecca5b9d1e0ad840dd47/reporter/utils.go#L191">vigilante reporter</a> submits this proof to the Babylon chain using the <code>InsertBTCSpvProof</code> function. The proof is validated and stored in state. This includes parsing the submission, checking for duplicates, and verifying the checkpoint with the <a href="https://github.com/babylonlabs-io/babylon/blob/main/x/checkpointing/README.md">checkpointing module</a>.</li>
+</ol>
+<p>Checkpoint Verification:</p>
+<ol>
+<li>
+<p>The Babylon chain maintains a Bitcoin light client through the <a href="https://github.com/babylonlabs-io/babylon/blob/dev/x/btclightclient/README.md">BTC Light Client module</a>. This module is responsible for tracking Bitcoin block headers, allowing Babylon to verify the depth and validity of Bitcoin transactions without running a full Bitcoin node.</p>
+</li>
+<li>
+<p>When new Bitcoin blocks are produced, the headers are relayed to and processed by the Babylon chain's light client.</p>
+</li>
+<li>
+<p>As the light client's tip changes, it triggers the <code>OnTipChange</code> callback.</p>
+</li>
+<li>
+<p>This callback initiates the <code>checkCheckpoints</code> process, which verifies the status of all submitted checkpoints based on their confirmation depth in the Bitcoin blockchain. This process includes:</p>
+<ul>
+<li>Checking if the checkpoint is still on the canonical chain</li>
+<li>Verifying if the deepest (best) submission of an older epoch happened
+before the given submission</li>
+<li>Determining how deep the submission is in the blockchain</li>
+<li>Marking each submission for deletion if it is:
+<ul>
+<li>Not known to the BTC light client, or</li>
+<li>On a fork of the BTC light client's chain</li>
+</ul>
+</li>
+</ul>
+<p>For more details on submissions, see <a href="#submission-data">Submissions</a>.</p>
+</li>
+<li>
+<p>Non-finalized epochs are retrieved from state. For each of these non-finalized epochs, the status is checked of the corresponding checkpoint. The depth of the checkpoint in the Bitcoin blockchain is verified and based on the depth and the module's parameters, the checkpoint's status may be updated. If the status changed, it's updated in the state and the corresponding status is set in the checkpointing module. Following an epoch being finalized, all submissions except the best one are deleted.</p>
+</li>
+</ol>
+<h2>States</h2>
+<p>The BTC Checkpoint module uses a combination of prefixed namespaces and individual keys within its KV store to organize different types of data. This approach allows for efficient storage and retrieval of various data elements related to checkpoints, epochs, and submissions.</p>
+<p><strong>Prefixes</strong></p>
+<ul>
+<li>
+<p><code>SubmisionKeyPrefix</code> is used to prefix keys for storing submission data.</p>
+</li>
+<li>
+<p><code>EpochDataPrefix</code> is used to prefix keys for storing epoch-related data.</p>
+</li>
+</ul>
+<p><strong>Keys</strong></p>
+<ul>
+<li>
+<p><code>LastFinalizedEpochKey</code> stores the number of the last finalized epoch</p>
+</li>
+<li>
+<p><code>BtcLightClientUpdatedKey</code> indicates whether the BTC light client was updated during the current block execution.</p>
+</li>
+<li>
+<p><code>ParamsKey</code> stores modules parameters.</p>
+</li>
+</ul>
+<h3>Parameters</h3>
+<p>The <a href="https://github.com/babylonlabs-io/babylon/blob/main/x/btccheckpoint/keeper/params.go">parameter management</a> maintains the BTC Checkpoint module's parameters. The BTC Checkpoint module's parameters are represented as a <code>Params</code> <a href="https://github.com/babylonlabs-io/babylon/blob/main/proto/babylon/btccheckpoint/v1/params.proto">object</a> defined as follows:</p>
+<pre><code class="language-protobuf">// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.equal) = true;
+
+  // btc_confirmation_depth is the confirmation depth in BTC.
+  // A block is considered irreversible only when it is at least k-deep in BTC
+  // (k in research paper)
+  uint32 btc_confirmation_depth = 1
+      [ (gogoproto.moretags) = "yaml:\"btc_confirmation_depth\"" ];
+
+  // checkpoint_finalization_timeout is the maximum time window (measured in BTC
+  // blocks) between a checkpoint
+  // - being submitted to BTC, and
+  // - being reported back to BBN
+  // If a checkpoint has not been reported back within w BTC blocks, then BBN
+  // has dishonest majority and is stalling checkpoints (w in research paper)
+  uint32 checkpoint_finalization_timeout = 2
+      [ (gogoproto.moretags) = "yaml:\"checkpoint_finalization_timeout\"" ];
+
+  // 4byte tag in hex format, required to be present in the OP_RETURN transaction
+  // related to babylon
+  string checkpoint_tag = 3
+      [ (gogoproto.moretags) = "yaml:\"checkpoint_tag\"" ];
+}
+</code></pre>
+<h3>Epoch Data</h3>
+<p>Epoch data is managed by <a href="https://github.com/babylonlabs-io/babylon/blob/main/x/btccheckpoint/keeper/submissions.go">submissions management</a> and is used to store and retrieve epoch-related data. The epoch data is indexed by epoch number and is represented as an <code>EpochData</code> object:</p>
+<pre><code class="language-protobuf">message EpochData {
+  // keys is the list of all received checkpoints during this epoch, sorted by
+  // order of submission.
+  repeated SubmissionKey keys = 1;
+
+  // status is the current btc status of the epoch
+  BtcStatus status = 2;
+}
+</code></pre>
+<h3>Latest Finalized Epoch</h3>
+<p>The Last Finalized Epoch number is stored in the state as a big-endian encoded uint64 value. It's accessed and modified using specific getter and setter functions in the keeper.</p>
+<h3>Submission Data</h3>
+<p>The <a href="https://github.com/babylonlabs-io/babylon/blob/main/x/btccheckpoint/keeper/submissions.go">submissions management</a> is responsible for managing and interacting with checkpoint submissions in the BTC checkpoint module The <code>SubmissionData</code> is defined as an object below.</p>
+<pre><code class="language-protobuf">message SubmissionData {
+  // address of the submitter and reporter
+  CheckpointAddresses vigilante_addresses = 1;
+  // txs_info is the two `TransactionInfo`s corresponding to the submission
+  // It is used for
+  // - recovering address of sender of btc transaction to payup the reward.
+  // - allowing the ZoneConcierge module to prove the checkpoint is submitted to
+  // BTC
+  repeated TransactionInfo txs_info = 2;
+  uint64 epoch = 3;
+}
+</code></pre>
+<h3>Transient States</h3>
+<h3>BTC Light Client Update</h3>
+<p>The BTC Light Client Update is maintained in the transient store during block execution. It is accessed using the <code>BtcLightClientUpdatedKey</code> and indicates whether the BTC light client was updated during the current block execution.</p>
+<pre><code class="language-go">func GetBtcLightClientUpdatedKey() []byte {
+	return BtcLightClientUpdatedKey
+}
+</code></pre>
+<h2>Messages</h2>
+<p>The BTC Checkpoint module primarily handles messages from the vigilante reporter. The message formats are defined in <a href="proto/babylon/btccheckpoint/v1/tx.proto.">proto/babylon/btccheckpoint/v1/tx.proto</a>. The message handlers are defined in <a href="x/btccheckpoint/keeper/msg_server.go">x/btccheckpoint/keeper/msg_server.go</a>. For more information on the SDK messages, refer to the <a href="https://docs.cosmos.network/main/build/building-modules/messages-and-queries">Cosmos SDK documentation on messages and queries</a></p>
+<h3>MsgInsertBTCSpvProof</h3>
+<p><code>MsgInsertBTCSpvProof</code> is used by vigilante reporter to insert a new checkpoint into the store, which can be seen <a href="https://github.com/babylonlabs-io/vigilante/blob/24da0381465249aa7b55be682a66e32cdaddc81b/types/btccheckpoint.go#L11">here</a>.</p>
+<pre><code class="language-protobuf">message MsgInsertBTCSpvProof {
+  option (cosmos.msg.v1.signer) = "submitter";
+  string submitter = 1;
+  repeated babylon.btccheckpoint.v1.BTCSpvProof proofs = 2;
+}
+</code></pre>
+<p>Upon receiving a <code>MsgInsertBTCSpvProof</code>, a Babylon node will execute as follows:</p>
+<ol>
+<li>Parse and validate the raw checkpoint data from the proof.</li>
+<li>Create a new <code>RawCheckpointSubmission</code> object from the parsed data.</li>
+<li>Verify if the submission is for the expected checkpoint by calling the checkpointing keeper.</li>
+<li>Check if the checkpoint is valid for the current epoch.</li>
+<li>Verify the ancestors of the checkpoint to ensure continuity.</li>
+<li>If all verifications pass, the new checkpoint submission is stored and the checkpoint status is updated.</li>
+</ol>
+<h2>MsgUpdateParams</h2>
+<p>This message is used to update the <code>btccheckpoint</code> module parameters. This should only be executable through governance proposals.</p>
+<pre><code class="language-protobuf">message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address of the governance account.
+  // just FYI: cosmos.AddressString marks that this field should use type alias
+  // for AddressString instead of string, but the functionality is not yet implemented
+  // in cosmos-proto
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // params defines the btccheckpoint parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+</code></pre>
+<h2>EndBlocker</h2>
+<p>Upon EndBlock, the BTC Checkpoint module executes the following:</p>
+<ul>
+<li>Check if the BTC light client head has been updated during the block execution using the <code>BtcLightClientUpdated</code> method.</li>
+<li>If the head has been updated, non-finalized epochs are checked to determine if their checkpoints have become confirmed, finalized, or abandoned.
+The logic for the <code>EndBlocker</code> is defined in at <a href="https://github.com/babylonlabs-io/babylon/blob/main/x/btccheckpoint/abci.go">x/btccheckpoint/abci.go</a>.</li>
+</ul>
+<h2>Queries</h2>
+<p>The BTC Checkpoint module provides a set of queries related to the status of checkpoints and other checkpoint-related data. These queries can be accessed via gRPC and REST endpoints.</p>
+<h3>Available Queries</h3>
+<p><strong>Parameters</strong><br>
+Endpoint: <code>/babylon/btccheckpoint/v1/params</code><br>
+Description: Queries the current parameters of the BTC Checkpoint module.</p>
+<p><strong>BTC Checkpoint Info</strong><br>
+Endpoint: <code>/babylon/btccheckpoint/v1/{epoch_num}</code><br>
+Description: Retrieves the best checkpoint information for a given epoch.</p>
+<p><strong>BTC Checkpoints Info</strong><br>
+Endpoint: <code>/babylon/btccheckpoint/v1/</code><br>
+Description: Retrieves checkpoint information for multiple epochs with pagination support.</p>
+<p><strong>Epoch Submissions</strong><br>
+Endpoint: <code>/babylon/btccheckpoint/v1/{epoch_num}/submissions</code><br>
+Description: Retrieves all submissions for a given epoch.</p>
+<p>Additional Information: For further details on how to use these queries and additional documentation, please refer to docs.babylonlabs.io.</p>
+</article></body></html>

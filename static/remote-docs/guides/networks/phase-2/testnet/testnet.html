@@ -1,0 +1,117 @@
+<html><body><article><h1>Babylon testnet-5 Network</h1>
+<p>Welcome to the network page for the Babylon Phase-2 testnet (<code>bbn-test-5</code>).
+This is your central hub
+for network participation information, whether you're running a node,
+operating as a validator, providing finality services, or participating
+in the covenant committee.</p>
+<h2>Network Parameters</h2>
+<h3>Chain ID</h3>
+<p><code>bbn-test-5</code></p>
+<h3>Genesis</h3>
+<p>The genesis file can be retrieved from <a href="./network-artifacts/genesis.json">here</a>.</p>
+<h3>State snapshot</h3>
+<p>A snapshot including state up to height <code>200</code> can be retrieved from
+<a href="./network-artifacts/bbn-test-5.tar.gz">here</a>.</p>
+<p>To boot a node with this snapshot, Babylon version <code>v1.0.0-rc.3</code> should be used
+(<a href="https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.0-rc.3">reference</a>).</p>
+<p>Some additional network snapshot sources are also listed:</p>
+<ul>
+<li>https://polkachu.com/testnets/babylon/snapshots</li>
+<li>https://www.imperator.co/services/chain-services/testnets/babylon</li>
+<li>https://services.contributiondao.com/testnet/babylon/snapshots</li>
+</ul>
+<h3>Seed nodes</h3>
+<p>Seed nodes can be retrieved from <a href="./network-artifacts/seeds.txt">here</a>.</p>
+<h3>Peers</h3>
+<p>Peers can be retrieved from <a href="./network-artifacts/peers.txt">here</a>.</p>
+<h3>Endpoints</h3>
+<ol>
+<li>RPC</li>
+</ol>
+<p>Pruned:</p>
+<ul>
+<li>https://babylon-testnet-rpc.nodes.guru</li>
+<li>https://babylon-testnet-rpc.polkachu.com</li>
+<li>https://rpc-babylon-testnet.imperator.co</li>
+<li>https://babylon-testnet-rpc.contributiondao.com</li>
+</ul>
+<p>Archive:</p>
+<ul>
+<li>https://babylon-testnet-rpc-archive-1.nodes.guru</li>
+</ul>
+<ol start="2">
+<li>LCD (node API)</li>
+</ol>
+<p>Pruned:</p>
+<ul>
+<li>https://babylon-testnet-api.nodes.guru</li>
+<li>https://babylon-testnet-api.polkachu.com</li>
+<li>https://lcd-babylon-testnet.imperator.co</li>
+<li>https://babylon-testnet-api.contributiondao.com</li>
+</ul>
+<p>Archive:</p>
+<ul>
+<li>https://babylon-testnet-api-archive-1.nodes.guru</li>
+</ul>
+<ol start="3">
+<li>gRPC</li>
+</ol>
+<ul>
+<li>https://babylon-testnet-grpc.nodes.guru</li>
+<li>http://babylon-testnet-grpc.polkachu.com:20690</li>
+<li>grpc-babylon-testnet.imperator.co:443</li>
+</ul>
+<h3>Covenant Committee</h3>
+<p>The covenant committee consists of 9 signing keys with a quorum being achieved
+with 6 signatures. Below are the members of the covenant committee and the
+BTC public keys associated with them.</p>
+<ul>
+<li>Babylon Labs:
+<ul>
+<li><code>fa9d882d45f4060bdb8042183828cd87544f1ea997380e586cab77d5fd698737</code></li>
+<li><code>0aee0509b16db71c999238a4827db945526859b13c95487ab46725357c9a9f25</code></li>
+<li><code>17921cf156ccb4e73d428f996ed11b245313e37e27c978ac4d2cc21eca4672e4</code></li>
+</ul>
+</li>
+<li>Cubist
+<ul>
+<li><code>113c3a32a9d320b72190a04a020a0db3976ef36972673258e9a38a364f3dc3b0</code></li>
+</ul>
+</li>
+<li>Informal Systems
+<ul>
+<li><code>79a71ffd71c503ef2e2f91bccfc8fcda7946f4653cef0d9f3dde20795ef3b9f0</code></li>
+</ul>
+</li>
+<li>Zellic
+<ul>
+<li><code>3bb93dfc8b61887d771f3630e9a63e97cbafcfcc78556a474df83a31a0ef899c</code></li>
+</ul>
+</li>
+<li>RockX
+<ul>
+<li><code>d21faf78c6751a0d38e6bd8028b907ff07e9a869a43fc837d6b3f8dff6119a36</code></li>
+</ul>
+</li>
+<li>AltLayer
+<ul>
+<li><code>f5199efae3f28bb82476163a7e458c7ad445d9bffb0682d10d3bdb2cb41f8e8e</code></li>
+</ul>
+</li>
+<li>CoinSummer Labs
+<ul>
+<li><code>40afaf47c4ffa56de86410d8e47baa2bb6f04b604f4ea24323737ddc3fe092df</code></li>
+</ul>
+</li>
+</ul>
+<p>Alternatively, the list can be retrieved from <a href="./covenant-committee.json">here</a>.</p>
+<h2>Network Participants</h2>
+<p>There are four types of participants in the Babylon network.
+Please see the setup and configuration guides below:</p>
+<ul>
+<li><a href="babylon-node/README.md">Babylon Node Operators</a></li>
+<li><a href="babylon-validators/README.md">Validators</a></li>
+<li><a href="https://github.com/babylonlabs-io/finality-provider/blob/main/README.md">Finality Providers</a></li>
+<li><a href="https://github.com/babylonlabs-io/covenant-emulator/blob/main/README.md">Covenant Committee</a></li>
+</ul>
+</article></body></html>

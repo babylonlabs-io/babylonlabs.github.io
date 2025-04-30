@@ -1,0 +1,49 @@
+<html><body><article><h1>Babylon-contract</h1>
+<p>This repo contains the Wasm smart contract for Babylon integrations.
+It will be deployed on a Cosmos zone that integrates Babylon, and will maintain BTC timestamps of headers in this Cosmos zone.</p>
+<h2>Development</h2>
+<h3>Prerequisites</h3>
+<p>Make sure you have <code>cargo-run-script</code> installed and docker running.</p>
+<pre><code class="language-bash">cargo install cargo-run-script
+</code></pre>
+<h3>Clean the build</h3>
+<pre><code class="language-bash">cargo clean
+</code></pre>
+<h3>Build the contract</h3>
+<pre><code class="language-bash">cargo build
+</code></pre>
+<h3>Formatting and Linting</h3>
+<p>Check whether the code is formatted correctly.</p>
+<pre><code class="language-bash">cargo fmt --all -- --check
+cargo check
+cargo clippy --all-targets -- -D warnings
+</code></pre>
+<p>Alternatively, you can run the following command to run all the checks at once.</p>
+<pre><code class="language-bash">cargo run-script lint
+</code></pre>
+<h3>Test the contract</h3>
+<p>Note: Requires the optimized contract to be built (<code>cargo optimize</code>)</p>
+<p>Runs all the CI checks locally (in your actual toolchain).</p>
+<pre><code class="language-bash">cargo test --lib
+</code></pre>
+<h3>Integration tests the contract</h3>
+<p>Note: Requires the optimized contract to be built (<code>cargo optimize</code>)</p>
+<pre><code class="language-bash">cargo test --test integration
+</code></pre>
+<p>Alternatively, you can run the following command, that makes sure to build the optimized contract before running
+the integration tests.</p>
+<pre><code class="language-bash">cargo run-script integration
+</code></pre>
+<h3>Generate the schema</h3>
+<pre><code class="language-bash">cargo run-script gen-schema
+</code></pre>
+<h3>Generate the protobuf files</h3>
+<pre><code class="language-bash">cargo run-script gen-proto
+</code></pre>
+<h3>Generate test data</h3>
+<pre><code class="language-bash">cargo run-script gen-data
+</code></pre>
+<h3>Build the optimized contract</h3>
+<pre><code class="language-bash">cargo run-script optimize
+</code></pre>
+</article></body></html>

@@ -160,6 +160,13 @@ function clearDirectory(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
 }
 
+async function mdToStructuredHtml(mdContent) {
+  const { remark } = await import('remark');
+  const html = (await import('remark-html')).default;
+  const file = await remark().use(html).process(mdContent);
+  return `<html><body><article>${file.value}</article></body></html>`;
+}
+
 async function main() {
   const DOCS_DIR = path.resolve(__dirname, '../docs');
   const STATIC_REMOTE_DOCS = path.resolve(__dirname, '../static/remote-docs');
@@ -169,7 +176,6 @@ async function main() {
   let total = 0, errorCount = 0;
   for (const mdx of mdxFiles) {
     const mdxContent = fs.readFileSync(mdx, 'utf-8');
-    // First analyze all variables
     const jsCode = extractJsAndRemoteMD(mdxContent);
     let ast;
     let variables = {};
@@ -180,7 +186,6 @@ async function main() {
     const targets = findRemoteMDTargets(mdxContent, variables);
     if (targets.length === 0) continue;
 
-    // docs/xxx/yyy.mdx => xxx/ relative directory
     const relPath = path.relative(DOCS_DIR, mdx);
     const relDir = path.dirname(relPath);
     const baseName = getFileBaseName(mdx);
@@ -189,11 +194,11 @@ async function main() {
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
 
     for (const { url, key } of targets) {
-      // If there are multiple keys in the same group, append `-key`
       let name = (targets.length === 1 || key === undefined || key === null)
         ? `${baseName}.md`
         : `${baseName}-${key}.md`;
       const outPath = path.join(targetDir, name);
+      const htmlOutPath = outPath.replace(/\.md$/, '.html');
       try {
         const res = await fetch(url);
         if (!res.ok) {
@@ -201,8 +206,12 @@ async function main() {
           console.warn(`[WARN] Download failed [${res.status}]: ${url}`);
           continue;
         }
-        fs.writeFileSync(outPath, await res.text(), 'utf-8');
-        console.log('Fetched:', url, '=>', outPath);
+        const mdContent = await res.text();
+        fs.writeFileSync(outPath, mdContent, 'utf-8');
+        const htmlContent = await mdToStructuredHtml(mdContent);
+        fs.writeFileSync(htmlOutPath, htmlContent, 'utf-8');
+        fs.unlinkSync(outPath);
+        console.log('Fetched:', url, '=>', htmlOutPath, '（md have deleted）');
         total++;
       } catch (err) {
         errorCount++;
@@ -210,6 +219,6 @@ async function main() {
       }
     }
   }
-  console.log(`Total written ${total} remote md, errors ${errorCount}`);
+  console.log(`Total written ${total} remote html (md deleted), errors ${errorCount}`);
 }
 main();
