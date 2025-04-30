@@ -71,6 +71,8 @@
     "prettier-plugin-tailwindcss": "^0.2.5",
     "process": "^0.11.10",
     "react-markdown": "^8.0.4",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1",
     "sass": "^1.83.1",
     "sass-loader": "^16.0.4",
     "stream-browserify": "^3.0.0",

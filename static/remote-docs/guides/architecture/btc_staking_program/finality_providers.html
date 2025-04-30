@@ -1,0 +1,149 @@
+<html><body><article><h1>Finality Provider</h1>
+<p>Finality providers are key participants in the Babylon BTC staking protocol.
+They provide finality votes on top of
+<a href="https://github.com/cometbft/cometbft">CometBFT</a>, Babylon's consensus mechanism,
+and earn commissions from BTC staking delegations.</p>
+<p>The finality provider toolset operates on standard UNIX-based
+systems and consists of three core components:</p>
+<ol>
+<li><strong>Babylon Genesis Node</strong>:
+A Babylon Genesis network node that provides chain data and transaction
+submission capabilities. While not mandatory, running your own node is
+strongly recommended for security rather than relying on third-party RPC nodes.
+See the <a href="https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/babylon-node/README.md">Setup Node Guide</a>
+for details.</li>
+<li><strong>Extractable One-Time Signature (EOTS) Manager</strong>:
+A secure key management daemon that handles EOTS key operations,
+generates extractable one-time signatures, and produces public randomness.
+For enhanced security, this component should run on a separate machine or
+network segment.</li>
+<li><strong>Finality Provider Daemon</strong>:
+The core daemon that polls Babylon Genesis blocks, commits public randomness, and
+submits finality signatures. It manages the finality provider's status transitions
+and handles rewards distribution.</li>
+</ol>
+<p><strong>Component Interactions</strong>:
+The Finality Provider daemon communicates with the Babylon Genesis Node to monitor blocks
+and submit transactions. It interacts with the EOTS Manager for signature and
+randomness generation. The EOTS Manager maintains secure key storage and handles
+all EOTS key operations.</p>
+<p><img src="./docs/static/finality-provider-arch.png" alt="Finality Provider Architecture Diagram"></p>
+<h2>Become a Finality Provider</h2>
+<p>For instructions on creating and operating a finality provider,
+see our <a href="./docs/finality-provider-operation.md">Finality Provider Guide</a>.</p>
+<h2>High Level Descriptions of EOTS and Finality Provider</h2>
+<h3>EOTS Manager</h3>
+<p>The EOTS daemon is responsible for managing EOTS keys, producing EOTS randomness, and
+using them to produce EOTS signatures.</p>
+<blockquote>
+<p>⚡ <strong>Note:</strong> EOTS stands for Extractable One Time Signature. You can read more about it
+in
+the <a href="https://docs.babylonchain.io/assets/files/btc_staking_litepaper-32bfea0c243773f0bfac63e148387aef.pdf">Babylon BTC Staking Litepaper</a>.
+In short, the EOTS manager generates EOTS public/private randomness pairs. The
+finality provider commits the public part of these pairs to Babylon Genesis for every future
+block height that they intend to provide a finality signature for. If the finality
+provider votes for two different blocks on the same height, they will have to reuse
+the same private randomness which will lead to their EOTS private key being
+exposed, leading to the slashing.</p>
+</blockquote>
+<p>Once a finality provider is double-signs, their voting power is immediately reduced
+to zero, while their private key is exposed. A finality provider that double-signs
+can never regain voting power (tombstoning). Additionally, the exposed private key
+of the finality provider can be used to fully sign the slashing transactions of all
+their stake delegations.</p>
+<p>The EOTS manager is responsible for the following operations:</p>
+<ol>
+<li><strong>EOTS Key Management:</strong>
+<ul>
+<li>Generates <a href="https://en.wikipedia.org/wiki/Schnorr_signature">Schnorr</a> key pairs
+for a given finality provider using the
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki">BIP-340</a>
+standard as its EOTS key pair</li>
+<li>Persists generated key pairs in the internal Cosmos keyring.</li>
+</ul>
+</li>
+<li><strong>Randomness Generation:</strong>
+<ul>
+<li>Generates lists of EOTS randomness pairs based on the EOTS key, chain ID, and
+block height.</li>
+<li>The randomness is deterministically generated and tied to specific parameters.</li>
+</ul>
+</li>
+<li><strong>Signature Generation:</strong>
+<ul>
+<li>Signs EOTS using the private key of the finality provider and the corresponding
+secret randomness for a given chain at a specified height.</li>
+<li>Signs Schnorr signatures using the private key of the finality provider.</li>
+</ul>
+</li>
+</ol>
+<h3>Finality Provider</h3>
+<p>The Finality Provider Daemon is responsible for monitoring for new Babylon Genesis blocks,
+committing public randomness for the blocks it intends to provide finality signatures
+for, and submitting finality signatures.</p>
+<p>The daemon can manage multiple finality providers but only run a single
+finality provider instance at a time performing the following operations:</p>
+<ol>
+<li>
+<p><strong>Creation and Registration</strong>: Creates and registers a finality provider to.</p>
+</li>
+<li>
+<p><strong>EOTS Randomness Commitment</strong>: The daemon monitors Babylon Genesis and commits
+EOTS public randomness for every Babylon Genesis block the finality provider intends to
+vote for. The commit intervals can be specified in the configuration.</p>
+</li>
+<li>
+<p><strong>Finality Votes Submission</strong>: The daemon monitors Babylon Genesis and produces
+finality votes for each block the finality provider has committed to vote for.</p>
+</li>
+<li>
+<p><strong>Status Management</strong>: The daemon continuously monitors voting power and overall
+provider status. It manages state transitions between <code>ACTIVE</code>, <code>INACTIVE</code>,
+<code>JAILED</code>, and <code>SLASHED</code> states, while handling the jailing process when violations
+occur.</p>
+</li>
+<li>
+<p><strong>Security and Key Management</strong>: The daemon manages Babylon Genesis keys for signing
+transactions and rewards distribution. It maintains secure coordination with
+the EOTS daemon for all key-related operations.</p>
+</li>
+</ol>
+<p>The daemon is controlled by the <code>fpd</code> tool, which provides commands for
+interacting with the running daemon.</p>
+<h2>Technical Documentation</h2>
+<p>For detailed technical information about the finality provider's internal operations, see:</p>
+<ul>
+<li><a href="./docs/fp-core.md">Core Heuristics</a></li>
+<li><a href="./docs/commit-pub-rand.md">Public Randomness Commits</a></li>
+<li><a href="./docs/send-finality-vote.md">Finality Votes submission</a></li>
+<li><a href="./docs/slashing-protection.md">Slashing Protection</a></li>
+</ul>
+<h2>Overview of Keys for Finality Provider and EOTS Manager</h2>
+<p>There are two distinct keys you'll be working with:</p>
+<ul>
+<li>
+<p><strong>EOTS Key</strong>:</p>
+<ul>
+<li>Used for generating EOTS signatures, Schnorr signatures, and randomness pairs</li>
+<li>This serves as the unique identifier for the finality provider</li>
+<li>It's derived from a Bitcoin private key, using the secp256k1
+elliptic curve.</li>
+<li>Stored in the EOTS manager daemon's keyring</li>
+<li>This key is used in the Bitcoin-based security model of Babylon.</li>
+</ul>
+</li>
+<li>
+<p><strong>Babylon Genesis Key</strong>:</p>
+<ul>
+<li>Used for signing transactions on Babylon.</li>
+<li>Associated with a Babylon Genesis account that receives rewards</li>
+<li>Stored in the finality provider daemon's keyring</li>
+</ul>
+</li>
+</ul>
+<p>This dual association allows the finality provider to interact with both the
+Bitcoin network (for security) and the Babylon Genesis network (for rewards and
+governance).</p>
+<p>Once a finality provider is created, neither key can be rotated or changed -
+they are permanently associated with that specific finality provider instance.</p>
+</article></body></html>
