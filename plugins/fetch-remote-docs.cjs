@@ -167,13 +167,33 @@ async function mdToStructuredHtml(mdContent) {
   return `<html><body><article>${file.value}</article></body></html>`;
 }
 
+function generateSitemap(urls, baseUrl) {
+  const sitemap =
+    `<?xml version="1.0" encoding="UTF-8"?>
+` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+` +
+    urls.map(url =>
+      `  <url>
+    <loc>${baseUrl}${url}</loc>
+  </url>`
+    ).join('\n') + ' </urlset>';
+  return sitemap;
+}
+
 async function main() {
   const DOCS_DIR = path.resolve(__dirname, '../docs');
   const STATIC_REMOTE_DOCS = path.resolve(__dirname, '../static/remote-docs');
+  const BRANCH_NAME = process.env.BRANCH_NAME;
+  const REMOTE_DOCS_BASE_URL =
+    BRANCH_NAME === 'main'
+      ? 'https://docs.babylonlabs.io/remote-docs'
+      : 'https://docs.dev.babylonlabs.io/remote-docs';
   // New: Clear the `remote-docs` directory each time
   clearDirectory(STATIC_REMOTE_DOCS);
   const mdxFiles = scanMdxFiles(DOCS_DIR, []);
   let total = 0, errorCount = 0;
+  const htmlUrls = [];
   for (const mdx of mdxFiles) {
     const mdxContent = fs.readFileSync(mdx, 'utf-8');
     const jsCode = extractJsAndRemoteMD(mdxContent);
@@ -211,6 +231,8 @@ async function main() {
         const htmlContent = await mdToStructuredHtml(mdContent);
         fs.writeFileSync(htmlOutPath, htmlContent, 'utf-8');
         fs.unlinkSync(outPath);
+        const relHtmlPath = path.relative(STATIC_REMOTE_DOCS, htmlOutPath).replace(/\\/g, '/');
+        htmlUrls.push(`/${relHtmlPath}`);
         console.log('Fetched:', url, '=>', htmlOutPath, '（md have deleted）');
         total++;
       } catch (err) {
@@ -218,6 +240,12 @@ async function main() {
         console.warn(`[ERROR] ${url} Download failed, reason: ${err.message}`);
       }
     }
+  }
+  if (htmlUrls.length > 0) {
+    const sitemapContent = generateSitemap(htmlUrls, REMOTE_DOCS_BASE_URL);
+    const sitemapPath = path.join(STATIC_REMOTE_DOCS, 'remote-docs-sitemap.xml');
+    fs.writeFileSync(sitemapPath, sitemapContent, 'utf-8');
+    console.log(`Generated sitemap: ${sitemapPath} (contains ${htmlUrls.length} html pages)`);
   }
   console.log(`Total written ${total} remote html (md deleted), errors ${errorCount}`);
 }
