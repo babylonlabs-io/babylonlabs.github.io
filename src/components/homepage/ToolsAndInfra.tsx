@@ -66,8 +66,8 @@ export default function ToolsAndInfra() {
         }
       },
       {
-        name: 'Axelar',
-        icon: '/img/landing-page/tools-and-infra/axelar_squid.jpeg',
+        name: 'Squid Router (Axelar)',
+        icon: '/img/landing-page/tools-and-infra/squid.png',
         tileLink: 'https://app.squidrouter.com/',
         socialLinks: {
           twitter: 'https://x.com/axelar',
