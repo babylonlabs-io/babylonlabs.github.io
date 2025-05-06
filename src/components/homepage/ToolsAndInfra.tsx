@@ -27,16 +27,16 @@ function PartnerCard({
   socialLinks: { [key: string]: string } 
 }) {
   return (
-    <div className="flex flex-col items-center rounded-lg border border-secondary-700 p-4 hover:border-primary">
-      <Link to={tileLink} className="mb-3 aspect-square w-full max-w-[200px] flex items-center justify-center p-4">
+    <div className="flex flex-col items-center rounded-lg border border-secondary-700 p-2 hover:border-primary min-w-[160px]">
+      <Link to={tileLink} className="mb-1 aspect-square w-full max-w-[80px] flex items-center justify-center p-1">
         <img src={icon} className="max-w-full max-h-full object-contain" alt={`${name} logo`} />
       </Link>
-      <Link to={tileLink} className="text-white mb-2 font-medium hover:text-primary">{name}</Link>
-      <div className="flex gap-2">
+      <Link to={tileLink} className="text-white mb-1 font-medium hover:text-primary text-xs">{name}</Link>
+      <div className="flex gap-1">
         {Object.entries(socialLinks).map(([platform, url]) => (
           <Link key={platform} to={url} className="text-white hover:text-primary">
-            {platform === 'twitter' && <Twitter className="h-5 w-5" />}
-            {platform === 'website' && <OpenRegular className="h-5 w-5" />}
+            {platform === 'twitter' && <Twitter className="h-3 w-3" />}
+            {platform === 'website' && <OpenRegular className="h-3 w-3" />}
           </Link>
         ))}
       </div>
@@ -108,10 +108,10 @@ export default function ToolsAndInfra() {
       {
         name: 'Tower',
         icon: '/img/landing-page/tools-and-infra/tower.jpg',
-        tileLink: 'https://towerprotocol.com',
+        tileLink: 'https://app.tower.fi/swap',
         socialLinks: {
           twitter: 'https://twitter.com/towerprotocol',
-          website: 'https://towerprotocol.com'
+          website: 'https://app.tower.fi/swap'
         }
       },
       {
@@ -127,8 +127,8 @@ export default function ToolsAndInfra() {
   };
 
   return (
-    <section className="mx-auto mb-16 flex w-full max-w-5xl flex-col p-4 py-0">
-      <span className="mb-2 uppercase tracking-wider text-text-400">
+    <section className="mx-auto mb-5 flex w-full max-w-5xl flex-col p-4 py-0">
+      <span className="mb-4 uppercase tracking-wider text-text-400">
         Tools & Infrastructure
       </span>
 
@@ -136,18 +136,18 @@ export default function ToolsAndInfra() {
         Building the Bitcoin's Future Together
       </h3> */}
 
-      <div className="mb-10">
-        <h4 className="mb-6 text-2xl">Bridges</h4>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mb-2">
+        <h4 className="mb-1 text-2xl">Bridges</h4>
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
           {partners.bridges.map((partner) => (
             <PartnerCard key={partner.name} {...partner} />
           ))}
         </div>
       </div>
 
-      <div className="mb-10">
-        <h4 className="mb-6 text-2xl">Liquid Staking Tokens</h4>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mb-2">
+        <h4 className="mb-1 text-2xl">Liquid Staking Tokens</h4>
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
           {partners.lsts.map((partner) => (
             <PartnerCard key={partner.name} {...partner} />
           ))}
@@ -155,8 +155,8 @@ export default function ToolsAndInfra() {
       </div>
 
       <div>
-        <h4 className="mb-6 text-2xl">Decentralized Exchanges</h4>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <h4 className="mb-1 text-2xl">Decentralized Exchanges</h4>
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
           {partners.dexes.map((partner) => (
             <PartnerCard key={partner.name} {...partner} />
           ))}
