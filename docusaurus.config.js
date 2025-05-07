@@ -208,7 +208,7 @@ const config = {
                 to: '/api/babylon-gRPC/babylon-grpc-api-docs',
               },
               {label: 'CometBFT',
-                to:'/api/babylon-gRPC/comet-bft-api-docs'
+                to:'api/comet-bft/babylon-grpc-api-docs'
               }
             ],
           },
