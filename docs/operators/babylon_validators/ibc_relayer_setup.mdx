@@ -1,0 +1,420 @@
+---
+title: IBC Relayer Setup Guide
+sidebar_label: Setup an IBC Relayer
+sidebar_position: 2
+---
+
+# IBC Relayer Setup Guide
+
+Babylon uses IBC (Inter-Blockchain Communication protocol) to enable cross-chain communication.
+To support this capability it relies on relayers, processes that can be run by anyone which constantly scan for outbound packets on one chain and submits these packets alongside corresponding proofs on the destination chain.
+This section describes how one can setup a relayer and create new connections between chains.
+
+There are two standard implementations:
+
+- Hermes built in Rust
+- Go Relayer built in Go
+
+The following guide explains how to establish IBC connections and relay packets between Celestia Mocha testnet and Babylon testnet networks by using the Hermes relayer.
+
+## Hermes
+Hermes is an open-source Rust implementation of an IBC relayer released as part of the ibc-relayer-cli crate.
+It includes a CLI for relaying packets between Cosmos SDK chains, as well as Prometheus metrics and a REST API.
+
+### Prerequisites
+- [Go](https://go.dev/doc/install)
+- [Rust](https://rustup.rs/)
+
+Please follow the steps at [Hermes Quick Start](https://hermes.informal.systems/quick-start/) to install Hermes.
+Before proceeding, verify that Hermes is installed correctly by running `hermes version`.
+
+## Configuration
+
+### Prerequisites
+- **Funded** Celestia Mocha account
+- **Funded** Babylon testnet account
+
+To acquire testnet tokens for Celestia Mocha, use [Celestia Testnet Faucet bot](https://discord.gg/celestiacommunity).
+To get testnet tokens for Babylon testnet, use [Babylon Testnet Faucet bot](https://discord.gg/babylonglobal).
+
+### Configure the chains
+
+After installing Hermes, create `.hermes` folder in your `$HOME` directory and create a config file.
+
+```bash
+mkdir $HOME/.hermes
+```
+
+Copy `config.toml` file from the `hermes` repository to the `.hermes` folder.
+
+```bash
+cp $HOME/hermes/config.toml $HOME/.hermes/config.toml
+```
+
+For this tutorial, we will be using the following chains:
+
+- Celestia's mocha-4 testnet
+- Babylon's Phase 2 testnet
+
+
+
+
+
+
+
+
+Edit the Hermes configuration.
+
+```bash
+vim $HOME/.hermes/config.toml
+```
+
+```toml
+[global]
+log_level = "info"
+
+[mode.clients]
+enabled = true
+refresh = true
+misbehaviour = true
+
+[mode.connections]
+enabled = false
+
+[mode.channels]
+enabled = false
+
+[mode.packets]
+enabled = true
+clear_interval = 100
+clear_on_start = true
+tx_confirmation = false
+auto_register_counterparty_payee = false
+
+[rest]
+enabled = false
+host = "127.0.0.1"
+port = 3000
+
+[telemetry]
+enabled = false
+host = "127.0.0.1"
+port = 3001
+
+[telemetry.buckets.latency_submitted]
+start = 500
+end = 20000
+buckets = 10
+
+[telemetry.buckets.latency_confirmed]
+start = 1000
+end = 30000
+buckets = 10
+
+[[chains]]
+id = 'bbn-test-5'
+type = "CosmosSdk"
+rpc_addr = 'https://babylon-testnet-rpc.nodes.guru'
+grpc_addr = 'https://babylon-testnet-grpc.nodes.guru'
+rpc_timeout = "10s"
+trusted_node = false
+account_prefix = "bbn"
+key_name = "babylon"
+key_store_type = "Test"
+store_prefix = "ibc"
+default_gas = 100000
+max_gas = 4000000
+gas_multiplier = 1.1
+max_msg_num = 30
+max_tx_size = 180000
+max_grpc_decoding_size = 33554432
+clock_drift = "5s"
+max_block_time = "30s"
+ccv_consumer_chain = false
+memo_prefix = ""
+sequential_batch_tx = false
+
+[chains.event_source]
+mode = "push"
+url = "wss://babylon-testnet-rpc.nodes.guru/websocket"
+batch_delay = "500ms"
+
+[chains.trust_threshold]
+numerator = "1"
+denominator = "3"
+
+[chains.gas_price]
+price = 0.01
+denom = "ubbn"
+
+[chains.packet_filter]
+policy = "allow"
+list = [["transfer","channel-20"]]
+
+[chains.packet_filter.min_fees]
+
+[chains.address_type]
+derivation = "cosmos"
+
+
+[[chains]]
+id = "mocha-4"
+type = "CosmosSdk"
+rpc_addr = "https://rpc-celestia-mocha.architectnodes.com"
+grpc_addr = "https://grpc.celestia-mocha.com:443"
+rpc_timeout = "10s"
+trusted_node = false
+account_prefix = "celestia"
+key_name = "celestia-key"
+key_store_type = "Test"
+store_prefix = "ibc"
+default_gas = 100000
+max_gas = 400000
+gas_multiplier = 1.5
+max_msg_num = 30
+max_tx_size = 180000
+max_grpc_decoding_size = 33554432
+clock_drift = "5s"
+max_block_time = "30s"
+ccv_consumer_chain = false
+memo_prefix = ""
+sequential_batch_tx = false
+
+[chains.event_source]
+mode = "push"
+url = "ws://rpc-mocha.pops.one:26657/websocket"
+batch_delay = "500ms"
+
+[chains.trust_threshold]
+numerator = "1"
+denominator = "3"
+
+[chains.gas_price]
+price = 0.1
+denom = "utia"
+
+[chains.packet_filter]
+policy = "allow"
+list = [["transfer", "channel-0"]]
+
+[chains.packet_filter.min_fees]
+
+[chains.address_type]
+derivation = "cosmos"
+
+```
+
+### Create/Add relayer wallets
+
+Now that we have successfully configured our relaying chains, we need to import the wallets that will be used for relaying. Please note that both wallets need to be funded with the native tokens of each chain.
+
+You can use Keplr to create a wallet for Celestia Mocha and Babylon testnet.
+You can get testnet tokens from faucets for bot testnets via Discord:
+Celestia: https://discord.gg/celestiacommunity
+Cosmos Hub: https://discord.gg/cosmosnetwork
+
+Add your seed phrase to a `.mnemonic` file and upload it to the server. Do not use wallets for anything else but relaying to avoid running into account sequence errors.
+
+Follow the steps at [Adding Keys to Hermes](https://hermes.informal.systems/quick-start/adding-keys-to-hermes/) to add keys for each chain:
+
+```bash
+hermes keys add --chain bbn-test-5 --mnemonic-file <PATH_TO_MNEMONIC_FILE>
+
+hermes keys add --chain mocha-4 --mnemonic-file <PATH_TO_MNEMONIC_FILE>
+```
+### Verify configuration files
+After editing config.toml and adding wallet keys, run the health check:
+
+```bash
+hermes health-check
+hermes config validate
+```
+If everything was set up correctly, you should see output like:
+
+```bash
+SUCCESS performed health check for all chains in the config
+SUCCESS "configuration is valid"
+```
+
+### Create clients
+
+First, verify that the chains do not have existing clients:
+
+```bash
+hermes query clients --host-chain mocha-4 --reference-chain bbn-test-5
+```
+To create a new client, use the [`create-client`](https://hermes.informal.systems/documentation/commands/path-setup/clients.html#create-client) command:
+
+```bash
+hermes create client --host-chain mocha-4 --reference-chain bbn-test-5
+```
+
+You should see output like:
+
+```bash
+SUCCESS CreateClient(
+    CreateClient(
+        Attributes {
+            client_id: ClientId(
+                "07-tendermint-27",
+            ),
+            client_type: Tendermint,
+            consensus_height: Height {
+                revision: 4,
+                height: 5730919,
+            },
+        },
+    ),
+)
+```
+:::note
+Make sure that accounts on both chains are funded with the native tokens of each chain.
+Otherwise, you will get an error:
+
+```bash
+ERROR foreign client error: error raised while creating client for chain mocha-4
+```
+:::
+
+Create a second client:
+
+```bash
+hermes create client --host-chain bbn-test-5 --reference-chain mocha-4
+```
+
+### Create a connection
+
+To create a connection between the two clients run:
+
+```bash
+hermes create connection --host-chain mocha-4 --reference-chain bbn-test-5
+```
+
+You should see output like:
+
+```bash
+SUCCESS Connection {
+    delay_period: 0ns,
+    a_side: ConnectionSide {
+        chain: BaseChainHandle {
+            chain_id: ChainId {
+                id: "mocha-4",
+                version: 4,
+            },
+            runtime_sender: Sender { .. },
+        },
+        client_id: ClientId(
+            "07-tendermint-595",
+        ),
+        connection_id: Some(
+            ConnectionId(
+                "connection-654",
+            ),
+        ),
+    },
+    b_side: ConnectionSide {
+        chain: BaseChainHandle {
+            chain_id: ChainId {
+                id: "bbn-test-5",
+                version: 5,
+            },
+            runtime_sender: Sender { .. },
+        },
+        client_id: ClientId(
+            "07-tendermint-29",
+        ),
+        connection_id: Some(
+            ConnectionId(
+                "connection-27",
+            ),
+        ),
+    },
+}
+```
+Now that the connection has been established over the clients, we need to create a new channel using an existing connection:
+
+```bash
+hermes create channel --a-chain mocha-4 --a-connection connection-654 --a-port transfer --b-port transfer
+```
+
+You should see output like:
+
+```bash
+SUCCESS Channel {
+    ordering: Unordered,
+    a_side: ChannelSide {
+        chain: BaseChainHandle {
+            chain_id: ChainId {
+                id: "mocha-4",
+                version: 4,
+            },
+            runtime_sender: Sender { .. },
+        },
+        client_id: ClientId(
+            "07-tendermint-595",
+        ),
+        connection_id: ConnectionId(
+            "connection-654",
+        ),
+        port_id: PortId(
+            "transfer",
+        ),
+        channel_id: Some(
+            ChannelId(
+                "channel-389",
+            ),
+        ),
+        version: None,
+    },
+    b_side: ChannelSide {
+        chain: BaseChainHandle {
+            chain_id: ChainId {
+                id: "bbn-test-5",
+                version: 5,
+            },
+            runtime_sender: Sender { .. },
+        },
+        client_id: ClientId(
+            "07-tendermint-29",
+        ),
+        connection_id: ConnectionId(
+            "connection-27",
+        ),
+        port_id: PortId(
+            "transfer",
+        ),
+        channel_id: Some(
+            ChannelId(
+                "channel-20",
+            ),
+        ),
+        version: None,
+    },
+    connection_delay: 0ns,
+```
+### Configure channels in Hermes
+Now that we have created new connections and opened channels, we need to edit config.toml again and add the newly created channels, or use the already existing ones.
+
+For mocha-4 add:
+
+```toml
+[chains.packet_filter]
+policy = "allow"
+list = [["transfer", "channel-389"]]
+```
+
+For bbn-test-5 add:
+
+```toml
+[chains.packet_filter]
+policy = "allow"
+list = [["transfer","channel-20"]]
+```
+
+### Start the relayer
+Start the relayer via hermes start
+
+```bash
+hermes start
+```
+

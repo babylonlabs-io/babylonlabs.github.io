@@ -1,0 +1,117 @@
+<html><body><article><h1>Covenant Committee</h1>
+<p>The Covenant Emulation committee comprises of entities operating a covenant
+signer to sign on-demand unbonding and slashing transactions.
+The committee has 9 seats, which are filled by the following entities:</p>
+<ul>
+<li>Babylon Labs: 3 seats</li>
+<li>CoinSummer Labs: 1 seat</li>
+<li>RockX: 1 seat</li>
+<li>AltLayer: 1 seat</li>
+<li>Zellic: 1 seat</li>
+<li>Informal Systems: 1 seat</li>
+<li>Cubist: 1 seat</li>
+</ul>
+<p>The covenant emulation committee operates on all phases of the Babylon mainnet
+launch, and during the transitionary stage between Phase-1 and Phase-2
+will operate separate programs for each stage to support both Phase-1 and
+Phase-2 stakers.
+Below, we detail the specifics of the operation for each phase.</p>
+<h2>Phase-2</h2>
+<p>During Phase-2, the covenant emulation committee is responsible for operationg
+the <a href="https://github.com/babylonlabs-io/covenant-emulator">covenant-emulator</a>,
+a daemon responsible for connecting with a Babylon Genesis node and monitoring
+for staking registrations that are pending verification. Once such a staking
+transaction is identified, the covenant emulator daemon submits signatures for
+the on-demand unbonding, slashing, and unbonding slashing transactions.</p>
+<blockquote>
+<p><strong>Note</strong>: The Babylon Genesis chain involves slashing of finality providers
+for double signing offences. This means that in Phase-2, covenant committee
+members submit not only unbonding signatures, but slashing signatures as
+well.</p>
+</blockquote>
+<p>The latest list of covenant public keys and operating entities can be found
+<a href="./covenant-committee.json">here</a>.</p>
+<blockquote>
+<p><strong>Important</strong>: The above list might be outdated. The best source of truth on the
+current covenant committee members and their keys is the Babylon
+Genesis node parameters. You should aim to retrieve the parameters from
+there.</p>
+</blockquote>
+<h2>Phase-1</h2>
+<p>During Phase-1, the covenant emulation committee is responsible for operating
+the <a href="https://github.com/babylonlabs-io/covenant-signer">covenant signer</a>,
+a daemon accepting requests for signing on-demand unbonding transactions.</p>
+<p>The Covenant Emulation Committee has 9 members, 3 of which
+are operated by Babylon Labs. The Covenant quorum configuration as
+well as the current members can be found in the
+<a href="../parameters/global-params.json">staking parameters</a>.</p>
+<p>A full list of the endpoints and the corresponding Covenant BTC Public Keys
+for the phase-1 covenant committee follows below, grouped by the operating entity.</p>
+<blockquote>
+<p><strong>Note</strong>: Use this list only for on-demand unbonding of Phase-1 stakes,
+i.e., stakes that have not been registered to the Babylon Genesis node.
+On-demand unbonding of stakes registered on Babylon Genesis
+follows a different procedure which is documented
+<a href="https://github.com/babylonlabs-io/babylon/blob/release/v1.x/docs/register-bitcoin-stake.md#41-on-demand-unbonding">here</a>.</p>
+</blockquote>
+<ul>
+<li>Babylon Labs
+<ul>
+<li>Signer 0
+<ul>
+<li>key: <code>03d45c70d28f169e1f0c7f4a78e2bc73497afe585b70aa897955989068f3350aaa</code></li>
+<li>URL: https://covenant-signer0.babylonlabs.io</li>
+</ul>
+</li>
+<li>Signer 1
+<ul>
+<li>key: <code>034b15848e495a3a62283daaadb3f458a00859fe48e321f0121ebabbdd6698f9fa</code></li>
+<li>URL: https://covenant-signer1.babylonlabs.io</li>
+</ul>
+</li>
+<li>Signer 2
+<ul>
+<li>key: <code>0223b29f89b45f4af41588dcaf0ca572ada32872a88224f311373917f1b37d08d1</code></li>
+<li>URL: https://covenant-signer2.babylonlabs.io</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CoinSummer Labs
+<ul>
+<li>key: <code>02d3c79b99ac4d265c2f97ac11e3232c07a598b020cf56c6f055472c893c0967ae</code></li>
+<li>URL: https://babylon-covenant-signer.coinsummer.com</li>
+</ul>
+</li>
+<li>RockX
+<ul>
+<li>key: <code>03f178fcce82f95c524b53b077e6180bd2d779a9057fdff4255a0af95af918cee0</code></li>
+<li>URL: https://babylon-mainnet-covenant-signer.rockx.com</li>
+</ul>
+</li>
+<li>AltLayer
+<ul>
+<li>key: <code>038242640732773249312c47ca7bdb50ca79f15f2ecc32b9c83ceebba44fb74df7</code></li>
+<li>URL: https://babylon-mainnet-covenant-signer.alt.technology</li>
+</ul>
+</li>
+<li>Zellic
+<ul>
+<li>key: <code>03cbdd028cfe32c1c1f2d84bfec71e19f92df509bba7b8ad31ca6c1a134fe09204</code></li>
+<li>URL: https://babylon-mainnet-covenant-signer.zellic.net</li>
+</ul>
+</li>
+<li>Informal Systems
+<ul>
+<li>key: <code>03e36200aaa8dce9453567bba108bdc51f7f1174b97a65e4dc4402fc5de779d41c</code></li>
+<li>URL: https://covenant-signer-babylon.informalsystems.io</li>
+</ul>
+</li>
+<li>Cubist
+<ul>
+<li>key: <code>03de13fc96ea6899acbdc5db3afaa683f62fe35b60ff6eb723dad28a11d2b12f8c</code></li>
+<li>URL: https://bbn-mainnet-covsign.cubestake.xyz</li>
+</ul>
+</li>
+</ul>
+</article></body></html>

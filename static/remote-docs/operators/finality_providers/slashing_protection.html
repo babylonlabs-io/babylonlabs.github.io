@@ -1,0 +1,144 @@
+<html><body><article><h1>Slashing Protection on Finality Provider</h1>
+<p>In the BTC staking protocol, finality providers operate the
+Finality Provider Daemon (<code>fpd</code>) to send finality votes to Babylon Genesis.
+If a finality provider re-uses the same committed randomness
+to sign two conflicting blocks on the same height,
+their EOTS private key is exposed, leading to the slashing
+of their delegations.
+Apart from malicious behavior, honest finality providers face
+<a href="https://cubist.dev/blog/slashing-risks-you-need-to-think-about-when-restaking">slashing risks</a>
+due to factors like hardware failures or software bugs.
+To combat these risks, the finality provider program stack employs
+an anti-slashing protection mechanism.</p>
+<p>Recall that in our system, the finality provider operation stack involves
+two daemons:</p>
+<ol>
+<li>The EOTS manager daemon (<code>eotsd</code>) manages the EOTS key and responds to
+signing requests from the finality provider daemon.</li>
+<li>The finality provider daemon (<code>fpd</code>) connects to the Babylon Genesis node
+and initiates EOTS signing requests upon a new block to finalize.</li>
+</ol>
+<p>The two daemons have different responsibilities to prevent double-signing.
+The anti-slashing protections of the two daemons are complementary to each other.
+Even if the db file of one daemon is compromised, the protection is still
+in effective, and the state will recover after restarting the service.</p>
+<h3>Finality provider daemon protection</h3>
+<p><strong>Requirement</strong>:</p>
+<ul>
+<li>The Babylon Genesis node the daemon connects to is trusted and responsive.</li>
+<li>The <code>finality-provider.db</code> file is not compromised.</li>
+</ul>
+<p>The finality provider daemon ensures that it will never initiate
+a signing request for the same height twice if the previous request succeeds.</p>
+<p>To achieve this, the daemon does the following:</p>
+<ul>
+<li>Maintains a local state <code>lastVotedHeight</code>, which is updated once
+a vote submission succeeds, and never votes for a height that is not higher
+than <code>lastVotedHeight</code>.</li>
+<li>Polls blocks one-by-one in a monotonically increasing order.</li>
+</ul>
+<p>Once a finality provider is restarted, it needs to determine which height to
+start from, or bootstrapping. The bootstrapping needs to ensure that no blocks
+will be missed and voted blocks will not be polled again. The bootstrapping
+process is as follows:</p>
+<ol>
+<li>
+<p>Query consumer chain for:</p>
+<ul>
+<li><code>lastFinalizedHeight</code> (defaults to <code>0</code> if no blocks are finalized): the
+latest finalized height,</li>
+<li><code>finalityActivationHeight</code>: the height after which the finality is
+activated, defined as the finality parameters,</li>
+<li><code>highestVotedHeight</code> (defaults to <code>0</code> if no votes exist): the highest
+height for which the given finality provider has ever voted.</li>
+</ul>
+</li>
+<li>
+<p>If local state is empty or broken:</p>
+<ul>
+<li>Set <code>lastVotedHeight = lastFinalizedHeight</code></li>
+</ul>
+</li>
+<li>
+<p>Compare <code>lastVotedHeight</code> and <code>highestVotedHeight</code>:</p>
+<ul>
+<li>If <code>lastVotedHeight >= highestVotedHeight</code>
+<ul>
+<li><code>startHeight = lastVotedHeight + 1</code></li>
+<li>Note: this is possible if <code>highestVotedHeight</code> has not been updated due to
+execution delay.</li>
+</ul>
+</li>
+<li>If <code>lastVotedHeight &#x3C; highestVotedHeight</code>
+<ul>
+<li><code>startHeight = highestVotedHeight + 1</code></li>
+<li>Note: this is possible due to bugs or if the local state is tampered with</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Start from <code>max(startHeight, finalityActivationHeight)</code></p>
+</li>
+</ol>
+<p>Note that the mechanism shown above is not comprehensive in the sense that
+it is still possible that the assumptions listed at the beginning
+of the section do not hold, and the assurance might be broken.
+One common example is that, during software upgrade,
+the Babylon Genesis node might not be responsive. In this case, if the <code>fpd</code> is
+restarted, it might send duplicate signing requests as the previous ones were
+not processed.</p>
+<p>Therefore, we also need the protection from the EOTS manager daemon, described
+in the next section.</p>
+<h3>EOTS manager daemon protection</h3>
+<p><strong>Requirement</strong>:</p>
+<ul>
+<li>The <code>eots.db</code> file is not compromised.</li>
+</ul>
+<p>The EOTS manager daemon ensures that EOTS signatures will not be signed
+twice for the same height. To achieve this, the daemon keeps track of all the
+signing histories in the EOTS manager. The signing record is defined below:</p>
+<pre><code class="language-go">type SigningRecord struct {
+    Height      uint64
+    BlockHash   []byte
+    PublicKey   []byte
+    Signature   []byte
+    Timestamp   time.Time
+}
+</code></pre>
+<p>For each EOTS signing request, the following checks are performed:</p>
+<ul>
+<li>Check if the height is already signed in the local storage.
+<ul>
+<li>If yes, check if the signing message in the request matches the previously
+signed message.
+<ul>
+<li>If yes, return the previous vote.</li>
+<li>If no, return error with double-signing warning.</li>
+</ul>
+</li>
+<li>If no, sign the EOTS signature, save it in the local storage by height,
+and return the vote.</li>
+</ul>
+</li>
+</ul>
+<p>The local storage of the EOTS manager should be backed up periodically, and
+corruption checks should be performed before the signing service starts.
+Pruning of old records can be done with configurable retention policies.</p>
+<h3>Operation Recommendations</h3>
+<p>Detailed specifications on the secure operation of the finality provider
+program stack can be found in
+the <a href="./finality-provider-operation.md">Finality Provider Operation</a> document.
+Here, we list security tips specifically for preventing double-sign:</p>
+<ul>
+<li>Operate your own Babylon Genesis RPC node and securely connect with it
+to ensure a trustless setup</li>
+<li>The keyring files or the mnemonic phrases should be backed up and kept safe</li>
+<li>Operate <code>fpd</code> and <code>eotsd</code> in separate machines connected in a secure
+network (config <code>EOTSManagerAddress</code> in <code>fpd.conf</code>)</li>
+<li>Set up HMAC for authentication between the two daemons.
+Details in <a href="./hmac-security.md">HMAC Security</a></li>
+<li>Backup the db files for both daemons periodically
+(one-hour interval is recommended)</li>
+</ul>
+</article></body></html>
