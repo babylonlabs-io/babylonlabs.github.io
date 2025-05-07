@@ -27,16 +27,16 @@ function PartnerCard({
   socialLinks: { [key: string]: string } 
 }) {
   return (
-    <div className="flex flex-col items-center rounded-lg border border-secondary-700 p-2 hover:border-primary min-w-[160px]">
+    <div className="flex flex-col items-center rounded-lg border border-secondary-700 p-2 hover:border-primary min-w-[140px] text-center">
       <Link to={tileLink} className="mb-1 aspect-square w-full max-w-[80px] flex items-center justify-center p-1">
         <img src={icon} className="max-w-full max-h-full object-contain" alt={`${name} logo`} />
       </Link>
-      <Link to={tileLink} className="text-white mb-1 font-medium hover:text-primary text-xs">{name}</Link>
+      <Link to={tileLink} className="text-white mb-1 font-medium hover:text-primary text-s">{name}</Link>
       <div className="flex gap-1">
         {Object.entries(socialLinks).map(([platform, url]) => (
           <Link key={platform} to={url} className="text-white hover:text-primary">
-            {platform === 'twitter' && <Twitter className="h-3 w-3" />}
-            {platform === 'website' && <OpenRegular className="h-3 w-3" />}
+            {platform === 'twitter' && <Twitter className="h-4 w-4" />}
+            {platform === 'website' && <OpenRegular className="h-4 w-4" />}
           </Link>
         ))}
       </div>
@@ -66,7 +66,7 @@ export default function ToolsAndInfra() {
         }
       },
       {
-        name: 'Squid Router (Axelar)',
+        name: 'Squid (Axelar)',
         icon: '/img/landing-page/tools-and-infra/squid.png',
         tileLink: 'https://app.squidrouter.com/',
         socialLinks: {
@@ -127,7 +127,7 @@ export default function ToolsAndInfra() {
   };
 
   return (
-    <section className="mx-auto mb-5 flex w-full max-w-5xl flex-col p-4 py-0">
+    <section className="mx-auto mb-3 flex w-full max-w-5xl flex-col p-4 py-0">
       <span className="mb-4 uppercase tracking-wider text-text-400">
         Tools & Infrastructure
       </span>
@@ -138,28 +138,34 @@ export default function ToolsAndInfra() {
 
       <div className="mb-2">
         <h4 className="mb-1 text-2xl">Bridges</h4>
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
-          {partners.bridges.map((partner) => (
-            <PartnerCard key={partner.name} {...partner} />
-          ))}
+        <div className="flex justify-center">
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
+            {partners.bridges.map((partner) => (
+              <PartnerCard key={partner.name} {...partner} />
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="mb-2">
         <h4 className="mb-1 text-2xl">Liquid Staking Tokens</h4>
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
-          {partners.lsts.map((partner) => (
-            <PartnerCard key={partner.name} {...partner} />
-          ))}
+        <div className="flex justify-center">
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
+            {partners.lsts.map((partner) => (
+              <PartnerCard key={partner.name} {...partner} />
+            ))}
+          </div>
         </div>
       </div>
 
       <div>
         <h4 className="mb-1 text-2xl">Decentralized Exchanges</h4>
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
-          {partners.dexes.map((partner) => (
-            <PartnerCard key={partner.name} {...partner} />
-          ))}
+        <div className="flex justify-center">
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
+            {partners.dexes.map((partner) => (
+              <PartnerCard key={partner.name} {...partner} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
