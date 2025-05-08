@@ -17,7 +17,7 @@ const PRODUCTS = [
     icon: WalletCreditCardRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
-    text: 'BTC holders that delegate their BTC stake to Bitcoin Secured Networks for rewards.',
+    text: 'BTC holders that delegate their BTC stake to Bitcoin Supercharged Networks for rewards.',
   },
   {
     title: 'Stake BABY',
@@ -33,7 +33,7 @@ const PRODUCTS = [
     icon: TetrisAppRegular,
     lightImage: 'img/landing-page/hero/infra_providers.png',
     darkImage: 'img/landing-page/hero/infra_providers_dark.png',
-    text: 'The operators that provide the data validation infrastructure for Bitcoin Secured Networks (BSNs).',
+    text: 'The operators that provide the data validation infrastructure for Bitcoin Supercharged Networks (BSNs).',
   },
   {
     title: 'Build dApps',
@@ -111,7 +111,7 @@ export default function HeroSection() {
           </h2>
           <p className="max-w-xl text-center text-text-400">
             At Babylon Labs, we're building a more economically secure
-            decentralized future. Learn concepts, create dApps and build Bitcoin Secured Networks.
+            decentralized future. Learn concepts, create dApps and build Bitcoin Supercharged Networks.
           </p>
         </div>
       </section>
