@@ -104,8 +104,17 @@ info:
     ```
  
 servers:
+  - url: https://babylon-archive.nodes.guru/api
+    description: Mainnet RPC (Archive)
+  - url: https://babylon.nodes.guru/rpc
+    description: Mainnet RPC (Pruned)
+  - url: https://babylon-testnet-rpc-archive-1.nodes.guru
+    description: Testnet RPC (Archive)
+  - url: https://babylon-testnet-rpc.nodes.guru
+    description: Testnet RPC (Pruned)
   - url: http://localhost:9090
     description: Run Babylon gRPC Gateway locally with default port 9090.
+  
 paths:
   /babylon/btccheckpoint/v1:
     get:
