@@ -1,0 +1,62 @@
+---
+sidebar_class_name: bitcoin_self_custodial_staking_sidebar
+sidebar_label: Geo Blocking
+sidebar_position: 7
+---
+
+# Geo Blocking
+
+Babylon's https://btcstaking.babylonlabs.io/ and API services excludes users from 
+certain jurisdictions to comply with local regulations.    
+
+Users in Restricted Territories and Excluded Jurisdictions can load the website but not 
+able to connect their wallets to stake or unbond.
+
+
+## Restricted Territories
+
+Restricted terriories are: 
+|  |  |  |
+|----------|----------|----------|
+| Afghanistan | Cuba | Nicaragua |
+| Belarus | Democratic People's Republic of Korea | Russia |
+| Bosnia and Herzegovina | Democratic Republic of the Congo | Somalia |
+| Burundi | Donetsk Region of Ukraine | South Sudan |
+| Central African Republic | Eritrea | Sudan |
+| China | Global Anti-Corruption | Syria |
+| Crimea | Guinea | Venezuela |
+| Guinea-Bissau | Haiti | Yemen |
+| Iran | Iraq | Zimbabwe |
+| Lebanon | Libya | Myanmar |
+| Luhansk Regions of Ukraine | Mali | |
+|  | | |
+
+Entities from restricted territories can't access our API at all.
+
+## Excluded Jurisdictions
+
+Excluded jurisdictions are: 
+
+|  |
+|----------|
+| United States of America |
+| Canada |
+| Australia |
+
+Excluded jurisdictions include countries that can access our API, but they can't access endpoints related to 
+unbonding or points. API endpoints to be blocked will be listed below: 
+
+| Endpoint | Method |
+|----------|--------|
+| /healthcheck | `GET` |
+| /v1/staker/delegations | `GET` |
+| /v1/unbonding | `POST` |
+| /v1/points/* | `GET` |
+| /v2/delegations | `GET` |
+| /v2/delegation | `GET` |
+
+## VPN Blocking
+
+Additionally, we are blocking all IPs associated with VPNs based on 
+[Cloudflare managed list](https://developers.cloudflare.com/waf/tools/lists/managed-lists/)
+. VPN users are treating same as [Restricted Territories](#restricted-territories).
