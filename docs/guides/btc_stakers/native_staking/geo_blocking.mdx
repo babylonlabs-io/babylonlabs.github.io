@@ -9,11 +9,12 @@ sidebar_position: 7
 Babylon's https://btcstaking.babylonlabs.io/ and API services excludes users from 
 certain jurisdictions to comply with local regulations.    
 
-Users in Restricted Territories and Excluded Jurisdictions can load the website but not 
-able to connect their wallets to stake or unbond.
 
 
 ## Restricted Territories
+
+Users in Restricted Territories will not be able to load the website and see a 
+message saying "Staking is not available in this region". 
 
 Restricted terriories are: 
 |  |  |  |
@@ -35,16 +36,22 @@ Entities from restricted territories can't access our API at all.
 
 ## Excluded Jurisdictions
 
-Excluded jurisdictions are: 
+Users in excluded jurisdictions can load the website but not 
+able to connect their wallets to stake or unbond.
 
+
+The excluded jurisdictions are:
 |  |
 |----------|
 | United States of America |
 | Canada |
 | Australia |
 
-Excluded jurisdictions include countries that can access our API, but they can't access endpoints related to 
-unbonding or points. API endpoints to be blocked will be listed below: 
+
+Entities in excluded jurisdictions can access our API, but they can't access endpoints related to 
+unbonding or points. 
+
+API endpoints to be blocked are: 
 
 | Endpoint | Method |
 |----------|--------|
@@ -58,5 +65,4 @@ unbonding or points. API endpoints to be blocked will be listed below:
 ## VPN Blocking
 
 Additionally, we are blocking all IPs associated with VPNs based on 
-[Cloudflare managed list](https://developers.cloudflare.com/waf/tools/lists/managed-lists/)
-. VPN users are treating same as [Restricted Territories](#restricted-territories).
+a Cloudflare managed list. VPN users are treating same as [Restricted Territories](#restricted-territories).
