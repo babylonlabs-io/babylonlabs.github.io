@@ -12,10 +12,15 @@ import HardwareBadge from '@site/src/components/badge/hardware';
 
 # Staking via web app
 
+Babylon Labs provides a web dApp (BTC Staking Dashboard) for staking BTC to the Babylon Genesis chain.
+Following is a step by step guide to stake BTC using the dashboard.
+
 ## 1. For Phase 1 Stakers
 ### How to register your Phase 1 stake to Phase 2
 
-According to the requirements set by the Babylon Foundation, you must convert your Phase 1 staking to Phase 2 in order to start earning BABY staking rewards and qualify for additional airdrops. The process is as follows:
+According to the requirements set by the Babylon Foundation, you must convert your Phase 1 staking to 
+Phase 2 in order to start earning BABY staking rewards or qualify for any additional airdrops. 
+The process is as follows:
 
 #### Step 1: Access the Staking Dashboard
 Visit the [Babylon Staking](https://btcstaking.babylonlabs.io/) website.
@@ -28,7 +33,9 @@ Visit the [Babylon Staking](https://btcstaking.babylonlabs.io/) website.
 />
 
 #### Step 2: Connect Your Wallet
-Connect your [compatible wallet](/guides/btc_stakers/native_staking/web_staking/#compatible-wallets) compatible wallet to continue with the staking operation.
+Connect your [compatible wallet](/guides/btc_stakers/native_staking/web_staking/#compatible-wallets) 
+compatible wallet to continue with the staking operation.
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -36,8 +43,12 @@ Connect your [compatible wallet](/guides/btc_stakers/native_staking/web_staking/
     dark: useBaseUrl('/img/guides/btc_stakers/web_staking/4_dark.png'),
   }}
 />
+
 #### Step 3: Submit the Registration Transaction
-Phase 1 stakers need to submit a registration transaction to the Babylon Genesis chain. Follow the instructions below to submit your registration transaction in the Babylon Staking Dashboard:
+Phase 1 stakers need to submit a registration transaction to the Babylon Genesis chain. 
+Follow the instructions below to submit your registration transaction in the Babylon BTC
+Staking Dashboard:
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -45,6 +56,7 @@ Phase 1 stakers need to submit a registration transaction to the Babylon Genesis
     dark: useBaseUrl('/img/guides/btc_stakers/web_staking/1_dark.png'),
   }}
 />
+
 - This registration transaction requires a small amount of BABY as a transaction fee.
 - The transaction must include the binding of BTC and BABY addresses to activate staking and requires the staker's signature as consent for penalty security.
 
@@ -73,7 +85,10 @@ After submitting the registration transaction, please wait patiently for it to b
 ### How to Register BTC Staking in Phase 2
 
 #### **Step 1: Connect Your BTC and BABY Wallets**
-Access the [Babylon Staking](https://btcstaking.babylonlabs.io/) and connect your BTC and BABY wallets.
+
+Access the [Babylon Staking Dashboard](https://btcstaking.babylonlabs.io/) and connect your BTC and 
+BABY wallets.
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -83,7 +98,10 @@ Access the [Babylon Staking](https://btcstaking.babylonlabs.io/) and connect you
 />
 
 #### **Step 2: Choose a Finality Provider**
-Select the Finality Provider to whom you want to delegate voting rights, enter your staking amount, and click “Preview”.
+
+Select the Finality Provider to whom you want to delegate voting rights, enter your staking 
+amount, and click "Preview".
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -91,6 +109,7 @@ Select the Finality Provider to whom you want to delegate voting rights, enter y
     dark: useBaseUrl('/img/guides/btc_stakers/web_staking/5_dark.png'),
   }}
 />
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -98,10 +117,15 @@ Select the Finality Provider to whom you want to delegate voting rights, enter y
     dark: useBaseUrl('/img/guides/btc_stakers/web_staking/6_dark.png'),
   }}
 />
-Please note that different Finality Providers charge varying commission rates; lower commissions mean higher staking rewards.
+
+Please note that different Finality Providers charge varying commission rates; lower 
+commissions mean higher staking rewards.
 
 #### **Step 3: Agree to Penalties and Wallet Binding**
-You will need to agree to the penalty terms and bind your wallet. The transaction will then be sent to the Bitcoin network.
+
+You will need to agree to the penalty terms and bind your wallet. 
+The transaction will then be sent to the Bitcoin network.
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -111,7 +135,11 @@ You will need to agree to the penalty terms and bind your wallet. The transactio
 />
 
 #### **Step 4: Wait for Transaction Confirmation**
-After your staking transaction is included in the Bitcoin blockchain, you will need to wait for 30 blocks to finalize your staking. During this waiting period, the covenant committee will pre-sign the transactions as part of the slashing mechanism design.
+
+After your staking transaction is included in the Bitcoin blockchain, you will need 
+to wait for 30 blocks to finalize your staking. During this waiting period, the covenant 
+committee will pre-sign the transactions as part of the slashing mechanism design.
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -121,7 +149,11 @@ After your staking transaction is included in the Bitcoin blockchain, you will n
 />
 
 #### **Step 5: Send the Staking Transaction**
-Once the waiting period is complete, you can click “Stake BTC” and sign the transaction via your BTC wallet. After you see the transaction confirmation screen, your stake will be active.
+
+Once the waiting period is complete, you can click "Stake BTC" and sign the transaction 
+via your BTC wallet. After you see the transaction confirmation screen, your stake 
+will be active.
+
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -134,8 +166,7 @@ Once the waiting period is complete, you can click “Stake BTC” and sign the 
 
 ## Compatible Wallets
 
-<Tabs>
-  <TabItem value="extension" label="Browser Extension Wallets" default>
+### Browser Extension Wallets
 
 | Wallet Name | BTC | BABY |
 |:--|:-:|:-:|
@@ -155,8 +186,7 @@ Once the waiting period is complete, you can click “Stake BTC” and sign the 
 | Ledger (via Keplr app) <HardwareBadge>Hardware</HardwareBadge> | ❌ | ✅ |
 | OneKey (Pro & Classic 1S) <HardwareBadge>Hardware</HardwareBadge> | ✅ | ❌ |
 
-  </TabItem>
-  <TabItem value="mobile" label="Mobile App Wallets">
+### Mobile App Wallets
 
 | Wallet Name | BTC | BABY |
 |:--|:-:|:-:|
@@ -173,9 +203,6 @@ Once the waiting period is complete, you can click “Stake BTC” and sign the 
 | ImToken | ❌ | ❌ |
 | Gate Web3 | ✅ | ✅ |
 | Coldlar <HardwareBadge>Hardware</HardwareBadge>  | ✅ | ✅ |
-
-  </TabItem>
-</Tabs>
 
 Where:
 * ✅ - indicates that the wallet is supported by the Babylon Staking web app.
