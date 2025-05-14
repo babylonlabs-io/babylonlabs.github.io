@@ -234,6 +234,7 @@ function RemoteMD({
 
   return (
     <>
+    {!(hideEnv && (hideRelease || !showReleaseSelector)) && (
       <div style={{ marginBottom: '20px' }} className="babylon-dropdown">
         {!hideEnv && (
           <>
@@ -274,6 +275,7 @@ function RemoteMD({
           </>
         )}
       </div>
+    )}
 
       {/* Show error message if fetching fails */}
       {errorMessage && !loading && (
