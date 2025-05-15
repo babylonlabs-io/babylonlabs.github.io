@@ -8,34 +8,6 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "mint",
-      link: {
-        type: "doc",
-        id: "api/comet-bft/mint",
-      },
-      items: [
-        {
-          type: "doc",
-          id: "api/comet-bft/annual-provisions",
-          label: "AnnualProvisions",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "api/comet-bft/genesis-time",
-          label: "GenesisTime",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "api/comet-bft/inflation-rate",
-          label: "InflationRate",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
       label: "CometBFT",
       link: {
         type: "doc",
