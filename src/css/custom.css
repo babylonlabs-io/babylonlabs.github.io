@@ -1616,6 +1616,14 @@ h3.anchor > code {
     background-color: var(--ifm-navbar-link-hover-color);
 }
 
+[data-theme="light"] [data-rmiz-modal-overlay="visible"] {
+  background-color: rgba(255,255,255,0.96) !important;
+}
+
+[data-theme="dark"] [data-rmiz-modal-overlay="visible"] {
+  background-color: rgba(0,0,0,0.88) !important;
+}
+
 /*FOR MOBILE SCREEN SIZE*/
 @media screen and (max-width: 767px) {
   .hello_bar_contents.u-hflex-center-center.u-gap-10 {
