@@ -85,7 +85,7 @@ info:
     ```
  
 servers:
-  - url: https://babylon.nodes.guru
+  - url: https://babylon.nodes.guru/rpc
     description: Mainnet RPC (Pruned)
   - url: https://babylon-testnet-rpc-archive-1.nodes.guru
     description: Testnet RPC (Archive)

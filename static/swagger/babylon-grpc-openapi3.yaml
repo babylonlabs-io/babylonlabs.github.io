@@ -106,7 +106,7 @@ info:
 servers:
   - url: https://babylon-archive.nodes.guru/api
     description: Mainnet RPC (Archive)
-  - url: https://babylon.nodes.guru/rpc
+  - url: https://babylon.nodes.guru
     description: Mainnet RPC (Pruned)
   - url: https://babylon-testnet-rpc-archive-1.nodes.guru
     description: Testnet RPC (Archive)
