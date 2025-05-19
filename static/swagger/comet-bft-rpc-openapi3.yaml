@@ -13,11 +13,8 @@ info:
   version: 1.0.0
   
   description: >
-    A Babylon gRPC Gateway is a REST interface for Babylon's gRPC.
-
-    This is a merged specification of the Babylon gRPC Gateway and the CometBFT
-    RPC.
-
+    A Babylon gRPC Gateway is a REST interface for Babylon's gRPC. 
+    This specification documents the RPCs for CometBFT functions.
 
     **Supported RPC protocols:**
 
