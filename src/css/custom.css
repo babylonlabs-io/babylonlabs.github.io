@@ -1616,6 +1616,16 @@ h3.anchor > code {
     background-color: var(--ifm-navbar-link-hover-color);
 }
 
+.small-table table {
+  font-size: 0.8rem;
+  word-break: break-word;
+}
+
+.small-table td, .small-table th {
+  padding: 0.3rem 0.4rem;
+}
+
+
 /*FOR MOBILE SCREEN SIZE*/
 @media screen and (max-width: 767px) {
   .hello_bar_contents.u-hflex-center-center.u-gap-10 {
