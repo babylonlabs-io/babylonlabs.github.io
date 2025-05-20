@@ -139,7 +139,7 @@ export default function ToolsAndInfra() {
       <div className="mb-2">
         <h4 className="mb-1 text-2xl">Bridges</h4>
         <div className="flex justify-center">
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
+          <div className="flex flex-wrap gap-4">
             {partners.bridges.map((partner) => (
               <PartnerCard key={partner.name} {...partner} />
             ))}
@@ -150,7 +150,7 @@ export default function ToolsAndInfra() {
       <div className="mb-2">
         <h4 className="mb-1 text-2xl">Liquid Staking Tokens</h4>
         <div className="flex justify-center">
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
+          <div className="flex flex-wrap gap-4">
             {partners.lsts.map((partner) => (
               <PartnerCard key={partner.name} {...partner} />
             ))}
@@ -161,7 +161,7 @@ export default function ToolsAndInfra() {
       <div>
         <h4 className="mb-1 text-2xl">Decentralized Exchanges</h4>
         <div className="flex justify-center">
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary-700 scrollbar-track-transparent">
+          <div className="flex flex-wrap gap-4">
             {partners.dexes.map((partner) => (
               <PartnerCard key={partner.name} {...partner} />
             ))}
