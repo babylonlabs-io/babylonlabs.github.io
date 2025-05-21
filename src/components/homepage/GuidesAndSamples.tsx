@@ -146,7 +146,7 @@ function Sample({ title, platform, blog, source, demo }: Sample) {
 
 export default function GuidesAndSamples() {
   return (
-    <section className="no-underline-links mx-auto my-40 flex w-full max-w-5xl flex-col gap-10 p-4 py-0 md:flex-row md:gap-0">
+    <section className="no-underline-links mx-auto my-10 flex w-full max-w-5xl flex-col gap-10 p-4 py-0 md:flex-row md:gap-0">
       <div className="flex-1">
         <div className="mb-8 flex items-center justify-between">
           <h3 className="m-0">Key Concepts</h3>

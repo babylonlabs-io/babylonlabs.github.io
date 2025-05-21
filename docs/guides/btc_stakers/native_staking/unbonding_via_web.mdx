@@ -3,6 +3,9 @@ sidebar_class_name: unbonding_via_web_sidebar
 sidebar_label: Unbonding via Web
 sidebar_position: 4
 ---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
 # Unbond via Web
 
 ## Step 1: Connect Your Wallet
@@ -14,11 +17,16 @@ For stakes that are in the **Pending Registration** list (i.e., before the trans
 
 ### Unbonding After Transition to Phase 2 Babylon Genesis
 If your stake has already been transitioned and is listed in the **Babylon Genesis Stakes** list, the unbonding process is more straightforward. Simply click on the **Unbond** button next to the stake you want to unbond, and the system will start the unbonding procedure for that particular stake.
-<img src={'/img/guides/unbonding_via_web_stake_list.png'} />
+<ThemedImage
+  alt="unbonding_via_web"
+  sources={{
+    light: useBaseUrl('/img/guides/unbonding_via_web_stake_list.png'),
+    dark: useBaseUrl('/img/guides/unbonding_via_web_stake_list_dark.png'),
+  }}
+/>
 
 ## Step 3: Wait for the Unbonding Period and Withdraw
 After you initiate the unbonding process, you need to wait for a specific period to complete the unbonding. Specifically, you must wait for 1,008 Bitcoin blocks (~7 days) to be mined, which typically takes around one week. This waiting period ensures the stability and security of the network.
-<img src={'/img/guides/unbonding_via_web_stake_list2.png'} />
 Once the unbonding period has elapsed, return to the staking history list in your wallet. Locate the unbonded stake. For stakes that have completed the unbonding process, you will see a **Withdraw** button. Click on the **Withdraw** button to transfer the unbonded funds back to your wallet. After clicking **Withdraw**, confirm the transaction in your wallet, and the funds will be on their way to your wallet address.
 
 :::note
