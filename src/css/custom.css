@@ -55,12 +55,12 @@
 @layer base {
   :root {
     /* Primary Colors aligned with #ce6533 */
-    --docs-color-primary-100: 218 125 79; /* Lighter shade of #ce6533 */
-    --docs-color-primary-200: 206 101 51; /* Default #ce6533 */
+    --docs-color-primary-100: 51 197 206; /* Lighter shade of #BEDCC9 */
+    --docs-color-primary-200: 51 197 206; /* #BEDCC9 */
 
-    --docs-color-secondary-700: 232 232 236;
-    --docs-color-secondary-800: 245 245 247;
-    --docs-color-secondary-900: 251 251 251;
+    --docs-color-secondary-700: 237 237 240;
+    --docs-color-secondary-800: 243 246 244;
+    --docs-color-secondary-900: 247 250 248;
     --docs-color-secondary-1000: 255 255 255;
 
     --docs-color-text-400: 160 160 160; /* Darker text tone */
@@ -68,6 +68,8 @@
 
   html[data-theme='dark'] {
     /* Dark Mode Adjustments */
+    --docs-color-primary-100: 222 236 226;
+    --docs-color-primary-200: 190 220 201;
 
     --docs-color-text-400: 160 160 160; /* Softer muted dark text */
 
@@ -133,7 +135,7 @@ body {
 
 /* Babylon Docs Tokens */
 :root {
-  --docs-color-primary: #eb885b;
+  --docs-color-primary: #33C5CE;
   /* --docs-color-primary-100: #1a90ff; */
   --docs-color-primary-tint: rgba(33, 96, 253, 0.16);
   --docs-color-primary-tint-light: rgba(33 96 253/0.24);
@@ -186,19 +188,23 @@ body {
     Consolas, 'Liberation Mono', 'Courier New', monospace;
 
 /* Theme colors */
-  --ifm-color-primary: #eb885b;          /* Primary */
-  --ifm-color-primary-dark: #b3582c;     /* Darker */
-  --ifm-color-primary-darker: #994d26;   /* Even Darker */
-  --ifm-color-primary-darkest: #803f1e;  /* Darkest */
-  --ifm-color-primary-light: #da7d4f;    /* Lighter */
-  --ifm-color-primary-lighter: #e19263;  /* Even Lighter */
-  --ifm-color-primary-lightest: #f2b08c; /* Lightest */
+  --ifm-color-primary: #33C5CE;          /* Primary */
+  --ifm-color-primary-dark: #BEDCC9;     /* Darker */
+  --ifm-color-primary-darker: #BEDCC9;   /* Even Darker */
+  --ifm-color-primary-darkest: #BEDCC9;  /* Darkest */
+  --ifm-color-primary-light: #33C5CE;    /* Lighter */
+  --ifm-color-primary-lighter: #33C5CE;  /* Even Lighter */
+  --ifm-color-primary-lightest: #33C5CE; /* Lightest */
+  --ifm-background-color: #ECF8F1;        /* Background */
+
 
   --ifm-navbar-shadow: none;
   --ifm-toc-border-color: #dedede;
 
   --ifm-table-border-color: var(--docs-color-border);
+  --ifm-background-surface-color: #ECF8F1;
   --code-border-color: var(--docs-color-border);
+  --ifm-code-background: #D4E6DB;
 
   --ifm-code-font-size: 92%;
   --docusaurus-highlighted-code-line-bg: rgba(147, 178, 244, 0.38);
@@ -206,25 +212,30 @@ body {
   --ifm-breadcrumb-item-background-active: transparent;
   --ifm-breadcrumb-padding-horizontal: 0;
 
-  --docusaurus-details-decoration-color: #b3582c;
+  --docusaurus-details-decoration-color: #33C5CE;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 html[data-theme='dark'] {
-  --ifm-link-color: #da7d4f;
-  --ifm-tabs-color-active-border: #da7d4f;
-  --ifm-tabs-color-active: #da7d4f;
+  --ifm-link-color: #BEDCC9;
+  --ifm-tabs-color-active-border: #BEDCC9;
+  --ifm-tabs-color-active: #BEDCC9;
 
-  --ifm-color-primary: #da7d4f;
+  --ifm-color-primary: #BEDCC9;
 
   --ifm-footer-background-color: #1c1c1c;
-  --ifm-background-surface-color: #161616;
-  --ifm-background-color: #161616;
+  --ifm-background-surface-color: #031B24;
+  --ifm-background-color: #031B24;
   --ifm-toc-border-color: #2e2e2e;
+  --ifm-code-background: #102A36;
 
   --ifm-color-content: #e7e7e7;
 
   --docusaurus-highlighted-code-line-bg: rgba(105, 105, 105, 0.3);
+}
+
+.container code{
+  background: var(--ifm-code-background);
 }
 
 nav.navbar {
@@ -753,6 +764,7 @@ html[data-theme='dark'] .dropdown > .navbar__link:after {
   border-radius: 0.375rem;
   cursor: pointer;
   min-width: 120px;
+  background-color: var(--ifm-background-color);
   
   /* Custom dropdown arrow updated with primary color */
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.293 8.293a1 1 0 0 1 1.414 0L12 14.586l6.293-6.293a1 1 0 1 1 1.414 1.414l-7 7a1 1 0 0 1-1.414 0l-7-7a1 1 0 0 1 0-1.414Z' fill='rgb(206, 101, 51)'/%3E%3C/svg%3E");
@@ -1120,6 +1132,11 @@ details p {
 
 .DocSearch-Button {
   @apply lg:!rounded-md;
+  background-color: #ECF8F1 !important;
+}
+
+[data-theme='dark'] .DocSearch-Button {
+  background-color: #031B24 !important;
 }
 
 .DocSearch-Button-Key {
@@ -1522,6 +1539,10 @@ h2.anchor > code {
   }
 }
 
+.hover\:bg-gradient-to-tr:hover {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops)) !important;
+}
+
 h2.anchor,
 h3.anchor {
   text-wrap: nowrap;
@@ -1689,5 +1710,4 @@ h3.anchor > code {
     align-items: center;
   }
 }
-
 /* CSS for hello bar ends*/

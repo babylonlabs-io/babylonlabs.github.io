@@ -61,8 +61,8 @@ function HeroProduct({
         borderWidth: '1px',
       }}
       className={clsx(
-        'group cursor-pointer overflow-clip rounded-3xl from-primary/30 via-transparent to-transparent text-black transition-all hover:bg-gradient-to-tr hover:text-primary hover:no-underline dark:text-white',
-        'w-[90vw] border-secondary-700 bg-secondary-900 hover:!border-primary dark:border-secondary-800 sm:w-[440px]'
+        'group cursor-pointer overflow-clip rounded-md from-primary/30 via-transparent to-transparent text-black transition-all hover:bg-gradient-to-tr hover:text-primary hover:no-underline dark:text-white',
+        'w-[90vw] border-secondary-700 hover:!border-primary dark:border-secondary-800 sm:w-[440px]'
       )}
     >
       <div className="p-6 !pb-0">
