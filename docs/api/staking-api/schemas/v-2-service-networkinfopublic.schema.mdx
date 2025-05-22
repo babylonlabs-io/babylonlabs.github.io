@@ -1,0 +1,33 @@
+---
+id: v-2-service-networkinfopublic
+title: "v2service.NetworkInfoPublic"
+description: ""
+sidebar_label: "v2service.NetworkInfoPublic"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"params":{"bbn":[{"allow_list_expiration_height":0,"btc_activation_height":0,"covenant_pks":["string"],"covenant_quorum":0,"delegation_creation_base_gas_fee":0,"max_active_finality_providers":0,"max_staking_time_blocks":0,"max_staking_value_sat":0,"min_commission_rate":"string","min_slashing_tx_fee_sat":0,"min_staking_time_blocks":0,"min_staking_value_sat":0,"slashing_pk_script":"string","slashing_rate":"string","unbonding_fee_sat":0,"unbonding_time_blocks":0,"version":0}],"btc":[{"btc_confirmation_depth":0,"version":0}]},"staking_status":{"is_staking_open":true}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"v2service.NetworkInfoPublic"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"params":{"properties":{"bbn":{"items":{"properties":{"allow_list_expiration_height":{"type":"integer"},"btc_activation_height":{"type":"integer"},"covenant_pks":{"items":{"type":"string"},"type":"array"},"covenant_quorum":{"type":"integer"},"delegation_creation_base_gas_fee":{"type":"integer"},"max_active_finality_providers":{"type":"integer"},"max_staking_time_blocks":{"type":"integer"},"max_staking_value_sat":{"type":"integer"},"min_commission_rate":{"type":"string"},"min_slashing_tx_fee_sat":{"type":"integer"},"min_staking_time_blocks":{"type":"integer"},"min_staking_value_sat":{"type":"integer"},"slashing_pk_script":{"type":"string"},"slashing_rate":{"type":"string"},"unbonding_fee_sat":{"type":"integer"},"unbonding_time_blocks":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"indexertypes.BbnStakingParams"},"type":"array"},"btc":{"items":{"properties":{"btc_confirmation_depth":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"indexertypes.BtcCheckpointParams"},"type":"array"}},"type":"object","title":"v2service.ParamsPublic"},"staking_status":{"properties":{"is_staking_open":{"type":"boolean"}},"type":"object","title":"v2service.StakingStatusPublic"}},"type":"object","title":"v2service.NetworkInfoPublic"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

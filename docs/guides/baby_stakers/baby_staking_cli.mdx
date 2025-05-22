@@ -1,0 +1,70 @@
+---
+sidebar_class_name: baby_staking_cli_sidebar
+sidebar_position: 4
+---
+
+# BABY Staking CLI Guide
+
+## Introduction
+This guide is designed to assist you in using the Command - Line Interface (CLI) to perform staking operations on the Babylon network. We will provide a detailed introduction to the processes of staking and unbonding.
+
+## Prerequisites
+- The `babylond` CLI tool has been installed.
+- You possess a wallet on the Babylon network with sufficient `ubbn` tokens.
+- You know the address of the validator node to which you want to stake.
+
+## Step 1: Check Wallet and Node Connection
+Before performing staking operations, ensure that the `babylond` tool is correctly configured and can connect to the Babylon network.
+
+### List Keys in the Wallet
+```bash
+babylond keys list
+```
+
+### Check Node Connection
+```bash
+babylond status --node [node-url]
+```
+Make sure there are no error messages in the output and that the correct network status is displayed.
+
+## Step 2: Stake Tokens
+### Staking Command Format
+```bash
+babylond tx epoching delegate [validator-addr] [amount] --from [wallet-name] --chain-id [chain-id] --node [node-url] --gas auto --gas-adjustment 1.2 --fees [fee-amount] -y
+```
+
+### Parameter Explanation
+- `[validator-addr]`: The address of the validator node to which you are staking tokens.
+- `[amount]`: The number of tokens you want to stake, in the unit of `ubbn`. For example, if you want to stake 1 $bbn$, you should enter `1000000ubbn`.
+- `[wallet-name]`: The name of the wallet used to sign the transaction.
+- `[chain-id]`: The chain ID of the Babylon network, such as `bbn-test-5`.
+- `[node-url]`: The URL of the connected node, such as `https://babylon-testnet-rpc.nodes.guru`.
+- `[fee-amount]`: The transaction fee, for example, `100ubbn`.
+
+### Example Command
+Suppose you want to stake 1 $bbn$ to the validator `bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt`, using the wallet `test - staking`, with a chain ID of `bbn-test-5` and a node address of `https://babylon-testnet-rpc.nodes.guru` and a fee of `1000ubbn`. You can use the following command:
+```bash
+babylond tx epoching delegate bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt 1000000ubbn --from test-staking --chain-id bbn-test-5 --node https://babylon-testnet-rpc.nodes.guru --gas auto --gas-adjustment 1.2 --fees 1000ubbn -y
+```
+
+## Step 3: Unbond Tokens
+### Unbonding Command Format
+```bash
+babylond tx epoching unbond [validator-addr] [amount] --from [wallet-name] --chain-id [chain-id] --node [node-url] --gas auto --gas-adjustment 1.2 --fees [fee-amount] -y
+```
+
+### Parameter Explanation
+The parameters are the same as those in the staking command.
+
+### Example Command
+Suppose you want to unbond 1 $bbn$ from the validator `bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt`, using the wallet `test - staking`, with a chain ID of `bbn-test-5` and a node address of `https://babylon-testnet-rpc.nodes.guru` and a fee of `1000ubbn`. You can use the following command:
+```bash
+babylond tx epoching unbond bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt 1000000ubbn --from test-staking --chain-id bbn-test-5 --node https://babylon-testnet-rpc.nodes.guru --gas auto --gas-adjustment 1.2 --fees 1000ubbn -y
+```
+
+## Precautions
+- There may be a certain lock - up period for unbonding. The unbonded tokens will return to your account only after the lock - up period ends.
+- Ensure that your wallet has enough tokens to cover the transaction fees.
+
+## Summary
+By following the above steps, you can use the CLI to perform staking and unbonding operations on the Babylon network. If you encounter any issues during the operation, please refer to the official Babylon documentation or community forums for assistance.

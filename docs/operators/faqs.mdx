@@ -5,14 +5,14 @@ sidebar_position: 9
 
 # Operator Frequently Asked Questions
 
-## Babbylon Genesis Validators
+## Babylon Genesis Validators
 
 ## Recommendations
 
-- Regularly monitor your node's status
-- Keep your node software and configurations up to date
-- Maintain secure and reliable deployment infrastructure
-- Participate in community channels for the latest updates and changes
+- Regularly monitor your node's status.
+- Keep your node software and configurations up to date.
+- Maintain secure and reliable deployment infrastructure.
+- Participate in community channels for the latest updates and changes.
 
 ### FAQs
 
@@ -22,22 +22,52 @@ You can download the genesis file from
 [Babylon Labs' networks repository](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/genesis.json).
 Ensure you're using the correct version of the Babylon binary specified in the documentation.
 
-#### Q: What are the hardware requirements for running Babylon nodes and finality providers?
+#### Q: What are the hardware requirements for running Babylon nodes and a Finality Provider?
 **A:**
 An instance with at least 8 GB of RAM should be sufficient to host both a
-Babylon node and a finality provider. However, for better reliability, it is recommended
+Babylon node and a Finality Provider. However, for better reliability, it is recommended
 to run them on separate instances.
 
-#### Q: How do I set up my Babylon validator?
+#### Q: How do I set up my Babylon Validator?
 **A:**
 Follow these steps:
-- Install the required Babylon binary.
-- Initialize your node with `babylond init`.
-- Sync from the correct genesis file or a snapshot.
-- Configure `config.toml` and add persistent peers.
-- Register your validator with `babylond tx staking create-validator`.
-Refer to the [official setup guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/babylon-node/README.md)
-for details.
+1. **Install the Babylon Binary**
+   - Download and install the necessary Babylon binary (`babylond`). Ensure you obtain it from the official and reliable sources provided by the Babylon project. This binary serves as the core tool for interacting with the Babylon network as a validator.
+2. **Initialize Your Node**
+   - Run the command `babylond init`. During this process, you'll need to provide a unique moniker for your validator node. This moniker will help identify your node within the network.
+   For example: ``` language="bash">babylond init "YourUniqueValidatorMoniker" --chain - id <your - chain - id>```, where `<your - chain - id>` corresponds to the specific chain ID of the Babylon network you're participating in (such as `bbn - test - 5` for the testnet).
+3. **Sync Your Node**
+   - **Using Genesis File**
+     - Download the official genesis file from the Babylon project's official repository or the designated location for your network version. Place the `genesis.json` file in the appropriate directory (usually `~/.babylond/config` if you haven't customized the `--home` flag). This file contains the initial state of the network, which your node needs to sync with.
+   - **Using a Snapshot**
+     - If available, using a snapshot can significantly speed up the sync process. Follow the instructions provided by the Babylon community or the official documentation to correctly apply the snapshot to your node. Snapshots are pre - synchronized data that can quickly bring your node up - to - date with the network state.
+4. **Configure `config.toml` and Add Persistent Peers**
+   - Locate the `config.toml` file in your node's configuration directory. In this file, you can configure various settings related to your node, such as network - related parameters, listening addresses, and port numbers.
+   - One crucial step is adding persistent peers. Persistent peers are other nodes in the network that your node will maintain connections with to stay updated and participate in the consensus process. You can find a list of reliable persistent peers in the official Babylon documentation or through community channels. Add these peers to the appropriate section in the `config.toml` file following the specified format.
+5. **Register Your Validator**
+   - Create a `validator.json` file that contains detailed information about your validator. The file should include the following key - value pairs:
+     - `"pubkey"` (required): The public key of your validator. You can obtain this key through the key generation process, such as using `babylond create - bls - key` (for BLS - based validators).
+     - `"amount"` (required): The amount of tokens (e.g., `ubbn`) you intend to stake as self - delegation. Make sure the amount is specified correctly according to the network's token denomination.
+     - `"commission_rate"` (required): The commission rate you will charge for your validation services. This rate determines the percentage of rewards you will receive from the staked tokens.
+     - `"moniker"` (required): The same moniker you used during the `babylond init` step. It helps in identifying your validator within the network.
+     - Optional fields may include `"identity"` (e.g., your Keybase or UPort identity), `"website"` (your validator's website), `"security_contact"` (your security contact email), etc.
+   - Here is an example structure of the `validator.json` file:
+```
+{
+    "pubkey": "YOUR_VALIDATOR_PUBLIC_KEY",
+    "amount": "1000000ubbn",
+    "commission_rate": "0.07",
+    "moniker": "YourUniqueValidatorMoniker",
+    "identity": "",
+    "website": "",
+    "security_contact": ""
+}
+```
+   - Once the `validator.json` file is created, register your validator using the command:
+   ``` language="bash">babylond tx checkpointing create - validator [path/to/validator.json] [flags]```.
+   Replace `[path/to/validator.json]` with the actual path to the `validator.json` file you created. The `[flags]` may include options such as `--chain - id` to specify the network chain ID, `--from` to indicate the wallet from which you'll sign the transaction (ensure this wallet has enough tokens to cover staking and transaction fees), `--gas` to set the gas limit for the transaction (you can use `auto` to let the system calculate it), `--gas - adjustment` to adjust the calculated gas amount, and `--fees` to specify the transaction fees you're willing to pay.
+
+For more in - depth and detailed information, including specific parameter values, troubleshooting tips, and security best practices, please refer to the [official setup guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/babylon-node/README.md). This guide is regularly updated to reflect the latest changes and requirements of the Babylon network, ensuring you have the most accurate and useful information for setting up your validator successfully.
 
 #### Q: What ports should I open for my Babylon node?
 **A:**
@@ -45,9 +75,9 @@ Open the following ports:
 - **RPC Port:** 26657
 - **gRPC Port:** 9090
 - **P2P Port:** 26656
-Ensure proper firewall rules if your validator and finality provider are on different instances.
+Ensure proper firewall rules if your Validator and Finality Provider are on different instances.
 
-#### Q: How can I check my validator’s status?
+#### Q: How can I check my Validator’s status?
 **A:**
 Use:
 ```bash
@@ -56,7 +86,7 @@ babylond q staking validator <your-valoper-address>
 Alternatively, check your status on an explorer such as [Mintscan](https://www.mintscan.io/babylon-testnet/validators)
 or [L2Scan](https://babylon-testnet.l2scan.co/).
 
-#### Q: How do I upgrade my Babylon validator node?
+#### Q: How do I upgrade my Babylon Validator node?
 **A:**
 Try the following:
 - Stop your node.
@@ -71,38 +101,38 @@ If your node fails to start after an upgrade:
 - Check logs for error messages.
 - Ensure you're using the correct genesis file or state snapshot.
 - Run `unsafe-reset-all` and resync the node.
-- If necessary, reinitialize the validator and restore from a backup.
+- If necessary, reinitialize the Validator and restore from a backup.
 
 
-#### Q: What should I do if my validator is jailed?
+#### Q: What should I do if my Validator is jailed?
 **A:**
 Try the following:
 - Check logs for issues related to missed votes or incorrect configurations.
 - Run `babylond tx slashing unjail` to attempt unjailing.
-- Ensure your validator is active and signing correctly before attempting unjailing.
+- Ensure your Validator is active and signing correctly before attempting unjailing.
 
-#### Q: How do I stake and delegate tokens to a validator?
+#### Q: How do I stake and delegate tokens to a Validator?
 **A:**
 Use the following command:
 ```bash
-babylond tx staking delegate <validator-address> <amount>ubbn --from <your-wallet>
+babylond tx epoching delegate <validator-address> <amount>ubbn --from <your-wallet>
 ```
 Ensure your wallet has sufficient balance to cover transaction fees.
 
 
-#### Q: How do I withdraw validator rewards?
+#### Q: How do I withdraw Validator rewards?
 **A:**
 Use the following command:
 ```bash
 babylond tx distribution withdraw-rewards <your-valoper-address> --from <your-wallet>
 ```
-Add `--commission` if you want to withdraw validator commission as well.
+Add `--commission` if you want to withdraw Validator commission as well.
 
-#### Q: How do I redelegate my stake to another validator?
+#### Q: How do I redelegate my stake to another Validator?
 **A:**
 Use:
 ```bash
-babylond tx staking redelegate <src-validator> <dest-validator> <amount>ubbn --from <your-wallet>
+babylond tx epoching redelegate <src-validator> <dest-validator> <amount>ubbn --from <your-wallet>
 ```
 Wait for the redelegation cooldown period before performing another redelegation.
 
@@ -116,18 +146,18 @@ Try the following:
 #### Q: What precautions should I take when resetting my node?
 **A:**
 Read the following:
-- **CAUTION:** Avoid using `unsafe-reset-all` without proper preparation
-- This command may remove BLS keys stored in `priv_validator_key.json`
-- Always create a backup of `priv_validator_key.json` before any reset
-- Wait for future updates that will separate BLS keys for improved safety
+- **CAUTION:** Avoid using `unsafe-reset-all` without proper preparation.
+- This command may remove BLS keys stored in `priv_validator_key.json`.
+- Always create a backup of `priv_validator_key.json` before any reset.
+- Wait for future updates that will separate BLS keys for improved safety.
 
 #### Q: How can I safely reset my Babylon node?
 **A:**
 Try the following:
-- Create a full backup of all critical configuration files
-- Specifically, backup `priv_validator_key.json`
-- Consult the latest Babylon documentation for recommended reset procedures
-- Consider reaching out to Babylon support if you're unsure about the reset process
+- Create a full backup of all critical configuration files.
+- Specifically, backup `priv_validator_key.json`.
+- Consult the latest Babylon documentation for recommended reset procedures.
+- Consider reaching out to Babylon support if you're unsure about the reset process.
 
 
 ## Finality Providers
@@ -135,14 +165,14 @@ Try the following:
 ### Recommendations
 
 **Connection Suggestions**
-   - Do not use multiple nodes behind a load balancer
-   - Always connect to a single, trusted Babylon RPC node
-   - Enable transaction indexing on your RPC node
+   - Do not use multiple nodes behind a load balancer.
+   - Always connect to a single, trusted Babylon RPC node.
+   - Enable transaction indexing on your RPC node.
 
 **Voting Mechanism Suggestions**
    - The jailing mechanism is similar to Cosmos SDK's native approach, Babylon
-Chain is built with the Cosmos SDK and uses the [x/slashing module](https://docs.cosmos.network/main/build/modules/slashing).
-   - It is designed to protect network integrity and prevent malicious activities
+Genesis is built with the Cosmos SDK and uses the [x/slashing module](https://docs.cosmos.network/main/build/modules/slashing).
+   - It is designed to protect network integrity and prevent malicious activities.
 
 ### Q&A
 
@@ -161,35 +191,35 @@ Run:
 ```bash
 babylond q finality provider <your-provider-address>
 ```
-Your provider should have active status and be voting on finality.
+Your provider should have an active status and be voting on finality.
 
 #### Q: What are the key recommendations for running a Finality Provider daemon?
 **A:**
 
 Follow these critical guidelines:
-- Connect your finality provider daemon to a trusted Babylon RPC node
-- Ensure you're connected to a single Babylon node (avoid load balancers)
-- Verify that your RPC node has transaction indexing enabled
+- Connect your Finality Provider daemon to a trusted Babylon RPC node.
+- Ensure you're connected to a single Babylon node (avoid load balancers).
+- Verify that your RPC node has transaction indexing enabled.
 
 #### Q: How can I prevent duplicate finality votes?
 **A:**
 Try the following:
-- Use a single, dedicated Babylon RPC node with transaction indexing enabled
-- Monitor your daemon's connection and status regularly
-- Check logs for any duplicate vote warnings
+- Use a single, dedicated Babylon RPC node with transaction indexing enabled.
+- Monitor your daemon's connection and status regularly.
+- Check logs for any duplicate vote warnings.
 
 #### Q: What should I do if my Finality Provider is jailed?
 **A:**
 Follow these steps:
-- Immediately check the status using `fpd finality-provider-info [eots-pk-hex]`
-- Verify your daemon's status on the Babylon staking dashboard
-- Investigate and resolve the underlying issue causing the jailing
-- Follow the official Babylon unjailing guide to restore your provider's status
+- Immediately check the status using `fpd finality-provider-info [eots-pk-hex]`.
+- Verify your daemon's status on the Babylon staking dashboard.
+- Investigate and resolve the underlying issue causing the jailing.
+- Follow the official Babylon unjailing guide to restore your provider's status.
 
 #### Q: What are the key recommendations for running a Finality Provider daemon?
 **A:**
 Follow these critical guidelines:
-- Connect your finality provider daemon to a trusted Babylon RPC node.
+- Connect your Finality Provider daemon to a trusted Babylon RPC node.
 - Ensure you're connected to a single Babylon node (avoid load balancers).
 - Verify that your RPC node has transaction indexing enabled.
 
@@ -212,11 +242,9 @@ Run:
 This is probably due to a new parameter appeared in the config and you could create a
 new default config with `eotsd init`, just remember to update the values to your key name and directory path
 
-
-
 ## Contact and Support
 
-For further assistance, please reach out to the Babbylon Genesis Validator and Finality Provider slack support channels (invit-only).
+For further assistance, please reach out to the Babylon Genesis Validator and Finality Provider Slack support channels (invite-only).
 
 :::warning
 This guide is based on the observation of current Babylon network

@@ -5,15 +5,15 @@ sidebar_position: 0
 
 # Babylon Operators
 
-Babylon Labs offers babylon cli, babylon node and a list of peripheral services to operators to who would 
+Babylon Labs offers babylon cli, babylon node and a list of peripheral services to operators who would 
 like to participate in the Babylon network. 
 
 Some example user stories: 
-* I am a experienced PoS chain Validator and want to help secure the Babylon network and earn block rewards.
-* I want to run a Finality Provider node to receive BTC delegation and earn mult-staking rewards commission.
-* I am a serious institutional staker and want to enable scallable access to the 
-* I am a infrastructure provider and want to build a explorer and RPC service for Babylon network. 
-* I am a BSN builder and want to be able achieve new real-time data availability with Babylon for my users.
+* I am an experienced PoS chain Validator and want to help secure the Babylon network and earn block rewards.
+* I want to run a Finality Provider node to receive BTC delegation and earn multi-staking rewards commission.
+* I am a serious institutional staker and want to enable scalable access to the Babylon network.
+* I am an infrastructure provider and want to build an explorer and RPC service for the Babylon network. 
+* I am a Bitcoin Supercharged Network (BSN) builder and want to be able to achieve new real-time data availability with Babylon for my users.
 
 ## Node Types
 ### Full Node
@@ -22,7 +22,7 @@ A full node downloads the entire blockchain history and verifies all transaction
 - Send transactions and sync blocks
 - Can be upgraded to Validator nodes or Finality Provider nodes
 
-### Babbylon Genesis Validator Node
+### Babylon Genesis Validator Node
 Validator nodes are full nodes that participate in consensus by:
 - Proposing new blocks
 - Voting on blocks
@@ -38,8 +38,8 @@ Finality Provider nodes are specialized nodes that participate in BSN finalizati
 - Earning rewards from BSNs
 
 :::note
-The difference between Validator and Finality Provider is that Validator nodes are responsible 
-for proposing blocks and voting on Babbylon Genesis, while Finality Provider nodes are responsible for 
+The difference between a Validator and Finality Provider is that Validator nodes are responsible 
+for proposing blocks and voting on Babylon Genesis, while Finality Provider nodes are responsible for 
 committing public randomness and signing blocks for BSNs.
 :::
 
@@ -54,16 +54,16 @@ Archive nodes maintain the complete state history and are useful for:
 * [Install babylond](/operators/babylon_node/installation_guide)
 
 ## Networks
-Babylon network is currently running following public facing networks: 
+Babylon network is currently running the following public facing networks: 
 * Phase 1 Mainnet (Locking on Bitcoin Chain)
-* Phase 2 testnet (Staking on Babbylon Genesis)
+* Phase 2 testnet (Staking on Babylon Genesis)
 * Phase 3 devnet (Multi-staking on BSNs)
 
 ## CLI Reference
 Babylon binary is available for multiple platforms and can be downloaded from the [releases page](https://github.com/babylonlabs-io/babylon/releases).  
 
 :::note
-For Phase 2 testnet users, pleas use the [`v1.0.0-rc.3`](https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.0-rc.3) tag for babylon binary.
+For Phase 2 testnet users, please use the [`v1.0.0-rc.3`](https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.0-rc.3) tag for babylon binary.
 :::
 
 ## API References
@@ -76,8 +76,8 @@ Types of keys important to node operators:
 * BSN Validator account private key (critical for proposing blocks)
 * BSN Finality Provider account private keys (critical for signing finality of BSNs)
 
-Operators should use`hardware security modules (HSMs) when possible, maintain physical security 
-for key storage, keep backups in separate locations.
+Operators should use hardware security modules (HSMs) when possible, maintain physical security 
+for key storage, and keep backups in separate locations.
 
 ## Monitoring & Backup Requirements
 Node operators should implement comprehensive monitoring and backup systems to ensure reliable 

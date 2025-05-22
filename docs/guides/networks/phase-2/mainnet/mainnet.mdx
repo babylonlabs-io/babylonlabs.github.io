@@ -1,13 +1,22 @@
 ---
 title: Mainnet
-sidebar_label: Mainnet
+sidebar_class_name: mainnet_sidebar
 sidebar_position: 1
 ---
 
 # Phase 2: Mainnet
 
-Information related to Phase 2 Mainnet of Babylon Genesis. 
+## Mainnet Network Details
 
-import DocCardList from '@theme/DocCardList';
+import RemoteMD from '@site/src/components/RemoteMD';
 
-<DocCardList />
+export const rawUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/README.md";
+
+<RemoteMD
+  networkVersions={{
+    mainnet: rawUrl
+  }}
+  hideEnv={true}
+  hideRelease={true}
+/>
+

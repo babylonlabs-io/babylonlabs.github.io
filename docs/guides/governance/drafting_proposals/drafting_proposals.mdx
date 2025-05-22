@@ -1,0 +1,138 @@
+---  
+id: drafting-proposals  
+title: Drafting Proposals  
+sidebar_label: Drafting Proposals  
+description: A guide to creating effective governance proposals for Babylon Genesis  
+keywords: [governance, proposals, drafting, community engagement, Babylon]  
+---  
+
+# Drafting Proposals  
+
+Creating a successful governance proposal requires careful planning, community engagement, and thorough documentation. This guide outlines the process for developing and submitting proposals within the Babylon ecosystem.  
+
+## Engage Community and Seek Feedback  
+
+Engagement is critical to the success of a proposal.  
+
+The extent of your engagement with the Babylon community should reflect the potential impact of your proposal on stakeholders. A proposal that affects many stakeholders or involves significant funds should involve more extensive community consultation.  
+
+We recommend a staged approach to engagement to conserve resources and build support incrementally. Check in with key stakeholders at each stage before investing more time in developing your proposal.  
+
+In the first stage, engage with community members and experts informally about your idea:  
+
+- Does it address a real need?  
+- Are there critical flaws in your reasoning?  
+- Are there better alternatives?  
+
+**Note**: Consider hosting AMAs on Discord, creating explainer videos, presenting at community calls, or developing simulations. Experiment with approaches that play to your strengths and connections.  
+
+## Stage 1: Refine Your Idea  
+
+### Not yet confident about your idea?  
+
+Governance proposals can have far-reaching impacts on many stakeholders. Start by introducing your idea to community members before investing significant resources into drafting a formal proposal.  
+
+If you know any active Babylon community members, send them a short overview of your thinking and the expected outcomes of your proposal. Let them ask questions before providing all the details. Do the same in community channels where constructive feedback is common. The Babylon Discord channels for governance and the Babylon Forum are good places to start these discussions.  
+
+### Confident with your idea?  
+
+Great! However, remember that governance proposals can impact stakeholders in unexpected ways. Introduce your idea to community members before investing resources in drafting a formal proposal. At this stage, actively seek critical feedback to protect yourself from confirmation bias. This is the ideal time to identify flaws, as submitting a flawed proposal will waste both your resources and the community's attention.  
+
+### Ready to draft a governance proposal?  
+
+You'll likely encounter different opinions about the value of your proposal and your implementation strategy. If you've considered feedback from diverse perspectives and believe your proposal is valuable, and you think others feel this way too, it's worth drafting a proposal.  
+
+Remember that the largest BABY stakers have the biggest voting power, so a vocal minority isn't necessarily representative of the likely outcome of an on-chain vote. A conservative approach is to have some confidence that you have initial support from a majority of the voting power before proceeding to draft your proposal. However, if your idea addresses an important issue, you may want to pursue it regardless of whether you're confident about having immediate support.  
+
+## Stage 2: Your Draft Proposal  
+
+### Begin with a well-structured draft proposal  
+
+Ensure that you have thoroughly considered your proposal and anticipated questions that the community will likely ask. Once your proposal is on-chain, you cannot change it.  
+
+The ideal format for a proposal is as a Markdown file (i.e., `.md`) in a GitHub repository. Markdown is a simple and accessible format for writing plain text files that is easy to learn. See the [GitHub Markdown Guide](https://guides.github.com/features/mastering-markdown/) for details on writing markdown files.  
+
+If you don't have a [GitHub](http://github.com/) account already, register one. You can either create your own repository or submit a pull request to the Babylon governance repository (if available). For help using GitHub, see the [GitHub Forking Guide](https://guides.github.com/activities/forking/). If you need assistance with GitHub, don't hesitate to ask in the Babylon Discord.  
+
+If you prefer not to use GitHub, you can draft a proposal in another format, but Markdown is the standard for distributed collaboration on text files. The [Babylon Proposal Templates](./proposal_templates) provide structured formats you should follow.  
+
+1. Post a draft of your proposal on the [Babylon Forum](https://forum.babylonchain.io/) under the governance category. Include a link to your GitHub repository if applicable.  
+
+2. Directly engage key members of the community for feedback. These could include:  
+   - Active validators  
+   - Large BABY stakers  
+   - BTC stakers  
+   - Finality providers  
+   - Community members with relevant expertise  
+   - Those likely to be most impacted by the proposal  
+
+3. Engage with the Babylon Foundation governance team. These are people focused on Babylon governance who can provide feedback and recommend resources to support your work. Members can be contacted on the forum or in Discord governance channels.  
+
+4. Present your proposal in community calls or governance-focused discussions. This allows for synchronous feedback and lets you address concerns immediately.  
+
+5. Once you've incorporated initial feedback, alert the broader community to your draft proposal via:  
+   - Twitter, tagging the official Babylon account and relevant community leaders  
+   - Discord announcements  
+   - Telegram groups (if applicable)  
+   - Forum posts with updates on the proposal's development  
+
+### Test your proposal (if applicable)  
+
+For parameter change proposals, consider:  
+- Simulating the effects of your parameter changes if possible  
+- Testing on testnet before proposing on mainnet  
+- Providing data and analysis on expected outcomes  
+
+For software upgrade proposals:  
+- Ensure thorough testing on testnet environments  
+- Document testing procedures and results  
+- Provide clear validator instructions  
+
+Submitting details of your testing increases community confidence in your proposal and demonstrates your commitment to its success.  
+
+## Stage 3: Your On-Chain Proposal  
+
+A significant portion of the voting community should be aware of and have considered your proposal before it goes live on-chain. If you're taking a conservative approach, you should have reasonable confidence that your proposal will pass before risking deposit contributions.  
+
+Make final revisions to your draft proposal based on community feedback before submission.  
+
+### The Deposit Period  
+
+The deposit period lasts 14 days. If you submit your transaction with the minimum deposit (50,000 BABY for standard proposals, 200,000 BABY for expedited), your proposal will immediately enter the voting period.  
+
+If you don't submit the full minimum deposit amount, this may be an opportunity for others to show their support by contributing their BABY as a bond for your proposal. You can request contributions openly and contact stakeholders directly (particularly those enthusiastic about your proposal).  
+
+Remember that each contributor is risking their funds—deposits are returned for proposals that pass or fail (but not vetoed), but are burned if the proposal:  
+- Doesn't reach the minimum deposit within 14 days  
+- Receives >33.4% NoWithVeto votes  
+
+This stage is when proposals typically gain broader attention. Most block explorers display proposals in the deposit period. Having your proposal in the deposit period is a good time to engage the broader Babylon community on Twitter, Discord, and other channels to prepare validators and BABY-holders for voting.  
+
+### The Voting Period  
+
+During the voting period (3 days for standard proposals, 1 day for expedited), track which validators have voted and which have not. Re-engage directly with top stake-holders, particularly the highest-ranking validator operators, to ensure that:  
+
+1. They are aware of your proposal  
+2. They can ask you any questions about your proposal  
+3. They are prepared to vote  
+
+Remember that any voter may change their vote at any time before the voting period ends. While this doesn't happen often, there may be opportunities to address concerns and convince voters to change their votes.  
+
+The biggest risk is that stakeholders won't vote at all. Validator operators often need multiple reminders to vote. How you choose to contact validator operators, how often, and what you say is up to you—remember that no validator is obligated to vote, and operators likely have competing demands for their attention. Take care not to strain your relationships with validator operators.  
+
+## After the Vote  
+
+Whether your proposal passes or not, it's valuable to:  
+
+1. Thank the community for their participation  
+2. Summarize the outcome and next steps  
+3. Document lessons learned for future proposals  
+4. Follow through on any commitments made in your proposal  
+
+For proposals that pass, provide regular updates on implementation progress. For proposals that fail, consider the feedback received and whether a revised proposal might be appropriate in the future.  
+
+## Real Examples  
+
+Before drafting your proposal, review successful proposals from the Babylon forum and on-chain voting history. These can provide practical examples of proposal structure, argumentation style, and engagement strategies that have worked in the past.  
+
+Remember that governance is a collaborative process. The goal isn't just to get your proposal passed but to improve the Babylon ecosystem through thoughtful, well-considered changes that have broad community support.  

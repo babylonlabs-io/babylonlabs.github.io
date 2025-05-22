@@ -20,9 +20,9 @@ interface Guide {
 
 const guides: Guide[] = [
   {
-    title: 'Babylon Chain Basics',
+    title: 'Babylon Genesis Chain Basics',
     icon: ArrowRightFilled,
-    text: 'Learn about the Babylon Chain architecture and how it works.',
+    text: 'Learn about the Babylon Genesis Chain architecture and how it works.',
     link: '/developers/babylon_genesis_chain',
   },
   {
@@ -34,13 +34,13 @@ const guides: Guide[] = [
   {
     title: 'Babylon Smart Contracts',
     icon: OpenRegular,
-    text: 'The CosmWASM contracts that are deployed on the Babylon Chain.',
+    text: 'The CosmWASM contracts that are deployed on the Babylon Genesis chain.',
     link: '/developers/dapps/smart_contract_deployment',
   },
   {
     title: 'Staking Transactions Specifications',
     icon: AppsAddInRegular,
-    text: "Learn details of the staking transactions that are executed on the Bitcoin Chain.",
+    text: "Learn details of the staking transactions that are executed on the Bitcoin chain.",
     link: '/guides/specifications/staking_transactions',
   },
 ];
@@ -55,8 +55,13 @@ interface Sample {
 
 const samples: Sample[] = [
   {
+    title: 'Phase 2 Finality Provider Guides',
+    platform: 'Navigate phase transition as a Finality Provider',
+    demo: '/operators/finality_providers/phase_2_registration_guide/',
+  },
+  {
     title: 'PoS Integrations Guides',
-    platform: 'Cosmos',
+    platform: 'For Cosmos chains',
     source:
       'https://github.com/babylonlabs-io/babylon-integration-deployment/tree/main/deployments/btc-staking-integration-bitcoind',
     blog: 'https://babylonlabs.io/blog/babylon-bitcoin-security-for-cosmos-and-beyond',
@@ -64,21 +69,19 @@ const samples: Sample[] = [
   },
   {
     title: 'L2 Integrations Guides',
-    platform: 'Optimism',
+    platform: 'For OP Stacks chains',
     blog: '/developers/bsns/op_stack_chains',
     source: 'https://babylonlabs.io/blog/forkless-rollups-with-bitcoin-staking',
     demo: '/developers/bsns/op_stack_chains',
   },
   {
     title: 'CosmWasm Contract Deployment Guides',
-    platform: 'Cosmos',
-    blog: '/developers/dapps/smart_contract_deployment',
+    platform: 'For dApp developers',
     source: 'https://github.com/babylonlabs-io/storage-contract',
     demo: '/developers/dapps/smart_contract_deployment',
   },
   {
     title: 'Wallet Integrations Guides',
-    platform: 'Wallets',
     blog: '/developers/wallet_integration',
     source:
       'https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/integration/wallet/babylon-wallet.md',
@@ -143,7 +146,7 @@ function Sample({ title, platform, blog, source, demo }: Sample) {
 
 export default function GuidesAndSamples() {
   return (
-    <section className="no-underline-links mx-auto my-40 flex w-full max-w-5xl flex-col gap-10 p-4 py-0 md:flex-row md:gap-0">
+    <section className="no-underline-links mx-auto my-10 flex w-full max-w-5xl flex-col gap-10 p-4 py-0 md:flex-row md:gap-0">
       <div className="flex-1">
         <div className="mb-8 flex items-center justify-between">
           <h3 className="m-0">Key Concepts</h3>

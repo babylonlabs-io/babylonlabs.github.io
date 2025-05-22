@@ -1,0 +1,118 @@
+---
+title: Finality Provider Registration Guide
+sidebar_label: Phase 2 Registration Guide
+sidebar_position: 0.9
+---
+
+# Phase 2 Finality Provider Registration Guide
+
+Babylon Bitcoin Staking Network has entered its second phase of operation since 
+10 April 2025. As a result, all existing finality providers will need to register 
+again in Phase 2 network.
+
+This guide provides instructions for both existing Phase 1 participants and new 
+Finality Providers looking to join Phase 2 network. 
+
+## Quick Links
+- [Phase 1 Finality Providers](#finality-providers-participated-in-phase-1)
+- [New Finality Providers](#new-finality-providers)
+
+## Finality Providers Participated in Phase 1
+
+If your Finality Provider received staking in Phase 1, you will need to register 
+in Phase 2 again. Failing to do so will cause your BTC delegation to not be 
+recognized in Phase 2 network.
+
+### Prerequisites
+- You should have already registered your Finality Provider for [the airdrop](https://babylon.foundation/docs/link-a-finality-provider-eots-pk-to-your-baby-address)
+- Your BABY account should be created and credited with tokens for gas costs
+- Your EOTS key from Phase 1 (no need to create a new one)
+
+### Registration Steps
+
+#### 1. Register on Babylon Genesis
+To register your Finality Provider during the registration period, you will need to: 
+- Ensure your program is operational
+- Verify interactions with the EOTS manager are healthy
+- Use the command: `fpd create-finality-provider` to create a registration request.
+  For detailed instructions, see [Create Finality Provider](https://docs.babylonlabs.io/operators/finality_providers/fp_operations/#61-create-finality-provider) in the FP Operations Guide.
+  You will need the BABY account address created earlier and your previous Phase 
+  1 EOTS key.
+
+#### 2. Ensure Healthy Finality Voting
+Once registered and the finality protocol is live, if you are in the top 60 FPs, your 
+Finality Provider will be active and begin submitting finality votes. 
+
+### Important Steps for Your Stakers
+Only after you have registered your Finality Provider on Phase 2, your stakers
+can transfer their stake to Phase 2. Please communicate the following to your 
+Phase 1 stakers:
+
+#### Stakers Participated in Cap 1
+- Can immediately transfer their stake to Phase 2 via [Babylon Staking Dashboard](https://btcstaking.babylonlabs.io/)
+- Check the [Cap 1 staking transactions allowed list](https://docs.babylonlabs.io/docs/allowed-list-cap-1)
+
+#### Stakers Participated in Cap 2 & 3
+- Can transfer their stake to Phase 2 via [Babylon Staking Dashboard](https://btcstaking.babylonlabs.io/) after 24 April 2025
+
+## New Finality Providers
+
+If you are a new Finality Provider (registered after 10 April 2025), follow these 
+steps to register in Phase 2.
+
+### 1. Create BABY Account
+1. Create a new BABY account using `fpd` CLI
+2. Fund the account with BABY tokens for gas costs
+3. See [Add Key for Babylon Account](https://docs.babylonlabs.io/operators/finality_providers/fp_operations/#52-add-key-for-the-babylon-account) for detailed instructions
+
+### 2. Finality Provider Toolset Setup
+1. Set up your Finality Provider node and EOTS manager
+2. Ensure they are operational
+3. Follow the [Install Finality Provider Toolset](https://docs.babylonlabs.io/operators/finality_providers/fp_operations/#3-install-finality-provider-toolset) guide
+4. Verify your BABY account has sufficient tokens
+
+### 3. EOTS Key Setup
+1. Initialize your EOTS manager
+2. Create a new EOTS key for your finality provider
+3. See [Add an EOTS Key](https://docs.babylonlabs.io/operators/finality_providers/fp_operations/#42-add-an-eots-key) for instructions
+
+### 4. Registration
+To register your Finality Provider:
+- Ensure your program is operational
+- Verify EOTS manager interactions are healthy
+- Use the command: `fpd create-finality-provider` to create a registration request.
+  See [Create Finality Provider](https://docs.babylonlabs.io/operators/finality_providers/fp_operations/#61-create-finality-provider) for detailed instructions. You will need the BABY account address and EOTS 
+  key created in the previous steps.
+
+### 5. Finality Voting
+Once registered and the finality protocol is active, your finality provider will 
+begin submitting finality votes.
+
+## Communication
+
+Join the `#finality-providers` channel in the `- tech-zone -` section of our 
+[Discord server](https://discord.com/invite/babylonglobal) for all communications.
+Testnet announcements will also be made there. 
+
+
+## Version Information
+- **Finality Provider:** [v1.0.0](https://github.com/babylonlabs-io/finality-provider/releases/tag/v1.0.0) ([Releases](https://github.com/babylonlabs-io/finality-provider/releases))
+- **Babylon Genesis node:** [v1.0.1](https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.1) ([Releases](https://github.com/babylonlabs-io/babylon/releases))
+
+:::note
+💡 Subscribe to the GitHub releases pages to receive notifications about new releases.
+:::
+
+## Additional Resources 
+
+### For Finality Providers
+- [Node Setup Guide](https://github.com/babylonlabs-io/networks/tree/main/bbn-1/babylon-node)
+- [Finality Providers Operational Guide](https://github.com/babylonlabs-io/finality-provider/blob/release/v1.x/docs/finality-provider-operation.md)
+- [Finality Activation Documentation](https://github.com/babylonlabs-io/babylon/blob/release/v1.x/x/btcstaking/docs/registration-eligibility.md)
+
+### For Stakers
+- [Bitcoin Stake Registration](https://github.com/babylonlabs-io/babylon/blob/release/v1.x/docs/register-bitcoin-stake.md)
+- [Staking Registration Eligibility](https://github.com/babylonlabs-io/babylon/blob/release/v1.x/x/btcstaking/docs/registration-eligibility.md)
+- [Supported Wallets](https://docs.babylonlabs.io/guides/stakers/native_staking/web_staking/)
+- [BTC Staking TypeScript Library](https://github.com/babylonlabs-io/babylon-proto-ts/tree/v1.0.1)
+- [BTC Staker CLI Usage](https://github.com/babylonlabs-io/btc-staker/tree/release/v0.15.x)

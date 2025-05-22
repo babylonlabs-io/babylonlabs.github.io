@@ -1,0 +1,107 @@
+---
+sidebar_class_name: baby_stakers_sidebar
+sidebar_label: BABY Stakers
+sidebar_position: 1
+---
+# Staking BABY on Babylon
+
+**BABY staking** is a native staking mechanism that secures the Babylon Genesis -
+the first Bitcoin Supercharged Network and a Proof of Stake chain. This allows token
+holders to delegate to a chain validator to accrue inflationary rewards
+proportional to their stake. Alongside BTC staking on Finality Providers of
+Babylon Genesis, it contributes to the chain’s security and decentralization.
+
+## Benefits of BABY Staking
+
+By staking BABY tokens, the delegator can:
+
+- **Earn rewards**: Receive a portion of the annual inflation allocated to BABY
+stakers.
+- **Secure the network**: Contribute to the Babylon Genesis chain's security
+and decentralization.
+- **Fast unbonding**: Access a significantly reduced unbonding period of
+approximately 2 days compared to the typical 21 days in most PoS chains.
+- **Governance participation**: BABY staking gives stakers voting power in the
+chain’s governance to help shape the future of the network.
+
+
+## The Staking Process
+
+When you have acquired BABY and decide to stake your BABY tokens, the general
+process is as follows:
+
+1. **Submission**: You send a BABY staking request through supported wallets.
+2. **Confirmation**: The system confirms it received your request.
+3. **Queuing**: Your request joins the queue, waiting for the current epoch to
+end.
+4. **Funds Status**: Important: Your funds remain available in your wallet
+until the epoch ends.
+
+*More on the staking mechanism can be found [here](/guides/baby_stakers/staking_mechanism).*
+
+## Slashing Conditions
+
+Like all staking operations, BABY staking carries certain risks that delegators
+should understand.
+
+- Staked validators can only be slashed for double signing, which means
+proposing two different blocks at the same height (considered a severe
+security violation).
+- When slashing occurs, 5% of the delegated tokens are slashed, while the
+remaining 95% are returned to the BABY delegator.
+
+Babylon implements several measures to protect BABY delegators:
+
+- **On-chain Records**: All slashing events are recorded on-chain and visible
+through explorers. Validator slashing history is publicly available to inform
+delegation decisions.
+- **Partial Slashing**: Calibrated slashing parameters in percentage help
+protect delegators from catastrophic loss.
+
+*More on the slashing conditions can be found [here](/guides/baby_stakers/staking_mechanism).*
+
+## Fast Unbonding
+
+Babylon Genesis employs the Bitcoin Timestamping protocol, which enables a
+fast unbonding process:
+
+### Unbonding Initiation:
+- Delegator submits an unbonding request transaction.
+- Request is queued for processing at the epoch boundary.
+- At epoch conclusion, the token delegation status changes to "unbonding".
+
+### Bitcoin Checkpoint Verification:
+- The protocol commits a cryptographic hash of the Babylon Genesis chain
+state to the Bitcoin blockchain.
+- The system monitors the Bitcoin chain for confirmation of the block that
+contains the checkpoint.
+- Required confirmation depth: 300 Bitcoin blocks (~2 days).
+
+### Token Release:
+- Once Bitcoin confirmations reach the required threshold, tokens are
+automatically released and returned to the delegator.
+- Released tokens become fully liquid and transferable; there are no more
+restrictions.
+
+*More on fast unbonding process [here](/guides/baby_stakers/staking_mechanism).*
+
+## Relationship with Bitcoin Staking
+
+BABY staking operates alongside Babylon's Bitcoin Staking Protocol. Both
+mechanisms contribute to securing the Babylon Genesis chain.Staking natively
+allows Babylon Genesis validators to validate chain information, while BTC
+staking allows Babylon Genesis Finality Providers to do the same.
+
+This dual-staking model is the foundation of Babylon’s Bitcoin Secured
+Network model, combining the robustness of Bitcoin with the efficiency of
+Proof of Stake consensus.
+
+Bitcoin staking delegators earn BABY rewards from a separate annual
+inflation figure. However, they do not participate in the governance of
+Babylon Genesis.
+
+*More information on governance can be found [here](/guides/governance/).*
+
+This overview provides the foundation for understanding BABY staking. The
+following sections will delve deeper into specific mechanisms, the unique fast
+unbonding process, and practical guides to getting started with BABY staking.

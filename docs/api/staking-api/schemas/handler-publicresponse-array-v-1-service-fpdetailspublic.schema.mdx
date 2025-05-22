@@ -1,0 +1,33 @@
+---
+id: handler-publicresponse-array-v-1-service-fpdetailspublic
+title: "handler.PublicResponse-array_v1service_FpDetailsPublic"
+description: ""
+sidebar_label: "handler.PublicResponse-array_v1service_FpDetailsPublic"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":[{"active_delegations":0,"active_tvl":0,"btc_pk":"string","commission":"string","description":{"details":"string","identity":"string","moniker":"string","security_contact":"string","website":"string"},"total_delegations":0,"total_tvl":0}],"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"handler.PublicResponse-array_v1service_FpDetailsPublic"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"v1service.FpDescriptionPublic"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.FpDetailsPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v1service_FpDetailsPublic"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

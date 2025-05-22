@@ -3,29 +3,104 @@ sidebar_class_name: audit_reports_sidebar
 sidebar_position: 1
 ---
 
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+
 # Audit Reports
 
-Babylon protocol is secure and audited by industry leading web3 security firms. 
+Babylon protocol is audited by industry leading web3 security firms.
+Below you can find the audits conducted for the code base associated with
+the different phases of the launch. 
+
+### Phase 1 Audits
+
+Audits for the Phase 1 of the Babylon Bitcoin Staking Protocol are conducted by three different firms.
 
 <CardSection id="Babylon Security Audit Reports">
-  <Card
-    title="Coinspect Audit Report"
-    to="https://docs.babylonlabs.io/assets/files/coinspect-phase1-audit.pdf"
-    description="Source Code Audit - Phase 1"
-  />
-  <Card
-    title="Coinspect Audit Report Incremental "
-    to="https://docs.babylonlabs.io//assets/files/coinspect-phase1-audit-incremental.pdf"
-    description="Source Code Audit - Phase 1 Cap3"
-  />
-  <Card
-    title="Zellic"
-    to="https://docs.babylonlabs.io/assets/files/zellic-phase1-audit.pdf"
-    description="Blockchain Security Assessment"
-  />
-  <Card
-    title="Cantina"
-    to="https://docs.babylonlabs.io/assets/files/cantina-phase1-competition.pdf"
-    description="Bitcoin Staking Scripts Competition"
-  />
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Coinspect Phase-1 Audit Report"
+        to={new URL('/assets/files/coinspect-phase1-audit.pdf', window.location.origin).href}
+        description="Coinspect Source Code Audit - Phase 1 (June 2024)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Coinspect Phase-1 Incremental Audit Report"
+        to={new URL('/assets/files/coinspect-phase1-audit-incremental.pdf', window.location.origin).href}
+        description="Zellic Source Code Audit - Phase 1 Cap-3 updates (October 2024)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Zellic Phase-1 Audit Report"
+        to={new URL('/assets/files/zellic-phase1-audit.pdf', window.location.origin).href}
+        description="Zellic Source Code Audit - Phase 1 (June 2024)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Cantina"
+        to={new URL('/assets/files/cantina-phase1-competition.pdf', window.location.origin).href}
+        description="Sherlock Source Code Security Competition - Phase 1 (June 2024)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
 </CardSection>
+
+### Phase 2 Audits
+
+Audits for the Babylon Genesis Chain are conducted by [Coinspect](https://www.coinspect.io/) and [Zellic](https://zellic.io/).
+
+<CardSection id="Babylon Security Audit Reports">
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Coinspect Phase 2 Audit Report"
+        to={new URL('/assets/files/coinspect_babylon_phase_2_audit_2025_03.pdf', window.location.origin).href}
+        description="Coinspect Babylon Genesis Chain Audit (March 2025)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Zellic Babylon Genesis Audit Report"
+        to={new URL('/assets/files/zellic_babylon_genesis_chain_audit_2025_03.pdf', window.location.origin).href}
+        description="Zellic Babylon Genesis Chain Audit (March 2025)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
+  <BrowserOnly>
+    {() => (
+      <Card
+        title="Sherlock Security Review for Babylon"
+        to={new URL('/assets/files/sherlock_security_revivew_for_babylon_2025_03.pdf', window.location.origin).href}
+        description="Sherlock Babylon Babylon Genesis Chain Audit (March 2025)"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    )}
+  </BrowserOnly>
+</CardSection>
+
+

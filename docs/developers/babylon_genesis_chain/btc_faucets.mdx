@@ -1,0 +1,61 @@
+---
+title: BTC Faucets
+sidebar_class_name: btc_faucets_sidebar
+sidebar_position: 6
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+import { useState } from 'react';
+
+# Getting Signet BTCs
+
+:::note
+Signet BTC is of no actual value and is not redeemable for real BTC. It is used solely for 
+testing the Babylon Bitcoin Staking Protocol.
+:::
+
+Babylon Labs is not a maintainer of the Signet BTC project and has only limited supply 
+of Signet BTC for testing purposes. 
+
+There are several Signet BTC faucets available for developers to claim testnet BTC.
+
+## HoodScan Signet BTC Faucet
+
+The [HoodScan Signet BTC Faucet](https://faucet.hoodscan.io/) is a simple faucet that 
+allows developers to claim sBTC.
+
+<div className="text-center">
+  <img
+    src={useBaseUrl('/img/developers/babylon_genesis_chain/hoodscan_btc_faucet.gif')}
+    alt="Demo of HoodScan Signet BTC Faucet"
+    className="zoomable"
+    width="80%"
+  />
+</div>
+
+To claim sBTC, follow these steps:
+
+1. **Create a Signet BTC Wallet**:
+   - Set up a Bitcoin wallet that supports Native SegWit (NSW)
+   - Copy your NSW Bitcoin wallet address
+
+2. **Access the Faucet**:
+   - Visit the [HoodScan Signet BTC Faucet](https://faucet.hoodscan.io/)
+   - In the "Select a Chain..." dropdown, choose "Bitcoin"
+   - Select "Bitcoin Signet" from the network options
+
+3. **Request Tokens**:
+   - Paste your NSW Bitcoin wallet address
+   - Click the "Request Tokens" button
+
+<div className="text-center">
+  <img
+    src={useBaseUrl('/img/developers/babylon_genesis_chain/hoodscan_btc_faucet.png')}
+    alt="HoodScan Signet BTC Faucet"
+    className="zoomable"
+    width="80%"
+  />
+</div>
+
+The sBTC will be sent to your wallet address shortly after submitting the request.

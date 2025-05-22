@@ -5,12 +5,12 @@ sidebar_label: Overview
 
 # Babylon Bitcoin Staking Protocol Overview
 
-Babylon is a decentralized system that enables native Bitcoin staking directly 
+Babylon is a decentralized protocol that enables native bitcoin staking directly 
 on the Bitcoin blockchain without intermediaries. The protocol implements a novel 
 shared-security architecture that extends Bitcoin's security model to the broader 
 decentralized ecosystem. Through its architecture, BTC holders can participate in 
-multi-staking operations while maintaining their assets on the Bitcoin network, 
-providing verifiable security guarantees to Bitcoin Secured Networks (BSNs).
+multi-staking operations while maintaining their assets on Bitcoin, 
+providing verifiable security guarantees to Bitcoin Supercharged Networks (BSNs).
 
 The protocol's primary function is to enhance Proof-of-Stake (PoS) consensus security by 
 implementing Bitcoin staking mechanisms. Through cryptographic primitives and 
@@ -23,7 +23,7 @@ import Link from '@docusaurus/Link';
 
 <div className="flex flex-col items-center justify-center">
   <ThemedImage
-    alt="Overview of Babylon Systems"
+    alt="Overview of Babylon Bitcoin Statking Protocol"
     sources={{
       light: useBaseUrl('/img/guides/overview.png'),
       dark: useBaseUrl('/img/guides/overview_dark.png'),
@@ -32,15 +32,15 @@ import Link from '@docusaurus/Link';
   <em>Babylon Overview</em><br/>
 </div>
 
-Key features of Babylon Protocol:
+Key features of Babylon Bitcoin Staking Protocol:
 
 -  Trustless staking architecture - BTC remains native with no wrapped assets
--  Optimized unbonding - Stake withdrawal period of just a few days
--  Configurable slashing parameters - Protocol violations trigger predetermined penalties
--  Modular security design - Compatible with any PoS consensus implementation
+-  Fast unbonding - Stake withdrawal period of just a few days
+-  Configurable slashing - Protocol violations trigger configrable penalties
+-  Modular security - Compatible with any PoS consensus implementation
 
 When implemented at scale, Bitcoin represents the largest potential staking capital 
-pool in the cryptocurrency ecosystem.
+pool in the web3 ecosystem.
 
 ## Core Concepts 
 
@@ -62,12 +62,6 @@ pool in the cryptocurrency ecosystem.
   <Card
     title="Phases of the Launch"
     to="/guides/overview/phases_of_the_launch"
-    title="Babylon Genesis"
-    to="/guides/overview/babylon_genesis"
-  />
-  <Card
-    title="Phases of the Launch"
-    to="/guides/overview/phases_of_the_launch"
   />
 </CardSection>
 
@@ -82,22 +76,17 @@ mechanisms that ensure:
 - Secure inter-chain message passing
 - Robust asset locking mechanisms
 - Automated reward distribution
-- Configurable slashing capabilities
+- Configurable slashing
 
 Read more on modules of the multi-staking architecture [here](/guides/architecture/).
 
-## Bitcoin Secured Networks (BSNs)
+## Bitcoin Supercharged Networks (BSNs)
 
-The Babylon multi-staked Bitcoins are used to secure BSNs. BSNs can be very broad, 
-they are any system that requires finality that has a data-driven application. 
-In most cases, a BSN is a blockchain of anykind. For example an L1 or L2 rollup 
+The Babylon multi-staked bitcoins are used to secure BSNs. BSNs can be broadly defined as 
+any system that requires finality that has a data-driven application. 
+In most cases, a BSN is a blockchain of some kind, for example, an L1 or L2 rollup 
 chain. It can also be versatile such as a DeFi protocol, blockchain infrastructure 
-project like a swap or bridge, or a decentralized network such as a compute network, 
-they are any system that requires finality that has a data-driven application. 
-In most cases, a BSN is a blockchain of anykind. For example an L1 or L2 rollup 
-chain. It can also be versatile such as a DeFi protocol, blockchain infrastructure 
-project like a swap or bridge, or a decentralized network such as a compute network, 
-etc. 
+project like a swap or bridge, or a decentralized network such as a compute network, etc. 
 
 Read more on how to integrate BSNs with Babylon [here](/guides/overview/bitcoin_secured_networks).
 
@@ -105,7 +94,7 @@ Read more on how to integrate BSNs with Babylon [here](/guides/overview/bitcoin_
 
 Babylon Network implements the following security guarantees:
 
-- **Slashable PoS Security:** Security violations trigger automatic slashing of a portion 
+- **PoS Security:** Security violations trigger automatic slashing of a portion 
 of the Bitcoin stake.
 - **Staker's Security:** Staked Bitcoin remains recoverable contingent on network 
 compliance by the staker or delegated validator.
@@ -114,7 +103,7 @@ consensus coordination.
 
 ## Technical Integration
 
-For developers looking to integrate to Babylon network or integration partners, we 
+For developers looking to integrate to Babylon protocol, we 
 provide a comprehensive set of tools and documentation to help you get started. 
 
 * [Babylon node](/operators/babylon_node/installation_guide)
@@ -123,31 +112,16 @@ provide a comprehensive set of tools and documentation to help you get started.
 
 Interchain communication is handled through [IBC protocol](https://tutorials.cosmos.network/academy/3-ibc/).
 
-## Deploy on Babylon Genesis
+## Babylon Genesis Chain
 
 Babylon Genesis implements a Cosmos SDK-based blockchain with native IBC (Inter-
 Blockchain Communication) protocol support. Babylon Genesis will be the first 
-Bitcoin Secured Network (BSN) and will serve as the control plane for security 
+BSN and will serve as the control plane for BTC security 
 and liquidity orchestration to other BSNs to come.   
 
 For smart contract deployment, Babylon Genesis provides CosmWasm compatibility. 
 Developers familiar with the Cosmos ecosystem can deploy standard contracts (e.g., 
-CW-20 implementations) through trusted RPC endpoints.
+CW-20 implementations) through trusted  or self-hosted RPC endpoints.
 
 More about Babylon Genesis [here](/developers/babylon_genesis_chain).
-Babylon Genesis implements a Cosmos SDK-based blockchain with native IBC (Inter-
-Blockchain Communication) protocol support. Babylon Genesis will be the first 
-Bitcoin Secured Network (BSN) and will serve as the control plane for security 
-and liquidity orchestration to other BSNs to come.   
-
-For smart contract deployment, Babylon Genesis provides CosmWasm compatibility. 
-Developers familiar with the Cosmos ecosystem can deploy standard contracts (e.g., 
-CW-20 implementations) through trusted RPC endpoints.
-
-More about Babylon Genesis [here](/developers/babylon_genesis_chain).
-
-## Getting Started
-
-To get started with staking on Babylon Genesis & BSNs, please refer to the 
-[BTC Staking page](/guides/stakers/).
 

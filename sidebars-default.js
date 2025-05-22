@@ -8,9 +8,9 @@
 
  Create as many sidebars as you want.
  */
-import petstoreSidebar from './docs/api/staking-api/sidebar';
+import stakingApiSidebar from './docs/api/staking-api/sidebar';
 import babylongRpcSidebar from './docs/api/babylon-gRPC/sidebar';
-
+import cometBFTSidebar from './docs/api/comet-bft/sidebar'
 // @ts-check
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
@@ -27,7 +27,7 @@ const sidebars = {
         type: 'doc',
         id: 'api/staking-api/babylon-staking-api',
       },
-      items: petstoreSidebar,
+      items: stakingApiSidebar,
     },
   ],
   babylonRpc: [
@@ -39,6 +39,17 @@ const sidebars = {
         id: 'api/babylon-gRPC/babylon-grpc-api-docs',
       },
       items: babylongRpcSidebar,
+    },
+  ],
+  cometBFT:[
+    {
+      type: 'category',
+      label: 'CometBFT',
+      link: {
+        type: 'doc',
+        id: 'api/comet-bft/babylon-grpc-api-docs',
+      },
+      items: cometBFTSidebar,
     },
   ],
 };

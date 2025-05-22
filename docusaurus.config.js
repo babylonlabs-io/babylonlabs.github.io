@@ -29,10 +29,10 @@ const openapiPlugins = [
   [
     'docusaurus-plugin-openapi-docs',
     {
-      id: 'api',
+      id: 'apiDocs',
       docsPluginId: 'classic',
       config: {
-        petstore: {
+        stakingApi: {
           specPath: 'static/swagger/babylon-staking-api-openapi3.yaml',
           outputDir: 'docs/api/staking-api',
           sidebarOptions: {
@@ -40,11 +40,10 @@ const openapiPlugins = [
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,
-          showSchemas: false,
-
+          showSchemas: true,
         },
         babylonGrpc: {
-          specPath: 'static/swagger/babylon-merged-rpc-openapi3.yaml',
+          specPath: 'static/swagger/babylon-grpc-openapi3.yaml',
           outputDir: 'docs/api/babylon-gRPC',
           sidebarOptions: {
             groupPathsBy: 'tag',
@@ -53,18 +52,19 @@ const openapiPlugins = [
           hideSendButton: false,
           showSchemas: false,
         },
+        
+          cometBFT:{
+            specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml'
+          ,outputDir: 'docs/api/comet-bft',
+          sidebarOptions: {
+            groupPathsBy: 'tag',
+            categoryLinkSource: 'tag',
+          },
+          hideSendButton: false,
+          showSchemas: false,
+
+          }
       },
-    },
-  ],
-];
-
-
-const analyticsPlugins = [
-  [
-    '@docusaurus/plugin-google-analytics',
-    {
-      trackingID: process.env.TRACKING_ID,
-      anonymizeIP: true,
     },
   ],
 ];
@@ -85,9 +85,9 @@ const defaultSettings = {
  * @param {import('@docusaurus/plugin-content-docs').Options} options
  */
 function create_doc_plugin({
-                             sidebarPath = require.resolve('./sidebars-default.js'),
-                             ...options
-                           }) {
+  sidebarPath = require.resolve('./sidebars-default.js'),
+  ...options
+}) {
   return [
     '@docusaurus/plugin-content-docs',
     /** @type {import('@docusaurus/plugin-content-docs').Options} */
@@ -101,23 +101,10 @@ function create_doc_plugin({
 
 const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
 const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
-const authPlugins = [
-  function myPlugin(context, options) {
-    return {
-      name: 'docusaurus-plugin-auth',
-      async contentLoaded({ actions }) {
-        const { setGlobalData } = actions;
-        setGlobalData({ authenticated: false });
-      }
-    };
-  },
-];
 const plugins = [
   tailwindPlugin,
   ...docs_plugins,
-  ...openapiPlugins,
-  ...authPlugins,
-  ...analyticsPlugins
+  ...openapiPlugins
 ];
 
 // @ts-ignore
@@ -163,16 +150,16 @@ const config = {
         sitemap: {
           ignorePatterns: ['**/tags/**', '/api/*'],
         },
-        gtag: {
+        gtag: process.env.TRACKING_ID ? {
           trackingID: process.env.TRACKING_ID,
           anonymizeIP: true,
-        },
+        } : false,
       }),
     ],
   ],
 
   themeConfig:
-  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: '/logo/babylon.svg',
       colorMode: {
@@ -220,6 +207,9 @@ const config = {
                 label: 'Babylon gRPC',
                 to: '/api/babylon-gRPC/babylon-grpc-api-docs',
               },
+              {label: 'CometBFT',
+                to:'api/comet-bft/babylon-grpc-api-docs'
+              }
             ],
           },
           {
@@ -290,8 +280,8 @@ const config = {
       languageTabs: [...languageTabs],
       algolia: {
         appId: process.env.ALGOLIA_APP_ID,
-        apiKey: process.env.ALGOLIA_API_KEY,
-        indexName:  ALGOLIA_INDEX_NAME,
+        apiKey: process.env.ALGOLIA_API_KEY_READONLY,
+        indexName: ALGOLIA_INDEX_NAME,
         contextualSearch: true,
         searchParameters: {},
         contextualSearchFilters: [],

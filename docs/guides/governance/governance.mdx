@@ -1,0 +1,168 @@
+---
+title: Governance
+sidebar_position: 4.1
+---
+
+# Babylon Genesis Chain Governance
+
+As a part of its design, Babylon Genesis enables stakeholders to participate in the decision-making process, which shapes the chain's future. This document outlines the governance framework, parameters, and processes.
+
+### Governance Framework
+
+Babylon Genesis employs an on-chain governance system built on the Cosmos SDK governance module. This module empowers BABY token holders, along with their delegates, to propose, vote on, and enact modifications to the network through a transparent and decentralized process.
+
+To foster a culture of transparency and openness, an off-chain discussion in a structured forum is essential. This approach aligns with the practices of similar projects.
+
+The framework is crafted to enable swift decision-making while safeguarding against potential abuses and attacks.
+
+Recommended readings on the governance facilitated by the Cosmos SDK governance module:
+- [Overview of Cosmos SDK based chains governance](https://medium.com/stakin/overview-of-cosmos-governance-4184e930a25d)
+- [Cosmos SDK Governance Module Technical Specification](https://docs.cosmos.network/main/build/modules/gov)
+
+### Governance Participants
+
+- **BABY Token Holders**: Participate in governance by voting on proposals and/or submitting new ones.
+- **Babylon Genesis Validators**: Vote with staked tokens and delegated tokens (if stakers don't vote).
+- **Babylon Foundation**: Provide forum for governance process as the steward of the community.
+
+### Governance Parameters
+
+The following parameters define how governance operates on Babylon:
+
+| Parameter | Value | Description |
+|-----------|--------|-------------|
+| Minimum Deposit | 50,000 BABY | Minimum tokens required for a proposal to enter the voting period |
+| Maximum Deposit Period | 14 days | Maximum time to reach the minimum deposit for a proposal |
+| Voting Period / Expedited | 3 days / 1 day | Duration of the voting period for standard proposals / expedited proposals |
+| Quorum | 33.4% (>1/3) | Minimum percentage of voting power needed for a valid vote |
+| Approval Threshold | 50% | Proportion of Yes votes (excluding Abstain) needed for approval |
+| Veto Threshold | 33.4% (>1/3) | Proportion of NoWithVeto votes that can block a proposal |
+| Expedited Approval Threshold | 66.7% (>2/3) | Higher threshold for expedited proposals |
+| Expedited Voting Period | 1 day | Shorter voting period for urgent proposals |
+| Expedited Minimum Deposit | 200,000 BABY | Higher deposit for expedited proposals |
+| Burn Proposal Deposit (no quorum) | No | Deposit returned 100% if quorum is not reached |
+| Burn Proposal Deposit (veto) | Yes | Deposit burned 100% if the proposal is vetoed |
+| Cancel Burn Ratio | 50% | 50% of the Deposit is burned if the proposer cancels the proposal |
+| Minimum Initial Deposit Ratio | 0% | No minimum initial deposit ratio required |
+
+### Voting Options
+
+When voting on proposals, participants can choose from the following options:
+
+- **Yes**: Approve the proposal
+- **No**: Reject the proposal
+- **No With Veto**: Reject and express strong opposition (contributes to veto threshold)
+- **Abstain**: Formally register participation without affecting Yes/No ratio
+
+The proposal owner can cancel the proposal during the active voting period. This would lead to 50% of the deposit being burned.
+
+### Voting Inheritance
+
+If a staker does not vote, their validator's vote is automatically inherited. This means validators have significant responsibility in representing their delegators' interests.
+
+- If the staker votes before its validator, it will not inherit from the validator's vote.
+- If the staker votes after its validator, it will override its validator vote with its own.
+
+If the proposal is urgent, it is possible that the vote will close before stakers have a chance to react and override their validator's vote. This is not a problem, because the system is designed with sufficient safety margins built in.
+
+The governance framework requires a supermajority (more than 2/3) to pass proposals. This high threshold already accounts for potential validator influence because it's significantly higher than the 1/3 threshold at which validators could disrupt the network. So even if stakers can't override their validators' votes in time for urgent proposals, the required supermajority ensures adequate protection against potential validator collusion.
+
+### Proposal Types
+
+Babylon's governance supports several types of proposals:
+
+- **Text Proposals**: Proposals for signaling community sentiment or discussing ideas.
+- **Parameter Change Proposals**: Modify specific blockchain parameters without changing underlying code.
+- **Community Spend Proposals**: Request funds from the community pool for projects, initiatives, or development.
+- **Software Upgrade Proposals**: Coordinate chain-wide software upgrades with specific upgrade heights or times.
+
+Each type of proposal has two urgency levels: standard or expedited.
+
+#### Standard Proposals
+
+For a standard proposal, the governance process requires:
+- Minimum deposit of 50,000 BABY
+- Deposit period of 14 days
+- Voting period of 3 days
+- Approval threshold of 50%
+
+#### Expedited Proposals
+
+For time-sensitive matters, expedited proposals offer a faster governance path with:
+- Higher minimum deposit at 200,000 BABY
+- Shorter voting period of 1 day
+- Higher approval threshold of 66.7%
+
+### Proposal Lifecycle
+
+Every proposal goes through the following phases:
+
+1. **Discussion**
+   - Community discussion on the Babylon Foundation Forum
+   - Refinement of proposal based on community feedback
+   - Recommended discussion period is one week
+
+2. **Submission**
+   - On-chain proposal submission with initial deposit (via babylond command-line tools or help of an explorer tool such as L2Scan or MintScan)
+   - Deposit period (up to 14 days) to reach the minimum deposit
+
+3. **Voting**
+   - 3-day voting period once the minimum deposit is reached
+   - All staked BABY holders can vote
+   - Validators vote with their delegated stake unless delegators vote directly
+
+4. **Execution**
+   - If approved, automatic implementation for parameter changes and fund transfers
+   - In case of Software Upgrade, execution for software upgrades will be scheduled
+   - For text proposals, manual implementation by the relevant parties
+
+### Unsuccessful Proposals
+
+The off-chain forum discussion gives a premise to feel the community temperature on the proposal before it was sent on-chain. Lots of negative sentiments will more likely lead to proposal failures. The governance has specific rules about what happens to proposal deposits in case of unsuccessful proposals.
+
+#### Pre-Voting Failures
+If a proposal fails to gather enough deposits to enter the voting phase, the deposit is not burned. Any deposited tokens are returned to the contributor. This rule encourages participation in governance while protecting proposers who may have misjudged the situation.
+
+#### Quorum Failures
+When a proposal makes it to the voting phase but fails to reach quorum, the deposit is not burned. The deposits are returned to the contributors.
+
+#### Veto Situations
+If a proposal is actively vetoed during the voting phase, the deposit is burned fully. This is the only scenario where deposits are destroyed rather than returned. This serves as a deterrent against spam or malicious proposals.
+
+### Initial Deposit Flexibility
+
+There is no minimum initial deposit requirement. This means proposers can:
+- Start with any amount they choose (including zero)
+- Allow other community members to help reach the minimum deposit
+
+### Governance Forums
+
+To facilitate proposal discussions and community engagement, Babylon maintains several communication channels:
+- **Forum**: Structured discussions on longer-term topics and detailed proposals
+- **Discord**: Just-in-time discussions and informal feedback
+
+### Best Practices for Governance Participation
+
+- Research thoroughly before voting on or submitting proposals
+- Engage in discussions to understand community sentiment and reasoning
+- Consider long-term effects rather than short-term benefits
+- Vote on all proposals to ensure your voice is heard rather than defaulting to your validator's position
+- Follow the proposal lifecycle and participate in each step
+
+### Continuous Improvements
+
+The Babylon Genesis governance is designed to evolve. Governance processes themselves can be modified through governance proposals. Depending on the changes, it might be possible with a Parameter Change Proposal or require a Software Upgrade Proposal. This allows the system to adapt to the community's needs over time.
+
+### Closing Thoughts
+
+Governance is a vital component of Babylon's decentralized ecosystem. By participating in governance, all network participants have the opportunity to shape the future. We encourage everyone to take an active role in this process, whether by voting on proposals, engaging in discussions, or submitting new proposals.
+
+### Next Steps
+
+Keen to get started on governance? Follow the links below:
+
+- [Reviewing Proposals](./reviewing_proposals)
+- [Drafting Proposals](./drafting_proposals)
+- [Submit Proposals](./submit_proposals)
+
+For specific feedback and reports of abuse and malicious acts in the governance process, please contact the Babylon Foundation Governance Team at governance@babylon.foundation.

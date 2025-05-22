@@ -1,0 +1,146 @@
+---
+title: Submit Proposals
+sidebar_label: Submit Proposals
+sidebar_position: 1
+description: A guide to submitting governance proposals in the Babylon Genesis ecosystem
+keywords: [governance, proposals, submission, Babylon, Genesis]
+---
+
+# Submit Proposals  
+
+This guide provides detailed instructions for preparing and submitting governance proposals in the Babylon Genesis ecosystem. Whether you're creating text proposals for signaling, parameter changes, community pool funding, or software upgrades, this guide will help you navigate the process with ease.  
+
+## Choose Proposal Types  
+
+To begin, it's essential to identify the type of proposal you need to create. The table below offers valuable guidance to help you select the appropriate type:  
+
+| Intention | Type of Proposal | Urgency |  
+|-----------|-----------------|---------|  
+| 🗣️ Establish community consensus without code changes | Text Proposal | Consider expedited if time-sensitive and critical |  
+| 🔧 Change network parameters (introduce new dapps, inflation, deposit amounts, etc.) | Parameter Change Proposal | Consider expedited for security concerns |  
+| 🔄 Implement chain-wide software upgrade | Software Upgrade Proposal | Consider expedited for critical fixes |  
+| 📜 To whitelist developer addresses or directly upload Smart Contract for deployment during permissioned phase of Babylon Genesis chain| Smart Contract Deployment Proposal | Consider expedited for project needs immediate launch |  
+| 🧐 Other types of messages supported by Cosmos SDK's governance module | Custom Proposal | Depends on the proposal |  
+
+## General Proposal Submission Process  
+
+The general lifecycle of a proposal and what to do during each step:  
+
+### Step 1: Pre-Submission  
+
+Before submitting an on-chain proposal:  
+
+1. **Draft your proposal** following the templates provided below  
+2. **Share for discussion** on official Babylon forums:  
+   * Post on Babylon Foundation Forum (must have)  
+   * Share in Discord #governance channel  
+   * Consider additional feedback channels as appropriate  
+3. **Gather feedback** and refine your proposal (a 7-day discussion period recommended)  
+4. **Build consensus** and address concerns raised by community members  
+5. **Announce intent** to submit on-chain within 48 hours once discussion period have passed  
+
+### Step 2: On-Chain Submission  
+
+Once your proposal has been thoroughly discussed:  
+
+1. **Prepare final proposal** incorporating community feedback  
+2. **Ensure sufficient BABY** for deposit (minimum 50,000 BABY for standard proposals, 200,000 BABY for an expedited path)  
+3. **Deposit** yourself or rally supporter to deposit for you  
+4. **Submit on-chain** using CLI or web tools (explorers)  
+5. **Share submission** with transaction hash on Forum  
+6. **Track deposit progress** to ensure minimum threshold is reached within 14 days  
+
+### Step 3: Voting Period  
+
+After the minimum deposit is reached:  
+
+1. **Promote awareness** of your active proposal across Babylon communities  
+2. **Respond to questions** and provide clarification as needed  
+3. **Monitor voting progress** through block explorers (L2Scan or MintScan)  
+4. **Prepare for implementation** if the proposal appears likely to pass  
+
+### Step 4: Implementation (if needed and approved)  
+
+If your proposal passes:  
+
+1. **Parameter changes** execute automatically  
+2. **Software upgrades** require validator coordination  
+3. **Text proposals** need manual implementation by relevant parties  
+4. **Provide updates** on implementation progress to the community  
+
+## Best Practices for Successful Proposals  
+
+### Preparation Phase  
+
+1. **Research thoroughly**: Understand the current state and historical context  
+2. **Consult with experts**: Get input from technical advisors if proposing technical changes  
+3. **Start small**: For newer community members, begin with smaller, less controversial proposals  
+4. **Use testnet**: Test technical (e.g. param change) proposals on testnet before proposing on mainnet  
+
+### Drafting Phase  
+
+1. **Be specific**: Clearly define what you're proposing and expected outcomes  
+2. **Provide context**: Explain why the proposal is necessary  
+3. **Include data**: Support claims with relevant data and analysis  
+4. **Address alternatives**: Explain why your approach is preferred over alternatives  
+5. **Acknowledge trade-offs**: Be honest about potential drawbacks  
+6. **Set clear metrics**: Define how success will be measured  
+7. **Consider Security:** Arrange auditing if the change is likely to cause security concerns  
+8. **Analyse Risks:** Analyse risks and also think of mitigation techniques related to this change  
+
+### Discussion Phase  
+
+1. **Be responsive**: Actively participate in discussion and answer questions  
+2. **Remain open**: Be willing to modify the proposal based on feedback  
+3. **Document changes**: Maintain a changelog of modifications to your proposal  
+4. **Build consensus**: Work to address concerns from different stakeholder groups  
+5. **Be patient**: Allow sufficient time for thorough discussion (recommended forum discussion period is one week)  
+
+### Submission Phase  
+
+1. **Double-check parameters**: Ensure all technical details are correct  
+2. **Secure sufficient deposit**: Arrange for the minimum deposit before submission  
+3. **Coordinate with validators**: Especially important for software upgrades  
+4. **Time strategically**: Consider market conditions and network events  
+
+### Voting Phase  
+
+1. **Stay engaged**: Continue to answer questions and provide clarification  
+2. **Monitor voting**: Track participation and sentiment  
+3. **Respect outcomes**: Accept the community's decision gracefully  
+
+## Common Pitfalls to Avoid  
+
+1. **Insufficient discussion**: Rushing to on-chain submission without adequate community input  
+2. **Vague proposals**: Lack of specific details or implementation plans  
+3. **Ignoring feedback**: Not addressing legitimate concerns raised during discussion  
+4. **Overambitious scope**: Trying to change too many things in a single proposal  
+5. **Technical errors**: Incorrect parameter formats or values  
+6. **Inadequate testing**: Not thoroughly testing technical changes before proposing  
+7. **Poor timing**: Submitting during community conferences or network upgrades  
+
+## Wallet Security  
+
+Please exercise caution and take care of the BABY key associated with governance processes. Here are some best practices for wallet security:  
+
+* The address has to be controlled by a multisig, avoid single-signature admin control  
+* Ensure secret keys of the multisig account are held by different persons / entities  
+* Store admin keys in cold storage or hardware wallets  
+* Maintain separate addresses for testnet/mainnet environments  
+* Never store private keys on servers or in environment variables  
+* Document and test recovery procedures  
+* Never share private keys between team members  
+* Keep personal addresses separate from admin ones  
+* Document all access patterns and procedures  
+
+## Notification of Compromises  
+
+If the secret key of a governance related account is compromised (e.g. whitelisted wasm account), the developer is recommended to notify the community on the forum, so that the community can take measures, e.g., submit a gov prop to delist the address.  
+
+If the developer is proven to fail to exercise these best practices, the community might take measures, e.g., submit a gov prop to delist the address.  
+
+## Conclusion  
+
+Submitting a governance proposal is a significant responsibility that contributes to the evolution of the Babylon ecosystem. By following the guidelines in this document and engaging constructively with the community, you can help ensure that the governance process remains effective, transparent, and beneficial for all stakeholders.  
+
+Remember that the best proposals emerge from collaborative efforts and thorough discussion. We encourage all community members to participate in governance discussions, even if you're not yet ready to submit your own proposals.  

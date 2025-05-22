@@ -1,0 +1,64 @@
+---
+id: health
+title: "health"
+description: "Get node health. Returns empty result (200 OK) on success, no response - in case of an error."
+sidebar_label: "health"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVn9rGzkQ/SqDOHAa7LUTSEsN5UjT9MeVNiFx4SAbWHlX61UjS3uS1qnx+bvfjLT2OnEuVzg4uPwR29LozcybNyOtmOczx8Y37MzMhX/7fsJu+8zUwnIvjf5UsDGrBFe+Yn1WCJdbWdMGLn8QHrQpBMT9BK6Eb6x2IOa1X4IVrlEeDo5HI7j4/AKMBtfkuXCuj8douzbaCRiA1JBz/GZK4BqEtcYmqUZ/GxuMb8UQhz72YnDwlYL4uAkyN9oL7cmW17WSeUhk+N3RgRVzeSXmfB/pPAR91XpEHK7URYnErJhf1gItzPS7yD3u1Jb48TLGJQv639pI9D0TFo3EDz6vFa6N1n1Gzm2d7xg6b6We7dqx42TE1mjspQ+/f7u++Hp1ecbW/X8KIVK9g76140UhKUGuLndPrPHvtvMUct+mTpt9dvIU3bGyoUL/gmk6/j9lOqb+LPi7LllSdMmlamxgdZdxwnnAOIaD/VcZariZCJ456nnMhtv2c8IuhHWBqcYq6kzvazceDqd8ulRGJ9SOLpk1thkSCY879guXWmPXYq5wcGkbLYoXIekn0QZeOI/mA4QacJtXciEGRzs+9vAn8UDEP40nftLBT8M+HTaCKpNzVRnnx69Hr0d7IFeNhrfRL8wI6QP34p4vIZxTS7iXvoJClJymVm2sB8JJGJVN6tKEqrflewB0evkJ3pncoUsqT3R3lIyS/SBOnw5BOuBwdX49AVK1LXkuoMQeaY17LpgnAJMKTV0tclm23QaFyZs5dqEDXwmiyIWjm2kOZaNzMnQ4Ug8Pr5uaUhNFIBO17U1ulBsfHuIuAHy7+gQGs4CPk8llXGqb49nlezF1Jr/DYZxqcnNmdCmxliFEwibLHIf7VEDe7mEM0yX4RmMDQc0tx4CRPmh0gYgpu0FV3KYMPJ8qQXcE5pfq7JezL5OPF1/OhxGn/Ui8masMSommmD0CN45wiZNsEAT2e4au53Oui4GSGqFKhTcfsjJBm03dKU4lHY41wNGJc9VRcTKfk8KOjl9RVZOj8fHLlyevsiQmi5wNiRfK8zSWUck70dUygSxHqUKn0HB+OMWFu18rIWeVf3OSRbSW1y3ihmcr/miwD9yGxsuL60mvAG9CjtaYGLzQRW3QMywkD9XCILMsm3JXpTpEMRjgQIkUn8UBPpjgMBvD4xmO3KdpqrHWeKZ1H9zuLBfcc+it0nZ2pWyMsCGvlPXxa6iro+WblJ2k+LbARRnsjta9LdAjZkLID+noFPYcKVw5A3PMLqS/PdMWefu7Y4k6z0PWwWd9EMkMK/a4WJ0Fop26pc4ra7RpXKB922Wx9GKBtGKmrplS+08FconCw5VGP1izqEOjcfrwBd4TQekPIndBY+9R0u0Fs6Prm2jF/e3BZrDOcIY10wR1PlzI4Wb/BarEqD4sTROI2kYQJkXvq7h/SxXrxbCxhcMoJBelUcrck8O2dcY7ahJ5ZbD2bRHTzdUbNYBXbFBAu7crjx0COoOoiVG30CkH1YVVtst42s+TEOabXsq60PF7ytbhMMrqT9ikDgMNAw/3br99u4qiuyg4vFRYjSXHTGnaaxxJf/v8XXXPn//gJdw+N7z44Ye1wmucQg3X36p9J9xs4sTrimRLK6sVVkp8s2q9puXAIq7j1wW3ktRGvxApToTwsLgTS7qoMLyaHiELrhryvPfAo2tx+2D5cD7BR8xfj60rXA==
+sidebar_class_name: "get api-method"
+info_path: api/comet-bft/babylon-grpc-api-docs
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"health"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/health"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get node health. Returns empty result (200 OK) on success, no response - in case of an error.
+
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Gets Node Health","content":{"application/json":{"schema":{"description":"Empty Response","allOf":[{"type":"object","properties":{"id":{"type":"integer","example":0},"jsonrpc":{"type":"string","example":"2.0"}},"title":"JSONRPC"},{"type":"object","properties":{"result":{"type":"object","additionalProperties":{}}}}],"title":"EmptyResponse"}}}},"500":{"description":"empty error","content":{"application/json":{"schema":{"description":"Error Response","allOf":[{"type":"object","properties":{"id":{"type":"integer","example":0},"jsonrpc":{"type":"string","example":"2.0"}},"title":"JSONRPC"},{"type":"object","properties":{"error":{"type":"string","example":"Description of failure"}}}],"title":"ErrorResponse"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

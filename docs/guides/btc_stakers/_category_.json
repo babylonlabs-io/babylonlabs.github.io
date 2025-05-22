@@ -1,0 +1,7 @@
+{
+    "position": 4,
+    "label": "BTC Stakers",
+    "collapsible": true, 
+    "collapsed": true,
+    "className": "btc_stakers_sidebar_header"
+  } 

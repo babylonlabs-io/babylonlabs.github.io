@@ -6,8 +6,8 @@ sidebar_position: 4
 
 # Vigilantes Installation Guide
 
-Vigilante programs are standalone programs that are run along-side with Babylon nodes.
-People run a vigilante program in three modes,
+Vigilante programs are standalone programs that are run alongside with Babylon nodes.
+People run a vigilante program in three modes:
 `reporter`, `submitter`, and
 `monitor`, each responsible to different aspects to the security of the Babylon network.
 
@@ -31,15 +31,15 @@ TESTNET_PATH="path_where_the_testnet_files_will_be_stored" # example: $HOME/Proj
 
 ## Configuration
 
-Create a directory which will store the vigilante configuration,
-copy the sample vigilante configuration into a `vigilante.yml` file, and
+Create a directory which will store the Vigilante configuration,
+copy the sample Vigilante configuration into a `vigilante.yml` file, and
 adapt it to the specific requirements.
 
-Currently, the vigilante configuration should be edited manually.
+Currently, the Vigilante configuration should be edited manually.
 In the future, we will add functionality for generating this file through
 a script.
 For Docker deployments, we have created the `sample-vigilante-docker.yaml`
-file which contains a configuration that will work out of this box for this guide.
+file which contains a configuration that will work out of the box for this guide.
 
 ```shell
 cp sample-vigilante.yml $VIGILANTE_PATH/vigilante.yml
@@ -50,7 +50,7 @@ nano $VIGILANTE_PATH/vigilante.yml # edit the config file to replace $TESTNET in
 
 ### Reporter
 
-Run the vigilante reporter
+Run the Vigilante reporter
 
 ```shell
 go run $VIGILANTE_PATH/cmd/main.go reporter \
@@ -62,7 +62,7 @@ where `$BABYLON_KEY_DIR` stores the keyring that will be used to submit BTC head
 
 ### Submitter
 
-Similarly, run the vigilante submitter
+Similarly, run the Vigilante submitter
 
 ```shell
 go run $VIGILANTE_PATH/cmd/main.go submitter \
@@ -73,7 +73,7 @@ go run $VIGILANTE_PATH/cmd/main.go submitter \
 
 The monitor mode requires the genesis file of Babylon as an additional parameter,
 which is stored under `$BABYLON_NODE_PATH/config/genesis.json`.
-To run the vigilante monitor
+To run the Vigilante monitor
 
 ```shell
 go run $VIGILANTE_PATH/cmd/main.go monitor \
@@ -92,7 +92,7 @@ make reporter-build
 ```
 
 Afterwards, run the above image and attach the directories
-that contain the configuration for Babylon, Bitcoin, and the vigilante.
+that contain the configuration for Babylon, Bitcoin, and the Vigilante.
 
 ```shell
 docker run --rm \

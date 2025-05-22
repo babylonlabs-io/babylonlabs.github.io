@@ -31,26 +31,28 @@ finality signatures over blocks to the BSN chain.
   - It connects to the Babylon contracts on the BSN chain for querying voting
 power and submitting finality signatures.
 
-Upon a new block in the BSN chain, It:
+Upon a new block in the BSN chain, it:
 
   - Gets the block metadata.
   - Queries the Babylon contracts on the BSN chain to determine whether it has
 voting power at this height.
   - If yes, sign and submit a finality signature to the Babylon contracts.
+
 - **Babylon Contracts:** a set of CosmWasm smart contracts that maintains IBC channels
-with Babylon and handles finality signatures submitted from finality providers
+with Babylon and handles finality signatures submitted from Finality Providers
   - It will be deployed on the BSN chain.
   - It establishes an IBC channel with Babylon. The IBC channel relays information
 about BTC light clients, BTC timestamps and BTC staking.
-  - It determines voting power of BSN finality providers based on the IBC packets.
+  - It determines voting power of BSN Finality Providers based on the IBC packets.
 
 Upon a finality signature, the Babylon contracts verify it:
 
   - If invalid, reject.
   - If valid and non-conflicting with any existing ones, accept.
   - If valid but conflicting with an existing finality signature, it sends an IBC
-packet to Babylon. Then Babylon emits an event so anyone can slash the finality
-provider and the BTC stake under it.
+packet to Babylon. Then Babylon emits an event so anyone can slash the Finality
+Provider and the BTC stake under it.
+
 - **Babylon-SDK:** a small Cosmos SDK module serving as a thin layer between Babylon
 contracts and Cosmos SDK level of the BSN chain.
   - It sends a sudo message to the Babylon contracts upon each `BeginBlock` , so that
@@ -67,7 +69,7 @@ Babylon node with BTC staking integration support to Cosmos SDK chains.
 - [finality-provider](https://github.com/babylonlabs-io/finality-provider/tree/base/consumer-chain-support):
 The Finality Provider program
 - [btc-staker](https://github.com/babylonlabs-io/btc-staker/tree/base/consumer-chain-support):
-The BTC staker program
+The BTC Staker program
 - [babylon-contract](https://github.com/babylonlabs-io/babylon-contract): The CosmWasm
 contracts deployed on the BSN chain for integration.
 - [babylon-sdk](https://github.com/babylonlabs-io/babylon-sdk): The Cosmos SDK module
@@ -76,8 +78,34 @@ chain
 
 ## Local deployments
 
-We have developed local deployment scripts for the Cosmos integration
+We have developed local deployment scripts for demonstrating the Cosmos integration
 
 - https://github.com/babylonlabs-io/babylon-integration-deployment
+
+## Phase-3 devnet information
+
+The Phase-3 devnet environment (Euphrates) is defined as follows. Note that this assumes a `bash` shell - modify accordingly for other shells, or use `bash`:
+
+```bash
+$ cat <<EOF >env_euphrates.sh
+:
+
+export binary="babylond"
+export chainId="euphrates-0.6.0"
+export homeDir="$HOME/.babylond"
+
+export key="user"
+export keyringBackend="--keyring-backend=test"
+export feeToken="ubbn"
+
+export rpcUrl="https://rpc-euphrates.devnet.babylonlabs.io"
+export nodeUrl="$rpcUrl"
+export grpcUrl="grpc-euphrates.devnet.babylonlabs.io:443"
+export faucetUrl="https://faucet-euphrates.devnet.babylonlabs.io"
+
+alias babylond='babylond --home=$homeDir'
+EOF
+$ . ./env_euphrates.sh
+```
 
 ---
