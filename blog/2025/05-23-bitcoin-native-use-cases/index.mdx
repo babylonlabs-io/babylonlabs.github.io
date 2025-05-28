@@ -1,0 +1,103 @@
+---
+title: Bitcoin’s Native Use Cases
+date: 2025-05-23
+---
+
+Fifteen years ago, Satoshi Nakamoto introduced Bitcoin to the world as a peer-to-peer digital cash system.
+
+Since then, there have been enormous efforts to expand the utility of both the Bitcoin chain and the BTC asset. In this blog, we examine the utility of bitcoin as an asset and define its native use cases.
+<!-- truncate -->
+## What can you do with your Bitcoin?
+
+Currently, there are four main use cases for the bitcoin asset:
+
+- **Holding** – Hold it as a way to store value
+- **Spending** – Use it as a medium of exchange
+- **Lending** – Lend it to a borrower in return for rewards
+- **Bridging** – Bridging the bitcoin to other blockchains, where synthetic bitcoin is issued for utilities like DeFi.
+
+*But are these four use cases equal?*
+
+## Native vs. foreign use cases
+
+Let's analyze the differences between these four use cases.
+
+Holding and spending bitcoin are safe to use as long as the Bitcoin network is secure and the users act honestly, without requiring trust in any third party.
+
+However, lending and bridging require an additional layer of trust:
+
+- **Lending**: You need to trust the *borrower* (or a *broker* in some cases) to repay the bitcoin loan.
+- **Bridging**: You need to trust the *bridge provider*, which may involve multi-signature wallets or centralized custodians possessing your Bitcoin. There are also other variants of bridges that rely on third-party oracles or altcoin collateral.
+
+This difference highlights a key concept: native use cases.
+
+A native bitcoin use case does not require trusting any third party. It remains safe as long as the BTC network is secure and live, and the user acts honestly.
+
+Therefore, lending and bridging are considered foreign use cases. Bitcoin only has two native use cases: **storing and transferring value**.
+
+Is this the norm in the crypto world? Let’s explore further.
+
+## Staking: A Common Native Use Case in the PoS World
+
+Unlike Bitcoin, which is secured by Proof of Work (PoW) consensus, most blockchain systems are secured by Proof of Stake (PoS) consensus.
+
+In a PoS system, users lock and stake their tokens to earn the rights to secure the network through proposing and voting for blocks. The staked tokens serve as collateral, meaning that malicious actions can result in a portion of the stake being "slashed" (or destroyed). As a result of good behavior, stakers earn rewards.
+
+Since this is at the core of PoS consensus, staking is the third native use case of PoS tokens. This means that on top of holding and spending, PoS tokens can claim a third native use case: **staking and earning rewards**.
+
+Several definitive features must be enabled for staking to be considered legitimate:
+
+- **Slashing** – Staked assets can be burned (destroyed) if a staker misbehaves or violates the network's rules.
+- **Locking** – Assets are rendered immobile for a set period to participate in securing the network so that stakers cannot act maliciously.
+- **Unstakable** – Stakers can exit the system and get tokens back via unstaking.
+
+Staking without slashing means there is no security, as there is no punishment for malicious behavior.
+
+Several nice-to-have features include:
+
+- **Delegatable** – Users can delegate their stake to another validator without giving up custody of their asset. This is particularly useful for small stakers, who cannot afford to run their own validator.
+- **Partial-slashing** – Stakers only get a fraction of their assets slashed for misbehavior rather than losing the entirety of their stake.
+- **Re-stakable** – Assets can be staked across multiple PoS networks simultaneously to maximize utility and rewards.
+
+Staking benefits both the user and the network by incentivizing participation and strengthening the blockchain ecosystem. For users, staking provides a way to support network security, participate in governance, access certain DeFi opportunities, and earn rewards. For PoS chains, staking enhances security by making attacks more expensive and can potentially increase decentralization.
+
+## Can Staking Become a Native Use Case for Bitcoin?
+
+First, to clarify, Bitcoin, as a Proof of Work (PoW) blockchain, doesn't rely on staking for its own security. So, when we talk about "Bitcoin staking," we're referring to the ability to use bitcoin to provide PoS security to other decentralized systems and earn rewards.
+
+Previous attempts to enable Bitcoin staking involved bridging Bitcoin to other chains and using the synthetic bitcoins as the staking asset. However, since the bridge provider needs to be trusted, these solutions cannot be considered native.
+
+Babylon takes a different approach. By leveraging advanced cryptography and Bitcoin's scripting language, we turn bitcoin into a genuine staking asset without relying on any intermediaries. This means you can stake your Bitcoin trustlessly while still maintaining full control over your assets.
+
+Therefore, Bitcoin can become a first-class staking asset in two ways:
+
+1. **Real staking**: It has all the necessary features (and the nice-to-have ones!) of a staking asset, including slashing, locking, and unstakability.
+2. **Native to Bitcoin**: The staking protocol is built using cryptography, timestamping, and various Bitcoin scripts, meaning users do not need to trust a third party to stake their BTC.
+
+This makes Babylon Bitcoin staking the third native use case of bitcoin.
+
+## Wait, aren’t Ordinals the third native use case?
+
+"Hold on!" you might say. "According to your definition, wouldn't Ordinals be the third native use case, not staking? After all, Ordinals also only rely on the Bitcoin blockchain’s security."
+
+Yes and no. Ordinals is indeed a native use case of the Bitcoin **chain**. But it does not have much to do with the bitcoin **asset**.
+
+Thus, staking is the third native use case of the bitcoin asset.
+
+Watch Fisher Yu, CTO of Babylon Labs, talk about Bitcoin staking as the third native use case:
+<div style={{position: "relative", width: "100%", paddingBottom: "56.25%", height: 0}}>
+  <iframe
+    src="https://www.youtube.com/embed/F5Rr9atLw5o"
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%"
+    }}
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+    title="YouTube video"
+  ></iframe>
+</div>

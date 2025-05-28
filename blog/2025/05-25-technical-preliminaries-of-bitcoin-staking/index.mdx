@@ -1,0 +1,215 @@
+---
+title: "Bitcoin Staking 101: Part 2 - Technical Preliminaries of Bitcoin Staking"
+date: 2025-05-25
+---
+
+Through this and the next articles, we explain how the Babylon protocol overcomes the Bitcoin protocol’s limited programmability, making trustless and self-custodial Bitcoin staking possible. This article focuses on the technical preliminaries, and the next article focuses on constructing Babylon’s Bitcoin staking contract.
+<!-- truncate -->
+This is part 2 of the Bitcoin Staking series. Be sure to check out [Part 1 - What is Bitcoin Staking?](https://babylonlabs.io/blog/what-is-bitcoin-staking) and [Part 3 - Babylon's Bitcoin Staking Contract](https://babylonlabs.io/blog/babylon-s-bitcoin-staking-contract) for more context and insights.
+
+**Table of Contents**
+
+1.  What Defines a Staking Asset?
+    1.  Slashing
+    2.  Delegation
+2.  What Does BTC Allow You to Do?
+    1.  Bitcoin Transaction and UTXO
+    2.  Spending Conditions
+    3.  Pre-Approval
+3.  Cryptographic Voodoo
+    1.  Extractable One-Time Signature (EOTS) Algorithm
+    2.  Adaptor Signature
+4.  Remark
+
+## 1. What Defines a Staking Asset?
+
+To turn Bitcoin into a staking asset, we first need to understand what a staking asset is.
+
+A staking asset is the asset in a PoS (proof-of-stake) system that a participant locks if the participant wishes to make attestations. The most common type of attestation is referred to as a vote. This enables stake-weighted voting protocols, which allow consensus among the participants in a decentralized way. When the decisions are chained, we have a PoS blockchain, and the participants are called validators.
+
+What does this “collateral“ entail?
+
+### 1.1 Slashing
+
+*“With great power comes great responsibility.“*
+
+For a PoS system to be secure, its staking asset should at least have the following two properties:
+
+1.  **Slashable**, meaning that if a staker attacks the PoS system secured by it, its staked asset can be slashed.
+2.  **Lockable**, meaning that once staked, the asset cannot be transferred or traded.
+
+The above two properties go hand in hand: slashability economically deters the staker from acting maliciously, and locking prevents malicious stakers from dodging the slashing (by immediately selling their staked asset after the attack).
+
+Indeed, most PoS systems impose an **unbonding period**. When a staker requests to unbond, its attestation power is immediately dismissed, so it cannot attack the PoS system. Meanwhile, the staked asset will still be locked for a certain period, giving the system enough time to uncover past attacks from the staker and slash it if needed. This unbonding period can be as long as a few weeks.
+
+### 1.2 Delegation
+
+**Delegation** is particularly important for small stakers. Maintaining an attestation infrastructure (such as a validator node) by themselves could be too difficult or costly. They may prefer to delegate their attestation power to a professional validator, who acts as a proxy and charges a fee from the staking rewards.
+
+If the delegated validator violates the protocol, itself and all its delegators are subject to slashing. This implies that the slashing is always applied to everyone or no one. In other words, there is no way for a delegated validator to selectively cause some of its delegators slashed. This property is called **atomic slashing**. It allows a professional validator to earn trust from delegators by self-delegating stakes.
+
+On the other hand, the delegated validator has no direct access or control of the delegator’s stake, meaning it cannot steal from the staker. This fundamental difference separates delegation from custodial arrangements, where the custodian controls the users' digital assets.
+
+The above properties define a staking asset. The other properties, such as partial slashing and restakable mentioned in Article-1, are nice-to-have.
+
+## 2. What Does BTC Allow You to Do?
+
+To turn Bitcoin into a staking asset, we should also understand what the BTC network allows you to do with it. If you are familiar with the terms UTXO, BTC script, and Taproot Script, you can skip this section.
+
+### 2.1 Bitcoin Transaction and UTXO
+
+The Bitcoin protocol is a peer-to-peer, electronic, decentralized, cryptocurrency protocol, and Bitcoin (BTC) is its native digital asset. A Bitcoin transaction is best explained via a real-world cash payment example:
+
+Alice has a $2 note. Her mom has a $5 note. They use their notes to pay Bob for a $6 ice cream, and the change of a $1 note goes to Alice. This transaction can be described as follows:
+
+```plaintext  
+// ice cream purchase  
+inputs:  
+  - input-1: value = $2, owner = Alice  
+  - input-2: value = $5, owner = Mom  
+outputs:  
+  - output-1: value = $6, owner = Bob  
+  - output-2: value = $1, owner = Alice  
+```
+
+Bob can then spend his $6 note to purchase $4 of milk from Charlie and receive a change of $2:
+
+```plaintext  
+// milk purchase
+inputs:
+  - input-1: Bob's $6 from the ice cream purchase
+
+outputs:
+  - output-1: value = $4, owner = Charlie
+  - output-2: value = $2, owner = Bob
+```
+
+A BTC transaction looks very much the same. Each BTC transaction requires:
+
+- A set of inputs, which are the source of the fund to be transacted.
+- A set of outputs, which are the destinations of the fund after the transaction.
+
+The total inputs should be greater than or equal to the total outputs. The surplus is the transaction fee.
+
+The milk purchase transaction under the BTC context will look like the following:
+```plaintext
+// milk purchase transaction on BTC network
+inputs:
+  - input-1: Bob's 6 Bitcoins from the ice cream purchase transaction
+
+outputs:
+  - output-1: value = 4 Bitcoins, owner = charlie_public_key
+  - output-2: value = 1.99 Bitcoins, owner = bob_public_key
+
+// Bob needs to sign the above transaction and submit it to the BTC network.
+```
+
+The main difference is that, in the Bitcoin network, fund ownership is specified through people’s cryptographic public key. This way, the output can only be spent if the owner cryptographically signs it using their secret key.
+
+Before an output is spent, it is called an unspent transaction output (UTXO). A person’s balance is the total value of all their UTXOs. Bitcoin transactions are all about spending (and destroying) existing UTXOs and creating new ones. In addition, due to this mode, how one UTXO of a person is spent will not affect the rest of this person’s UTXOs.
+
+In the above milk purchase transaction, there is a surplus of 0.01 Bitcoin. This is the transaction fee that Bob pays to the miner who mines the BTC block that includes his transaction. More specifically, the miner of this BTC block (called Ming) will create a special coinbase transaction for this block, which looks like the following:
+
+```plaintext
+// coinbase transaction
+inputs: n.a.
+outputs:
+  - output-1: value = 6.26 Bitcoins, owner = ming_public_key
+```
+
+This special transaction has no inputs because Ming turned his hard work into Bitcoin rather than receiving Bitcoin from someone else. He gets 6.26 Bitcoins, comprising 6.25 Bitcoins of base mining reward (specified by the protocol) and 0.01 Bitcoin of transaction fee (if Bob is the only one paying the transaction fee in this block).
+
+This is an elegant design. Bob cannot predict who will be the miner that includes his transaction, so he cannot explicitly pay the miner. With this design, he only needs to create a surplus in his transaction to implicitly pay to whomever the miner will be.
+
+### 2.2 Spending Conditions
+Speaking of spending, BTC has a scripting language that allows you to specify some simple condition(s) under which a UTXO can be spent. Two basic conditions (which we will use) are:
+
+  - signature(s), which allow you to specify whose consent is needed to spend a UTXO. The owner public key above is an example where only one consent is needed.
+  - Time lock, which lets you specify how many BTC blocks a UTXO can be spent later. For example, a time lock of 1000 BTC blocks will make a UTXO temporarily unspendable for about 1000 * 10 mins / 60 = 167 hours (roughly a week) after this UTXO’s creation.
+
+For example, if Alice’s mom wants to give Alice some allowance with the following spending conditions:
+
+“This UTXO is only spendable either 1) after seven days by Alice in whatever way, or 2) in a way that both myself and Alice agree to“,
+
+Alice’s mom can submit the following transaction to BTC:
+
+```plaintext
+// Mom's tx to give Alice 4 Bitcoins of allowance, with strings attached.
+Inputs:
+  - input-1: mom's 10 Bitcoins
+
+Outputs:
+  - output-1: value = 4 Bitcoins,
+              conditions:
+              - condition-1: time_lock = 1000 & alice_public_key OR
+              - condition-2: alice public_key & mom_public_key
+  - output-2: value = 5.99 Bitcoins,
+              conditions:
+              - condition-1: mom_public_key
+
+// Mom signs this transaction and sends it to the BTC network.
+```
+
+Once executed by the BTC network, the UTXO-1 above will carry 4 Bitcoins and can only be spent as specified previously. Mom and Alice will co-own these 4 Bitcoins for 7 days, after which Alice will have full ownership. The UTXO-2 above is mom’s change and has nothing to do with Alice.
+
+### 2.3 Pre-Approval
+What is even cooler is that Alice’s mom can give Alice her pre-approval. Imagine that mom only allows Alice to send the Bitcoin to her dad (not anyone else) before the 7-day restriction is lifted. To achieve this:
+
+  - Mom prepares a BTC transaction, in which the previous UTXO is spent via the 2nd condition above, and the recipient is set to Alice’s dad.
+  - Mom then signs this transaction and gives Alice her signature.
+  - If Alice does want to send the Bitcoins to her dad, Alice can simply co-sign it and submits it to the BTC network anytime.
+
+```plaintext
+// Mom's pre-approval transaction
+Inputs:
+  - input-1: The previous UTXO that is worth 4 Bitcoins.
+             - To be spent via condition-2.
+             - Signatures needed: alice and mom.
+
+Outputs:
+  - output-1: value = 3.99 Bitcoins,
+              conditions:
+              - condition-1: dad_public_key
+
+// Mom signs the above transaction and gives the signature to Alice as her pre-approval.
+// Alice can sign the above transaction later and submit the transaction and both
+// signatures to the BTC network.
+```
+
+## 3. Cryptographic Voodoo
+   To make slashing happen, we need some doses of “voodoo” from cryptography.
+
+### 3.1 Extractable One-Time Signature (EOTS) Algorithm
+<img src="/img/blog/05-25-technical-preliminaries-of-bitcoin-staking/1.png" alt="Bitcoin Staking Illustration" width="100%" />
+Imagine Alice has received two job offers and should only pick one to sign. Is there a way to deter her from signing both? The answer is yes if Alice can be fined if she does so. There is a cryptographic primitive that can achieve this, called EOTS. It can be constructed from the famous Schnorr signature algorithm natively supported by BTC since the Taproot upgrade.
+
+In the Schnorr signature algorithm, the signer has a pair of **(secret_key, public_key)**. To sign a new message **M**, the signer:
+
+  1. Generates a **secret_nonce**.
+  2. Uses the **secret_key** and the **secret_nonce** to sign the message.
+  3. Computes the corresponding **public_nonce** of the **secret_nonce**.
+  4. Publishes the signature **S** and **public_nonce** to allow the public to verify **S**.
+
+Here, the **secret_nonce** must be a new one for every new message. If the same **secret_nonce** is used to sign two different messages, then anyone who observes the two signatures can extract the signer’s **secret_key**.
+
+With an appropriate construction, Schnorr's above property can deter the signer from equivocation, making it EOTS. For example, if Alice signs two conflicting contracts, her secret key can get decrypted. Alice will think twice before doing so if she has a sizeable asset managed by this secret key.
+
+### 3.2 Adaptor Signature
+Section 2.3 showed that Alice’s mom can give Alice her pre-approval for a specific fund destination address. Now imagine this address belongs to Alice’s best friend, and mom isn’t a big fan of this person. Mom can say:
+
+“You can send the 4 Bitcoins to your best friend. But if you do so, all your savings will be gone.“
+
+There is a cryptographic primitive that can make this happen, called one-time verifiably encrypted signature (one-time VES) algorithm, a.k.a. adaptor signature. It can also be derived from the Schnorr signature algorithm. It works as follows:
+
+  1. Alice’s mom signs the message **M**, which is the Bitcoin transaction that will send the 4 Bitcoins to Alice’s best friend. The result is mom’s Schnorr signature **S**.
+  2. Instead of passing **S** to Alice as the pre-approval, mom encrypts **S** using Alice’s public key, **alice_public_key**. The result is called an adaptor signature **A**. Mom publishes **A** so that the public knows it, including Alice.
+  3. If Alice does want to proceed, she can use mom’s adaptor signature A and her own secret key **alice_secret_key** to recover a Schnorr signature **S'**. This **S'** is different from mom’s original signature S, but is still a valid Schnorr signature of mom over **M**, as if mom used a different secret nonce to sign **M**.
+  4. Alice submits the Bitcoin transaction **M**, her own signature over **M**, and mom’s **S'** to BTC. BTC will verify and execute this transaction, so that Alice’s best friend will receive 4 Bitcoins.
+  5. Here is the catch: Mom’s Schnorr signature **S'** and adaptor signature **A** allow anyone to decrypt Alice’s secret key **alice_secret_key**.
+  6. If Alice also uses this key to manage her savings, then she will think twice before sending the fund to her best friend - anyone can then steal her savings.
+
+This is why the adaptor signature is one-time: Alice can use her secret key to open the special treasury box her mom gives her, but after that, her secret key is exposed and won’t be usable anymore.
+
+## Remark
+Blockchain security and cryptography are not for everyone, but you have come a long way. Congrats! Now, for our next steps, let’s build a Bitcoin staking contract together!
+<img src="/img/blog/05-25-technical-preliminaries-of-bitcoin-staking/2.png" alt="Bitcoin Staking Illustration" width="100%" />

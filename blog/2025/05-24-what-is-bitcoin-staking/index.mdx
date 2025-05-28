@@ -1,0 +1,69 @@
+---
+title: "Bitcoin Staking 101: Part 1 - What is Bitcoin Staking?"
+date: 2025-05-24
+---
+
+# Bitcoin Staking 101: Part 1 - What is Bitcoin Staking?
+
+This is part 1 of the Bitcoin Staking series. Be sure to check out [Part 2 - Technical Preliminaries of Bitcoin Staking](/blog/2025/05/25/technical-preliminaries-of-bitcoin-staking/) and [Part 3 - Babylon's Bitcoin Staking Contract](/blog/2025/05/26/babylon-s-bitcoin-staking-contract/) when you are done reading this article.
+
+**_Bitcoin is gold, and you should HODL it._**
+<!-- truncate -->
+## What Can You Do With Your Bitcoin While HODLing It?
+
+In the PoS (Proof of Stake) world, holding tight equals earning. PoS token holders can lock their tokens to become validators of the PoS system. If a validator acts maliciously, the locked tokens will be slashed. With such deterrence, the more tokens staked, the higher the crypto-economic security of the PoS system. In return, honest stakers get rewards for contributing to the security.
+
+Enter Bitcoin Staking, a new protocol introduced by Babylon. Babylon's Bitcoin staking protocol turns Bitcoins into a stakable asset for any PoS system, allowing Bitcoin holders to hold and earn simultaneously by contributing to the crypto-economic security of the PoS world. This marks an important step towards Babylon's vision and for believers in decentralization: a Bitcoin-secured decentralized world.
+
+## That Sounds Like a No-Brainer, but Is It Hard to Build?
+
+- It is easy to build if you are not concerned about counterparty risks and are alright with sending your Bitcoins to someone else.
+- Yes, it is very hard if you are concerned - and you should be.
+
+The context here is that, unlike most other blockchains, the Bitcoin chain trades programmability off for stability. You cannot simply write codes (such as smart contracts) to instruct the Bitcoin chain to verify the evidence of malicious behaviors and slash the associated malicious Bitcoin stakers. In layman’s words, the Bitcoin chain does not know how to be a law enforcer in foreign affairs.
+
+An intuitive workaround is to bridge your Bitcoins to a more programmable blockchain, where synthetic Bitcoins are issued to you and used as the staking asset. Due to Bitcoin’s limited programmability (again), to bridge, you will need to first send your Bitcoins to the bridge owner’s Bitcoin address.
+
+However, as the motto says:
+
+_“Not your keys, not your coins.”_
+
+Trusting a third-party-controlled bridge exposes you to a fundamental counterparty risk: when the time to redeem comes, you are at the mercy of the bridge owner to get your Bitcoins back. Therefore, Babylon is pioneering the development of a trustless and self-custodial Bitcoin staking protocol. To this end, one has to find a way to teach (via code) the Bitcoin chain how to process staking and slashing correctly.
+
+## Have You Made It?
+
+Yes, we made it. We successfully used the existing Bitcoin scripts (which the Bitcoin chain knows how to execute) and advanced cryptographic primitives to emulate Bitcoin staking and slashing. In other words, we constructed a minimalistic Bitcoin staking contract that resides on the Bitcoin chain, similar to how smart contracts reside on other blockchains.
+
+<img src="/img/blog/05-24-what-is-bitcoin-staking/1.png" alt="what is bitcoin staking" width="100%" />
+
+## A Trustless and Self-Custodial Bitcoin Staking Protocol
+
+The trustless and self-custodial Bitcoin staking protocol does:
+
+- Not require you to send your Bitcoins to any third-party Bitcoin address;
+- Not require you to bridge/wrap your Bitcoins to another blockchain;
+- Not require you to trust any oracle (such as a price oracle);
+- Not rely on altcoin collateral for redemption.
+
+Following the protocol, Bitcoin holders just need to lock their Bitcoins in a self-custodial way. The locked Bitcoins become staked and slashable while also enjoying all the popular staking properties in the PoS world:
+
+- Earn PoS token rewards while holding;
+- **Delegable:** If you don't want to run a validator infrastructure yourself, you can delegate your voting power to another validator. Note that this does not require transferring your Bitcoins.
+- **On-demand unbonding:** You can unilaterally get your Bitcoin back without anyone’s permission.
+- **Restakable:** You can stake one Bitcoin to multiple PoS systems to earn multiple rewards.
+- **Partial slashing:** The protocol can be configured such that, for each slashed staker, only a fraction of its staked Bitcoin is slashed, and the rest is returned to the staker.
+
+## Are My Bitcoins Safe with Bitcoin Staking?
+
+Yes, your Bitcoins are as safe as they can possibly be:
+
+1. No one can steal your Bitcoin to their wallet, literally no one.
+2. If you (and the validator you may delegate your voting power to) don’t act maliciously, your Bitcoins are safe. Indeed, there are many code-level and system-level misbehavior-avoidance mechanisms. Unless you are intentionally malicious, you will highly likely not be slashed.
+
+<img src="/img/blog/05-24-what-is-bitcoin-staking/2.png" alt="what is bitcoin staking" width="100%" />
+
+The second safety guarantee implies a unique property of Babylon’s Bitcoin staking protocol. Even if the entire PoS world is compromised, your Bitcoin is safe as long as you (and the validator you may delegate your voting power to) haven’t participated in the attack. This is a rare property. For example, in most bridge protocols, if the destination chain is compromised, the synthetic tokens issued there could also be compromised, making the redemption difficult, if not impossible.
+
+## Final Remarks
+
+Babylon’s trustless and self-custodial Bitcoin staking protocol marks the third major use case of Bitcoin beyond the storage of value and simple payment. In the rest of this 101 series, we will explore how Bitcoin staking works in detail.

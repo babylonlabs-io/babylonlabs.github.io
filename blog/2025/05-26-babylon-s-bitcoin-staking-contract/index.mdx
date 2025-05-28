@@ -1,0 +1,296 @@
+---
+title: "Bitcoin Staking 101: Part 3 - Babylon's Bitcoin Staking Contract"
+date: 2025-05-26
+---
+# Bitcoin Staking 101: Part 3 - Babylon's Bitcoin Staking Contract
+
+In this article, we use the technical preliminaries introduced in the last article to construct Babylon’s trustless and non-custodial Bitcoin staking contract step-by-step.
+
+This is part 3 of the Bitcoin Staking series. Be sure to check out ["Part 1- What is Bitcoin Staking?"](https://babylonlabs.io/blog/what-is-bitcoin-staking) and ["Part 2 - Technical Preliminaries of Bitcoin Staking"](https://babylonlabs.io/blog/technical-preliminaries-of-bitcoin-staking) for more context and insights.
+
+**Table of Contents**
+
+1. Recap
+2. Locking
+3. Slashing
+- 1. Naive Slashing
+- 2. Enforcing Burning
+- 3. Enabling Safe Delegation
+- 4. Enforcing Atomic Slashing
+- 5. Enabling Partial Slashing
+4. Restaking
+5. Secure On-Demand Unbonding
+6. Summary
+
+## 1. Recap
+
+- For Bitcoin to be a legit staking asset, it should at least be slashable and lockable, have a slashable unbonding period, and be delegatable.
+- Bitcoins are represented as UTXOs. A Bitcoin holder can have multiple UTXOs and specify different spending conditions on different UTXOs using BTC scripts.
+- The Schnorr signature algorithm supported by BTC:
+  - Has the property that the signer’s secret key is extractable if it uses the same nonce to sign two different messages. This makes it a potential EOTS (extractable one-time signature) signature algorithm that prevents equivocation.
+  - Enables adaptor signature, where to spend a UTXO jointly owned by two persons, person-2 needs to obtain person-1’s Schnorr signature by decrypting person-1’s adaptor signature. But doing so will cause person-2’s Schnorr secret key to be extractable. Adaptor signature thus deters person-2 from spending this UTXO.
+
+Now, let’s assume a staker named Alice wants to stake 1 Bitcoin. To do so, she should create a UTXO worth 1 Bitcoin and specify its spending conditions through a Bitcoin script. This is effectively a staking contract. We will construct it step-by-step and also version it for easy indexing.
+
+## 2. Locking
+
+To achieve locking, Alice can simply apply a time lock to her staking UTXO:
+```plaintext
+// Contract V0: adding a locking condition to Alice's staking UTXO
+condition-1 (locking): time_lock = 1000 & alice_public_key
+```
+
+In the above contract, Alice locks her Bitcoin for 1000 Bitcoin blocks (about one week). Upon the expiration of the time lock, only Alice can spend it.
+
+This simple condition provides a guaranteed exit for the staker. As long as the BTC network is live, Alice can get her 1 Bitcoin back even if everything else in the world goes offline.
+
+## 3. Slashing
+
+### 3.1 Naive Slashing
+
+To achieve slashing, Alice needs to create a Schnorr key pair as her EOTS key pair **\[eots_secret_key, eots_public_key\]**. She then creates a new spending condition in the staking contract, and puts the **eots_public_key** there:
+```plaintext
+// Contract V1: adding naive slashing
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+condition-2 (slashing): alice_eots_public_key
+```
+
+Alice can now use this EOTS key pair to provide attestations. For example, to cast her vote for a PoS chain-X at block height-1000:
+
+1. Alice generates a pair of **\[secret_nonce, public_nonce\]**
+2. Alice publicly declares in advance that for chain-X at height-1000, this **public_nonce** is the only one that verifies her vote. This way, no one will accept her vote signed using other pairs of nonces.
+3. Once Alice verifies block-1000 and is happy with it, she uses the above **secret_nonce** and **eots_secret_key** to sign the block and publish the signature as the vote.
+4. The public can verify the vote using Alice’s **eots_public_key** and the pre-declared **public_nonce**.
+
+Now, if Alice is malicious and wants to fork chain-X at height-1000, she will have to vote for another block-1000 using the same **secret_nonce** and **eots_secret_key**. Then whoever sees her both votes can decrypt her **eots_secret_key** and use **condition-2** above to withdraw Alice’s 1 Bitcoin, effectively causing Alice to be slashed.
+
+In general, the above contract and the pre-declaration requirement enable an anti-equivocation mechanism. If Alice equivocates in any types of decision making, her 1 Bitcoin can be slashed.
+
+_“Wait a second, this mechanism is very buggy!”_ You may immediately recognize. Yes, it is just the beginning.
+
+Let’s continue and fix it.
+
+### 3.2 Enforcing Burning
+
+A big problem of **contract V1** is that the slashing condition only requires Alice’s EOTS signature. Therefore, Alice can withdraw her 1 Bitcoin anytime via this condition to dodge slashing.
+
+To solve this problem, we must ensure that when the staking UTXO is spent via the slashing condition, the staked Bitcoin can only be sent to a pre-defined burn address rather than to Alice. A sample burn address is **0000...0000**; no one knows the corresponding secret key, so funds in this address are not spendable.
+
+Remember the mom figure in Article-2 who ensured that Alice could only send her Bitcoin to her dad before the time lock expired? The same mechanism applies here.
+```plaintext
+// Contract V2
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+condition-2 (slashing): alice_eots_public_key & covenant_committee_quorum
+
+// Slashing transaction V0
+inputs:
+  - input-1: the staking UTXO, spent using condition-2 above
+outputs:
+  - output-1: value = 0.99 Bitcoin, owner = 0000...0000
+// Pre-approval V0: enforcing burning
+//
+// Covenant committee pre-signs the above slashing tx as its pre-approval
+```
+
+Here we add a covenant committee quorum to the slashing condition, which is an **M-out-of-N** multi-signature. This means the UTXO is only spendable if at least **M** out of a committee of **N** covenant members agree to it.
+
+To enforce the burn address, the covenant committee will only sign a slashing transaction that sends Alice’s 1 Bitcoin to the pre-defined burn address. This way, Alice cannot withdraw her 1 Bitcoin and dodge slashing. For this reason, the members should be chosen from the entities that don’t want Alice to dodge slashing, such as the PoS systems' foundations.
+
+Indeed, since Alice’s EOTS key is required in the slashing condition, except for enforcing the burn address, there is no way the covenant committee can act against Alice:
+1. the covenant committee cannot steal Alice’s stake;
+2. the covenant committee cannot cause Alice to be wrongly slashed, because no one except Alice herself knows her EOTS secret key if Alice is honest.
+
+Thus, Alice does not need to trust the covenant committee at all. Even a compromised covenant committee cannot harm Alice. The only thing it can do is to help Alice withdraw her stake her way.
+
+### 3.3 Enabling Safe Delegation
+
+Delegation looks intuitive. Alice can put a third-party validator’s EOTS public key in the slashing condition. This way, if the validator is malicious, Alice can be slashed.
+
+However, from Alice’s perspective, such delegation is not safe. The delegated validator and the covenant committee may collude and steal her Bitcoin.
+
+This problem is simple to solve. Alice can play the mom figure in Article-2 against the validator and the covenant committee by adding her own ordinary public key (not an EOTS one) to the slashing condition, too. Alice will only pre-sign a slashing transaction that sends her 1 Bitcoin to the pre-defined burn address, leaving no way for the delegated validator and covenant committee to collude and steal her stake.
+```plaintext
+// Contract V3: enabling safe delegation
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+condition-2 (slashing): alice_public_key & validator_eots_public_key & covenant_committee_quorum
+
+// Slashing transaction V0
+inputs:
+  - input-1: the staking UTXO, spent using condition-2 above
+outputs:
+  - output-1: value = 0.99 Bitcoin, owner = 0000...0000
+// Pre-approval V1
+//
+// Alice pre-signs the slashing tx as her pre-approval.
+//
+// Covenant committee pre-signs the slashing tx as its pre-approval.
+```
+
+We have now completed the slashing condition of the staking contract. By involving three sets of signatures (staker, validator, covenant committee) in the slashing condition and asking the staker and covenant committee to only sign the slashing transaction that burns the stake, the system ensures that:
+
+- No one can steal Alice’s stake;
+- If Alice or the validator she delegates to acts maliciously, her stake is slashed;
+- If Alice or the validator she delegates to acts honestly, her stake can never be slashed;
+- When slashing happens, the stake can only be sent to a pre-defined burn address rather than being withdrawn.
+
+_“Something still seems wrong…”_ You might feel.
+
+Yes, you are sharp! There is a final piece of the puzzle: atomic slashing.
+
+### 3.4 Enforcing Atomic Slashing
+
+In the case of delegation, once Alice and the covenant committee give their pre-approval, the only signature needed to trigger the slashing condition is the delegated validator’s signature. If the validator goes rogue and has a beef with Alice, it can simply sign the slashing transaction and send it to BTC to get Alice slashed alone. No other stakes delegated to this validator will be affected.
+
+Adaptor signature comes to the rescue. Alice can further encrypt her signature using the delegated validator’s EOTS public key and use the resulting adaptor signature as her pre-approval. This way, to target Alice, the validator will have to decrypt the adaptor signature using its own EOTS secret key, which will cause its EOTS secret key to be extracted. Once extracted, all the stakes delegated to it become slashable, including its self-delegated stake. Atomic slashing is thus achieved.
+
+We can also request the covenant committee to sign the adaptor signature. This way, even if Alice is unable to generate adaptor signatures (e.g., due to a lack of wallet support), atomic slashing can still be achieved.
+```plaintext
+// Contract V3
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+
+condition-2 (slashing): alice_public_key & validator_eots_public_key & covenant_committee_quorum
+
+// Slashing transaction V0
+inputs:
+  - input-1: the staking UTXO, spent using condition-2 above
+outputs:
+  - output-1: value = 0.99 Bitcoin, owner = 0000...0000
+// Pre-approval V2: enforcing atomic slashing when delegate
+//
+// Alice's pre-approval is an adaptor signature of the slashing tx
+// she generated using the validator's EOTS public key.
+//
+// Covenant committee pre-signs the slashing tx as its pre-approval.
+```
+
+### 3.5 Enabling Partial Slashing
+
+Slashing the entire stake sounds scary. Luckily, many PoS systems support partial slashing, in which only a small portion of each stake is slashed, and the rest is returned to the staker.
+
+The refund comes at a delay to mitigate the re-entry attack, which is most prominent when the slashing portion is small. More specifically, malicious stakers could use the slashing mechanism as the exit to get its fund back and then immediately re-enter the system as a staker and attack again. A refund delay will significantly slow down such attacks.
+
+Enabling partial slashing is simple in Bitcoin staking. Instead of having only one output that sends the entire stake to burn, the slashing transaction can have two outputs: one sends a portion of the stake to the burn address and the other returns the rest to Alice with a pre-defined time lock.
+
+Below is an example where the slashing percentage is 10% and the refund delay is 500 BTC blocks. 0.9 Bitcoin should be returned to Alice after 500 BTC blocks. The 0.01 Bitcoin surplus there is the transaction fee.
+```plaintext
+// Contract V3
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+
+condition-2 (slashing): alice_public_key & validator_eots_public_key & covenant_committee_quorum
+
+// Slashing transaction V1: enabling partial slashing
+inputs:
+  - input-1: the staking UTXO, spent using condition-2 above
+outputs:
+  - output-1: value = 0.09 Bitcoin, owner = 0000...0000
+  - output-2: value = 0.9 Bitcoin,
+              conditions:
+              - condition-1: time_lock = 500 & alice_public_key
+// Pre-approval V2
+//
+// Alice's pre-approval is an adaptor signature of the slashing tx
+// she generated using the validator's EOTS public key.
+//
+// Covenant committee pre-signs the slashing tx as its pre-approval.
+```
+
+## 4. Restaking
+
+Restaking means Alice (or her delegated validator) uses her 1 Bitcoin to participate in multiple PoS systems at the same time. If Alice (or her delegated validator) attacks any one of them, she will be slashed and removed from all of them.
+
+A naive solution is for Alice (or her delegated validator) to use the same EOTS key to participate in all the interested PoS systems. This achieves the restaking slashing goal without changing the staking contract. However, this is extremely unsafe and highly unrecommended by the validator community because the accidental leakage of one single secret key will jeopardise all the delegated stakes of this validator across all the PoS systems secured by it.
+
+Therefore, every validator should use a different EOTS key for each different PoS system. For example, if three validators validate four PoS systems, then there should be 12 EOTS keys.
+
+Then, for Alice, restaking becomes simply choosing one EOTS key per PoS system she wants to restake to. To achieve this, we only need to extend the EOTS key field in the staking contract from accepting one key to accepting a list of keys and specify that the EOTS condition is met as long as any one of the keys signs.
+```plaintext
+// Contract V4: Enabling restaking
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+condition-2 (slashing): alice_public_key
+                        & any signature from list [validator_eots_public_key]
+                        & covenant_committee_quorum
+
+// Slashing transaction V1
+inputs:
+  - input-1: the staking UTXO, spent using condition-2 above
+
+outputs:
+  - output-1: value = 0.09 Bitcoin, owner = 0000...0000
+  - output-2: value = 0.9 Bitcoin,
+              conditions:
+              - condition-1: time_lock = 500 & alice_public_key
+// Pre-approval V2
+//
+// Alice's pre-approval is an adaptor signature of the slashing tx
+// she generated using the validator's EOTS public key.
+//
+// Covenant committee pre-signs the slashing tx as its pre-approval.
+```
+
+## 5. Secure On-Demand Unbonding
+
+Article-2 explained that for stake unbonding to be secure, there should be an unbonding period, during which the stake must still be locked and slashable.
+
+To achieve this, we need to turn Alice’s current stake (which has a long time lock) into a new stake (which has a shorter time lock equal to the unbonding time) and request Alice to pre-sign the corresponding new slashing transaction.
+
+In addition, to enforce the above correct unbonding, we need to add a third spending condition (the unbonding condition) to the staking UTXO, which requires Alice’s and the covenant committee’s signatures.
+
+More specifically:
+
+1. To prepare for unbonding, Alice will create an unbonding transaction that spends the original staking UTXO via this new 3rd condition. This unbonding transaction has a new staking UTXO that has a time lock equals to the unbonding period and a slashing condition same as the origin.
+2. Alice then creates a new slashing transaction that spends the new staking UTXO.
+3. Alice will then publish the unbonding transaction, the slashing transaction, and her pre-approval to the slashing transaction.
+4. The covenant committee will review the above information and sign both the unbonding transaction and the new slashing transaction.
+5. When Alice wants to execute the unbonding, she signs the unbonding transaction. Since both Alice’s and the covenant committee’s signatures are in place, Alice can submit the unbonding transaction to BTC to execute the unbonding.
+6. After the shorter time lock expires, she can withdraw her Bitcoin.
+```plaintext
+// Contract V5: Enabling on-demand unbonding
+condition-1 (locking): time_lock = 1000 & alice_public_key; OR
+condition-2 (slashing): alice_public_key
+                        & any signature from list [validator_eots_public_key]
+                        & covenant_committee_quorum
+
+condition-3 (unbonding): alice_public_key & covenant_committee_quorum
+
+// Slashing transaction V1
+inputs:
+  - input-1: the staking UTXO, spent using condition-2 above
+outputs:
+  - output-1: value = 0.09 Bitcoin, owner = 0000...0000
+  - output-2: value = 0.9 Bitcoin,
+              conditions:
+              - condition-1: time_lock = 500 & alice_public_key
+// Pre-approval V2
+//
+// Alice's pre-approval is an adaptor signature of the slashing tx
+// she generated using the validator's EOTS public key.
+//
+// Covenant committee pre-signs the slashing tx as its pre-approval.
+
+// Unbonding transaction
+inputs:
+  input-1: the staking UTXO, spent using condition-3 above
+
+outputs:
+  output-1: value = 0.99 Bitcoin
+            conditions:
+            - condition-1 (locking): time_lock = 500 & alice_public_key; OR
+
+            - condition-2 (slashing): alice_public_key
+                                      & any signature from list [validator_eots_public_key]
+                                      & covenant_committee_quorum
+// Slashing transaction of the unbonding transaction
+inputs:
+  - input-1: the unbonding UTXO, spent using condition-2 above
+outputs:
+  - output-1: value = 0.08 Bitcoin, owner = 0000...0000
+  - output-2: value = 0.9 Bitcoin,
+              conditions:
+              - condition-1: time_lock = 500 & alice_public_key
+```
+
+## 6. Summary
+
+Woohoo! This is super intense, but we made it! We constructed a contract that turns Bitcoin into a first-class staking asset with all the properties one could wish for a staking asset: trustless, self-custodial, lockable, slashable (including partial slashing and atomic slashing), delegatable, restakable, and on-demand unbondable!
+
+<img src="/img/blog/05-26-babylon-s-bitcoin-staking-contract/1.png" alt="Bitcoin Staking Illustration" width="100%" />
