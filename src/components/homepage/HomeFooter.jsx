@@ -68,7 +68,7 @@ function Links({ name, links, isAccordion }) {
 export default function Footer() {
   const { withBaseUrl } = useBaseUrlUtils();
   return (
-    <footer className="bg-[#F4F7FF] dark:bg-[#191919]">
+    <footer>
       <div className="mx-auto flex w-full max-w-[1080px] flex-col px-6 py-12">
         <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <ThemedImage
@@ -81,8 +81,8 @@ export default function Footer() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap">
-          <Links name="Developers" links={developers}/>
+        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap dark:hover:text-[#BEDCC9]">
+          <Links name="Developers" links={developers} className="dark:hover:text-[#00e0ff]"/>
         </div>
 
         <hr className="my-12 !bg-gray-300 dark:!bg-[#999]"/>
@@ -91,15 +91,14 @@ export default function Footer() {
           <div className="flex flex-wrap gap-2 text-sm text-gray-500">
             <Link
               href="https://babylonlabs.io/privacy-policy"
-              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#ce6533
-]"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#BEDCC9]"
             >
               Privacy Policy
             </Link>
             &bull;
             <Link
               href="https://babylonlabs.io/terms"
-              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#ce6533]"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#BEDCC9]"
             >
               Terms of Service
             </Link>
