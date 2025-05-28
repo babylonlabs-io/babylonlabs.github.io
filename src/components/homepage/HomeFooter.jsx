@@ -72,6 +72,7 @@ export default function Footer() {
       <div className="mx-auto flex w-full max-w-[1080px] flex-col px-6 py-12">
         <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <ThemedImage
+            isLogo
             alt="Babylon"
             className="h-9 w-fit lg:h-12"
             sources={{

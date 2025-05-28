@@ -60,7 +60,7 @@
 
     --docs-color-secondary-700: 237 237 240;
     --docs-color-secondary-800: 243 246 244;
-    --docs-color-secondary-900: 247 250 248;
+    --docs-color-secondary-900: 232 236 239;
     --docs-color-secondary-1000: 255 255 255;
 
     --docs-color-text-400: 160 160 160; /* Darker text tone */
@@ -75,7 +75,7 @@
 
     --docs-color-secondary-700: 71 71 71;
     --docs-color-secondary-800: 38 38 38;
-    --docs-color-secondary-900: 25 25 25;
+    --docs-color-secondary-900: 32 32 32;
     --docs-color-secondary-1000: 0 0 0;
   }
 
@@ -1640,6 +1640,14 @@ h3.anchor > code {
 
 [data-theme="dark"] [data-rmiz-modal-overlay="visible"] {
   background-color: rgba(0,0,0,0.88) !important;
+}
+
+.navbar__brand img, footer img{
+  border-radius: 0;
+}
+
+.navbar__logo img{
+  cursor: pointer !important;
 }
 
 /*FOR MOBILE SCREEN SIZE*/
