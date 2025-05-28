@@ -188,8 +188,8 @@ body {
     Consolas, 'Liberation Mono', 'Courier New', monospace;
 
 /* Theme colors */
-  --ifm-color-primary: #33C5CE;          /* Primary */
-  --ifm-color-primary-dark: #BEDCC9;     /* Darker */
+  --ifm-color-primary: #348f94;          /* Primary */
+  --ifm-color-primary-dark: #bcd1c4;     /* Darker */
   --ifm-color-primary-darker: #BEDCC9;   /* Even Darker */
   --ifm-color-primary-darkest: #BEDCC9;  /* Darkest */
   --ifm-color-primary-light: #33C5CE;    /* Lighter */
