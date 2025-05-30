@@ -1,4 +1,29 @@
-<html><body><article><h1>Public Randomness Commit Specification</h1>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    
+    <h1>Public Randomness Commit Specification</h1>
 <h2>Overview</h2>
 <p>The finality provider periodically commits public randomness to the consumer
 chain to be used for future block finalization. This document specifies the
@@ -131,4 +156,8 @@ used for sending finality votes.</li>
 a long period of time to avoid frequent commit of randomness.
 In real life, the value of <code>NumPubRand</code> should be much larger than
 <code>TimestampingDelayBlocks</code>, e.g., <code>NumPubRand = 2 * TimestampingDelayBlocks</code>.</p>
-</article></body></html>
+
+  </article>
+</body>
+</html>
+  

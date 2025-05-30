@@ -1,4 +1,29 @@
-<html><body><article><h1>HMAC Security for Finality Provider</h1>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    
+    <h1>HMAC Security for Finality Provider</h1>
 <p>This document describes the HMAC (Hash-based Message Authentication Code) authentication system used to secure the
 communication between the Finality Provider Daemon (FPD) and the Extractable One-Time Signature Daemon (EOTSD).
 HMAC ensures that only authorized requests from FPD are processed by EOTSD, which handles sensitive key operations.</p>
@@ -72,4 +97,8 @@ Double-check that they are identical, including any leading or trailing whitespa
 <p>Cloud Secret References: If you're using cloud secret references (AWS, GCP, Azure), ensure they are properly formatted and accessible.</p>
 </li>
 </ol>
-</article></body></html>
+
+  </article>
+</body>
+</html>
+  

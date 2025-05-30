@@ -14,11 +14,6 @@ import RemoteMD from '@site/src/components/RemoteMD';
 export const rawUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/covenant-committee/README.md";
 
 <RemoteMD
-  networkVersions={{
-    mainnet: rawUrl,
-    testnet: 'http://testnet.example.com/docs/README.md',
-    devnet: 'http://devnet.example.com/docs/README.md'
-  }}
-  hideEnv={false}
+  rawUrl={rawUrl}
   hideRelease={true}
 />
