@@ -1,4 +1,29 @@
-<html><body><article><h1>Large BTC Reorgs Recovery Procedure</h1>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    
+    <h1>Large BTC Reorgs Recovery Procedure</h1>
 <p>Babylon relies in a number of confirmation blocks in BTC to accept BTC
 staking transacitons, this number is defined inside the <code>x/btccheckpoint</code>
 Parameter as <code>BtcConfirmationDepth</code> and as <code>k</code> in the research papers
@@ -173,4 +198,8 @@ collected during step <a href="#3-analyze-each-message">3</a>.</p>
 the <a href="../../../RELEASE_PROCESS.md#release-procedure">Release Procedure</a>
 test the logic in a private enviroment and if it all the state is modified
 as expected, announce the new binary for validators.</p>
-</article></body></html>
+
+  </article>
+</body>
+</html>
+  

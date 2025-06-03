@@ -1,4 +1,29 @@
-<html><body><article><h1>BTC light client</h1>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    
+    <h1>BTC light client</h1>
 <p>The BTC light client module is essentially a BTC light client that maintains
 the canonical header chain of Bitcoin.</p>
 <p>Babylon chain needs to know about different events happening on Bitcoin chain.
@@ -224,4 +249,8 @@ message EventBTCRollForward { BTCHeaderInfo header = 1; }
 message EventBTCHeaderInserted { BTCHeaderInfo header = 1; }
 
 </code></pre>
-</article></body></html>
+
+  </article>
+</body>
+</html>
+  

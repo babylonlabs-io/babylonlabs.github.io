@@ -1,8 +1,35 @@
-<html><body><article><h1>Babylon Node Setup</h1>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    <div class="release-badge">Version: <strong>testnet</strong></div>
+    <h1>Babylon Node Setup</h1>
 <h2>Table of Contents</h2>
 <ol>
-<li><a href="#1-install-babylon-binary">Install Babylon binary</a></li>
-<li><a href="#2-set-up-your-node-home-directory-and-configuration">Set up node home directory and configuration</a></li>
+<li><a href="#1-install-babylon-binary">Install Babylon Binary</a></li>
+<li><a href="#2-set-up-your-node-home-directory-and-configuration">Set Up Node Home Directory and Configuration</a></li>
+<li><a href="#1-install-babylon-binary">Install Babylon Binary</a></li>
+<li><a href="#2-set-up-your-node-home-directory-and-configuration">Set Up Node Home Directory and Configuration</a></li>
 <li><a href="#3-prepare-for-sync">Prepare for sync</a>
 <ol>
 <li><a href="#31-sync-through-a-network-snapshot">Sync through a network snapshot</a></li>
@@ -25,9 +52,10 @@ cd babylon
 # tag corresponds to the version of the software
 # you want to install -- depends on which
 # height you sync from
-git checkout v1.0.1
-# install the binary
-make install
+git checkout v1.0.0-rc.6-fix
+# we use this to ensure that the testnet-specific upgrade data
+# are included in the binary
+BABYLON_BUILD_OPTIONS="testnet" make install
 </code></pre>
 <p>This command does the following:</p>
 <ul>
@@ -37,7 +65,7 @@ make install
 </ul>
 <p>You can verify your installation by executing the <code>version</code> command:</p>
 <pre><code class="language-shell">babylond version
-v1.0.1
+v1.0.0-rc.6-fix
 </code></pre>
 <p>If your shell cannot find the installed binary, make sure <code>$GOPATH/bin</code> is in
 your shell's <code>$PATH</code>. Use the following command to add it to your profile,
@@ -45,12 +73,10 @@ depending on your shell:</p>
 <pre><code class="language-shell">echo 'export PATH=$HOME/go/bin:$PATH' >> ~/.profile
 </code></pre>
 <p>Make sure to restart your terminal session after running the above command.</p>
-<p>Note: Alternatively, you can use a
-<a href="https://hub.docker.com/layers/babylonlabs/babylond/v1.0.1/images/sha256-8650aca16af767d844de62d45ff989637aa6009d7d71d19f5a0d2b86198cda94">Docker image</a></p>
-<h2>2. Set up your node</h2>
+<h2>2. Set up your node, home directory, and configuration</h2>
 <p>In this section we will initialize your node and create the necessary
 configuration directory through the <code>init</code> command.</p>
-<pre><code class="language-shell">babylond init &#x3C;moniker> --chain-id bbn-1 --home &#x3C;path>
+<pre><code class="language-shell">babylond init &#x3C;moniker> --chain-id bbn-test-5 --home &#x3C;path>
 </code></pre>
 <p>Parameters:</p>
 <ul>
@@ -65,41 +91,14 @@ The default home directory for your Babylon node is:
 </ul>
 </li>
 </ul>
-<blockquote>
-<p><strong>⚠️  Important note about BLS keys</strong></p>
-<p>A prompt will appear for you to enter a password for a BLS key.
-This password will be used to encrypt your BLS key before storing it in a
-file (<code>$HOME/config/bls_key.json</code>).
-All node operators intending to become validators must have a BLS key,
-similar to the requirement for a <code>priv_validator_key.json</code> file.
-Babylon uses both the <code>bls_key.json</code> and the <code>priv_validator_key.json</code> files.</p>
-<p>You can specify your BLS password using the following options:</p>
-<ul>
-<li><strong>CLI or Environment Variable</strong>: You can specify your password through the
-CLI or an environment variable (note that if both are used concurrently, an
-error will be raised):
-<ul>
-<li><strong>Environment Variable</strong>: <code>BABYLON_BLS_PASSWORD</code> is set.</li>
-<li><strong>CLI flags</strong>: One of the following CLI options has been set:
-<ul>
-<li><code>--no-bls-password</code> is a flag that if set designates that an empty BLS
-password should be used.</li>
-<li><code>--bls-password-file=&#x3C;path></code> allows to specify a file location that
-contains the plaintext BLS password.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>(Recommended) Password Prompt</strong>
-If none of the above is set, a prompt will appear asking you to type your
-password.</li>
-</ul>
-</blockquote>
+<p>Note that a prompt will happen for the password of the generated BLS key.
+This command will generate all the important configuration files structured
+as below:</p>
 <pre><code>$HOME/.babylond/
 ├── config/
 │   ├── app.toml         # Application-specific configuration
 │   ├── bls_key.json     # BLS key for the node
-│   ├── bls_password.txt # Password file for the BLS key (if `--bls-password-file` has been set)
+│   ├── bls_password.txt # Password file for the BLS key
 │   ├── client.toml      # Client configuration
 │   ├── config.toml      # Tendermint core configuration
 │   ├── genesis.json     # Genesis state of the network
@@ -118,31 +117,19 @@ password.</li>
 # Minimum gas prices that this node will accept
 minimum-gas-prices = "0.002ubbn"
 
-[mempool]
-# Setting max-txs to 0 will allow for a unbounded amount of transactions in the mempool.
-# Setting max_txs to negative 1 (-1) will disable transactions from being inserted into the mempool (no-op mempool).
-# Setting max_txs to a positive number (> 0) will limit the number of transactions in the mempool, by the specified amount.
-#
-# Note, this configuration only applies to SDK built-in app-side mempool
-# implementations.
-max-txs = 0
-
 [btc-config]
 
 # Configures which bitcoin network should be used for checkpointing
 # valid values are: [mainnet, testnet, simnet, signet, regtest]
-network = "mainnet" # The Babylon Genesis mainnet connects to the mainnet Bitcoin network
+network = "signet" # The Babylon testnet connects to the signet Bitcoin network
 </code></pre>
 <p>Parameters:</p>
 <ul>
 <li><code>minimum-gas-prices</code>: The minimum gas price your node will accept for
 transactions. The Babylon protocol enforces a minimum of <code>0.002ubbn</code> and
 any transactions with gas prices below your node's minimum will be rejected.</li>
-<li><code>mempool.max-txs</code>: Set this to <code>0</code> in order to utilise the application side
-mempool.</li>
 <li><code>btc-config.network</code>: Specifies which Bitcoin network to connect to for
-checkpointing. For the Babylon Genesis mainnet,
-we use "mainnet" which is Bitcoin's mainnet network.</li>
+checkpointing. For testnet-5, we use "signet" which is Bitcoin's test network.</li>
 </ul>
 <p>Note: If you're running a validator or RPC node that needs to handle queries,
 it's recommended to keep these default values for optimal performance. Only
@@ -178,8 +165,7 @@ to account for network delays.</li>
 the initial state of the blockchain and is crucial for successfully syncing
 your node. You can inspect the file <a href="../README.md#genesis">here</a> or use the
 following commands to download it directly:</p>
-<pre><code class="language-shell">wget
-https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/network-artifacts/genesis.json
+<pre><code class="language-shell">wget https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-test-5/network-artifacts/genesis.json
 mv genesis.json &#x3C;path>/config/genesis.json # You must insert the home directory of your node
 </code></pre>
 <h2>3. Prepare for sync</h2>
@@ -197,21 +183,16 @@ height. Instead of processing all blocks from the beginning, you can download
 and import this snapshot to quickly reach a recent block height.</p>
 <p>You can obtain the network snapshot <a href="../README.md#state-snapshot">here</a>.</p>
 <p>To extract the snapshot, utilize the following command:</p>
-<pre><code class="language-shell">tar -xvf bbn-1.tar.gz -C &#x3C;path>
+<pre><code class="language-shell">tar -xvf bbn-test-5.tar.gz -C &#x3C;path>
 </code></pre>
 <p>Parameters:</p>
 <ul>
-<li><code>bbn-1.tar.gz</code>: Name of the compressed blockchain snapshot file</li>
+<li><code>bbn-test-5.tar.gz</code>: Name of the compressed blockchain snapshot file</li>
 <li><code>&#x3C;path></code> : Your node's home directory</li>
 </ul>
 <p>After importing the state, you can now start your node as specified in section
 <a href="#4-start-the-node">Start the node</a>.</p>
 <h3>3.2. Sync from scratch</h3>
-<blockquote>
-<p><strong>Important</strong>: If you decide to sync from scratch and target to become a
-validator, do not create a BLS key before
-upgrading to a version that is <code>> 1.0.0</code>.</p>
-</blockquote>
 <p>Lastly, you can also sync from scratch, i.e., sync from block <code>1</code>. Syncing from
 scratch means downloading and verifying every block from the beginning
 of the blockchain (genesis block) to the current block.</p>
@@ -228,16 +209,16 @@ using the genesis software version <code>v0.9.0</code> in place of <code>&#x3C;t
 </ol>
 <p>Your node will sync blocks until it reaches a software upgrade height.</p>
 <p>At that point, you will have to perform the steps matching the corresponding
-<a href="../network-artifacts/upgrades/README.md">upgrade height</a>.</p>
+<a href="../upgrades/README.md">upgrade height</a>.</p>
 <p>Note: When building the upgrade binary, include the following build flag so that
-mainnet-specific upgrade data are included in the binary:</p>
-<pre><code class="language-shell">BABYLON_BUILD_OPTIONS="mainnet" make install
+testnet-specific upgrade data are included in the binary:</p>
+<pre><code class="language-shell">BABYLON_BUILD_OPTIONS="testnet" make install
 </code></pre>
 <p>You will have to go over all the software upgrades until you sync with the
 full blockchain.</p>
 <h2>4. Start the node</h2>
 <p>You can start your node using the following command:</p>
-<pre><code class="language-shell">babylond start --chain-id bbn-1 --home &#x3C;path> --x-crisis-skip-assert-invariants
+<pre><code class="language-shell">babylond start --chain-id bbn-test-5 --home &#x3C;path> --x-crisis-skip-assert-invariants
 </code></pre>
 <p>Parameters:</p>
 <ul>
@@ -249,31 +230,9 @@ dependent on where the files were generated for you from the initialization
 <li><code>--x-crisis-skip-assert-invariants</code>: Skips state validation checks to improve
 performance. Not recommended for validator nodes.</li>
 </ul>
-<blockquote>
-<p><strong>⚠️  Important note about BLS keys</strong></p>
-<p>The <code>start</code> command will need to decrypt and load your BLS key, which
-requires your BLS key password. As with the <code>init</code> command,
-you can specify your BLS password using the following options:</p>
-<ul>
-<li><strong>CLI or Environment Variable</strong>: You can specify your password through the
-CLI or an environment variable (note that if both are used concurrently, an
-error will be raised):
-<ul>
-<li><strong>Environment Variable</strong>: <code>BABYLON_BLS_PASSWORD</code> is set.</li>
-<li><strong>CLI flags</strong>: One of the following CLI options has been set:
-<ul>
-<li><code>--no-bls-key</code> is a flag that if set designates that an empty BLS
-password should be used.</li>
-<li><code>--bls-password-file=&#x3C;path></code> allows to specify a file location that
-contains the plaintext BLS password.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>(Recommended) Password Prompt</strong>
-If none of the above is set, a prompt will appear asking you to type your
-password.</li>
-</ul>
-</blockquote>
 <p>Congratulations! Your Babylon node is now set up and syncing blocks.</p>
-</article></body></html>
+
+  </article>
+</body>
+</html>
+  
