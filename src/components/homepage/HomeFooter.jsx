@@ -40,7 +40,7 @@ function Links({ name, links, isAccordion }) {
           <Link
             key={name}
             href={href}
-            className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9]"
+            className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9] hover:dark:text-primary"
             onClick={() => (isAccordion ? toggleAccordion(href) : null)}
           >
             {name}
@@ -50,7 +50,7 @@ function Links({ name, links, isAccordion }) {
                   <li key={index}>
                     <Link
                       href={item.href}
-                      className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9]"
+                      className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9] hover:dark:text-primary"
                     >
                       {item.name}
                     </Link>
