@@ -72,6 +72,7 @@ export default function Footer() {
       <div className="mx-auto flex w-full max-w-[1080px] flex-col px-6 py-12">
         <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <ThemedImage
+            isLogo
             alt="Babylon"
             className="h-9 w-fit lg:h-12"
             sources={{
@@ -81,8 +82,8 @@ export default function Footer() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap">
-          <Links name="Developers" links={developers}/>
+        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap dark:hover:text-[#BEDCC9]">
+          <Links name="Developers" links={developers} className="dark:hover:text-[#00e0ff]"/>
         </div>
 
         <hr className="my-12 !bg-gray-300 dark:!bg-[#999]"/>

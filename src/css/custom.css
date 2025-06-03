@@ -75,7 +75,7 @@
 
     --docs-color-secondary-700: 71 71 71;
     --docs-color-secondary-800: 38 38 38;
-    --docs-color-secondary-900: 25 25 25;
+    --docs-color-secondary-900: 32 32 32;
     --docs-color-secondary-1000: 0 0 0;
   }
 
@@ -1640,6 +1640,95 @@ h3.anchor > code {
 
 [data-theme="dark"] [data-rmiz-modal-overlay="visible"] {
   background-color: rgba(0,0,0,0.88) !important;
+}
+/* components/homepage/BlogSection.css */
+.blog-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  background-color: var(--docs-color-background-100);
+}
+
+.blog-container{
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.blog-posts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.blog-post {
+  flex: 1 1 300px;
+  max-width: 380px;
+  min-width: 280px;
+  position: relative;
+  background: var(--docs-color-background);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--docs-color-border);
+}
+
+.blog-post p,.blog-post span{
+    padding: 0 5px;
+}
+
+.first-post {
+  position: relative;
+}
+
+.title-overlay {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.title-overlay h2 {
+  margin: 0;
+  color: var(--docs-color-text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.view-all {
+  color: var(--docs-color-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--docs-color-background);
+  transition: all 0.2s;
+}
+
+.view-all:hover {
+  background: var(--docs-color-primary);
+  color: white;
+  text-decoration: none;
+}
+
+.blog-post:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+
+.navbar__brand img, footer img{
+  border-radius: 0;
+}
+
+.navbar__logo img{
+  cursor: pointer !important;
 }
 
 /*FOR MOBILE SCREEN SIZE*/
