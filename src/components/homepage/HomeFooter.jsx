@@ -40,7 +40,7 @@ function Links({ name, links, isAccordion }) {
           <Link
             key={name}
             href={href}
-            className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9]"
+            className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9] hover:dark:text-primary"
             onClick={() => (isAccordion ? toggleAccordion(href) : null)}
           >
             {name}
@@ -50,7 +50,7 @@ function Links({ name, links, isAccordion }) {
                   <li key={index}>
                     <Link
                       href={item.href}
-                      className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9]"
+                      className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9] hover:dark:text-primary"
                     >
                       {item.name}
                     </Link>
@@ -81,8 +81,8 @@ export default function Footer() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap dark:hover:text-[#BEDCC9]">
-          <Links name="Developers" links={developers} className="dark:hover:text-[#00e0ff]"/>
+        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap">
+          <Links name="Developers" links={developers}/>
         </div>
 
         <hr className="my-12 !bg-gray-300 dark:!bg-[#999]"/>

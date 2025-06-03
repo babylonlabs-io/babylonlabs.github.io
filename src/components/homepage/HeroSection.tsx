@@ -73,12 +73,12 @@ function HeroProduct({
         'w-[90vw] border-secondary-700 hover:!border-primary dark:border-secondary-800 sm:w-[440px]'
       )}
     >
-      <div className="p-6 !pb-0">
+      <div className="p-6">
         <h3 className="mb-1.5 flex items-center gap-3 font-jakarta group-hover:text-primary">
           <Icon className="h-7 w-7" />
           <div>{title}</div>
         </h3>
-        <p className="mb-0 text-sm text-zinc-400">{text}</p>
+        <p className="mb-0 text-sm text-zinc-700">{text}</p>
       </div>
       {/* <ThemedImage
         sources={{

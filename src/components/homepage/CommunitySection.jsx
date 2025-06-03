@@ -1,30 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 
-import { Linkedin, Twitter } from 'react-feather';
-import { DiscordIcon } from '@site/src/icons';
-
-const githubUsernames = [
-  'filippos47',
-  'fishermanymc',
-  'gbarkhatov',
-  'gitferry',
-  'jrwbabylonlab',
-  'Lazar955',
-  'liam-icheng-lai',
-  'maurolacy',
-  'PayneJoe',
-  'RafilxTenfen',
-  'samricotta',
-  'SebastianElvis',
-  'supertong',
-  '0xDazzer',
-  'vitsalis',
-  'Vvaradinov',
-  'web3jenks',
-  'kkkk666',
-];
-
 export default function CommunitySection() {
   return (
     <section className="no-underline-links">
@@ -38,35 +14,24 @@ export default function CommunitySection() {
           Engage with our ever-growing community to get the latest updates,
           product support, and more.
         </p>
-        {/* <div className="mx-auto mb-16 flex flex-wrap -space-x-1.5">
-          {githubUsernames.map((username) => (
-            <img
-              key={username}
-              src={`https://github.com/${username}.png?size=60`}
-              alt={`User ${username}`}
-              loading="lazy"
-              className="h-6 w-6 rounded-full border-2 border-solid border-white transition hover:-translate-y-2 hover:scale-150 lg:h-12 lg:w-12"
-            />
-          ))}
-        </div> */}
         <div className="flex w-full flex-col items-center justify-center gap-2 text-sm font-semibold lg:flex-row lg:gap-8">
           <Link
             className="flex w-full items-center justify-center gap-2  border border-solid border-primary-100 px-8 py-2
-            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-100 lg:w-auto"
+            hover:border-primary-100  hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
             href="https://discord.com/invite/babylonglobal"
           >
             Discord
           </Link>
           <Link
             className="flex w-full items-center justify-center gap-2  border border-solid border-primary-100 px-8 py-2
-            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-100 lg:w-auto"
+            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
             href="https://x.com/babylonlabs_io"
           >
            Twitter
           </Link>
           <Link
             className="flex w-full items-center justify-center gap-2 border border-solid border-primary-100 px-8 py-2
-            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-100 lg:w-auto"
+            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
             href="https://www.linkedin.com/company/babylon-chain/o"
           >
            LinkedIn

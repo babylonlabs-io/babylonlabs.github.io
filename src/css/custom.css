@@ -63,7 +63,7 @@
     --docs-color-secondary-900: 247 250 248;
     --docs-color-secondary-1000: 255 255 255;
 
-    --docs-color-text-400: 160 160 160; /* Darker text tone */
+    --docs-color-text-400: 60 60 60; /* Darker text tone */
   }
 
   html[data-theme='dark'] {
