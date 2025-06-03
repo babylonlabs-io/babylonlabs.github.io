@@ -5,19 +5,17 @@ sidebar_position: 1
 ---
 
 # Babylon Genesis Validators Installation Guide
-# Babylon Genesis Validators Installation Guide
 
 import RemoteMD from '@site/src/components/RemoteMD';
 
 export const testnetUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/babylon-validators/README.md";
 
-export const mainnetUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/babylon-validators/README.md";
+export const rawUrl="https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-1/babylon-validators/README.md";
 
 <RemoteMD
-  networkVersions={{
-   testnet: testnetUrl,
-   mainnet: mainnetUrl
-  }}
-  hideEnv={false}
+  rawUrl={rawUrl}
   hideRelease={true}
+  releaseVersions={{
+    'testnet': testnetUrl
+  }}
 />
