@@ -1,0 +1,410 @@
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    <div class="release-badge">Version: <strong>next-v4.x</strong></div>
+    <h1>Bitcoin Staking Transactions Specification</h1>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-introduction">Introduction</a></li>
+<li><a href="#2-preliminaries">Preliminaries</a>
+<ol>
+<li><a href="#21-building-blocks">Building Blocks</a></li>
+<li><a href="#22-stakeholders">Stakeholders</a></li>
+</ol>
+</li>
+<li><a href="#3-btc-staking-protocol-transactions">BTC Staking Protocol Transactions</a>
+<ol>
+<li><a href="#31-the-staking-output">The Staking Output</a></li>
+<li><a href="#32-the-unbonding-output">The Unbonding Output</a></li>
+<li><a href="#33-the-slashing-refund-output">The Slashing Refund Output</a></li>
+</ol>
+</li>
+</ol>
+<h2>1. Introduction</h2>
+<p>The Babylon BTC Staking protocol turns Bitcoin into a staking asset,
+aiming to onboard both the asset and its holders to the
+Bitcoin Supercharged Networks (BSNs) ecosystem and the Babylon Genesis
+chain (the first BSN).</p>
+<p>Bitcoin holders can stake their BTC by locking it using a
+special transaction on the Bitcoin network.
+Once locked, the Bitcoin contributes to the economic security of
+BSNs selected to be secured,
+which in turn enables new opportunities for stakers,
+such as earning staking yields.</p>
+<p>This document specifies the structure of the transactions involved
+in the BTC Staking protocol.
+These transactions must conform to a defined format and
+commit to specific Taproot scripts.
+The values in these scripts are governed by
+parameters defined on the Babylon Genesis chain and
+the staker's selections.</p>
+<blockquote>
+<p>⚡ For information on retrieving Babylon Genesis parameters and
+registering valid staking transactions,
+refer to the
+<a href="./register-bitcoin-stake.md">registering Bitcoin stakes documentation</a></p>
+</blockquote>
+<h2>2. Preliminaries</h2>
+<h3>2.1. Building Blocks</h3>
+<p>The Bitcoin Staking protocol transaction specification is
+heavily based on Bitcoin's
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki">Taproot upgrade</a>,
+which introduced
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki">Schnorr signatures</a>.</p>
+<h3>2.2. Stakeholders</h3>
+<p>The Bitcoin Staking protocol involves the following stakeholders:</p>
+<ul>
+<li><strong>Bitcoin Staker</strong>:
+The Bitcoin staker is the controller and beneficiary of the
+Bitcoin stake once it is created.
+The staker is identified by their Bitcoin public key
+(referenced as <code>&#x3C;StakerPk></code> in the staking scripts).
+<blockquote>
+<p>⚡ The staker public key does not need to match the UTXO funder of the
+staking transaction. The funding UTXO can originate from any source,
+including multi-sig, MPC, or threshold-controlled accounts.</p>
+</blockquote>
+</li>
+<li><strong>Finality Providers</strong>:
+Bitcoin Staking supports delegated staking,
+allowing voting power from a stake to be assigned
+to a finality provider.
+A finality provider is identified by their EOTS public
+key (<code>&#x3C;FinalityProviderPk></code>) and participates in the finality
+voting round of a specific BSN.
+The selection of a finality provider also implicitly determines
+the BSN they secure, as each provider may only secure one BSN.
+Bitcoin stakers specify their chosen finality provider by including
+their EOTS key in the staking script.
+<blockquote>
+<p>⚠️ Currently, only a single finality provider securing the Babylon Genesis chain
+can be selected. Future protocol versions will support additional BSNs and allow
+BTC stakers to delegate to providers securing those networks.</p>
+</blockquote>
+</li>
+<li><strong>Covenant Committee</strong>:
+The role of the covenant committee (identified
+by the Bitcoin public keys of its members <code>CovenantPk1..CovenantPkN</code>)
+is to protect BSNs against attacks from the BTC stakers and finality providers.
+It achieves this by representing itself as an M-out-of-N multi-signature
+that co-signs BTC transactions with the BTC staker. Through co-signing,
+the covenant committee enforces spending rules on the staked Bitcoin,
+so that they can only be spent in a protocol compliant manner.
+The co-signatures are published on the Babylon Genesis chain and
+are a pre-requisite for the stake's activation.
+There's no way the covenant committee can act against the stakers,
+except rejecting their staking requests.</li>
+<li><strong>Babylon Genesis chain</strong>:
+The Babylon Genesis chain is the first BSN and acts as the control layer
+for the BTC staking protocol. All Bitcoin stakes and finality providers
+must be registered on the Babylon Genesis chain.
+It is also responsible for propagating staking-related data to other BSNs.</li>
+</ul>
+<blockquote>
+<p>⚠️ Staking scripts must not contain duplicate keys.
+The public keys for <code>StakerPk</code>, <code>FinalityProviderPk</code>, and each <code>CovenantPk</code>
+must be unique within a single stake.</p>
+</blockquote>
+<h2>3. BTC Staking Protocol Transactions</h2>
+<p>The Bitcoin Staking protocol defines four key transaction types:</p>
+<ul>
+<li><strong>Staking Transaction</strong>:
+A staking transaction is a Bitcoin
+transaction that locks a specific amount of BTC into
+the Babylon-recognized staking script.
+It marks the beginning of a BTC staking lifecycle.
+The requirements for a valid staking transaction are:
+<ul>
+<li>It can contain an arbitrary number of inputs.</li>
+<li>It can contain an arbitrary number of outputs,
+with the requirement that at least one of those outputs
+—referred to as the staking output—
+is a Taproot output that commits to the Bitcoin Staking script.</li>
+</ul>
+</li>
+<li><strong>Unbonding Transaction</strong>:
+The unbonding transaction is a Bitcoin transaction
+that enables the staker to on-demand unbond their Bitcoin before the staking
+timelock they originally committed to as part of the staking transaction expires.
+The requirements for a valid unbonding transaction are:
+<ul>
+<li>It contains exactly one input which points to the staking output in which the
+Bitcoin to be on-demand unbonded have been locked in.</li>
+<li>It contains exactly one output—referred to as the unbonding output—
+that is a Taproot output committing to the Bitcoin Staking unbonding script.</li>
+<li>The Bitcoin fee of the unbonding transaction must be equal to the fee
+for unbonding transactions specified in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+</li>
+<li><strong>Slashing Transaction</strong>:
+The slashing transaction is used to punish a BTC staker
+when the finality provider they have delegated to double-signs. The requirements
+for a valid slashing transaction are:
+<ul>
+<li>It must have exactly one input pointing to either the staking output or
+the unbonding output.</li>
+<li>It must have exactly two outputs,
+<ul>
+<li>the first sending the slashed fraction
+of the funds to a burn address specified in the Babylon Genesis chain's parameters, and</li>
+<li>the second sending the remaining funds to a Taproot output—referred to as the
+slashing refund output— which locks the funds in a short timelock before they are redeemable
+by the staker.</li>
+</ul>
+</li>
+<li>The fee of the Bitcoin slashing transaction must be larger than or equal to the
+minimum fee specified for slashing transactions in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+</li>
+<li><strong>Withdrawal Transaction</strong>:
+The withdrawal transaction is a Bitcoin transaction that
+extracts unlocked Bitcoin from the timelock script associated with a Bitcoin Staking script
+(either Staking, Unbonding, or Slashing). The only requirement for a valid withdrawal transaction
+is that one of its inputs is a Staking, Unbonding, or Slashing output.</li>
+</ul>
+<p>The following diagram shows how the above transactions create and spend
+different Bitcoin outputs:</p>
+<pre><code class="language-mermaid">stateDiagram-v2
+    active: Staking output
+    unbonding: Unbonding output
+    state stake_slashing &#x3C;&#x3C;fork>>
+    state unbonding_slashing &#x3C;&#x3C;fork>>
+    burn_staking: Burn address output
+    change_staking: Change output
+    burn_unbonding: Burn address output
+    change_unbonding: Change output
+
+    [*] --> active: Staking transaction
+
+    active --> unbonding: Unbonding transaction
+
+    unbonding --> [*]: Unbonding withdrawal transaction
+
+    unbonding --> unbonding_slashing: Slashing transaction
+    unbonding_slashing --> burn_unbonding
+    unbonding_slashing --> change_unbonding
+    change_unbonding --> [*]: Withdrawal transaction
+
+    active --> [*]: Staking withdrawal transaction
+
+    active --> stake_slashing: Slashing transaction
+
+    stake_slashing --> burn_staking
+    stake_slashing --> change_staking
+    change_staking --> [*]: Withdrawal transaction
+</code></pre>
+<h3>3.1. The Staking Output</h3>
+<p>The staking output is a Taproot output which can only be spent through
+the script spending path.
+The key spending path is disabled by using the "Nothing Up My Sleeve"
+(NUMS) point as the internal key.
+The NUMS point used is the one defined in
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki#constructing-and-spending-taproot-outputs">BIP341</a>:</p>
+<pre><code>H = lift_x(0x50929b74c1a04954b78b4b6035e97a5e078a5a0f28ec96d547bfee9ace803ac0)
+</code></pre>
+<p>This point is derived by hashing the standard uncompressed encoding of the
+secp256k1 base point <code>G</code> as the X coordinate.</p>
+<p>The staking output can be spent through one of the following three script paths:</p>
+<ol>
+<li>
+<p><strong>Timelock Path</strong>:
+This path locks the staker's Bitcoin for a predefined number of Bitcoin blocks.</p>
+<pre><code>&#x3C;StakerPK> OP_CHECKSIGVERIFY  &#x3C;TimelockBlocks> OP_CHECKSEQUENCEVERIFY
+</code></pre>
+<p><strong>Fields</strong>:</p>
+<ul>
+<li><code>&#x3C;StakerPK></code> is the BTC staker's public key.</li>
+<li><code>&#x3C;TimelockBlocks></code> defines the number of Bitcoin blocks the funds
+are committed to remain locked. This duration starts once the staking
+transaction is confirmed in a Bitcoin block.
+Requirements:
+<ul>
+<li>The timelock must be lower than <code>65535</code>.</li>
+<li>The timelock should be within the bounds for Bitcoin staking transaction
+timelocks defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Unbonding Path</strong>:
+This path allows the staker to unlock their Bitcoin on-demand,
+before the timelock expires.</p>
+<pre><code>&#x3C;StakerPk> OP_CHECKSIGVERIFY
+&#x3C;CovenantPk1> OP_CHECKSIG &#x3C;CovenantPk2> OP_CHECKSIGADD ... &#x3C;CovenantPkN> OP_CHECKSIGADD
+&#x3C;CovenantThreshold> OP_NUMEQUAL
+</code></pre>
+<p><strong>Fields</strong>:</p>
+<ul>
+<li><code>StakerPK</code> is the BTC staker's public key.</li>
+<li><code>CovenantPk1..CovenantPkN</code> are the lexicographically sorted public keys of the
+covenant committee as defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+<li><code>CovenantThreshold</code> is a Babylon parameter specifying the number of how many
+covenant committee member signatures are required. It is defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+<p>This path protects against immediate withdrawal without protocol-compliant unbonding,
+by requiring signatures from a quorum of the covenant committee.</p>
+</li>
+<li>
+<p><strong>Slashing Path</strong>:
+This path is used to slash staked funds when the
+finality provider to which they have been delegated to
+is proven to have double-signed.</p>
+<pre><code>&#x3C;StakerPk> OP_CHECKSIGVERIFY
+&#x3C;FinalityProviderPk> OP_CHECKSIGVERIFY
+&#x3C;CovenantPk1> OP_CHECKSIG &#x3C;CovenantPk2> OP_CHECKSIGADD ... &#x3C;CovenantPkN> OP_CHECKSIGADD
+&#x3C;CovenantThreshold> OP_NUMEQUAL
+</code></pre>
+<p><strong>Fields</strong>:</p>
+<ul>
+<li><code>StakerPK</code> is the BTC staker's public key.</li>
+<li><code>FinalityProviderPk</code> is the public key of the finality provider
+to which the stake is delegated.
+<blockquote>
+<p>⚡ At the moment, only a single finality provider is supported.
+Once multi-staking is enabled, the script will be modified to accommodate
+more finality providers.</p>
+</blockquote>
+</li>
+<li><code>CovenantPk1..CovenantPkN</code> are the lexicographically sorted public keys of the
+covenant committee as defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+<li><code>CovenantThreshold</code> is a Babylon parameter specifying the number of how many
+covenant committee member signatures are required. It is defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+<p>This path can only be executed with the collaboration of the BTC staker, finality provider,
+and covenant committee. The staker is required to submit a pre-signature
+for spending the slashing path in order for their stake to be accepted.
+The covenant signatures are required to protect against
+non protocol-compliant withdrawals. More details on the procedure
+for registering stake can be found on the
+<a href="./register-bitcoin-stake.md">registering Bitcoin stakes documentation</a>.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>⚡ Key Difference Between the Unbonding and Slashing Paths</strong></p>
+<p>The main difference lies in the presence of <code>&#x3C;FinalityProviderPk></code> in
+the slashing path which has the following implications:</p>
+<ul>
+<li>For a staking request to become active, the BTC staker must include
+a valid (unsigned) unbonding transaction in the staking request.
+It becomes active only when the Babylon Genesis chain receives
+<code>CovenantThreshold</code> signatures by the covenant committee.
+Since the unbonding path does not include <code>&#x3C;FinalityProviderPk></code>,
+the staker can exit at any time without needing the finality provider's
+consent.</li>
+<li>In contrast, the slashing path does include <code>&#x3C;FinalityProviderPk></code> and
+requires a pre-signed slashing transaction by both the staker and a
+<code>CovenantThreshold</code> of the covenant emulation committee to become active.
+This ensures that the finality provider's cooperation is needed to prevent
+slashing, but not to execute it. If a finality provider misbehaves,
+their key is exposed and can be used to execute the slashing.</li>
+</ul>
+</blockquote>
+<h3>3.2. The Unbonding Output</h3>
+<p>The unbonding output is a Taproot output which can only be spent through the
+script spending path. The key spending path is disabled by using
+the "Nothing Up My Sleeve" (NUMS) point as the internal key.
+The NUMS point used is the one defined in
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki#constructing-and-spending-taproot-outputs">BIP341</a>:</p>
+<pre><code>H = lift_x(0x50929b74c1a04954b78b4b6035e97a5e078a5a0f28ec96d547bfee9ace803ac0)
+</code></pre>
+<p>This point is derived by hashing the standard uncompressed encoding of the
+secp256k1 base point <code>G</code> as the X coordinate.</p>
+<p>The unbonding output can be spent through one of the following two script paths:</p>
+<ol>
+<li><strong>Timelock path</strong>:
+This path locks the staker's Bitcoin for a predefined number of Bitcoin blocks.
+<pre><code>&#x3C;StakerPK> OP_CHECKSIGVERIFY  &#x3C;TimelockBlocks> OP_CHECKSEQUENCEVERIFY
+</code></pre>
+<strong>Fields</strong>:
+<ul>
+<li><code>&#x3C;StakerPK></code> is the BTC staker's public key.</li>
+<li><code>&#x3C;TimelockBlocks></code> defines the unbonding time. It must equal
+the value specified for unbonding defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+</li>
+<li><strong>Slashing path</strong>:
+This path is used to slash staked funds when the
+finality provider to which they have been delegated to
+is proven to have double-signed while the stake is in the unbonding period.
+<pre><code>&#x3C;StakerPk> OP_CHECKSIGVERIFY
+&#x3C;FinalityProviderPk> OP_CHECKSIGVERIFY
+&#x3C;CovenantPk1> OP_CHECKSIG &#x3C;CovenantPk2> OP_CHECKSIGADD ... &#x3C;CovenantPkN> OP_CHECKSIGADD
+&#x3C;CovenantThreshold> OP_NUMEQUAL
+</code></pre>
+<strong>Fields</strong>:
+<ul>
+<li><code>StakerPK</code> is the BTC staker's public key.</li>
+<li><code>FinalityProviderPk</code> is the public key of the finality provider
+to which the stake is delegated.
+<blockquote>
+<p>⚡ At the moment, only a single finality provider is supported.
+Once multi-staking is enabled, the script will be modified to accommodate
+more finality providers.</p>
+</blockquote>
+</li>
+<li><code>CovenantPk1..CovenantPkN</code> are the lexicographically sorted public keys of the
+covenant committee as defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+<li><code>CovenantThreshold</code> is a Babylon parameter specifying the number of how many
+covenant committee member signatures are required. It is defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>⚡ Slashing Path in the Unbonding Output</strong></p>
+<p>The presence of the slashing path in the unbonding output ensures that a BTC staker
+can still be slashed during the unbonding period,
+if their delegated finality provider double-signs.</p>
+</blockquote>
+<h3>3.3. The Slashing Refund Output</h3>
+<p>The slashing refund output returns the non-slashed portion of the staked funds
+to the staker in the case of slashing. It is an output committing to the
+following <strong>timelock script</strong>:</p>
+<pre><code>&#x3C;StakerPK> OP_CHECKSIGVERIFY  &#x3C;TimelockBlocks> OP_CHECKSEQUENCEVERIFY`
+</code></pre>
+<p><strong>Fields</strong>:</p>
+<ul>
+<li><code>&#x3C;StakerPK></code> is BTC staker public key.</li>
+<li><code>&#x3C;TimelockBlocks></code> defines the time in which the funds
+will remain locked before being accessible. This timelock is there
+to ensure that the slashing path is not maliciously used to retrieve the
+remaining funds faster than the unbonding time. It must equal
+the value specified for unbonding time defined in the
+<a href="./register-bitcoin-stake.md#32-babylon-chain-btc-staking-parameters">Babylon Genesis parameters</a>.</li>
+</ul>
+
+  </article>
+</body>
+</html>
+  

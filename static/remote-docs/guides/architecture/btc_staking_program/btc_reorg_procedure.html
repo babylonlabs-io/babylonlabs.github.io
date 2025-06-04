@@ -24,83 +24,83 @@
   <article>
     
     <h1>Large BTC Reorgs Recovery Procedure</h1>
-<p>Babylon relies in a number of confirmation blocks in BTC to accept BTC
-staking transacitons, this number is defined inside the <code>x/btccheckpoint</code>
+<p>Babylon relies on a number of confirmation blocks on Bitcoin to accept BTC
+staking transactions. This number is defined inside the <code>x/btccheckpoint</code>
 Parameter as <code>BtcConfirmationDepth</code> and as <code>k</code> in the research papers
-which we considerate to be an irreversible block.</p>
-<p>If for some unexpected reason there is a reorg in the bitcoin blockchain
+which we consider to be an irreversible block.</p>
+<p>If for some unexpected reason there is a reorg in the Bitcoin blockchain
 larger than the <code>BtcConfirmationDepth</code>, the chain should halt and revoke all
 the BTC delegations that were recorded until the first reorg block height.</p>
-<p>By example, if BTC is in block height 150 and Babylon chain has a
-<code>BtcConfirmationDepth</code> of 10 and it is submitted a valid BTC reorg of 15 blocks
-that rollbacks BTC to block height 136, every BTC delegation that was included
-in BTC block 136 or higher should be deleted as the inclusion proof will
-be different. BTC delegations that included in the BTC block height 135 or lower
-will not be affected as the BTC rollbacks only happens if there is a better
-chain presented, a better chain means chain with more blocks, so any BTC
+<p>By example, if the Bitcoin chain is in block height 150 and Babylon chain has a
+<code>BtcConfirmationDepth</code> of 10 and it is submitted a valid Bitcoin reorg of 15 blocks
+that rollbacks Bitcoin to block height 136, every BTC delegation that was included
+in Bitcoin block 136 or higher should be deleted as the inclusion proof will
+be different. BTC delegations that are included in the Bitcoin block height 135 or lower
+will not be affected as the Bitcoin rollbacks only happens if there is a better
+chain presented. A better chain means a chain that has more blocks, so any BTC
 delegation included in block 135 or prior would still be considered valid.</p>
 <p>This recovery procedure only cares about the BTC transactions that were executed
 in blocks which have been rollbacked.</p>
 <h2>Chain Halt</h2>
-<p>If the chain halted due to a BTC reorg largest than <code>BtcConfirmationDepth</code>,
-there is a few steps to be followed to gather the data to be modified at the
+<p>If the chain is halted due to a Bitcoin chain reorg larger than <code>BtcConfirmationDepth</code>,
+there are a few steps to be followed to gather the data to be modified by the
 emergency upgrade handler:</p>
-<h3>1. Collect correspondent Babylon height</h3>
-<p>The correlation of BTC and Babylon block heights can be found in the <code>x/btcstaking</code>
+<h3>1. Collect Corresponding Babylon Height</h3>
+<p>The correlation of Bitcoin and Babylon block heights can be found in the <code>x/btcstaking</code>
 state in the <a href="https://github.com/babylonlabs-io/babylon/blob/fcc6fdc009e414da440426e6b81920ceef981de3/x/btcstaking/types/genesis.pb.go#L36">BlockHeightChains</a>,
 currently there is no query for it, but it can be retrieved by exporting the
 genesis state.</p>
-<h3>2. Collect BTC related msgs that were rollbacked</h3>
-<p>After having collected the babylon block height corresponded to the BTC block
+<h3>2. Collect Bitcoin Related Messages that were Rollbacked</h3>
+<p>After having collected the Babylon block height corresponding to the Bitcoin block
 height which the rollback happened, iterate over every transaction until
-the halt block and gather all the messages which were approved and are one of
+the halt block, then gather all the messages which were approved and are of one of
 the types: <code>MsgCreateBTCDelegation</code>, <code>MsgAddBTCDelegationInclusionProof</code>,
 <code>MsgBTCUndelegate</code>, <code>MsgInsertHeaders</code> and <code>MsgInsertBTCSpvProof</code>.</p>
-<h3>3. Analyze each message</h3>
-<p>Each BTC related msg that was rollbacked might need to have a different treatment.</p>
+<h3>3. Analyze Each Message</h3>
+<p>Each Bitcoin related message that was rollbacked might need to have a different treatment.</p>
 <h4>3.1 <code>MsgCreateBTCDelegation</code></h4>
-<p>The msg which creates a new BTC delegation, if doesn't have inclusion proof
-can stay as it is was not active or anything and neither had the inclusion
-proof sent.</p>
-<p>If there was a inclusion proof, verify if the proof is one from the BTC block
-heights which was rollbacked, if it is from an BTC block that was not reorg,
-but it was only later included in the Babylon chain, all good and there is
-nothing to do. Now, if it was rollbacked this BTC staking transaction needs to
-be removed from the following modules state <code>x/btcstaking</code>, <code>x/finality</code>,
+<p>The message which creates a new Bitcoin delegation, if it doesn't have inclusion proof
+can stay as it was not active, and neither had the inclusion
+proof been sent.</p>
+<p>If there was an inclusion proof, verify if the proof is from one of the Bitcoin block
+heights which was rollbacked. If it is from a Bitcoin block that was not reorg,
+but it was only later included in the Babylon chain, this is good and there is
+nothing to do. Now if it was rollbacked, this BTC staking transaction needs to
+be removed from the following modules states <code>x/btcstaking</code>, <code>x/finality</code>,
 <code>x/incentives</code>.</p>
 <ul>
 <li><code>x/btcstaking</code>
 <ul>
 <li>Remove from <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L22"><code>BTCDelegatorKey</code></a>
-the BTC staking tx hash.</li>
+the BTC staking transaction hash.</li>
 <li>Remove from <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L23"><code>BTCDelegationKey</code></a>
-the BTC staking tx hash.</li>
+the BTC staking transaction hash.</li>
 <li>Remove the <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L27"><code>PowerDistUpdateKey</code></a>
 if a <code>EventPowerDistUpdate_BtcDelStateUpdate</code> was emitted for that
-BTC staking tx hash.</li>
+BTC staking transaction hash.</li>
 </ul>
 </li>
 <li><code>x/finality</code>
 <ul>
 <li>Update the voting power amount in <a href="https://github.com/babylonlabs-io/babylon/blob/40f890d56d0bb081a6ce413281cc025f3d8b91d1/x/finality/types/keys.go#L50"><code>VotingPowerKey</code></a>
-by subtracting the satoshi amounts of the finality provider that the BTC
+by subtracting the satoshi amounts of the Finality Provider that the BTC
 delegation delegated to if that BTC delegation was active.</li>
 <li>Subtract the <code>TotalVotingPower</code> and the respective <code>FinalityProviderDistInfo</code>
-based on which finality provider was delegated to in
+based on which Finality Provider was delegated to in
 <a href="https://github.com/babylonlabs-io/babylon/blob/40f890d56d0bb081a6ce413281cc025f3d8b91d1/x/finality/types/keys.go#L51"><code>VotingPowerDistCacheKey</code></a>
 if that BTC delegation was active.</li>
 </ul>
 </li>
 <li><code>x/incentives</code> If that BTC delegation was ever active, there is a need to
-subtract the voting power from the rewards tracker. Also it is only modified
-the values from now on, if rewards were accured from a BTC staking transaction
-that was rollbacked, the past is behind us and it should be let with the funds
-that were accured, losing a few coins in the rewards.
+subtract the voting power from the rewards tracker. Also it only modifies
+the values from now on. If rewards were accrued from a BTC staking transaction
+that was rollbacked, the past is behind us, and it should be left with the funds
+that were accrued, losing a few coins in the rewards.
 <ul>
 <li>For the incentives module state there is a single function which should be
 called <a href="https://github.com/babylonlabs-io/babylon/blob/c8c44be12eb826b41f6f2cd3eae4452268398cdf/x/incentive/keeper/reward_tracker.go#L47"><code>BtcDelegationUnbonded</code></a>
-which receives as parameter the Finality provider and BTC delegator baby
-address and the amount of satoshi from the rollbacked BTC delegation.
+which receives as parameter the Finality Provider and BTC delegator Babylon
+address and the amount of satoshis from the rollbacked BTC delegation.
 This will already update all the keys in the state accordingly.</li>
 </ul>
 </li>
@@ -108,9 +108,9 @@ This will already update all the keys in the state accordingly.</li>
 <blockquote>
 <p>Note transactions that were included during blocks 150 ~ 141 (150 - <code>BtcConfirmationDepth</code>)
 in a 15 Bitcoin blocks rollback are invalid and should be removed but were
-also not  considered deep enough to be active. Dropping those proofs and
+also not considered deep enough to be active. Dropping those proofs and
 the event updates to voting power table is enough to handle during the
-recory procedure.</p>
+recovery procedure.</p>
 </blockquote>
 <h4>3.2 <code>MsgAddBTCDelegationInclusionProof</code></h4>
 <p>Check if the proof is one from the BTC block heights which was rollbacked,
@@ -119,27 +119,25 @@ the same steps defined in <a href="#31-msgcreatebtcdelegation">3.1</a> need to b
 to remove the data from the 3 modules states.</p>
 <h4>3.3 <code>MsgBTCUndelegate</code></h4>
 <p>Check if the inclusion proof had a reorg in the BTC blocks, if it is not
-rollbacked, there is nothing to do. If it was rollbacked it is needed
-to remove the existence of this BTC undelegation and affecting 3 modules state
-with similar steps took at <a href="#31-msgcreatebtcdelegation">3.1</a>.</p>
+rollbacked, there is nothing to do. If it was rollbacked, remove the existence of this BTC undelegation and the affecting 3 modules states with similar steps taken at <a href="#31-msgcreatebtcdelegation">3.1</a>.</p>
 <ul>
 <li><code>x/btcstaking</code>
 <ul>
 <li>Clean out the field for <code>BtcUndelegation</code> in <code>BTCDelegation</code> for the key
 <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L23"><code>BTCDelegationKey</code></a>
-in which corresponds to the BTC staking tx hash.</li>
+in which corresponds to the BTC staking transaction hash.</li>
 <li>Remove the <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L27"><code>PowerDistUpdateKey</code></a>
 if a <code>EventPowerDistUpdate_BtcDelStateUpdate</code> was emitted for that
-BTC staking tx hash with Undelegate.</li>
+BTC staking transaction hash with Undelegate.</li>
 </ul>
 </li>
 <li><code>x/finality</code>
 <ul>
 <li>Update the voting power amount in <a href="https://github.com/babylonlabs-io/babylon/blob/40f890d56d0bb081a6ce413281cc025f3d8b91d1/x/finality/types/keys.go#L50"><code>VotingPowerKey</code></a>
-by adding the satoshi amounts of the finality provider that the BTC
+by adding the satoshi amounts of the Finality Provider that the BTC
 delegation delegated to.</li>
 <li>Add the <code>TotalVotingPower</code> and the respective <code>FinalityProviderDistInfo</code>
-based on which finality provider was delegated to in
+based on which Finality Provider was delegated to in
 <a href="https://github.com/babylonlabs-io/babylon/blob/40f890d56d0bb081a6ce413281cc025f3d8b91d1/x/finality/types/keys.go#L51"><code>VotingPowerDistCacheKey</code></a>.</li>
 </ul>
 </li>
@@ -147,8 +145,8 @@ based on which finality provider was delegated to in
 <ul>
 <li>For the incentives module state there is a single function which should be
 called <a href="https://github.com/babylonlabs-io/babylon/blob/c8c44be12eb826b41f6f2cd3eae4452268398cdf/x/incentive/keeper/reward_tracker.go#L34"><code>BtcDelegationActivated</code></a>
-which receives as parameter the Finality provider and BTC delegator baby
-address and the amount of satoshi from the rollbacked BTC undelegate.
+which receives as parameter the Finality Provider and BTC delegator Babylon
+address and the amount of satoshis from the rollbacked BTC undelegate.
 This will already update all the keys in the state accordingly.</li>
 </ul>
 </li>
@@ -157,28 +155,28 @@ This will already update all the keys in the state accordingly.</li>
 <p>The module <code>x/btclightclient</code> automatically handles the rollback of blocks, the issue
 relies when the Babylon chain was halted while Bitcoin was producing new blocks, the
 new blocks should have it's headers collected and included into the Babylon chain
-state when it is being recovered. If the headers are not insterted, an attacker
+state when it is being recovered. If the headers are not inserted, an attacker
 could mine just 1-2 blocks on the forked Bitcoin chain and cause Babylon chain
 to execute fake delegations, right after Babylon chain restarts. To avoid this,
-Babylon should insert headers of the created Bitcoind blocks while it was
+Babylon should insert headers of the created Bitcoin blocks while it was
 down during the recovery procedure.</p>
 <h4>3.5 <code>MsgInsertBTCSpvProof</code></h4>
-<p>All the proofs that were sent by the vigilante reporter in the Bitcoin blocks
+<p>All the proofs that were sent by the Vigilante Reporter in the Bitcoin blocks
 that were affected by the rollback, will need to be revoked and might modify
-the status of checkpoints, the recovery procedure for this specific case
-might also need to modify the vigilante to send again transactions of
+the status of checkpoints. The recovery procedure for this specific case
+might also need to modify the Vigilante to send again transactions of
 checkpoints to the main chain of Bitcoin. This inserted proofs will
-then need to be included into Babylon state and update checkpoint status
-accordingly to chain configuration of <code>BtcConfirmationDepth</code> and
+then need to be included into the Babylon state and checkpoint status updated
+accordingly to the chain configuration of <code>BtcConfirmationDepth</code> and
 <code>CheckpointFinalizationTimeout</code> in the <code>x/btccheckpoint</code> module.</p>
 <h3>4. Overall updates</h3>
 <p>Beside the specific cases of the messages sent, there is also the need
-to update some state about the new heights as in:</p>
+to update some states about the new heights as in:</p>
 <ul>
 <li><code>x/btcstaking</code>
 <ul>
 <li>Update <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L25"><code>BTCHeightKey</code></a>
-the babylon height corresponded to the BTC block height</li>
+the Babylon height corresponding to the BTC block height</li>
 <li>Remove the <a href="https://github.com/babylonlabs-io/babylon/blob/7727f91491d5b8ddd6c10fa285ef3bea8a5ded4d/x/btcstaking/types/keys.go#L32"><code>LargestBtcReorgInBlocks</code></a>
 value previous set, to avoid halting again from the same BTC reorg.</li>
 </ul>
@@ -186,18 +184,15 @@ value previous set, to avoid halting again from the same BTC reorg.</li>
 </ul>
 <h3>Create the emergency upgrade handler</h3>
 <p>The emergency upgrade handler is called a
-<a href="https://github.com/babylonlabs-io/babylon/blob/b56406b48b3d3b541c8aa57fe4490edb0fbff6a8/app/upgrades/types.go#L43"><code>Fork</code></a> in the structures as the chain is halted
-and there is no possibility to create a software upgrade proposal
-that handles nicely the upgrade plan. So, the fork structure
+<a href="https://github.com/babylonlabs-io/babylon/blob/b56406b48b3d3b541c8aa57fe4490edb0fbff6a8/app/upgrades/types.go#L43"><code>Fork</code></a> in the structures as the chain is halted and there is no possibility to create a software upgrade proposal
+that nicely handles the upgrade plan. So, the fork structure
 would contain as the name something that correlates with the BTC block heights
 which were reorg, the upgrade height would be defined as the Babylon block
 height in which the panic for reorg happened and the <code>BeginForkLogic</code>
 should contain a single function that modifies the keepers with the data
 collected during step <a href="#3-analyze-each-message">3</a>.</p>
 <p>After that, tag a new release with the emergency upgrade in it, following
-the <a href="../../../RELEASE_PROCESS.md#release-procedure">Release Procedure</a>
-test the logic in a private enviroment and if it all the state is modified
-as expected, announce the new binary for validators.</p>
+the <a href="../../../RELEASE_PROCESS.md#release-procedure">Release Procedure</a>. Test the logic in a private environment and if all the state is modified as expected, announce the new binary for Validators.</p>
 
   </article>
 </body>
