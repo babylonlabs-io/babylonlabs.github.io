@@ -8,7 +8,6 @@ import Head from '@docusaurus/Head';
 import GuidesAndSamples from '../components/homepage/GuidesAndSamples';
 import ToolsAndInfra from '../components/homepage/ToolsAndInfra';
 import BlogSection from '../components/homepage/BlogSection';
-
 export default function Homepage() {
   return (
     <Layout
