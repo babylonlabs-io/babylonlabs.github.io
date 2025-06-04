@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Tag } from '@styled-icons/bootstrap/Tag';
 import Admonition from '@theme/Admonition';
+import sanitizeHtml from 'sanitize-html';
 
 function extractRepoInfo(url) {
   const urlParts = url.split('/');
@@ -165,7 +166,15 @@ export default function RemoteMD({
       const response = await fetch(mdUrl);
       if (!response.ok) throw new Error('Document not found');
       const text = await response.text();
-      setMarkdown(text.replace(/<!--[\s\S]*?-->/g, '')); // 支持去注释
+      setMarkdown(
+        sanitizeHtml(text, {
+          allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+          allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            img: ['src', 'alt']
+          }
+        })
+      );
       setErrorMessage('');
     } catch (e) {
       setMarkdown('');
