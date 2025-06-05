@@ -7,6 +7,7 @@ import HomeFooter from '../components/homepage/HomeFooter';
 import Head from '@docusaurus/Head';
 import GuidesAndSamples from '../components/homepage/GuidesAndSamples';
 import ToolsAndInfra from '../components/homepage/ToolsAndInfra';
+import BlogSection from '../components/homepage/BlogSection';
 export default function Homepage() {
   return (
     <Layout
@@ -21,6 +22,7 @@ export default function Homepage() {
       <HeroSection/>
       <ToolsAndInfra/>
       <GuidesAndSamples/>
+      <BlogSection />
       <CommunitySection/>
       <HomeFooter/>
     </Layout>

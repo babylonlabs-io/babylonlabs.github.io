@@ -13,9 +13,6 @@ import RemoteMD from '@site/src/components/RemoteMD';
 export const rawUrl="https://raw.githubusercontent.com/babylonchain/networks/refs/heads/main/bbn-test-4/parameters/README.md";
 
 <RemoteMD
-  networkVersions={{
-    testnet: rawUrl
-  }}
-  hideEnv={false}
-  hideRelease={true}
+  rawUrl={rawUrl}
+  hideRelease={false}
 />

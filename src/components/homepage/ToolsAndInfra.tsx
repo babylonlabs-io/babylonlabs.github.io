@@ -31,10 +31,10 @@ function PartnerCard({
       <Link to={tileLink} className="mb-1 aspect-square w-full max-w-[80px] flex items-center justify-center p-1">
         <img src={icon} className="max-w-full max-h-full object-contain" alt={`${name} logo`} />
       </Link>
-      <Link to={tileLink} className="text-white mb-1 font-medium hover:text-primary text-s">{name}</Link>
+      <Link to={tileLink} className="text-black dark:text-white mb-1 font-medium hover:text-primary dark:hover:text-primary text-s">{name}</Link>
       <div className="flex gap-1">
         {Object.entries(socialLinks).map(([platform, url]) => (
-          <Link key={platform} to={url} className="text-white hover:text-primary">
+          <Link key={platform} to={url} className="text-black dark:text-white hover:text-primary dark:hover:text-primary">
             {platform === 'twitter' && <Twitter className="h-4 w-4" />}
             {platform === 'website' && <OpenRegular className="h-4 w-4" />}
           </Link>

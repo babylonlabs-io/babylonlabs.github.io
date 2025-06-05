@@ -25,13 +25,15 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT:
-            'rgb(var(--docs-color-primary-200, 206 101 51) / <alpha-value>)', // #ce6533
-          100: 'rgb(var(--docs-color-primary-100, 218 125 79) / <alpha-value>)', // Lighter
-          200: 'rgb(var(--docs-color-primary-200, 206 101 51) / <alpha-value>)', // Default
+            'rgb(var(--docs-color-primary-200, 190 220 201) / <alpha-value>)', // #ce6533
+          100: 'rgb(var(--docs-color-primary-100, 190 220 201) / <alpha-value>)', // Lighter
+          200: 'rgb(var(--docs-color-primary-200, 190 220 201) / <alpha-value>)', // Default
         },
         secondary: {
           DEFAULT:
-            'rgb(var(--docs-color-secondary-1000, 128 63 30) / <alpha-value>)', // Darkest
+            'rgb(var(--docs-color-secondary-1000, 51 197 206) / <alpha-value>)', // Darkest
+          100: 'rgb(var(--docs-color-primary-100, 51 197 206) / <alpha-value>)', // Dark
+          200: 'rgb(var(--docs-color-primary-200, 51 197 206) / <alpha-value>)', // Dark
           1000: 'rgb(var(--docs-color-secondary-1000, 128 63 30) / <alpha-value>)', // Darkest
           900: 'rgb(var(--docs-color-secondary-900, 153 77 38) / <alpha-value>)', // Darker
           800: 'rgb(var(--docs-color-secondary-800, 179 88 44) / <alpha-value>)', // Dark
