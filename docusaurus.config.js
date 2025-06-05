@@ -191,14 +191,24 @@ const config = {
             className: 'guides-top-header',
           },
           {
-            label: 'Operators',
-            to: '/operators/',
-            className: 'operators-top-header',
+            label: 'Stakers',
+            to: '/stakers/',
+            className: 'stakers-top-header',
           },
           {
             label: 'Developers',
             to: '/developers/',
             className: 'developers-top-header',
+          },
+          {
+            label: 'Operators',
+            to: '/operators/',
+            className: 'operators-top-header',
+          },
+          {
+            label: 'BSNs',
+            to: '/bsns/',
+            className: 'bsns-top-header',
           },
           {
             label: 'API',
@@ -217,7 +227,7 @@ const config = {
             ],
           },
           {
-            label: 'Participate',
+            label: 'Community',
             to: 'https://babylonlabs.io/community',
           },
           {

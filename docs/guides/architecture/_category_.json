@@ -1,7 +1,7 @@
 {
   "position": 2,
   "label": "Architecture",
-  "collapsible": true,
-  "collapsed": true,
+  "collapsible": false,
+  "collapsed": false,
   "className": "architecture_sidebar_header"
 }
