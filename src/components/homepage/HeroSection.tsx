@@ -6,7 +6,6 @@ import {
   TetrisAppRegular,
   DocumentChevronDoubleRegular,
 } from '@fluentui/react-icons';
-import ThemedImage from '@theme/ThemedImage';
 import clsx from 'clsx';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 
@@ -57,9 +56,7 @@ function HeroProduct({
   link,
   title,
   icon: Icon,
-  text,
-  lightImage,
-  darkImage
+  text
 }: 
 (typeof PRODUCTS)[0]) {
   return (
@@ -78,16 +75,8 @@ function HeroProduct({
           <Icon className="h-7 w-7" />
           <div>{title}</div>
         </h3>
-        <p className="mb-0 text-sm text-zinc-700">{text}</p>
+        <p className="mb-0 text-sm text-zinc-700 dark:text-zinc-400">{text}</p>
       </div>
-      {/* <ThemedImage
-        sources={{
-          light: lightImage,
-          dark: darkImage,
-        }}
-        alt={title}
-        className="mt-1 w-full transition-transform group-hover:scale-110"
-      /> */}
     </Link>
   );
 }
@@ -97,8 +86,6 @@ export default function HeroSection() {
 
   const processedProducts = PRODUCTS.map((product) => ({
     ...product,
-    // lightImage: withBaseUrl(product.lightImage),
-    // darkImage: withBaseUrl(product.darkImage),
     link: withBaseUrl(product.link),
   }));
 
