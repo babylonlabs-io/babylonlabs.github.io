@@ -17,13 +17,14 @@ function getSrcFromThemedImageProps(props, isDarkTheme) {
 export default function ThemedImage(props) {
   const { colorMode } = useColorMode();
   const curSrc = getSrcFromThemedImageProps(props, colorMode);
+  const { isLogo, ...restProps } = props;
   // Exclude navbar logo from Zoom effect
-  if (props.isLogo || (typeof props.src === 'string' && props.src.includes('logo'))) {
-    return <OriginalThemedImage {...props} />;
+  if (isLogo || (typeof props.src === 'string' && props.src.includes('logo'))) {
+    return <OriginalThemedImage {...restProps} />;
   }
   return (
     <Zoom key={curSrc + colorMode}>
-      <OriginalThemedImage {...props} />
+      <OriginalThemedImage {...restProps} />
     </Zoom>
   );
 }

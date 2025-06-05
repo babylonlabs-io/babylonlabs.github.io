@@ -58,7 +58,7 @@
     --docs-color-primary-100: 51 197 206; /* Lighter shade of #BEDCC9 */
     --docs-color-primary-200: 51 197 206; /* #BEDCC9 */
 
-    --docs-color-secondary-700: 237 237 240;
+    --docs-color-secondary-700: 212 230 219;
     --docs-color-secondary-800: 243 246 244;
     --docs-color-secondary-900: 247 250 248;
     --docs-color-secondary-1000: 255 255 255;
@@ -73,7 +73,7 @@
 
     --docs-color-text-400: 160 160 160; /* Softer muted dark text */
 
-    --docs-color-secondary-700: 71 71 71;
+    --docs-color-secondary-700: 16 42 54;
     --docs-color-secondary-800: 38 38 38;
     --docs-color-secondary-900: 32 32 32;
     --docs-color-secondary-1000: 0 0 0;
@@ -949,7 +949,7 @@ img[src$='#terminal'] {
   --ifm-link-hover-color: inherit;
   cursor: pointer;
   @apply flex flex-row items-center;
-  @apply border-secondary-800 bg-secondary-900 hover:bg-secondary-800;
+  @apply border-secondary-800 bg-secondary-700 hover:bg-secondary-800;
   border-width: 1px;
   transition-property: background-color, color;
 
@@ -1003,8 +1003,8 @@ details {
   font-size: 14px;
   font-weight: 500;
   color: var(--docs-color-text-100) !important;
-  background: var(--docs-color-background-100) !important;
-  border: solid 2px var(--docs-color-code-background) !important;
+  background: var(--ifm-pre-background) !important;
+  border: solid 2px var(--ifm-pre-background) !important;
 }
 
 details code {
@@ -1647,7 +1647,6 @@ h3.anchor > code {
   justify-content: center;
   align-items: center;
   padding: 40px 0;
-  background-color: var(--docs-color-background-100);
 }
 
 .blog-container{
@@ -1668,7 +1667,6 @@ h3.anchor > code {
   max-width: 380px;
   min-width: 280px;
   position: relative;
-  background: var(--docs-color-background);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   overflow: hidden;
@@ -1707,7 +1705,6 @@ h3.anchor > code {
   font-weight: 500;
   padding: 4px 12px;
   border-radius: 20px;
-  background: var(--docs-color-background);
   transition: all 0.2s;
 }
 
@@ -1729,6 +1726,25 @@ h3.anchor > code {
 
 .navbar__logo img{
   cursor: pointer !important;
+}
+
+.openapi-explorer__code-block{
+  background: none !important;
+}
+
+.openapi-explorer__code-block-code-line-number{
+  background: none !important;
+}
+
+.openapi-explorer__form-item-input{
+  background: none !important;
+}
+
+.openapi-explorer__server-container{
+  background: none !important;
+}
+.openapi-explorer__select-input{
+    background: none !important;
 }
 
 /*FOR MOBILE SCREEN SIZE*/
