@@ -22,11 +22,13 @@ for example, X→ Y means "Y queries data from X and the data flows from X to Y"
     dark: useBaseUrl('/img/cosmos-integration.png'),
   }}
 />
+<br />
 
 The design involves the following main components:
 
-- **Finality Provider:** a daemon program that receives BTC stake and keeps submitting
-finality signatures over blocks to the BSN chain.
+### Finality Provider
+
+A daemon program that receives BTC stake and keeps submitting finality signatures over blocks to the BSN chain.
   - It connects to a BSN chain node to query block metadata.
   - It connects to the Babylon contracts on the BSN chain for querying voting
 power and submitting finality signatures.
@@ -38,8 +40,9 @@ Upon a new block in the BSN chain, it:
 voting power at this height.
   - If yes, sign and submit a finality signature to the Babylon contracts.
 
-- **Babylon Contracts:** a set of CosmWasm smart contracts that maintains IBC channels
-with Babylon and handles finality signatures submitted from Finality Providers
+### Babylon Contracts
+
+A set of CosmWasm smart contracts that maintains IBC channels with Babylon and handles finality signatures submitted from Finality Providers
   - It will be deployed on the BSN chain.
   - It establishes an IBC channel with Babylon. The IBC channel relays information
 about BTC light clients, BTC timestamps and BTC staking.
@@ -53,8 +56,9 @@ Upon a finality signature, the Babylon contracts verify it:
 packet to Babylon. Then Babylon emits an event so anyone can slash the Finality
 Provider and the BTC stake under it.
 
-- **Babylon-SDK:** a small Cosmos SDK module serving as a thin layer between Babylon
-contracts and Cosmos SDK level of the BSN chain.
+### Babylon-SDK
+
+A small Cosmos SDK module serving as a thin layer between Babylon contracts and Cosmos SDK level of the BSN chain.
   - It sends a sudo message to the Babylon contracts upon each `BeginBlock` , so that
 Babylon contracts can update voting power table and tally blocks.
   - It moves a part of the reward from the fee collector account to Babylon contracts,
