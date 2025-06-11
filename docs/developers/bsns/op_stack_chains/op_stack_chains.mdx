@@ -21,10 +21,12 @@ The design involves the following main components:
     light: useBaseUrl('/img/op-stack-integration.png'),
     dark: useBaseUrl('/img/op-stack-integration.png'),
   }}
-/>;
+/>
+<br />
 
-- **Finality Provider:** a daemon program that receives BTC stake and keeps
-submitting finality signatures over L2 blocks to the finality contract on Babylon.
+### Finality Provider
+
+A daemon program that receives BTC stake and keeps submitting finality signatures over L2 blocks to the finality contract on Babylon.
   - It connects to a Babylon node to query its voting power.
   - It connects to the finality contract via the Babylon node for submitting
 finality signatures.
@@ -35,7 +37,10 @@ Upon a new L2 block in the OP-stack chain, It:
   - Gets the L2 block metadata.
   - Queries Babylon Genesis to determine whether it has voting power at this L2 block height.
   - If yes, sign and submit a finality signature to the finality contract.
-- **Finality contract:** a CosmWasm smart contract that maintains all finality signatures submitted from OP-stack Finality Providers.
+
+### Finality Contract
+
+A CosmWasm smart contract that maintains all finality signatures submitted from OP-stack Finality Providers.
   - It will be deployed on Babylon Genesis.
   - It will query Babylon Genesis to determine the Finality Provider’s status and voting power.
 
@@ -44,7 +49,10 @@ Upon a finality signature, the finality contract verifies it and identifies equi
   - If invalid, reject.
   - If valid and non-conflicting with any existing ones, accept.
   - If valid but conflicting with an existing finality signature, it emits an event so anyone can slash the Finality Provider and the BTC stake under it.
-- **Finality gadget**: a daemon program that keeps tallying all finality signatures for L2 blocks and serves RPC to allow querying the BTC-voting quorum of those blocks.
+
+### Finality Gadget
+
+A daemon program that keeps tallying all finality signatures for L2 blocks and serves RPC to allow querying the BTC-voting quorum of those blocks.
   - It connects to a Babylon node for querying the voting power of Finality Providers.
   - It connects to the finality contract via the Babylon node for querying finality signatures.
   - It connects to an RPC of the OP stack chain to get L2 block metadata.
@@ -55,7 +63,10 @@ Upon a new L2 block in the OP-stack chain, it:
   - Queries Babylon to get all Finality Providers’ BTC delegations for this chain and use the L2 block’s timestamp to determine the voting power distribution among all its Finality Providers at the time of this block.
   - Tallies finality signatures and determines whether the L2 block receives a quorum.
   - If this L2 block receives a quorum and its parent block is also BTC staking-finalized, marks it as BTC staking-finalized and stores it in the finality gadget’s local database.
-- **OP node with finality gadget:** a modified OP node that enforces BTC-voting quorum before finalizing L2 blocks.
+
+### OP Node with Finality Gadget
+
+A modified OP node that enforces BTC-voting quorum before finalizing L2 blocks.
   - It connects to the finality gadget for querying consecutive BTC-voting quorums to determine the finalization status of the L2 blocks.
   - It notifies OP-geth about the L2 blocks’ finalization status to move the L2 finalized block head.
 
@@ -81,6 +92,6 @@ We have finished the reference implementation. The codebases include:
 We have developed local deployment scripts for the OP stack integration.
 
 - https://github.com/Snapchain/babylon-deployment for spinning up an OP stack chain integrating with Babylon Euphrates devnet
-- https://github.com/Snapchain/op-chain-deployment for spinning up the entire stack (OP stack chain + ETH L1 + Babylon + Bitcoin)
+- https://github.com/Snapchain/op-chain-deployment for spinning up the entire stack (OP stack chain + ETH L1 + Babylon Genesis + Bitcoin)
 
 ---
