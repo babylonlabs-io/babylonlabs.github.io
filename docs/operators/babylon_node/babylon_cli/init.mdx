@@ -1,0 +1,384 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: init
+sidebar_position: 12
+---
+
+# init
+
+Initialize the configuration files for the validator and node. This command sets up the essential directory structure, configuration files, and cryptographic keys needed to run a Babylon node, including the generation and encryption of BLS keys for checkpointing participation.
+
+## Overview
+
+The `init` command is typically the first command run when setting up a new Babylon node. It creates the node's home directory structure, generates validator keys (including BLS keys), and creates initial configuration files with sensible defaults.
+
+```bash
+babylond init [moniker] [flags]
+```
+
+## Prerequisites
+
+- **System Requirements**: Sufficient disk space and permissions to create the home directory
+- **No prior setup**: This command creates everything from scratch (use `--overwrite` to reinitialize)
+- **Backup considerations**: If reinitializing, backup existing keys and configuration
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `moniker` | A human-readable name for your node (used for identification in the network) |
+
+## Flags
+
+### Basic Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--chain-id` | string | Random | Genesis file chain-id (leave blank for random generation) |
+| `--default-denom` | string | `stake` | Genesis file default denomination |
+| `--initial-height` | int | `1` | Specify the initial block height at genesis |
+| `--home` | string | `~/.babylond` | Node's home directory |
+
+### BLS Key Configuration
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--insecure-bls-password` | string | The password for the BLS key (prompted if not provided) |
+| `--no-bls-password` | | Use an empty password for the BLS key |
+
+### Initialization Options
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `-o, --overwrite` | | Overwrite existing configuration files |
+| `--recover` | | Provide seed phrase to recover existing key instead of creating new |
+| `-h, --help` | | Help for init |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+
+## Examples
+
+### Basic Node Initialization
+
+Initialize a new node with default settings:
+
+```bash title="Basic initialization"
+babylond init my-babylon-node
+```
+
+### Custom Chain Configuration
+
+Initialize with specific chain and denomination settings:
+
+```bash title="Custom chain configuration"
+babylond init my-validator \
+  --chain-id babylon-1 \
+  --default-denom ubbn \
+  --initial-height 1
+```
+
+### Custom Home Directory
+
+Initialize node in a specific location:
+
+```bash title="Custom home directory"
+babylond init testnet-node \
+  --home /opt/babylon/testnet \
+  --chain-id babylon-testnet-1
+```
+
+### Recovery from Existing Keys
+
+Recover a node from existing mnemonic:
+
+```bash title="Node recovery"
+babylond init recovered-node \
+  --chain-id babylon-1 \
+  --recover
+# Will prompt for mnemonic phrase
+```
+
+### Development Setup
+
+Initialize for development with insecure but convenient settings:
+
+```bash title="Development initialization"
+babylond init dev-node \
+  --chain-id babylon-dev \
+  --no-bls-password \
+  --home ./dev-babylon
+```
+
+### Production Validator Setup
+
+Initialize production validator with secure BLS key:
+
+```bash title="Production validator initialization"
+babylond init "Babylon Validator" \
+  --chain-id babylon-1 \
+  --default-denom ubbn \
+  --home /var/lib/babylond
+# Will prompt for secure BLS password
+```
+
+### Reinitialize Existing Node
+
+Overwrite existing configuration (backup first!):
+
+```bash title="Reinitialize with backup"
+# Backup existing configuration
+cp -r ~/.babylond ~/.babylond.backup.$(date +%Y%m%d_%H%M%S)
+
+# Reinitialize
+babylond init "New Config" --overwrite
+```
+
+## Created Directory Structure
+
+After successful initialization, the following structure is created:
+
+```text title="Node directory structure"
+~/.babylond/
+├── config/
+│   ├── app.toml              # Application configuration
+│   ├── client.toml           # Client configuration  
+│   ├── config.toml           # CometBFT configuration
+│   ├── genesis.json          # Genesis file
+│   ├── node_key.json         # Node P2P identity key
+│   └── priv_validator_key.json # Validator consensus key + BLS key
+└── data/
+    └── priv_validator_state.json # Validator state tracking
+```
+
+### Key Files Explained
+
+**Configuration Files:**
+- `config.toml` - CometBFT consensus engine settings
+- `app.toml` - Babylon application settings (API, gRPC, etc.)
+- `client.toml` - CLI client default settings
+- `genesis.json` - Network genesis state
+
+**Cryptographic Keys:**
+- `priv_validator_key.json` - Ed25519 consensus key + BLS keys
+- `node_key.json` - P2P networking identity
+
+**State Files:**
+- `priv_validator_state.json` - Tracks validator signing state
+
+## BLS Key Integration
+
+Unlike standard Cosmos SDK chains, Babylon automatically generates BLS keys during initialization:
+
+### BLS Key Structure in priv_validator_key.json
+
+```json title="Validator key file with BLS keys"
+{
+  "address": "1234567890ABCDEF1234567890ABCDEF12345678",
+  "pub_key": {
+    "type": "tendermint/PubKeyEd25519",
+    "value": "..."
+  },
+  "priv_key": {
+    "type": "tendermint/PrivKeyEd25519", 
+    "value": "..."
+  },
+  "bls_key": {
+    "pub_key": "...",
+    "pop": "...",
+    "encrypted_priv_key": "..."
+  }
+}
+```
+
+### BLS Password Management
+
+```bash title="BLS password options"
+# Secure: Prompted for password (recommended for production)
+babylond init my-validator
+
+# Insecure: Password via flag (not recommended for production)
+babylond init dev-node --insecure-bls-password "dev-password"
+
+# No password: Empty password (testing only)
+babylond init test-node --no-bls-password
+```
+
+## Validation and Verification
+
+### Verify Successful Initialization
+
+```bash title="Post-initialization verification"
+# Check directory structure
+ls -la ~/.babylond/
+ls -la ~/.babylond/config/
+
+# Verify key files exist and are valid JSON
+jq empty ~/.babylond/config/priv_validator_key.json && echo "✅ Validator keys valid"
+jq empty ~/.babylond/config/genesis.json && echo "✅ Genesis file valid"
+
+# Check BLS keys were generated
+jq '.bls_key' ~/.babylond/config/priv_validator_key.json | grep -v null && echo "✅ BLS keys present"
+
+# Verify file permissions
+ls -la ~/.babylond/config/priv_validator_key.json  # Should be 600
+```
+
+### Configuration Validation
+
+```bash title="Validate configuration"
+# Test configuration loading
+babylond start --dry-run
+
+# Check specific configurations
+babylond config view app | head -20
+babylond config view config | head -20
+
+# Verify chain-id setting
+jq '.chain_id' ~/.babylond/config/genesis.json
+```
+
+## Complete Node Setup Workflows
+
+### New Validator Setup
+
+```bash title="Complete validator initialization workflow"
+# 1. Initialize the node
+babylond init "My Babylon Validator" \
+  --chain-id babylon-1 \
+  --default-denom ubbn
+
+# 2. Verify initialization
+jq '.bls_key != null' ~/.babylond/config/priv_validator_key.json
+
+# 3. Configure networking (edit config.toml)
+sed -i 's/external_address = ""/external_address = "tcp:\/\/YOUR_IP:26656"/' ~/.babylond/config/config.toml
+
+# 4. Set up validator account
+babylond keys add validator-key
+
+# 5. Add genesis account (for genesis ceremony)
+babylond add-genesis-account validator-key 100000000ubbn
+
+# 6. Create genesis transaction
+babylond gentx validator-key 50000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "My Babylon Validator"
+
+echo "✅ Validator initialization completed"
+```
+
+### Testnet Participation
+
+```bash title="Testnet node setup"
+# Initialize for testnet
+babylond init testnet-validator \
+  --chain-id babylon-testnet-1 \
+  --home ~/.babylond-testnet
+
+# Download testnet genesis
+wget -O ~/.babylond-testnet/config/genesis.json \
+  https://github.com/babylonchain/networks/raw/main/testnet/genesis.json
+
+# Verify genesis
+babylond validate-genesis --home ~/.babylond-testnet
+
+# Configure for testnet
+sed -i 's/minimum-gas-prices = ""/minimum-gas-prices = "0.005ubbn"/' \
+  ~/.babylond-testnet/config/app.toml
+
+echo "✅ Testnet node initialized"
+```
+
+### Development Environment
+
+```bash title="Development setup"
+# Create development environment
+mkdir -p ./babylon-dev
+babylond init dev-node \
+  --home ./babylon-dev \
+  --chain-id babylon-dev \
+  --no-bls-password
+
+# Create multiple validators for local testnet
+for i in {1..3}; do
+  babylond init "validator-$i" \
+    --home "./babylon-dev/validator$i" \
+    --chain-id babylon-dev \
+    --no-bls-password
+done
+
+echo "✅ Development environment created"
+```
+
+### Network Migration
+
+```bash title="Migrate to new network version"
+# Backup current setup
+BACKUP_DIR="$HOME/.babylond.backup.$(date +%Y%m%d_%H%M%S)"
+cp -r ~/.babylond "$BACKUP_DIR"
+
+# Initialize for new network
+babylond init "Migrated Validator" \
+  --chain-id babylon-2 \
+  --overwrite
+
+# Restore validator keys if needed
+# (Manual process - copy specific keys from backup)
+
+echo "✅ Network migration initialized"
+echo "Backup stored at: $BACKUP_DIR"
+```
+
+## Security Considerations
+
+:::danger Critical Security Notes
+- **Private Key Protection**: The generated validator keys control your node and funds
+- **BLS Key Security**: BLS keys are essential for checkpointing participation
+- **File Permissions**: Ensure priv_validator_key.json has restrictive permissions (600)
+- **Backup Strategy**: Immediately backup all generated keys securely
+:::
+
+:::warning Production Security
+- **Use strong BLS passwords** in production environments
+- **Never use `--no-bls-password`** except for testing
+- **Secure the initialization environment** - preferably offline
+- **Validate file permissions** after initialization
+:::
+
+:::info Operational Security
+- **Monitor key file integrity** with checksums
+- **Implement backup procedures** for all key files
+- **Use secure storage** for key backups
+- **Document recovery procedures** for your team
+:::
+
+## Best Practices
+
+:::tip Node Setup
+- **Choose meaningful monikers** that identify your node purpose
+- **Use consistent naming** across environments (mainnet, testnet)
+- **Set appropriate chain-id** for your target network
+- **Configure custom home directories** for multiple nodes
+:::
+
+:::note Environment Management
+- **Separate home directories** for different networks
+- **Use descriptive chain-ids** for custom networks
+- **Document initialization parameters** for reproducibility
+- **Test initialization** on non-production systems first
+:::
+
+:::warning Key Management
+- **Backup immediately** after initialization
+- **Test key recovery** procedures
+- **Use hardware security modules** for production validators
+- **Implement key rotation** strategies
+:::
+

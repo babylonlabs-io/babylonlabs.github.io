@@ -1,0 +1,414 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: gen-helpers
+sidebar_position: 8
+---
+
+# gen-helpers
+
+Useful commands for creating the genesis state with Babylon-specific Bitcoin staking data. These specialized utilities help network coordinators bootstrap the Babylon chain with initial Bitcoin delegations, headers, and finality providers.
+
+## Overview
+
+The `gen-helpers` command group provides utilities for incorporating Bitcoin staking-specific data into the genesis.json file. These commands are essential for initializing the Babylon network with pre-existing Bitcoin staking relationships and finality provider configurations.
+
+```bash
+babylond gen-helpers [command] [flags]
+```
+
+## Quick Reference
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| [`set-btc-delegations`](#set-btc-delegations) | Set BTC delegations from JSON file | Initialize BTC staking delegations |
+| [`set-btc-headers`](#set-btc-headers) | Set BTC headers from JSON file | Bootstrap Bitcoin header chain |
+| [`set-finality-providers`](#set-finality-providers) | Set finality providers from JSON file | Configure initial finality providers |
+
+## Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+---
+
+## set-btc-delegations
+
+Reads BTC delegation structures from a JSON file and updates the genesis.json file in place to include the delegations in the btcstaking module's genesis state. This command is used to bootstrap the network with existing Bitcoin staking delegations.
+
+### Usage
+
+```bash
+babylond gen-helpers set-btc-delegations [path/to/btc_delegations.json] [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `path/to/btc_delegations.json` | Path to the JSON file containing BTC delegation structures |
+
+### BTC Delegations JSON Structure
+
+```json title="btc_delegations.json example"
+{
+  "btc_delegations": [
+    {
+      "babylon_pk": {
+        "key": "AkCmkLYWjr0/49MCK3lzTqKC1MiPSldXgoqP0EdtV8m1"
+      },
+      "btc_pk": "5ea8d7dfe920f5aecb1f4411b1b3e6684031ecb7a282df65107a615adc562a48",
+      "pop": {
+        "btc_sig_type": "BIP340",
+        "babylon_sig": "gjqXTQdgzC6AX/lnj3T3QV5vV+jtKDKwJOP9jMpZdb90MoIKRGV7j/A6lwbgsnUzbsvd4L19U7/3cOZqYBfQAg==",
+        "btc_sig": "Gx0VxuXgjiLvdCIIx1eN9JE9mqo+qvIv48cUhTCbM6uTxt59HTJiVGloHE518OXk+vQrNcHB+bZFqX+T5wMS9w=="
+      },
+      "fp_btc_pk_list": [
+        "3d6a1db7bffaebed71831fae74d32bf78e97884c41634cc1a80b0ebbffe1c7dd"
+      ],
+      "start_height": "127",
+      "end_height": "10127",
+      "total_sat": "1000000",
+      "staking_tx": "...",
+      "staking_output_idx": 0,
+      "slashing_tx": "...",
+      "delegator_sig": "...",
+      "covenant_sigs": [...],
+      "unbonding_time": 101,
+      "btc_undelegation": {...},
+      "params_version": 0
+    }
+  ]
+}
+```
+
+### Examples
+
+```bash title="Set BTC delegations"
+babylond gen-helpers set-btc-delegations ./genesis-data/btc_delegations.json
+```
+
+```bash title="Custom home directory"
+babylond gen-helpers set-btc-delegations \
+  ./btc_delegations.json \
+  --home /custom/babylon/home
+```
+
+:::warning Duplicate Prevention
+Duplicated BTC delegations are not allowed and will cause an error. Ensure all delegations in the JSON file are unique.
+:::
+
+---
+
+## set-btc-headers
+
+Reads BTC header structures from a JSON file and updates the genesis.json file in place to include the Bitcoin headers in the btcstaking module's genesis state. This bootstraps the chain with the Bitcoin header chain history.
+
+### Usage
+
+```bash
+babylond gen-helpers set-btc-headers [path/to/btc_headers.json] [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `path/to/btc_headers.json` | Path to the JSON file containing BTC header structures |
+
+### BTC Headers JSON Structure
+
+```json title="btc_headers.json example"
+{
+  "btc_headers": [
+    {
+      "header": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a45068653ffff7f2002000000",
+      "hash": "683e86bd5c6d110d91b94b97137ba6bfe02dbbdb8e3dff722a669b5d69d77af6",
+      "height": "0",
+      "work": "2"
+    },
+    {
+      "header": "00000020f67ad7695d9b662a72ff3d8edbbb2de0bfa67b13974bb9910d116d5cbd863e682259b3c6351788d4456e8fbb738dd51fd6aea615f63b10f634021f930c9c34be02150466ffff7f2000000000",
+      "hash": "6fceca20e50018d9f54632b791144eef4b3f9cb2ced9fa2702c376857a550e03",
+      "height": "1",
+      "work": "4"
+    }
+  ]
+}
+```
+
+### Examples
+
+```bash title="Set BTC headers"
+babylond gen-helpers set-btc-headers ./genesis-data/btc_headers.json
+```
+
+```bash title="Bootstrap with testnet headers"
+babylond gen-helpers set-btc-headers \
+  ./testnet_btc_headers.json \
+  --home ~/.babylond-testnet
+```
+
+:::warning Header Chain Continuity
+BTC headers should form a continuous chain. Ensure headers are properly ordered and connected to maintain chain integrity.
+:::
+
+---
+
+## set-finality-providers
+
+Reads finality provider structures from a JSON file and updates the genesis.json file in place to include the finality providers in the btcstaking module's genesis state. This sets up the initial set of finality providers for the network.
+
+### Usage
+
+```bash
+babylond gen-helpers set-finality-providers [path/to/finality_providers.json] [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `path/to/finality_providers.json` | Path to the JSON file containing finality provider structures |
+
+### Finality Providers JSON Structure
+
+```json title="finality_providers.json example"
+{
+  "finality_providers": [
+    {
+      "description": {
+        "moniker": "val-fp",
+        "identity": "",
+        "website": "",
+        "security_contact": "",
+        "details": ""
+      },
+      "commission": "0.050000000000000000",
+      "babylon_pk": {
+        "key": "A6FTeYaKkvi8cOXSmVF+2n+q58WV/qffI99YucsvrGsk"
+      },
+      "btc_pk": "625057f9828753569c478b1aa826205395222bcdbefafe9653dfdc638d18eadc",
+      "pop": {
+        "btc_sig_type": "BIP340",
+        "babylon_sig": "/RJyVqBEm/PDkQQTDgdPj84MywTu6LUVXDWUlPBgDGo1qsU/Rg+kJhBRwxCEKs8PYmoADcp4FiH2vVyAqRG2UA==",
+        "btc_sig": "OaLj+w2loH0O88cT2IEdUoV4Swx+RWagk632+mKs5wVRBM63D6uwW+lCLIjxVBfOYQRFzT2D9943k10Whw5a7Q=="
+      },
+      "slashed_babylon_height": "0",
+      "slashed_btc_height": "0"
+    }
+  ]
+}
+```
+
+### Examples
+
+```bash title="Set finality providers"
+babylond gen-helpers set-finality-providers ./genesis-data/finality_providers.json
+```
+
+```bash title="Initialize testnet finality providers"
+babylond gen-helpers set-finality-providers \
+  ./testnet_finality_providers.json \
+  --home ~/.babylond-testnet
+```
+
+:::warning Provider Uniqueness
+Duplicated finality providers are not allowed and will cause an error. Ensure all providers have unique Bitcoin public keys.
+:::
+
+---
+
+## Complete Genesis Setup Workflow
+
+### Network Launch Preparation
+
+```bash title="Complete genesis setup for mainnet"
+#!/bin/bash
+# Complete genesis setup workflow
+
+# 1. Initialize the chain
+babylond init babylon-coordinator --chain-id babylon-1
+
+# 2. Add initial accounts
+babylond add-genesis-account coordinator 100000000000ubbn
+
+# 3. Set BTC headers (bootstrap Bitcoin chain)
+babylond gen-helpers set-btc-headers ./mainnet-data/btc_headers.json
+
+# 4. Set finality providers (initial FP set)
+babylond gen-helpers set-finality-providers ./mainnet-data/finality_providers.json
+
+# 5. Set BTC delegations (existing staking positions)
+babylond gen-helpers set-btc-delegations ./mainnet-data/btc_delegations.json
+
+# 6. Generate genesis transaction
+babylond gentx coordinator 50000000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Babylon Coordinator"
+
+# 7. Collect genesis transactions
+babylond collect-gentxs
+
+# 8. Validate final genesis
+babylond validate-genesis
+
+echo "✅ Genesis setup completed successfully!"
+```
+
+### Testnet Setup
+
+```bash title="Testnet genesis setup"
+#!/bin/bash
+# Testnet setup with sample data
+
+# Initialize testnet
+babylond init testnet-node --chain-id babylon-testnet-1
+
+# Create sample data files
+cat > btc_headers_testnet.json << 'EOF'
+{
+  "btc_headers": [
+    {
+      "header": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a45068653ffff7f2002000000",
+      "hash": "683e86bd5c6d110d91b94b97137ba6bfe02dbbdb8e3dff722a669b5d69d77af6",
+      "height": "0",
+      "work": "2"
+    }
+  ]
+}
+EOF
+
+# Apply BTC headers
+babylond gen-helpers set-btc-headers btc_headers_testnet.json
+
+# Continue with other genesis setup...
+babylond validate-genesis
+```
+
+### Migration from Existing Network
+
+```bash title="Network migration with existing data"
+#!/bin/bash
+# Migrate from existing network with preserved Bitcoin data
+
+# Export existing state
+babylond export --height 1000000 --output-document old_state.json
+
+# Extract Bitcoin staking data
+jq '.app_state.btcstaking.btc_delegations' old_state.json > btc_delegations.json
+jq '.app_state.btcstaking.btc_headers' old_state.json > btc_headers.json
+jq '.app_state.btcstaking.finality_providers' old_state.json > finality_providers.json
+
+# Initialize new chain
+babylond init new-babylon --chain-id babylon-2
+
+# Apply extracted Bitcoin data
+babylond gen-helpers set-btc-headers btc_headers.json
+babylond gen-helpers set-finality-providers finality_providers.json
+babylond gen-helpers set-btc-delegations btc_delegations.json
+
+# Validate migration
+babylond validate-genesis
+```
+
+## Data Preparation and Validation
+
+### BTC Delegations Data Validation
+
+```bash title="Validate BTC delegations data"
+#!/bin/bash
+# Validate BTC delegations before applying
+
+DELEGATIONS_FILE="btc_delegations.json"
+
+# Check JSON validity
+jq empty "$DELEGATIONS_FILE" || { echo "❌ Invalid JSON"; exit 1; }
+
+# Validate required fields
+REQUIRED_FIELDS=("babylon_pk" "btc_pk" "pop" "start_height" "end_height" "total_sat")
+
+for field in "${REQUIRED_FIELDS[@]}"; do
+    if ! jq -e ".btc_delegations[0] | has(\"$field\")" "$DELEGATIONS_FILE" > /dev/null; then
+        echo "❌ Missing required field: $field"
+        exit 1
+    fi
+done
+
+# Check for duplicates
+UNIQUE_COUNT=$(jq '[.btc_delegations[].btc_pk] | unique | length' "$DELEGATIONS_FILE")
+TOTAL_COUNT=$(jq '.btc_delegations | length' "$DELEGATIONS_FILE")
+
+if [ "$UNIQUE_COUNT" -ne "$TOTAL_COUNT" ]; then
+    echo "❌ Duplicate BTC public keys found"
+    exit 1
+fi
+
+echo "✅ BTC delegations data validation passed"
+```
+
+### Finality Providers Validation
+
+```bash title="Validate finality providers data"
+#!/bin/bash
+# Validate finality providers before applying
+
+FP_FILE="finality_providers.json"
+
+# Validate structure
+jq -e '.finality_providers | type == "array"' "$FP_FILE" > /dev/null || {
+    echo "❌ finality_providers must be an array"
+    exit 1
+}
+
+# Check for duplicate BTC public keys
+UNIQUE_BTC_PKS=$(jq '[.finality_providers[].btc_pk] | unique | length' "$FP_FILE")
+TOTAL_FPS=$(jq '.finality_providers | length' "$FP_FILE")
+
+if [ "$UNIQUE_BTC_PKS" -ne "$TOTAL_FPS" ]; then
+    echo "❌ Duplicate finality provider BTC public keys"
+    exit 1
+fi
+
+# Validate commission rates
+jq -e '.finality_providers[] | .commission | tonumber >= 0 and tonumber <= 1' "$FP_FILE" > /dev/null || {
+    echo "❌ Invalid commission rates (must be between 0 and 1)"
+    exit 1
+}
+
+echo "✅ Finality providers data validation passed"
+```
+
+## Best Practices
+
+:::tip Genesis Preparation
+- **Validate all JSON files** before applying them to genesis
+- **Test the complete workflow** on testnet before mainnet deployment
+- **Backup genesis files** at each step of the process
+- **Coordinate with network participants** for consistent data
+:::
+
+:::warning Data Integrity
+- **Ensure BTC header chain continuity** with proper ordering and connectivity
+- **Verify signature validity** in proof-of-possession fields
+- **Check Bitcoin transaction formats** for staking and slashing transactions
+- **Validate all cryptographic proofs** before network launch
+:::
+
+:::info Network Coordination
+- **Use standardized data formats** across all network participants
+- **Verify data consistency** between different node operators
+- **Document all genesis modifications** for audit trails
+- **Test genesis validation** before network launch
+:::
+
+:::note Performance Considerations
+- **Large datasets can slow genesis processing** - monitor resource usage
+- **File I/O operations** may require sufficient disk space
+- **JSON parsing** can be memory-intensive for large files
+- **Validate incrementally** rather than with complete datasets during development
+:::

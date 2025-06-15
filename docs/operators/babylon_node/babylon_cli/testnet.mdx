@@ -1,0 +1,240 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: testnet
+sidebar_position: 22
+---
+
+# babylond testnet
+
+Create a multi-validator testnet with necessary configuration files.
+
+## Overview
+
+The `babylond testnet` command creates a complete testnet environment by generating directories for multiple validators, each populated with essential files including private validator keys, genesis configuration, and node configuration. This command is essential for development, testing, and local network setup.
+
+:::info Key Features
+- Creates multiple validator directories with complete configurations
+- Generates genesis file with all validators
+- Sets up peer-to-peer networking configuration
+- Configures Bitcoin staking parameters
+- Initializes economic and consensus parameters
+:::
+
+## Usage
+
+```bash
+babylond testnet [flags]
+```
+
+## Quick Start
+
+### Basic 4-Validator Testnet
+```bash
+babylond testnet --v 4 --output-dir ./testnet --starting-ip-address 192.168.10.2
+```
+
+This creates a testnet with:
+- 4 validators (node0, node1, node2, node3)
+- Output directory: `./testnet`
+- IP addresses starting from 192.168.10.2
+
+## Configuration Flags
+
+### Network Setup
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--v` | int | Number of validators to initialize | `4` |
+| `-o, --output-dir` | string | Directory to store testnet data | `"./mytestnet"` |
+| `--starting-ip-address` | string | Starting IP address for persistent peers | `"192.168.0.1"` |
+| `--chain-id` | string | Genesis file chain-id (randomly created if blank) | |
+| `--node-daemon-home` | string | Home directory of node's daemon configuration | `"babylond"` |
+| `--node-dir-prefix` | string | Prefix for node directory names | `"node"` |
+| `--keyring-backend` | string | Keyring backend (`os`\|`file`\|`test`) | `"os"` |
+| `--key-type` | string | Key signing algorithm | `"secp256k1"` |
+
+### Bitcoin Configuration
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--btc-network` | string | Bitcoin network (`simnet`\|`testnet`\|`regtest`\|`mainnet`) | `"simnet"` |
+| `--btc-base-header` | string | Hex of the base Bitcoin header | `"0100000000000000..."` |
+| `--btc-base-header-height` | uint32 | Height of the base Bitcoin header | `0` |
+| `--btc-confirmation-depth` | uint32 | Confirmation depth for Bitcoin headers | `6` |
+| `--btc-finalization-timeout` | uint32 | Finalization timeout for Bitcoin headers | `20` |
+| `--checkpoint-tag` | string | Hex encoded tag for Babylon checkpoint on BTC | `"01020304"` |
+
+### Bitcoin Staking Parameters
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--covenant-pks` | string | Covenant public keys (comma separated) | Multiple keys |
+| `--covenant-quorum` | uint32 | Bitcoin staking covenant quorum | `3` |
+| `--max-staking-amount-sat` | int | Maximum staking amount in satoshis | `100000000000` |
+| `--min-staking-amount-sat` | int | Minimum staking amount in satoshis | `500000` |
+| `--max-staking-time-blocks` | uint16 | Maximum staking time in blocks | `10000` |
+| `--min-staking-time-blocks` | uint16 | Minimum staking time in blocks | `100` |
+| `--min-slashing-fee-sat` | int | Minimum slashing fee in satoshis | `1000` |
+| `--slashing-pk-script` | string | Slashing pk script (hex encoded) | `"76a914010101..."` |
+| `--slashing-rate` | string | Bitcoin staking slashing rate | `"0.1"` |
+| `--unbonding-fee-sat` | int | Required unbonding transaction fee in satoshis | `1000` |
+| `--unbonding-time` | uint16 | Unbonding timelock in BTC blocks | `21` |
+
+### Consensus & Validation
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--max-active-validators` | uint32 | Maximum number of validators | `10` |
+| `--max-active-finality-providers` | uint32 | Maximum active finality providers | `100` |
+| `--epoch-interval` | uint | Blocks between epochs (must be > 0) | `400` |
+| `--activation-height` | uint | Finality activation height | `1` |
+| `--vote-extension-enable-height` | int | Vote extension enable height | `1` |
+| `--time-between-blocks-seconds` | uint | Time between blocks in seconds | `5` |
+| `--blocks-per-year` | uint | Blocks per year | `6311520` |
+
+### Economic Parameters
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--inflation-max` | float | Maximum inflation rate | `0.2` |
+| `--inflation-min` | float | Minimum inflation rate | `0.07` |
+| `--inflation-rate-change` | float | Inflation rate change | `0.13` |
+| `--goal-bonded` | float | Bonded tokens goal | `0.67` |
+| `--minimum-gas-prices` | string | Minimum gas prices | `"0.000006ubbn"` |
+| `--block-gas-limit` | int | Block gas limit | `50000000` |
+| `--min-commission-rate` | string | Minimum validator commission rate | `"0"` |
+
+### Finality & Liveness
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--finality-sig-timeout` | int | Finality vote timeout in blocks | `3` |
+| `--jail-duration` | string | Minimum jail duration | `"24h0m0s"` |
+| `--min-signed-per-window` | string | Minimum signing ratio to avoid jail | `"0.500000000000000000"` |
+| `--signed-blocks-window` | int | Sliding window size for liveness tracking | `100` |
+
+### Additional Options
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--genesis-time` | int | Genesis time (Unix timestamp) | `1747294051` |
+| `--additional-sender-account` | boolean | Add extra pre-funded account per validator | `false` |
+| `--allowed-reporter-addresses` | string | Bitcoin header reporter addresses | |
+
+## Examples
+
+### Development Testnet (Local)
+```bash
+babylond testnet \
+  --v 3 \
+  --output-dir ./devnet \
+  --chain-id babylon-dev \
+  --starting-ip-address 127.0.0.1
+```
+
+### Bitcoin Testnet Integration
+```bash
+babylond testnet \
+  --v 5 \
+  --output-dir ./btc-testnet \
+  --btc-network testnet \
+  --btc-confirmation-depth 3 \
+  --min-staking-amount-sat 100000 \
+  --max-staking-amount-sat 10000000000
+```
+
+### Custom Economic Parameters
+```bash
+babylond testnet \
+  --v 4 \
+  --output-dir ./custom-testnet \
+  --inflation-max 0.15 \
+  --inflation-min 0.05 \
+  --goal-bonded 0.75 \
+  --minimum-gas-prices "0.001ubbn"
+```
+
+### Performance Testing Network
+```bash
+babylond testnet \
+  --v 10 \
+  --output-dir ./perfnet \
+  --time-between-blocks-seconds 2 \
+  --block-gas-limit 100000000 \
+  --epoch-interval 100
+```
+
+### Finality Provider Testing
+```bash
+babylond testnet \
+  --v 4 \
+  --output-dir ./finality-test \
+  --max-active-finality-providers 50 \
+  --finality-sig-timeout 5 \
+  --signed-blocks-window 50 \
+  --min-signed-per-window "0.8"
+```
+
+## Generated Directory Structure
+
+After running the command, the output directory contains:
+
+```
+./testnet/
+├── node0/
+│   ├── babylond/
+│   │   ├── config/
+│   │   │   ├── app.toml
+│   │   │   ├── config.toml
+│   │   │   ├── genesis.json
+│   │   │   └── priv_validator_key.json
+│   │   └── data/
+│   └── babylond.log
+├── node1/
+│   └── ...
+├── node2/
+│   └── ...
+├── node3/
+│   └── ...
+└── gentxs/
+    ├── node0.json
+    ├── node1.json
+    ├── node2.json
+    └── node3.json
+```
+
+## Starting the Testnet
+
+### Start All Nodes
+```bash
+# Start each node in separate terminals
+cd ./testnet/node0 && babylond start --home ./babylond
+cd ./testnet/node1 && babylond start --home ./babylond
+cd ./testnet/node2 && babylond start --home ./babylond
+cd ./testnet/node3 && babylond start --home ./babylond
+```
+
+### Docker Compose Example
+```yaml
+version: '3.8'
+services:
+  node0:
+    image: babylon:latest
+    command: babylond start --home /babylon/node0/babylond
+    volumes:
+      - ./testnet:/babylon
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+      - "9090:9090"
+  
+  node1:
+    image: babylon:latest
+    command: babylond start --home /babylon/node1/babylond
+    volumes:
+      - ./testnet:/babylon
+    ports:
+      - "26756:26656"
+      - "26757:26657"
+```
