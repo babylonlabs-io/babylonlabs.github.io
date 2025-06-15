@@ -1,0 +1,176 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: query
+sidebar_position: 18
+---
+
+# query
+
+Querying subcommands for retrieving blockchain state and information. The query system provides comprehensive access to all blockchain data including account balances, validator information, governance proposals, Bitcoin staking data, and Babylon-specific protocol state.
+
+## Overview
+
+The `query` command group serves as the primary interface for reading blockchain state, offering access to over 30 modules covering everything from basic account information to advanced Bitcoin staking and finality provider data. All queries are read-only operations that don't modify blockchain state.
+
+```bash
+babylond query [module] [subcommand] [flags]
+```
+
+**Alias:** `q` (shorthand for `query`)
+
+## Module Categories
+
+### Core Cosmos Modules
+
+| Module | Description | Key Queries |
+|--------|-------------|-------------|
+| **auth** | Account authentication and management | accounts, account info, module accounts |
+| **bank** | Token balances and transfers | balances, total supply, denomination metadata |
+| **staking** | Validator bonding and delegations | validators, delegations, staking pool |
+| **distribution** | Staking reward distribution | rewards, commission, community pool |
+| **gov** | Governance proposals and voting | proposals, votes, governance parameters |
+| **slashing** | Validator penalty tracking | signing info, slashing parameters |
+
+### Babylon-Specific Modules
+
+| Module | Description | Key Queries |
+|--------|-------------|-------------|
+| **btcstaking** | Bitcoin staking delegations | BTC delegations, finality providers, parameters |
+| **checkpointing** | Babylon checkpointing system | checkpoints by epoch, checkpoint lists |
+| **finality** | Finality provider operations | finality votes, provider info, signing data |
+| **btclightclient** | Bitcoin light client | Bitcoin headers, main chain, tip information |
+| **btccheckpoint** | Bitcoin checkpoint submissions | epoch submissions, BTC height mappings |
+| **epoching** | Epoch-based operations | epoch info, validators, pending messages |
+| **incentive** | Reward and incentive system | BTC staking rewards, delegation rewards |
+| **zoneconcierge** | Consumer chain coordination | chain info, finalized states |
+
+### IBC and Cross-Chain
+
+| Module | Description | Key Queries |
+|--------|-------------|-------------|
+| **ibc** | Inter-blockchain communication | channels, clients, connections |
+| **ibc-transfer** | IBC token transfers | denomination traces, escrow addresses |
+| **ibc-fee** | IBC relayer incentivization | packet fees, relayer payees |
+| **ibc-wasm** | IBC WebAssembly contracts | contract code, checksums |
+
+### Infrastructure Modules
+
+| Module | Description | Key Queries |
+|--------|-------------|-------------|
+| **authz** | Authorization grants | grants by granter/grantee |
+| **feegrant** | Fee payment grants | fee grants, allowances |
+| **evidence** | Byzantine behavior evidence | submitted evidence |
+| **circuit** | Circuit breaker functionality | disabled messages, permissions |
+| **consensus** | Consensus parameters | consensus params, validator info |
+| **mint** | Token inflation and minting | inflation rate, annual provisions |
+| **params** | Protocol parameters | module parameters |
+| **upgrade** | Protocol upgrades | upgrade plans, module versions |
+| **wasm** | WebAssembly contracts | contract state, code info |
+
+### Block and Transaction Queries
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| **block** | Query specific blocks | Block inspection, debugging |
+| **block-results** | Query block execution results | Transaction outcomes, events |
+| **blocks** | Search blocks by events | Block discovery, monitoring |
+| **tx** | Query specific transactions | Transaction verification |
+| **txs** | Search transactions by events | Transaction history, analysis |
+| **wait-tx** | Wait for transaction inclusion | Transaction confirmation |
+| **comet-validator-set** | Query validator set | Consensus monitoring |
+
+## Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--chain-id` | string | | The network chain ID |
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+
+## Common Query Patterns
+
+### Account and Balance Queries
+
+```bash title="Account information"
+# Check account balance
+babylond query bank balances babylon1abc123...
+
+# Get specific denomination balance
+babylond query bank balance babylon1abc123... ubbn
+
+# Check account details
+babylond query auth account babylon1abc123...
+
+# Get total supply
+babylond query bank total-supply
+```
+
+### Validator and Staking Queries
+
+```bash title="Validator information"
+# List all validators
+babylond query staking validators
+
+# Get specific validator info
+babylond query staking validator babylonvaloper1abc123...
+
+# Check delegations to a validator
+babylond query staking delegations-to babylonvaloper1abc123...
+
+# Get delegator's delegations
+babylond query staking delegations babylon1abc123...
+
+# Check staking pool
+babylond query staking pool
+```
+
+### Bitcoin Staking Queries
+
+```bash title="Bitcoin staking information"
+# Get all finality providers
+babylond query btcstaking finality-providers
+
+# Check specific finality provider
+babylond query btcstaking finality-provider <btc-pk-hex>
+
+# Get BTC delegations by status
+babylond query btcstaking btc-delegations --status active
+
+# Check BTC staking parameters
+babylond query btcstaking params
+```
+
+### Finality and Checkpointing
+
+```bash title="Finality system queries"
+# Get finality providers at height
+babylond query finality finality-providers-at-height 1000
+
+# Check finality votes at height
+babylond query finality votes-at-height 1000
+
+# Get checkpoint for epoch
+babylond query checkpointing raw-checkpoint 10
+
+# Check epoch information
+babylond query epoching epoch
+```
+
+### Governance Queries
+
+```bash title="Governance information"
+# List active proposals
+babylond query gov proposals --status voting_period
+
+# Get specific proposal
+babylond query gov proposal 1
+
+# Check proposal votes
+babylond query gov votes 1
+
+# Get governance parameters
+babylond query gov params
+```

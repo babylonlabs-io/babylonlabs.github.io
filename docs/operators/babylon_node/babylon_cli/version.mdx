@@ -1,0 +1,36 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: version
+sidebar_position: 25
+---
+
+# babylond version
+
+Print application binary version information and build details.
+
+## Overview
+
+The `babylond version` command displays version information about the Babylon daemon binary, including version numbers, commit hashes, build information, and Go runtime details. This information is essential for debugging, compatibility checking, network coordination, and support requests.
+
+:::info Why Version Information Matters
+- **Network Compatibility**: Ensure compatibility with specific network versions
+- **Debugging**: Provide accurate version info when reporting issues
+- **Deployment Tracking**: Verify correct binary versions in production
+- **Update Management**: Check current version before upgrading
+- **Support Requests**: Include version details in bug reports
+:::
+
+## Usage
+
+```bash
+babylond version [flags]
+```
+
+## Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--long` | boolean | Print detailed version information | `false` |
+| `-o, --output` | string | Output format (`text` \| `json`) | `"text"` |
+| `-h, --help` | boolean | Show help information | `false` |
+

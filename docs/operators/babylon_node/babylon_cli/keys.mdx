@@ -1,0 +1,689 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: keys
+sidebar_position: 13
+---
+
+# keys
+
+Keyring management commands for handling cryptographic keys used by Babylon nodes, validators, and applications. These keys support any format compatible with the CometBFT crypto library and are essential for signing transactions, validating blocks, and participating in the Babylon network.
+
+## Overview
+
+The `keys` command group provides comprehensive key management functionality including creation, import/export, backup, and recovery operations. Keys are stored in a configurable keyring backend with various security levels to suit different operational requirements.
+
+```bash
+babylond keys [command] [flags]
+```
+
+## Keyring Backends
+
+Babylon supports multiple keyring backends with different security and convenience trade-offs:
+
+| Backend | Description | Security Level | Use Case |
+|---------|-------------|----------------|----------|
+| **os** | Operating system's default credentials store | High | Production (recommended) |
+| **file** | Encrypted file-based keystore | Medium | Custom security setups |
+| **kwallet** | KDE Wallet Manager integration | High | Linux desktop environments |
+| **pass** | Pass command line utility | High | Linux/Unix with GPG |
+| **test** | Insecure disk storage | Low | Development and testing only |
+| **memory** | In-memory storage | Medium | Temporary operations |
+
+:::warning Backend Dependencies
+- **kwallet**: Requires KDE Wallet Manager - [Documentation](https://github.com/KDE/kwallet)
+- **pass**: Requires pass utility and GnuPG - [Pass docs](https://www.passwordstore.org/) | [GnuPG docs](https://gnupg.org/)
+:::
+
+## Quick Reference
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| [`add`](#add) | Create or recover a key | Key generation, wallet recovery |
+| [`delete`](#delete) | Remove keys from keyring | Key cleanup, security |
+| [`export`](#export) | Export private keys | Backup, migration |
+| [`import`](#import) | Import ASCII-armored keys | Key restoration |
+| [`import-hex`](#import-hex) | Import hex-encoded keys | Raw key import |
+| [`list`](#list) | Show all keys | Key inventory |
+| [`list-key-types`](#list-key-types) | Show supported algorithms | Algorithm verification |
+| [`migrate`](#migrate) | Upgrade key serialization | Protocol upgrades |
+| [`mnemonic`](#mnemonic) | Generate BIP39 mnemonic | Seed phrase creation |
+| [`parse`](#parse) | Convert address formats | Address debugging |
+| [`rename`](#rename) | Rename existing keys | Key organization |
+| [`show`](#show) | Display key information | Key details, addresses |
+
+## Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--keyring-backend` | string | `os` | Select keyring backend (`os`\|`file`\|`kwallet`\|`pass`\|`test`\|`memory`) |
+| `--keyring-dir` | string | `~/.babylond` | The client keyring directory |
+| `--output` | string | `text` | Output format (`text`\|`json`) |
+| `--home` | string | `~/.babylond` | Directory for config and data |
+
+---
+
+## add
+
+Create a new private key or recover an existing one from a mnemonic phrase. This is the primary command for key generation and supports BIP39 mnemonics, custom HD paths, multisig keys, and hardware wallet integration.
+
+### Usage
+
+```bash
+babylond keys add <name> [flags]
+```
+
+### Key Creation Options
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--recover` | | | Recover key from existing mnemonic phrase |
+| `--dry-run` | | | Generate key but don't store in keyring |
+| `--no-backup` | | | Don't display mnemonic phrase (security) |
+| `-i, --interactive` | | | Interactive prompts for BIP39 passphrase and mnemonic |
+
+### HD Wallet Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--coin-type` | uint32 | `118` | Coin type number for HD derivation |
+| `--account` | uint32 | `0` | Account number for HD derivation |
+| `--index` | uint32 | `0` | Address index for HD derivation |
+| `--hd-path` | string | | Manual HD path (overrides BIP44 config) |
+
+### Advanced Options
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--key-type` | string | `secp256k1` | Key signing algorithm (`secp256k1`\|`ed25519`) |
+| `--ledger` | | | Store reference to Ledger device key |
+| `--multisig` | strings | | List of key names for multisig key |
+| `--multisig-threshold` | int | `1` | Required signatures for multisig |
+| `--nosort` | | | Don't sort multisig keys by address |
+| `--pubkey` | string | | Import arbitrary public key (JSON format) |
+| `--pubkey-base64` | string | | Import public key (base64 format) |
+| `--source` | string | | Import mnemonic from file |
+
+### Examples
+
+```bash title="Wallet creation"
+# to create a new wallet, use the following command. don’t forget to save the mnemonic
+babylond keys add $WALLET
+
+# to restore exexuting wallet, use the following command
+babylond keys add $WALLET --recover
+
+# save wallet and validator address
+WALLET_ADDRESS=$(babylond keys show $WALLET -a)
+VALOPER_ADDRESS=$(babylond keys show $WALLET --bech val -a)
+echo "export WALLET_ADDRESS="$WALLET_ADDRESS >> $HOME/.bash_profile
+echo "export VALOPER_ADDRESS="$VALOPER_ADDRESS >> $HOME/.bash_profile
+source $HOME/.bash_profile
+
+# check sync status, once your node is fully synced, the output from above will print "false"
+babylond status 2>&1 | jq 
+
+# before creating a validator, you need to fund your wallet and check balance
+babylond query bank balances $WALLET_ADDRESS 
+
+```
+
+
+
+
+```bash title="HD wallet customization"
+# Custom coin type and account
+babylond keys add custom-path \
+  --coin-type 60 \
+  --account 1 \
+  --index 5
+
+# Manual HD path
+babylond keys add manual-path --hd-path "m/44'/118'/0'/0/0"
+```
+
+## delete
+
+Remove keys from the keyring. For hardware wallet and offline keys, this only removes the local reference, not the actual private key material.
+
+### Usage
+
+```bash
+babylond keys delete <name>... [flags]
+```
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `-f, --force` | | Remove without passphrase confirmation (deprecated) |
+| `-y, --yes` | | Skip confirmation prompt for offline/ledger keys |
+
+### Examples
+
+```bash title="Delete keys"
+# Delete single key
+babylond keys delete old-key
+
+# Delete multiple keys
+babylond keys delete key1 key2 key3
+
+# Delete without confirmation
+babylond keys delete temp-key --yes
+```
+
+:::warning Key Deletion
+- **Permanent operation**: Deleted keys cannot be recovered without backup
+- **Hardware wallets**: Only removes local reference, private key remains on device
+- **Backup first**: Always backup keys before deletion
+:::
+
+---
+
+## export
+
+Export private keys from the keyring in ASCII-armored encrypted format for backup or migration purposes.
+
+### Usage
+
+```bash
+babylond keys export <name> [flags]
+```
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--unarmored-hex` | | Export as unarmored hex (requires `--unsafe`) |
+| `--unsafe` | | Enable unsafe operations for unarmored export |
+
+### Examples
+
+```bash title="Secure key export"
+# Export key in encrypted format
+babylond keys export my-key > my-key-backup.asc
+
+# Export for migration to another system
+babylond keys export validator-key \
+  --keyring-backend file > validator-backup.asc
+```
+
+```bash title="Unsafe export (advanced users only)"
+# Export unarmored hex private key
+babylond keys export dev-key --unarmored-hex --unsafe > dev-key.hex
+```
+
+:::danger Unsafe Export
+- **Use --unsafe flag with extreme caution**
+- **Unarmored export** exposes raw private key material
+- **Only for advanced users** who understand the security implications
+- **Never use for production keys**
+:::
+
+---
+
+## import
+
+Import ASCII-armored private keys into the local keyring.
+
+### Usage
+
+```bash
+babylond keys import <name> <keyfile> [flags]
+```
+
+### Examples
+
+```bash title="Import keys"
+# Import from backup file
+babylond keys import restored-key ./key-backup.asc
+
+# Import with specific backend
+babylond keys import validator-key ./validator-backup.asc \
+  --keyring-backend file
+```
+
+---
+
+## import-hex
+
+Import hex-encoded private keys directly into the keyring.
+
+### Usage
+
+```bash
+babylond keys import-hex <name> <hex> [flags]
+```
+
+### Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--key-type` | string | `secp256k1` | Private key algorithm type |
+
+### Examples
+
+```bash title="Import hex keys"
+# Import secp256k1 private key
+babylond keys import-hex imported-key 1234567890abcdef...
+
+# Import Ed25519 private key
+babylond keys import-hex ed25519-key abcdef1234567890... \
+  --key-type ed25519
+```
+
+---
+
+## list
+
+Display all keys stored in the keyring with their names, addresses, and public keys.
+
+### Usage
+
+```bash
+babylond keys list [flags]
+```
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `-n, --list-names` | | Show only key names |
+
+### Examples
+
+```bash title="List keys"
+# Show all keys with details
+babylond keys list
+
+# Show only key names
+babylond keys list --list-names
+
+# List in JSON format
+babylond keys list --output json
+```
+
+**Sample Output:**
+```text
+- address: babylon1abc123...
+  name: validator-key
+  pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A..."}'
+  type: local
+```
+
+---
+
+## show
+
+Display detailed information about specific keys, including addresses and public keys.
+
+### Usage
+
+```bash
+babylond keys show [name_or_address [name_or_address...]] [flags]
+```
+
+### Output Options
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `-a, --address` | | Output only the address |
+| `-p, --pubkey` | | Output only the public key |
+| `--bech` | string | Bech32 prefix (`acc`\|`val`\|`cons`) |
+| `-d, --device` | | Output address from Ledger device |
+
+### Multisig Options
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--multisig-threshold` | int | `1` | Required signatures for ephemeral multisig |
+
+### Examples
+
+```bash title="Show key information"
+# Show full key details
+babylond keys show my-key
+
+# Show only address
+babylond keys show my-key --address
+
+# Show public key
+babylond keys show my-key --pubkey
+
+# Show validator address format
+babylond keys show validator-key --bech val
+
+# Show consensus address format
+babylond keys show validator-key --bech cons
+```
+
+```bash title="Multisig key display"
+# Create ephemeral multisig from multiple keys
+babylond keys show key1 key2 key3 --multisig-threshold 2
+```
+
+---
+
+## Advanced Commands
+
+### list-key-types
+
+Display all supported cryptographic algorithms.
+
+```bash title="List supported algorithms"
+babylond keys list-key-types
+```
+
+**Sample Output:**
+```
+secp256k1
+ed25519
+sr25519
+```
+
+### mnemonic
+
+Generate a BIP39 mnemonic phrase for key creation.
+
+```bash title="Generate mnemonic"
+# Generate random mnemonic
+babylond keys mnemonic
+
+# Generate with custom entropy (advanced)
+babylond keys mnemonic --unsafe-entropy
+```
+
+### parse
+
+Convert addresses between hex and bech32 formats.
+
+```bash title="Parse addresses"
+# Convert bech32 to hex
+babylond keys parse babylon1abc123...
+
+# Convert hex to bech32
+babylond keys parse 1234567890ABCDEF...
+```
+
+### rename
+
+Rename existing keys in the keyring.
+
+```bash title="Rename keys"
+# Rename key
+babylond keys rename old-name new-name
+
+# Rename without confirmation
+babylond keys rename temp-key final-key --yes
+```
+
+### migrate
+
+Migrate keys from Amino to Protocol Buffers serialization format.
+
+```bash title="Migrate key format"
+babylond keys migrate
+```
+
+---
+
+## Common Workflows
+
+### Validator Setup
+
+```bash title="Complete validator key setup"
+# 1. Create validator operator key
+babylond keys add validator-operator
+
+# 2. Create backup of the key
+babylond keys export validator-operator > validator-backup.asc
+
+# 3. Show validator address
+VALIDATOR_ADDR=$(babylond keys show validator-operator --address)
+echo "Validator Address: $VALIDATOR_ADDR"
+
+# 4. Show consensus address format
+babylond keys show validator-operator --bech val
+
+# 5. Add to genesis (during network setup)
+babylond add-genesis-account $VALIDATOR_ADDR 100000000ubbn
+```
+
+### Multi-Environment Key Management
+
+```bash title="Manage keys across environments"
+# Production environment (secure backend)
+babylond keys add prod-validator --keyring-backend os
+
+# Testing environment (convenient backend)
+babylond keys add test-validator --keyring-backend test
+
+# Development environment (file backend)
+babylond keys add dev-validator --keyring-backend file
+```
+
+### Key Backup and Recovery
+
+```bash title="Backup and recovery workflow"
+# Backup all keys
+mkdir -p ~/babylon-key-backups
+for key in $(babylond keys list --list-names); do
+    echo "Backing up $key..."
+    babylond keys export "$key" > "~/babylon-key-backups/${key}-backup.asc"
+done
+
+# Recovery on new system
+for backup in ~/babylon-key-backups/*-backup.asc; do
+    KEY_NAME=$(basename "$backup" -backup.asc)
+    echo "Restoring $KEY_NAME..."
+    babylond keys import "$KEY_NAME" "$backup"
+done
+```
+
+### Multisig Management
+
+```bash title="Multisig key workflow"
+# Create individual keys for multisig participants
+babylond keys add alice
+babylond keys add bob
+babylond keys add charlie
+
+# Create 2-of-3 multisig key
+babylond keys add treasury \
+  --multisig "alice,bob,charlie" \
+  --multisig-threshold 2
+
+# Show multisig address
+babylond keys show treasury --address
+
+# Send funds to multisig (example)
+babylond tx bank send funding-key $(babylond keys show treasury -a) 1000000ubbn
+```
+
+## Security Best Practices
+
+:::danger Critical Security
+- **Backup mnemonics immediately** after key creation
+- **Store backups securely** offline in multiple locations
+- **Never share private keys** or mnemonic phrases
+- **Use strong passwords** for file backend encryption
+:::
+
+:::warning Operational Security
+- **Use appropriate backends** for your security requirements
+- **Regularly test recovery procedures** from backups
+- **Monitor key file integrity** with checksums
+- **Implement access controls** for key storage locations
+:::
+
+:::tip Production Recommendations
+- **Use `os` backend** for production validators
+- **Implement hardware security modules** for high-value keys
+- **Separate keys by function** (validator, treasury, governance)
+- **Document key management procedures** for your team
+:::
+
+:::info Development Guidelines
+- **Use `test` backend** only for development
+- **Never use test keys** with real funds
+- **Clean up test keys** regularly
+- **Use consistent naming** conventions across environments
+:::
+
+## Troubleshooting
+
+### Common Issues
+
+**Keyring backend not available**
+```
+Error: keyring backend 'kwallet' not available
+```
+**Solution**: Install required dependencies or use a different backend:
+```bash
+babylond keys add my-key --keyring-backend os
+```
+
+**Key already exists**
+```
+Error: key with name 'my-key' already exists
+```
+**Solution**: Use a different name or delete the existing key:
+```bash
+babylond keys delete my-key
+babylond keys add my-key
+```
+
+**Invalid mnemonic**
+```
+Error: invalid mnemonic
+```
+**Solution**: Verify mnemonic phrase correctness and word count (12/24 words).
+
+**Permission denied accessing keyring**
+```
+Error: permission denied
+```
+**Solution**: Check file permissions and keyring directory access:
+```bash
+ls -la ~/.babylond/
+chmod 700 ~/.babylond/
+```
+
+### Diagnostic Commands
+
+```bash title="Key management diagnostics"
+# Check available backends
+babylond keys list --keyring-backend test 2>&1 | grep -i "backend"
+
+# Verify key existence
+babylond keys list | grep "my-key"
+
+# Test key access
+babylond keys show my-key --address
+
+# Check keyring directory
+ls -la ~/.babylond/keyring-*
+
+# Validate key operations
+babylond keys mnemonic > /dev/null && echo "✅ Mnemonic generation works"
+```
+
+### Recovery Procedures
+
+```bash title="Key recovery workflow"
+# 1. Identify the issue
+babylond keys list 2>&1
+
+# 2. Check backup availability
+ls ~/key-backups/
+
+# 3. Recover from mnemonic
+babylond keys add recovered-key --recover
+
+# 4. Or import from backup file
+babylond keys import recovered-key ~/key-backups/key-backup.asc
+
+# 5. Verify recovery
+babylond keys show recovered-key
+
+# 6. Test signing capability
+babylond tx bank send recovered-key babylon1test... 1ubbn --dry-run
+```
+
+## Advanced Usage
+
+### Hardware Wallet Integration
+
+```bash title="Ledger device setup"
+# Add Ledger device reference
+babylond keys add ledger-validator --ledger
+
+# Show Ledger address
+babylond keys show ledger-validator --device
+
+# Use Ledger for transactions
+babylond tx bank send ledger-validator recipient 1000ubbn \
+  --ledger
+```
+
+### Custom HD Paths
+
+```bash title="Advanced HD wallet usage"
+# BIP44 standard path: m/44'/118'/0'/0/0
+babylond keys add standard-key
+
+# Custom coin type (Ethereum-compatible)
+babylond keys add eth-compat --coin-type 60
+
+# Multiple accounts from same mnemonic
+babylond keys add account-0 --account 0 --index 0
+babylond keys add account-1 --account 1 --index 0
+
+# Custom derivation path
+babylond keys add custom-path --hd-path "m/44'/118'/5'/0/10"
+```
+
+### Automated Key Management
+
+```bash title="Scripted key operations"
+#!/bin/bash
+# Automated key setup for validators
+
+VALIDATOR_COUNT=3
+CHAIN_ID="babylon-testnet"
+
+for i in $(seq 1 $VALIDATOR_COUNT); do
+    KEY_NAME="validator-$i"
+    
+    # Create validator key
+    echo "Creating $KEY_NAME..."
+    babylond keys add "$KEY_NAME" --keyring-backend test
+    
+    # Export backup
+    babylond keys export "$KEY_NAME" > "${KEY_NAME}-backup.asc"
+    
+    # Show address for genesis setup
+    ADDR=$(babylond keys show "$KEY_NAME" --address)
+    echo "$KEY_NAME: $ADDR"
+    
+    # Add to genesis
+    babylond add-genesis-account "$ADDR" 100000000ubbn
+done
+
+echo "✅ Validator keys created and added to genesis"
+```
+
+## Related Commands
+
+### Validator Operations
+- [`babylond gentx`](./gentx.md) - Generate genesis transaction using keys
+- [`babylond tx checkpointing create-validator`](./tx-checkpointing.md) - Create validator using keys
+- [`babylond generate-bls-pop`](./generate-bls-pop.md) - Generate proof-of-possession with keys
+
+### Node Setup
+- [`babylond init`](./init.md) - Initialize node (creates validator consensus keys)
+- [`babylond add-genesis-account`](./add-genesis-account.md) - Add key addresses to genesis
+
+### Address Operations
+- [`babylond debug addr`](./debug.md#addr) - Convert address formats
+- [`babylond debug pubkey`](./debug.md#pubkey) - Debug public key formats
+
