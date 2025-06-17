@@ -88,28 +88,28 @@ We have developed local deployment scripts for demonstrating the Cosmos integrat
 
 ## Phase-3 devnet information
 
-The Phase-3 devnet environment (Euphrates) is defined as follows. Note that this assumes a `bash` shell - modify accordingly for other shells, or use `bash`:
+The Phase-3 devnet environment (Edge) is defined as follows. Note that this assumes a `bash` shell - modify accordingly for other shells, or use `bash`:
 
 ```bash
-$ cat <<EOF >env_euphrates.sh
+$ cat <<EOF >env_edge.sh
 :
 
 export binary="babylond"
-export chainId="euphrates-0.6.0"
+export chainId="edge-0.6.0"
 export homeDir="$HOME/.babylond"
 
 export key="user"
 export keyringBackend="--keyring-backend=test"
 export feeToken="ubbn"
 
-export rpcUrl="https://rpc-euphrates.devnet.babylonlabs.io"
+export rpcUrl="https://rpc-edge.devnet.babylonlabs.io"
 export nodeUrl="$rpcUrl"
-export grpcUrl="grpc-euphrates.devnet.babylonlabs.io:443"
-export faucetUrl="https://faucet-euphrates.devnet.babylonlabs.io"
+export grpcUrl="grpc-edge.devnet.babylonlabs.io:443"
+export faucetUrl="https://faucet-edge.devnet.babylonlabs.io"
 
 alias babylond='babylond --home=$homeDir'
 EOF
-$ . ./env_euphrates.sh
+$ . ./env_edge.sh
 ```
 
 ---
