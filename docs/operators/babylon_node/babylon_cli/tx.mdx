@@ -1,0 +1,189 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: tx
+sidebar_position: 23
+---
+
+# babylond tx
+
+Comprehensive transaction system for interacting with the Babylon blockchain.
+
+## Overview
+
+The `babylond tx` command provides access to all transaction functionality on the Babylon blockchain. Transactions are used to modify blockchain state, including transferring tokens, staking, governance participation, Bitcoin staking operations, and smart contract interactions.
+
+## Transaction Workflow
+
+All transactions follow a common pattern:
+
+1. **Generate** → Create an unsigned transaction
+2. **Sign** → Add cryptographic signatures 
+3. **Broadcast** → Submit to the network
+
+```bash
+# Generate unsigned transaction
+babylond tx bank send [from] [to] [amount] --generate-only > tx.json
+
+# Sign the transaction
+babylond tx sign tx.json --from [key-name] > signed-tx.json
+
+# Broadcast to network
+babylond tx broadcast signed-tx.json
+```
+
+## Usage
+
+```bash
+babylond tx [module] [command] [flags]
+```
+
+## Command Categories
+
+### Core Transaction Operations
+
+Essential commands for transaction management:
+
+| Command | Description |
+|---------|-------------|
+| `broadcast` | Broadcast signed transactions to the network |
+| `encode` | Encode transactions to protobuf format |
+| `decode` | Decode binary transaction strings |
+| `sign` | Sign unsigned transactions |
+| `multi-sign` | Create multisig signatures |
+| `simulate` | Test transaction execution and gas usage |
+| `validate-signatures` | Verify transaction signatures |
+
+### Financial Operations
+
+Basic token and financial operations:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `bank` | `send`, `multi-send` | Transfer tokens between accounts |
+| `distribution` | `withdraw-rewards`, `fund-community-pool` | Staking rewards and community funding |
+| `feegrant` | `grant`, `revoke` | Fee allowances for other accounts |
+| `vesting` | `create-vesting-account` | Time-locked token accounts |
+
+### Governance & Authorization
+
+Network governance and delegation:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `gov` | `submit-proposal`, `vote`, `deposit` | Network governance participation |
+| `authz` | `grant`, `revoke`, `exec` | Authorization delegation |
+
+### Staking & Validation
+
+Babylon's epoched staking system:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `epoching` | `delegate`, `unbond`, `redelegate` | Epoch-based staking operations |
+| `checkpointing` | `create-validator` | Validator registration |
+| `slashing` | `unjail` | Validator penalty management |
+
+### Examples
+
+```bash title="Create validator"
+cd $HOME
+# Create validator.json file
+echo "{\"pubkey\":{\"@type\":\"/cosmos.crypto.ed25519.PubKey\",\"key\":\"$(babylond comet show-validator | grep -Po '\"key\":\s*\"\K[^"]*')\"},
+    \"amount\": \"1000000ubbn\",
+    \"moniker\": \"test\",
+    \"identity\": \"\",
+    \"website\": \"\",
+    \"security\": \"\",
+    \"details\": \"I love blockchain ❤️\",
+    \"commission-rate\": \"0.1\",
+    \"commission-max-rate\": \"0.2\",
+    \"commission-max-change-rate\": \"0.01\",
+    \"min-self-delegation\": \"1\"
+}" > validator.json
+# Create a validator using the JSON configuration
+babylond tx staking create-validator validator.json \
+    --from $WALLET \
+    --chain-id bbn-1 \
+	--gas auto --gas-adjustment 1.5
+```
+### Bitcoin Integration (Babylon-Specific)
+
+Bitcoin staking and integration features:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `btcstaking` | `create-btc-delegation`, `create-finality-provider` | Bitcoin staking operations |
+| `btccheckpoint` | `insert-proofs` | Bitcoin checkpoint submissions |
+| `btclightclient` | `insert-headers` | Bitcoin block header management |
+| `btcstkconsumer` | `register-consumer` | Consumer chain registration |
+
+### Finality & Incentives
+
+Babylon's finality and reward systems:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `finality` | `add-finality-sig`, `commit-pubrand-list` | Finality provider operations |
+| `incentive` | `withdraw-reward`, `set-withdraw-addr` | Reward distribution |
+| `monitor` | Various monitoring operations | Network monitoring transactions |
+| `zoneconcierge` | Cross-zone operations | Inter-zone communication |
+
+### Cross-Chain (IBC)
+
+Inter-Blockchain Communication:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `ibc` | `channel`, `client` | Core IBC operations |
+| `ibc-transfer` | `transfer` | Token transfers via IBC |
+| `ibc-fee` | `pay-packet-fee` | IBC relayer incentivization |
+| `ibc-wasm` | `store-code`, `migrate-contract` | IBC WASM contracts |
+
+### Smart Contracts
+
+WASM smart contract operations:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `wasm` | `store`, `instantiate`, `execute`, `migrate` | Smart contract lifecycle |
+
+### Network Management
+
+System-level operations:
+
+| Module | Commands | Description |
+|--------|----------|-------------|
+| `circuit` | `authorize`, `disable`, `reset` | Circuit breaker management |
+| `crisis` | `invariant-broken` | Emergency system checks |
+| `upgrade` | `software-upgrade` | Network upgrades |
+| `consensus` | Consensus parameter changes | Consensus modifications |
+
+## Common Flag Reference
+
+### Transaction Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--chain-id` | string | Network chain ID | |
+| `--from` | string | Signing account name or address | |
+| `--fees` | string | Transaction fees (e.g., `10ubbn`) | |
+| `--gas` | string | Gas limit (`auto` for estimation) | `200000` |
+| `--gas-prices` | string | Gas prices (e.g., `0.1ubbn`) | |
+| `--note` | string | Transaction memo/note | |
+
+### Signing Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--keyring-backend` | string | Keyring backend (`os`\|`file`\|`test`) | `"os"` |
+| `--sign-mode` | string | Signature mode (`direct`\|`amino-json`) | |
+| `--offline` | boolean | Offline signing mode | `false` |
+| `--generate-only` | boolean | Generate unsigned transaction | `false` |
+
+### Broadcasting Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--broadcast-mode` | string | Broadcasting mode (`sync`\|`async`) | `"sync"` |
+| `--node` | string | RPC endpoint | `"tcp://localhost:26657"` |
+| `--yes` | boolean | Skip confirmation prompts | `false` |

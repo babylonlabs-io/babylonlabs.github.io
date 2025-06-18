@@ -1,0 +1,284 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: generate-bls-pop
+sidebar_position: 9
+---
+
+# generate-bls-pop
+
+Generate a BLS proof-of-possession for a validator. The proof-of-possession (PoP) is a cryptographic proof that demonstrates ownership of both Ed25519 and BLS private keys, required for validators participating in Babylon's checkpointing mechanism.
+
+## Overview
+
+The `generate-bls-pop` command creates a BLS proof-of-possession by combining the Ed25519 and BLS private keys from stored validator key files. This proof is essential for validator registration and is used with the `babylond tx checkpointing create-validator` command.
+
+```bash
+babylond generate-bls-pop [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- Initialized your Babylon node with [`babylond init`](./init.md)
+- Created BLS keys with [`babylond create-bls-key`](./create-bls-key.md)
+- Confirmed that both key files exist:
+  - `priv_validator_key.json` (contains Ed25519 keys)
+  - `bls_key.json` or BLS keys embedded in `priv_validator_key.json`
+
+## Arguments
+
+This command takes no positional arguments. All configuration is done through flags.
+
+## Flags
+
+### Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | The node home directory |
+| `-h, --help` | | | Help for generate-bls-pop |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+## Examples
+
+### Basic PoP Generation
+
+Generate BLS proof-of-possession with default settings:
+
+```bash title="Generate BLS PoP"
+babylond generate-bls-pop
+```
+
+### Custom Home Directory
+
+Generate PoP from custom validator key location:
+
+```bash title="Custom home directory"
+babylond generate-bls-pop --home /custom/babylon/path
+```
+
+### Complete Validator Setup Workflow
+
+```bash title="Full validator creation with BLS PoP"
+# 1. Initialize the node
+babylond init my-validator --chain-id babylon-1
+
+# 2. Create BLS keys
+babylond create-bls-key
+
+# 3. Generate BLS proof-of-possession
+BLS_POP=$(babylond generate-bls-pop)
+
+# 4. Create validator with BLS PoP
+babylond tx checkpointing create-validator \
+  --amount 1000000ubbn \
+  --pubkey $(babylond comet show-validator) \
+  --moniker "My Validator" \
+  --chain-id babylon-1 \
+  --commission-rate 0.05 \
+  --commission-max-rate 0.20 \
+  --commission-max-change-rate 0.01 \
+  --min-self-delegation 1 \
+  --bls-pop "$BLS_POP" \
+  --from validator-key
+```
+
+### Testnet Validator Setup
+
+```bash title="Testnet validator with PoP"
+# Initialize testnet validator
+babylond init testnet-validator --chain-id babylon-testnet-1
+
+# Create BLS keys with password
+babylond create-bls-key
+
+# Generate and save PoP for later use
+babylond generate-bls-pop > bls_pop.txt
+
+# Create validator transaction
+babylond tx checkpointing create-validator \
+  --amount 50000000ubbn \
+  --pubkey $(babylond comet show-validator) \
+  --moniker "Testnet Validator" \
+  --chain-id babylon-testnet-1 \
+  --commission-rate 0.10 \
+  --commission-max-rate 0.50 \
+  --commission-max-change-rate 0.05 \
+  --min-self-delegation 1 \
+  --bls-pop "$(cat bls_pop.txt)" \
+  --from testnet-key \
+  --gas auto \
+  --gas-adjustment 1.5
+```
+
+### Validator Migration
+
+```bash title="Migrate validator with new PoP"
+# Stop existing validator
+systemctl stop babylond
+
+# Backup existing keys
+cp ~/.babylond/config/priv_validator_key.json ~/.babylond/backup/
+
+# Create new BLS keys (if migrating)
+babylond create-bls-key
+
+# Generate new PoP
+NEW_POP=$(babylond generate-bls-pop)
+
+# Update validator with new PoP
+babylond tx checkpointing edit-validator \
+  --bls-pop "$NEW_POP" \
+  --from validator-key \
+  --chain-id babylon-1
+
+# Restart validator
+systemctl start babylond
+```
+
+## Understanding BLS Proof-of-Possession
+
+### What is PoP?
+
+A BLS proof-of-possession is a cryptographic proof that demonstrates:
+
+1. **Key Ownership**: The validator controls both Ed25519 and BLS private keys
+2. **Key Association**: The keys are properly linked and belong to the same entity
+3. **Anti-Rogue Key Attack**: Prevents malicious aggregation of public keys
+
+### PoP Structure
+
+The generated proof-of-possession contains:
+
+```json title="BLS PoP structure"
+{
+  "ed25519_sig": {
+    "ed25519_sig": "base64_encoded_signature"
+  },
+  "bls_sig": {
+    "bls_sig": "base64_encoded_bls_signature"
+  }
+}
+```
+
+### Cryptographic Process
+
+The PoP generation process:
+
+1. **Message Creation**: Constructs a specific message format
+2. **Ed25519 Signature**: Signs the message with Ed25519 private key
+3. **BLS Signature**: Signs the message with BLS private key
+4. **Proof Assembly**: Combines both signatures into the PoP structure
+
+## Verification and Validation
+
+### Verify Key Files
+
+Before generating PoP, verify your key files:
+
+```bash title="Check validator keys"
+# Verify priv_validator_key.json exists and is valid
+test -f ~/.babylond/config/priv_validator_key.json && echo "✅ Validator key found"
+jq empty ~/.babylond/config/priv_validator_key.json && echo "✅ Valid JSON format"
+
+# Check for BLS keys in validator file
+jq '.bls_key' ~/.babylond/config/priv_validator_key.json | grep -v null && echo "✅ BLS keys found"
+
+# Verify file permissions
+ls -la ~/.babylond/config/priv_validator_key.json
+```
+
+### Validate Generated PoP
+
+```bash title="Validate PoP format"
+# Generate and validate PoP structure
+POP=$(babylond generate-bls-pop)
+echo "$POP" | jq empty && echo "✅ Valid JSON PoP"
+
+# Check PoP components
+echo "$POP" | jq -e '.ed25519_sig.ed25519_sig' > /dev/null && echo "✅ Ed25519 signature present"
+echo "$POP" | jq -e '.bls_sig.bls_sig' > /dev/null && echo "✅ BLS signature present"
+
+# Verify base64 encoding
+echo "$POP" | jq -r '.ed25519_sig.ed25519_sig' | base64 -d > /dev/null && echo "✅ Valid Ed25519 signature encoding"
+echo "$POP" | jq -r '.bls_sig.bls_sig' | base64 -d > /dev/null && echo "✅ Valid BLS signature encoding"
+```
+
+### Integration Testing
+
+```bash title="Test PoP with validator creation"
+# Generate PoP
+POP=$(babylond generate-bls-pop)
+
+# Test validator creation (dry run)
+babylond tx checkpointing create-validator \
+  --amount 1000000ubbn \
+  --pubkey $(babylond comet show-validator) \
+  --moniker "Test Validator" \
+  --chain-id babylon-1 \
+  --commission-rate 0.05 \
+  --commission-max-rate 0.20 \
+  --commission-max-change-rate 0.01 \
+  --min-self-delegation 1 \
+  --bls-pop "$POP" \
+  --from validator-key \
+  --dry-run
+
+echo "✅ PoP validation test completed"
+```
+
+## Security Considerations
+
+:::danger Critical Security Notes
+- **Private Key Access**: PoP generation requires access to private keys - ensure secure environment
+- **Key File Protection**: Maintain strict file permissions (600) on validator key files
+- **Secure Generation**: Generate PoP on the same secure system where keys are stored
+- **No Key Transmission**: Never transmit or share the private keys used for PoP generation
+:::
+
+:::warning Operational Security
+- **Backup Before Generation**: Always backup key files before any operations
+- **Environment Isolation**: Generate PoP on isolated, secure systems
+- **Access Logging**: Monitor access to key files and PoP generation
+- **Key Rotation**: Plan for PoP regeneration during key rotation procedures
+:::
+
+:::info Network Security
+- **PoP Uniqueness**: Each PoP is specific to the validator's key pair
+- **Replay Protection**: PoP cannot be reused by other validators
+- **Network Verification**: The network validates PoP during validator registration
+- **Slashing Protection**: Invalid PoP can prevent validator participation
+:::
+
+## Best Practices
+
+:::tip Validator Setup
+- **Generate PoP immediately before validator creation** to ensure freshness
+- **Test PoP validity** with dry-run validator creation commands
+- **Store PoP securely** if not using immediately
+- **Regenerate PoP** after any key operations or rotations
+:::
+
+:::note Operational Procedures
+- **Document PoP generation** in validator setup procedures
+- **Include PoP validation** in health check scripts
+- **Plan for PoP regeneration** during maintenance windows
+- **Test recovery procedures** including PoP regeneration
+:::
+
+:::warning Troubleshooting Preparation
+- **Keep backup copies** of working key configurations
+- **Document key generation procedures** for recovery scenarios
+- **Test PoP generation** on testnet before mainnet operations
+- **Verify network compatibility** of generated PoP format
+:::
+

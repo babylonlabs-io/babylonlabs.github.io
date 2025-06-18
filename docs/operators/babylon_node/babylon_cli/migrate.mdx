@@ -1,0 +1,456 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: migrate
+sidebar_position: 14
+---
+
+# migrate
+
+Migrate the source genesis file to a target version format and output the updated genesis. This command is essential for chain upgrades, enabling networks to transition between different protocol versions while preserving state and maintaining network continuity.
+
+## Overview
+
+The `migrate` command transforms genesis files from one protocol version to another, updating the format, schema, and default parameters to match the target version requirements. This is a critical tool for coordinated network upgrades and protocol evolution.
+
+```bash
+babylond migrate [target-version] [genesis-file] [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- **Source genesis file** from the current network version
+- **Target version information** for the upgrade
+- **Backup procedures** in place for the original genesis
+- **Network coordination** with other validators for upgrade timing
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `target-version` | The target protocol version (e.g., `v1.0.0`, `v2.0.0`) |
+| `genesis-file` | Path to the source genesis.json file to migrate |
+
+## Flags
+
+### Migration Configuration
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--chain-id` | string | Override chain_id in the migrated genesis |
+| `--genesis-time` | string | Override genesis_time in the migrated genesis |
+| `--output-document` | string | Write migrated genesis to file instead of STDOUT |
+| `-h, --help` | | Help for migrate |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+
+## Examples
+
+### Basic Genesis Migration
+
+Migrate genesis to a new version:
+
+```bash title="Basic migration"
+babylond migrate v2.0.0 ./genesis.json > migrated_genesis.json
+```
+
+### Complete Network Upgrade
+
+Migrate with new chain parameters:
+
+```bash title="Network upgrade migration"
+babylond migrate v2.0.0 ./current_genesis.json \
+  --chain-id babylon-2 \
+  --genesis-time 2024-12-01T12:00:00Z \
+  --output-document ./babylon-2-genesis.json
+```
+
+### Migration with Original Parameters
+
+Preserve existing chain-id and genesis time:
+
+```bash title="Version-only migration"
+babylond migrate v1.5.0 ./genesis-v1.4.json \
+  --output-document ./genesis-v1.5.json
+```
+
+### Migration from Exported State
+
+Migrate an exported state to new format:
+
+```bash title="Migrate exported state"
+# Export current state
+babylond export --height 1000000 --output-document current_state.json
+
+# Migrate to new version
+babylond migrate v2.0.0 current_state.json \
+  --chain-id babylon-upgraded \
+  --genesis-time 2024-12-01T12:00:00Z \
+  --output-document upgraded_genesis.json
+```
+
+## Complete Chain Upgrade Workflow
+
+### Coordinated Network Upgrade
+
+```bash title="Full upgrade procedure"
+#!/bin/bash
+# Complete chain upgrade workflow
+
+# Configuration
+OLD_VERSION="v1.0.0"
+NEW_VERSION="v2.0.0"
+UPGRADE_HEIGHT="2000000"
+NEW_CHAIN_ID="babylon-2"
+UPGRADE_TIME="2024-12-01T12:00:00Z"
+
+echo "🔄 Starting chain upgrade from $OLD_VERSION to $NEW_VERSION"
+
+# 1. Stop the current chain at upgrade height
+echo "⏹️ Stopping chain at height $UPGRADE_HEIGHT"
+# Network stops automatically at upgrade height
+
+# 2. Export final state
+echo "📤 Exporting final state..."
+babylond export \
+  --height $UPGRADE_HEIGHT \
+  --output-document final_state_$OLD_VERSION.json
+
+# 3. Backup current state
+echo "💾 Creating backup..."
+cp final_state_$OLD_VERSION.json final_state_backup_$(date +%Y%m%d_%H%M%S).json
+
+# 4. Migrate genesis to new version
+echo "🔄 Migrating genesis to $NEW_VERSION..."
+babylond migrate $NEW_VERSION final_state_$OLD_VERSION.json \
+  --chain-id $NEW_CHAIN_ID \
+  --genesis-time $UPGRADE_TIME \
+  --output-document genesis_$NEW_VERSION.json
+
+# 5. Validate migrated genesis
+echo "✅ Validating migrated genesis..."
+babylond validate-genesis genesis_$NEW_VERSION.json
+
+# 6. Replace genesis file
+echo "📝 Installing new genesis..."
+cp genesis_$NEW_VERSION.json ~/.babylond/config/genesis.json
+
+# 7. Update binary to new version
+echo "⬆️ Update babylond binary to $NEW_VERSION"
+# Binary update process depends on your setup
+
+echo "✅ Chain upgrade preparation completed!"
+echo "Start the new chain with: babylond start"
+```
+
+### Testnet Migration Testing
+
+```bash title="Test migration procedure"
+#!/bin/bash
+# Test migration on testnet before mainnet
+
+TESTNET_GENESIS="testnet_genesis.json"
+TARGET_VERSION="v2.0.0"
+
+echo "🧪 Testing migration procedure..."
+
+# 1. Download current testnet genesis
+wget -O $TESTNET_GENESIS \
+  https://github.com/babylonchain/networks/raw/main/testnet/genesis.json
+
+# 2. Test migration
+babylond migrate $TARGET_VERSION $TESTNET_GENESIS \
+  --chain-id babylon-testnet-upgraded \
+  --genesis-time $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+  --output-document testnet_migrated.json
+
+# 3. Validate migrated genesis
+if babylond validate-genesis testnet_migrated.json; then
+    echo "✅ Migration test successful"
+else
+    echo "❌ Migration test failed"
+    exit 1
+fi
+
+# 4. Compare key parameters
+echo "📊 Migration comparison:"
+echo "Original chain-id: $(jq -r '.chain_id' $TESTNET_GENESIS)"
+echo "Migrated chain-id: $(jq -r '.chain_id' testnet_migrated.json)"
+echo "Original app version: $(jq -r '.app_version // "unknown"' $TESTNET_GENESIS)"
+echo "Migrated app version: $(jq -r '.app_version // "unknown"' testnet_migrated.json)"
+
+echo "🎉 Migration testing completed"
+```
+
+### Multi-Validator Coordination
+
+```bash title="Distributed upgrade coordination"
+#!/bin/bash
+# Script for coordinating migration across multiple validators
+
+VALIDATORS=("validator1.babylon.network" "validator2.babylon.network" "validator3.babylon.network")
+UPGRADE_HEIGHT="3000000"
+NEW_VERSION="v2.0.0"
+
+echo "🌐 Coordinating upgrade across ${#VALIDATORS[@]} validators"
+
+# 1. Export state from all validators at upgrade height
+for validator in "${VALIDATORS[@]}"; do
+    echo "📤 Exporting state from $validator..."
+    ssh "$validator" "babylond export --height $UPGRADE_HEIGHT" > "state_${validator}.json"
+done
+
+# 2. Compare exported states for consistency
+echo "🔍 Verifying state consistency..."
+base_hash=$(sha256sum "state_${VALIDATORS[0]}.json" | cut -d' ' -f1)
+all_consistent=true
+
+for validator in "${VALIDATORS[@]:1}"; do
+    current_hash=$(sha256sum "state_${validator}.json" | cut -d' ' -f1)
+    if [ "$base_hash" != "$current_hash" ]; then
+        echo "❌ State mismatch between ${VALIDATORS[0]} and $validator"
+        all_consistent=false
+    fi
+done
+
+if [ "$all_consistent" = true ]; then
+    echo "✅ All validator states are consistent"
+else
+    echo "❌ State inconsistency detected - investigation required"
+    exit 1
+fi
+
+# 3. Perform migration
+echo "🔄 Performing migration..."
+babylond migrate $NEW_VERSION "state_${VALIDATORS[0]}.json" \
+  --chain-id babylon-upgraded \
+  --genesis-time "2024-12-01T12:00:00Z" \
+  --output-document coordinated_genesis.json
+
+# 4. Validate and distribute
+babylond validate-genesis coordinated_genesis.json
+
+for validator in "${VALIDATORS[@]}"; do
+    echo "📨 Distributing genesis to $validator..."
+    scp coordinated_genesis.json "$validator:~/upgraded_genesis.json"
+done
+
+echo "🎊 Coordinated migration completed!"
+```
+
+## Migration Validation and Testing
+
+### Pre-Migration Validation
+
+```bash title="Validate before migration"
+#!/bin/bash
+# Comprehensive pre-migration validation
+
+GENESIS_FILE="current_genesis.json"
+TARGET_VERSION="v2.0.0"
+
+echo "🔍 Pre-migration validation..."
+
+# 1. Validate source genesis
+echo "✅ Validating source genesis..."
+babylond validate-genesis $GENESIS_FILE || {
+    echo "❌ Source genesis validation failed"
+    exit 1
+}
+
+# 2. Check genesis file structure
+echo "📋 Checking genesis structure..."
+required_fields=("chain_id" "genesis_time" "app_state")
+for field in "${required_fields[@]}"; do
+    if ! jq -e ".$field" $GENESIS_FILE > /dev/null; then
+        echo "❌ Missing required field: $field"
+        exit 1
+    fi
+done
+
+# 3. Verify app state modules
+echo "🔧 Checking app state modules..."
+modules=$(jq -r '.app_state | keys[]' $GENESIS_FILE)
+echo "Available modules: $modules"
+
+# 4. Check for Babylon-specific modules
+babylon_modules=("btcstaking" "checkpointing" "finality")
+for module in "${babylon_modules[@]}"; do
+    if jq -e ".app_state.$module" $GENESIS_FILE > /dev/null; then
+        echo "✅ Babylon module found: $module"
+    else
+        echo "⚠️  Babylon module missing: $module"
+    fi
+done
+
+echo "🎯 Pre-migration validation completed"
+```
+
+### Post-Migration Testing
+
+```bash title="Validate migrated genesis"
+#!/bin/bash
+# Post-migration validation and testing
+
+MIGRATED_GENESIS="migrated_genesis.json"
+ORIGINAL_GENESIS="original_genesis.json"
+
+echo "🧪 Post-migration validation..."
+
+# 1. Validate migrated genesis
+echo "✅ Validating migrated genesis..."
+babylond validate-genesis $MIGRATED_GENESIS || {
+    echo "❌ Migrated genesis validation failed"
+    exit 1
+}
+
+# 2. Compare key metrics
+echo "📊 Comparing migration results..."
+
+# Chain ID comparison
+ORIG_CHAIN_ID=$(jq -r '.chain_id' $ORIGINAL_GENESIS)
+NEW_CHAIN_ID=$(jq -r '.chain_id' $MIGRATED_GENESIS)
+echo "Chain ID: $ORIG_CHAIN_ID → $NEW_CHAIN_ID"
+
+# Genesis time comparison
+ORIG_TIME=$(jq -r '.genesis_time' $ORIGINAL_GENESIS)
+NEW_TIME=$(jq -r '.genesis_time' $MIGRATED_GENESIS)
+echo "Genesis time: $ORIG_TIME → $NEW_TIME"
+
+# Module comparison
+echo "📋 Module comparison:"
+ORIG_MODULES=$(jq -r '.app_state | keys | sort | join(", ")' $ORIGINAL_GENESIS)
+NEW_MODULES=$(jq -r '.app_state | keys | sort | join(", ")' $MIGRATED_GENESIS)
+echo "Original modules: $ORIG_MODULES"
+echo "Migrated modules: $NEW_MODULES"
+
+# 3. Test genesis loading
+echo "🔄 Testing genesis initialization..."
+babylond init test-migration --chain-id test-migration-chain
+
+# Replace with migrated genesis
+cp $MIGRATED_GENESIS ~/.babylond/config/genesis.json
+
+# Test startup (dry run)
+if babylond start --dry-run; then
+    echo "✅ Genesis loads successfully"
+else
+    echo "❌ Genesis loading failed"
+    exit 1
+fi
+
+# Cleanup test
+rm -rf ~/.babylond
+
+echo "🎉 Post-migration validation completed successfully"
+```
+
+## Security and Safety Considerations
+
+:::danger Critical Migration Safety
+- **Always backup** original genesis files before migration
+- **Test migrations** thoroughly on testnets before mainnet
+- **Coordinate timing** with all network validators
+- **Validate results** before network restart
+:::
+
+:::warning Network Coordination
+- **Synchronize upgrade timing** across all validators
+- **Verify state consistency** between validators before migration
+- **Plan rollback procedures** in case of migration failure
+- **Test communication channels** for upgrade coordination
+:::
+
+:::info Migration Best Practices
+- **Document migration procedures** for your team
+- **Verify target version compatibility** with your setup
+- **Test with realistic data** similar to production state
+- **Plan sufficient time** for validation and testing
+:::
+
+## Common Use Cases
+
+1. **Protocol Upgrades**: Migrate to new consensus or application versions
+2. **Network Forks**: Create new networks from existing state
+3. **Chain Mergers**: Combine state from multiple networks (advanced)
+4. **Parameter Updates**: Update network parameters during upgrades
+5. **Bug Fixes**: Apply fixes that require genesis format changes
+
+## Troubleshooting
+
+### Common Migration Issues
+
+**Unsupported target version**
+```
+Error: unknown version 'v3.0.0'
+```
+**Solution**: Verify the target version is supported by your babylond binary.
+
+**Invalid genesis format**
+```
+Error: genesis file validation failed
+```
+**Solution**: Validate the source genesis first:
+```bash
+babylond validate-genesis original_genesis.json
+```
+
+**Missing required fields**
+```
+Error: missing field 'app_state.auth'
+```
+**Solution**: Ensure the source genesis contains all required modules for the target version.
+
+**Chain ID conflicts**
+```
+Error: chain-id mismatch
+```
+**Solution**: Use `--chain-id` flag to specify the correct chain ID for the migration.
+
+### Diagnostic Commands
+
+```bash title="Migration diagnostics"
+# Check source genesis validity
+babylond validate-genesis source_genesis.json
+
+# Verify migration output format
+babylond migrate v2.0.0 source_genesis.json | jq empty
+
+# Compare migration results
+diff <(jq '.app_state | keys | sort' original.json) \
+     <(jq '.app_state | keys | sort' migrated.json)
+
+# Test migration with dry run
+babylond migrate v2.0.0 source_genesis.json \
+  --output-document test_migration.json && \
+  babylond validate-genesis test_migration.json
+```
+
+### Recovery Procedures
+
+```bash title="Migration recovery workflow"
+# 1. Stop if migration fails
+set -e
+
+# 2. Restore from backup
+if [ -f "genesis_backup.json" ]; then
+    echo "🔄 Restoring from backup..."
+    cp genesis_backup.json ~/.babylond/config/genesis.json
+fi
+
+# 3. Validate restoration
+babylond validate-genesis ~/.babylond/config/genesis.json
+
+# 4. Restart with original version
+echo "▶️ Restarting with original configuration..."
+babylond start
+```
