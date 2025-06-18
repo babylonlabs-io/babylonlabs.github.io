@@ -1,0 +1,819 @@
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    <div class="release-badge">Version: <strong>v1.1.0-rc.1</strong></div>
+    <p>data-color-mode="auto" data-light-theme="light" data-dark-theme="dark"
+data-a11y-animated-images="system" data-a11y-link-underlines="true"</p>
+<blockquote>
+</blockquote>
+<pre><code>&#x3C;link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-225433424a87.css" />
+&#x3C;link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-b4bd0459f984.css" />
+&#x3C;link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/global-46e30a0a488d.css" />
+&#x3C;link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/github-ef14fd9f242b.css" />
+</code></pre>
+<p></p>
+<pre><code>&#x3C;meta name="hovercard-subject-tag" content="repository:833974208" data-turbo-transient>
+</code></pre>
+<pre><code>&#x3C;meta name="google-site-verification" content="Apib7-x98H0j5cPqHWwSMm6dNU4GmODRoqxLiDzdx9I">
+</code></pre>
+<pre><code>&#x3C;meta name="user-login" content="">
+
+
+
+&#x3C;meta name="viewport" content="width=device-width">
+
+
+
+  &#x3C;meta name="description" content="Contribute to babylonlabs-io/finality-provider development by creating an account on GitHub.">
+
+  &#x3C;link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+
+&#x3C;link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+&#x3C;meta property="fb:app_id" content="1401488693436528">
+&#x3C;meta name="apple-itunes-app" content="app-id=1477376905, app-argument=https://github.com/babylonlabs-io/finality-provider/blob/v1.1.0-rc.1/docs/hmac-security.md" />
+
+  &#x3C;meta name="twitter:image" content="https://opengraph.githubassets.com/117e622a03cd2170bcb2561abe6d08a73807507fac6b085220a2ad7867617d83/babylonlabs-io/finality-provider" />&#x3C;meta name="twitter:site" content="@github" />&#x3C;meta name="twitter:card" content="summary_large_image" />&#x3C;meta name="twitter:title" content="finality-provider/docs/hmac-security.md at v1.1.0-rc.1 · babylonlabs-io/finality-provider" />&#x3C;meta name="twitter:description" content="Contribute to babylonlabs-io/finality-provider development by creating an account on GitHub." />
+</code></pre>
+<p></p>
+<pre><code>  &#x3C;meta name="hostname" content="github.com">
+
+
+
+    &#x3C;meta name="expected-hostname" content="github.com">
+</code></pre>
+<pre><code>  &#x3C;meta name="turbo-cache-control" content="no-cache" data-turbo-transient>
+
+&#x3C;meta data-hydrostats="publish">
+</code></pre>
+<p></p>
+<pre><code>  &#x3C;meta name="robots" content="noindex, nofollow" />
+
+
+&#x3C;meta name="turbo-body-classes" content="logged-out env-production page-responsive">
+</code></pre>
+<pre><code>&#x3C;div class="position-relative header-wrapper js-header-wrapper ">
+  &#x3C;a href="#start-of-content" data-skip-target-assigned="false" class="px-2 py-4 color-bg-accent-emphasis color-fg-on-emphasis show-on-focus js-skip-to-content">Skip to content&#x3C;/a>
+
+  &#x3C;span data-view-component="true" class="progress-pjax-loader Progress position-fixed width-full">
+&#x3C;span style="width: 0%;" data-view-component="true" class="Progress-item progress-pjax-loader-bar left-0 top-0 color-bg-accent-emphasis">&#x3C;/span>
+</code></pre>
+<pre><code>  &#x3C;script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/ui_packages_ui-commands_ui-commands_ts-eb77c4447210.js" defer="defer">&#x3C;/script>
+</code></pre>
+<p>&#x3C;react-partial
+partial-name="keyboard-shortcuts-dialog"
+data-ssr="false"
+data-attempted-ssr="false"
+data-react-profiling="false"</p>
+<blockquote>
+</blockquote>
+<pre><code>  &#x3C;a class="mr-lg-3 color-fg-inherit flex-order-2 js-prevent-focus-on-mobile-nav"
+    href="/"
+    aria-label="Homepage"
+    data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Marketing nav&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;click to go to homepage&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;ref_page:Marketing;ref_cta:Logomark;ref_loc:Header&#x26;quot;}">
+    &#x3C;svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github">
+&#x3C;path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;div class="d-flex flex-1 flex-order-2 text-right d-lg-none gap-2 flex-justify-end">
+      &#x3C;a
+        href="/login?return_to=https%3A%2F%2Fgithub.com%2Fbabylonlabs-io%2Ffinality-provider%2Fblob%2Fv1.1.0-rc.1%2Fdocs%2Fhmac-security.md"
+        class="HeaderMenu-link HeaderMenu-button d-inline-flex f5 no-underline border color-border-default rounded-2 px-2 py-1 color-fg-inherit js-prevent-focus-on-mobile-nav"
+        data-hydro-click="{&#x26;quot;event_type&#x26;quot;:&#x26;quot;authentication.click&#x26;quot;,&#x26;quot;payload&#x26;quot;:{&#x26;quot;location_in_page&#x26;quot;:&#x26;quot;site header menu&#x26;quot;,&#x26;quot;repository_id&#x26;quot;:null,&#x26;quot;auth_type&#x26;quot;:&#x26;quot;SIGN_UP&#x26;quot;,&#x26;quot;originating_url&#x26;quot;:&#x26;quot;https://github.com/babylonlabs-io/finality-provider/blob/v1.1.0-rc.1/docs/hmac-security.md&#x26;quot;,&#x26;quot;user_id&#x26;quot;:null}}" data-hydro-click-hmac="d0ca31fd69c0cf0b1df99aeca9d5faced29fba529a998a55334b527e9c3c5e07"
+        data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Marketing nav&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;click to Sign in&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;ref_page:Marketing;ref_cta:Sign in;ref_loc:Header&#x26;quot;}"
+      >
+        Sign in
+      &#x3C;/a>
+          &#x3C;div class="AppHeader-appearanceSettings">
+&#x3C;react-partial-anchor>
+  &#x3C;button data-target="react-partial-anchor.anchor" id="icon-button-3380660c-edd8-4955-be74-75ba7f023a7d" aria-labelledby="tooltip-eaf3b76a-6356-4610-a3c2-96ad9546b810" type="button" disabled="disabled" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium AppHeader-button HeaderMenu-link border cursor-wait">  &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-sliders Button-visual">
+&#x3C;path d="M15 2.75a.75.75 0 0 1-.75.75h-4a.75.75 0 0 1 0-1.5h4a.75.75 0 0 1 .75.75Zm-8.5.75v1.25a.75.75 0 0 0 1.5 0v-4a.75.75 0 0 0-1.5 0V2H1.75a.75.75 0 0 0 0 1.5H6.5Zm1.25 5.25a.75.75 0 0 0 0-1.5h-6a.75.75 0 0 0 0 1.5h6ZM15 8a.75.75 0 0 1-.75.75H11.5V10a.75.75 0 1 1-1.5 0V6a.75.75 0 0 1 1.5 0v1.25h2.75A.75.75 0 0 1 15 8Zm-9 5.25v-2a.75.75 0 0 0-1.5 0v1.25H1.75a.75.75 0 0 0 0 1.5H4.5v1.25a.75.75 0 0 0 1.5 0v-2Zm9 0a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1 0-1.5h6a.75.75 0 0 1 .75.75Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;template data-target="react-partial-anchor.template">
+    &#x3C;script crossorigin="anonymous" type="application/javascript" src="https://github.githubassets.com/assets/ui_packages_document-metadata_document-metadata_ts-ui_packages_promise-with-resolvers-polyfil-40d47c-d5b8454ad019.js" defer="defer">&#x3C;/script>
+</code></pre>
+<p>&#x3C;react-partial
+partial-name="appearance-settings"
+data-ssr="false"
+data-attempted-ssr="false"
+data-react-profiling="false"</p>
+<blockquote>
+</blockquote>
+<pre><code>  &#x3C;/template>
+&#x3C;/react-partial-anchor>
+</code></pre>
+<pre><code>  &#x3C;/div>
+&#x3C;/div>
+
+
+&#x3C;div class="HeaderMenu js-header-menu height-fit position-lg-relative d-lg-flex flex-column flex-auto top-0">
+  &#x3C;div class="HeaderMenu-wrapper d-flex flex-column flex-self-start flex-lg-row flex-auto rounded rounded-lg-0">
+      &#x3C;nav class="HeaderMenu-nav" aria-label="Global">
+        &#x3C;ul class="d-lg-flex list-style-none">
+
+
+            &#x3C;li class="HeaderMenu-item position-relative flex-wrap flex-justify-between flex-items-center d-block d-lg-flex flex-lg-nowrap flex-lg-items-center js-details-container js-header-menu-item">
+  &#x3C;button type="button" class="HeaderMenu-link border-0 width-full width-lg-auto px-0 px-lg-2 py-lg-2 no-wrap d-flex flex-items-center flex-justify-between js-details-target" aria-expanded="false">
+    Product
+    &#x3C;svg opacity="0.5" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down HeaderMenu-icon ml-1">
+&#x3C;path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;div class="HeaderMenu-dropdown dropdown-menu rounded m-0 p-0 pt-2 pt-lg-4 position-relative position-lg-absolute left-0 left-lg-n3 pb-2 pb-lg-4 d-lg-flex flex-wrap dropdown-menu-wide">
+      &#x3C;div class="HeaderMenu-column px-lg-4 border-lg-right mb-4 mb-lg-0 pr-lg-7">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0">
+
+            &#x3C;ul class="list-style-none f5" >
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+      &#x3C;div class="HeaderMenu-column px-lg-4 border-lg-right mb-4 mb-lg-0 pr-lg-7">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0">
+
+            &#x3C;ul class="list-style-none f5" >
+                
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+      &#x3C;div class="HeaderMenu-column px-lg-4">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0 border-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="product-explore-heading">Explore&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="product-explore-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<pre><code>&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-link-external HeaderMenu-external-icon color-fg-subtle">
+&#x3C;path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z">&#x3C;/path>
+</code></pre>
+<pre><code>                &#x3C;li>
+</code></pre>
+<pre><code>&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-link-external HeaderMenu-external-icon color-fg-subtle">
+&#x3C;path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z">&#x3C;/path>
+</code></pre>
+<pre><code>                &#x3C;li>
+</code></pre>
+<pre><code>&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-link-external HeaderMenu-external-icon color-fg-subtle">
+&#x3C;path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z">&#x3C;/path>
+</code></pre>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+
+  &#x3C;/div>
+</code></pre>
+<pre><code>            &#x3C;li class="HeaderMenu-item position-relative flex-wrap flex-justify-between flex-items-center d-block d-lg-flex flex-lg-nowrap flex-lg-items-center js-details-container js-header-menu-item">
+  &#x3C;button type="button" class="HeaderMenu-link border-0 width-full width-lg-auto px-0 px-lg-2 py-lg-2 no-wrap d-flex flex-items-center flex-justify-between js-details-target" aria-expanded="false">
+    Solutions
+    &#x3C;svg opacity="0.5" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down HeaderMenu-icon ml-1">
+&#x3C;path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;div class="HeaderMenu-dropdown dropdown-menu rounded m-0 p-0 pt-2 pt-lg-4 position-relative position-lg-absolute left-0 left-lg-n3 d-lg-flex flex-wrap dropdown-menu-wide">
+      &#x3C;div class="HeaderMenu-column px-lg-4 border-lg-right mb-4 mb-lg-0 pr-lg-7">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0 pb-lg-3 mb-3 mb-lg-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="solutions-by-company-size-heading">By company size&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="solutions-by-company-size-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="solutions-by-use-case-heading">By use case&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="solutions-by-use-case-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+      &#x3C;div class="HeaderMenu-column px-lg-4">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="solutions-by-industry-heading">By industry&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="solutions-by-industry-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+
+     &#x3C;div class="HeaderMenu-trailing-link rounded-bottom-2 flex-shrink-0 mt-lg-4 px-lg-4 py-4 py-lg-3 f5 text-semibold">
+        &#x3C;a href="/solutions">
+          View all solutions
+          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-right HeaderMenu-trailing-link-icon">
+&#x3C;path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z">&#x3C;/path>
+</code></pre>
+<pre><code>            &#x3C;li class="HeaderMenu-item position-relative flex-wrap flex-justify-between flex-items-center d-block d-lg-flex flex-lg-nowrap flex-lg-items-center js-details-container js-header-menu-item">
+  &#x3C;button type="button" class="HeaderMenu-link border-0 width-full width-lg-auto px-0 px-lg-2 py-lg-2 no-wrap d-flex flex-items-center flex-justify-between js-details-target" aria-expanded="false">
+    Resources
+    &#x3C;svg opacity="0.5" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down HeaderMenu-icon ml-1">
+&#x3C;path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;div class="HeaderMenu-dropdown dropdown-menu rounded m-0 p-0 pt-2 pt-lg-4 position-relative position-lg-absolute left-0 left-lg-n3 pb-2 pb-lg-4 d-lg-flex flex-wrap dropdown-menu-wide">
+      &#x3C;div class="HeaderMenu-column px-lg-4 border-lg-right mb-4 mb-lg-0 pr-lg-7">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="resources-topics-heading">Topics&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="resources-topics-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+      &#x3C;div class="HeaderMenu-column px-lg-4">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-lg-bottom-0 border-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="resources-explore-heading">Explore&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="resources-explore-heading">
+                &#x3C;li>
+</code></pre>
+<pre><code>&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-link-external HeaderMenu-external-icon color-fg-subtle">
+&#x3C;path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z">&#x3C;/path>
+</code></pre>
+<pre><code>                &#x3C;li>
+</code></pre>
+<pre><code>&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-link-external HeaderMenu-external-icon color-fg-subtle">
+&#x3C;path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z">&#x3C;/path>
+</code></pre>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<pre><code>&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-link-external HeaderMenu-external-icon color-fg-subtle">
+&#x3C;path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z">&#x3C;/path>
+</code></pre>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+
+  &#x3C;/div>
+</code></pre>
+<pre><code>            &#x3C;li class="HeaderMenu-item position-relative flex-wrap flex-justify-between flex-items-center d-block d-lg-flex flex-lg-nowrap flex-lg-items-center js-details-container js-header-menu-item">
+  &#x3C;button type="button" class="HeaderMenu-link border-0 width-full width-lg-auto px-0 px-lg-2 py-lg-2 no-wrap d-flex flex-items-center flex-justify-between js-details-target" aria-expanded="false">
+    Open Source
+    &#x3C;svg opacity="0.5" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down HeaderMenu-icon ml-1">
+&#x3C;path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;div class="HeaderMenu-dropdown dropdown-menu rounded m-0 p-0 pt-2 pt-lg-4 position-relative position-lg-absolute left-0 left-lg-n3 pb-2 pb-lg-4 px-lg-4">
+      &#x3C;div class="HeaderMenu-column">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 pb-lg-3 mb-3 mb-lg-0 mb-lg-3">
+
+            &#x3C;ul class="list-style-none f5" >
+                &#x3C;li>
+</code></pre>
+<pre><code>  &#x3C;div>
+      &#x3C;div class="color-fg-default h4">
+        GitHub Sponsors
+      &#x3C;/div>
+    Fund open source developers
+  &#x3C;/div>
+
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 pb-lg-3 mb-3 mb-lg-0 mb-lg-3">
+
+            &#x3C;ul class="list-style-none f5" >
+                &#x3C;li>
+</code></pre>
+<pre><code>  &#x3C;div>
+      &#x3C;div class="color-fg-default h4">
+        The ReadME Project
+      &#x3C;/div>
+    GitHub community articles
+  &#x3C;/div>
+
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="open-source-repositories-heading">Repositories&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="open-source-repositories-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+
+  &#x3C;/div>
+</code></pre>
+<pre><code>            &#x3C;li class="HeaderMenu-item position-relative flex-wrap flex-justify-between flex-items-center d-block d-lg-flex flex-lg-nowrap flex-lg-items-center js-details-container js-header-menu-item">
+  &#x3C;button type="button" class="HeaderMenu-link border-0 width-full width-lg-auto px-0 px-lg-2 py-lg-2 no-wrap d-flex flex-items-center flex-justify-between js-details-target" aria-expanded="false">
+    Enterprise
+    &#x3C;svg opacity="0.5" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-chevron-down HeaderMenu-icon ml-1">
+&#x3C;path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;div class="HeaderMenu-dropdown dropdown-menu rounded m-0 p-0 pt-2 pt-lg-4 position-relative position-lg-absolute left-0 left-lg-n3 pb-2 pb-lg-4 px-lg-4">
+      &#x3C;div class="HeaderMenu-column">
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 pb-lg-3 mb-3 mb-lg-0 mb-lg-3">
+
+            &#x3C;ul class="list-style-none f5" >
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+          &#x3C;div class="border-bottom pb-3 pb-lg-0 border-bottom-0">
+                &#x3C;span class="d-block h4 color-fg-default my-1" id="enterprise-available-add-ons-heading">Available add-ons&#x3C;/span>
+
+            &#x3C;ul class="list-style-none f5" aria-labelledby="enterprise-available-add-ons-heading">
+                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>                &#x3C;li>
+</code></pre>
+<p></p>
+<pre><code>            &#x3C;/ul>
+          &#x3C;/div>
+      &#x3C;/div>
+
+  &#x3C;/div>
+</code></pre>
+<pre><code>            &#x3C;li class="HeaderMenu-item position-relative flex-wrap flex-justify-between flex-items-center d-block d-lg-flex flex-lg-nowrap flex-lg-items-center js-details-container js-header-menu-item">
+&#x3C;a class="HeaderMenu-link no-underline px-0 px-lg-2 py-3 py-lg-2 d-block d-lg-inline-block" data-analytics-event="{&#x26;quot;location&#x26;quot;:&#x26;quot;navbar&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;pricing&#x26;quot;,&#x26;quot;context&#x26;quot;:&#x26;quot;global&#x26;quot;,&#x26;quot;tag&#x26;quot;:&#x26;quot;link&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;pricing_link_global_navbar&#x26;quot;}" href="https://github.com/pricing">Pricing&#x3C;/a>
+</code></pre>
+<pre><code>        &#x3C;/ul>
+      &#x3C;/nav>
+
+    &#x3C;div class="d-flex flex-column flex-lg-row width-full flex-justify-end flex-lg-items-center text-center mt-3 mt-lg-0 text-lg-left ml-lg-3">
+            
+</code></pre>
+<pre><code>&#x3C;input type="hidden" name="type" class="js-site-search-type-field">
+
+</code></pre>
+<pre><code>      &#x3C;div data-view-component="true">        &#x3C;div class="search-suggestions position-fixed width-full color-shadow-large border color-fg-default color-bg-default overflow-hidden d-flex flex-column query-builder-container"
+      style="border-radius: 12px;"
+      data-target="qbsearch-input.queryBuilderContainer"
+      hidden
+    >
+      &#x3C;!-- '"` -->&#x3C;!-- &#x3C;/textarea>&#x3C;/xmp> -->&#x3C;/option>&#x3C;/form>&#x3C;form id="query-builder-test-form" action="" accept-charset="UTF-8" method="get">
+</code></pre>
+<pre><code>  &#x3C;/div>
+  &#x3C;template id="search-icon">
+</code></pre>
+<pre><code>    &#x3C;div class="position-relative">
+            &#x3C;ul
+              role="listbox"
+              class="ActionListWrap QueryBuilder-ListWrap"
+              aria-label="Suggestions"
+              data-action="
+                combobox-commit:query-builder#comboboxCommit
+                mousedown:query-builder#resultsMousedown
+              "
+              data-target="query-builder.resultsList"
+              data-persist-list=false
+              id="query-builder-test-results"
+            >&#x3C;/ul>
+    &#x3C;/div>
+  &#x3C;div class="FormControl-inlineValidation" id="validation-c7dd2fdc-d16a-4d7b-a1e9-b4863cab3d11" hidden="hidden">
+    &#x3C;span class="FormControl-inlineValidation--visual">
+      &#x3C;svg aria-hidden="true" height="12" viewBox="0 0 12 12" version="1.1" width="12" data-view-component="true" class="octicon octicon-alert-fill">
+&#x3C;path d="M4.855.708c.5-.896 1.79-.896 2.29 0l4.675 8.351a1.312 1.312 0 0 1-1.146 1.954H1.33A1.313 1.313 0 0 1 .183 9.058ZM7 7V3H5v4Zm-1 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z">&#x3C;/path>
+</code></pre>
+<pre><code>&#x3C;/div>
+</code></pre>
+<p></p>
+<pre><code>&#x3C;/div>
+&#x3C;div class="Overlay-actionWrap">
+  &#x3C;button data-close-dialog-id="feedback-dialog" aria-label="Close" aria-label="Close" type="button" data-view-component="true" class="close-button Overlay-closeButton">&#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+&#x3C;path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z">&#x3C;/path>
+</code></pre>
+<p>
+</p>
+<pre><code>&#x3C;custom-scopes data-target="qbsearch-input.customScopesManager">
+</code></pre>
+<pre><code>    &#x3C;div hidden class="create-custom-scope-form" data-target="custom-scopes.createCustomScopeForm">
+    &#x3C;!-- '"` -->&#x3C;!-- &#x3C;/textarea>&#x3C;/xmp> -->&#x3C;/option>&#x3C;/form>&#x3C;form id="custom-scopes-dialog-form" data-turbo="false" action="/search/custom_scopes" accept-charset="UTF-8" method="post">&#x3C;input type="hidden" data-csrf="true" name="authenticity_token" value="X2/zWZUVdY0+sMRxpIXFmdZHNjCw8rMOTfKLtwmk5TtrNC0FXqvtP6/WlveUsQQjo5jJ7kJMN+Pn5fLCy40HEw==" />
+      &#x3C;div data-target="custom-scopes.customScopesModalDialogFlash">&#x3C;/div>
+
+      &#x3C;input type="hidden" id="custom_scope_id" name="custom_scope_id" data-target="custom-scopes.customScopesIdField">
+
+      &#x3C;div class="form-group">
+        &#x3C;label for="custom_scope_name">Name&#x3C;/label>
+        &#x3C;auto-check src="/search/custom_scopes/check_name" required>
+          &#x3C;input
+            type="text"
+            name="custom_scope_name"
+            id="custom_scope_name"
+            data-target="custom-scopes.customScopesNameField"
+            class="form-control"
+            autocomplete="off"
+            placeholder="github-ruby"
+            required
+            maxlength="50">
+          &#x3C;input type="hidden" data-csrf="true" value="A2739roWAFa3o9mTwuJYLP+413g6NUSHH4OKdb+DJPEN8nD4fo5tvXfzy5nCufut5HXd32JE794mt4gTyNzYlg==" />
+        &#x3C;/auto-check>
+      &#x3C;/div>
+
+      &#x3C;div class="form-group">
+        &#x3C;label for="custom_scope_query">Query&#x3C;/label>
+        &#x3C;input
+          type="text"
+          name="custom_scope_query"
+          id="custom_scope_query"
+          data-target="custom-scopes.customScopesQueryField"
+          class="form-control"
+          autocomplete="off"
+          placeholder="(repo:mona/a OR repo:mona/b) AND lang:python"
+          required
+          maxlength="500">
+      &#x3C;/div>
+
+      &#x3C;p class="text-small color-fg-muted">
+        To see all available qualifiers, see our &#x3C;a class="Link--inTextBlock" href="https://docs.github.com/search-github/github-code-search/understanding-github-code-search-syntax">documentation&#x3C;/a>.
+      &#x3C;/p>
+</code></pre>
+<pre><code>    &#x3C;div data-target="custom-scopes.manageCustomScopesForm">
+      &#x3C;div data-target="custom-scopes.list">&#x3C;/div>
+    &#x3C;/div>
+</code></pre>
+<pre><code>        &#x3C;div class="position-relative HeaderMenu-link-wrap d-lg-inline-block">
+          &#x3C;a
+            href="/login?return_to=https%3A%2F%2Fgithub.com%2Fbabylonlabs-io%2Ffinality-provider%2Fblob%2Fv1.1.0-rc.1%2Fdocs%2Fhmac-security.md"
+            class="HeaderMenu-link HeaderMenu-link--sign-in HeaderMenu-button flex-shrink-0 no-underline d-none d-lg-inline-flex border border-lg-0 rounded rounded-lg-0 px-2 py-1"
+            style="margin-left: 12px;"
+            data-hydro-click="{&#x26;quot;event_type&#x26;quot;:&#x26;quot;authentication.click&#x26;quot;,&#x26;quot;payload&#x26;quot;:{&#x26;quot;location_in_page&#x26;quot;:&#x26;quot;site header menu&#x26;quot;,&#x26;quot;repository_id&#x26;quot;:null,&#x26;quot;auth_type&#x26;quot;:&#x26;quot;SIGN_UP&#x26;quot;,&#x26;quot;originating_url&#x26;quot;:&#x26;quot;https://github.com/babylonlabs-io/finality-provider/blob/v1.1.0-rc.1/docs/hmac-security.md&#x26;quot;,&#x26;quot;user_id&#x26;quot;:null}}" data-hydro-click-hmac="d0ca31fd69c0cf0b1df99aeca9d5faced29fba529a998a55334b527e9c3c5e07"
+            data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Marketing nav&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;click to go to homepage&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;ref_page:Marketing;ref_cta:Sign in;ref_loc:Header&#x26;quot;}"
+          >
+            Sign in
+          &#x3C;/a>
+        &#x3C;/div>
+
+          &#x3C;a href="/signup?ref_cta=Sign+up&#x26;amp;ref_loc=header+logged+out&#x26;amp;ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E%2Fblob%2Fshow&#x26;amp;source=header-repo&#x26;amp;source_repo=babylonlabs-io%2Ffinality-provider"
+            class="HeaderMenu-link HeaderMenu-link--sign-up HeaderMenu-button flex-shrink-0 d-flex d-lg-inline-flex no-underline border color-border-default rounded px-2 py-1"
+            data-hydro-click="{&#x26;quot;event_type&#x26;quot;:&#x26;quot;authentication.click&#x26;quot;,&#x26;quot;payload&#x26;quot;:{&#x26;quot;location_in_page&#x26;quot;:&#x26;quot;site header menu&#x26;quot;,&#x26;quot;repository_id&#x26;quot;:null,&#x26;quot;auth_type&#x26;quot;:&#x26;quot;SIGN_UP&#x26;quot;,&#x26;quot;originating_url&#x26;quot;:&#x26;quot;https://github.com/babylonlabs-io/finality-provider/blob/v1.1.0-rc.1/docs/hmac-security.md&#x26;quot;,&#x26;quot;user_id&#x26;quot;:null}}" data-hydro-click-hmac="d0ca31fd69c0cf0b1df99aeca9d5faced29fba529a998a55334b527e9c3c5e07"
+            data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Sign up&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;click to sign up for account&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;ref_page:/&#x26;lt;user-name&#x26;gt;/&#x26;lt;repo-name&#x26;gt;/blob/show;ref_cta:Sign up;ref_loc:header logged out&#x26;quot;}"
+          >
+            Sign up
+          &#x3C;/a>
+
+            &#x3C;div class="AppHeader-appearanceSettings">
+&#x3C;react-partial-anchor>
+  &#x3C;button data-target="react-partial-anchor.anchor" id="icon-button-83a7b4aa-3a78-4239-b8e9-a4abc45f2d59" aria-labelledby="tooltip-3853c95e-87ce-4288-92ba-1da14f0d3691" type="button" disabled="disabled" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium AppHeader-button HeaderMenu-link border cursor-wait">  &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-sliders Button-visual">
+&#x3C;path d="M15 2.75a.75.75 0 0 1-.75.75h-4a.75.75 0 0 1 0-1.5h4a.75.75 0 0 1 .75.75Zm-8.5.75v1.25a.75.75 0 0 0 1.5 0v-4a.75.75 0 0 0-1.5 0V2H1.75a.75.75 0 0 0 0 1.5H6.5Zm1.25 5.25a.75.75 0 0 0 0-1.5h-6a.75.75 0 0 0 0 1.5h6ZM15 8a.75.75 0 0 1-.75.75H11.5V10a.75.75 0 1 1-1.5 0V6a.75.75 0 0 1 1.5 0v1.25h2.75A.75.75 0 0 1 15 8Zm-9 5.25v-2a.75.75 0 0 0-1.5 0v1.25H1.75a.75.75 0 0 0 0 1.5H4.5v1.25a.75.75 0 0 0 1.5 0v-2Zm9 0a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1 0-1.5h6a.75.75 0 0 1 .75.75Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;template data-target="react-partial-anchor.template">
+    &#x3C;link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-react.c212c596cc6bbefb1798.module.css" />
+</code></pre>
+<p>&#x3C;react-partial
+partial-name="appearance-settings"
+data-ssr="false"
+data-attempted-ssr="false"
+data-react-profiling="false"</p>
+<blockquote>
+</blockquote>
+<pre><code>  &#x3C;/template>
+&#x3C;/react-partial-anchor>
+</code></pre>
+<pre><code>      &#x3C;button type="button" class="sr-only js-header-menu-focus-trap d-block d-lg-none">Resetting focus&#x3C;/button>
+    &#x3C;/div>
+  &#x3C;/div>
+&#x3C;/div>
+</code></pre>
+<pre><code>  &#x3C;div hidden="hidden" data-view-component="true" class="js-stale-session-flash stale-session-flash flash flash-warn flash-full">
+
+    &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-alert">
+&#x3C;path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>&#x3C;button id="icon-button-6a0eab85-ad6e-4f88-9572-76795473c688" aria-labelledby="tooltip-8aae58a6-d157-4562-ac12-7a3d145f6298" type="button" data-view-component="true" class="Button Button--iconOnly Button--invisible Button--medium flash-close js-flash-close">  &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x Button-visual">
+&#x3C;path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z">&#x3C;/path>
+</code></pre>
+<pre><code>&#x3C;div id="js-flash-container" class="flash-container" data-turbo-replace>
+</code></pre>
+<pre><code>  &#x3C;div>{{ message }}&#x3C;/div>
+
+&#x3C;/div>
+</code></pre>
+<pre><code>  &#x3C;div class="d-flex flex-nowrap flex-justify-end mb-3  px-3 px-lg-5" style="gap: 1rem;">
+
+    &#x3C;div class="flex-auto min-width-0 width-fit">
+        
+</code></pre>
+<pre><code>&#x3C;span class="author flex-self-stretch" itemprop="author">
+  &#x3C;a class="url fn" rel="author" data-hovercard-type="organization" data-hovercard-url="/orgs/babylonlabs-io/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="/babylonlabs-io">
+    babylonlabs-io
+</code></pre>
+<p>    
+/
+
+finality-provider
+</p>
+<pre><code>&#x3C;span>&#x3C;/span>&#x3C;span class="Label Label--secondary v-align-middle mr-1">Public&#x3C;/span>
+</code></pre>
+<pre><code>    &#x3C;/div>
+
+    &#x3C;div id="repository-details-container" class="flex-shrink-0" data-turbo-replace style="max-width: 70%;">
+        &#x3C;ul class="pagehead-actions flex-shrink-0 d-none d-md-inline" style="padding: 2px 0;">
+
+  
+</code></pre>
+<pre><code>    &#x3C;/div>
+  &#x3C;/div>
+
+    &#x3C;div id="responsive-meta-container" data-turbo-replace>
+</code></pre>
+<pre><code>      &#x3C;nav data-pjax="#js-repo-pjax-container" aria-label="Repository" data-view-component="true" class="js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav px-3 px-md-4 px-lg-5">
+</code></pre>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z">&#x3C;/path>
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-issue-opened UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z">&#x3C;/path>&#x3C;path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z">&#x3C;/path>
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-git-pull-request UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z">&#x3C;/path>
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-comment-discussion UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M1.75 1h8.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 10.25 10H7.061l-2.574 2.573A1.458 1.458 0 0 1 2 11.543V10h-.25A1.75 1.75 0 0 1 0 8.25v-5.5C0 1.784.784 1 1.75 1ZM1.5 2.75v5.5c0 .138.112.25.25.25h1a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h3.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25Zm13 2a.25.25 0 0 0-.25-.25h-.5a.75.75 0 0 1 0-1.5h.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 14.25 12H14v1.543a1.458 1.458 0 0 1-2.487 1.03L9.22 12.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.22 2.22v-2.19a.75.75 0 0 1 .75-.75h1a.25.25 0 0 0 .25-.25Z">&#x3C;/path>
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-play UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z">&#x3C;/path>
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-table UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM6.5 6.5v8h7.75a.25.25 0 0 0 .25-.25V6.5Zm8-1.5V1.75a.25.25 0 0 0-.25-.25H6.5V5Zm-13 1.5v7.75c0 .138.112.25.25.25H5v-8ZM5 5V1.5H1.75a.25.25 0 0 0-.25.25V5Z">&#x3C;/path>
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-shield UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>  &#x3C;h3 data-view-component="true" class="blankslate-heading">        Uh oh!
+</code></pre>
+<p>
+
+</p>
+<pre><code>          &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-graph UnderlineNav-octicon d-none d-sm-inline">
+&#x3C;path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z">&#x3C;/path>
+</code></pre>
+<p></p>
+<pre><code>  &#x3C;div data-view-component="true" class="Overlay-body Overlay-body--paddingNone">          &#x3C;action-list>
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-be0769fa-09b0-484b-bd82-af8638384c81" href="/babylonlabs-io/finality-provider/tree/v1.1.0-rc.1" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-code">
+&#x3C;path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Code
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-6189b7f1-548d-4a2a-a176-fd56989b4bd9" href="/babylonlabs-io/finality-provider/issues" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-issue-opened">
+&#x3C;path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z">&#x3C;/path>&#x3C;path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Issues
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-f79f6199-53ae-41aa-924e-2fddc2bfd5ba" href="/babylonlabs-io/finality-provider/pulls" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-git-pull-request">
+&#x3C;path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Pull requests
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-1e8c14c9-65a0-4957-bfd1-cfc1272f730f" href="/babylonlabs-io/finality-provider/discussions" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-comment-discussion">
+&#x3C;path d="M1.75 1h8.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 10.25 10H7.061l-2.574 2.573A1.458 1.458 0 0 1 2 11.543V10h-.25A1.75 1.75 0 0 1 0 8.25v-5.5C0 1.784.784 1 1.75 1ZM1.5 2.75v5.5c0 .138.112.25.25.25h1a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h3.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25Zm13 2a.25.25 0 0 0-.25-.25h-.5a.75.75 0 0 1 0-1.5h.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 14.25 12H14v1.543a1.458 1.458 0 0 1-2.487 1.03L9.22 12.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.22 2.22v-2.19a.75.75 0 0 1 .75-.75h1a.25.25 0 0 0 .25-.25Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Discussions
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-64a248be-180a-4285-87ff-0ced20cefd20" href="/babylonlabs-io/finality-provider/actions" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-play">
+&#x3C;path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Actions
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-21fa45e3-d37d-4a1b-84b9-083627fe4919" href="/babylonlabs-io/finality-provider/projects" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-table">
+&#x3C;path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM6.5 6.5v8h7.75a.25.25 0 0 0 .25-.25V6.5Zm8-1.5V1.75a.25.25 0 0 0-.25-.25H6.5V5Zm-13 1.5v7.75c0 .138.112.25.25.25H5v-8ZM5 5V1.5H1.75a.25.25 0 0 0-.25.25V5Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Projects
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-d653994a-47ad-430d-b8f5-cdb21a41a027" href="/babylonlabs-io/finality-provider/security" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-shield">
+&#x3C;path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Security
+</code></pre>
+<pre><code>&#x3C;a tabindex="-1" id="item-080e5ade-03f5-4a62-ad86-bf105342f291" href="/babylonlabs-io/finality-provider/pulse" role="menuitem" data-view-component="true" class="ActionListContent ActionListContent--visual16">
+    &#x3C;span class="ActionListItem-visual ActionListItem-visual--leading">
+      &#x3C;svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-graph">
+&#x3C;path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z">&#x3C;/path>
+</code></pre>
+<pre><code>    &#x3C;span data-view-component="true" class="ActionListItem-label">
+      Insights
+</code></pre>
+<p>&#x3C;react-app
+app-name="react-code-view"
+initial-path="/babylonlabs-io/finality-provider/blob/v1.1.0-rc.1/docs/hmac-security.md"
+style="display: block; min-height: calc(100vh - 64px);"
+data-attempted-ssr="false"
+data-ssr="false"
+data-lazy="false"
+data-alternate="false"
+data-data-router-enabled="false"
+data-react-profiling="false"</p>
+<blockquote>
+</blockquote>
+<pre><code>&#x3C;/main>
+</code></pre>
+<pre><code>      &#x3C;footer class="footer pt-8 pb-6 f6 color-fg-muted p-responsive" role="contentinfo" >
+</code></pre>
+<pre><code>&#x3C;nav aria-label="Footer">
+  &#x3C;h3 class="sr-only" id="sr-footer-heading">Footer navigation&#x3C;/h3>
+
+  &#x3C;ul class="list-style-none d-flex flex-justify-center flex-wrap mb-2 mb-lg-0" aria-labelledby="sr-footer-heading">
+
+      &#x3C;li class="mx-2">
+        &#x3C;a data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Footer&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;go to Terms&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;text:terms&#x26;quot;}" href="https://docs.github.com/site-policy/github-terms/github-terms-of-service" data-view-component="true" class="Link--secondary Link">Terms&#x3C;/a>
+      &#x3C;/li>
+
+      &#x3C;li class="mx-2">
+        &#x3C;a data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Footer&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;go to privacy&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;text:privacy&#x26;quot;}" href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" data-view-component="true" class="Link--secondary Link">Privacy&#x3C;/a>
+      &#x3C;/li>
+
+      &#x3C;li class="mx-2">
+        &#x3C;a data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Footer&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;go to security&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;text:security&#x26;quot;}" href="https://github.com/security" data-view-component="true" class="Link--secondary Link">Security&#x3C;/a>
+      &#x3C;/li>
+
+      &#x3C;li class="mx-2">
+        &#x3C;a data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Footer&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;go to status&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;text:status&#x26;quot;}" href="https://www.githubstatus.com/" data-view-component="true" class="Link--secondary Link">Status&#x3C;/a>
+      &#x3C;/li>
+
+      &#x3C;li class="mx-2">
+        &#x3C;a data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Footer&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;go to docs&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;text:docs&#x26;quot;}" href="https://docs.github.com/" data-view-component="true" class="Link--secondary Link">Docs&#x3C;/a>
+      &#x3C;/li>
+
+      &#x3C;li class="mx-2">
+        &#x3C;a data-analytics-event="{&#x26;quot;category&#x26;quot;:&#x26;quot;Footer&#x26;quot;,&#x26;quot;action&#x26;quot;:&#x26;quot;go to contact&#x26;quot;,&#x26;quot;label&#x26;quot;:&#x26;quot;text:contact&#x26;quot;}" href="https://support.github.com?tags=dotcom-footer" data-view-component="true" class="Link--secondary Link">Contact&#x3C;/a>
+      &#x3C;/li>
+
+      &#x3C;li class="mx-2" >
+</code></pre>
+<pre><code>  &#x3C;/ul>
+&#x3C;/nav>
+</code></pre>
+<pre><code>&#x3C;ghcc-consent id="ghcc" class="position-fixed bottom-0 left-0" style="z-index: 999999"
+  data-locale="en"
+  data-initial-cookie-consent-allowed=""
+  data-cookie-consent-required="false"
+>&#x3C;/ghcc-consent>
+</code></pre>
+<pre><code>&#x3C;template id="site-details-dialog">
+</code></pre>
+<pre><code>&#x3C;div class="Popover js-hovercard-content position-absolute" style="display: none; outline: none;">
+</code></pre>
+<pre><code>&#x3C;template id="snippet-clipboard-copy-button">
+</code></pre>
+<pre><code>&#x3C;/div>
+
+&#x3C;div id="js-global-screen-reader-notice" class="sr-only mt-n1" aria-live="polite" aria-atomic="true" >&#x3C;/div>
+&#x3C;div id="js-global-screen-reader-notice-assertive" class="sr-only mt-n1" aria-live="assertive" aria-atomic="true">&#x3C;/div>
+</code></pre>
+
+  </article>
+</body>
+</html>
+  

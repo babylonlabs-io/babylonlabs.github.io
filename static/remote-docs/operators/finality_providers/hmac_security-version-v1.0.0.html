@@ -22,7 +22,7 @@
 </head>
 <body>
   <article>
-    
+    <div class="release-badge">Version: <strong>v1.0.0</strong></div>
     <h1>HMAC Security for Finality Provider</h1>
 <p>This document describes the HMAC (Hash-based Message Authentication Code) authentication system used to secure the
 communication between the Finality Provider Daemon (FPD) and the Extractable One-Time Signature Daemon (EOTSD).
@@ -55,7 +55,7 @@ openssl rand -base64 32
 </code></pre>
 <p>Example output: Wt+Nxkn1DpNCFJtxQSxTKoSoKzx1C9XwHTMbT6ir9m0= (Your key will be different).</p>
 <h2>Configuration Methods</h2>
-<h3>1. FPD Configuration (fpd.conf)</h3>
+<h3>1. FPD Configuration (fpd.conf):</h3>
 <p>Set the hmackey option within your fpd.conf file:</p>
 <pre><code>[metrics]
 # ... other settings ...
