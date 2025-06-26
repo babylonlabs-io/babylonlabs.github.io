@@ -3,14 +3,212 @@
 > Comprehensive command reference for `babylond`
 
 ---
+## ⚡ Frequently Used CLI Commands
 
-## 🚀 CLI Commands
+### Key Management 🔑
+Add new wallet:
+```
+babylond keys add <WALLET>
+```
+
+Restore executing wallet:
+```
+babylond keys add <WALLET> --recover
+```
+
+List all wallets:
+```
+babylond keys list
+```
+
+Delete wallet:
+```
+babylond keys delete <WALLET>
+```
+
+Check balance:
+```
+babylond q bank balances <WALLET_ADDRESS>
+```
+
+Export key (save it to wallet.backup):
+```
+babylond keys export <WALLET>
+```
+
+Import key (restore from wallet.backup):
+```
+babylond keys import <WALLET> wallet.backup
+```
+
+### Tokens 💰
+Withdraw all rewards:
+```
+babylond tx distribution withdraw-all-rewards --from <WALLET> --chain-id bbn-1 --gas auto --gas-adjustment 1.5 
+```
+
+Withdraw rewards and commission from your validator:
+```
+babylond tx distribution withdraw-rewards <VALOPER_ADDRESS> --from <WALLET> --commission --chain-id bbn-1 --gas auto --gas-adjustment 1.5 -y 
+```
+
+Check your balance:
+```
+babylond query bank balances <WALLET_ADDRESS>
+```
+
+Delegate to yourself:
+```
+babylond tx epoching delegate $(babylond keys show <WALLET> --bech val -a) 1000000ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-adjustment 1.5 -y 
+```
+
+Delegate:
+```
+babylond tx epoching delegate <TO_VALOPER_ADDRESS> 1000000ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-adjustment 1.5 -y 	
+```
+
+Redelegate stake to another validator:
+```
+babylond tx epoching redelegate <VALOPER_ADDRESS> <TO_VALOPER_ADDRESS> 1000000ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-adjustment 1.5 -y 
+```
+
+Unbond:
+```
+babylond tx epoching unbond $(babylond keys show <WALLET> --bech val -a) 1000000ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-adjustment 1.5 -y 
+```
+
+Transfer funds:
+```
+babylond tx bank send <YOUR_WALLET_ADDRESS> <TO_WALLET_ADDRESS> 1000000ubbn --gas auto --gas-adjustment 1.5 -y 
+```
+
+Transfer funds to multiple accounts:
+```
+babylond tx bank multi-send <YOUR_WALLET_ADDRESS> <TO_WALLET_ADDRESS_1> <TO_WALLET_ADDRESS_2> <TO_WALLET_ADDRESS_3> 1000000ubbn --gas auto --gas-adjustment 1.5 -y 
+```
+
+### Governance 🗳️
+View proposals list:
+```
+babylond query gov proposals 
+```
+
+View proposal:
+```
+babylond query gov proposal 1 
+```
+
+Vote:
+```
+babylond tx gov vote 1 yes --from <WALLET> --chain-id bbn-1  --gas auto --gas-adjustment 1.5 -y 
+```
+
+Submit new proposal:
+```
+babylond tx gov submit-proposal path/to/proposal.json
+```
+
+Where proposal.json contains:
+```
+{
+  // array of proto-JSON-encoded sdk.Msgs
+  "messages": [
+    {
+      "@type": "/cosmos.bank.v1beta1.MsgSend",
+      "from_address": "cosmos1...",
+      "to_address": "cosmos1...",
+      "amount":[{"denom": "stake","amount": "10"}]
+    }
+  ],
+  // metadata can be any of base64 encoded, raw text, stringified json, IPFS link to json
+  // see below for example metadata
+  "metadata": "4pIMOgIGx1vZGU=",
+  "deposit": "10stake",
+  "title": "My proposal",
+  "summary": "A short summary of my proposal",
+  "expedited": false
+}
+
+metadata example: 
+{
+        "title": "",
+        "authors": [""],
+        "summary": "",
+        "details": "", 
+        "proposal_forum_url": "",
+        "vote_option_context": "",
+}
+```
+
+### Validator Operations 👨‍💻
+Create new validator:
+```
+babylond tx checkpointing create-validator path/to/validator.json --from <WALLET>
+```
+
+Where validator.json contains:
+```
+{
+        "pubkey": {"@type":"/cosmos.crypto.ed25519.PubKey","key":"oWg2ISpLF405Jcm2vXV+2v4fnjodh6aafuIdeoW+rUw="},
+        "amount": "1000000stake",
+        "moniker": "myvalidator",
+        "identity": "optional identity signature (ex. UPort or Keybase)",
+        "website": "validator's (optional) website",
+        "security": "validator's (optional) security contact email",
+        "details": "validator's (optional) details",
+        "commission-rate": "0.1",
+        "commission-max-rate": "0.2",
+        "commission-max-change-rate": "0.01",
+        "min-self-delegation": "1"
+}
+```
+
+Edit validator:
+```
+babylond tx epoching edit-validator \
+--commission-rate 0.1 \
+--new-moniker "$MONIKER" \
+--identity "" \
+--details "" \
+--from <WALLET> \
+--chain-id bbn-1 \
+--gas auto --gas-adjustment 1.5 \
+-y 
+```
+
+Unjail validator:
+```
+babylond tx slashing unjail --from $WALLET --chain-id bbn-1 --gas auto --gas-adjustment 1.5 -y 
+```
+
+Your validator details:
+```
+babylond query staking validator $(babylond keys show <WALLET> --bech val -a) 
+```
+
+Another validator details:
+```
+babylond query staking validator <VALOPER_ADDRESS>
+```
+
+Slashing parameters:
+```
+babylond query slashing params
+```
+
+Signing info:
+```
+babylond query slashing signing-info <VALOPER_ADDRESS>
+```
+
+Active validators list:
+```
+babylond query staking validators
+```
+
+## 🚀 Full List of CLI Commands
 
 ### `# Babylon CLI Usage Guide`
-
-```bash
-# Babylon CLI Usage Guide
-```
 
 ## babylond add-genesis-account
 ```
