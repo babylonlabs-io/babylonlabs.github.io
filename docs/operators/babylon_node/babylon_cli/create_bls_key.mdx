@@ -20,7 +20,11 @@ babylond create-bls-key [flags]
 
 Before using this command, ensure you have:
 
+<<<<<<< HEAD
 - Initialized your Babylon node with [`babylond init`](./init.mdx) or [`babylond testnet`](./testnet.mdx)
+=======
+- Initialized your Babylon node with [`babylond init`](./init.md) or [`babylond testnet`](./testnet.md)
+>>>>>>> d9fd4df (Daria/cli ref clean (#208))
 - Confirmed that `priv_validator_key.json` exists in your node's configuration directory
 - Planned your BLS key password security strategy
 
@@ -287,6 +291,7 @@ systemctl start babylond
 ## Related Commands
 
 ### Validator Setup
+<<<<<<< HEAD
 - [`babylond init`](./init.mdx) - Initialize node (required prerequisite)
 - [`babylond testnet`](./testnet.mdx) - Initialize testnet configuration
 - [`babylond gentx`](./gen_tx.mdx) - Generate validator genesis transaction
@@ -299,4 +304,18 @@ systemctl start babylond
 ### Node Operations
 - [`babylond start`](./start.mdx) - Start the validator node
 - [`babylond status`](./status.mdx) - Check validator status
+=======
+- [`babylond init`](./init.md) - Initialize node (required prerequisite)
+- [`babylond testnet`](./testnet.md) - Initialize testnet configuration
+- [`babylond gentx`](./gentx.md) - Generate validator genesis transaction
+- [`babylond add-genesis-account`](./add-genesis-account.md) - Add validator account to genesis
+
+### Key Management
+- [`babylond keys`](./keys.md) - Manage keyring keys
+- [`babylond comet show-validator`](./comet.md#show-validator) - Show validator public key
+
+### Node Operations
+- [`babylond start`](./start.md) - Start the validator node
+- [`babylond status`](./status.md) - Check validator status
+>>>>>>> d9fd4df (Daria/cli ref clean (#208))
 
