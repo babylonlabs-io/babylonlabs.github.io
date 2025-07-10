@@ -1,0 +1,124 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: status
+sidebar_position: 21
+---
+
+# babylond status
+
+Query remote node for status information.
+
+## Overview
+
+The `babylond status` command retrieves and displays the current status of a Babylon node. This includes information about the node's sync status, latest block height, validator info, and network connectivity. It's essential for monitoring node health and network participation.
+
+## Usage
+
+```bash
+babylond status [flags]
+```
+
+## Flags
+
+### Command-Specific Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `-n, --node` | string | Node to connect to | `"tcp://localhost:26657"` |
+| `-o, --output` | string | Output format (`text` \| `json`) | `"json"` |
+| `-h, --help` | boolean | Show help information | `false` |
+
+### Global Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--home` | string | Directory for config and data | `"/Users/dariaagadzhanova/.babylond"` |
+| `--log_format` | string | Logging format (`json` \| `plain`) | `"plain"` |
+| `--log_level` | string | Logging level or pattern | `"info"` |
+| `--log_no_color` | boolean | Disable colored logs | `false` |
+| `--trace` | boolean | Print full stack trace on errors | `false` |
+
+## Examples
+
+### Basic Status Query
+```bash
+babylond status
+```
+
+### Human-Readable Text Output
+```bash
+babylond status --output text
+```
+
+### Query Remote Node
+```bash
+babylond status --node tcp://rpc.babylon.example.com:26657
+```
+
+### Query with Custom Output Format
+```bash
+babylond status -n tcp://127.0.0.1:26657 -o json
+```
+
+### Query Multiple Nodes
+```bash
+# Check local node
+babylond status --node tcp://localhost:26657
+
+# Check remote node
+babylond status --node tcp://mainnet-rpc.babylon.io:26657
+
+# Check testnet node
+babylond status --node tcp://testnet-rpc.babylon.io:26657
+```
+
+## Output Information
+
+The status command typically returns information including:
+
+- **Node Info**: Moniker, network, version
+- **Sync Info**: Latest block height, block hash, block time
+- **Validator Info**: Public key, voting power (if validator)
+- **Network**: Chain ID, peer connections
+
+### JSON Output Example
+```json
+{
+  "NodeInfo": {
+    "protocol_version": {
+      "p2p": "8",
+      "block": "11",
+      "app": "0"
+    },
+    "id": "node_id_here",
+    "listen_addr": "tcp://0.0.0.0:26656",
+    "network": "babylon-1",
+    "version": "0.37.0",
+    "channels": "40202122233038606100",
+    "moniker": "my-babylon-node",
+    "other": {
+      "tx_index": "on",
+      "rpc_address": "tcp://127.0.0.1:26657"
+    }
+  },
+  "SyncInfo": {
+    "latest_block_hash": "block_hash_here",
+    "latest_app_hash": "app_hash_here",
+    "latest_block_height": "12345",
+    "latest_block_time": "2025-06-10T12:00:00Z",
+    "earliest_block_hash": "genesis_hash_here",
+    "earliest_app_hash": "genesis_app_hash_here",
+    "earliest_block_height": "1",
+    "earliest_block_time": "2025-01-01T00:00:00Z",
+    "catching_up": false
+  },
+  "ValidatorInfo": {
+    "Address": "validator_address_here",
+    "PubKey": {
+      "type": "tendermint/PubKeyEd25519",
+      "value": "pubkey_value_here"
+    },
+    "VotingPower": "0"
+  }
+}
+```

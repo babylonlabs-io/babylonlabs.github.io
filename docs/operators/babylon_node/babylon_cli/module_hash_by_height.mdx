@@ -1,0 +1,64 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: module-hash-by-height
+sidebar_position: 15
+---
+
+# module-hash-by-height
+
+Get module hashes at a given height. This debugging command is essential for verifying application state consistency, diagnosing state-related issues, and performing forensic analysis of blockchain state at specific block heights.
+
+## Overview
+
+The `module-hash-by-height` command retrieves cryptographic hashes of each application module's state at a specified block height. This information is crucial for debugging state inconsistencies, verifying state transitions, and performing detailed analysis of blockchain state evolution.
+
+```bash
+babylond module-hash-by-height [height] [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- **Node stopped** - The daemon must NOT be running when executing this command
+- **Database access** - Read access to the node's state database
+- **Height availability** - The target height must exist and not be pruned
+- **Sufficient resources** - Adequate memory and CPU for state analysis
+
+:::danger Critical Requirement
+**The babylond daemon MUST be stopped** before running this command. Running it while the daemon is active can cause database corruption or inconsistent results.
+:::
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `height` | Block height to query module hashes from |
+
+## Flags
+
+### Query Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--height` | int | | Alternative way to specify height (overrides positional argument) |
+| `-o, --output` | string | `text` | Output format (`text`\|`json`) |
+
+### Network Connection
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--grpc-addr` | string | | The gRPC endpoint to use for this chain |
+| `--grpc-insecure` | | | Allow gRPC over insecure channels |
+| `--node` | string | `tcp://localhost:26657` | CometBFT RPC interface host:port |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+

@@ -1,0 +1,287 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: config
+sidebar_position: 4
+---
+
+# config
+
+Utilities for managing application configuration files. These commands provide comprehensive tools for viewing, modifying, and maintaining your Babylon node's configuration settings across different versions and deployments.
+
+## Overview
+
+The `config` command group provides utilities for managing Cosmos SDK application configuration files (app.toml) including reading, writing, migrating, and comparing configuration values.
+
+```bash
+babylond config [command] [flags]
+```
+
+## Quick Reference
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| [`diff`](#diff) | Show config differences from defaults | Configuration auditing |
+| [`get`](#get) | Get a specific config value | Value retrieval |
+| [`home`](#home) | Show the home directory path | Path verification |
+| [`migrate`](#migrate) | Migrate config to specified version | Version upgrades |
+| [`set`](#set) | Set a config value | Configuration updates |
+| [`view`](#view) | View entire config file | Configuration inspection |
+
+## Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+---
+
+## diff
+
+Outputs all config values that are different from the app.toml defaults. Useful for configuration auditing and identifying customizations.
+
+### Usage
+
+```bash
+babylond config diff [target-version] <app-toml-path> [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `target-version` | Target version to compare against (optional) |
+| `app-toml-path` | Path to the app.toml file to compare |
+
+### Examples
+
+```bash title="Compare current config with defaults"
+babylond config diff ~/.babylond/config/app.toml
+```
+
+```bash title="Compare with specific version"
+babylond config diff v1.0.0 ~/.babylond/config/app.toml
+```
+
+---
+
+## get
+
+Get an application config value. The config argument must be the name of the config file without the .toml extension when used with babylond.
+
+### Usage
+
+```bash
+babylond config get [config] [key] [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `config` | Config file name (without .toml extension) or full path |
+| `key` | Configuration key to retrieve |
+
+### Examples
+
+```bash title="Get minimum gas prices"
+babylond config get app minimum-gas-prices
+```
+
+```bash title="Get API configuration"
+babylond config get app api.enable
+```
+
+```bash title="Get gRPC settings"
+babylond config get app grpc.enable
+babylond config get app grpc.address
+```
+
+```bash title="Common configuration queries"
+# Check telemetry settings
+babylond config get app telemetry.enabled
+
+# Check state sync settings  
+babylond config get app state-sync.snapshot-interval
+
+# Check pruning configuration
+babylond config get app pruning
+```
+
+---
+
+## home
+
+Outputs the folder used as the binary home directory. The path can be changed by setting the `$APPD_HOME` environment variable or using the `--home` flag.
+
+### Usage
+
+```bash
+babylond config home [flags]
+```
+
+### Examples
+
+```bash title="Show current home directory"
+babylond config home
+```
+
+```bash title="Use in scripts"
+HOME_DIR=$(babylond config home)
+echo "Babylon home: $HOME_DIR"
+```
+
+```bash title="Verify custom home directory"
+babylond config home --home /custom/babylon/path
+```
+
+---
+
+## migrate
+
+Migrate the contents of the Cosmos SDK app configuration (app.toml) to the specified version. The output is written in-place unless `--stdout` is provided.
+
+### Usage
+
+```bash
+babylond config migrate [target-version] <app-toml-path> [flags]
+```
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--skip-validate` | | Skip configuration validation (allows migrating unknown configurations) |
+| `--stdout` | | Print the updated config to stdout |
+| `--verbose` | | Log changes to stderr |
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `target-version` | Version to migrate the configuration to |
+| `app-toml-path` | Path to the app.toml file to migrate |
+
+### Examples
+
+```bash title="Migrate to latest version"
+babylond config migrate v1.0.0 ~/.babylond/config/app.toml
+```
+
+```bash title="Preview migration changes"
+babylond config migrate v1.0.0 ~/.babylond/config/app.toml --stdout
+```
+
+```bash title="Verbose migration with validation"
+babylond config migrate v1.0.0 ~/.babylond/config/app.toml --verbose
+```
+
+```bash title="Migrate unknown configs (advanced)"
+babylond config migrate v1.0.0 ~/.babylond/config/app.toml --skip-validate
+```
+
+:::warning Backup First
+Always backup your configuration files before running migration commands. In case of errors, no output is written to preserve the original file.
+:::
+
+---
+
+## set
+
+Set an application config value. The config argument must be the name of the config file without the .toml extension when used with babylond.
+
+### Usage
+
+```bash
+babylond config set [config] [key] [value] [flags]
+```
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `-s, --skip-validate` | | Skip configuration validation (allows mutating unknown configurations) |
+| `--stdout` | | Print the updated config to stdout |
+| `-v, --verbose` | | Log changes to stderr |
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `config` | Config file name (without .toml extension) or full path |
+| `key` | Configuration key to set |
+| `value` | Value to set for the specified key |
+
+### Examples
+
+```bash title="Set minimum gas prices"
+babylond config set app minimum-gas-prices "0.005ubbn"
+```
+
+```bash title="Enable API server"
+babylond config set app api.enable true
+babylond config set app api.address "tcp://0.0.0.0:1317"
+```
+
+```bash title="Configure gRPC"
+babylond config set app grpc.enable true
+babylond config set app grpc.address "0.0.0.0:9090"
+```
+
+```bash title="Set pruning configuration"
+babylond config set app pruning "custom"
+babylond config set app pruning-keep-recent "100"
+babylond config set app pruning-interval "10"
+```
+
+```bash title="Configure telemetry"
+babylond config set app telemetry.enabled true
+babylond config set app telemetry.prometheus-retention-time 60
+```
+
+```bash title="Preview changes before applying"
+babylond config set app minimum-gas-prices "0.005ubbn" --stdout
+```
+
+---
+
+## view
+
+View the config file contents. The config argument must be the name of the config file without the .toml extension when used with babylond.
+
+### Usage
+
+```bash
+babylond config view [config] [flags]
+```
+
+### Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--output-format` | string | `toml` | Output format (`json`\|`toml`) |
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `config` | Config file name (without .toml extension) or full path |
+
+### Examples
+
+```bash title="View app configuration"
+babylond config view app
+```
+
+```bash title="View config in JSON format"
+babylond config view app --output-format json
+```
+
+```bash title="View specific sections with grep"
+babylond config view app | grep -A 5 "\[api\]"
+babylond config view app | grep -A 5 "\[grpc\]"
+```
+

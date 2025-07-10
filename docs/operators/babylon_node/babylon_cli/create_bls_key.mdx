@@ -1,0 +1,302 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: create-bls-key
+sidebar_position: 5
+---
+
+# create-bls-key
+
+Create a pair of BLS keys that are used to send BLS signatures for checkpointing. BLS keys are essential for validators participating in Babylon's checkpointing mechanism and are stored alongside other validator keys in the priv_validator_key.json file.
+
+## Overview
+
+The `create-bls-key` command generates BLS (Boneh-Lynn-Shacham) cryptographic keys required for validators to participate in Babylon's checkpointing protocol. These keys enable validators to create BLS signatures that are aggregated for efficient blockchain checkpointing.
+
+```bash
+babylond create-bls-key [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- Initialized your Babylon node with [`babylond init`](./init.md) or [`babylond testnet`](./testnet.md)
+- Confirmed that `priv_validator_key.json` exists in your node's configuration directory
+- Planned your BLS key password security strategy
+
+## Arguments
+
+This command takes no positional arguments. All configuration is done through flags.
+
+## Flags
+
+### BLS Key Configuration
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--home` | string | The node home directory (default: `~/.babylond`) |
+| `--insecure-bls-password` | string | The password for the BLS key. If not set, password will be prompted |
+| `--no-bls-password` | | The BLS key will use an empty password if this flag is set |
+| `-h, --help` | | Help for create-bls-key |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+## Examples
+
+### Basic BLS Key Creation
+
+Create BLS keys with interactive password prompt:
+
+```bash title="Create BLS keys with password prompt"
+babylond create-bls-key
+```
+
+### Custom Home Directory
+
+Create BLS keys in a custom location:
+
+```bash title="Custom home directory"
+babylond create-bls-key --home /custom/babylon/path
+```
+
+### Password Management Options
+
+```bash title="Set password via flag (not recommended for production)"
+babylond create-bls-key --insecure-bls-password "your-secure-password"
+```
+
+```bash title="Create without password (not recommended)"
+babylond create-bls-key --no-bls-password
+```
+
+### Complete Validator Setup Workflow
+
+```bash title="Full validator initialization with BLS keys"
+# 1. Initialize the node
+babylond init my-validator --chain-id babylon-testnet-1
+
+# 2. Verify priv_validator_key.json exists
+ls -la ~/.babylond/config/priv_validator_key.json
+
+# 3. Create BLS keys
+babylond create-bls-key
+
+# 4. Verify BLS keys were added
+cat ~/.babylond/config/priv_validator_key.json | jq '.bls_key'
+
+# 5. Continue with validator setup
+babylond add-genesis-account validator-key 100000000ubbn
+babylond gentx validator-key 50000000ubbn --chain-id babylon-testnet-1
+```
+
+### Testnet Setup
+
+```bash title="Testnet validator with BLS keys"
+# Initialize testnet configuration
+babylond testnet init-files --v 1 --output-dir ./testnet
+
+# Create BLS keys for the validator
+babylond create-bls-key --home ./testnet/node0/babylond
+
+# Verify BLS keys creation
+cat ./testnet/node0/babylond/config/priv_validator_key.json
+```
+
+## Security Considerations
+
+:::danger Critical Security Notes
+- **Private Key Security**: BLS keys are cryptographic secrets that must be protected with the same security as validator private keys
+- **Password Strength**: Use strong, unique passwords for BLS key encryption
+- **Backup Strategy**: Include BLS keys in your validator backup procedures
+- **Access Control**: Restrict access to priv_validator_key.json to the validator process only
+:::
+
+:::warning Production Security
+- **Never use `--insecure-bls-password`** in production environments
+- **Avoid `--no-bls-password`** except for testing scenarios
+- **Use interactive password prompts** or secure password management systems
+- **Set proper file permissions** (600) on priv_validator_key.json
+:::
+
+## File Structure
+
+After creating BLS keys, your `priv_validator_key.json` will contain:
+
+```json title="priv_validator_key.json structure"
+{
+  "address": "1234567890ABCDEF1234567890ABCDEF12345678",
+  "pub_key": {
+    "type": "tendermint/PubKeyEd25519",
+    "value": "..."
+  },
+  "priv_key": {
+    "type": "tendermint/PrivKeyEd25519",
+    "value": "..."
+  },
+  "bls_key": {
+    "pub_key": "...",
+    "pop": "...",
+    "encrypted_priv_key": "..."
+  }
+}
+```
+
+## Validation Steps
+
+### Verify BLS Key Creation
+
+```bash title="Check BLS key presence"
+# Check if BLS keys exist in validator file
+cat ~/.babylond/config/priv_validator_key.json | jq '.bls_key'
+
+# Verify BLS key structure
+cat ~/.babylond/config/priv_validator_key.json | jq '.bls_key | keys'
+```
+
+### File Permissions
+
+```bash title="Secure file permissions"
+# Set secure permissions
+chmod 600 ~/.babylond/config/priv_validator_key.json
+
+# Verify permissions
+ls -la ~/.babylond/config/priv_validator_key.json
+```
+
+### Backup Verification
+
+```bash title="Backup validation"
+# Create encrypted backup
+gpg --symmetric --cipher-algo AES256 ~/.babylond/config/priv_validator_key.json
+
+# Test backup restoration (in safe environment)
+gpg --decrypt priv_validator_key.json.gpg > test_restore.json
+diff ~/.babylond/config/priv_validator_key.json test_restore.json
+rm test_restore.json
+```
+
+## Best Practices
+
+:::tip Key Management
+- **Generate keys offline** when possible for maximum security
+- **Use hardware security modules (HSM)** for production validators
+- **Implement key rotation procedures** according to your security policy
+- **Document key generation procedures** for your team
+:::
+
+:::info Operational Security
+- **Monitor key file integrity** with checksums or file monitoring
+- **Implement automated backup procedures** for all validator keys
+- **Test recovery procedures** regularly in non-production environments
+- **Use secure communication channels** for key-related operations
+:::
+
+:::note Network Participation
+- **BLS keys are required** for validators to participate in checkpointing
+- **Key generation must be completed** before starting the validator
+- **BLS signatures are aggregated** across validators for efficiency
+- **Checkpointing participation** affects validator rewards and slashing
+:::
+
+## Common Use Cases
+
+1. **New Validator Setup**: Generate BLS keys as part of initial validator configuration
+2. **Validator Migration**: Create new BLS keys when migrating validator infrastructure
+3. **Key Rotation**: Generate replacement BLS keys for security maintenance
+4. **Testnet Participation**: Create BLS keys for testnet validator testing
+5. **Development Testing**: Generate BLS keys for local development networks
+
+## Troubleshooting
+
+### Common Errors
+
+**priv_validator_key.json not found**
+```
+Error: open ~/.babylond/config/priv_validator_key.json: no such file or directory
+```
+**Solution**: Initialize the node first with `babylond init` or `babylond testnet`.
+
+**Permission denied**
+```
+Error: open ~/.babylond/config/priv_validator_key.json: permission denied
+```
+**Solution**: Check file ownership and permissions:
+```bash
+sudo chown $(whoami):$(whoami) ~/.babylond/config/priv_validator_key.json
+chmod 600 ~/.babylond/config/priv_validator_key.json
+```
+
+**BLS keys already exist**
+```
+Error: BLS key already exists in priv_validator_key.json
+```
+**Solution**: BLS keys can only be created once. To replace them, backup and remove the existing file first.
+
+**Invalid password**
+```
+Error: failed to decrypt BLS private key
+```
+**Solution**: Ensure you're using the correct password that was set during key creation.
+
+### Diagnostic Commands
+
+```bash title="BLS key diagnostics"
+# Check if BLS key exists
+jq '.bls_key != null' ~/.babylond/config/priv_validator_key.json
+
+# Verify BLS key components
+jq '.bls_key | has("pub_key") and has("pop") and has("encrypted_priv_key")' ~/.babylond/config/priv_validator_key.json
+
+# Check file permissions
+stat -c "%a %n" ~/.babylond/config/priv_validator_key.json
+
+# Validate JSON structure
+jq empty ~/.babylond/config/priv_validator_key.json && echo "Valid JSON"
+```
+
+### Recovery Procedures
+
+```bash title="Key recovery workflow"
+# 1. Stop the validator (if running)
+systemctl stop babylond
+
+# 2. Backup current state
+cp ~/.babylond/config/priv_validator_key.json ~/.babylond/config/priv_validator_key.json.backup
+
+# 3. Restore from backup
+cp /secure/backup/location/priv_validator_key.json ~/.babylond/config/
+
+# 4. Set correct permissions
+chmod 600 ~/.babylond/config/priv_validator_key.json
+
+# 5. Verify BLS keys
+babylond create-bls-key --help  # This won't create keys, just verify command availability
+
+# 6. Start validator
+systemctl start babylond
+```
+
+
+## Related Commands
+
+### Validator Setup
+- [`babylond init`](./init.md) - Initialize node (required prerequisite)
+- [`babylond testnet`](./testnet.md) - Initialize testnet configuration
+- [`babylond gentx`](./gentx.md) - Generate validator genesis transaction
+- [`babylond add-genesis-account`](./add-genesis-account.md) - Add validator account to genesis
+
+### Key Management
+- [`babylond keys`](./keys.md) - Manage keyring keys
+- [`babylond comet show-validator`](./comet.md#show-validator) - Show validator public key
+
+### Node Operations
+- [`babylond start`](./start.md) - Start the validator node
+- [`babylond status`](./status.md) - Check validator status
+

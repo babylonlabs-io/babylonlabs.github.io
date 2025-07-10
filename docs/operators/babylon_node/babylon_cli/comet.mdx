@@ -1,0 +1,341 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: comet
+sidebar_position: 3
+---
+
+# comet
+
+CometBFT subcommands for managing consensus engine operations, validator information, and node state. These commands provide essential tools for node operators to interact with the underlying CometBFT consensus layer.
+
+## Overview
+
+The `comet` command group provides access to CometBFT-specific functionality including state management, validator information retrieval, and node diagnostics.
+
+```bash
+babylond comet [command] [flags]
+```
+
+**Aliases:** `comet`, `cometbft`, `tendermint`
+
+## Quick Reference
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| [`bootstrap-state`](#bootstrap-state) | Bootstrap CometBFT state at arbitrary block height | State sync, fast sync |
+| [`reset-state`](#reset-state) | Remove all data and WAL | Clean restart |
+| [`show-address`](#show-address) | Show validator consensus address | Validator setup |
+| [`show-node-id`](#show-node-id) | Show node's unique ID | Network configuration |
+| [`show-validator`](#show-validator) | Show validator information | Validator diagnostics |
+| [`unsafe-reset-all`](#unsafe-reset-all) | Reset everything to genesis state | Emergency reset |
+| [`version`](#version) | Show CometBFT version | Version checking |
+
+## Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+---
+
+## bootstrap-state
+
+Bootstrap CometBFT state at an arbitrary block height using a light client. This is useful for state sync operations and fast synchronization with the network.
+
+### Usage
+
+```bash
+babylond comet bootstrap-state [flags]
+```
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--height` | int | Block height to bootstrap state at, if not provided it uses the latest block height in app state |
+
+### Examples
+
+```bash title="Bootstrap from latest height"
+babylond comet bootstrap-state
+```
+
+```bash title="Bootstrap from specific height"
+babylond comet bootstrap-state --height 1000000
+```
+
+---
+
+## reset-state
+
+Remove all the data and WAL (Write-Ahead Log). This command cleans the node's state while preserving configuration files.
+
+### Usage
+
+```bash
+babylond comet reset-state [flags]
+```
+
+**Aliases:** `reset-state`, `reset_state`
+
+### Examples
+
+```bash title="Reset node state"
+babylond comet reset-state
+```
+
+```bash title="Reset with custom home"
+babylond comet reset-state --home /custom/babylon/home
+```
+
+:::warning Data Loss
+This command permanently removes blockchain data and WAL files. Only configuration files are preserved.
+:::
+
+---
+
+## show-address
+
+Shows this node's CometBFT validator consensus address. Essential for validator setup and network configuration.
+
+### Usage
+
+```bash
+babylond comet show-address [flags]
+```
+
+### Examples
+
+```bash title="Show consensus address"
+babylond comet show-address
+```
+
+**Sample Output:**
+```
+babylonvalcons1abc123def456...
+```
+
+---
+
+## show-node-id
+
+Show this node's unique identifier. Used for peer-to-peer network connections and node discovery.
+
+### Usage
+
+```bash
+babylond comet show-node-id [flags]
+```
+
+### Examples
+
+```bash title="Show node ID"
+babylond comet show-node-id
+```
+
+```bash title="Use in persistent peers configuration"
+NODE_ID=$(babylond comet show-node-id)
+echo "Persistent peers: ${NODE_ID}@192.168.1.100:26656"
+```
+
+**Sample Output:**
+```
+a1b2c3d4e5f6789012345678901234567890abcd
+```
+
+---
+
+## show-validator
+
+Show this node's CometBFT validator info including the public key and other validator-specific data.
+
+### Usage
+
+```bash
+babylond comet show-validator [flags]
+```
+
+### Examples
+
+```bash title="Show validator info"
+babylond comet show-validator
+```
+
+**Sample Output:**
+```json
+{
+  "type": "tendermint/PubKeyEd25519",
+  "value": "abc123def456..."
+}
+```
+
+---
+
+## unsafe-reset-all
+
+**(UNSAFE)** Remove all the data and WAL, reset this node's validator to genesis state. This is the most destructive reset option.
+
+### Usage
+
+```bash
+babylond comet unsafe-reset-all [flags]
+```
+
+**Aliases:** `unsafe-reset-all`, `unsafe_reset_all`
+
+### Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--keep-addr-book` | | Keep the address book intact |
+
+### Examples
+
+```bash title="Complete reset"
+babylond comet unsafe-reset-all
+```
+
+```bash title="Reset but keep address book"
+babylond comet unsafe-reset-all --keep-addr-book
+```
+
+:::danger Destructive Operation
+This command removes ALL data including validator state and resets to genesis. Use with extreme caution. This can result in double-signing if used on an active validator.
+:::
+
+---
+
+## version
+
+Print CometBFT libraries' version numbers against which this app has been compiled.
+
+### Usage
+
+```bash
+babylond comet version [flags]
+```
+
+### Examples
+
+```bash title="Show CometBFT version"
+babylond comet version
+```
+
+**Sample Output:**
+```
+0.38.0
+```
+
+---
+
+## Common Workflows
+
+### New Validator Setup
+
+```bash title="Validator information gathering"
+# Get node ID for peer connections
+NODE_ID=$(babylond comet show-node-id)
+echo "Node ID: $NODE_ID"
+
+# Get consensus address for delegation
+CONS_ADDR=$(babylond comet show-address)
+echo "Consensus Address: $CONS_ADDR"
+
+# Get validator public key
+babylond comet show-validator
+```
+
+### Node Troubleshooting
+
+```bash title="Diagnostic commands"
+# Check CometBFT version
+babylond comet version
+
+# Check node connectivity info
+babylond comet show-node-id
+
+# Verify validator setup
+babylond comet show-validator
+```
+
+### State Management
+
+```bash title="Clean restart workflow"
+# Stop the node first
+# systemctl stop babylond
+
+# Reset state (preserves config)
+babylond comet reset-state
+
+# Or complete reset (if needed)
+babylond comet unsafe-reset-all --keep-addr-book
+
+# Restart node
+# systemctl start babylond
+```
+
+### Fast Sync Setup
+
+```bash title="State sync workflow"
+# Configure state sync in config.toml first
+# Then bootstrap from specific height
+babylond comet bootstrap-state --height 1000000
+
+# Start the node
+babylond start
+```
+
+## Best Practices
+
+:::tip Node Management
+- Always stop the node before running reset commands
+- Use `reset-state` for routine cleanup, reserve `unsafe-reset-all` for emergencies
+- Keep backups of your validator key and node configuration
+:::
+
+:::warning Validator Safety
+- Never run `unsafe-reset-all` on an active validator without proper coordination
+- Always use `--keep-addr-book` to preserve peer connections when possible
+- Monitor for double-signing after any reset operation
+:::
+
+:::info State Sync
+- Use `bootstrap-state` for faster initial sync instead of syncing from genesis
+- Verify the target height is available from your peers before bootstrapping
+:::
+
+## Troubleshooting
+
+### Common Issues
+
+**Node won't start after reset**
+```bash
+# Check if genesis file is valid
+babylond validate-genesis
+
+# Verify node configuration
+babylond config
+```
+
+**State sync fails**
+```bash
+# Check peer connectivity
+babylond comet show-node-id
+
+# Verify state sync configuration in config.toml
+cat ~/.babylond/config/config.toml | grep -A 10 "\[statesync\]"
+```
+
+**Validator not signing**
+```bash
+# Check validator info
+babylond comet show-validator
+
+# Verify consensus address matches
+babylond comet show-address
+```
+
