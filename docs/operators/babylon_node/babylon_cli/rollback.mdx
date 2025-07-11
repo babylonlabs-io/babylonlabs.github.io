@@ -1,0 +1,73 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: rollback
+sidebar_position: 19
+---
+
+# babylond rollback
+
+Perform a state rollback to recover from an incorrect application state transition.
+
+## Overview
+
+The `babylond rollback` command is used to recover from situations where CometBFT has persisted an incorrect application hash and is unable to make progress. This command rolls back the application state from height `n` to height `n - 1`.
+
+:::warning Important Notes
+- No blocks are removed during the rollback process
+- Upon restarting CometBFT, the transactions in block `n` will be re-executed against the application
+- Use this command with caution as it affects the blockchain state
+:::
+
+## When to Use
+
+State rollback should be performed when:
+- An incorrect application state transition has occurred
+- CometBFT has persisted an incorrect app hash
+- The node is unable to make progress due to state inconsistencies
+
+## Usage
+
+```bash
+babylond rollback [flags]
+```
+
+## Flags
+
+### Command-Specific Flags
+
+| Flag | Description |
+|------|-------------|
+| `--hard` | Remove the last block as well as the state |
+| `-h, --help` | Show help information for the rollback command |
+| `--home <string>` | Specify the application home directory<br/>**Default:** `/Users/dariaagadzhanova/.babylond` |
+
+### Global Flags
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--log_format` | string | Set the logging format (`json` \| `plain`) | `plain` |
+| `--log_level` | string | Set the logging level<br/>Options: `trace` \| `debug` \| `info` \| `warn` \| `error` \| `fatal` \| `panic` \| `disabled`<br/>Or use pattern: `*:<level>,<key>:<level>` | `info` |
+| `--log_no_color` | boolean | Disable colored logs | `false` |
+| `--trace` | boolean | Print out full stack trace on errors | `false` |
+
+## Examples
+
+### Basic Rollback
+```bash
+babylond rollback
+```
+
+### Hard Rollback (Remove Last Block)
+```bash
+babylond rollback --hard
+```
+
+### Rollback with Custom Home Directory
+```bash
+babylond rollback --home /path/to/custom/home
+```
+
+### Rollback with Debug Logging
+```bash
+babylond rollback --log_level debug
+```

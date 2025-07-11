@@ -42,7 +42,7 @@ The above command will build and install the following binaries to `$GOPATH/bin`
 
 ## Getting Signet BTC Tokens
 
-The Euphrates devnet is connected to BTC Signet. There's information on how to connect to Signet in the [BTC Signet wiki](https://en.bitcoin.it/wiki/Signet). After creating a wallet and a new BTC address in the signet network, you can visit Bitcoin's signet faucets (e.g., [https://signetfaucet.com](https://signetfaucet.com/)) for signet BTC. Babylon also provides a BTC signet faucet in the [Babylon discord server](https://discord.gg/babylonglobal).
+The Edge devnet is connected to BTC Signet. There's information on how to connect to Signet in the [BTC Signet wiki](https://en.bitcoin.it/wiki/Signet). After creating a wallet and a new BTC address in the signet network, you can visit Bitcoin's signet faucets (e.g., [https://signetfaucet.com](https://signetfaucet.com/)) for signet BTC. Babylon also provides a BTC signet faucet in the [Babylon discord server](https://discord.gg/babylonglobal).
 
 ## Setting Up the BTC Staker Daemon
 
@@ -151,11 +151,11 @@ BlockCacheSize = 1000000
 ; name of the key to sign transactions with
 Key = btc-staker
 ; chain id of the chain to connect to
-ChainID = euphrates-0.6.0
+ChainID = edge-devnet-1
 ; address of the rpc server to connect to
-RPCAddr = https://rpc-euphrates.devnet.babylonlabs.io:443
+RPCAddr = https://rpc-edge.devnet.babylonlabs.io:443
 ; address of the grpc server to connect to
-GRPCAddr = https://rpc-euphrates.devnet.babylonlabs.io:9090
+GRPCAddr = https://rpc-edge.devnet.babylonlabs.io:9090
 ; account prefix to use for addresses
 AccountPrefix = bbn
 ; type of keyring to use
@@ -239,7 +239,7 @@ Note that among public keys specified in `--finality-providers-pks`, at least on
 You can query the Babylon node to see the BTC delegation:
 
 ```bash
-$ babylond query btcstaking btc-delegations any --node https://rpc-euphrates.devnet.babylonlabs.io
+$ babylond query btcstaking btc-delegations any --node https://rpc-edge.devnet.babylonlabs.io
 ```
 
 This will show all the BTC delegations including yours.

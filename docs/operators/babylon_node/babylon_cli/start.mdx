@@ -1,0 +1,197 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: start
+sidebar_position: 20
+---
+
+# babylond start
+
+Run the full node application with CometBFT in or out of process.
+
+## Overview
+
+The `babylond start` command launches a full Babylon node with CometBFT. By default, the application runs with CometBFT in process, providing a complete blockchain node that can participate in the network, validate transactions, and maintain the blockchain state.
+
+## Usage
+
+```bash
+babylond start [flags]
+```
+
+## Pruning Strategies
+
+Pruning options can be configured via the `--pruning` flag or with `--pruning-keep-recent` and `--pruning-interval` for custom configurations:
+
+| Strategy | Description |
+|----------|-------------|
+| `default` | Keep the last 362,880 states, pruning at 10 block intervals |
+| `nothing` | Archive node - save all historic states, nothing deleted |
+| `everything` | Keep only 2 latest states, pruning at 10 block intervals |
+| `custom` | Manual configuration via `--pruning-keep-recent` and `--pruning-interval` |
+
+:::tip Choosing a Pruning Strategy
+- Use `nothing` for archive nodes that need full history
+- Use `default` for most validator and full nodes
+- Use `everything` for lightweight nodes with minimal storage
+- Use `custom` for specific storage requirements
+:::
+
+## Node Halting
+
+Configure automatic node shutdown using halt flags:
+
+- **`--halt-height`**: Stop at a specific block height
+- **`--halt-time`**: Stop at a specific Unix timestamp
+
+During the ABCI Commit phase, the node checks these conditions and gracefully shuts down if met, preventing the block from being committed.
+
+## Query-Only Mode
+
+Enable query-only mode with `--grpc-only` to:
+- Run only gRPC and JSON HTTP API services
+- Bypass CometBFT for legacy queries
+- Support post-upgrade query requirements
+
+:::info
+When `--grpc-only` is enabled, gRPC is automatically enabled as well.
+:::
+
+## Configuration Flags
+
+### Core Application
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--home` | string | Application home directory | `/Users/dariaagadzhanova/.babylond` |
+| `--chain-id` | string | Genesis file chain-id (randomly created if blank) | |
+| `--moniker` | string | Node name | `"Darias-MacBook-Air.local"` |
+| `--with-comet` | boolean | Run ABCI app embedded with CometBFT | `true` |
+| `--grpc-only` | boolean | Start in gRPC query only mode | `false` |
+
+### API Server
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--api.enable` | boolean | Enable the API server | `false` |
+| `--api.address` | string | API server listen address | `"tcp://localhost:1317"` |
+| `--api.enabled-unsafe-cors` | boolean | Enable CORS (unsafe - use at your own risk) | `false` |
+| `--api.max-open-connections` | uint | Maximum open connections | `1000` |
+| `--api.rpc-max-body-bytes` | uint | CometBFT maximum request body (bytes) | `1000000` |
+| `--api.rpc-read-timeout` | uint | CometBFT RPC read timeout (seconds) | `10` |
+| `--api.rpc-write-timeout` | uint | CometBFT RPC write timeout (seconds) | |
+| `--api.swagger` | boolean | Auto-register swagger documentation | `false` |
+
+### gRPC Server
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--grpc.enable` | boolean | Enable the gRPC server | `true` |
+| `--grpc.address` | string | gRPC server listen address | `"localhost:9090"` |
+| `--grpc-web.enable` | boolean | Enable gRPC-Web server | `true` |
+
+### P2P Networking
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--p2p.laddr` | string | Node listen address | `"tcp://0.0.0.0:26656"` |
+| `--p2p.external-address` | string | IP:port to advertise to peers | |
+| `--p2p.persistent_peers` | string | Comma-delimited ID@host:port persistent peers | |
+| `--p2p.seeds` | string | Comma-delimited ID@host:port seed nodes | |
+| `--p2p.private_peer_ids` | string | Comma-delimited private peer IDs | |
+| `--p2p.unconditional_peer_ids` | string | Comma-delimited unconditional peer IDs | |
+| `--p2p.pex` | boolean | Enable/disable Peer-Exchange | `true` |
+| `--p2p.seed_mode` | boolean | Enable/disable seed mode | `false` |
+
+### Database & Storage
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--db_backend` | string | Database backend: `goleveldb` \| `cleveldb` \| `boltdb` \| `rocksdb` \| `badgerdb` | `"goleveldb"` |
+| `--db_dir` | string | Database directory | `"data"` |
+| `--iavl-disable-fastnode` | boolean | Disable fast node for IAVL tree | `false` |
+| `--inter-block-cache` | boolean | Enable inter-block caching | `true` |
+
+### Pruning Configuration
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--pruning` | string | Pruning strategy (`default`\|`nothing`\|`everything`\|`custom`) | `"default"` |
+| `--pruning-keep-recent` | uint | Recent heights to keep (custom pruning only) | |
+| `--pruning-interval` | uint | Height interval for pruning (custom pruning only) | |
+| `--min-retain-blocks` | uint | Minimum block height offset for CometBFT block pruning | |
+
+### Consensus
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--consensus.create_empty_blocks` | boolean | Produce blocks when no transactions | `true` |
+| `--consensus.create_empty_blocks_interval` | string | Interval between empty blocks | `"0s"` |
+| `--consensus.double_sign_check_height` | int | Blocks to check for consensus votes before joining | |
+
+### BLS & Security
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--no-bls-password` | boolean | Generate BLS key without password (suitable for RPC nodes) | `true` |
+| `--insecure-bls-password` | string | Use specified BLS password | |
+| `--bls-password-file` | string | Load BLS password from file (not recommended) | |
+| `--keyring-backend` | string | Keyring backend (`os`\|`file`\|`kwallet`\|`pass`\|`test`) | `"os"` |
+
+### RPC Configuration
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--rpc.laddr` | string | RPC listen address | `"tcp://127.0.0.1:26657"` |
+| `--rpc.grpc_laddr` | string | GRPC listen address (BroadcastTx only) | |
+| `--rpc.pprof_laddr` | string | pprof listen address | |
+| `--rpc.unsafe` | boolean | Enable unsafe RPC methods | `false` |
+
+### Performance & Profiling
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--cpu-profile` | string | Enable CPU profiling and write to file | |
+| `--query-gas-limit` | uint | Maximum gas for Rest/gRPC queries (0 = unbounded) | |
+| `--mempool.max-txs` | int | MaxTx value for app-side mempool | `-1` |
+| `--minimum-gas-prices` | string | Minimum gas prices (e.g., `0.01photino;0.0001stake`) | |
+
+### State Sync
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--state-sync.snapshot-interval` | uint | State sync snapshot interval | |
+| `--state-sync.snapshot-keep-recent` | uint32 | State sync snapshots to keep | `2` |
+
+### WASM Configuration
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--wasm.memory_cache_size` | uint32 | In-memory cache for WASM modules (MiB, 0 = disabled) | `100` |
+| `--wasm.query_gas_limit` | uint | Max gas for WASM contract queries | `3000000` |
+| `--wasm.simulation_gas_limit` | string | Max gas for simulation transactions | |
+| `--wasm.skip_wasmvm_version_check` | boolean | Skip libwasmvm/wasmvm version check | `false` |
+
+### Node Halting
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--halt-height` | uint | Block height to gracefully halt the chain | |
+| `--halt-time` | uint | Unix timestamp to gracefully halt the chain | |
+
+### Advanced Options
+
+| Flag | Type | Description | Default |
+|------|------|-------------|---------|
+| `--abci` | string | ABCI transport (`socket` \| `grpc`) | `"socket"` |
+| `--address` | string | Listen address | `"tcp://127.0.0.1:26658"` |
+| `--transport` | string | Transport protocol (`socket` \| `grpc`) | `"socket"` |
+| `--proxy_app` | string | Proxy app address | `"tcp://127.0.0.1:26658"` |
+| `--priv_validator_laddr` | string | Socket for external priv_validator process | |
+| `--genesis_hash` | bytesHex | Optional SHA-256 hash of genesis file | |
+| `--inv-check-period` | uint | Assert invariants every N blocks | |
+| `--shutdown-grace` | duration | Resource cleanup wait duration on shutdown | |
+| `--trace` | boolean | Full stack traces for ABCI Log errors | `false` |
+| `--trace-store` | string | Enable KVStore tracing to file | |
+| `--unsafe-skip-upgrades` | ints | Skip upgrade heights to continue old binary | |
+| `--x-crisis-skip-assert-invariants` | boolean | Skip x/crisis invariants check on startup | `false` |
+

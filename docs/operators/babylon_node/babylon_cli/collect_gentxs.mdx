@@ -1,0 +1,119 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: collect-gentxs
+sidebar_position: 2
+---
+
+# collect-gentxs
+
+Collect genesis txs and output a genesis.json file. This command gathers all genesis transactions from the gentx directory and incorporates them into the final genesis.json file, completing the genesis file preparation process.
+
+## Overview
+
+The `collect-gentxs` command collects all genesis transactions (gentxs) created by validators and merges them into the genesis.json file. This is typically the final step in setting up a new blockchain network after all validators have generated their genesis transactions.
+
+```bash
+babylond collect-gentxs [flags]
+```
+
+## Arguments
+
+This command takes no positional arguments. All configuration is done through flags.
+
+## Flags
+
+### Directory Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--gentx-dir` | string | `[--home]/config/gentx/` | Override default "gentx" directory from which collect and execute genesis transactions |
+| `--home` | string | `~/.babylond` | The application home directory |
+| `-h, --help` | | | Help for collect-gentxs |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+## Examples
+
+### Basic Collection
+
+Collect all genesis transactions from the default directory:
+
+```bash
+babylond collect-gentxs
+```
+
+### Custom Gentx Directory
+
+Collect genesis transactions from a custom directory:
+
+```bash
+babylond collect-gentxs --gentx-dir /path/to/custom/gentx
+```
+
+### Custom Home Directory
+
+Collect gentxs with a custom home directory:
+
+```bash
+babylond collect-gentxs --home /custom/babylon/home
+```
+
+### Complete Network Setup Workflow
+
+```bash
+# 1. Initialize the network
+babylond init my-node --chain-id babylon-testnet-1
+
+# 2. Add genesis accounts
+babylond add-genesis-account validator1 100000000ubbn
+babylond add-genesis-account validator2 100000000ubbn
+
+# 3. Generate genesis transactions (each validator does this)
+babylond gentx validator1 50000000ubbn --chain-id babylon-testnet-1
+
+# 4. Collect all genesis transactions
+babylond collect-gentxs
+
+# 5. Validate the final genesis file
+babylond validate-genesis
+```
+
+### Multi-Validator Setup
+
+```bash
+# Network coordinator collects gentxs from multiple validators
+mkdir -p ~/.babylond/config/gentx
+
+# Copy gentx files from validators
+cp validator1-gentx.json ~/.babylond/config/gentx/
+cp validator2-gentx.json ~/.babylond/config/gentx/
+cp validator3-gentx.json ~/.babylond/config/gentx/
+
+# Collect all transactions
+babylond collect-gentxs
+
+# Verify collection was successful
+babylond validate-genesis
+```
+
+## Usage Notes
+
+:::info Genesis File
+This command modifies the `genesis.json` file to include all collected genesis transactions. The original genesis.json is updated with validator information and initial delegations.
+:::
+
+:::warning Prerequisites
+Before running this command, ensure all validators have generated their gentx files using `babylond gentx` and the files are present in the gentx directory.
+:::
+
+:::tip Validation
+Always run `babylond validate-genesis` after collecting gentxs to ensure the genesis file is valid and the network can start successfully.
+:::
+

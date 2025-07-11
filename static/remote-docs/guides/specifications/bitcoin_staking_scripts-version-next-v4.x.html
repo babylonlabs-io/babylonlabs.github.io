@@ -93,14 +93,17 @@ to a finality provider.
 A finality provider is identified by their EOTS public
 key (<code>&#x3C;FinalityProviderPk></code>) and participates in the finality
 voting round of a specific BSN.
-The selection of a finality provider also implicitly determines
-the BSN they secure, as each provider may only secure one BSN.
-Bitcoin stakers specify their chosen finality provider by including
-their EOTS key in the staking script.
+The selection of finality providers determines which BSNs the stake will secure,
+as each finality provider may only secure one BSN. Bitcoin stakers can delegate
+to multiple finality providers across different BSNs by including their
+EOTS keys in the staking script.
 <blockquote>
-<p>⚠️ Currently, only a single finality provider securing the Babylon Genesis chain
-can be selected. Future protocol versions will support additional BSNs and allow
-BTC stakers to delegate to providers securing those networks.</p>
+<p>⚡ Multi-staking to finality providers across different BSNs is
+supported from v3 of the Babylon Genesis node. The system enforces that
+at least one finality provider must secure the Babylon Genesis chain,
+with at most one finality provider per BSN. This allows
+BTC stakers to provide security to multiple networks simultaneously
+while maintaining proper validation constraints.</p>
 </blockquote>
 </li>
 <li><strong>Covenant Committee</strong>:
@@ -277,19 +280,21 @@ This path is used to slash staked funds when the
 finality provider to which they have been delegated to
 is proven to have double-signed.</p>
 <pre><code>&#x3C;StakerPk> OP_CHECKSIGVERIFY
-&#x3C;FinalityProviderPk> OP_CHECKSIGVERIFY
+&#x3C;FinalityProviderPk1> OP_CHECKSIG &#x3C;FinalityProviderPk2> OP_CHECKSIGADD ... &#x3C;FinalityProviderPkN> OP_CHECKSIGADD
+1 OP_NUMEQUAL
 &#x3C;CovenantPk1> OP_CHECKSIG &#x3C;CovenantPk2> OP_CHECKSIGADD ... &#x3C;CovenantPkN> OP_CHECKSIGADD
 &#x3C;CovenantThreshold> OP_NUMEQUAL
 </code></pre>
 <p><strong>Fields</strong>:</p>
 <ul>
 <li><code>StakerPK</code> is the BTC staker's public key.</li>
-<li><code>FinalityProviderPk</code> is the public key of the finality provider
-to which the stake is delegated.
+<li><code>FinalityProviderPk1..FinalityProviderPkN</code> are the lexicographically sorted
+public keys of the finality providers to which the stake is delegated.
 <blockquote>
-<p>⚡ At the moment, only a single finality provider is supported.
-Once multi-staking is enabled, the script will be modified to accommodate
-more finality providers.</p>
+<p>⚡ Multi-staking to finality providers across different BSNs is
+supported from v3 of the Babylon Genesis node.
+The system enforces that at least one finality provider must secure the Babylon Genesis chain,
+with at most one finality provider per BSN.</p>
 </blockquote>
 </li>
 <li><code>CovenantPk1..CovenantPkN</code> are the lexicographically sorted public keys of the
@@ -357,19 +362,21 @@ This path is used to slash staked funds when the
 finality provider to which they have been delegated to
 is proven to have double-signed while the stake is in the unbonding period.
 <pre><code>&#x3C;StakerPk> OP_CHECKSIGVERIFY
-&#x3C;FinalityProviderPk> OP_CHECKSIGVERIFY
+&#x3C;FinalityProviderPk1> OP_CHECKSIG &#x3C;FinalityProviderPk2> OP_CHECKSIGADD ... &#x3C;FinalityProviderPkN> OP_CHECKSIGADD
+1 OP_NUMEQUAL
 &#x3C;CovenantPk1> OP_CHECKSIG &#x3C;CovenantPk2> OP_CHECKSIGADD ... &#x3C;CovenantPkN> OP_CHECKSIGADD
 &#x3C;CovenantThreshold> OP_NUMEQUAL
 </code></pre>
 <strong>Fields</strong>:
 <ul>
 <li><code>StakerPK</code> is the BTC staker's public key.</li>
-<li><code>FinalityProviderPk</code> is the public key of the finality provider
-to which the stake is delegated.
+<li><code>FinalityProviderPk1..FinalityProviderPkN</code> are the lexicographically sorted
+public keys of the finality providers to which the stake is delegated.
 <blockquote>
-<p>⚡ At the moment, only a single finality provider is supported.
-Once multi-staking is enabled, the script will be modified to accommodate
-more finality providers.</p>
+<p>⚡ Multi-staking to finality providers across different BSNs is
+supported from v3 of the Babylon Genesis node.
+The system enforces that at least one finality provider must secure the Babylon Genesis chain,
+with at most one finality provider per consumer chain/BSN.</p>
 </blockquote>
 </li>
 <li><code>CovenantPk1..CovenantPkN</code> are the lexicographically sorted public keys of the

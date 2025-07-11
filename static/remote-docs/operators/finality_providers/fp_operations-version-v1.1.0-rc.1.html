@@ -22,7 +22,7 @@
 </head>
 <body>
   <article>
-    
+    <div class="release-badge">Version: <strong>v1.1.0-rc.1</strong></div>
     <h1>Finality Provider Operation</h1>
 <p>This is an operational guide intended for technical finality provider administrators.
 This guide covers the complete
@@ -52,7 +52,11 @@ gain an overall understanding of the finality provider.</p>
 <li><a href="#522-import-an-existing-eots-key">Import an existing EOTS key</a></li>
 </ol>
 </li>
-<li><a href="#53-starting-the-eots-daemon">Starting the EOTS Daemon</a></li>
+<li><a href="#53-starting-the-eots-daemon">Starting the EOTS Daemon</a>
+<ol>
+<li><a href="#531-unlock-file-based-keyring">Unlock file-based keyring</a></li>
+</ol>
+</li>
 </ol>
 </li>
 <li><a href="#6-setting-up-the-finality-provider">Setting up the Finality Provider</a>
@@ -245,7 +249,9 @@ RPC listener address, logging levels, and metrics configuration.</p>
 <p><strong>keyring-directory</strong>*:</p>
 <ul>
 <li>EOTS private keys are securely stored using Cosmos SDK's keyring system</li>
-<li><code>test</code> keyring-backend is mandatory for daemon access for automated signing.</li>
+<li><code>test</code> keyring-backend should only be used for test environments.</li>
+<li><code>file</code> keyring-backend is used for production environments but requires call to <code>Unlock</code> command.
+See the section <a href="#531-unlock-file-based-keyring">Unlock file-based keyring</a></li>
 <li>Keys are used for EOTS signatures</li>
 </ul>
 </li>
@@ -369,12 +375,30 @@ this value by specifying a custom address with the <code>--rpc-listener</code> f
 2024-10-30T12:42:29.393363Z     info  EOTS Manager Daemon is fully active!
 EOTS Manager Daemon is fully active!
 </code></pre>
+<h4>5.3.1. Unlock file-based keyring</h4>
+<p>⚠️⚠️⚠️ Mandatory step for file-based keyring backend ⚠️⚠️⚠️</p>
+<p>If you are using a <code>file</code> based keyring-backend, you need to unlock the keyring by executing the <code>unlock</code> command.
+Unlock is required after the eotsd daemon is started, otherwise if the unlock command is not run the daemon will error and not be able to sign.
+This only applies to the <code>file</code> keyring backend, if you are using the <code>test</code> keyring backend, you can skip this step.</p>
+<pre><code class="language-shell">eotsd unlock --eots-pk &#x3C;eots-pk> --rpc-client &#x3C;eotsd-address>
+</code></pre>
+<p>You will be prompted to enter the password for the keyring. After which the signing operations will be available and eotsd can
+run uninterrupted.</p>
+<p>An alternative to providing the password as an input is specifying the password with the environment variable <code>EOTS_KEYRING_PASSWORD</code>:</p>
+<pre><code class="language-shell">export EOTSD_KEYRING_PASSWORD=&#x3C;your-password>
+</code></pre>
+<p>If you have HMAC security enabled, you can also specify the HMAC key either with:</p>
+<ul>
+<li><code>HMAC_KEY</code> environment variable, or</li>
+<li>providing the <code>--home</code> path to the eotsd home directory which contains the config file with hmac key set up.</li>
+</ul>
+<hr>
 <blockquote>
 <p><strong>🔒 Security Tip</strong>:</p>
 <ul>
 <li><code>eotsd</code> holds your private keys which are used for signing</li>
 <li>operate the daemon in a separate machine or network segment
-with enhanced security</li>
+>   with enhanced security</li>
 <li>only allow access to the RPC server specified by the <code>RPCListener</code>
 port to trusted sources. You can edit the <code>EOTSManagerAddress</code> in
 the configuration file of the finality provider to
@@ -483,11 +507,21 @@ The output should look similar to the one below:</p>
 }
 </code></pre>
 <h3>6.3. Configure Your Finality Provider</h3>
-<p>Edit the <code>fpd.conf</code> file in your finality provider home directory with the
-following parameters:</p>
+<p>Once the finality provider is initialised and its keys are added/created,
+the <code>fpd.conf</code> file located in the daemon's home directory must be configured
+with the below minimal parameters.</p>
+<p>The configuration controls how the finality provider communicates with the
+EOTS manager, the Babylon Genesis chain, and manages the keyring and RPC interfaces.</p>
+<p>The following is an example of the <code>fpd.conf</code> file:</p>
 <pre><code class="language-shell">[Application Options]
 EOTSManagerAddress = 127.0.0.1:12582
 RPCListener = 127.0.0.1:12581
+
+; The number of Schnorr public randomness for each commitment
+NumPubRand              = 50000     # the number of randomness entries generated and committed per batch (~5 days)
+
+; The delay, measured in blocks, between a randomness commit submission and the randomness is BTC-timestamped
+TimestampingDelayBlocks = 18000     # delay before timestamping (300 BTC blocks = 18000 Babylon blocks)
 
 [babylon]
 Key = &#x3C;finality-provider-key-name-signer> # the key you used above
@@ -496,11 +530,53 @@ RPCAddr = http://127.0.0.1:26657 # Your Babylon Genesis node's RPC endpoint
 KeyDirectory = &#x3C;path> # The `--home` path to the directory where the keyring is stored
 </code></pre>
 <blockquote>
+<p>⚠️ <strong>Critical Public Randomness Configuration</strong>:
+The finality provider can only vote for blocks for which it has submitted
+public randomness for. Further, for the randomness to be available for use,
+it should have been committed in a Babylon Genesis block that has been
+confirmed with sufficient depth on the Bitcoin network.</p>
+<p>The configuration enables operators to choose how much randomness they commit
+each time and what estimations they should perform to target their
+randomness activating at a desired height.</p>
+<ul>
+<li><code>NumPubRand</code> determines the number of public randomness entries
+generated and committed per batch. The default value is set to <code>50,000</code>, which is
+approx. 5 days of operation with 10 second intervals (the current target
+block time for the testnet and mainnet).
+<ul>
+<li>The codebase enforces a minimum of 1800 of <code>NumPubRand</code> and a maximum of
+<code>500000</code>.</li>
+<li>An increased value leads to less frequent commits and less gas usage,
+but it leads to longer computation times whenever a commit should be
+created.</li>
+</ul>
+</li>
+<li><code>TimestampingDelayBlocks</code> defines an estimation
+of the number of Babylon Genesis blocks that will be generated
+until a public randomness commit is Bitcoin timestamped.
+The default value is set to <code>18,000</code> Babylon Genesis blocks,
+which corresponds to 300 Bitcoin blocks being generated (the finalization
+target for mainnet) and Babylon Genesis having a 10s block time (the target
+block time for testnet and mainnet).
+<ul>
+<li><em>Note: This value should be selected according to the network you
+connect to and its parameters. For example, for testnet, with the
+finalization target being set to 100 Bitcoin blocks, a value of 6,000 is
+more appropriate</em></li>
+</ul>
+</li>
+</ul>
+<p>For further explanation of how public randomness works and how it is
+committed, refer to the <a href="commit-pub-rand.md">Public Randomness Commit Specification</a>.</p>
+</blockquote>
+<blockquote>
 <p>⚠️ <strong>Important</strong>: Operating a finality provider requires a connection to a
 Babylon Genesis node. It is <strong>highly recommended</strong> to operate your own
 Babylon Genesis full node instead of relying on third parties. You can find
 instructions on setting up a Babylon Genesis node
 <a href="https://github.com/babylonlabs-io/networks/tree/main/bbn-test-5/babylon-node/README.md">here</a>.</p>
+</blockquote>
+<blockquote>
 <p>⚠️ <strong>Critical RPC Configuration</strong>:
 When configuring your finality provider to a Babylon Gensis RPC node, you should
 connect to a <strong>single</strong> node directly. Additionally you <strong>must</strong>

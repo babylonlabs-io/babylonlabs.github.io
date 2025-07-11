@@ -1,0 +1,390 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: debug
+sidebar_position: 6
+---
+
+# debug
+
+Tool for helping with debugging your application. These utilities provide essential debugging capabilities for developers and node operators working with Babylon blockchain data, including address conversion, public key decoding, and codec inspection.
+
+## Overview
+
+The `debug` command group provides a comprehensive set of utilities for debugging and troubleshooting Babylon blockchain applications, handling various data format conversions and inspections.
+
+```bash
+babylond debug [command] [flags]
+```
+
+## Quick Reference
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| [`addr`](#addr) | Convert address between hex and bech32 | Address format conversion |
+| [`codec`](#codec) | Debug application codec | Codec troubleshooting |
+| [`prefixes`](#prefixes) | List bech32 prefixes | Address prefix verification |
+| [`pubkey`](#pubkey) | Decode pubkey from proto JSON | Public key inspection |
+| [`pubkey-raw`](#pubkey-raw) | Decode pubkey from various formats | Raw key conversion |
+| [`raw-bytes`](#raw-bytes) | Convert raw bytes to hex | Data format conversion |
+
+## Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+---
+
+## addr
+
+Convert an address between hex encoding and bech32 format. Essential for debugging address-related issues and understanding different address representations.
+
+### Usage
+
+```bash
+babylond debug addr [address] [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `address` | The address to convert (hex or bech32 format) |
+
+### Examples
+
+```bash title="Convert bech32 to hex"
+babylond debug addr babylon1e0jnq2sun3dzjh8p2xq95kk0expwmd7shwjpfg
+```
+
+```bash title="Convert hex to bech32"
+babylond debug addr 1234567890ABCDEF1234567890ABCDEF12345678
+```
+
+```bash title="Validate address formats"
+# Test different address types
+babylond debug addr babylon1abc123...  # Regular account
+babylond debug addr babylonvaloper1... # Validator operator
+babylond debug addr babylonvalcons1... # Validator consensus
+```
+
+**Sample Output:**
+```
+Address: [20 bytes hex representation]
+Address (hex): 1234567890ABCDEF1234567890ABCDEF12345678
+Bech32 Acc: babylon1e0jnq2sun3dzjh8p2xq95kk0expwmd7shwjpfg
+```
+
+---
+
+## codec
+
+Tool for helping with debugging your application codec. Provides introspection into the registered types and interfaces in the Cosmos SDK codec.
+
+### Usage
+
+```bash
+babylond debug codec [command] [flags]
+```
+
+### Subcommands
+
+| Command | Description |
+|---------|-------------|
+| `list-implementations` | List the registered type URLs for the provided interface |
+| `list-interfaces` | List all registered interface type URLs |
+
+### Examples
+
+```bash title="List all registered interfaces"
+babylond debug codec list-interfaces
+```
+
+```bash title="List implementations for specific interface"
+babylond debug codec list-implementations cosmos.crypto.PubKey
+```
+
+```bash title="Inspect message types"
+babylond debug codec list-implementations cosmos.bank.v1beta1.Msg
+```
+
+**Sample Output for list-interfaces:**
+```
+/cosmos.crypto.PubKey
+/cosmos.authz.v1beta1.Authorization
+/cosmos.bank.v1beta1.Msg
+/cosmos.staking.v1beta1.Msg
+...
+```
+
+---
+
+## prefixes
+
+List prefixes used for Human-Readable Part (HRP) in Bech32 addresses. Helpful for understanding the different address types used in the Babylon network.
+
+### Usage
+
+```bash
+babylond debug prefixes [flags]
+```
+
+### Examples
+
+```bash title="List all bech32 prefixes"
+babylond debug prefixes
+```
+
+**Sample Output:**
+```
+Bech32 Prefixes:
++----------------+--------------------+
+| Address Type   | Address Prefix     |
++----------------+--------------------+
+| Account        | babylon            |
+| Validator      | babylonvaloper     |
+| Consensus      | babylonvalcons     |
+| Public         | babylonpub         |
+| Validator Pub  | babylonvaloperpub  |
+| Consensus Pub  | babylonvalconspub  |
++----------------+--------------------+
+```
+
+---
+
+## pubkey
+
+Decode a pubkey from proto JSON and display its address. Useful for extracting address information from public key data.
+
+### Usage
+
+```bash
+babylond debug pubkey [pubkey] [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `pubkey` | The public key in proto JSON format |
+
+### Examples
+
+```bash title="Decode secp256k1 public key"
+babylond debug pubkey '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"AurroA7jvfPd1AadmmOvWM2rJSwipXfRf8yD6pLbA2DJ"}'
+```
+
+```bash title="Decode Ed25519 public key"
+babylond debug pubkey '{"@type":"/cosmos.crypto.ed25519.PubKey","key":"PubKeyDataInBase64=="}'
+```
+
+```bash title="Get validator consensus address"
+# Extract from validator info
+VALIDATOR_PUBKEY=$(babylond comet show-validator)
+babylond debug pubkey "$VALIDATOR_PUBKEY"
+```
+
+**Sample Output:**
+```
+Address: babylonvalcons1abc123def456...
+Hex: 1234567890ABCDEF1234567890ABCDEF12345678
+```
+
+---
+
+## pubkey-raw
+
+Decode a pubkey from hex, base64, or bech32 format. Supports both Ed25519 and secp256k1 key types.
+
+### Usage
+
+```bash
+babylond debug pubkey-raw [pubkey] -t [{ed25519, secp256k1}] [flags]
+```
+
+### Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `-t, --type` | string | `ed25519` | Pubkey type to decode (`secp256k1`\|`ed25519`) |
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `pubkey` | The public key in hex, base64, or bech32 format |
+
+### Examples
+
+```bash title="Decode hex format Ed25519 key"
+babylond debug pubkey-raw 8FCA9D6D1F80947FD5E9A05309259746F5F72541121766D5F921339DD061174A
+```
+
+```bash title="Decode base64 format key"
+babylond debug pubkey-raw j8qdbR+AlH/V6aBTCSWXRvX3JUESF2bV+SEzndBhF0o= --type ed25519
+```
+
+```bash title="Decode bech32 format key"
+babylond debug pubkey-raw babylonpub1zcjduepq3l9f6mglsz28l40f5pfsjfvhgm6lwf2pzgtkd40eyyeem5rpza9q47axrz
+```
+
+```bash title="Decode secp256k1 key"
+babylond debug pubkey-raw 02ab8912ab9f2a5e7f3e5f7c8e9b3a2d1c4e5f6789abcdef0123456789abcdef --type secp256k1
+```
+
+**Sample Output:**
+```
+Address: babylon1abc123def456...
+PubKey: {"@type":"/cosmos.crypto.ed25519.PubKey","key":"j8qdbR+AlH/V6aBTCSWXRvX3JUESF2bV+SEzndBhF0o="}
+```
+
+---
+
+## raw-bytes
+
+Convert raw bytes output (e.g., [10 21 13 255]) to hex format. Useful for interpreting debug output from other commands.
+
+### Usage
+
+```bash
+babylond debug raw-bytes <raw-bytes> [flags]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `raw-bytes` | Raw bytes in array format (e.g., [10 21 13 255]) |
+
+### Examples
+
+```bash title="Convert simple byte array"
+babylond debug raw-bytes '[72 101 108 108 111 44 32 112 108 97 121 103 114 111 117 110 100]'
+```
+
+```bash title="Convert hash bytes"
+babylond debug raw-bytes '[32 45 67 89 123 156 78 90 12 34 56 78 90 123 145 167]'
+```
+
+---
+
+## Common Debugging Workflows
+
+### Address Investigation
+
+```bash title="Complete address analysis"
+ADDRESS="babylon1e0jnq2sun3dzjh8p2xq95kk0expwmd7shwjpfg"
+
+# Convert address formats
+babylond debug addr $ADDRESS
+
+# Check what prefixes are available
+babylond debug prefixes
+
+# Query account information
+babylond query auth account $ADDRESS
+```
+
+### Public Key Analysis
+
+```bash title="Validator public key investigation"
+# Get validator public key
+VALIDATOR_PUBKEY=$(babylond comet show-validator)
+
+# Decode the public key
+babylond debug pubkey "$VALIDATOR_PUBKEY"
+
+# Show validator consensus address
+babylond comet show-address
+
+# Compare with decoded address
+```
+
+### Transaction Debugging
+
+```bash title="Transaction troubleshooting"
+# Decode transaction addresses
+babylond debug addr sender_address
+babylond debug addr recipient_address
+
+# Check address prefixes
+babylond debug prefixes
+
+# Validate public key formats
+babylond debug pubkey-raw hex_pubkey --type secp256k1
+```
+
+### Codec Investigation
+
+```bash title="Protocol debugging"
+# List all available interfaces
+babylond debug codec list-interfaces
+
+# Check specific message types
+babylond debug codec list-implementations cosmos.bank.v1beta1.Msg
+babylond debug codec list-implementations cosmos.staking.v1beta1.Msg
+
+# Verify module message types
+babylond debug codec list-implementations cosmos.authz.v1beta1.Authorization
+```
+
+### Development Testing
+
+```bash title="Integration testing workflow"
+# Generate test data
+TEST_PUBKEY="8FCA9D6D1F80947FD5E9A05309259746F5F72541121766D5F921339DD061174A"
+
+# Test different formats
+babylond debug pubkey-raw $TEST_PUBKEY --type ed25519
+
+# Convert to proto JSON format
+babylond debug pubkey '{"@type":"/cosmos.crypto.ed25519.PubKey","key":"base64_key_here"}'
+
+# Verify address conversion
+babylond debug addr derived_address
+```
+
+## Advanced Debugging Scenarios
+
+### Multi-Signature Debugging
+
+```bash title="Multi-sig troubleshooting"
+# Decode each public key in multi-sig
+babylond debug pubkey-raw pubkey1 --type secp256k1
+babylond debug pubkey-raw pubkey2 --type secp256k1
+babylond debug pubkey-raw pubkey3 --type secp256k1
+
+# Convert multi-sig address
+babylond debug addr multisig_address
+
+# Verify address derivation
+```
+
+### Cross-Chain Address Verification
+
+```bash title="IBC address verification"
+# Convert IBC addresses
+babylond debug addr ibc_address
+
+# Check prefix compatibility
+babylond debug prefixes
+
+# Verify derived addresses match
+```
+
+### Network Migration Debugging
+
+```bash title="Chain upgrade debugging"
+# Check codec compatibility
+babylond debug codec list-interfaces
+
+# Verify key formats
+babylond debug pubkey-raw validator_key
+
+# Test address conversions
+babylond debug addr old_format_address
+```

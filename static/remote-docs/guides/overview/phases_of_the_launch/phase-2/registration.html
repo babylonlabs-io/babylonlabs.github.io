@@ -29,8 +29,11 @@
 <li><a href="#1-introduction">Introduction</a></li>
 <li><a href="#2-bitcoin-stake-registration-methods">Bitcoin Stake Registration Methods</a>
 <ol>
-<li><a href="#21-post-staking-registration">Post-Staking Registration</a></li>
-<li><a href="#22-pre-staking-registration">Pre-Staking Registration</a></li>
+<li><a href="#21-multi-staking-to-bsns">Multi-Staking to BSNs</a></li>
+<li><a href="#22-bsn-and-finality-provider-selection">BSN and Finality Provider Selection</a></li>
+<li><a href="#23-multi-staking-validation">Multi-Staking Validation</a></li>
+<li><a href="#24-post-staking-registration">Post-Staking Registration</a></li>
+<li><a href="#25-pre-staking-registration">Pre-Staking Registration</a></li>
 </ol>
 </li>
 <li><a href="#3-bitcoin-stake-registration">Bitcoin Stake Registration</a>
@@ -111,7 +114,13 @@ containing the transaction.</p>
 <li>Block 90 is 10-deep</li>
 </ul>
 </blockquote>
-<h3>2.1. Post-Staking Registration</h3>
+<h3>2.1. Multi-Staking to BSNs</h3>
+<p>Multi-staking is the ability to stake BTC to secure multiple BSNs
+(Bitcoin Supercharged Networks). When staking singularly to a finality provider,
+one finality provider is selected, enabling staking to secure a single BSN.
+With multi-staking, Bitcoin holders can delegate to multiple finality providers
+simultaneously, with each finality provider securing a different BSN.</p>
+<h3>2.2. Post-Staking Registration</h3>
 <p>This flow applies to stakers whose BTC staking transaction has already
 been confirmed in a Bitcoin block that is <code>k</code>-deep
 and is subsequently registered on the Babylon Genesis chain.
@@ -139,13 +148,12 @@ been included on the Bitcoin ledger.
 <strong>your stake to be included in a later Bitcoin height, leading to</strong>
 <strong>the rejection of any subsequent staking registrations of it</strong>.
 In those cases, the stake will have to be unbonded and staked again.</p>
-<p><strong>⚠️ Important Warning about Finality Providers</strong>: Be cautious when selecting a
-Finality Provider for your stake. If the Finality Provider you delegate to gets
+<p><strong>⚠️ Important Warning about Finality Providers</strong>: Be cautious when selecting
+Finality Providers for your stake. If the Finality Providers you delegate to get
 slashed before your stake is registered, your stake may become stuck. This is
-particularly important for Phase-1 stakes that are in the process of being
-registered.</p>
+particularly important when delegating across multiple BSNs.</p>
 </blockquote>
-<h3>2.2. Pre-Staking Registration</h3>
+<h3>2.3. Pre-Staking Registration</h3>
 <p>The Pre-staking registration flow is for stakers who seek
 verification from the Babylon chain before submitting their
 BTC staking transaction to the Bitcoin ledger. By doing so,
@@ -216,11 +224,10 @@ This minimum gas is defined by the <code>delegation_creation_base_gas_fee</code>
 staking parameter of the Babylon Genesis chain
 (this parameter will be detailed in
 <a href="#32-babylon-chain-btc-staking-parameters">Section 3.2.</a>).</p>
-<p><strong>⚠️ Important Warning about Finality Providers</strong>: Be cautious when selecting a
-Finality Provider for your stake. If the Finality Provider you delegate to gets
+<p><strong>⚠️ Important Warning about Finality Providers</strong>: Be cautious when selecting
+Finality Providers for your stake. If the Finality Providers you delegate to get
 slashed before your stake is registered, your stake may become stuck. This is
-particularly important for Phase-1 stakes that are in the process of being
-registered.</p>
+particularly important when delegating across multiple BSNs.</p>
 </blockquote>
 <h2>3. Bitcoin Stake Registration</h2>
 <h3>3.1. Overview of Registration Data</h3>
@@ -239,7 +246,7 @@ the staker to on-demand unbond their stake. It is submitted to the Babylon Genes
 and co-signed by the covenants upon verification.</li>
 <li><strong>Slashing Transactions</strong>: Two staker pre-signed slashing transactions
 (one for staking, one for unbonding) that ensure enforcement
-of slashing if the Finality Provider to which the stake is delegated to
+of slashing if the Finality Providers to which the stake is delegated to
 double-signs. They are submitted to the Babylon Genesis chain and co-signed
 by the covenants upon verification.</li>
 <li><strong>Proof of Possession</strong>: Confirms ownership of the Bitcoin key
@@ -257,11 +264,10 @@ stake needing to unbond and be staked again.</p>
 <p><strong>⚡ Note</strong>: More details on the Bitcoin staking, unbonding, and slashing
 transactions can be found in the
 <a href="./staking-script.md">Bitcoin Staking script specification</a>.</p>
-<p><strong>⚠️ Important Warning about Finality Providers</strong>: Be cautious when selecting a
-Finality Provider for your stake. If the Finality Provider you delegate to gets
+<p><strong>⚠️ Important Warning about Finality Providers</strong>: Be cautious when selecting
+Finality Providers for your stake. If the Finality Providers you delegate to get
 slashed before your stake is registered, your stake may become stuck. This is
-particularly important for Phase-1 stakes that are in the process of being
-registered.</p>
+particularly important when delegating across multiple BSNs.</p>
 </blockquote>
 <p>Once assembled, this data is packaged into a Babylon Genesis chain transaction and
 broadcast to the network. The process differs based on whether the staker
@@ -396,8 +402,9 @@ message MsgCreateBTCDelegation {
   ProofOfPossessionBTC pop = 2;
   // btc_pk is the Bitcoin secp256k1 PK of the BTC delegator
   bytes btc_pk = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
-  // fp_btc_pk_list is the list of Bitcoin secp256k1 PKs of the finality providers, if there is more than one
-  // finality provider pk it means that delegation is re-staked
+  // fp_btc_pk_list is the list of Bitcoin secp256k1 PKs of the finality providers across different BSNs.
+  // If there is more than one finality provider pk, it means the delegation is multi-staked
+  // across multiple BSNs, with at most one finality provider per BSN allowed.
   repeated bytes fp_btc_pk_list = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
   // staking_time is the time lock used in staking transaction
   uint32 staking_time = 5;
@@ -487,12 +494,21 @@ in the BTC Staking transaction.</p>
 <p><code>fp_btc_pk_list</code>:
 A list of the <code>secp256k1</code> public keys of the finality providers
 (FPs) to which the stake is delegated in BIP-340 format (Schnorr signatures)
-and compact 32-byte representation.
-<strong>For phase-2,
-this list contains a single key,
-since Babylon is the only system secured by the Bitcoin stake</strong>.
-The public key should be exactly the same as the one
-used when constructing the <a href="./staking-script.md">staking script</a>.</p>
+and compact 32-byte representation.</p>
+<blockquote>
+<p>Specifying more than one finality provider constitutes multi-staking,
+i.e delegating across multiple BSNs. The system enforces the following constraints:</p>
+<ul>
+<li>At least one finality provider must be securing the Babylon Genesis chain.</li>
+<li>At most one finality provider may be selected per consumer BSN.</li>
+<li>The total number of finality providers must not exceed the
+<code>max_multi_staked_fps limit</code>, which can be queried from the registered BSN.
+The system will validate your selection against all multi-staking constraints
+before accepting the delegation.
+Each public key should be exactly the same as the one used when
+constructing the <a href="./staking-script.md">staking script</a>.</li>
+</ul>
+</blockquote>
 </li>
 <li>
 <p><code>staking_time</code>:
@@ -576,7 +592,6 @@ message InclusionProof {
     // proof is the Merkle proof that this tx is included in the position in `key`
     bytes proof = 2;
 }
-
 </code></pre>
 <ul>
 <li><code>key</code>: Identifies the transaction's position in the Bitcoin blockchain.
@@ -731,8 +746,10 @@ refer to:</p>
 <li><a href="../btcstaking/witness_utils.go">the Golang staking library utils</a></li>
 </ul>
 <h3>4.3. Withdrawing Remaining Funds after Slashing</h3>
-<p>A Bitcoin stake is slashed if the Finality Provider to
-which it was delegated to double-signs. Slashing involves
+<p>A Bitcoin stake is slashed if one of the Finality Providers to
+which it is delegated to double-signs. When delegating across multiple
+BSNs, slashing can be triggered by misbehavior from any
+finality provider in the delegation set. Slashing involves
 broadcasting a <a href="./staking-script.md">slashing transaction</a>
 that sends a portion of the slashed funds to a burn address
 (as defined in the staking parameters in <a href="#32-babylon-chain-btc-staking-parameters">Section 3.2.</a>),
@@ -743,8 +760,10 @@ defined in the previous section.</p>
 parameter in the <a href="32-babylon-chain-btc-staking-parameters">Babylon Chain BTC Staking Parameters</a>. Babylon Genesis ensures that the timelock on the change output of a slashing
 transaction matches the unbonding time. Therefore, the unbonding time
 parameter effectively represents your slashing timelock. The reasoning behind
-the timelock is that we want to avoid situations in which some Finality Providers
-could use slashing as a way to unbond instantly.</p>
+the timelock is that we want to avoid situations in which finality providers
+could use slashing as a way to unbond instantly. Note that when delegated to
+multiple finality providers across BSNs, slashing affects the entire
+delegation regardless of which specific finality provider misbehaved.</p>
 <h2>5. Bitcoin Staking Rewards</h2>
 <p>Bitcoin stakers are rewarded with native tokens from
 the chain they help secure, in exchange for the economic security
@@ -764,10 +783,10 @@ they provide.</p>
 </ul>
 <p>The allocation is controlled by specific parameters:</p>
 <ul>
-<li><strong>Bitcoin Stakers Portion</strong>: Defined by the <code>btc_staking_portion</code> parameter,
-which specifies the portion of rewards allocated to Bitcoin stakers. This is
-calculated based on the voting power and commission rate of the Finality
-Provider the stake has been delegated to.</li>
+<li><strong>Bitcoin Stakers Portion</strong>: Defined by the <code>btc_staking_portion</code>
+parameter, which specifies the portion  of rewards allocated to Bitcoin
+stakers. This is calculated based on the voting power and commission rate
+of the Finality Provider the stake has been delegated to.</li>
 <li><strong>Community Pool Portion</strong>: Typically defined in the <code>x/distribution</code>
 module of the Cosmos SDK, often referred to as the community tax.</li>
 <li><strong>Native Stakers Portion</strong>: The remaining rewards, after allocations to
@@ -775,8 +794,8 @@ Bitcoin stakers and the community pool, are distributed to native stakers.</li>
 </ul>
 </li>
 <li>
-<p>Rewards for Bitcoin stakers are further distributed based on the voting power
-and commission rate of the Finality Provider the stake has been delegated to.
+<p>Rewards for Bitcoin stakers are distributed based on the voting power
+and commission rates of all finality providers in their delegation set.
 The rewards are entered into a gauge, which stakers can query and withdraw
 from through a transaction submission.</p>
 </li>
@@ -827,6 +846,27 @@ where <code>address</code> is the bech32 address of the staker.</li>
 <code>babylond query incentive reward-gauges &#x3C;bech32-address></code></li>
 <li><strong>via TypeScript</strong>: You can use the TypeScript implementation to query rewards.
 Please refer to the <a href="https://github.com/babylonlabs-io/simple-staking/blob/main/src/app/hooks/client/rpc/queries/useBbnQuery.ts">TypeScript library documentation</a>.</li>
+</ul>
+<h2>6. Available BSNs</h2>
+<p>To view the list of available BSNs or obtain further information about each BSN,
+including attributes such as <code>max_multi_staked_fps</code> you can use
+the<code>x/btcstkconsumer</code> module.</p>
+<p><strong>Querying for available BSNs</strong>:
+This can be checked using the <code>x/btcstkconsumer</code> module:</p>
+<ul>
+<li><strong>via an RPC/LCD query</strong>
+List all registered BSNs
+<code>/babylon/btcstkconsumer/v1/consumer_registry_list</code>
+Retrieve data for a specific BSN
+<code>/babylon/btcstkconsumer/v1/consumers_registry/{consumer_ids}</code></li>
+<li><strong>via the CLI command</strong>
+To retrieve the list of BSNs
+<code>babylond query btcstkconsumer registered-consumers</code>
+To retrieve a specific BSN
+<code>babylond query btcstkconsumer registered-consumer &#x3C;consumer-id></code></li>
+<li><strong>Protobuf Reference</strong>:
+To see the proto file, please refer to the
+<a href="../proto/babylon/btcstkconsumer/v1/query.proto">btcstkconsumer proto</a>.</li>
 </ul>
 
   </article>

@@ -1,0 +1,401 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: help
+sidebar_position: 11
+---
+
+# help
+
+Help provides help for any command in the application. This is your primary tool for discovering and understanding Babylon CLI commands, their usage patterns, flags, and examples directly from the command line.
+
+## Overview
+
+The `help` command provides detailed information about any babylond command, including usage syntax, available flags, examples, and subcommands. It's the built-in documentation system that helps you explore and understand the CLI without leaving your terminal.
+
+```bash
+babylond help [command] [flags]
+```
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `command` | The command or command path to get help for (optional) |
+
+## Flags
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `-h, --help` | | Help for the help command |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+
+## Examples
+
+### General Help
+
+Get overall babylond help and list all available commands:
+
+```bash title="Show all available commands"
+babylond help
+```
+
+### Command-Specific Help
+
+Get detailed help for specific commands:
+
+```bash title="Help for individual commands"
+# Get help for the start command
+babylond help start
+
+# Get help for the keys command group
+babylond help keys
+
+# Get help for a specific keys subcommand
+babylond help keys add
+```
+
+### Subcommand Navigation
+
+Navigate through command hierarchies:
+
+```bash title="Explore command groups"
+# Show all transaction commands
+babylond help tx
+
+# Show all query commands
+babylond help query
+
+# Show all genesis helpers
+babylond help gen-helpers
+
+# Show all debug utilities
+babylond help debug
+```
+
+### Complex Command Paths
+
+Get help for deeply nested commands:
+
+```bash title="Complex command paths"
+# Get help for validator creation
+babylond help tx checkpointing create-validator
+
+# Get help for staking queries
+babylond help query staking validator
+
+# Get help for bank transactions
+babylond help tx bank send
+
+# Get help for governance proposals
+babylond help tx gov submit-proposal
+```
+
+### Alternative Help Syntax
+
+Multiple ways to access help information:
+
+```bash title="Alternative help access methods"
+# Using --help flag (equivalent to help command)
+babylond start --help
+babylond keys --help
+babylond tx bank send --help
+
+# Using short form -h flag
+babylond init -h
+babylond config -h
+babylond export -h
+```
+
+## Command Discovery Workflow
+
+### Exploring Available Commands
+
+```bash title="Discover babylond capabilities"
+# 1. Start with general help
+babylond help
+
+# 2. Explore major command groups
+babylond help tx        # All transaction commands
+babylond help query     # All query commands
+babylond help keys      # Key management commands
+babylond help config    # Configuration commands
+
+# 3. Dive into specific areas of interest
+babylond help tx checkpointing    # Checkpointing transactions
+babylond help query btcstaking    # BTC staking queries
+babylond help comet               # CometBFT operations
+```
+
+### Learning New Features
+
+```bash title="Learn about specific features"
+# Discover BTC staking functionality
+babylond help tx btcstaking
+babylond help query btcstaking
+
+# Learn about checkpointing
+babylond help tx checkpointing
+babylond help query checkpointing
+
+# Explore finality provider operations
+babylond help tx finality
+babylond help query finality
+```
+
+### Quick Reference Generation
+
+```bash title="Generate quick references"
+# Create personal cheat sheets
+babylond help keys > keys_reference.txt
+babylond help tx > transactions_reference.txt
+babylond help query > queries_reference.txt
+
+# Get help for specific workflows
+babylond help gentx > validator_setup_help.txt
+babylond help export > state_export_help.txt
+```
+
+## Help Output Structure
+
+### Typical Help Output Format
+
+```text title="Standard help output structure"
+<Command Description>
+
+Usage:
+  babylond <command> [subcommand] [flags]
+
+Available Commands:
+  subcommand1    Description of subcommand1
+  subcommand2    Description of subcommand2
+
+Flags:
+  --flag1 string    Description of flag1
+  --flag2           Description of flag2
+
+Global Flags:
+  --home string     Home directory path
+  --log_level       Logging level
+
+Use "babylond <command> [subcommand] --help" for more information about a command.
+```
+
+### Understanding Help Sections
+
+**Command Description**: Brief overview of what the command does  
+**Usage**: Exact syntax showing required and optional parameters  
+**Available Commands**: List of subcommands with short descriptions  
+**Flags**: Command-specific options and their descriptions  
+**Global Flags**: Flags available to all commands  
+**Additional Info**: Navigation hints for deeper exploration  
+
+## Interactive Help Navigation
+
+### Building Command Knowledge
+
+```bash title="Progressive command learning"
+# Start broad
+babylond help
+
+# Focus on an area
+babylond help tx
+
+# Get specific
+babylond help tx checkpointing
+
+# Deep dive
+babylond help tx checkpointing create-validator
+
+# Study the full syntax
+babylond help tx checkpointing create-validator | less
+```
+
+### Help-Driven Development
+
+```bash title="Use help to build commands"
+# 1. Start with help to understand syntax
+babylond help tx bank send
+
+# 2. Build command step by step
+babylond tx bank send --help
+
+# 3. Identify required parameters
+babylond tx bank send [from_key_or_address] [to_address] [amount] --help
+
+# 4. Add optional flags as needed
+babylond tx bank send alice bob 1000ubbn --chain-id babylon-1 --help
+```
+
+## Help for Common Tasks
+
+### Validator Setup Help
+
+```bash title="Validator-related help commands"
+# Node initialization
+babylond help init
+
+# Key management
+babylond help keys add
+babylond help create-bls-key
+
+# Genesis setup
+babylond help add-genesis-account
+babylond help gentx
+babylond help collect-gentxs
+
+# Validator operations
+babylond help tx checkpointing create-validator
+babylond help query checkpointing validator
+```
+
+### BTC Staking Help
+
+```bash title="BTC staking help commands"
+# BTC staking transactions
+babylond help tx btcstaking
+
+# BTC staking queries
+babylond help query btcstaking
+
+# Finality provider operations
+babylond help tx finality
+babylond help query finality
+
+# Genesis helpers for BTC data
+babylond help gen-helpers
+```
+
+### Network Operations Help
+
+```bash title="Network operation help commands"
+# Node operations
+babylond help start
+babylond help status
+babylond help comet
+
+# State management
+babylond help export
+babylond help debug
+
+# Configuration
+babylond help config
+```
+
+## Best Practices
+
+:::tip Effective Help Usage
+- **Start broad, then narrow** - Begin with general help, then drill down to specific commands
+- **Use help before searching documentation** - Often faster than web searches
+- **Combine with --dry-run** - Use help to understand, then test with dry-run
+- **Save useful help output** - Create personal reference files for complex commands
+:::
+
+:::info Learning Strategy
+- **Explore systematically** - Go through each major command group
+- **Focus on your use case** - Prioritize commands relevant to your role
+- **Practice with examples** - Try the examples shown in help output
+- **Build incrementally** - Start with simple commands, add complexity gradually
+:::
+
+:::note Documentation Hierarchy
+- **Help command** - Quick syntax and flag reference
+- **Official documentation** - Comprehensive guides and explanations
+- **Community resources** - Tutorials and real-world examples
+- **Source code** - Ultimate truth for complex behaviors
+:::
+
+## Help Integration with Workflows
+
+### Development Workflow
+
+```bash title="Help-driven development"
+#!/bin/bash
+# Use help to build scripts correctly
+
+# 1. Research the command
+babylond help tx bank send
+
+# 2. Understand required parameters
+# from_key_or_address, to_address, amount
+
+# 3. Check available flags
+# --chain-id, --gas, --fees, etc.
+
+# 4. Build the command
+babylond tx bank send \
+  alice \
+  babylon1recipient... \
+  1000ubbn \
+  --chain-id babylon-1 \
+  --gas auto \
+  --yes
+
+echo "✅ Command built using help guidance"
+```
+
+### Troubleshooting Workflow
+
+```bash title="Help for troubleshooting"
+# When a command fails, check help for correct syntax
+if ! babylond tx checkpointing create-validator ...; then
+    echo "❌ Command failed, checking help..."
+    babylond help tx checkpointing create-validator
+    echo "Review the syntax and try again"
+fi
+```
+
+### Learning New Features
+
+```bash title="Systematic feature exploration"
+# Explore new modules or features
+NEW_MODULE="btcstaking"
+
+echo "📚 Exploring $NEW_MODULE module..."
+babylond help tx $NEW_MODULE
+babylond help query $NEW_MODULE
+
+# Try each subcommand help
+for cmd in $(babylond help tx $NEW_MODULE | grep -E "^  [a-z]" | awk '{print $1}'); do
+    echo "Learning: tx $NEW_MODULE $cmd"
+    babylond help tx $NEW_MODULE $cmd
+done
+```
+
+## Common Help Patterns
+
+### Finding the Right Command
+
+```bash title="Command discovery patterns"
+# Looking for specific functionality
+babylond help | grep -i "validator"    # Find validator-related commands
+babylond help | grep -i "stake"        # Find staking commands
+babylond help | grep -i "key"          # Find key management commands
+
+# Exploring transaction types
+babylond help tx | grep -i "bank"      # Banking transactions
+babylond help tx | grep -i "gov"       # Governance transactions
+babylond help tx | grep -i "btc"       # BTC-related transactions
+```
+
+### Understanding Flag Usage
+
+```bash title="Flag exploration"
+# Common flags across commands
+babylond help start | grep -A5 "Flags:"
+babylond help tx | grep -A10 "Global Flags:"
+
+# Understanding gas and fee flags
+babylond help tx bank send | grep -E "(gas|fee)"
+
+# Finding output format options
+babylond help query | grep -E "(output|format)"
+```

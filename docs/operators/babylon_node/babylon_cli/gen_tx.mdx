@@ -1,0 +1,341 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: gentx
+sidebar_position: 10
+---
+
+# gentx
+
+Generate a genesis transaction that creates a validator with a self-delegation and BLS key if needed. This command is essential for the genesis ceremony, allowing validators to create their initial validator registration transactions that will be included in the network's genesis block.
+
+## Overview
+
+The `gentx` command creates a genesis transaction that establishes a validator with an initial self-delegation. This transaction is signed by a key from the keyring and includes validator metadata, commission parameters, and network connection details.
+
+```bash
+babylond gentx [key_name] [amount] [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- Initialized your Babylon node with [`babylond init`](./init.mdx)
+- Created validator keys with [`babylond keys add`](./keys.mdx)
+- Created BLS keys with [`babylond create-bls-key`](./create_bls_key.mdx)
+- Added your validator account to genesis with [`babylond add-genesis-account`](./add_genesis_account.mdx)
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `key_name` | Name of the key in the keyring to use for signing the transaction |
+| `amount` | Amount of tokens to self-delegate (e.g., `1000000ubbn`) |
+
+## Default Parameters
+
+The command includes the following default parameters:
+
+| Parameter | Default Value | Description |
+|-----------|---------------|-------------|
+| **Delegation amount** | `100000000stake` | Default self-delegation if amount not specified |
+| **Commission rate** | `0.1` (10%) | Initial commission rate |
+| **Commission max rate** | `0.2` (20%) | Maximum commission rate |
+| **Commission max change rate** | `0.01` (1%) | Maximum daily commission change |
+| **Minimum self delegation** | `1` | Minimum required self-delegation |
+
+## Flags
+
+### Validator Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--moniker` | string | | The validator's display name |
+| `--identity` | string | | The identity signature (e.g., UPort or Keybase) |
+| `--website` | string | | The validator's website |
+| `--security-contact` | string | | The validator's security contact email |
+| `--details` | string | | Additional validator details |
+
+### Commission Settings
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--commission-rate` | string | `0.1` | The initial commission rate percentage |
+| `--commission-max-rate` | string | `0.2` | The maximum commission rate percentage |
+| `--commission-max-change-rate` | string | `0.01` | The maximum commission change rate percentage (per day) |
+| `--min-self-delegation` | string | `1` | The minimum self delegation required on the validator |
+
+### Network Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--ip` | string | Current IP | The node's public P2P IP |
+| `--p2p-port` | uint | `26656` | The node's public P2P port |
+| `--node-id` | string | Auto-detected | The node's NodeID |
+| `--pubkey` | string | Auto-detected | The validator's Protobuf JSON encoded public key |
+
+### Transaction Options
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--chain-id` | string | | The network chain ID (required) |
+| `--home` | string | `~/.babylond` | The application home directory |
+| `--keyring-backend` | string | `os` | Select keyring's backend (`os`\|`file`\|`kwallet`\|`pass`\|`test`\|`memory`) |
+| `--output-document` | string | | Write the genesis transaction to the given file instead of default location |
+
+### Transaction Fees and Gas
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--gas` | string | `200000` | Gas limit (`auto` to calculate automatically) |
+| `--gas-adjustment` | float | `1` | Adjustment factor for gas estimation |
+| `--gas-prices` | string | | Gas prices to determine transaction fee |
+| `--fees` | string | | Fees to pay along with transaction |
+
+### Advanced Options
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--generate-only` | | Build unsigned transaction and write to STDOUT |
+| `--dry-run` | | Perform simulation without broadcasting |
+| `--offline` | | Offline mode (no online functionality) |
+| `-y, --yes` | | Skip confirmation prompts |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+
+## Examples
+
+### Basic Genesis Transaction
+
+Create a basic gentx with default settings:
+
+```bash title="Basic gentx"
+babylond gentx validator-key 1000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "My Validator"
+```
+
+### Complete Validator Setup
+
+Create a full gentx with all validator metadata:
+
+```bash title="Complete validator gentx"
+babylond gentx validator-key 50000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Babylon Validator" \
+  --identity "1234567890ABCDEF" \
+  --website "https://myvalidator.com" \
+  --security-contact "security@myvalidator.com" \
+  --details "Professional Babylon validator with 24/7 monitoring" \
+  --commission-rate 0.05 \
+  --commission-max-rate 0.10 \
+  --commission-max-change-rate 0.005 \
+  --min-self-delegation 1000000
+```
+
+### Testnet Genesis Transaction
+
+Create gentx for testnet with higher commission limits:
+
+```bash title="Testnet gentx"
+babylond gentx testnet-validator 10000000ubbn \
+  --chain-id babylon-testnet-1 \
+  --moniker "Testnet Validator" \
+  --commission-rate 0.10 \
+  --commission-max-rate 0.50 \
+  --commission-max-change-rate 0.05 \
+  --min-self-delegation 1000000
+```
+
+### Custom Network Configuration
+
+Create gentx with specific network settings:
+
+```bash title="Custom network configuration"
+babylond gentx validator-key 25000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Custom Validator" \
+  --ip "203.0.113.100" \
+  --p2p-port 26656 \
+  --commission-rate 0.07
+```
+
+### Genesis Transaction for File Output
+
+Generate gentx and save to specific file:
+
+```bash title="Output to file"
+babylond gentx validator-key 75000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "File Validator" \
+  --output-document ./custom-gentx.json
+```
+
+### Complete Genesis Ceremony Workflow
+
+```bash title="Full genesis ceremony workflow"
+# 1. Initialize the validator node
+babylond init my-validator --chain-id babylon-1
+
+# 2. Create validator key
+babylond keys add validator-key
+
+# 3. Create BLS keys
+babylond create-bls-key
+
+# 4. Add validator account to genesis
+babylond add-genesis-account validator-key 100000000ubbn
+
+# 5. Generate genesis transaction
+babylond gentx validator-key 50000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Genesis Validator" \
+  --commission-rate 0.05 \
+  --commission-max-rate 0.20 \
+  --commission-max-change-rate 0.01 \
+  --min-self-delegation 1000000
+
+# 6. Collect all genesis transactions
+babylond collect-gentxs
+
+# 7. Validate the final genesis
+babylond validate-genesis
+
+echo "✅ Genesis ceremony completed!"
+```
+
+### Multi-Validator Network Setup
+
+```bash title="Coordinated multi-validator setup"
+# Each validator generates their gentx
+# Validator 1
+babylond gentx validator1 30000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Validator One" \
+  --ip "203.0.113.10" \
+  --commission-rate 0.05
+
+# Validator 2
+babylond gentx validator2 40000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Validator Two" \
+  --ip "203.0.113.20" \
+  --commission-rate 0.07
+
+# Validator 3
+babylond gentx validator3 35000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Validator Three" \
+  --ip "203.0.113.30" \
+  --commission-rate 0.06
+
+# Network coordinator collects all gentxs
+# Copy all gentx files to ~/.babylond/config/gentx/
+# Then run: babylond collect-gentxs
+```
+
+## Validation and Testing
+
+### Validate Generated Transaction
+
+```bash title="Validate gentx before collection"
+# Generate gentx
+babylond gentx validator-key 1000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Test Validator"
+
+# Check the generated file
+GENTX_FILE=$(ls ~/.babylond/config/gentx/gentx-*.json)
+echo "Generated gentx: $GENTX_FILE"
+
+# Validate JSON structure
+jq empty "$GENTX_FILE" && echo "✅ Valid JSON format"
+
+# Check transaction content
+jq '.body.messages[0]' "$GENTX_FILE"
+```
+
+### Dry Run Testing
+
+```bash title="Test gentx with dry run"
+babylond gentx validator-key 1000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Dry Run Validator" \
+  --dry-run
+
+echo "✅ Dry run completed successfully"
+```
+
+### Simulate Transaction
+
+```bash title="Simulate gentx transaction"
+babylond gentx validator-key 1000000ubbn \
+  --chain-id babylon-1 \
+  --moniker "Simulation Validator" \
+  --gas auto \
+  --gas-adjustment 1.5 \
+  --generate-only > simulated_gentx.json
+
+echo "✅ Transaction simulation saved to simulated_gentx.json"
+```
+
+## Security Considerations
+
+:::danger Critical Security Notes
+- **Private Key Security**: Genesis transactions require signing with validator private keys
+- **Key Backup**: Ensure validator keys are securely backed up before generating gentx
+- **Network Coordination**: Only generate gentx for legitimate network launches
+- **File Permissions**: Protect gentx files as they contain validator information
+:::
+
+:::warning Operational Security
+- **Verify Chain ID**: Always double-check the chain-id parameter
+- **Validate Parameters**: Review all validator parameters before generating gentx
+- **Secure Environment**: Generate gentx on secure, isolated systems
+- **Network Isolation**: Avoid generating production gentx on public networks
+:::
+
+:::info Network Security
+- **Unique Validator Info**: Ensure moniker and other details are unique
+- **IP Address Accuracy**: Verify IP addresses are correct and accessible
+- **Commission Validation**: Set appropriate commission rates for network sustainability
+- **Self-Delegation Limits**: Choose self-delegation amounts carefully
+:::
+
+## Best Practices
+
+:::tip Genesis Ceremony
+- **Coordinate timing** with other validators for network launches
+- **Test on testnet** before generating mainnet gentx
+- **Validate all parameters** before final gentx generation
+- **Backup gentx files** after generation
+:::
+
+:::note Validator Configuration
+- **Choose meaningful monikers** that identify your validator
+- **Set reasonable commission rates** to attract delegators
+- **Provide accurate contact information** for network communication
+- **Document your validator setup** for team reference
+:::
+
+:::warning Parameter Selection
+- **Commission rates should be competitive** but sustainable
+- **Self-delegation should demonstrate commitment** to the network
+- **Network parameters (IP, port) must be accurate** for peer connectivity
+- **Maximum rates should allow for** operational flexibility
+:::
+
+## Common Use Cases
+
+1. **New Network Launch**: Generate gentx for coordinated network genesis
+2. **Testnet Participation**: Create validator for testnet environments
+3. **Network Migration**: Generate gentx for chain upgrades or forks
+4. **Development Testing**: Create validators for local development networks
+5. **Validator Onboarding**: Generate gentx for joining genesis ceremony

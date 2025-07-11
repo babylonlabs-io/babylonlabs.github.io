@@ -1,0 +1,104 @@
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    <div class="release-badge">Version: <strong>v1.0.0</strong></div>
+    <h1>HMAC Security for Finality Provider</h1>
+<p>This document describes the HMAC (Hash-based Message Authentication Code) authentication system used to secure the
+communication between the Finality Provider Daemon (FPD) and the Extractable One-Time Signature Daemon (EOTSD).
+HMAC ensures that only authorized requests from FPD are processed by EOTSD, which handles sensitive key operations.</p>
+<h2>Overview</h2>
+<p>The Finality Provider (FPD) and EOTS Manager (EOTSD) are separate components. EOTSD manages EOTS keys,
+generates randomness, and signs EOTS signatures and schnorr signatures, making it a critical security target.
+HMAC authentication adds a layer of protection, preventing unauthorized access to these signing capabilities.</p>
+<h2>Security Classification of EOTSD Messages</h2>
+<p>The following gRPC methods exposed by EOTSD <em>require</em> HMAC authentication:</p>
+<ul>
+<li><strong><code>SignEOTS</code></strong></li>
+<li><strong><code>SignSchnorrSig</code></strong></li>
+<li><strong><code>CreateRandomnessPairList</code></strong></li>
+</ul>
+<p>The following gRPC method does <em>not</em> require HMAC authentication:</p>
+<ul>
+<li><strong><code>Ping</code></strong>: Used for health checks and basic connectivity testing.</li>
+</ul>
+<p><strong>Key Management Note:</strong>  Key <em>creation</em> (e.g., using the <code>eotsd keys add</code> command) is handled locally by <code>eotsd</code>
+and does <em>not</em> use gRPC.  Therefore, key creation does <em>not</em> use or require HMAC authentication.</p>
+<h2>Configuring HMAC Authentication</h2>
+<p>HMAC authentication is strongly recommended for production deployments. It relies on a shared secret key
+(the HMAC key) known to both FPD and EOTSD.</p>
+<h3>Generating a Strong HMAC Key</h3>
+<p>Generate a cryptographically secure random key (32 bytes is recommended) and encode it using base64.<br>
+You can use the <code>openssl</code> command:</p>
+<pre><code class="language-bash"># Generate a 32-byte random key and encode it as base64
+openssl rand -base64 32
+</code></pre>
+<p>Example output: Wt+Nxkn1DpNCFJtxQSxTKoSoKzx1C9XwHTMbT6ir9m0= (Your key will be different).</p>
+<h2>Configuration Methods</h2>
+<h3>1. FPD Configuration (fpd.conf):</h3>
+<p>Set the hmackey option within your fpd.conf file:</p>
+<pre><code>[metrics]
+# ... other settings ...
+
+hmackey=Wt+Nxkn1DpNCFJtxQSxTKoSoKzx1C9XwHTMbT6ir9m0=  # Your base64 encoded key
+</code></pre>
+<h3>2. EOTSD Configuration (eotsd.conf):</h3>
+<p>Set the hmackey option within your eotsd.conf file:</p>
+<pre><code>hmackey=Wt+Nxkn1DpNCFJtxQSxTKoSoKzx1C9XwHTMbT6ir9m0=  # MUST match the FPD key, base64 encoded
+</code></pre>
+<h3>Important Considerations:</h3>
+<ul>
+<li>
+<p>Consistency: The HMAC key must be identical for both FPD and EOTSD.</p>
+</li>
+<li>
+<p>Security: Never commit the HMAC key to version control. Store it securely, treating it like a private key.</p>
+</li>
+<li>
+<p>If No Key is Provided: If no key is set in the configuration, the services will still start, but with gRPC authentication turned off. This is not recommended for production environments.</p>
+</li>
+</ul>
+<h2>Deployment Best Practices</h2>
+<p>Separate Machines: For maximum security, run FPD and EOTSD on separate machines. Restrict network access to the EOTSD
+machine, allowing connections only from the FPD instance.</p>
+<p>Key Rotation: Rotate the HMAC key periodically (e.g., every few months). Generate a new key, update the configuration
+files, and restart both services. This requires a brief downtime.</p>
+<h2>Troubleshooting</h2>
+<p>If you encounter HMAC authentication errors:</p>
+<ol>
+<li>
+<p>Key Mismatch: The most common cause is a difference between the HMAC keys configured for FPD and EOTSD.
+Double-check that they are identical, including any leading or trailing whitespace.</p>
+</li>
+<li>
+<p>Configuration Issues: Ensure that the HMAC key is properly set in both configuration files.</p>
+</li>
+<li>
+<p>Cloud Secret References: If you're using cloud secret references (AWS, GCP, Azure), ensure they are properly formatted and accessible.</p>
+</li>
+</ol>
+
+  </article>
+</body>
+</html>
+  

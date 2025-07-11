@@ -1,0 +1,111 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: prepare-genesis
+sidebar_position: 17
+---
+
+# prepare-genesis
+
+Prepare a genesis file with Babylon-specific parameters and configurations. This command creates a fully configured genesis file with all necessary parameters for Bitcoin staking, finality providers, checkpointing, and economic settings tailored for Babylon networks.
+
+## Overview
+
+The `prepare-genesis` command generates a complete genesis file with default parameters optimized for Babylon's Bitcoin security inheritance protocol. It configures Bitcoin integration, finality provider settings, staking parameters, and economic incentives in a single command.
+
+```bash
+babylond prepare-genesis <testnet|mainnet> <chain-id> [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- **Network planning completed** - Understand your target network configuration
+- **Parameter decisions made** - Economic and security parameters chosen
+- **Bitcoin network coordination** - Base header and network-specific settings ready
+- **Backup procedures** - Plan for genesis file distribution and backup
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `testnet\|mainnet` | Network type - determines default parameter sets |
+| `chain-id` | Unique identifier for the blockchain network |
+
+## Parameter Categories
+
+### Network Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--chain-id` | string | | Genesis file chain-id (can override positional argument) |
+| `--genesis-time` | int | Current time | Genesis timestamp (Unix epoch) |
+| `--home` | string | `~/.babylond` | Application home directory |
+
+### Bitcoin Integration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--btc-base-header` | string | Genesis header | Hex of the base Bitcoin header |
+| `--btc-base-header-height` | uint32 | `0` | Height of the base Bitcoin header |
+| `--btc-confirmation-depth` | uint32 | `6` | Confirmation depth for Bitcoin headers |
+| `--btc-finalization-timeout` | uint32 | `20` | Finalization timeout for Bitcoin headers |
+| `--checkpoint-tag` | string | `01020304` | Hex encoded tag for babylon checkpoint on BTC |
+| `--allowed-reporter-addresses` | string | | Addresses allowed to submit Bitcoin headers |
+
+### Bitcoin Staking Parameters
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--min-staking-amount-sat` | int | `500000` | Minimum staking amount in satoshis (0.005 BTC) |
+| `--max-staking-amount-sat` | int | `100000000000` | Maximum staking amount in satoshis (1000 BTC) |
+| `--min-staking-time-blocks` | uint16 | `100` | Minimum staking time in blocks |
+| `--max-staking-time-blocks` | uint16 | `10000` | Maximum staking time in blocks |
+| `--min-slashing-fee-sat` | int | `1000` | Minimum slashing fee in satoshis |
+| `--slashing-rate` | string | `0.1` | Bitcoin staking slashing rate (10%) |
+| `--slashing-pk-script` | string | Default script | Bitcoin staking slashing pk script (hex) |
+| `--unbonding-time` | uint16 | `21` | Unbonding timelock in BTC blocks |
+| `--unbonding-fee-sat` | int | `1000` | Required unbonding transaction fee in satoshis |
+
+### Covenant Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--covenant-pks` | string | Default keys | Bitcoin staking covenant public keys (comma-separated) |
+| `--covenant-quorum` | uint32 | `3` | Bitcoin staking covenant quorum threshold |
+
+### Finality Provider Settings
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--max-active-finality-providers` | uint32 | `100` | Maximum active finality providers |
+| `--activation-height` | uint | `1` | Block height to start accepting finality votes |
+| `--finality-sig-timeout` | int | `3` | Blocks for finality providers to cast votes |
+| `--min-commission-rate` | string | `0` | Minimum commission rate for finality providers |
+| `--jail-duration` | string | `24h0m0s` | Minimum jail period for finality providers |
+| `--signed-blocks-window` | int | `100` | Sliding window for tracking provider liveness |
+| `--min-signed-per-window` | string | `0.5` | Minimum signing requirement to avoid jail |
+
+### Economic Parameters
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--inflation-min` | float | `0.07` | Minimum inflation rate (7%) |
+| `--inflation-max` | float | `0.2` | Maximum inflation rate (20%) |
+| `--inflation-rate-change` | float | `0.13` | Maximum inflation rate change per year |
+| `--goal-bonded` | float | `0.67` | Target bonded token ratio (67%) |
+| `--blocks-per-year` | uint | `6311520` | Expected blocks per year |
+
+### Validator Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--max-active-validators` | uint32 | `10` | Maximum number of active validators |
+| `--epoch-interval` | uint | `400` | Number of blocks between epochs |
+| `--vote-extension-enable-height` | int | `1` | Height to enable vote extensions |
+
+### Network Performance
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--block-gas-limit` | int | `50000000` | Block gas limit |

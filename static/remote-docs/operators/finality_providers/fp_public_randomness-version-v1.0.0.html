@@ -1,0 +1,186 @@
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remote Documentation</title>
+  <style>
+    .release-badge {
+      background-color: #f0f0f0;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <article>
+    <div class="release-badge">Version: <strong>v1.0.0</strong></div>
+    <h1>Public Randomness Commit Specification</h1>
+<h2>Overview</h2>
+<p>The finality provider periodically commits public randomness to the consumer
+chain to be used for future block finalization. This document specifies the
+process for committing public randomness.</p>
+<h2>Commit Process</h2>
+<h3>Generating a Commit</h3>
+<p>A randomness pair is essentially a pair of <code>32-byte</code> points over <code>secp256k1</code>.
+A public randomness commit is a commitment to an association
+between public randomnesses and heights for them to be used.
+In particular, a commit consists of:</p>
+<ul>
+<li>a merkle root containing a list of public randomness values,</li>
+<li>a start height, indicating from which height the randomness starts, and</li>
+<li>the number of randomness contained in the merkle tree.</li>
+</ul>
+<p>To generate a new commit, following steps are needed:</p>
+<ol>
+<li>Generate a list of randomness. This requires an RPC call to the EOTS manager
+daemon (<code>eotsd</code>) to generate a list of public randomness,
+each corresponding to a specific height according to the start height and
+the number of randomness in the request.
+Randomness generation is required to be deterministic.</li>
+<li>Construct the merkle tree based on the list of randomness using the CometBFT's
+<a href="https://github.com/cometbft/cometbft/tree/main/crypto/merkle">merkle</a>
+library. The merkle root will be used in the commit, while each randomness
+number and their merkle proofs will be used for finality vote submission
+in the future.</li>
+<li>Send a
+<a href="https://github.com/btcsuite/btcd/blob/684d64ad74fed203fb846c032f2b55b3e3c36734/btcec/schnorr/signature.go#L391">Schnorr</a>
+signature request to the EOTS manager over the hash of the commit
+(concatenated by the start height, number of randomness, and the merkle root).</li>
+<li>Build the commit message
+(<a href="https://github.com/babylonlabs-io/babylon/blob/aa99e2eb093e06cb9a28a58f373e8fa5f2494383/proto/babylon/finality/v1/tx.proto#L29">MsgCommitPubRandList</a>)
+and send a transaction to Babylon.</li>
+</ol>
+<h3>Timing to Commit</h3>
+<p>Public randomness is an essential component of finality voting. It should be
+committed before finality votes can be sent.
+If the finality provider does not have public randomness committed for a
+specific height, they can't vote for it and therefore lose the voting power
+they would have otherwise had for it.</p>
+<p>To this end, when a finality provider is started, it runs a loop to periodically
+check whether it needs to make a new commit and calculate the height
+its next public randomness commit should start with. In particular:</p>
+<pre><code class="language-go">    // Estimate the consumer chain block height
+    // a new commitment of public randomness would be Bitcoin timestamped
+    // and ready for use, if the commitment was made in the current
+    // consumer chain block.
+	tipHeightWithDelay := tipHeight + uint64(fp.cfg.TimestampingDelayBlocks)
+	var startHeight uint64
+	switch {
+	case lastCommittedHeight &#x3C; tipHeightWithDelay:
+        // If the last height the finality provider has committed
+        // randomness, is less than the estimation, then
+        // the finality provider should commit randomness from that height.
+		startHeight = tipHeightWithDelay
+	case lastCommittedHeight &#x3C; tipHeightWithDelay+uint64(fp.cfg.NumPubRand):
+        // otherwise, the finality provider should commit randomness
+        // from the last height it has committed to
+		startHeight = lastCommittedHeight + 1
+	default:
+        // randomness is sufficient, do not need to make a commit
+</code></pre>
+<p>where:</p>
+<ul>
+<li><code>lastCommittedHeight</code> is the end height (<code>startHeight + numRand - 1</code>)
+of the latest public randomness commit recorded on the consumer chain</li>
+<li><code>tipHeight</code> is the current height of the consumer chain</li>
+<li><code>TimestampingDelayBlocks</code> is a configuration value, which measures when to make a
+new commit</li>
+<li><code>NumPubRand</code> is the number of randomness in a commit defined in the config.</li>
+</ul>
+<h3>Determining <code>TimestampingDelayBlocks</code></h3>
+<p>The configuration value <code>TimestampingDelayBlocks</code> defines an estimation
+estimation of the number of consumer chain blocks that will be generated
+until a public randomness commit is Bitcoin timestamped.</p>
+<p>Here's an example:</p>
+<ul>
+<li>The consumer chain receives a commit with:
+<ul>
+<li>Start height: 100</li>
+<li>Number of randomness values: 1000</li>
+<li>Current epoch: 10</li>
+</ul>
+</li>
+<li>This means randomness for heights [100, 1099] becomes available after epoch 10
+is finalized</li>
+</ul>
+<p>The BTC-timestamping protocol requires:</p>
+<ul>
+<li>300 BTC blocks for epoch finalization</li>
+<li>≈ 3000 minutes (50 hours) at 10-minute average block time</li>
+<li>With consumer chain blocks every 10 seconds, this equals approximately 18,000
+blocks</li>
+</ul>
+<p>Therefore,</p>
+<ul>
+<li><code>TimestampingDelayBlocks</code> should be around 18,000</li>
+<li>Recommended production value: > 20,000 to provide additional safety margin</li>
+</ul>
+<h3>Determining the Start Height for a Commit</h3>
+<p>To determine the start height for a commit:</p>
+<ol>
+<li>If this is a first time commit or the finality provider has not committed
+for a long time:
+<ul>
+<li><code>startHeight = currentConsumerChainHeight + TimestampingDelayBlocks + 1</code></li>
+</ul>
+</li>
+<li>For subsequent commits:
+<ul>
+<li><code>startHeight = lastCommittedHeight + 1</code>,</li>
+<li>where <code>lastCommittedHeight</code> is obtained from the consumer chain.</li>
+</ul>
+</li>
+</ol>
+<p>The <code>baseHeight</code> can be specified via configuration or CLI options.</p>
+<blockquote>
+<p><strong>Important Notes:</strong></p>
+<ul>
+<li>Consecutiveness across commits is not enforced by the system but
+different commits must not overlap.</li>
+<li><code>startHeight</code> should not be higher than <code>finalityActivationHeight</code>,
+a parameter defined in Babylon Genesis specifying when the finality
+protocol is activated.
+Therefore, <code>startHeight = max(startHeight, finalityActivationHeight)</code>.</li>
+</ul>
+</blockquote>
+<h3>Determining the Number of Randomness</h3>
+<p>The number of randomness contained in a commit is specified in the <code>NumPubRand</code>
+configuration. A general strategy is that the value should be as large
+as possible. This is because each commit of the consumer chain costs gas.</p>
+<p>However, in real life, this stategy might not always gain due to the following
+reasons:</p>
+<ul>
+<li>A finality provider might not have voting power for every block. Randomness
+for those heights is a waste.</li>
+<li>Generating more randomness leads to a larger merkle proof size which will be
+used for sending finality votes.</li>
+<li>Generating randomness and saving the merkle proofs require time.</li>
+</ul>
+<p>Additionally, given that the end height of a commit equals to
+<code>startHeight + NumPubRand - 1</code>, we should ensure that the condition
+<code>lastCommittedHeight > tipHeight + uint64(TimestampingDelayBlocks)</code> can hold for
+a long period of time to avoid frequent commit of randomness.</p>
+<blockquote>
+<p><strong>Important Note</strong>:
+In real life, the value of <code>NumPubRand</code> should be much larger than
+<code>TimestampingDelayBlocks</code>, e.g., <code>NumPubRand = 2 * TimestampingDelayBlocks</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Important Note</strong>:
+The finality provider daemon enforces a minimum
+of <code>16384</code> of <code>NumPubRand</code> and a maximum of <code>50000</code>.</p>
+</blockquote>
+
+  </article>
+</body>
+</html>
+  

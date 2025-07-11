@@ -8,29 +8,29 @@ sidebar_position: 2
 
 ## Overview
 
-This page provides a guide for a Cosmos PoS chain to integrate Babylon phase-3 devnet, called Euphrates. The integration allows a BSN to get economic security from BTC staking.
+This page provides a guide for a Cosmos PoS chain to integrate Babylon phase-3 devnet, called Edge. The integration allows a BSN to get economic security from BTC staking.
 
-Euphrates devnet is currently in a highly experimental phase, and unexpected issues may arise. We welcome any feedback on the integration process and this document.
+Edge devnet is currently in a highly experimental phase, and unexpected issues may arise. We welcome any feedback on the integration process and this document.
 
 ## System components
 
 The integration involves three blockchains:
 
-- **A Babylon blockchain.** This is the Babylon phase-3 devnet, called Euphrates. Please refer to the [Cosmos Chains](./cosmos_chains.mdx) page for setting up the environment variables needed to interact with the devnet.
+- **A Babylon blockchain.** This is the Babylon phase-3 devnet, called Edge. Please refer to the [Cosmos Chains](./cosmos_chains.mdx) page for setting up the environment variables needed to interact with the devnet.
 - **A Bitcoin blockchain.** In this specific case, Babylon blockchain is interacting with Bitcoin Signet.
 - **A BSN (sometimes referred to as a consumer system in code).** This is the chain that we aim to integrate with Babylon Bitcoin Staking Protocol.
 
-**Accessing the Euphrates devnet.** The Phase-3 devnet environment (Euphrates) is defined in the [Cosmos Chains](./cosmos_chains.mdx) page. Please refer to that section for setting up the environment variables needed to interact with the devnet.
+**Accessing the Edge devnet.** The Phase-3 devnet environment (Edge) is defined in the [Cosmos Chains](./cosmos_chains.mdx) page. Please refer to that section for setting up the environment variables needed to interact with the devnet.
 
 ## BSN requirements
 
-The BSN integrating with Euphrates devnet needs to support IBC and CosmWasm smart contracts. This is because Babylon sends information about Finality Providers and BTC delegations as IBC packets. The BSN needs to deploy CosmWasm smart contracts to process these IBC packets, and then store the Finality Providers and BTC delegations information.
+The BSN integrating with Edge devnet needs to support IBC and CosmWasm smart contracts. This is because Babylon sends information about Finality Providers and BTC delegations as IBC packets. The BSN needs to deploy CosmWasm smart contracts to process these IBC packets, and then store the Finality Providers and BTC delegations information.
 
 The Babylon team is developing a specialized relayer to support BSNs without IBC, and is developing BSN side software for various types of BSNs.
 
 ## Prerequisites
 
-To integrate with Euphrates devnet, you need to install:
+To integrate with Edge devnet, you need to install:
 - [Go v1.23](https://go.dev/doc/install)
 - [Rust](https://www.rust-lang.org/tools/install) `stable` version 
 
@@ -76,7 +76,7 @@ Please note that the corresponding version tag of the Babylon SDK is [https://gi
 
 ### Getting test tokens
 
-**Babylon tBABY tokens.** One can get Babylon tBABY tokens on Euphrates devnet by the following:
+**Babylon tBABY tokens.** One can get Babylon tBABY tokens on Edge devnet by the following:
 
 1. Create a Babylon account by using
 
@@ -240,13 +240,13 @@ The client ID of the consumer chain will be used as the consumer ID, denoted as 
 With the client ID of the consumer chain, you can register it on the BSN, by using
 
 ```bash
-$ babylond tx btcstkconsumer egister-consumer $CONSUMER_ID consumer-name consumer-description --node https://rpc-euphrates.devnet.babylonlabs.io
+$ babylond tx btcstkconsumer egister-consumer $CONSUMER_ID consumer-name consumer-description --node https://rpc-edge.devnet.babylonlabs.io
 ```
 
 Then you can query the registered consumer by using
 
 ```bash
-$ babylond query btcstkconsumer registered-consumers -o json --node https://rpc-euphrates.devnet.babylonlabs.io
+$ babylond query btcstkconsumer registered-consumers -o json --node https://rpc-edge.devnet.babylonlabs.io
 {
   "chain_ids": [
     "test-bsn-chain"
@@ -265,7 +265,7 @@ You can create an IBC channel by following the instructions [here](https://herme
 You'll need the following information:
 
 - The port ID is `zoneconcierge` for Babylon, and `wasm.<babylon_contract_address>` for the BSN.
-- The GRPC endpoint of the Euphrates devnet is `https://grpc-euphrates.devnet.babylonlabs.io` .
+- The GRPC endpoint of the Edge devnet is `https://grpc-edge.devnet.babylonlabs.io` .
 - For gas prices, both for the IBC relayer setup and sending TXs, you can just use `1ubbn`.
 - Channel ordering must be specified as `"ordered"`.
 - and channel version is `"zoneconcierge-1"`.
