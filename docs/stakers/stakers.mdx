@@ -3,4 +3,123 @@ sidebar_label: "Stakers"
 sidebar_position: 0
 ---
 
-# BTC and BABY Stakers
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+import Link from '@docusaurus/Link';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Babylon Genesis Stakers Overview
+
+Babylon Genesis implements a **dual-staking model** that combines the security of BTC 
+(a PoW asset) with the efficiency of Proof-of-Stake consensus. This innovative approach 
+allows both **BTC holders** and **BABY token holders** to participate in securing the network 
+while earning rewards.
+
+### Quick Start
+<CardSection id="quick-links">
+  <Card
+    title="BTC Staking Guide"
+    description="Learn how to stake Bitcoin on Babylon"
+    to="/stakers/btc_stakers/native_staking/web_staking/"
+  />
+  <Card
+    title="BABY Staking Guide"
+    description="Learn how to stake BABY tokens"
+    to="/stakers/baby_stakers/"
+  />
+</CardSection>
+
+## Two Staking Mechanisms
+
+### 1. Bitcoin (BTC) Staking
+
+**BTC staking** enables Bitcoin holders to stake their assets directly on the Bitcoin network in a self-custodial manner without wrapping or bridging. BTC stakers delegate to **Finality Providers** who enhance the security of the Proof-of-Stake chain.
+
+#### Key Features:
+- **Self-custodial**: Maintain direct control of your Bitcoin
+- **Native operation**: No wrapped tokens or bridges required
+- **Trustless execution**: No reliance on third parties
+- **Slashing capability**: Protocol-enforced penalties for malicious behavior
+- **Multi-staking**: Delegate across multiple Finality Providers and BSNs
+
+#### Benefits:
+- **Earn BABY rewards**: Receive a portion of the annual inflation allocated to BTC stakers
+- **Secure the network**: Contribute to Babylon Genesis chain's security
+- **Maintain Bitcoin ownership**: Your BTC remains on the Bitcoin blockchain
+- **Fast unbonding**: ~2 days compared to typical 21 days in most PoS chains
+
+### 2. BABY Token Staking
+
+**BABY staking** is a native staking mechanism that secures the Babylon Genesis chain. BABY token holders delegate to chain validators to accrue inflationary rewards proportional to their stake.
+
+#### Key Features:
+- **Epoch-based staking**: Delayed execution queue for enhanced security
+- **Fast unbonding**: ~2 days via Bitcoin timestamping protocol
+- **Governance participation**: Voting power in chain governance
+- **Partial slashing**: 5% slashing for double-signing violations
+
+#### Benefits:
+- **Earn rewards**: Receive a portion of the annual inflation allocated to BABY stakers
+- **Secure the network**: Contribute to the Babylon Genesis chain's security and decentralization
+- **Governance rights**: Participate in shaping the future of the network
+- **Fast unbonding**: Significantly reduced unbonding period
+
+
+## How They Work Together
+
+The dual-staking model creates a robust security framework:
+
+### Security Model
+- **BTC stakers** delegate to Finality Providers who enhance PoS security
+- **BABY stakers** delegate to validators who oversee block production and consensus
+- Both mechanisms contribute to securing the Babylon Genesis chain
+
+### Reward Distribution
+The annual inflation (8%) is distributed among:
+- **BTC stakers**: 4% of annual inflation
+- **BABY stakers**: 4% of annual inflation
+- **Community pool**: Remaining portion
+
+### Governance
+- **BABY stakers** participate in governance with voting power
+- **BTC stakers** do not participate in governance but receive rewards
+
+
+## Risk Considerations
+
+### BTC Staking Risks
+- **Slashing risk**: 0.1% maximum penalty for protocol violations
+- **Finality Provider risk**: Choose reliable Finality Providers
+- **Market volatility**: BTC price fluctuations affect staking value
+
+### BABY Staking Risks
+- **Slashing risk**: 5% penalty for validator double-signing
+- **Validator risk**: Choose reliable validators with good track records
+- **Market volatility**: BABY price fluctuations affect staking value
+
+## Advanced Features
+
+### Fast Unbonding
+Both BTC and BABY staking benefit from Babylon's Bitcoin Timestamping protocol:
+- **~2 days unbonding** vs typical 21 days
+- **Bitcoin checkpoint verification** ensures security
+- **Automatic token release** once confirmations are met
+
+### Multi-Staking (BTC)
+BTC stakers can delegate across multiple Finality Providers and BSNs simultaneously:
+- **Diversify risk** across multiple networks
+- **Maximize rewards** from multiple sources
+- **Maintain security isolation** between networks
+
+## Next Steps
+
+- **BTC Stakers**: Explore [BTC staking guides](/stakers/btc_stakers/)
+- **BABY Stakers**: Explore [BABY staking guides](/stakers/baby_stakers/)
+- **Learn more**: Read about [Babylon Genesis architecture](/guides/architecture/)
+- **Get support**: Visit [community channels](https://babylonlabs.io/community)
+
+This dual-staking model represents the foundation of Babylon's Bitcoin Secured Network, 
+combining the robustness of Bitcoin with the efficiency of Proof of Stake consensus to 
+create a secure, decentralized, and rewarding staking ecosystem.
+
