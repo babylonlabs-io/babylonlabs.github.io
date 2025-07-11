@@ -25,34 +25,35 @@
     
     <h1>ZoneConcierge</h1>
 <p>The Zone Concierge module is responsible for providing BTC staking integration
-functionalities for other Bitcoin Supercharged Networks (BSNs).<br>
-It leverages the IBC protocol to receive BSNs' headers, and propagate BTC timestamps of those headers
-and information associated with the BTC staking protocol (e.g., finality providers, BTC stakes, and more).<br>
-The Zone Concierge module synchronises the following information with consumer
-chains via IBC packets:</p>
+functionalities for Bitcoin Supercharged Networks (BSNs) connecting<br>
+to Babylon Genesis through IBC. It leverages the IBC protocol to receive BSNs'
+headers, and propagate BTC timestamps of those headers and information
+associated with the BTC staking protocol (e.g., finality providers, BTC stakes,
+and more).<br>
+The Zone Concierge module synchronises the following information with BSNs (aka
+consumers) via IBC packets:</p>
 <ul>
-<li><strong>BTC Headers:</strong> Babylon Genesis forwards BTC headers to BSNs to keep their
-BTC light clients in sync with Babylon's BTC light client. This allows
-BSNs to independently verify BTC timestamps.</li>
-<li><strong>BTC Timestamps:</strong> When a Babylon epoch is finalised, Babylon sends BTC
-timestamps to BSNs. Each BTC timestamp contains:
+<li><strong>BTC Headers:</strong> Babylon Genesis forwards the BTC headers maintained by its
+BTC light client to BSNs.<br>
+This allows BSNs to maintain an image of the Bitcoin chain and verify
+information included in it through inclusion proofs (e.g., an inclusion
+proof of a BTC Timestamp containing BSN headers).</li>
+<li><strong>BTC Timestamps:</strong> When a Babylon Genesis epoch is finalized, the Babylon
+Genesis chain sends BTC timestamps to BSNs. Each BTC timestamp contains:
 <ul>
-<li>The latest BSN header that was checkpointed in the finalised
-epoch</li>
-<li>Recent BTC headers that extend the consumer's BTC light client</li>
+<li>The latest BSN header that was checkpointed in the finalised epoch</li>
+<li>Recent BTC headers that extend the BSN's BTC light client</li>
 <li>The finalised epoch's metadata and raw checkpoint</li>
-<li>Proofs that the consumer header was included in the epoch and the epoch was
-properly sealed and submitted to Bitcoin</li>
+<li>Proofs that a BSN header was included in an epoch and the epoch was
+timestamped on the Bitcoin chain.</li>
 </ul>
 </li>
-<li><strong>BTC Staking:</strong> Babylon enables trustless Bitcoin staking for BSNs
-by synchronising staking-related information between Bitcoin, Babylon and
-BSNs. This allows BTC holders to stake their BTC to secure consumer
-chains without requiring any custodial solutions.</li>
+<li><strong>BTC Staking:</strong> Babylon Genesis enables trustless Bitcoin staking for BSNs by
+synchronising staking-related information between Bitcoin, Babylon Genesis and
+BSNs. This allows BTC holders to stake their BTC to secure BSNs without
+requiring any custodial solutions.</li>
 </ul>
 <h2>Table of contents</h2>
-<ul>
-<li><a href="#zoneconcierge">ZoneConcierge</a>
 <ul>
 <li><a href="#table-of-contents">Table of contents</a></li>
 <li><a href="#state">State</a>
@@ -63,48 +64,43 @@ chains without requiring any custodial solutions.</li>
 <li><a href="#canonicalchain">CanonicalChain</a></li>
 <li><a href="#fork">Fork</a></li>
 <li><a href="#params">Params</a></li>
+<li><a href="#port">Port</a></li>
+<li><a href="#lastsentbtcsegment">LastSentBTCSegment</a></li>
+<li><a href="#sealedepochproof">SealedEpochProof</a></li>
 </ul>
 </li>
 <li><a href="#posthandler-for-intercepting-ibc-headers">PostHandler for intercepting IBC headers</a></li>
 <li><a href="#hooks">Hooks</a>
 <ul>
 <li><a href="#indexing-headers-upon-afterepochends">Indexing headers upon <code>AfterEpochEnds</code></a></li>
+<li><a href="#recording-proofs-upon-afterrawcheckpointsealed">Recording proofs upon <code>AfterRawCheckpointSealed</code></a></li>
 <li><a href="#sending-btc-timestamps-upon-afterrawcheckpointfinalized">Sending BTC timestamps upon <code>AfterRawCheckpointFinalized</code></a></li>
+</ul>
+</li>
+<li><a href="#endblocker">EndBlocker</a>
+<ul>
+<li><a href="#broadcasting-btc-headers">Broadcasting BTC Headers</a></li>
+<li><a href="#broadcasting-btc-staking-events">Broadcasting BTC Staking Events</a></li>
+</ul>
+</li>
+<li><a href="#handling-inbound-ibc-packets">Handling Inbound IBC Packets</a>
+<ul>
+<li><a href="#inbound-ibc-packets">Inbound IBC Packets</a></li>
+<li><a href="#processing-inbound-ibc-packets">Processing Inbound IBC Packets</a></li>
 </ul>
 </li>
 <li><a href="#messages-and-queries">Messages and Queries</a></li>
 <li><a href="#bsn-integration">BSN Integration</a>
 <ul>
 <li><a href="#ibc-communication-protocol">IBC Communication Protocol</a></li>
-<li><a href="#relaying-btc-headers">Relaying BTC Headers</a>
-<ul>
-<li><a href="#broadcasting-headers">Broadcasting headers</a></li>
-<li><a href="#selecting-headers-to-be-broadcast">Selecting headers to be broadcast</a></li>
-</ul>
-</li>
-<li><a href="#relaying-btc-timestamps">Relaying BTC Timestamps</a>
-<ul>
-<li><a href="#triggering-timestamp-relay">Triggering timestamp relay</a></li>
-<li><a href="#broadcasting-timestamps">Broadcasting timestamps</a></li>
-<li><a href="#assembling-timestamps">Assembling timestamps</a></li>
-<li><a href="#cryptographic-proofs">Cryptographic Proofs</a></li>
-</ul>
-</li>
-<li><a href="#propagating-btc-staking-events">Propagating BTC Staking Events</a>
-<ul>
-<li><a href="#broadcasting-staking-events">Broadcasting staking events</a></li>
-<li><a href="#processing-event-flow">Processing event flow</a></li>
-<li><a href="#registering-consumers">Registering consumers</a></li>
-<li><a href="#handling-slashing">Handling slashing</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#relaying-btc-headers">Relaying BTC Headers</a></li>
+<li><a href="#relaying-btc-timestamps">Relaying BTC Timestamps</a></li>
+<li><a href="#relaying-btc-staking-events">Relaying BTC Staking Events</a></li>
 </ul>
 </li>
 </ul>
 <h2>State</h2>
-<p>The Zone Concierge module keeps handling IBC headers of PoS blockchains, and
+<p>The Zone Concierge module keeps handling IBC headers of PoS systems, and
 maintains the following KV stores.</p>
 <h3>Parameters</h3>
 <p>The <a href="./keeper/params.go">parameter storage</a> maintains the Zone Concierge
@@ -123,10 +119,10 @@ message Params {
 </code></pre>
 <h3>ChainInfo</h3>
 <p>The <a href="./keeper/chain_info_indexer.go">chain info storage</a> maintains <code>ChainInfo</code>
-for each PoS blockchain. The key is the PoS blockchain's <code>ConsumerID</code>, which is
-the ID of the IBC light client. The value is a <code>ChainInfo</code> object. The
-<code>ChainInfo</code> is a structure storing the information of a PoS blockchain that
-checkpoints to Babylon.</p>
+for each PoS system. The key is the PoS system's <code>ConsumerID</code>, which is the ID
+of the IBC light client. The value is a <code>ChainInfo</code> object. The <code>ChainInfo</code> is a
+structure storing the information of a PoS system that checkpoints to Babylon
+Genesis.</p>
 <pre><code class="language-protobuf">// ChainInfo is the information of a Consumer
 message ChainInfo {
   // consumer_id is the ID of the consumer
@@ -143,13 +139,13 @@ message ChainInfo {
 </code></pre>
 <h3>EpochChainInfo</h3>
 <p>The <a href="./keeper/epoch_chain_info_indexer.go">epoch chain info storage</a> maintains
-<code>ChainInfo</code> at the end of each Babylon epoch for each PoS blockchain. The key is
-the PoS blockchain's <code>ConsumerID</code> plus the epoch number, and the value is a
-<code>ChainInfo</code> object.</p>
+<code>ChainInfo</code> at the end of each Babylon epoch for each PoS system. The key is the
+PoS system's <code>ConsumerID</code> plus the epoch number, and the value is a <code>ChainInfo</code>
+object.</p>
 <h3>CanonicalChain</h3>
 <p>The <a href="./keeper/canonical_chain_indexer.go">canonical chain storage</a> maintains the
-metadata of canonical IBC headers of a PoS blockchain. The key is the consumer
-chain's <code>ConsumerID</code> plus the height, and the value is a <code>IndexedHeader</code> object.
+metadata of canonical IBC headers of a PoS system. The key is the BSN's
+<code>ConsumerID</code> plus the height, and the value is a <code>IndexedHeader</code> object.
 <code>IndexedHeader</code> is a structure storing IBC header's metadata.</p>
 <pre><code class="language-protobuf">// IndexedHeader is the metadata of a Consumer header
 message IndexedHeader {
@@ -180,9 +176,9 @@ message IndexedHeader {
 </code></pre>
 <h3>Fork</h3>
 <p>The <a href="./keeper/fork_indexer.go">fork storage</a> maintains the metadata of canonical
-IBC headers of a PoS blockchain. The key is the PoS blockchain's <code>ConsumerID</code>
-plus the height, and the value is a list of <code>IndexedHeader</code> objects, which
-represent fork headers at that height.</p>
+IBC headers of a PoS system. The key is the PoS system's <code>ConsumerID</code> plus the
+height, and the value is a list of <code>IndexedHeader</code> objects, which represent fork
+headers at that height.</p>
 <h3>Params</h3>
 <p>The <a href="./keeper/params.go">parameter storage</a> maintains the parameters for the
 Zone Concierge module.</p>
@@ -196,42 +192,71 @@ message Params {
       [ (gogoproto.moretags) = "yaml:\"ibc_packet_timeout_seconds\"" ];
 }
 </code></pre>
+<h3>Port</h3>
+<p>The <a href="./keeper/keeper.go">port storage</a> maintains the port ID for the Zone
+Concierge module. The key is <code>PortKey</code> and the value is the port ID string.</p>
+<h3>LastSentBTCSegment</h3>
+<p>The <a href="./keeper/epochs.go">last sent BTC segment storage</a> maintains information
+about the last BTC chain segment that was broadcast to other light clients. The
+key is <code>LastSentBTCSegmentKey</code> and the value is a <code>BTCChainSegment</code> object,
+defined as follows.</p>
+<pre><code class="language-protobuf">// Btc light client chain segment grown during last finalized epoch
+message BTCChainSegment {
+  repeated babylon.btclightclient.v1.BTCHeaderInfo btc_headers = 1;
+}
+</code></pre>
+<h3>SealedEpochProof</h3>
+<p>The <a href="./keeper/epochs.go">sealed epoch proof storage</a> maintains proofs that
+epochs were properly sealed. The key is <code>SealedEpochProofKey</code> plus the epoch
+number, and the value is a <code>ProofEpochSealed</code> object.</p>
 <h2>PostHandler for intercepting IBC headers</h2>
 <p>The Zone Concierge module implements a
 <a href="https://docs.cosmos.network/v0.50/learn/advanced/baseapp#runtx-antehandler-runmsgs-posthandler">PostHandler</a>
 <code>IBCHeaderDecorator</code> to intercept headers sent to the <a href="https://github.com/cosmos/ibc-go/tree/v8.0.0/modules/core/02-client">IBC client
 module</a>.
 The <code>IBCHeaderDecorator</code> PostHandler is defined at
-<a href="./keeper/header_handler.go">x/zoneconcierge/keeper/header_handler.go</a>, and
-works as follows.</p>
+<a href="./keeper/ibc_header_decorator.go">x/zoneconcierge/keeper/ibc_header_decorator.go</a>.</p>
+<p>For each IBC client update message in the transaction, the <code>PostHandler</code>
+executes as follows:</p>
 <ol>
-<li>If the PoS blockchain hosting the header is not known to Babylon, initialize
-<code>ChainInfo</code> storage for the PoS blockchain.</li>
+<li>Extract the header info and the client state from the message</li>
+<li>Determine if the header is on a fork by checking if the client is frozen</li>
+<li>Call <code>HandleHeaderWithValidCommit</code> to process the header</li>
+<li>If the PoS system hosting the header is not known to Babylon Genesis,
+initialize <code>ChainInfo</code> storage for the PoS system</li>
 <li>If the header is on a fork, insert the header to the fork storage and update
-<code>ChainInfo</code>.</li>
+<code>ChainInfo</code></li>
 <li>If the header is canonical, insert the header to the canonical chain storage
-and update <code>ChainInfo</code>.</li>
+and update <code>ChainInfo</code></li>
+<li>Unfreeze the client if it was frozen due to a fork header</li>
 </ol>
 <h2>Hooks</h2>
 <p>The Zone Concierge module subscribes to the Epoching module's <code>AfterEpochEnds</code>
 <a href="../epoching/types/hooks.go">hook</a> for indexing the epochs when receiving
-headers from BSNs, and the Checkpointing module's
-<code>AfterRawCheckpointFinalized</code> <a href="../checkpointing/types/hooks.go">hook</a> for
-sending BTC timestamps to BSNs.</p>
+headers from BSNs, the Checkpointing module's <code>AfterRawCheckpointSealed</code>
+<a href="../checkpointing/types/hooks.go">hook</a> for recording epoch chain info proofs,
+and the Checkpointing module's <code>AfterRawCheckpointFinalized</code>
+<a href="../checkpointing/types/hooks.go">hook</a> for sending BTC timestamps to BSNs.</p>
 <h3>Indexing headers upon <code>AfterEpochEnds</code></h3>
 <p>The <code>AfterEpochEnds</code> hook is triggered when an epoch is ended, i.e., the last
 block in this epoch has been committed by CometBFT. Upon <code>AfterEpochEnds</code>, the
 Zone Concierge will save the current <code>ChainInfo</code> to the <code>EpochChainInfo</code> storage
 for each BSN.</p>
+<h3>Recording proofs upon <code>AfterRawCheckpointSealed</code></h3>
+<p>The <code>AfterRawCheckpointSealed</code> hook is triggered when an epoch's raw checkpoint
+is sealed by validator signatures. Upon <code>AfterRawCheckpointSealed</code>, the Zone
+Concierge will:</p>
+<ol>
+<li>Record epoch chain info with inclusion proofs for each BSN</li>
+<li>Generate and store the proof that the epoch is sealed</li>
+</ol>
 <h3>Sending BTC timestamps upon <code>AfterRawCheckpointFinalized</code></h3>
 <p>The <code>AfterRawCheckpointFinalized</code> hook is triggered upon a checkpoint becoming
 <em>finalised</em>, i.e., Bitcoin transactions of the checkpoint become <code>w</code>-deep in
 Bitcoin's canonical chain, where <code>w</code> is the <code>checkpoint_finalization_timeout</code>
 <a href="../../proto/babylon/btccheckpoint/v1/params.proto">parameter</a> in the
-<a href="../btccheckpoint/">BTCCheckpoint</a> module.</p>
-<p>Upon <code>AfterRawCheckpointFinalized</code>, the Zone Concierge module will prepare and
-send a BTC timestamp to each BSN.<br>
-The <a href="../../proto/babylon/zoneconcierge/v1/packet.proto">BTCTimestamp</a> structure<br>
+<a href="../btccheckpoint/">BTCCheckpoint module</a>.</p>
+<p>The <a href="../../proto/babylon/zoneconcierge/v1/packet.proto">BTCTimestamp</a> structure<br>
 includes a header and a set of proofs that the header is checkpointed by
 Bitcoin.</p>
 <pre><code class="language-protobuf">// BTCTimestamp is a BTC timestamp that carries information of a BTC-finalized epoch
@@ -287,78 +312,63 @@ message ProofFinalizedChainInfo {
 }
 </code></pre>
 <p>When <code>AfterRawCheckpointFinalized</code> is triggered, the Zone Concierge module will
-send an IBC packet including a <code>BTCTimestamp</code> to each BSN. The logic
-is defined at <a href="./keeper/hooks.go">x/zoneconcierge/keeper/hooks.go</a> and works as
-follows:</p>
+send an IBC packet including a <code>BTCTimestamp</code> to each BSN. The logic is defined
+at <a href="./keeper/hooks.go">x/zoneconcierge/keeper/hooks.go</a> and works as follows:</p>
 <ol>
-<li>Find all open IBC channels with Babylon's Zone Concierge module. The
-counterparty at each IBC channel is a PoS blockchain.</li>
-<li>Get all BTC headers to be sent in BTC timestamps. Specifically,
-<ol>
-<li>Find the segment of BTC headers sent upon the last time
-<code>AfterRawCheckpointFinalized</code> is triggered.</li>
-<li>If all BTC headers in the segment are no longer canonical, the BTC headers
-to be sent will be the last <code>w+1</code> ones in the BTC light client, where <code>w</code>
-is the <code>checkpoint_finalization_timeout</code>
+<li>
+<p><strong>Determine BTC headers to broadcast</strong>: Get all BTC headers to be sent in BTC
+timestamps by:</p>
+<ul>
+<li>Finding the segment of BTC headers sent upon the last time
+<code>AfterRawCheckpointFinalized</code> was triggered</li>
+<li>If all BTC headers in the segment are no longer canonical (due to a Bitcoin
+reorg), send the last <code>w+1</code> BTC headers from the current tip, where <code>w</code> is
+the <code>checkpoint_finalization_timeout</code>
 <a href="../../proto/babylon/btccheckpoint/v1/params.proto">parameter</a> in the
-<a href="../btccheckpoint/">BTCCheckpoint</a> module.</li>
-<li>Otherwise, the BTC headers to be sent will be from the latest header that
-is still canonical in the segment to the current tip of the BTC light
-client.</li>
-</ol>
+<a href="../btccheckpoint/">BTCCheckpoint module</a></li>
+<li>Otherwise, send BTC headers from the latest header that is still canonical
+in the segment to the current tip of the BTC light client</li>
+</ul>
 </li>
-<li>For each of these IBC channels:
-<ol>
-<li>Find the <code>ConsumerID</code> of the counterparty chain (i.e., the PoS blockchain)
-in the IBC channel.</li>
-<li>Get the <code>ChainInfo</code> of the <code>ConsumerID</code> at the last finalised epoch.</li>
+<li>
+<p><strong>Broadcast BTC timestamps to all open channels</strong>: For each open IBC channel
+with Babylon Genesis' Zone Concierge module:</p>
+<ul>
+<li>Find the <code>ConsumerID</code> of the counterparty chain (i.e., the PoS system) in
+the IBC channel</li>
+<li>Get the <code>ChainInfo</code> of the <code>ConsumerID</code> at the last finalised epoch</li>
 <li>Get the metadata of the last finalised epoch and its corresponding raw
-checkpoint.</li>
-<li>Generate the proof that the last PoS blockchain's canonical header is
-committed to the epoch's metadata.
-5. Generate the proof that the epoch is sealed, i.e., receives a BLS
-multisignature generated by validators with >2/3 total voting power at
-the last finalised epoch.</li>
+checkpoint</li>
+<li>Generate the proof that the last PoS system's canonical header is committed
+to the epoch's metadata (if applicable)</li>
+<li>Generate the proof that the epoch is sealed, i.e., receives a BLS
+multisignature generated by validators with >2/3 total voting power at the
+last finalised epoch</li>
 <li>Generate the proof that the epoch's checkpoint is submitted, i.e., encoded
-in transactions on Bitcoin.</li>
-<li>Assemble all the above and the BTC headers obtained in step 2 as
-<code>BTCTimestamp</code>, and send it to the IBC channel in an IBC packet.</li>
-</ol>
+in transactions on Bitcoin</li>
+<li>Assemble all the above and the BTC headers obtained in step 1 as
+<code>BTCTimestamp</code>, and send it to the IBC channel in an IBC packet</li>
+</ul>
+</li>
+<li>
+<p><strong>Update last sent segment</strong>: If headers were broadcast, update the last sent
+BTC segment for future reference</p>
 </li>
 </ol>
-<h2>Messages and Queries</h2>
-<p>The Zone Concierge module only has one message <code>MsgUpdateParams</code> for updating
-the module parameters via a governance proposal.</p>
-<p>It provides a set of queries about the status of checkpointed PoS blockchains,
-listed at
-<a href="https://docs.babylonlabs.io/docs/developer-guides/grpcrestapi#tag/ZoneConcierge">docs.babylonlabs.io</a>.</p>
-<h2>BSN Integration</h2>
-<p>The Zone Concierge module connects Babylon and BSNs, relaying three
-types of information through IBC: BTC headers, BTC timestamps, and BTC staking
-events.</p>
-<h3>IBC Communication Protocol</h3>
-<p>Channel Configuration:</p>
-<ul>
-<li>Port: <code>zoneconcierge</code></li>
-<li>Ordering: <code>ORDERED</code></li>
-<li>Version: <code>zoneconcierge-1</code></li>
-</ul>
-<p>Packet Types:</p>
-<ul>
-<li>Outbound: <code>BTCHeaders</code>, <code>BTCTimestamp</code>, <code>BTCStakingConsumerEvent</code></li>
-<li>Inbound: <code>ConsumerSlashingIBCPacket</code></li>
-</ul>
-<h3>Relaying BTC Headers</h3>
-<p>Zone Concierge relays BTC headers from Babylon's BTC light client to consumer
-chains to keep their BTC light clients synchronised with Bitcoin's canonical
-chain.</p>
-<h4>Broadcasting headers</h4>
-<p>The <code>BroadcastBTCHeaders</code> function broadcasts BTC headers to all open IBC
-channels.</p>
-<h4>Selecting headers to be broadcast</h4>
+<h2>EndBlocker</h2>
+<p>The Zone Concierge module implements an <code>EndBlocker</code> function that is executed
+at the end of every block. The <code>EndBlocker</code> is defined at
+<a href="./abci.go">x/zoneconcierge/abci.go</a>, and broadcasts BTC headers and BTC staking
+related events.</p>
+<h3>Broadcasting BTC Headers</h3>
+<p>The <code>EndBlocker</code> calls <code>BroadcastBTCHeaders</code> to send BTC headers to all open IBC
+channels with BSNs. This ensures that BSNs' BTC light clients stay synchronized
+with Babylon Genesis' BTC light client.</p>
+<p>The header selection logic follows the same rules as described in the <a href="#sending-btc-timestamps-upon-afterrawcheckpointfinalized">Hooks
+section</a>:</p>
 <ul>
 <li>If no headers have been sent previously: Send the last <code>w+1</code> BTC headers from
-the tip, where <code>w</code> is the checkpoint finalisation timeout</li>
+the tip</li>
 <li>If headers have been sent previously:
 <ul>
 <li>If the last sent segment is still valid (no Bitcoin reorg): Send headers
@@ -368,73 +378,166 @@ from the last sent header to the current tip</li>
 </ul>
 </li>
 </ul>
+<h3>Broadcasting BTC Staking Events</h3>
+<p>After broadcasting BTC headers, the <code>EndBlocker</code> calls
+<code>BroadcastBTCStakingConsumerEvents</code> to propagate BTC staking events to relevant
+BSNs. This function handles the distribution of BTC staking-related events that
+need to be communicated to BSNs. The process works as follows:</p>
+<ol>
+<li>
+<p><strong>Getting events</strong>: Gets all pending events from <code>x/btcstaking</code> module's
+store</p>
+</li>
+<li>
+<p><strong>Channel Mapping</strong>: For each BSN that has events:</p>
+</li>
+</ol>
+<ul>
+<li>Retrieves all open IBC channels connected to that BSN's port</li>
+<li>Maps the consumer ID (a BSN's identifier) to its corresponding active
+channels</li>
+</ul>
+<ol start="3">
+<li>
+<p><strong>Event Distribution</strong>:</p>
+<ul>
+<li>Groups events by consumer ID</li>
+<li>For each BSN:
+<ul>
+<li>Assembles its relevant events into an IBC packet</li>
+<li>Sends the packet to the IBC channel with that BSN</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Cleanup and State Management</strong>:</p>
+<ul>
+<li>After successful transmission, removes sent events from the pending queue</li>
+<li>Updates relevant indices and counters</li>
+</ul>
+</li>
+</ol>
+<p>This process ensures that all BTC staking events are reliably propagated to the
+corresponding BSNs, maintaining consistency across the network and enabling
+proper operation of the BTC staking system.</p>
+<h2>Handling Inbound IBC Packets</h2>
+<p>The Zone Concierge module implements the <code>OnRecvPacket</code> function to handle
+incoming IBC packets from BSNs. The packet handling is defined at
+<a href="./module_ibc.go">x/zoneconcierge/module_ibc.go</a> and processes different types
+of inbound packets.</p>
+<h3>Inbound IBC Packets</h3>
+<p>The <a href="proto/babylon/zoneconcierge/v1/packet.proto">inbound packet structure</a> is
+defined as follows. Currently, the Zone Concierge module handles one type of
+incoming packet: <code>ConsumerSlashingIBCPacket</code>. This packet type allows BSNs to
+report slashing evidence for finality providers.</p>
+<pre><code class="language-protobuf">// InboundPacket represents packets received by Babylon from other chains
+message InboundPacket {
+  // packet is the actual message carried in the IBC packet
+  oneof packet {
+    ConsumerSlashingIBCPacket consumer_slashing = 1;
+  }
+}
+
+// ConsumerSlashingIBCPacket defines the slashing information that a Consumer sends to Babylon's ZoneConcierge upon a
+// Consumer slashing event.
+// It includes the FP public key, the Consumer block height at the slashing event, and the double sign evidence.
+message ConsumerSlashingIBCPacket {
+  /// evidence is the FP slashing evidence that the Consumer sends to Babylon
+  babylon.finality.v1.Evidence evidence = 1;
+}
+</code></pre>
+<h3>Processing Inbound IBC Packets</h3>
+<p>The <code>HandleConsumerSlashing</code> function (called upon
+<a href="x/zoneconcierge/module_ibc.go">OnRecvPacket</a>) processes slashing reports
+received from BSNs through IBC packets, with the following workflow:</p>
+<ol>
+<li><strong>Verifying Evidence</strong>:
+<ul>
+<li>Validates that slashing evidence is present and well-formed</li>
+<li>Extracts the BTC secret key from the evidence</li>
+<li>Verifies that the finality provider's BTC public key matches the evidence</li>
+</ul>
+</li>
+<li><strong>Slashing Execution</strong>:
+<ul>
+<li>Updates the BSN finality provider's slashed status</li>
+<li>Sends power distribution update events to adjust the Babylon Genesis
+finality provider's voting power (necessary because all BTC stakes must
+delegate to a Babylon Genesis finality provider, so slashing affects their
+voting power)</li>
+<li>Identifies all BTC delegations associated with the slashed finality
+provider</li>
+<li>Identifies all affected BSNs, where "affected" means there exists a slashed
+BTC delegation that multi-stakes to a finality provider in this BSN</li>
+<li>Creates slashed BTC delegation events for each affected BSN</li>
+<li>Propagates the slashing event to each BSN such that the BSN will update the
+status of affected BTC delegations and update the voting power of affected
+BSN finality providers. (Note: The propagation timing depends on the IBC
+relayer's operation schedule and is not under direct control of this
+module)</li>
+</ul>
+</li>
+<li><strong>Event Emission</strong>: Emits a <code>EventSlashedFinalityProvider</code> event for external
+slashing mechanisms (e.g., BTC slasher/vigilante)</li>
+</ol>
+<h2>Messages and Queries</h2>
+<p>The Zone Concierge module only has one message <code>MsgUpdateParams</code> for updating
+the module parameters via a governance proposal.</p>
+<p>It provides a set of queries about the status of checkpointed PoS systems,
+listed at
+<a href="https://docs.babylonlabs.io/docs/developer-guides/grpcrestapi#tag/ZoneConcierge">docs.babylonlabs.io</a>.</p>
+<h2>BSN Integration</h2>
+<p>The Zone Concierge module connects Babylon Genesis and BSNs, relaying three
+types of information through IBC: BTC headers, BTC timestamps, and BTC staking
+events.</p>
+<h3>IBC Communication Protocol</h3>
+<p>| Configuration Type | Value |
+|-------------------|--------|
+| Port | <code>zoneconcierge</code> |
+| Ordering | <code>ORDERED</code> |
+| Version | <code>zoneconcierge-1</code> |</p>
+<p>| Packet Direction | Types |
+|-----------------|-------|
+| Outbound | <code>BTCHeaders</code>, <code>BTCTimestamp</code>, <code>BTCStakingConsumerEvent</code> |
+| Inbound | <code>ConsumerSlashingIBCPacket</code> |</p>
+<h3>Relaying BTC Headers</h3>
+<p>Zone Concierge relays BTC headers from Babylon Genesis' BTC light client to BSNs
+in two scenarios:</p>
+<ol>
+<li>When a new BTC timestamp is being sent (triggered by
+<code>AfterRawCheckpointFinalized</code>, see <a href="#sending-btc-timestamps-upon-afterrawcheckpointfinalized">Sending BTC
+Timestamps</a>)</li>
+<li>Periodically via the <code>BroadcastBTCHeaders</code> function which is called upon
+<code>EndBlock</code></li>
+</ol>
+<p>This ensures BSNs can keep their BTC light clients synchronized with Bitcoin's
+canonical chain. The headers are sent through IBC packets to all open channels
+between Babylon and the BSNs.</p>
 <h3>Relaying BTC Timestamps</h3>
-<p>Zone Concierge sends BTC timestamps to BSNs when a Babylon epoch
-becomes BTC-finalised.</p>
-<h4>Triggering timestamp relay</h4>
-<p>The <code>AfterRawCheckpointFinalized</code> hook is called when an epoch's checkpoint
-becomes <code>w</code>-deep in Bitcoin's canonical chain.</p>
-<h4>Broadcasting timestamps</h4>
-<p>The <code>BroadcastBTCTimestamps</code> function creates and sends BTC timestamps to all
-open IBC channels.</p>
-<h4>Assembling timestamps</h4>
-<ol>
-<li><code>getFinalizedInfo</code> collects shared finalisation data:
+<p>Zone Concierge sends BTC timestamps to BSNs when a Babylon epoch becomes
+BTC-finalised. The <code>AfterRawCheckpointFinalized</code> hook is triggered when an
+epoch's checkpoint becomes <code>w</code>-deep in Bitcoin's canonical chain, which then
+broadcasts <code>BTCTimestamp</code> packets to all open IBC channels.</p>
+<p>Each <code>BTCTimestamp</code> includes:</p>
 <ul>
+<li>BTC headers to keep BSN light clients synchronised</li>
 <li>Epoch metadata and raw checkpoint</li>
-<li>BTC submission key and proofs</li>
-<li>Proof that the epoch was sealed by validators</li>
-<li>Proof that the epoch's checkpoint was submitted to Bitcoin</li>
+<li>Proofs that the epoch is finalized</li>
 </ul>
-</li>
-<li><code>createBTCTimestamp</code> constructs individual timestamps for each consumer:
+<p>The <a href="#sending-btc-timestamps-upon-afterrawcheckpointfinalized">Hooks section</a>
+provides details of assembling and broadcasting BTC timestamps.</p>
+<h3>Relaying BTC Staking Events</h3>
+<p>Zone Concierge relays BTC staking events between Babylon Genesis and BSNs to
+enable trustless BTC staking. The module handles:</p>
 <ul>
-<li>If the channel is uninitialized: Include Bitcoin headers from tip to
-<code>(w+1+len(headersToBroadcast))</code>-deep</li>
-<li>If the channel is initialized: Include only the headers from
-<code>headersToBroadcast</code></li>
-<li>If the consumer has a header checkpointed in the finalised epoch: Include
-the consumer header and proof</li>
+<li>Broadcasting staking events to BSNs via <code>BroadcastBTCStakingConsumerEvents</code>
+during EndBlock</li>
+<li>Validating BSN registration during IBC channel creation</li>
+<li>Processing slashing reports from BSNs</li>
 </ul>
-</li>
-</ol>
-<h4>Cryptographic Proofs</h4>
-<ul>
-<li><code>ProofEpochSealed</code>: Proves >2/3 validators signed the epoch</li>
-<li><code>ProofEpochSubmitted</code>: Proves the checkpoint was submitted to Bitcoin</li>
-<li><code>ProofConsumerHeaderInEpoch</code>: Proves the consumer header was timestamped in
-the epoch (if applicable)</li>
-</ul>
-<h3>Propagating BTC Staking Events</h3>
-<p>Zone Concierge propagates BTC staking events from Babylon to BSNs to
-enable trustless BTC staking.</p>
-<h4>Broadcasting staking events</h4>
-<p>The <code>BroadcastBTCStakingConsumerEvents</code> function sends staking events to
-relevant BSNs.</p>
-<h4>Processing event flow</h4>
-<ol>
-<li>Retrieve all pending consumer events from the BTC staking module via
-<code>GetAllBTCStakingConsumerIBCPackets</code></li>
-<li>Map consumer IDs to their corresponding open IBC channels</li>
-<li>Send each consumer's events to all their open channels</li>
-<li>Delete sent events from the store via <code>DeleteBTCStakingConsumerIBCPacket</code></li>
-</ol>
-<h4>Registering consumers</h4>
-<ul>
-<li><code>HandleIBCChannelCreation</code> validates consumer registration during IBC
-handshake</li>
-<li>Consumer must be registered in the BTC staking module with a valid
-<code>ConsumerRegister</code></li>
-<li>Channel ID is stored in the consumer's metadata upon successful handshake</li>
-</ul>
-<h4>Handling slashing</h4>
-<ul>
-<li><code>HandleConsumerSlashing</code> processes slashing reports from BSNs</li>
-<li>Validates the slashing evidence and finality provider association</li>
-<li>Updates the finality provider's status and propagates slashing to other
-consumers</li>
-<li>Emits <code>EventSlashedFinalityProvider</code> for external slashing mechanisms</li>
-</ul>
+<p>See <a href="#endblocker">EndBlocker</a> section for details on the event broadcasting
+process.</p>
 
   </article>
 </body>
