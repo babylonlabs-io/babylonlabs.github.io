@@ -23,9 +23,24 @@
 <body>
   <article>
     
-    <h1>Babylon-contract</h1>
-<p>This repo contains the Wasm smart contract for Babylon integrations.
-It will be deployed on a Cosmos zone that integrates Babylon, and will maintain BTC timestamps of headers in this Cosmos zone.</p>
+    <h1>Cosmos BSN Contracts</h1>
+<p>This repository contains the CosmWasm smart contracts that enable
+the integration of Cosmos BSNs with the Babylon BTC Staking protocol.</p>
+<h2>Architecture</h2>
+<p>The contracts are written in Rust, and use the CosmWasm framework to interact
+with the BSN's Cosmos application layer.
+There's a thin layer which adds a <a href="https://github.com/babylonlabs-io/babylon-sdk/tree/main/x/babylon"><code>babylon</code> module</a>
+, which provides the necessary functionality to interact with the contracts
+through privileged calls (<code>sudo</code> messages) and custom messages.
+This thin layer is naturally written in Go, and uses the Cosmos SDK.</p>
+<p>An integrator can import the <code>babylon</code> module into their Cosmos SDK-based chain,
+and use the provided functionality to interact with the Cosmos BSN contracts,
+following the demo app's guidelines and layout, which is provided in
+<a href="https://github.com/babylonlabs-io/babylon-sdk"><code>babylon-sdk</code></a> as well.</p>
+<p>The entire solution is designed to be modular and extensible, for ease of
+integration and future upgrades.</p>
+<p>A broad architecture diagram, along with the contracts' main interfaces, can be
+found in the <a href="docs/ARCHITECTURE.md"><code>docs/ARCHITECTURE.md</code></a> documentation.</p>
 <h2>Development</h2>
 <h3>Prerequisites</h3>
 <p>Make sure you have <code>cargo-run-script</code> installed and docker running.</p>

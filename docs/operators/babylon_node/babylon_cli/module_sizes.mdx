@@ -1,0 +1,52 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: module-sizes
+sidebar_position: 16
+---
+
+# module-sizes
+
+Print sizes of each module in the database. This diagnostic tool provides detailed analysis of storage usage by different blockchain modules, helping operators understand disk usage patterns, optimize storage allocation, and plan capacity requirements.
+
+## Overview
+
+The `module-sizes` command analyzes the node's database and reports the storage footprint of each application module. This information is crucial for performance monitoring, storage optimization, and identifying modules that consume the most disk space.
+
+```bash
+babylond module-sizes [path-to-db] [flags]
+```
+
+## Prerequisites
+
+Before using this command, ensure you have:
+
+- **Node database access** - The database should be accessible and not corrupted
+- **Sufficient permissions** - Read access to the database directory
+- **Node stopped** - For accurate analysis, stop the node before running (recommended)
+- **Backup considerations** - Ensure database integrity before analysis
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `path-to-db` | Path to the database directory (optional - defaults to home/data) |
+
+## Flags
+
+### Analysis Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--print-interval` | int | `100000` | Interval between printing database stats during analysis |
+| `-h, --help` | | | Help for module-sizes |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | Directory for config and data |
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print full stack trace on errors |
+

@@ -1,0 +1,125 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: add-genesis-account
+sidebar_position: 1
+---
+# add-genesis-account
+
+Add a genesis account to genesis.json. The provided account must specify
+the account address or key name and a list of initial coins. If a key name is given,
+the address will be looked up in the local Keybase. The list of initial tokens must
+contain valid denominations. Accounts may optionally be supplied with vesting parameters.
+
+## Overview
+
+The `add-genesis-account` command allows you to add an account with an initial balance to the genesis file. This is typically used during blockchain setup to configure initial token distributions and vesting schedules.
+
+```bash
+babylond add-genesis-account [address_or_key_name] [coin][,[coin]] [flags]
+```
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `address_or_key_name` | The account address (e.g., `babylon1...`) or key name from your keyring |
+| `coin` | Token amount and denomination (e.g., `1000000ubbn`). Multiple coins can be specified separated by commas |
+
+## Flags
+
+### Account Configuration
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--vesting-amount` | string | Amount of coins for vesting accounts |
+| `--vesting-start-time` | int | Schedule start time (unix epoch) for vesting accounts |
+| `--vesting-end-time` | int | Schedule end time (unix epoch) for vesting accounts |
+
+### Network & Query Options
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--grpc-addr` | string | | The gRPC endpoint to use for this chain |
+| `--grpc-insecure` | | | Allow gRPC over insecure channels, if not the server must use TLS |
+| `--height` | int | | Use a specific height to query state at (this can error if the node is pruning state) |
+| `--node` | string | `tcp://localhost:26657` | `<host>:<port>` to CometBFT RPC interface for this chain |
+
+### Configuration & Output
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--home` | string | `~/.babylond` | The application home directory |
+| `--keyring-backend` | string | `os` | Select keyring's backend (`os`\|`file`\|`kwallet`\|`pass`\|`test`) |
+| `-o, --output` | string | `text` | Output format (`text`\|`json`) |
+| `-h, --help` | | | Help for add-genesis-account |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+## Examples
+
+### Basic Account Addition
+
+Add a simple account with initial balance:
+
+```bash
+babylond add-genesis-account babylon1abc123... 1000000ubbn
+```
+
+### Using Key Name
+
+Add an account using a key name from your keyring:
+
+```bash
+babylond add-genesis-account validator-key 1000000ubbn
+```
+
+### Multiple Token Types
+
+Add an account with multiple token denominations:
+
+```bash
+babylond add-genesis-account babylon1abc123... 1000000ubbn,500000ustake
+```
+
+### Vesting Account
+
+Create a vesting account with a 1-year vesting period:
+
+```bash
+babylond add-genesis-account babylon1abc123... 1000000ubbn \
+  --vesting-amount 800000ubbn \
+  --vesting-start-time 1672531200 \
+  --vesting-end-time 1704067200
+```
+
+### Custom Configuration
+
+Add account with custom home directory and keyring backend:
+
+```bash
+babylond add-genesis-account validator-key 1000000ubbn \
+  --home /custom/babylon/home \
+  --keyring-backend file
+```
+
+## Usage Notes
+
+:::info
+This command modifies the `genesis.json` file in your node's configuration directory. Make sure to back up your genesis file before making changes.
+:::
+
+:::warning
+Vesting accounts require all three vesting parameters to be specified: `--vesting-amount`, `--vesting-start-time`, and `--vesting-end-time`.
+:::
+
+:::tip
+Use the `--output json` flag to get machine-readable output that can be processed by scripts or other tools.
+:::
+

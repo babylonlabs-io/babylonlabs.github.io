@@ -1,0 +1,271 @@
+---
+sidebar_class_name: node_operators_installation_guide_sidebar
+sidebar_label: export
+sidebar_position: 7
+---
+
+# export
+
+Export state to JSON format. This command creates a comprehensive snapshot of the blockchain state at a specific height, which can be used for chain upgrades, migrations, backups, or creating new genesis files.
+
+## Overview
+
+The `export` command extracts the complete blockchain state and outputs it as a JSON document. This is essential for chain upgrades, state analysis, and creating genesis files for new networks or testnets.
+
+```bash
+babylond export [flags]
+```
+
+## Arguments
+
+This command takes no positional arguments. All configuration is done through flags.
+
+## Flags
+
+### Export Configuration
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--height` | int | `-1` | Export state from a particular height (-1 means latest height) |
+| `--for-zero-height` | | | Export state to start at height zero (perform preprocessing) |
+| `--output-document` | string | | Exported state is written to the given file instead of STDOUT |
+| `--modules-to-export` | strings | | Comma-separated list of modules to export. If empty, will export all modules |
+| `--jail-allowed-addrs` | strings | | Comma-separated list of operator addresses of jailed validators to unjail |
+| `--home` | string | `~/.babylond` | The application home directory |
+| `-h, --help` | | | Help for export |
+
+### Global Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--log_format` | string | `plain` | The logging format (`json`\|`plain`) |
+| `--log_level` | string | `info` | The logging level (`trace`\|`debug`\|`info`\|`warn`\|`error`\|`fatal`\|`panic`\|`disabled` or `'*:<level>,<key>:<level>'`) |
+| `--log_no_color` | | | Disable colored logs |
+| `--trace` | | | Print out full stack trace on errors |
+
+## Examples
+
+### Basic State Export
+
+Export current state to stdout:
+
+```bash title="Export latest state"
+babylond export
+```
+
+Export to a file:
+
+```bash title="Export to file"
+babylond export --output-document exported_state.json
+```
+
+### Historical State Export
+
+Export state from a specific height:
+
+```bash title="Export from specific height"
+babylond export --height 1000000 --output-document state_at_1M.json
+```
+
+```bash title="Export earlier state for analysis"
+babylond export --height 500000 --output-document historical_state.json
+```
+
+### Chain Upgrade Preparation
+
+Export state for zero-height genesis:
+
+```bash title="Prepare for chain upgrade"
+babylond export --for-zero-height --output-document upgrade_genesis.json
+```
+
+```bash title="Chain upgrade with specific height"
+babylond export --height 2000000 --for-zero-height --output-document new_chain_genesis.json
+```
+
+### Selective Module Export
+
+Export specific modules only:
+
+```bash title="Export banking and staking modules"
+babylond export --modules-to-export "bank,staking" --output-document partial_state.json
+```
+
+```bash title="Export governance and distribution"
+babylond export --modules-to-export "gov,distribution" --output-document gov_state.json
+```
+
+### Validator Management
+
+Export with jailed validator handling:
+
+```bash title="Unjail validators during export"
+babylond export \
+  --jail-allowed-addrs "babylonvaloper1abc123...,babylonvaloper1def456..." \
+  --output-document state_with_unjailed.json
+```
+
+### Complete Chain Migration Workflow
+
+```bash title="Full migration process"
+# 1. Stop the current chain
+systemctl stop babylond
+
+# 2. Export the final state
+babylond export \
+  --height 2500000 \
+  --for-zero-height \
+  --output-document migration_genesis.json
+
+# 3. Backup the export
+cp migration_genesis.json /secure/backup/location/
+
+# 4. Validate the exported genesis
+babylond validate-genesis migration_genesis.json
+
+# 5. Prepare for new chain launch
+cp migration_genesis.json ~/.babylond/config/genesis.json
+```
+
+### Development and Testing
+
+```bash title="Create testnet genesis"
+# Export mainnet state
+babylond export --output-document mainnet_state.json
+
+# Create testnet with subset of modules
+babylond export \
+  --modules-to-export "auth,bank,staking" \
+  --for-zero-height \
+  --output-document testnet_genesis.json
+```
+
+## State Export Structure
+
+The exported JSON contains the complete blockchain state organized by modules:
+
+```json title="Typical export structure"
+{
+  "genesis_time": "2024-01-01T00:00:00.000000000Z",
+  "chain_id": "babylon-1",
+  "initial_height": "0",
+  "consensus_params": { ... },
+  "app_hash": "",
+  "app_state": {
+    "auth": { ... },
+    "bank": { ... },
+    "staking": { ... },
+    "distribution": { ... },
+    "gov": { ... },
+    "slashing": { ... },
+    "babylon": { ... }
+  }
+}
+```
+
+## Use Cases
+
+### Chain Upgrades
+
+```bash title="Coordinated network upgrade"
+# Network coordinator exports state
+babylond export \
+  --height 3000000 \
+  --for-zero-height \
+  --output-document upgrade_v2_genesis.json
+
+# Validators download and verify
+wget https://releases.babylon.network/upgrade_v2_genesis.json
+babylond validate-genesis upgrade_v2_genesis.json
+
+# Replace genesis file
+cp upgrade_v2_genesis.json ~/.babylond/config/genesis.json
+```
+
+### State Analysis and Auditing
+
+```bash title="Blockchain state analysis"
+# Export for analysis
+babylond export --output-document analysis_state.json
+
+# Extract specific data
+jq '.app_state.bank.balances' analysis_state.json > all_balances.json
+jq '.app_state.staking.validators' analysis_state.json > validator_set.json
+jq '.app_state.gov.proposals' analysis_state.json > governance_proposals.json
+
+# Generate reports
+jq '[.app_state.bank.balances[] | select(.coins[].amount | tonumber > 1000000)] | length' analysis_state.json
+```
+
+### Backup and Recovery
+
+```bash title="Regular state backups"
+#!/bin/bash
+# Automated backup script
+
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="/backup/babylon/state"
+HEIGHT=$(babylond status | jq -r '.sync_info.latest_block_height')
+
+# Create backup
+babylond export \
+  --height $HEIGHT \
+  --output-document "$BACKUP_DIR/state_${HEIGHT}_${DATE}.json"
+
+# Compress backup
+gzip "$BACKUP_DIR/state_${HEIGHT}_${DATE}.json"
+
+# Verify backup
+gunzip -t "$BACKUP_DIR/state_${HEIGHT}_${DATE}.json.gz"
+
+echo "✅ State backup completed: height $HEIGHT"
+```
+
+### Fork Creation
+
+```bash title="Create network fork"
+# Export state from fork point
+babylond export \
+  --height 1500000 \
+  --for-zero-height \
+  --output-document fork_genesis.json
+
+# Modify chain ID and parameters
+jq '.chain_id = "babylon-fork-1"' fork_genesis.json > temp.json && mv temp.json fork_genesis.json
+
+# Update genesis time
+jq '.genesis_time = "2024-06-01T12:00:00.000000000Z"' fork_genesis.json > temp.json && mv temp.json fork_genesis.json
+
+# Validate modified genesis
+babylond validate-genesis fork_genesis.json
+```
+
+## Best Practices
+
+:::tip Export Planning
+- **Plan exports during low activity periods** to minimize state changes
+- **Use specific heights** rather than latest height for reproducible exports
+- **Test exports on non-production environments** before mainnet operations
+- **Coordinate timing with other validators** for network upgrades
+:::
+
+:::warning Storage Requirements
+- **Exported state files are large** (several GB for active networks)
+- **Plan sufficient disk space** for export operations
+- **Use compression** for long-term storage of exports
+- **Monitor disk usage** during export operations
+:::
+
+:::info Validation Strategy
+- **Always validate exported genesis files** before using them
+- **Cross-verify exports** with other validators when possible
+- **Test imports** in isolated environments first
+- **Check state consistency** after import operations
+:::
+
+:::note Performance Considerations
+- **Exports can take significant time** on large networks
+- **Database performance affects** export speed
+- **Network I/O may be impacted** during export
+- **Consider maintenance windows** for large exports
+:::
