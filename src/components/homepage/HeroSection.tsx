@@ -12,7 +12,7 @@ import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 const PRODUCTS = [
   {
     title: 'Stake BTC',
-    link: '/guides/btc_stakers',
+    link: '/stakers/btc_stakers',
     icon: WalletCreditCardRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
@@ -20,7 +20,7 @@ const PRODUCTS = [
   },
   {
     title: 'Stake BABY',
-    link: '/guides/baby_stakers',
+    link: '/stakers/baby_stakers',
     icon: WalletCreditCardRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
@@ -44,7 +44,7 @@ const PRODUCTS = [
   },
   {
     title: 'Build BSNs',
-    link: '/developers/bsns',
+    link: '/bsns',
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
