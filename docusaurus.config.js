@@ -186,7 +186,7 @@ const config = {
         },
         items: [
           {
-            label: 'Docs',
+            label: 'Overview',
             to: '/guides/overview/',
             className: 'guides-top-header',
           },
