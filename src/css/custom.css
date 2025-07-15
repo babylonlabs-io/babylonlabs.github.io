@@ -1744,8 +1744,12 @@ h3.anchor > code {
   background: none !important;
 }
 .openapi-explorer__select-input{
-    background: none !important;
+  background: none !important;
 }
+div:has(> .openapi-tabs__schema-container) {
+  background: none !important;
+}
+
 
 /*FOR MOBILE SCREEN SIZE*/
 @media screen and (max-width: 767px) {
