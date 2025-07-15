@@ -65,14 +65,14 @@ const samples: Sample[] = [
     source:
       'https://github.com/babylonlabs-io/babylon-integration-deployment/tree/main/deployments/btc-staking-integration-bitcoind',
     blog: 'https://babylonlabs.io/blog/babylon-bitcoin-security-for-cosmos-and-beyond',
-    demo: '/developers/bsns',
+    demo: '/bsns/',
   },
   {
     title: 'L2 Integrations Guides',
     platform: 'For OP Stacks chains',
-    blog: '/developers/bsns/op_stack_chains',
+    blog: '/bsns/op_stack_chains',
     source: 'https://babylonlabs.io/blog/forkless-rollups-with-bitcoin-staking',
-    demo: '/developers/bsns/op_stack_chains',
+    demo: '/bsns/op_stack_chains',
   },
   {
     title: 'CosmWasm Contract Deployment Guides',
