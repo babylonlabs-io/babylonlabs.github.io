@@ -211,16 +211,6 @@ const config = {
             className: 'bsns-top-header',
           },
           {
-            label: 'Operators',
-            to: '/operators/',
-            className: 'operators-top-header',
-          },
-          {
-            label: 'BSNs',
-            to: '/bsns/',
-            className: 'bsns-top-header',
-          },
-          {
             label: 'API',
             items: [
               {
@@ -237,8 +227,8 @@ const config = {
             ],
           },
           {
-            label: 'Community',
-            to: 'https://babylonlabs.io/community',
+            label: 'Support',
+            to: 'https://discord.com/invite/babylonglobal',
           },
           {
             href: 'https://discord.com/invite/babylonglobal',
