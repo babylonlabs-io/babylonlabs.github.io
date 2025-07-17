@@ -11,19 +11,19 @@ interface FeaturedBlogPost {
 const blogPosts: FeaturedBlogPost[] = [
   {
     title: "Bitcoin Staking 101: Part 3 - Babylon's Bitcoin Staking Contract",
-    image: "/img/blog/05-26-babylon-s-bitcoin-staking-contract/xangle_baby_faucet.png",
+    image: "/img/blog/05-26-babylon-s-bitcoin-staking-contract/img.png",
     link: "https://babylonlabs.io/blog/babylon-s-bitcoin-staking-contract",
     readTime: 14
   },
   {
     title: "Bitcoin Staking 101: Part 2 - Technical Preliminaries of Bitcoin Staking",
-    image: "/img/blog/05-25-technical-preliminaries-of-bitcoin-staking/xangle_baby_faucet.png",
+    image: "/img/blog/05-25-technical-preliminaries-of-bitcoin-staking/img.png",
     link: "https://babylonlabs.io/blog/technical-preliminaries-of-bitcoin-staking",
     readTime: 12
   },
   {
     title: "Bitcoin Staking 101: Part 1 - What is Bitcoin Staking?",
-    image: "/img/blog/05-24-what-is-bitcoin-staking/xangle_baby_faucet.png",
+    image: "/img/blog/05-24-what-is-bitcoin-staking/img.png",
     link: "https://babylonlabs.io/blog/what-is-bitcoin-staking",
     readTime: 5
   }
