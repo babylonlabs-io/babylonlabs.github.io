@@ -3,4 +3,173 @@ sidebar_class_name: node_operators_installation_guide_sidebar
 sidebar_label: Usage Guide
 sidebar_position: 1
 ---
-//ITRocket guide
+# CLI Usage Guide
+
+### Key Management 🔑
+Add new wallet:
+```
+babylond keys add <WALLET>
+```
+
+Restore executing wallet:
+```
+babylond keys add <WALLET> --recover
+```
+
+List all wallets:
+```
+babylond keys list
+```
+
+Delete wallet:
+```
+babylond keys delete <WALLET>
+```
+
+Export key (saves it to `wallet.backup`):
+```
+babylond keys export <WALLET>
+```
+
+Import key (restore from wallet.backup):
+```
+babylond keys import <WALLET> wallet.backup
+```
+
+### Tokens 💰
+Check balance:
+```
+babylond q bank balances <WALLET>
+```
+
+Withdraw all rewards:
+```
+babylond tx distribution withdraw-all-rewards --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 
+```
+
+Withdraw rewards and commission from your validator:
+```
+babylond tx distribution withdraw-rewards $(babylond keys show <WALLET> --bech val -a) --from <WALLET> --commission --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Delegate to your validator:
+```
+babylond tx epoching delegate $(babylond keys show <WALLET> --bech val -a) <AMOUNT>ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Delegate to another validator:
+```
+babylond tx epoching delegate <TO_VALOPER_ADDRESS> <AMOUNT>ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 	
+```
+
+Redelegate stake to another validator:
+```
+babylond tx epoching redelegate <FROM_VALOPER_ADDRESS> <TO_VALOPER_ADDRESS> <AMOUNT>ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Unbond from your validator:
+```
+babylond tx epoching unbond $(babylond keys show <WALLET> --bech val -a) <AMOUNT>ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Unbond from another validator:
+```
+babylond tx epoching unbond <VALOPER_ADDRESS> <AMOUNT>ubbn --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Transfer funds:
+```
+babylond tx bank send <YOUR_WALLET> <TO_WALLET_ADDRESS> <AMOUNT>ubbn --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Transfer funds to multiple accounts:
+```
+babylond tx bank multi-send <YOUR_WALLET> <TO_WALLET_ADDRESS_1> <TO_WALLET_ADDRESS_2> <TO_WALLET_ADDRESS_3...> <AMOUNT>ubbn --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+### Governance 🗳️
+View proposals list:
+```
+babylond query gov proposals 
+```
+
+View proposal:
+```
+babylond query gov proposal <PROPOSAL_ID>
+```
+
+Vote:
+```
+babylond tx gov vote <PROPOSAL_ID> <VOTE_OPTION> --from <WALLET> --chain-id bbn-1  --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+### Validator Operations 👨‍💻
+Create new validator:
+```
+# Create a validator.json file with validator details (replace moniker, details, etc. with your data):
+echo "{\"pubkey\":{\"@type\":\"/cosmos.crypto.ed25519.PubKey\",\"key\":\"$(babylond comet show-validator | grep -Po '\"key\":\s*\"\K[^"]*')\"},
+    \"amount\": \"1000000ubbn\",
+    \"moniker\": \"test\",
+    \"identity\": \"\",
+    \"website\": \"\",
+    \"security\": \"\",
+    \"details\": \"I love Babylon ❤️\",
+    \"commission-rate\": \"0.1\",
+    \"commission-max-rate\": \"0.2\",
+    \"commission-max-change-rate\": \"0.01\",
+    \"min-self-delegation\": \"1\"
+}" > validator.json
+
+# Create a validator using JSON file
+babylond tx checkpointing create-validator validator.json --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5
+```
+
+Edit validator (from `new-moniker`, `identity`, `details`, `commission-rate` flags, use only those you want to edit):
+```
+babylond tx epoching edit-validator \
+--commission-rate 0.1 \
+--new-moniker "<MONIKER>" \
+--identity "" \
+--details "" \
+--from <WALLET> \
+--chain-id bbn-1 \
+--gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 \
+-y 
+```
+
+Unjail validator:
+```
+babylond tx slashing unjail --from <WALLET> --chain-id bbn-1 --gas auto --gas-prices 0.002ubbn --gas-adjustment 1.5 -y 
+```
+
+Your validator details:
+```
+babylond query staking validator $(babylond keys show <WALLET> --bech val -a) 
+```
+
+Another validator details:
+```
+babylond query staking validator <VALOPER_ADDRESS>
+```
+
+Slashing parameters:
+```
+babylond query slashing params
+```
+
+Signing and jailing info of your validator:
+```
+babylond query slashing signing-info $(babylond tendermint show-validator)
+```
+
+Signing and jailing info of another validator:
+```
+babylond query slashing signing-info '<CONSENSUS_PUBKEY>'
+```
+
+Active validators list:
+```
+babylond query staking validators
+```
+
+*Guide provided by [ITRocket team](https://itrocket.net/).*

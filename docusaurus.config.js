@@ -186,9 +186,19 @@ const config = {
         },
         items: [
           {
-            label: 'Docs',
+            label: 'Overview',
             to: '/guides/overview/',
             className: 'guides-top-header',
+          },
+          {
+            label: 'Stakers',
+            to: '/stakers/',
+            className: 'stakers-top-header',
+          },
+          {
+            label: 'Developers',
+            to: '/developers/',
+            className: 'developers-top-header',
           },
           {
             label: 'Operators',
@@ -196,9 +206,9 @@ const config = {
             className: 'operators-top-header',
           },
           {
-            label: 'Developers',
-            to: '/developers/',
-            className: 'developers-top-header',
+            label: 'BSNs',
+            to: '/bsns/',
+            className: 'bsns-top-header',
           },
           {
             label: 'API',
@@ -217,8 +227,8 @@ const config = {
             ],
           },
           {
-            label: 'Participate',
-            to: 'https://babylonlabs.io/community',
+            label: 'Support',
+            to: 'https://discord.com/invite/babylonglobal',
           },
           {
             href: 'https://discord.com/invite/babylonglobal',

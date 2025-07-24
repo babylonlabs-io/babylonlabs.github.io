@@ -49,17 +49,11 @@ Initialize your validator key with `babylond init` will create the BABY key you
 need for consensus participation and a BLS key used in checkpointing and timestamping 
 to Bitcoin blockchain.
 
-See [3. Key Management](/operators/babylon_validators/installation_guide/#3-key-management) 
-for more details.
-
 ### 3. Create a Validator
 Instead of using `staking` module of Cosmos SDK, Babylon Genesis uses `checkpointing` 
 module for validator registration and management. 
 
 To create a validator, use `babylond tx checkpointing create-validator` command.
-
-See [4. Create a Validator](/operators/babylon_validators/installation_guide/#4-create-a-validator) 
-for more details.
 
 ### 4. Verify Your Validator
 
@@ -71,38 +65,6 @@ registration request is in the queue.
 Initially, your status will be `0 - BOND_STATUS_UNBONDED`. When active, your 
 status will change to `3 - BOND_STATUS_BONDED`.
 
-See [5. Verify Your Validator](/operators/babylon_validators/installation_guide/#51-verifying-validator-setup) 
-for more details and rules.
-
 ## Communication
 
-Join the `#finality-providers` channel in the `- tech-zone -` section of our 
-[Discord server](https://discord.com/invite/babylonglobal) for all communications.
-Testnet announcements will also be made there. 
-
-## CosmWasm Governance Proposals
-
-The Babylon Genesis chain will initially use permissioned CosmWasm. After public 
-launch on 10 April 2025, dApp developers are expected to submit governance proposals 
-for either (a) deploying CosmWasm smart contracts or (b) whitelisting addresses to 
-deploy such contracts. These proposals can be expedited (24-hour voting) or standard 
-(72-hour voting). **It is important that all validators with voting power actively 
-monitor on-chain proposals, review them (**[Governance guidelines](https://docs.babylonlabs.io/guides/governance/))**
-, and participate in governance.**
-
-## Version Information
-
-- **Babylon Genesis node**: Version [v1.0.1](https://github.com/babylonlabs-io/babylon/releases/tag/v1.0.1)([Releases page](https://github.com/babylonlabs-io/babylon/releases))
-
-## Faucets 
-
-There are two ways to get tBABY for Phase 2 Testnet:
-
-1. [Babylon Labs Discord Faucet](https://discord.com/channels/1266159481218457600/1266159481218457600)
-2. [Xangle Faucet](https://babylon-explorer.xangle.io/testnet/faucet) (0.01 tBABY each request)
-
-## Documentation
-
-- [Node Setup guide](https://github.com/babylonlabs-io/networks/tree/main/bbn-1/babylon-node)
-- [Validator Setup Guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-1/babylon-validators/README.md)
-- [Governance guidelines](https://docs.babylonlabs.io/guides/governance/)
+Join the `#finality-providers`

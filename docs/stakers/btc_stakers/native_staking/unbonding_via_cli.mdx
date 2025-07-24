@@ -87,33 +87,33 @@ Prepare a ```parameters.json``` file containing global parameters. This file mus
 - File Structure: The file should contain a Versions field, whose value is an array. Each element in the array corresponds to the global parameters of a version, with the following format:
 ```json
 {
-    "Versions": [
-        {
-            "Version": 3,
-            "ActivationHeight": 874088,
-            "StakingCap": 3,
-            "CapHeight": 875090,
-            "Tag": "bbn1",
-            "CovenantPks": ["d45c70d28f169e1f0c7f4a78e2bc73497afe585b70aa897955989068f3350aaa",
-                            "4b15848e495a3a62283daaadb3f458a00859fe48e321f0121ebabbdd6698f9fa",
-                            "23b29f89b45f4af41588dcaf0ca572ada32872a88224f311373917f1b37d08d1",
-                            "d3c79b99ac4d265c2f97ac11e3232c07a598b020cf56c6f055472c893c0967ae",
-                            "8242640732773249312c47ca7bdb50ca79f15f2ecc32b9c83ceebba44fb74df7",
-                            "e36200aaa8dce9453567bba108bdc51f7f1174b97a65e4dc4402fc5de779d41c",
-                            "cbdd028cfe32c1c1f2d84bfec71e19f92df509bba7b8ad31ca6c1a134fe09204",
-                            "f178fcce82f95c524b53b077e6180bd2d779a9057fdff4255a0af95af918cee0",
-                            "de13fc96ea6899acbdc5db3afaa683f62fe35b60ff6eb723dad28a11d2b12f8c"],
-            "CovenantQuorum": 6,
-            "UnbondingTime": 1008,
-            "UnbondingFee": 10000,
-            "MaxStakingAmount": 500000000000,
-            "MinStakingAmount": 500000,
-            "MaxStakingTime": 64000,
-            "MinStakingTime": 64000,
-            "ConfirmationDepth": 30
-        },
-        // Parameters of other versions...
-    ]
+    "version": 5,
+    "covenant_pks": [
+        "d45c70d28f169e1f0c7f4a78e2bc73497afe585b70aa897955989068f3350aaa",
+        "4b15848e495a3a62283daaadb3f458a00859fe48e321f0121ebabbdd6698f9fa",
+        "23b29f89b45f4af41588dcaf0ca572ada32872a88224f311373917f1b37d08d1",
+        "d3c79b99ac4d265c2f97ac11e3232c07a598b020cf56c6f055472c893c0967ae",
+        "8242640732773249312c47ca7bdb50ca79f15f2ecc32b9c83ceebba44fb74df7",
+        "e36200aaa8dce9453567bba108bdc51f7f1174b97a65e4dc4402fc5de779d41c",
+        "f178fcce82f95c524b53b077e6180bd2d779a9057fdff4255a0af95af918cee0",
+        "de13fc96ea6899acbdc5db3afaa683f62fe35b60ff6eb723dad28a11d2b12f8c",
+        "cbdd028cfe32c1c1f2d84bfec71e19f92df509bba7b8ad31ca6c1a134fe09204"
+    ],
+    "covenant_quorum": 6,
+    "min_staking_value_sat": 500000,
+    "max_staking_value_sat": 500000000000,
+    "min_staking_time_blocks": 64000,
+    "max_staking_time_blocks": 64000,
+    "slashing_pk_script": "6a07626162796c6f6e",
+    "min_slashing_tx_fee_sat": 150000,
+    "slashing_rate": "0.001000000000000000",
+    "unbonding_time_blocks": 301,
+    "unbonding_fee_sat": 9600,
+    "min_commission_rate": "0.030000000000000000",
+    "max_active_finality_providers": 0,
+    "delegation_creation_base_gas_fee": 1095000,
+    "allow_list_expiration_height": 139920,
+    "btc_activation_height": 905634
 }
 ```
 - Parameter Explanation:
@@ -433,7 +433,7 @@ You can use the following command to get the list of all staking transactions in
 stakercli daemon list -staking -transactions
 ```
 ### Minimum Unbonding Time
-There is a minimum unbonding time currently set to 1008 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the Bitcoin blocks in the `bitcoind` systemd logs using `journalctl -u bitcoind -f` or by comparing the latest block in your node with a BTC explorer like `https://mempool.space/mainnet`.
+There is a minimum unbonding time currently set to 301 BTC blocks. After this period, the unbonding timelock will expire, and the staked funds will be unbonded. You can monitor the progress of the Bitcoin blocks in the `bitcoind` systemd logs using `journalctl -u bitcoind -f` or by comparing the latest block in your node with a BTC explorer like [https://mempool.space/mainnet](https://mempool.space/mainnet).
 
 ### Troubleshooting
 
