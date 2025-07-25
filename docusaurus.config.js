@@ -102,6 +102,17 @@ function create_doc_plugin({
 const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
 const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
 const plugins = [
+  [
+    '@docusaurus/plugin-client-redirects',
+    {
+      redirects: [
+        {
+          from: '/guides/baby_stakers/baby_staking_tools/', // the old URL
+          to: '/stakers/baby_stakers/',   // the new URL
+        },
+      ],
+    },
+  ],
   tailwindPlugin,
   ...docs_plugins,
   ...openapiPlugins
