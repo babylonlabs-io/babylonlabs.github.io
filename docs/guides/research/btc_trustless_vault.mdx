@@ -1,0 +1,40 @@
+---
+sidebar_class_name: btc_trustless_vault_sidebar
+sidebar_position: 3
+---
+import Link from '@docusaurus/Link';
+
+# A Bitcoin-Charged Crypto Economy with Trustless Vaults
+
+### Abstract
+
+Bitcoin is by far the largest crypto asset by market capitalization, yet the vast majority of it
+remains idle. Today, less than 1% of all bitcoins are bridged to smart contract platforms, where
+most decentralized finance (DeFi) activity takes place. A key barrier to greater participation is
+that existing Bitcoin bridges are either centralized or rely on significant trust assumptions. In
+fact, due to the lack of covenants in the Bitcoin scripting language, there are no known ways to
+build trustless Bitcoin bridges.
+
+We bypass this barrier by introducing a different primitive: trustless Bitcoin vaults. Bitcoin
+holders deposit their BTC into these on-chain vaults in a self-custodial fashion. The bitcoins in
+each vault are tied to a specific smart contract protocol on an external chain. These vaults are
+programmable, and withdrawals are permitted only when a zero-knowledge proof of a specific
+smart contract state is verified on the Bitcoin chain. Together with an appropriate Bitcoin
+scripting design of the vault, this eliminates the need for mutual trust among parties.
+We demonstrate how this construction enables the use of native Bitcoin—without wrapping or
+bridging—as collateral in many DeFi applications, including lending, stablecoin issuance, and
+perpetual DEXs. 
+
+Leveraging recent advances in BitVM3, we present experimental results
+showing that these vaults can be operated with minimal on-chain overhead—an essential
+requirement for scaling trustless Bitcoin-backed DeFi. Bitcoin vaults built on top of the Babylon
+Bitcoin staking protocol further improve capital efficiency by allowing staked BTC to act as
+collateral in DeFi protocols. We conclude by discussing how trustless Bitcoin vaults significantly
+strengthen the existing Babylon ecosystem and the utility of BABY as the token for its
+decentralized governance.
+
+<a
+  href="https://docs.babylonlabs.io/papers/trustless-bitcoin-vaults.pdf"
+>
+    Read the Paper
+</a>
