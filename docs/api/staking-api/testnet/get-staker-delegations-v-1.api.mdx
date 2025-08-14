@@ -1,0 +1,72 @@
+---
+id: get-staker-delegations-v-1
+title: "getStakerDelegationsV1"
+description: "Retrieves phase-1 delegations for a given staker. This endpoint will be deprecated once all phase-1 delegations are either withdrawn or registered into phase-2."
+sidebar_label: "getStakerDelegationsV1"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV81u4zYQfhVCpxaI7c2ip5zqJNrCaGqnthJg0QYCJY0lrmVSS1JODCNAH6JP2CfpDCnHsi272y3QS3uSOOQMv/kfbgJVgeZWKDnKgqsgBzuzfAH6FkrIHd08XgYXQcU1X4IFbYKrXzZBBibVoqJ95PIs7Dq6Yfd1UoqU/QhrZBK0+bkGTQuJ/Lg07myc2DSuFkjW8LkWGvByq2u4CExawJIHV5vArivPoIXMg9fXi8NrJ7JcMw221pJlO7zsWdiCVSAz5GM8bYiFSAsmZFrWGTjqCi5YLRPlzrV+Y4IExkK2JSK6bmWaS2J/SdCBPlGqBC674N/zXEgHmS1gzaxic7CI0RbAJLxYVvEcmJq3dTuF401UvHCWP23FJzK5qVAWGNp//+4dfVIlLUhLv7yq0IVO2uCTIaiblrxKU8RY4bkzbh1VWFia4+05oiqFXcdIXokM/V4t4gJeOoChYiaGUuQiKSGeKx1bzaUR3ljH9nTn1Qr0vFTPJw+YkpuCgqtrvwnFM5DoBPnXvhzrpmpb1TYWGB5tZoF2zEE33NqibJEX9twJK5YYbnxZdWKg3VKli24J9uUEeNrzFJV8gtQGJMmWRFhdGtArkUI/IhP74PWJu690XKD1/tI4K17WcFI/C53Mu2z7D9n2i/h2lXfnkoaLa83XtN7l+7HtqHS4KvC3cBdcZiXo/k7ytKkSX8TmoW5Zeg5o/KZTfKwTCd0vh3fC2INqx1A62yHCErkAl7nf/aOiBVrjB8Xgj9I3KnMhCrJeYm8LRuMonI6Hd/EsnD6ObsI4nE4nU9T5cXg3uh1Go8n4jTSeRPGHycP4Fv+vh7fxNPz5IZxFuPowmV6Pbm/DMf4/jO+nk5twNhte36G4cTSKPiK5ORxHo5/CyUMUPF0c+OsieOkRqt6Kayr0xsFDlXFVzrxpQ1KBwGGdzZz6W8pY2Q+qltS6rnk29T2NkCmdiCwDalcPEi2TgjEci24o0avUPJqzESYHJqLD1bib8Jl++Ga2JsVrszXiYRKdCZ0cu3SdxKlaxglP1qWSJU9MT6i4KSw9XoneNoJEo3ZsCo7TQtxC0hVMbuOKoeJsq7nDwnNnxNUlabXPMgW0OqzAsArLHvQu9yIRGxLjLMehQTLfN/osKoRhOAFUCtHh1FGWLAHkqjRgJELGlExx1EByl0RUgwHaAAcnGlgyzZ8lw1s05JgJgEritIJDged93/9V7t+H/4oGoNrgSTxnCvXMSHy6PqkBjRZVrStl3GDxVoTb99Jy72L0GU5+hWrmQzcM2gIXg9XlwNtisD+ikNO2k2KtS6oT1lbmajBoubZv0SsSbL/l/b5QwaFfrv02m3lWNrwfsT9++51Fnj2giUbIudoWBCy5Lp2XXNDNDen7g1uOIiZC03RdpeZzVIXRDXrpyxBPMC2cLV1/I0vaFjeNwVsJZo0mXaLvPqoaAyilXHNVDb1GHsxpgpHowGTtZNCNQ3/qDsMeaykrhVx4DyfYq57JHaXfctXeD4DHfHhs3/SZSs2BrQfcGLBmMBclmAGlm0fYay7oV9nct0mfsh32wWvI1d6G7/vvXHdSxi65bMHDsGHNI6H1sGDuZbHnhlZN/z8hzyRkU1Qt9vpBVXLhuqLz96bJTlfktjOuM/MuQzFjCvQRHdpsEhT6oMvXVyL7d4V74QnXFDDp57w0cMZP30ybJ9y37NRDsBOum1GO3oPNNBkE7sH0xSD+3bfgGX2OnoRfqdBXvg7PITt8JO6QPdFCC4KGzn9ClgI4PtdcJHhuqi6VbXEdTVwk5a1R/BBG2HH/BEegxoQ=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/testnet/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getStakerDelegationsV1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/staker/delegations"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieves phase-1 delegations for a given staker. This endpoint will be deprecated once all phase-1 delegations are either withdrawn or registered into phase-2.
+This endpoint is only used to show legacy phase-1 delegations for the purpose of unbonding or registering into phase-2.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Staker BTC Public Key","in":"query","name":"staker_btc_pk","required":true,"schema":{"type":"string"}},{"description":"Only return delegations with pending actions which include active, unbonding, unbonding_requested, unbonded","in":"query","name":"pending_action","schema":{"type":"boolean"}},{"description":"Pagination key to fetch the next page of delegations","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"items":{"properties":{"finality_provider_pk_hex":{"type":"string"},"is_eligible_for_transition":{"type":"boolean"},"is_overflow":{"type":"boolean"},"is_slashed":{"type":"boolean"},"staker_pk_hex":{"type":"string"},"staking_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"},"staking_tx_hash_hex":{"type":"string"},"staking_value":{"type":"integer"},"state":{"type":"string"},"unbonding_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"}},"type":"object","title":"v1service.DelegationPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v1service_DelegationPublic"}}},"description":"List of delegations and pagination token"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      

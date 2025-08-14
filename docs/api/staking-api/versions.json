@@ -1,0 +1,12 @@
+[
+  {
+    "version": "devnet",
+    "label": "Edge-Devnet",
+    "baseUrl": "/staking-api/devnet"
+  },
+  {
+    "version": "testnet",
+    "label": "Testnet",
+    "baseUrl": "/staking-api/testnet"
+  }
+]

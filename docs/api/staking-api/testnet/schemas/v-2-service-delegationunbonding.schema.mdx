@@ -1,0 +1,33 @@
+---
+id: v-2-service-delegationunbonding
+title: "v2service.DelegationUnbonding"
+description: ""
+sidebar_label: "v2service.DelegationUnbonding"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"covenant_unbonding_signatures":[{"covenant_btc_pk_hex":"string","signature_hex":"string"}],"slashing":{"spending_height":0,"unbonding_slashing_tx_hex":"string"},"unbonding_timelock":0,"unbonding_tx":"string"}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"v2service.DelegationUnbonding"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"covenant_unbonding_signatures":{"items":{"properties":{"covenant_btc_pk_hex":{"type":"string"},"signature_hex":{"type":"string"}},"type":"object","title":"v2service.CovenantSignature"},"type":"array"},"slashing":{"properties":{"spending_height":{"type":"integer"},"unbonding_slashing_tx_hex":{"type":"string"}},"type":"object","title":"v2service.UnbondingSlashing"},"unbonding_timelock":{"type":"integer"},"unbonding_tx":{"type":"string"}},"type":"object","title":"v2service.DelegationUnbonding"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

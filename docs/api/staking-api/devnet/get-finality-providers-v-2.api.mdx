@@ -1,0 +1,63 @@
+---
+id: get-finality-providers-v-2
+title: "List Finality Providers"
+description: "Fetches finality providers with its stats, currently does not support pagination"
+sidebar_label: "List Finality Providers"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV81u4zYQfhWCpxbwT2BsLznViZVCQGpnbSXAYnchUNLY5kYitSTlrGEY6EP0CfsknaFkryOr7gJFbzlZmv/5+A092nFdghFOahVm/JqvwN1JJXLptg9Gb2QGxj6NeI8bsKVWFiy/3vHR1RX9pFo5UI4eRVnmMvVxhl+sViSz6RoKQU+loSxO1t6ZcF4qHRT2XC1SJzcQZ5DDygf0UrctAeuTmHEFhu97Bzu3ybv1iUvj8vlEZ52RakWqVBeFtFbWdZ6pM7CpkaVr9K3qwQmZ205HhEs5hK5TWWgln7G0Lp2FtDLoGBOk2Fin0QskFjHr0KGykejkC6A7vkuXk4DkdtA+08lJh5TeiTouqKrg1x8bbLnXqCzZ8s+9Vs4e/9Yn6/5GGCUKwuYjb6dZUNzxIVandnGS4GLJ7yswW8zsvS62vBlZMBuZwlkM8rUPVYJU5d8DCGPElt5LsUKH7mNX8M3Fz9B1tBdKWWNzOZjB98jzZo5+yK0u9eDS94XGx/bii+3t20Tm99I6ppds2bix8jDh7EW6NZPOMmKCJSze/acRB0M8xzD4oM2tzl6xK5xGwXw6vo8XwfwpvA3iYD6fzbH/p/F9OBlH4Wx6FE1nUXw3e5xO8PlmPInnwfvHYBERnWbzm3AyCab4/Dh9mM9ug8VifHOP4aZRGH1AcWMcR+Hvwewx+kEWh9gyvuWLGuaAWqDiELTMt3+QTLW705XKqDSRzeFrBZaO8U6bRGZ4F1BlCpFJwVqR5BDUtwMWVttGsgBduXPyB0fYmums7AHE9kV3gUYrPNUqwTuliBORbHOtcpHYvtQxhnzG/vuilP0Dm2TTdmzXwkAWn1TSxaZQbQgQVgqDwDlikTasEPlSmwIyZho4PJfevXHpjUv/zKWp7rqUlh4PNP7l7S5648/lu6g2Z+QPhvmTZjrFpQq967rEygO6GVGHr93vwCF37L//MfaYj6hcvmWZRg+lHbNVWWrj2Mn2gMseuLVuFmpOm4Vb48twMxoekvSPSWjN8nVTgTtemZxWAOdKez0cnqAzgGwF/Qw2CtzgBMSB1Lzd0k2tZovanY0fQvbXH3+yifdmPwUYqseKKncIem3zM98jMlIt9WHYmkUUp0pSSY3o11bqs9OI1sC68uvlkiClDKbwQDGRIOWYQwe/gtJ24k68b6LbYwS7tfi9MPikPujKMJESjxnuSayywKRlK40IKvzjSbY+BmUc11b3SCncn1gu1TMaOM0SyPXLAFHLa5Xf8HDmsPpzPzR7fSaZTm3rAIbCWnAWTzcHOyQq1xX2mwSDMlv6lbMZhw58MA1xoMZwNLjyG6m2rhDqpDy/xB0WP/ZwwqHWV8vxtvw/6N1MucOleFjmQvqvCA/SruG6n7Qe72A7kmyNbZHJbpcIC48m3+9J/JVWfJTjI96Bkm4pesPQaxAZfTrhePgdnNMJlTRZuIRUfolv/yMQmY9T+FsQ4S3wN9alN58=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/devnet/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List Finality Providers"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/finality-providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Fetches finality providers with its stats, currently does not support pagination
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"types.FinalityProviderDescription"},"state":{"enum":["active","standby"],"type":"string","x-enum-varnames":["FinalityProviderStateActive","FinalityProviderStateStandby"],"title":"types.FinalityProviderQueryingState"}},"type":"object","title":"v2service.FinalityProviderStatsPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v2service_FinalityProviderStatsPublic"}}},"description":"List of finality providers with its stats"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Invalid parameters or malformed request"},"404":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"No finality providers found"},"500":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Internal server error occurred"}}}
+>
+  
+</StatusCodes>
+
+
+      

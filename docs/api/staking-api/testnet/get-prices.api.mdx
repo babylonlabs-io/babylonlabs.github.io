@@ -1,0 +1,63 @@
+---
+id: get-prices
+title: "getPrices"
+description: "Get latest prices for all available symbols"
+sidebar_label: "getPrices"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVduO2zYQ/RVCz2tpsQj64Kfaa20gdCu7shwgSAOBksYWsxSpkpQbwzCQj+gX9ks6Q8mO94KgRZ9EDjkzZw7PjI6B7sBwJ7RK6mAa7MCtjKjABjeBAdtpZXE9PQZ3t7f0qbRyoBwteddJUXnX6IvVimy2aqDltOoMBXZi8K6581Ze14IcuFw9O3eHDjC76tsSTHC6ORt0+QUqh1iccJIMLe8K64xQu2IrNXc/vaPbHd8J5ZG8Tq3gqyue4HCVZggQnH6Qp+GqlmDC75GzkY1/5bbqS+Tm7DJ5CzWFqcFWRnQD8GD5C9Xy7n8RDcbgB8PgQpt7XYO3IrHB9FOQpHmcpbPHYh1nH5L7uIizbJkh/g+zx2Qxy5NlejGly7x4WG7SBa7ns0WRxb9t4nWOu4dlNk8WizjF9SZdZcv7eL2ezR8xXJon+Uc0j5eLPPk1Xm7y4PPNC+5vgq8TQjXZc6N4S+ARHpaMO7kGs0cNxlQCgeNS1L78syXV7kH3qiZovM7gjx4sPcODNqWoa1CETCEzKGTLSwmxwhc6ELDhbi5a0L3zuManI3w2jC+0IYfWcdfbM4ljAQJB7kikP5DBTrimL4tKt0XJy4PUSvLSToRGFfAnrH/COzGxQ5mFGMsubMMN1MUVkrdk4g+mDAtn58o9Fr7zJO7vqKrnLu/BMckdXmWd72621YZxKRnfcyGJIWYPbakl9X0LrtHjMAiouVyDm2h/F3Xn0UDQwVC+Y9AbScp3rrPTKLoqMKSEClx4xUEodPAS3Xw4ZuvBlc1WCfv7218sH9yDE9Yj1Faf24JXvi1Q/4Iyj6afX2R5xVveAHsrld5usRRGGUzrZcZ4ieJgDh1IAoBX/ObsPc/vLxHswTpow9/VR90jpRUpjuEUYL0FJizbaSRKQc3Kg49BGWfDrUckE6cDk0I94QWnWQlS/xkiQXI48vMLuwPRv/bDa8+pr3VlX3AdcWvB2WgrJNiIRDcgnIwJwq7e+nE7CvcNfjANPfXA4V146+ettq7l6goeSoVdfhzPeL8aZf9Rh2N3ORzgUSe5UJTal3wcRenVjnCGxCiTBoGR+XgsuYWNkacTmbFLDP4APuES542gPLTDcA3wGpuZdOz/EQFx3JHs91z2lP7V9CU5XlrkfZxj9/0DdWmEfQ==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/testnet/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getPrices"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/prices"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get latest prices for all available symbols
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"additionalProperties":{"type":"number"},"type":"object","title":"map_string_float64"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-map_string_float64"}}},"description":"OK"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,63 @@
+---
+id: get-stats-v-2
+title: "getStatsV2"
+description: "Overall system stats"
+sidebar_label: "getStatsV2"
+hide_title: true
+hide_table_of_contents: true
+api: eJylVdtu4zYQ/RVCz7EcGH3yU+1YKYRm5VSWAyzSQqCksc0NRaokpa5hBNiP6Bf2SzpDya7X8V6KfTI5msuZwzPjQ6AbMNwJreIqmAZbcCvHnX2aBDeBAdtoZcEG00Mwub2ln1IrB8rRkTeNFKWPHX+wWpHNljuoOZ0aQ5md6KMr7q5YeelEB3kFErY+j7e6fQMIRWChLZjg9ebotxGKS+H2OWbpRAXm6+7W8Zdv+bhOXv/utOPyOyuSe2/SxQcoHVLnhJNk6CYWTCdKCJcd8iylZ/exLZA5KtPwLZag1t+yo+Cjy19gf1bSOiPU9qsVd1xVEkz4X+Z0eMbvCuuhHUNGJ/z5NfyUsAJbGtH0LQTLX6mrn35IK2AM/mAaPGhzpyvwVtXWwfQ5iJMsSpPZQ76K0qf4LsqjNF2m2MnT7CFezLJ4mZxMyTLL75frZIHn+WyRp9Fv62iV4e1+mc7jxSJK8LxOHtPlXbRazeYPmC7J4uw9mgfnPIvfRct1Fvxxc/EKN8HHEaEaddwoXhN4hIct402uetoiaoHAoYwq3/7Rkmh3r1tVETRepfBnC5Ye5F6bQlQVKEKmkJkSrOWFhEjhW+0JWO+biRp06zyu4REJnw2jE23IIQ6Ba+2RxP+h3K1wu7bIS13nBS/2UivJCzsS2s8V9j/ijRgd1SGGtnO74waq/AzJNZn4D1OGjbNj5x4L33oSuwl1daGsXn/M7q2DmlFfFuHW4HZ62FwBzZPb4WXcTcZHD4LoB/f5ELRGktada+x0PD5rJHSIQYELz3oNhQ4uUcz7z2zVh7LZY8z++fQ3y/rw4BVxC7XRR/njmvHirbmgyoPp54sqb/jJdsCuldKbDbbCqIKpvZwYL1AEzGEANQzo4i/H6Hl2d8rQUxf+rt7r1jBekrIYzj1rLTBh2VYjUQoqVux9Dqo4670e8JFxHzAp1As6OM0KkPqvEAmS/Se/sXAKEP3bOHT7nPpKl/aC6zG3Fpwdb4QEOyZx9QhHQ4GwqTZ+Mw8CvcIPlqGn7jmchLd+w2rraq7O4KFSmF9jzP/Lfcb82dL6kuKGgXG4nceN5EJRFd/dYZCfF3A/epaEvEMIZD0cCm5hbeTrK5lR9waX+zMecYMImnG6YbYdcPyv8Yr1+z8gNhvSd8dlS9Xf7FMS3mkWfokynKd/AbkpvEU=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/testnet/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getStatsV2"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/stats"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Overall system stats
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"active_delegations":{"type":"integer"},"active_finality_providers":{"type":"integer"},"active_stakers":{"type":"integer"},"active_tvl":{"type":"integer"},"total_finality_providers":{"type":"integer"}},"type":"object","title":"v2service.OverallStatsPublic"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v2service_OverallStatsPublic"}}},"description":"OK"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      

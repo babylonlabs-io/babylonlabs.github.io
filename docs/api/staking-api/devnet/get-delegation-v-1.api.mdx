@@ -1,0 +1,75 @@
+---
+id: get-delegation-v-1
+title: "getDelegationV1"
+description: "[DEPRECATED] Retrieves a delegation by a given transaction hash. Please use /v2/delegation instead."
+sidebar_label: "getDelegationV1"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVs1u4zYQfhVCp10gtpOgp5zqxEphILVTWQmw2AYCJY0lbmhSS1LaGEaAPkSfsE/SGUr+d4IUBXrpwbBIzgy/+eaHswp0BYY7odU4D66CAtwIJBR+5/EiOAsqbvgCHBgbXH1dBTnYzIiKjlF85vizUAVzhivLM9plJbclE/gPL2yuzYI7tCJI+nsNZokLhQZxaVvlxL0kpJOgAh4a+F4LAwjGmRrOApuVsODB1Spwy6pVM6gVvL4+kbCttLJg6fzy/Jz+Mq0cKEefvKqkyLwvg2+WEK927FWGfHei1c65O7E7F4pL4ZYJbjciB5NUzx7oMR500iYgRSFSCQl6nnhWREvVRjzVWgJXnbxuwMyl/vGmgJVIDbFx6pwYfB/SluNj33TtqtolQuV7ygLpK8B02sahbVGU7j0JJxaAX4vqJAY6lTp7Pm2Bon8SPJ21Ozr9BhllkRNO0kZzYcE0IoN+vE28+zrFYO87vU2s98hpuKzhTf8cnFSuVapV/j/j9kN62wayDUnFC6ykdSnsc6XgxSXPsPxnOEuucgmmv7Ucdc3gQ2ottLVKb4M+OUZP5vbb3laGfPvpX/UdMAb/0Ax+aHOjc59uoOoF9ttgPInDaDK8S2Zh9Di+CZMwiqYR+vM4vBuPhvF4OtlsTaZxcjt9mIzw+3o4SqLwt4dwFuPqdhpdj0ejcILfD5P7aHoTzmbD6zs0N4nH8Rfc7oSTePxrOH2Ig6ezg1icBS89QtVruKEGbj08dBlXctaSF5ILBA57Zu7dX+9MtLvVtcoJGs8j7PGY1IRMm1TkOShCppCZDKzl2EBDhRGjx6KTjTHRsag8ri6UhM/2ww1tXbnWdk3iYUG8kxaFcGWdJpleJClPl1IryVPbEzrpmkSPV6K3zhHRuZ3YkuNTlewgOZUu/uCKoeNs7bnHwgtPYnNBXuVQGcCc2b58+0a+jsL7KLwZxuHoCc1gUKAByzjLN8nI0iWuC9GAOnqR++weXw0LrMbfoLkc7KgJZR3wvI984Etf6m4Q8I+/K3ExaC525HGfiFhPBLWRVFfOVfZqMNihqw95Ab0cGgWuv8NqX+jg0Lvr9pitB4rh/Zj99cefbOS12acQTZ2xRS0dRqGV+RzQBCDUXK+rD931tbPggiB1Wz8fXH0UnrgEdup+PZ+jj4xuoCmGmOIp5iBzqOAfBhTxi7X2dXyzsWCXSOqi/7v6omvDeEaJzbD5+AAIywp6+hXkFDSyQTcOW6k7zDFsSkwK9YwCTrMUm/wPio9sj3zbbKeoYz0U249JrjN7EIABtxacHcyFBDug3G4R9roL+lU+b9+Xtj5O8IPXUA60HF72z32b19YtuNqBh3nEtu2S+ZFyj/6dxvkf5XjXAxw+O4NKcuGbuGds1SW8r0nCuUl5zLQSfaOj1SrFOx6MfH2l7Xao9aOx8J0Lq2fOpT0s4F0/P0XdkPuZfXiCPonav5pvDNLdVBP4MsGmLQgcAn1CvRKpwI5IqFsTlEGV29E6esLIyqY7/BLG2ML+BvpBSL4=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/devnet/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getDelegationV1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/delegation"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Retrieves a delegation by a given transaction hash. Please use /v2/delegation instead.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Staking transaction hash in hex format","in":"query","name":"staking_tx_hash_hex","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"finality_provider_pk_hex":{"type":"string"},"is_eligible_for_transition":{"type":"boolean"},"is_overflow":{"type":"boolean"},"is_slashed":{"type":"boolean"},"staker_pk_hex":{"type":"string"},"staking_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"},"staking_tx_hash_hex":{"type":"string"},"staking_value":{"type":"integer"},"state":{"type":"string"},"unbonding_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"}},"type":"object","title":"v1service.DelegationPublic"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v1service_DelegationPublic"}}},"description":"Delegation"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      
