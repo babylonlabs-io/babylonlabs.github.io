@@ -22,7 +22,7 @@ source ~/.bashrc
 ### Get Test Tokens
   - Register a Babylon testnet account
   - Obtain test tokens from the Faucet (address format: bbn1...)
-## Step 1: Install Finality Provider Tools
+### Step 1: Install Finality Provider Tools
 ```bash
 # Clone the repository and compile
 git clone https://github.com/babylonlabs-io/finality-provider.git
@@ -34,7 +34,7 @@ make install
 fpd version
 eotsd version
 ```
-## Step 2: Create EOTS Key (Signing Key)
+### Step 2: Create EOTS Key (Signing Key)
 ```bash
 # Create EOTS key (for test environment)
 eotsd keys add eots-key-1 --keyring-backend test
@@ -43,7 +43,7 @@ eotsd keys add eots-key-1 --keyring-backend test
 # Example output:
 # pubkey_hex: 36227dc*****************************56b8a6fd
 ```
-## Step 3: Start EOTS Service
+### Step 3: Start EOTS Service
 ```bash
 # Start EOTS daemon (run in background)
 eotsd start --home ~/.eotsd &
@@ -53,7 +53,7 @@ tail -f ~/.eotsd/logs/eotsd.log
 
 # Should see "EOTS Manager Daemon is fully active!"
 ```
-## Step 4: Create Finality Provider Key
+### Step 4: Create Finality Provider Key
 ```bash
 # Create Finality Provider key
 fpd keys add fp-key-1 --keyring-backend test
@@ -62,7 +62,7 @@ fpd keys add fp-key-1 --keyring-backend test
 # Example output:
 # address: bbn1***************************wn3upt
 ```
-## Step 5: Configure and Start Finality Provider
+### Step 5: Configure and Start Finality Provider
 Edit the configuration file (~/.fpd/config/fpd.conf):
 ```toml
 [Application Options]
@@ -76,7 +76,7 @@ RPCAddr = "https://babylon-testnet-rpc.nodes.guru"  # Public RPC node
 KeyDirectory = "~/.fpd"                 # Key directory
 ```
 
-### Start Finality Provider:
+#### Start Finality Provider:
 ```bash
 fpd start --home ~/.fpd &
 
@@ -85,7 +85,7 @@ tail -f ~/.fpd/logs/fpd.log
 
 # Should see "Starting finality provider daemon..."
 ```
-## Step 6: Register Finality Provider
+### Step 6: Register Finality Provider
 ```bash
 # Execute registration command (replace parameters)
 fpd create-finality-provider \
@@ -104,21 +104,21 @@ fpd create-finality-provider \
 # "status": "REGISTERED"
 # "tx_hash": "F2DD0C***************************C9F7DEA6"
 ```
-## Step 7: Verify Successful Deployment
-### Check status:
+### Step 7: Verify Successful Deployment
+#### Check status:
 ```bash
 fpd finality-provider-info <pubkey_hex from Step 2>
 
 # Should show "status": "ACTIVE"
 ```
-### View rewards:
+#### View rewards:
 ```bash
 fpd reward-gauges <address from Step 4> --node https://babylon-testnet-rpc.nodes.guru
 ```
-### Monitoring metrics (optional):
+#### Monitoring metrics (optional):
   - Finality Provider metrics: http://localhost:2112/metrics
   - EOTS metrics: http://localhost:2113/metrics
-## Common Issues
+### Common Issues
   - Error: account not found
 Cause: The account from Step 4 has insufficient test tokens
 
@@ -127,7 +127,7 @@ Solution: Obtain more test tokens from the Faucet
 Check logs: `tail -f ~/.eotsd/logs/eotsd.log or tail -f ~/.fpd/logs/fpd.log`
 
 Ensure ports are not occupied (default EOTS: 12582, FPD: 12581)
-## Next Steps
+### Next Steps
   - Set up automatic service restart (Systemd configuration)
   - Configure firewall to open necessary ports
   - Regularly monitor service status and rewards
