@@ -129,13 +129,22 @@ export default function RemoteMD({
           url,
           isCustom: true
         })),
-        ...stableReleases.map(release => ({
-          key: release.tag_name,
-          label: release.tag_name,
-          url: rawUrl.replace(/refs\/heads\/[^/]+/, release.tag_name),
-          publishedAt: release.published_at
-        }))
+        ...stableReleases.map(release => {
+          let url;
+          if (rawUrl.includes('release/')) {
+            url = rawUrl.replace(/release\/v[\d.]+\w*/, `${release.tag_name}`);
+          } else {
+            url = rawUrl.replace(/refs\/heads\/[^/]+/, release.tag_name)
+          }
+          return {
+            key: release.tag_name,
+            label: release.tag_name,
+            url,
+            publishedAt: release.published_at
+          }
+        })
       ];
+
 
       const customReleases = allReleases.filter(r => r.isCustom);
       const apiReleases = allReleases.filter(r => !r.isCustom).sort(sortBySemVer);
