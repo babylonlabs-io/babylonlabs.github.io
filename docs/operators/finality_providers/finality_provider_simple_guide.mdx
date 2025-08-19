@@ -1,0 +1,340 @@
+---
+sidebar_class_name: finality_provider_simple_guide_sidebar
+sidebar_label: Finality Provider Simple Guide
+sidebar_position: 3
+---
+
+# Finality Provider Simple Guide
+
+## Prerequisites
+### Environment Setup
+  - Server Configuration: 2 CPU Cores / 4GB RAM / 50GB SSD
+  - OS: Ubuntu 20.04+ or macOS
+  - Install Golang 1.23+:
+```bash
+wget https://go.dev/dl/go1.23.0.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.23.0.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+source ~/.bashrc
+```
+  - Verify Installation: go version
+
+### Get Test Tokens
+  - Register a Babylon testnet account
+  - Obtain test tokens from the Faucet (address format: bbn1...)
+## Step 1: Install Finality Provider Tools
+```bash
+# Clone the repository and compile
+git clone https://github.com/babylonlabs-io/finality-provider.git
+cd finality-provider
+make install
+
+
+# Verify installation
+fpd version
+eotsd version
+```
+## Step 2: Create EOTS Key (Signing Key)
+```bash
+# Create EOTS key (for test environment)
+eotsd keys add eots-key-1 --keyring-backend test
+
+# Record the pubkey_hex from the output (needed for later steps)
+# Example output:
+# pubkey_hex: 36227dc*****************************56b8a6fd
+```
+## Step 3: Start EOTS Service
+```bash
+# Start EOTS daemon (run in background)
+eotsd start --home ~/.eotsd &
+
+# Verify service status (check logs)
+tail -f ~/.eotsd/logs/eotsd.log
+
+# Should see "EOTS Manager Daemon is fully active!"
+```
+## Step 4: Create Finality Provider Key
+```bash
+# Create Finality Provider key
+fpd keys add fp-key-1 --keyring-backend test
+
+# Record the address from the output (needed for later steps)
+# Example output:
+# address: bbn1***************************wn3upt
+```
+## Step 5: Configure and Start Finality Provider
+Edit the configuration file (~/.fpd/config/fpd.conf):
+```toml
+[Application Options]
+```text
+EOTSManagerAddress = "127.0.0.1:12582"  # EOTS service address
+RPCListener = "127.0.0.1:12581"         # FPD service address
+[babylon]
+Key = "fp-key-1"                        # Key name from Step 4
+ChainID = "bbn-test-5"                  # Testnet chain ID
+RPCAddr = "https://babylon-testnet-rpc.nodes.guru"  # Public RPC node
+KeyDirectory = "~/.fpd"                 # Key directory
+```
+
+### Start Finality Provider:
+```bash
+fpd start --home ~/.fpd &
+
+Verify service status
+tail -f ~/.fpd/logs/fpd.log
+
+# Should see "Starting finality provider daemon..."
+```
+## Step 6: Register Finality Provider
+```bash
+# Execute registration command (replace parameters)
+fpd create-finality-provider \
+--chain-id bbn-test-5 \
+--eots-pk <pubkey_hex from Step 2> \
+--commission-rate 0.05 \
+--commission-max-rate 0.05 \
+--commission-max-change-rate 0.01 \
+--key-name fp-key-1 \
+--moniker "YourFinalityProvider" \
+--website "https://yourwebsite.com" \
+--security-contact "your@email.com" \
+--details "Finality provider for Babylon network"
+
+# Successful output example:
+# "status": "REGISTERED"
+# "tx_hash": "F2DD0C***************************C9F7DEA6"
+```
+## Step 7: Verify Successful Deployment
+### Check status:
+```bash
+fpd finality-provider-info <pubkey_hex from Step 2>
+
+# Should show "status": "ACTIVE"
+```
+### View rewards:
+```bash
+fpd reward-gauges <address from Step 4> --node https://babylon-testnet-rpc.nodes.guru
+```
+### Monitoring metrics (optional):
+  - Finality Provider metrics: http://localhost:2112/metrics
+  - EOTS metrics: http://localhost:2113/metrics
+## Common Issues
+  - Error: account not found
+Cause: The account from Step 4 has insufficient test tokens
+
+Solution: Obtain more test tokens from the Faucet
+  - Service fails to start
+Check logs: `tail -f ~/.eotsd/logs/eotsd.log or tail -f ~/.fpd/logs/fpd.log`
+
+Ensure ports are not occupied (default EOTS: 12582, FPD: 12581)
+## Next Steps
+  - Set up automatic service restart (Systemd configuration)
+  - Configure firewall to open necessary ports
+  - Regularly monitor service status and rewards
+
+Congratulations! You have successfully deployed a Finality Provider! 🎉
+
+## Docker Deployment Guide
+If you prefer a containerized deployment using Docker, follow these steps. This method simplifies dependency management and ensures consistent environments.
+
+### Prerequisites
+#### Environment Setup
+  - Server Configuration: 2 CPU Cores / 4GB RAM / 50GB SSD
+  - OS: Docker-supported Linux (Ubuntu 20.04+ recommended)
+  - Docker and Docker Compose installed:
+
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Verify installation
+docker --version
+```
+### Step 1: Pull the Docker Image
+```bash
+# Pull the official image
+docker pull babylonlabs/finality-provider:latest
+```
+### Step 2: Create Project Directory Structure
+```bash
+# Create project directory
+mkdir babylon-fp-docker && cd babylon-fp-docker
+
+# Create necessary directories
+mkdir -p {data/{eotsd,fpd},config,logs}
+```
+### Step 3: Initialize Configuration Files
+Use the `init` command to auto-generate default config files (more reliable than manual creation):
+#### Initialize EOTS Manager Configuration
+```bash
+# Initialize EOTS config (auto-generates eotsd.conf)
+docker run --rm -v $(pwd)/data/eotsd:/home/finality-provider/.eotsd \
+babylonlabs/finality-provider:latest \
+eotsd init --home /home/finality-provider/.eotsd --force
+```
+#### Initialize Finality Provider Configuration
+```bash
+# Initialize Finality Provider config (auto-generates fpd.conf)
+docker run --rm -v $(pwd)/data/fpd:/home/finality-provider/.fpd \
+  babylonlabs/finality-provider:latest \
+  fpd init --home /home/finality-provider/.fpd --force
+```
+### Step 4: Create Keys
+#### Create EOTS Key
+```bash
+docker run --rm -it -v $(pwd)/data/eotsd:/home/finality-provider/.eotsd \
+  babylonlabs/finality-provider:latest \
+  eotsd keys add eots-key-1 --keyring-backend test --home /home/finality-provider/.eotsd
+
+# Record the pubkey_hex from the output (required for later steps)
+# Example output:
+# pubkey_hex: fbe6ce8bb6*****************************119e65aa4e3
+```
+#### Create Finality Provider Key
+```bash
+docker run --rm -it -v $(pwd)/data/fpd:/home/finality-provider/.fpd \
+  babylonlabs/finality-provider:latest \
+  fpd keys add fp-key-1 --keyring-backend test --home /home/finality-provider/.fpd
+
+# Record the address from the output (required for later steps)
+# Example output:
+# address: bbn1***************************gqj9
+```
+#### Step 5: Create Docker Compose Configuration
+Create a `docker-compose.yml` file in the project root:
+```yaml
+version: '3.8'
+
+services:
+  eotsd:
+    image: babylonlabs/finality-provider:latest
+    container_name: eots-manager
+    command: ["eotsd", "start", "--home", "/home/finality-provider/.eotsd"]
+    ports:
+      - "12582:12582"  # EOTS RPC port
+      - "2113:2113"    # EOTS metrics port
+    volumes:
+      - ./data/eotsd:/home/finality-provider/.eotsd
+    networks:
+      - fp-network
+    restart: unless-stopped
+
+  fpd:
+    image: babylonlabs/finality-provider:latest
+    container_name: finality-provider
+    command: ["fpd", "start", "--home", "/home/finality-provider/.fpd"]
+    ports:
+      - "12581:12581"  # FPD RPC port
+      - "2112:2112"    # FPD metrics port
+    volumes:
+      - ./data/fpd:/home/finality-provider/.fpd
+    networks:
+      - fp-network
+    depends_on:
+      - eotsd
+    restart: unless-stopped
+
+networks:
+  fp-network:
+    driver: bridge
+```
+### Step 6: Modify Configuration Files
+#### Edit EOTS Manager Configuration
+```bash
+# Edit EOTS config file
+nano data/eotsd/config/eotsd.conf
+```
+Update these parameters:
+```toml
+[Application Options]
+RPCListener = 0.0.0.0:12582  # Allow inter-container communication
+KeyringBackend = test
+```
+#### Edit Finality Provider Configuration
+```bash
+# Edit FP config file
+nano data/fpd/config/fpd.conf
+```
+Update these parameters:
+```toml
+[Application Options]
+EOTSManagerAddress = eots-manager:12582  # Docker Compose service name
+RPCListener = 0.0.0.0:12581
+
+[babylon]
+Key = fp-key-1
+ChainID = bbn-test-5
+RPCAddr = https://babylon-testnet-rpc.nodes.guru
+KeyringBackend = test
+```
+### Step 7: Start Services
+```bash
+# Start all services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
+### Step 8: Register Finality Provider
+Run the following command to register (replace `<YOUR_EOTS_PUBKEY>` with the `pubkey_hex` recorded in Step 4):
+```bash
+docker exec -it finality-provider fpd create-finality-provider \
+  --chain-id bbn-test-5 \
+  --eots-pk <YOUR_EOTS_PUBKEY> \
+  --commission-rate 0.05 \
+  --commission-max-rate 0.05 \
+  --commission-max-change-rate 0.01 \
+  --key-name fp-key-1 \
+  --moniker "DockerFinalityProvider" \
+  --website "https://yourwebsite.com" \
+  --security-contact "your@email.com" \
+  --details "Docker-based finality provider for Babylon network" \
+  --daemon-address localhost:12581
+```
+### Step 9: Verify Docker Deployment
+```bash
+# Check Finality Provider status
+docker exec -it finality-provider \
+  fpd finality-provider-info <YOUR_EOTS_PUBKEY>
+
+# Should show "status": "ACTIVE"
+
+# View rewards
+docker exec -it finality-provider \
+  fpd reward-gauges <address from Step 4> \
+  --node https://babylon-testnet-rpc.nodes.guru
+```
+
+### Docker-Specific Common Issues
+  - "account `<address>` not found: key not found"
+
+    If you encounter an error like `account bbn1*******************qj9 not found: key not found`, this typically means:
+    1. The Finality Provider account (created in Step 4) has no test tokens (tbaby) to pay for transaction fees.
+    2. The account hasn’t been initialized on the network yet (requires a small balance to activate).
+  - Solution: Fund the Account with Test Tokens
+    1. Get your Finality Provider address (recorded in Step 4, e.g., `bbn1*******************qj9`).
+    2. Request test tokens (tbaby) from the Babylon testnet faucet:
+        - Visit the [Xangle Faucet](https://babylon-explorer.xangle.io/testnet/faucet).
+        - Enter your address and submit the request.
+    3. Verify the balance (replace `<your-address>` with your account address):
+    ```bash
+    # For local deployment:
+    fpd query bank balances <your-address> --node https://babylon-testnet-rpc.nodes.guru
+
+    # For Docker deployment:
+    docker exec -it finality-provider \
+    fpd query bank balances <your-address> \
+    --node https://babylon-testnet-rpc.nodes.guru
+    ```
+    4. Retry the registration command after confirming the balance is received.
+This error is resolved once the account has sufficient tbaby to cover transaction fees (typically a small amount, e.g., 1-10 tbaby).
+### Docker Deployment Next Steps
+  - Set up systemd to manage the Docker Compose stack for auto-restart on server reboot.
+  - Configure firewall rules to restrict access to RPC ports.
+  - Regularly update the Docker image with docker pull babylonlabs/finality-provider:latest and restart services.
+
+Congratulations! You’ve deployed a Finality Provider using Docker! 🎉
