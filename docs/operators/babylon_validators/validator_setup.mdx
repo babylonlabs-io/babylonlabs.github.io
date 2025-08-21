@@ -1,0 +1,605 @@
+---
+title: Validator Setup Guide
+sidebar_label: Validator Setup Guide
+sidebar_position: 3
+---
+
+**A step-by-step guide to becoming a validator on the Babylon mainnet (bbn-1)**
+
+> ⚠️ **Important**: This guide is for mainnet setup. Make sure you understand the risks and requirements before proceeding.
+
+---
+
+## Before You Start
+
+### What You Need to Know
+
+**Babylon validators have special requirements:**
+- Must participate in **BLS signature voting** every epoch
+- Need both **consensus keys** and **BLS keys** 
+- Validator activation happens only at **epoch boundaries**
+
+
+## Hardware & System Setup
+
+### Recommended Hardware
+```
+CPU:     8 cores (minimum 4 cores)
+RAM:     32GB (minimum 16GB)
+Storage: 2TB SSD
+Network: 1Gbps connection, minimal latency
+```
+
+### Initial System Setup
+
+**1. Update your system:**
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+**2. Install essential tools:**
+```bash
+sudo apt install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
+```
+
+---
+
+## 🔧 Installing Dependencies
+
+### Install Go Programming Language
+
+**1. Remove any existing Go installation:**
+```bash
+sudo rm -rf /usr/local/go
+```
+
+**2. Download and install Go 1.23.1:**
+```bash
+cd $HOME
+VER="1.23.1"
+wget "https://golang.org/dl/go$VER.linux-amd64.tar.gz"
+sudo tar -C /usr/local -xzf "go$VER.linux-amd64.tar.gz"
+rm "go$VER.linux-amd64.tar.gz"
+```
+
+**3. Set up Go environment:**
+```bash
+[ ! -f ~/.bash_profile ] && touch ~/.bash_profile
+echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bash_profile
+source $HOME/.bash_profile
+[ ! -d ~/go/bin ] && mkdir -p ~/go/bin
+```
+
+**4. Verify installation:**
+```bash
+go version
+# Should output: go version go1.23.1 linux/amd64
+```
+
+---
+
+## 🏗️ Setting Up Babylon Node
+
+### Configure Environment Variables
+
+**1. Set up your node configuration:**
+```bash
+echo "export WALLET=\"wallet\"" >> $HOME/.bash_profile
+echo "export MONIKER=\"your-validator-name\"" >> $HOME/.bash_profile  # Change this!
+echo "export BABYLON_CHAIN_ID=\"bbn-1\"" >> $HOME/.bash_profile
+echo "export BABYLON_PORT=\"27\"" >> $HOME/.bash_profile
+source $HOME/.bash_profile
+```
+
+### Download and Build Babylon
+
+**1. Clone the repository:**
+```bash
+cd $HOME
+rm -rf babylon
+git clone https://github.com/babylonlabs-io/babylon.git
+cd babylon
+```
+
+**2. Checkout the mainnet version:**
+```bash
+git checkout v2.1.0
+```
+
+**3. Build for mainnet:**
+```bash
+BABYLON_BUILD_OPTIONS="mainnet" make install
+```
+
+**4. Verify installation:**
+```bash
+babylond version
+```
+
+### Initialize Your Node
+
+**1. Initialize the node:**
+```bash
+babylond init $MONIKER --chain-id $BABYLON_CHAIN_ID
+```
+
+**2. Configure client settings:**
+```bash
+sed -i \
+-e "s/chain-id = .*/chain-id = \"${BABYLON_CHAIN_ID}\"/" \
+-e "s/keyring-backend = .*/keyring-backend = \"os\"/" \
+-e "s/node = .*/node = \"tcp:\/\/localhost:${BABYLON_PORT}657\"/" $HOME/.babylond/config/client.toml
+```
+
+### Download Network Configuration
+
+**1. Download genesis file:**
+```bash
+wget -O $HOME/.babylond/config/genesis.json https://server-2.itrocket.net/mainnet/babylon/genesis.json
+```
+
+**2. Download address book:**
+```bash
+wget -O $HOME/.babylond/config/addrbook.json https://server-2.itrocket.net/mainnet/babylon/addrbook.json
+```
+
+### Configure Network Settings
+
+**1. Set seeds and peers:**
+```bash
+SEEDS="145ee7d64ae5d3f6a8ceb6b7dba889f7de48de06@babylon-mainnet-seed.itrocket.net:27656"
+PEERS="b16397b576f2431c8a80efa4f5338c1b82583916@babylon-mainnet-peer.itrocket.net:27656"
+
+sed -i -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*seeds *=.*/seeds = \"$SEEDS\"/}" \
+-e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*persistent_peers *=.*/persistent_peers = \"$PEERS\"/}" $HOME/.babylond/config/config.toml
+```
+
+### Configure Ports and Performance
+
+**1. Set custom ports in app.toml:**
+```bash
+sed -i.bak -e "s%:1317%:${BABYLON_PORT}317%g;
+s%:8080%:${BABYLON_PORT}080%g;
+s%:9090%:${BABYLON_PORT}090%g;
+s%:9091%:${BABYLON_PORT}091%g;
+s%:8545%:${BABYLON_PORT}545%g;
+s%:8546%:${BABYLON_PORT}546%g;
+s%:6065%:${BABYLON_PORT}065%g" $HOME/.babylond/config/app.toml
+```
+
+**2. Set custom ports in config.toml:**
+```bash
+sed -i.bak -e "s%:26658%:${BABYLON_PORT}658%g;
+s%:26657%:${BABYLON_PORT}657%g;
+s%:6060%:${BABYLON_PORT}060%g;
+s%:26656%:${BABYLON_PORT}656%g;
+s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${BABYLON_PORT}656\"%;
+s%:26660%:${BABYLON_PORT}660%g" $HOME/.babylond/config/config.toml
+```
+
+**3. Configure pruning and gas settings:**
+```bash
+# Set pruning
+sed -i -e "s/^pruning *=.*/pruning = \"custom\"/" $HOME/.babylond/config/app.toml
+sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"100\"/" $HOME/.babylond/config/app.toml
+sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"19\"/" $HOME/.babylond/config/app.toml
+
+# Set minimum gas prices and enable monitoring
+sed -i 's|minimum-gas-prices =.*|minimum-gas-prices = "0.002ubbn"|g' $HOME/.babylond/config/app.toml
+sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.babylond/config/config.toml
+sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.babylond/config/config.toml
+```
+
+---
+
+## Creating Your Validator Keys
+
+### Create System Service
+
+**1. Create the service file:**
+```bash
+sudo tee /etc/systemd/system/babylond.service > /dev/null <<EOF
+[Unit]
+Description=Babylon node
+After=network-online.target
+
+[Service]
+User=$USER
+WorkingDirectory=$HOME/.babylond
+ExecStart=$(which babylond) start --home $HOME/.babylond --bls-password-file="$HOME/.babylond/config/bls_password.txt"
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+**2. Enable the service:**
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable babylond
+```
+
+### Create Wallet
+
+**1. Create a new wallet:**
+```bash
+babylond keys add $WALLET
+```
+
+> 🔐 **CRITICAL**: Save your mnemonic phrase securely! You cannot recover your validator without it.
+
+**2. Or restore an existing wallet:**
+```bash
+babylond keys add $WALLET --recover
+```
+
+**3. Save wallet addresses:**
+```bash
+WALLET_ADDRESS=$(babylond keys show $WALLET -a)
+VALOPER_ADDRESS=$(babylond keys show $WALLET --bech val -a)
+echo "export WALLET_ADDRESS=\"$WALLET_ADDRESS\"" >> $HOME/.bash_profile
+echo "export VALOPER_ADDRESS=\"$VALOPER_ADDRESS\"" >> $HOME/.bash_profile
+source $HOME/.bash_profile
+
+echo "💰 Wallet Address: $WALLET_ADDRESS"
+echo "🔑 Validator Operator Address: $VALOPER_ADDRESS"
+```
+
+---
+
+## Syncing Your Node
+
+### Download Snapshot (Recommended)
+
+**1. Reset and download snapshot:**
+```bash
+babylond tendermint unsafe-reset-all --home $HOME/.babylond
+
+# Download snapshot if available
+if curl -s --head https://server-2.itrocket.net/mainnet/babylon/null | head -n 1 | grep "200" > /dev/null; then
+    echo "📥 Downloading snapshot..."
+    curl https://server-2.itrocket.net/mainnet/babylon/null | lz4 -dc - | tar -xf - -C $HOME/.babylond
+    echo "✅ Snapshot downloaded successfully"
+else
+    echo "⚠️ No snapshot found - will sync from genesis"
+fi
+```
+
+### Start Your Node
+
+**1. Start the node:**
+```bash
+sudo systemctl restart babylond
+```
+
+**2. Monitor logs:**
+```bash
+sudo journalctl -u babylond -fo cat
+```
+
+**3. Check sync status:**
+```bash
+# This should show 'false' when fully synced
+babylond status 2>&1 | jq .SyncInfo.catching_up
+```
+
+### Monitor Sync Progress
+
+**Create a sync monitoring script:**
+```bash
+cat > check_sync.sh << 'EOF'
+#!/bin/bash
+rpc_port=$(grep -m 1 -oP '^laddr = "\K[^"]+' "$HOME/.babylond/config/config.toml" | cut -d ':' -f 3)
+while true; do
+    local_height=$(curl -s localhost:$rpc_port/status | jq -r '.result.sync_info.latest_block_height')
+    network_height=$(curl -s https://babylon-mainnet-rpc.itrocket.net/status | jq -r '.result.sync_info.latest_block_height')
+    
+    if ! [[ "$local_height" =~ ^[0-9]+$ ]] || ! [[ "$network_height" =~ ^[0-9]+$ ]]; then
+        echo -e "\033[1;31mError: Invalid block height data. Retrying...\033[0m"
+        sleep 5
+        continue
+    fi
+    
+    blocks_left=$((network_height - local_height))
+    echo -e "\033[1;33mNode Height:\033[1;34m $local_height\033[0m \033[1;33m| Network Height:\033[1;36m $network_height\033[0m \033[1;33m| Blocks Left:\033[1;31m $blocks_left\033[0m"
+    
+    if [ $blocks_left -eq 0 ]; then
+        echo "🎉 Node is fully synced!"
+        break
+    fi
+    
+    sleep 5
+done
+EOF
+
+chmod +x check_sync.sh
+./check_sync.sh
+```
+
+---
+
+## Setting Up BLS Keys
+
+> **Why BLS Keys?** Babylon validators must sign checkpoints using BLS signatures every epoch to secure the network.
+
+### Generate BLS Keys
+
+**1. Create BLS keys for your wallet:**
+```bash
+babylond create-bls-key $WALLET_ADDRESS
+```
+
+**2. Create BLS password file:**
+```bash
+echo "your_secure_bls_password_here" > $HOME/.babylond/config/bls_password.txt
+chmod 600 $HOME/.babylond/config/bls_password.txt
+```
+
+> 🔒 **Security**: Use a strong, unique password for BLS keys
+
+**3. Configure BLS key name:**
+```bash
+sed -i -e "s|^key-name *=.*|key-name = \"$WALLET\"|" $HOME/.babylond/config/app.toml
+```
+
+**4. Restart node to load BLS keys:**
+```bash
+sudo systemctl restart babylond
+```
+
+---
+
+## Creating Your Validator
+
+### Wait for Full Sync
+
+**Before creating your validator, ensure:**
+- [ ] Node is fully synced (`catching_up: false`)
+- [ ] You have enough tokens to cover both the stake amount and transaction fees.
+- [ ] BLS keys are properly configured
+
+**Check your balance:**
+```bash
+babylond query bank balances $WALLET_ADDRESS
+```
+
+### Create Validator Transaction
+
+**1. Create validator configuration file:**
+```bash
+cd $HOME
+cat > validator.json << EOF
+{
+  "pubkey": {
+    "@type": "/cosmos.crypto.ed25519.PubKey",
+    "key": "$(babylond comet show-validator | grep -Po '"key":\s*"\K[^"]*')"
+  },
+  "amount": "1000000ubbn",
+  "moniker": "$MONIKER",
+  "identity": "",
+  "website": "",
+  "security": "",
+  "details": "Professional Babylon validator",
+  "commission-rate": "0.05",
+  "commission-max-rate": "0.20",
+  "commission-max-change-rate": "0.01",
+  "min-self-delegation": "1"
+}
+EOF
+```
+
+**2. Customize your validator details:**
+```bash
+# Edit the validator.json file with your information
+nano validator.json
+```
+
+**Important fields to customize:**
+- `moniker`: Your validator name
+- `identity`: Your Keybase ID (optional)
+- `website`: Your website/social media
+- `details`: Description of your validator
+- `commission-rate`: Your commission (5% = 0.05)
+
+**3. Create your validator:**
+```bash
+babylond tx staking create-validator validator.json \
+    --from $WALLET \
+    --chain-id bbn-1 \
+    --gas auto \
+    --gas-adjustment 1.5
+```
+
+### Verify Validator Creation
+
+**After submitting the transaction:**
+
+1. Save your transaction hash and check it in explorer
+
+2. Wait for next epoch (~60 minutes) for activation
+
+3. Check validator status:
+```bash
+babylond query staking validator $VALOPER_ADDRESS
+```
+
+4. Check if validator is in active set:
+```bash
+babylond query staking validators --limit 200 | grep -A 5 -B 5 $MONIKER
+```
+
+---
+
+## Security & Monitoring
+
+### Essential Security Steps
+
+**1. Backup critical files:**
+```bash
+# Create backup directory
+mkdir -p $HOME/validator_backup
+
+# Backup critical files
+cp $HOME/.babylond/config/priv_validator_key.json $HOME/validator_backup/
+cp $HOME/.babylond/config/bls_password.txt $HOME/validator_backup/
+cp $HOME/.babylond/config/node_key.json $HOME/validator_backup/
+
+# Backup your wallet mnemonic (write it down separately!)
+```
+
+**2. Set up firewall:**
+```bash
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw allow ssh/tcp
+sudo ufw allow ${BABYLON_PORT}656/tcp
+sudo ufw enable
+```
+
+**3. Secure SSH access:**
+```bash
+# Edit SSH config
+sudo nano /etc/ssh/sshd_config
+
+# Add these lines:
+# PermitRootLogin no
+# PasswordAuthentication no
+# PubkeyAuthentication yes
+
+# Restart SSH
+sudo systemctl restart sshd
+```
+
+### Monitoring Commands
+
+**Check node status:**
+```bash
+babylond status 2>&1 | jq
+```
+
+**Check validator info:**
+```bash
+babylond query staking validator $VALOPER_ADDRESS
+```
+
+**Monitor logs:**
+```bash
+sudo journalctl -u babylond -fo cat
+```
+
+**Check if validator is jailed:**
+```bash
+babylond query slashing signing-info $(babylond tendermint show-validator)
+```
+
+**Withdraw rewards:**
+```bash
+babylond tx distribution withdraw-rewards $VALOPER_ADDRESS \
+    --from $WALLET \
+    --commission \
+    --chain-id bbn-1 \
+    --gas auto \
+    --gas-adjustment 1.5
+```
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues & Solutions
+
+**❌ Node not syncing:**
+```bash
+# Check peers
+babylond query staking validators --limit 1 --output json | jq
+
+# Restart with snapshot
+sudo systemctl stop babylond
+babylond tendermint unsafe-reset-all --home $HOME/.babylond
+# Re-download snapshot and restart
+```
+
+**❌ BLS signature errors:**
+```bash
+# Check BLS configuration
+grep -n "key-name" $HOME/.babylond/config/app.toml
+cat $HOME/.babylond/config/bls_password.txt
+
+# Regenerate BLS keys if needed
+babylond create-bls-key $WALLET_ADDRESS
+sudo systemctl restart babylond
+```
+
+**❌ Validator not active:**
+- Wait for next epoch (up to 60 minutes)
+- Ensure you have enough stake to be in top validators
+- Check your validator hasn't been jailed
+
+**❌ Transaction failures:**
+```bash
+# Check balance
+babylond query bank balances $WALLET_ADDRESS
+
+# Check gas prices
+sed -n 's/^minimum-gas-prices = "\(.*\)"/\1/p' $HOME/.babylond/config/app.toml
+```
+
+### Useful Commands
+
+**Unjail validator:**
+```bash
+babylond tx slashing unjail \
+    --from $WALLET \
+    --chain-id bbn-1 \
+    --gas auto \
+    --gas-adjustment 1.5
+```
+
+**Edit validator details:**
+```bash
+babylond tx staking edit-validator \
+    --new-moniker "New Name" \
+    --identity "new-keybase-id" \
+    --website "https://newwebsite.com" \
+    --details "Updated description" \
+    --from $WALLET \
+    --chain-id bbn-1 \
+    --gas auto \
+    --gas-adjustment 1.5
+```
+
+**Self-delegate more tokens:**
+```bash
+babylond tx staking delegate $VALOPER_ADDRESS 1000000ubbn \
+    --from $WALLET \
+    --chain-id bbn-1 \
+    --gas auto \
+    --gas-adjustment 1.5
+```
+
+---
+
+## Final Checklist
+
+Before considering your validator fully operational:
+
+- Node is fully synced and running
+- Validator transaction confirmed
+- BLS keys properly configured
+- Firewall configured
+- Critical files backed up
+- Monitoring is setup
+- Validator appears in explorer
+- Validator is signing blocks
+
+**🎉 Congratulations! You're now running a Babylon validator!**
+
+
+### Important Links
+- **Official Documentation**: https://docs.babylonlabs.io/
+- **GitHub Repository**: https://github.com/babylonlabs-io/babylon
+- **Block Explorer**: https://babylon.explorers.guru/
+- **Mainnet Info**: https://github.com/babylonlabs-io/networks/tree/main/bbn-1
