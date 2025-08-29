@@ -1,0 +1,71 @@
+---
+id: get-staker-stats-v-2
+title: "Get Staker Stats"
+description: "Fetches staker stats for babylon staking including active tvl and active delegations."
+sidebar_label: "Get Staker Stats"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV81u2zgQfhVCpxbwT2B0LzmtE8uFgaydlZUARRsIlDS22MikSlJODMPAPsQ+4T7JzpBSasdOm0Wxt1xskZqfb2a+oYbbQFWguRVKTvLgPFiCnVt+Dxp/rbkdBJ2g4pqvwII2wfnnbZCDybSoSAPlr+u0FBm7hw1TC2YLYMapM6vYAmxWoAFBgt9q0BtcSLSFSy+VVPdJAY+4reFbLTQgBKtr6AQmK2DFg/NtYDeVV9BCLoPd7o6ETaWkAUPvB2dn9JcpaUFaeuRVhZhcTP2vhmBu9+xVmiK2wmvn3J7Y5ZkVa0hyKGHp7Jg9JAIdLUEHu04rZ9fl6feHUR4H0wlqmSqZ4+Lnzr6LvujvQdgi1/yBp+Ur0B9Iv2ATxZotlX6FzGKprLAlbawHBvRaZNDbY4znA1mv+FJI7mnyPL8SHm2CnDlV35cdFlzmJejed8tRQ4RXqXlorUr3CX5yAj7ZOyS6FyJ2W0Phffgl2oHW+Idm8EHpS5WD25X1CnssmEzjMJoOr5J5GN1OLsMkjKJZhCHdDq8mo2E8mU2ftqazOBnPbqYjfL4YjpIo/PMmnMe4Gs+ii8loFE7x+WZ6Hc0uw/l8eHGF5qbxJP6E241wEk/+CGc3cXDXeVaOTvDYJVTdNdfUucbBw5BxVc59/kIKgcDxUuQu/HZnquxY1TInaDyPsMXBUGXGSqciz0ESMomZycAYYmEosWh0SjSysViBqq3D1VST8Jle+JQ232W2Nm0S/wODl9gAdZpkapWkPN2USpY8NV2hEmpcjL/LK9FtaSKasBNTcDypkj0kpwjjXpwzDJy1kTvafHijzRttfkobzAHzSUCJ397OmjfSvII0bbIYZQs/Vq08ouBLl871gOI7VB7TmAamHdzcF44tlGYNTtYAZEJmZU0DCPNzD8OZgeHHtV3uDRw9jBxnxkI1M6UbI22Bi/560Pee+v5bijl1aP10WeuSPtnWVua8399LTQ/yJXRzWEuwvb0M9oQKnkd00QCfN8CH1xP2z19/s5HTZu9CNNVhq7q0mHEv8x6L+yPvFhnyC55jrx7Q9CrkQrXtjJlzzbjigjw3W78/83JU7xjn7FOu1GKBiWTkQa9cJRhPkdTtYG6hndJb7Yv48smC2RgLq94X+UnVGotKneLqWxtgwrClwjJJyFm6cTbI49BLXSFpcahipZD3KIDDfwqleiAalP6VG/v87H+sh2KHqc9VZp7lus+NAWv6C1GC6VOzeITdxkGvyheUqbbhTuQH3RDRfA4HvTM3pipjV1zuwfuIFGmmvXnD0IPs7x3E/1vvNKeIxTm5X5Ucb1C7JkXbppFcL7c3DP+AUJFeBQZEr7fblBu40eVuR9v+/uUucMKdf9iZC14a+EF076LmVvaeveaedxK0m/KPrntrXtYk6xoCz3tBiBDdHWoUwHMMiaB6ZeJKZfe0jr5+ZOXpuPkYxnjm/QvNYCc4
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Staker Stats"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/staker/stats"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Fetches staker stats for babylon staking including active tvl and active delegations.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Public key of the staker to fetch","in":"query","name":"staker_pk_hex","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"staker_pk_hex":{"type":"string"},"unbonding_delegations":{"type":"integer"},"unbonding_tvl":{"type":"integer"},"withdrawable_delegations":{"type":"integer"},"withdrawable_tvl":{"type":"integer"}},"type":"object","title":"v2service.StakerStatsPublic"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v2service_StakerStatsPublic"}}},"description":"Staker stats"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"},"404":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Not Found"},"500":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Internal Server Error"}}}
+>
+  
+</StatusCodes>
+
+
+      

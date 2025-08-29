@@ -1,0 +1,75 @@
+---
+id: get-finality-providers-v-1
+title: "Get Active Finality Providers (Deprecated)"
+description: "[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead."
+sidebar_label: "Get Active Finality Providers (Deprecated)"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVs2O2zYQfhVCp13Alnf3uKc4sTcI0IORugGC1DAoaWQzpkiWHCkxDAN9iD5hn6RDUrK9lrLdoKceDJk/M/Pxm5mPPCTagOUotPpQJI/JBvBJKC4F7hdWN6IA6z7dJ6PEcMsrQBomj18OSQEut8J4O7Ja1JkUOdvBnumS4RZY2TphpvXCULMSMN+SL+Ft/qjB7mmgyC0NS7POMF+bHU25fAsVTx4PCe6NX3Rohdokx+OoF5lvKJIfhOhdkIBBwXdkhm/Ag+oBcj8AYk4e1+TxRTSrUWLBGa0cOL/+cHfnP7lWCAr9X24MERO8Tb46j/hw4Y+gEPkoonXBMcwKhMr1l3mOooF1ARI2waG7gCQo4gZschx1+7CRw+sty/3jjAh4VQnnRMTZW37GfA89IBfSDRoS3QqJ+8HFSiuxI2hDaw7y2pLh2lNKBxvc9A0yR5wNlks3o7OvQOY0Fij9RHPvwDYih/TJzM7nioXsvaJGLv+d7bjtB2S/On6g7iJ2NOLW8r0fn0uyz7sv8lCoP3X8LVeFBJuePX9sC/lVZhFqZzIOQNenI617RzpeV08yZVI4HG5M5rRFKFi2Z9NQzMtGMqGY9wCqoLMxbYuOYL7xikSEJisfxFigfgPSMrQ1XIf9MpsvPs7fTZfz2Yo9eaUAx9rS9WC4lCw20Mu4SF6E7XaGGmANlzUwqfMdbbk5Ab8dQp6yhQTugNX0mzQPky7Y+BxMKIfAi5ToJ93d6ladgxTjlgaT5n7AzgsWpaHT6dpKnzdE4x4nE4d8RyDG3IgUig2MC2gUYJrxbC+1kjxzqdDJNWtv4zL7NZqz6eID+/vPv9gsWLObObkasaqWKMZtiNvEq6NQpe4UsW1fkj7hIbVTb65C9wplSUI+FF+XZWSp1LaKFwDPdI1B+QkEQncVddZvl+9OHtyeyK3S39VnXfs85uAco+IOCRGObTQxqE65DhGncdcvVOFU9FS/ymeabpwMpP7m8yTjUmjLeJn07Wjb85wUOndXCZhw5wAdZVeCm1CyxhHhuA2QmqIMOtG25QA/FMbXQOTwIb0LMqIdVlxdwHtP2YuVyrpbn52ufXYzO3XT7XVNXNxy/9OmajUOST8nRnJ6Chzb1BzaDguiMkoGeoxKe0tk+i2HQ0Yxf7PyePTT8TERXkjC8Ux6ISq5dNdKdMnfT76eBoGHG+DZIypQR3NJeDS9Hsx/elC9gK33rjoDXPmBFR4hUbciky0lyb8JiMdo7ZvI4IVV72XlvZyE8v18SbfDPwsA1FQ=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Active Finality Providers (Deprecated)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/finality-providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Public key of the finality provider to fetch","in":"query","name":"fp_btc_pk","schema":{"type":"string"}},{"description":"Pagination key to fetch the next page of finality providers","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"v1service.FpDescriptionPublic"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.FpDetailsPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v1service_FpDetailsPublic"}}},"description":"A list of finality providers sorted by ActiveTvl in descending order"}}}
+>
+  
+</StatusCodes>
+
+
+      

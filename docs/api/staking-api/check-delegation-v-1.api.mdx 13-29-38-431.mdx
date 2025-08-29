@@ -1,0 +1,73 @@
+---
+id: check-delegation-v-1
+title: "checkDelegationV1"
+description: "Check if a staker has an active delegation by the staker BTC address (Taproot or Native Segwit)."
+sidebar_label: "checkDelegationV1"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVlFv4jgQ/itWnnYlIG11TzwdhfSE1IVeCJVW2ypykoF4G+ys7dBFiP9+M05SQmmr1e7rPSW2x+Nvvpn57L2nStDcCiWnmTf00hzSpwkUsHZz95dezyu55huwoI03/Lb3MjCpFiUt44aF5U+g2XU0ZjzLNBjDhGQRL7VS1p+hly2wBayfhWUrpTfcokdBO39UoHc4kOgch81unNDwoxIaEI7VFfQ8g6A23BvuPbsrydRYLeTaOxx6r9GMCT4TK2ZzYNlLGEwYxlMHBXHkCJDWEeJWZJAxKzawohjfgdZdP4IBWW2QEM+qjO+8x94ZukcKxZRKGjC04erigj6pkhakpV9eloVIHUT/u6EI9p0DEB/mxop6d6oy6HAg0MkatHfoeRm3XXYSpQrgkuhpp1TyHVIi3gpb0MT2MucyKzClg2OyHXl3VYKQwgY3OqEDTjg+bmCuWhgGWRWWkPz1RxGC1vhBN/ij9LiJt6V5OouCcDa6jRdBeD8dB3EQhvMQY7of3U4no2g6n71MzeZRfDNfzib4fz2axGHw7zJYRDi6mYfX08kkmOH/cnYXzsfBYjG6vkV3s2gafcXpxjiOpl+C+TI6z2zP+9knVP0t11QhxsHDkHFULEBvRQoBhUDgeCEyF347M1P2RlUyI2g8C7HWwVBqbpRORJaBJGQSmUmxG3hSQCAxa1SNjW2E1agq63A16SR8ZhC80IYcGsttZcbvFM0HpbHGBqmSOFWbOOHJrlCy4InpCxWjyyeMv89L0Td1mLFowo5NzrFl4w6St2rHLQwZBs7ayB0WvnYk1k4osnfamjNT603OsaNl29SdTk92rrfNuSx9akSJKc1OdOnz4EHO3VG8KHY9tlMVS9F5ow946IsAMKuaov9tjXmQEc7zLRcFZbfjGx081Gry4LHnXKR5fRb6XSHLbInBXF6NvjBVn51WWmObMZKfnocKnSuS8DVYJ9o2x4G/vfRrLvwjVN+5JTHDLLayXukC7XNrSzP0/U6uB3uQ28OgUwwDobzXKbqul9mi3shGd1O0wQ4RFGXd33LbbWjI1tDPYCsdXou1QH8u9ytOgjI8MTk4QRVypVqJQbadvw1SSVdXPfX3K6BnNUj0v4EWWV0hF4xOoGuKUsoTbLS2niy0xLe7qbpaD2ZnLGywkr6qSmMhUPdihWasMi6za4VMSyyEpkDpxFFtdYuNhFrLCiGfqFIUS6BQzwNkpaiXKMzmLjrfh2anuctUal6ly+fGgDX+SmAufGrgGmG/OWBQZitiqhWBd7KJ/NQcXg0uyLxUxm647MCrm6NzRbgXxEkCOvfD/439C43dCLWFn9YvC44PlEOT8X3T5d/wPvec5CM1ju4WOw7qXsfWyTFZZLvfJ9zAUheHA03Xbx33sBPuvkENWfHCwAdp+xQ2T7TP7Lfef2+G9AS7k2fglhcVWXnumffL2P78CfgBuq7ZEd/jUeiQyEe0zoFnmApitd5ILVvazq6zhxF5edHwf4IIBe8/fOUIfQ==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"checkDelegationV1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/staker/delegation/check"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Check if a staker has an active delegation by the staker BTC address (Taproot or Native Segwit).
+Optionally, you can provide a timeframe to check if the delegation is active within the provided timeframe
+The available timeframe is "today" which checks after UTC 12AM of the current day
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Staker BTC address in Taproot/Native Segwit format","in":"query","name":"address","required":true,"schema":{"type":"string"}},{"description":"Check if the delegation is active within the provided timeframe","in":"query","name":"timeframe","schema":{"enum":["today"],"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"code":{"type":"integer"},"data":{"type":"boolean"}},"type":"object","title":"v1handlers.DelegationCheckPublicResponse"}}},"description":"Delegation check result"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      

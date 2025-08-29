@@ -1,0 +1,67 @@
+---
+id: get-global-params-v-1
+title: "getGlobalParamsV1"
+description: "[DEPRECATED] Retrieves the global parameters for Babylon, including finality provider details. Please use /v2/network-info instead."
+sidebar_label: "getGlobalParamsV1"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNVk1v2zgQ/SsEz7GU5JhT0zYoCuzBSLMFFt7AGEkjiTVFsuRIrWHkv++QkhN/yEWOezBEkW/eDOfjyTtpHXogZc3XSt7JBumLtgXoJXjowvcbeSU9BmdNwCDvdvL2+jo+SmsIDcUlOKdVmSjyH8GauBfKFjuIK+ejA1KjdQU0szugD2yd1oqwC+cQKEkNyce6RdW0yTNtHXLMikNp0MuXK1mC+/O5NbXy3UhUoaP2Em5AA4bWbnMc1QQN5JVpInLaAO9he2T5s7e+7+bpO/i9DgQb5lhDZ3tzIdxDHKkOL6CUeR/bAe4y2x7BqZwHEDSzmehNYU0VTWu8wP0Guex/aoa5w7d02+IHlsS9SYp03BhuAvpBlZh9H+2xOuzjZV9wj57X612M80QOGmVSI513q8HftN7gdiZPf/DYgqk0+uyN+XGavHeZjaHtTRav8a/n4o+EFYbSKzdeQY4o4SIMiZM4OoWGb7TibMjnaOE88qgjSwX5Hk85Vp8flo8Pn+6fHj4/i0fkK+OAQVCLojmlF7X14iMUW23NlVCm1H3sDFHz3bWireCUDqpCLyokUDpkYqkRAoqef/lwmxukX9ZvFsrUlgkCIVQZJ4b5WzuJmYyFilMu8+EmH4NYpCACH8UMxZverXay9zomk8iFuzyfpmABTmU7NMNLVoyhaihCpqw8vfp0E/FtNBT3y6+MGcArKPTYFUwzPqIsrCRWDS4qHEyKkjBQXKUs19BrHuIjCJeMz+Jd9/rLmpj4Os4Og6etDyeBnhX6iasxE62wdR3LEj1MCimgsD2l8nE+CBmSXvbWH58+vTKELee/y/41/9jeCyhLDEFwZ6ZqqSAa1kXPUymKbeKIHu9H1F/cpNyxQiuzYQBZUaC2v2Ip9XiUZgqiYshzO4Yd166yZTgpVw4hIIW8VlyLnIu6GCNcTA4yV9VJHaaZulDNvTTJ2+w6aYAN1IE5CI9bTkyTNA6cSJ/QowocfD3/JxMzSQuxbOVOgzJJrGNSd9P4JAW4kscDxP3Ycgbi6W5XsKO/vX55ids/e/SsfqvntxGIb8zaskvW8jhxSSBlLKajNCu6T9J8+n8i9v3rTH95eOJR+A9KuRDd
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getGlobalParamsV1"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/global-params"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Retrieves the global parameters for Babylon, including finality provider details. Please use /v2/network-info instead.
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"versions":{"items":{"properties":{"activation_height":{"type":"integer"},"cap_height":{"type":"integer"},"confirmation_depth":{"type":"integer"},"covenant_pks":{"items":{"type":"string"},"type":"array"},"covenant_quorum":{"type":"integer"},"max_staking_amount":{"type":"integer"},"max_staking_time":{"type":"integer"},"min_staking_amount":{"type":"integer"},"min_staking_time":{"type":"integer"},"staking_cap":{"type":"integer"},"tag":{"type":"string"},"unbonding_fee":{"type":"integer"},"unbonding_time":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"v1service.VersionedGlobalParamsPublic"},"type":"array"}},"type":"object","title":"v1service.GlobalParamsPublic"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v1service_GlobalParamsPublic"}}},"description":"Global parameters"}}}
+>
+  
+</StatusCodes>
+
+
+      

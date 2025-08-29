@@ -1,0 +1,71 @@
+---
+id: check-address-risk
+title: "Checks address risk"
+description: "Checks address risk"
+sidebar_label: "Checks address risk"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV81u4zYQfhVCp13AloNge8mp/lEKA6mdyvICi20gUOLY5lomtSTlrmEY6EP0CfsknaGk2HGcNMBec7I4nJ9vvhnSw32gSzDcSa3GIrgJ8hXk674QBqyNpV0HnaDkhm/AgbHBzdd9IMDmRpZkgfqDZMh4rc6cZt4cbSTtfa/A7HCh0ByXmcvTRhWFBr5X0gDGdKaCTmDRdMODm33gdiWpW2ekWgaHwwMp21IrC5b2r6+u6CfXyoFy9MnLspC5T6L3zRKu/Ym/0lCKTtbWgrsL0lNszzYN8XABWKeV6Owb5O6CBNfSFSTYXq+4EgWSGDbsznIDoNBT3CQXHIjrpVS85vYchoIfLl3D7i1QjoGbsOHR8zHeG8zuqwypbU26xzTSl9Mgv0+7hDqJ6QXDhLZSgGhbhlL+9FPlBGPwB93ghzZDLcBLVbXBZg3GkySKJ/27dBbFn8fDKI3ieBpjmp/7d+NRPxlPJ4+iyTRJb6fzyQi/B/1RGkd/zKNZgqvbaTwYj0bRBL/nk/t4Ooxms/7gDt1NknHyBcWNcpqMf4+m8yR46JyVqBP86BKq7pYbOg/Ww8OUcVXMwGxlDhGlQOB4IYVPv5VMtLvVlRIEjYsYjw5YqtatNpkUAhQhU8hMjqTyrIBIYSHp7DW6idyArpzH1VSY8NkweqQNObSOu8q2JDYJSAS5BPNqtyylW1VZmutNmvFsV2hV8Mx2pU7R5Rrz7/JSdm2dZiqbtFO74ngDpCdILjWP37hhmDhrM/dt8+m9bd7b5n/bBjlgNQmo8cv7XfPeNG9ompYsRmyBYa0+ouBLT+f2mvJ7ajyk4cc+jkOmHp9wdFppGq2W4Pw05Va46DVaPdv+f+Ke9dHqMasyBf0NO1fam17vJLUQxBK6ArYKXHjCQCh1cI5oUG+zWW3O+vdj9u/f/7CRt2YfInTVYZuqcMhYrfMRi/NadIcV/onISW0e0FQn1UK3x5Hn/jjiuZMUuRH9ehblWb2SFbBLofRigUQyimA2vr0Zz7ApmUMDaj2gccSdWNMg23qwO+tgE/6pvujKMJ5TpzOce1hlgUnLlhrLpHCMyXbeB0Xs11p32HQ4BLFCqjUq4EicQaH/CpGgot7yo1w9ET+3Q7Wn1Aud2zOue9xacLa3kAXYHjV7jbDbBAhLsSCm2gNzgR8MQ41Wc3gdXvnRU1u34eoE3uV+flKAk7v0BfXmGDscXntlwfFhcGhy3Ddn4WtwfBUcTwP2xwoR0fZ+n3ELc1McDiSunxX+KSL9BYSHa8ELC69g+xA3z42P7IUXy0Wcfto+e7hseVGRpm9hvGElQUA4D6i/Ai7w+iJstSlVt3QnVs/+b8jL4xXxW5TgLfMfp3uwWw==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Checks address risk"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/address/screening"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Checks address risk
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"BTC address to check","in":"query","name":"btc_address","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"properties":{"btc_address":{"properties":{"risk":{"type":"string"}},"type":"object"}},"type":"object","title":"v2handlers.AddressScreeningResponse"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-v2handlers_AddressScreeningResponse"}}},"description":"Risk of provided address"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"},"404":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Not Found"},"500":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Internal Server Error"}}}
+>
+  
+</StatusCodes>
+
+
+      

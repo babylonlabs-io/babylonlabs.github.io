@@ -1,0 +1,74 @@
+---
+id: lookup-staker-public-keys
+title: "Get stakers' public keys"
+description: "Retrieves public keys for the given BTC addresses. This endpoint"
+sidebar_label: "Get stakers' public keys"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV91O4zgUfhUrN8tI/YHR7g1XU2gYVcu2bBpGGg0ocuLTxkNqZ2ynUFWV9iH2CfdJ9hwngRS6CGmkveICmjjn/3znx9tAl2C4k1pNRHAaFFrfVeXc8TswV1VayOx32NigF5Tc8BU4MDY4/bYNBNjMyJL4kOtSWsf0gp3F54wLYcBasMxpRuJYVbIj/MPXk+MPPZZVxoByxYZphf9sVZbaOMtiXhqtHeNKsClatAY2h+W9dE8i0Q54KAstIDh1poJeIEn9jwrMBr8ptBBfG3I8MPCjkgZES22zHFY8ON0G0sHK0oPblMRjnZFqGex67QE3hm+C3e6WpNhSK1KP9B+Pj+kn08qhE/TIyxLD5EM4/G4pHtuOIvQJA+xkzS2486dooiQGXlztff8va3T6HTKHHjnpCjpY8TKpqZIn4pIvpeJ1Tp5rVvDgkjvYHNDyipock1GAGTxJjppgvImtRlDL0j9gNEnZx9KIIdlBMLkcpGGZNnVCBApgpdfA0DHLjjyenlgQOjkTUMDSW24ZN8AMuMooEB8oYL/+VDLBGPxBMfigzblHJZ6qaoUlEkymcRhNR5fJPIy+TM7DJIyiWYRB+jK6nIxH8WQ2fTyazuLkYnY9HePz2WicROGf1+E8xreLWXQ2GY/DKT5fT6+i2Xk4n4/OLlHcNJ7EX/G4IU7iyR/h7DoObnvPEtwLHvpkVX/NDZWI9eahy/hWzMGsZQYhuUDG8UIK7357MtXuQldKkGlcRFhRYCnXF9qkUghQZJnCyGQYdZ4WECqEAZVjQxvLFejKebsafJB9dhA+hg1jaB13lW2D2Dgg0cglmFextsQsV2mS6VWS8nRTIAh4avtSI8b4Hfrf56Xs29rNRDZuJzZHNIikY8khMKLHrHHjlE3UmqLDpCorxzoNEdl+e0fSO5JeQ1IbJUZhAsNaQlTPlz6OtRxybp8zAgw+rLGhdZvdQhtqiGyJc1Lt98oBi3NpGShRarTyRvm+WDe+l0I6LTbnjuUc5y63VmeSOxB7/VOqG0U67cbi+BywyQKHdSsAOS1T+jBvj+EYv5dFgRSOpXCjpMqKSgBVk/ejHbIDNm8XglRj/37DVjDAHGIl5poWmCU4v624HF+G65Oh9bvMEN1Gl/v1foMU1qehXmYqU9DQcq60p8NhJ9kDEEvoC1grcIMOJgZSBy9bhf/M5jU7G11N2D9//c3GnpsdhSiqx1ZV4RBDNQ3NoNe0O8T8T2iOa/aAdhipFrptUDzzDQo7kSTNzdGnZ1peIDjGLB1SpRcLDCQjDWbls814imXq00rFCDTNXYeb0NpKaLB0o77qCsGYUe37ZFcWGKJ4qTFNOK9ZuvEySOOoprrEMkTEsEKqOyTADSGFQt8THIr6k1986qXwJR+S7Yde6Mw+i/UQ0QzODheyADuk8q8t7DcKBqVY+DWtaSEH4oNqCGh1DD8Ojv2ipq1bcdUx7zNCpEaq/aVbos+T3Rkx743hLY2hafYO199hWXC8L+yavG+bLvEtWJ8Efmxg9Kl37HUKrJ0cs0Vk223KLVybYrej4/rW4S9D0o8rbD8LXlh4JWVHUXMj+cD+xzvTwRj4u0DnroS7TUVUvl3gfJfkErp3i7Q5cIGxIV9rNqqk0nW4Xmw7JOWxKX8OYxx1/wIY/A8A
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get stakers' public keys"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/staker/pubkey-lookup"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieves public keys for the given BTC addresses. This endpoint
+only returns public keys for addresses that have associated delegations in
+the system. If an address has no associated delegation, it will not be
+included in the response. Supports both Taproot and Native Segwit addresses.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"List of BTC addresses to look up (up to 10), currently only supports Taproot and Native Segwit addresses","explode":true,"in":"query","name":"address","required":true,"schema":{"items":{"type":"string"},"type":"array"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"data":{"additionalProperties":{"type":"string"},"type":"object","title":"map_string_string"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-map_string_string"}}},"description":"A map of BTC addresses to their corresponding public keys (only addresses with delegations are returned)"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Bad Request: Invalid input parameters"},"500":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Internal Server Error"}}}
+>
+  
+</StatusCodes>
+
+
+      

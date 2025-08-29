@@ -1,0 +1,63 @@
+---
+id: get-network-info
+title: "getNetworkInfo"
+description: "Get network info, including staking status and param"
+sidebar_label: "getNetworkInfo"
+hide_title: true
+hide_table_of_contents: true
+api: eJy1Vttu2zgQ/RVBz74EwT7lae1EKQxk7aytFCi6hUBJY4s1Raokpdow8u87Q9KOnTiXdrEvNi8z1JkzZ4bcxaoBzSxXclLGV/EK7BTsT6XXE7lUcS/WYBolDZj4ahdfXlzQX6GkBWlpyJpG8ML5D78bJWnNFBXUjEaNptMt994N06w2L9fz3LlxC+d2mRDqZya4sRlsGu6xZhXwVeUQ2G0DCJwjpBXo+LEX57bIWGF5975poTqQTNqsWZsTDMHUWM3liizDAtOabU88f7RKt/X540sQsPIoCg1+kDMD2YqZbAlw3qtmG48fsiWXTHC7zZCTjpegzesuxrI1gs0sryHLhSrWHzDumGghM+wVfmqOyFVdc2MIO5IPZ9khOyOYqRyADcX29qEfB3tk/A7YA4BmnZlC88aexXowezWaVuZKlmTyZhxPZu9G0WHmuK+O55tP2lL5dygs1pzlVnibEjZYCbhtBuNcLjwP976OzogSlf9GJVFdYOkuua69FEtobPX/AbbFdQXFulHo+hrmNw7rLg3ojhcw8M73bY6txmUw6AH/bXsmUG4OksHl4yBypQQw+cHvBr4X7jP7z3/I86iHHvxcP/C6dMzGwSji1Glx94//1F1Ba/zDY3Cg9LUqnbZBUm/6Gk+maTKfju6yRTL/PLlOsmQ+n80R++fR3eRmlE5m08PSdJZmt7OH6Q2Ox6ObbJ78/ZAsUpzdzubjyc1NMsXxw/R+PrtOFovR+A6Pm6aT9AsuB+MsnfyVzB7S+FvvWX314k2fUPU7piWrCTzCw5BxJhaev4RCIHDY/EoX/n5lquytamVJ0Fg5hx8tGErBrdI5L0tMNiKTyEwBxrBcQCIxO1sC5m1TLFXVWocrpM3LNTnQ5hWGKd+T+AsVsOK2anPqmdjo861QUrDc9LnaK7LPGt4PMsl4CDszFdNQZkdIzgnGbVxFGHi0j9xhYStHYndJUZ26fAIbySOd9fC3EC11rSgginywEZNl5K5oDKcGW6nwHsBpw6hPxMPuchgO63P/PKBI3K30dRe3WqBRZW1jrobDo3gHO5Dd4+CIkAEn51OoY78dhaqLRvcTtEGVcMqj17jsjkUN5Qr6JXTSgbTIB40cB0vWCiyhExNkFPcc8FBmeMu682rGCXpY+vMZ0Bd5SCuIzqCN1HKJXDieQ4uNWI5iiyw6EMuAJm6y9x6n14cTzNZg3x78I7+oVkesIAW7pLQGIm6iFb44tIQyyrfuDPriyFvdoZjwjRYJLtdoYFWUA76aBsiK8FsUJlUbon/ph2anuStVYZ6la8iMAWuGS465GJKIPcJ++MCgKZeuvYdCeCWb+2slvhxckHmjjK2ZPIKHiov2nTG8QU/YP2qQv6vuULwWNnbYCMalu82JgV2QuiumXnwidtROhWhpc7ejV9yDFo+PtIylqLe4/u1JrjTDQytg+Ghz1bGGLZGPpDXW6RrfMnQPPm/xpNFD+X1KUpTtv+vNGc8=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"getNetworkInfo"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/network-info"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get network info, including staking status and param
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"content":{"application/json":{"schema":{"properties":{"params":{"properties":{"bbn":{"items":{"properties":{"allow_list_expiration_height":{"type":"integer"},"btc_activation_height":{"type":"integer"},"covenant_pks":{"items":{"type":"string"},"type":"array"},"covenant_quorum":{"type":"integer"},"delegation_creation_base_gas_fee":{"type":"integer"},"max_active_finality_providers":{"type":"integer"},"max_staking_time_blocks":{"type":"integer"},"max_staking_value_sat":{"type":"integer"},"min_commission_rate":{"type":"string"},"min_slashing_tx_fee_sat":{"type":"integer"},"min_staking_time_blocks":{"type":"integer"},"min_staking_value_sat":{"type":"integer"},"slashing_pk_script":{"type":"string"},"slashing_rate":{"type":"string"},"unbonding_fee_sat":{"type":"integer"},"unbonding_time_blocks":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"indexertypes.BbnStakingParams"},"type":"array"},"btc":{"items":{"properties":{"btc_confirmation_depth":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"indexertypes.BtcCheckpointParams"},"type":"array"}},"type":"object","title":"v2service.ParamsPublic"},"staking_status":{"properties":{"is_staking_open":{"type":"boolean"}},"type":"object","title":"v2service.StakingStatusPublic"}},"type":"object","title":"v2service.NetworkInfoPublic"}}},"description":"Network info"},"400":{"content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}},"description":"Error: Bad Request"}}}
+>
+  
+</StatusCodes>
+
+
+      
