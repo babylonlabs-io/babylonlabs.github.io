@@ -134,7 +134,7 @@ export default function RemoteMD({
           if (rawUrl.includes('release/')) {
             url = rawUrl.replace(/release\/v[\d.]+\w*/, `${release.tag_name}`);
           } else {
-            url = rawUrl.replace(/refs\/heads\/[^/]+/, release.tag_name)
+            url = rawUrl.replace(/refs\/heads\/[^/]+/, release.tag_name);
           }
           return {
             key: release.tag_name,
