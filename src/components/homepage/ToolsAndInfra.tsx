@@ -106,15 +106,6 @@ export default function ToolsAndInfra() {
     ],
     dexes: [
       {
-        name: 'Tower',
-        icon: '/img/landing-page/tools-and-infra/tower.jpg',
-        tileLink: 'https://app.tower.fi/swap',
-        socialLinks: {
-          twitter: 'https://twitter.com/towerprotocol',
-          website: 'https://app.tower.fi/swap'
-        }
-      },
-      {
         name: 'Persistence',
         icon: '/img/landing-page/tools-and-infra/persistence.jpg',
         tileLink: 'https://app.persistence.one/?from=BABY&to=XPRT',
