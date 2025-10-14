@@ -7,7 +7,7 @@ sidebar_position: 2
 
 # Submit Proposals via CLI
 
-[Babylond](https://github.com/babylonlabs-io/babylon) (install instructions [here](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/babylon-node/README.md)) provides various commands that assist you to draft and submit your on-chain proposal. This guide will walk through step by step how to create a proposal.
+[Babylond](https://github.com/babylonlabs-io/babylon) (install instructions [here](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-6/babylon-node/README.md)) provides various commands that assist you to draft and submit your on-chain proposal. This guide will walk through step by step how to create a proposal.
 
 ## Step 1: Create a BABY wallet
 
@@ -111,7 +111,7 @@ If everything appears correct, you can submit your proposal using the submit-pro
 babylond tx gov submit-proposal draft_proposal.json \
   --from=your-proposer-baby-key \
   --deposit="50000bbn" \
-  --chain-id=bbn-test-5 \
+  --chain-id=bbn-test-6 \
   --gas=auto \
   --fees=2000ubbn
 ```
@@ -124,7 +124,7 @@ draft_proposal.json: The JSON file containing your proposal details, created ear
 
 --deposit="50000000000ubbn": The amount you are depositing with the proposal. This must meet or exceed the minimum deposit required to enter the voting period. If specified in your JSON file, this flag may be redundant or could override what's in the file. Default amount is also 500000000000ubbn.
 
---chain-id=bbn-test-5: Specifies the blockchain network to which you are submitting.
+--chain-id=bbn-test-6: Specifies the blockchain network to which you are submitting.
 
 --gas=auto: Automatically estimates the gas required for the transaction. The CLI will calculate how much gas your transaction needs, rather than you specifying a fixed amount.
 
