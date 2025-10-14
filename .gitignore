@@ -133,3 +133,6 @@ dist
 .pnp.*
 
 .idea
+
+# ignore temporary files
+tmp/

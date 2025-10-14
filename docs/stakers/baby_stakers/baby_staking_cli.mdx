@@ -37,14 +37,14 @@ babylond tx epoching delegate [validator-addr] [amount] --from [wallet-name] --c
 - `[validator-addr]`: The address of the validator node to which you are staking tokens.
 - `[amount]`: The number of tokens you want to stake, in the unit of `ubbn`. For example, if you want to stake 1 $bbn$, you should enter `1000000ubbn`.
 - `[wallet-name]`: The name of the wallet used to sign the transaction.
-- `[chain-id]`: The chain ID of the Babylon network, such as `bbn-test-5`.
+- `[chain-id]`: The chain ID of the Babylon network, such as `bbn-test-6`.
 - `[node-url]`: The URL of the connected node, such as `https://babylon-testnet-rpc.nodes.guru`.
 - `[fee-amount]`: The transaction fee, for example, `100ubbn`.
 
 ### Example Command
-Suppose you want to stake 1 $bbn$ to the validator `bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt`, using the wallet `test - staking`, with a chain ID of `bbn-test-5` and a node address of `https://babylon-testnet-rpc.nodes.guru` and a fee of `1000ubbn`. You can use the following command:
+Suppose you want to stake 1 $bbn$ to the validator `bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt`, using the wallet `test - staking`, with a chain ID of `bbn-test-6` and a node address of `https://babylon-testnet-rpc.nodes.guru` and a fee of `1000ubbn`. You can use the following command:
 ```bash
-babylond tx epoching delegate bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt 1000000ubbn --from test-staking --chain-id bbn-test-5 --node https://babylon-testnet-rpc.nodes.guru --gas auto --gas-adjustment 1.2 --fees 1000ubbn -y
+babylond tx epoching delegate bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt 1000000ubbn --from test-staking --chain-id bbn-test-6 --node https://babylon-testnet-rpc.nodes.guru --gas auto --gas-adjustment 1.2 --fees 1000ubbn -y
 ```
 
 ## Step 3: Unbond Tokens
@@ -57,9 +57,9 @@ babylond tx epoching unbond [validator-addr] [amount] --from [wallet-name] --cha
 The parameters are the same as those in the staking command.
 
 ### Example Command
-Suppose you want to unbond 1 $bbn$ from the validator `bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt`, using the wallet `test - staking`, with a chain ID of `bbn-test-5` and a node address of `https://babylon-testnet-rpc.nodes.guru` and a fee of `1000ubbn`. You can use the following command:
+Suppose you want to unbond 1 $bbn$ from the validator `bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt`, using the wallet `test - staking`, with a chain ID of `bbn-test-6` and a node address of `https://babylon-testnet-rpc.nodes.guru` and a fee of `1000ubbn`. You can use the following command:
 ```bash
-babylond tx epoching unbond bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt 1000000ubbn --from test-staking --chain-id bbn-test-5 --node https://babylon-testnet-rpc.nodes.guru --gas auto --gas-adjustment 1.2 --fees 1000ubbn -y
+babylond tx epoching unbond bbnvaloper1fa0c7df8v25mv926wey4m9kunhhm7svnp6tezt 1000000ubbn --from test-staking --chain-id bbn-test-6 --node https://babylon-testnet-rpc.nodes.guru --gas auto --gas-adjustment 1.2 --fees 1000ubbn -y
 ```
 
 ## Precautions

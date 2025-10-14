@@ -71,7 +71,7 @@ EOTSManagerAddress = "127.0.0.1:12582"  # EOTS service address
 RPCListener = "127.0.0.1:12581"         # FPD service address
 [babylon]
 Key = "fp-key-1"                        # Key name from Step 4
-ChainID = "bbn-test-5"                  # Testnet chain ID
+ChainID = "bbn-test-6"                  # Testnet chain ID
 RPCAddr = "https://babylon-testnet-rpc.nodes.guru"  # Public RPC node
 KeyDirectory = "~/.fpd"                 # Key directory
 ```
@@ -89,7 +89,7 @@ tail -f ~/.fpd/logs/fpd.log
 ```bash
 # Execute registration command (replace parameters)
 fpd create-finality-provider \
---chain-id bbn-test-5 \
+--chain-id bbn-test-6 \
 --eots-pk <pubkey_hex from Step 2> \
 --commission-rate 0.05 \
 --commission-max-rate 0.05 \
@@ -265,7 +265,7 @@ RPCListener = 0.0.0.0:12581
 
 [babylon]
 Key = fp-key-1
-ChainID = bbn-test-5
+ChainID = bbn-test-6
 RPCAddr = https://babylon-testnet-rpc.nodes.guru
 KeyringBackend = test
 ```
@@ -284,7 +284,7 @@ docker-compose logs -f
 Run the following command to register (replace `<YOUR_EOTS_PUBKEY>` with the `pubkey_hex` recorded in Step 4):
 ```bash
 docker exec -it finality-provider fpd create-finality-provider \
-  --chain-id bbn-test-5 \
+  --chain-id bbn-test-6 \
   --eots-pk <YOUR_EOTS_PUBKEY> \
   --commission-rate 0.05 \
   --commission-max-rate 0.05 \

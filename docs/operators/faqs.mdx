@@ -19,7 +19,7 @@ sidebar_position: 9
 #### Q: How can I retrieve the correct genesis file?
 **A:**
 You can download the genesis file from
-[Babylon Labs' networks repository](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/network-artifacts/genesis.json).
+[Babylon Labs' networks repository](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-6/network-artifacts/genesis.json).
 Ensure you're using the correct version of the Babylon binary specified in the documentation.
 
 #### Q: What are the hardware requirements for running Babylon nodes and a Finality Provider?
@@ -35,7 +35,7 @@ Follow these steps:
    - Download and install the necessary Babylon binary (`babylond`). Ensure you obtain it from the official and reliable sources provided by the Babylon project. This binary serves as the core tool for interacting with the Babylon network as a validator.
 2. **Initialize Your Node**
    - Run the command `babylond init`. During this process, you'll need to provide a unique moniker for your validator node. This moniker will help identify your node within the network.
-   For example: ``` language="bash">babylond init "YourUniqueValidatorMoniker" --chain - id <your - chain - id>```, where `<your - chain - id>` corresponds to the specific chain ID of the Babylon network you're participating in (such as `bbn - test - 5` for the testnet).
+   For example: ``` language="bash">babylond init "YourUniqueValidatorMoniker" --chain - id <your - chain - id>```, where `<your - chain - id>` corresponds to the specific chain ID of the Babylon network you're participating in (such as `bbn-test-6` for the testnet).
 3. **Sync Your Node**
    - **Using Genesis File**
      - Download the official genesis file from the Babylon project's official repository or the designated location for your network version. Place the `genesis.json` file in the appropriate directory (usually `~/.babylond/config` if you haven't customized the `--home` flag). This file contains the initial state of the network, which your node needs to sync with.
@@ -67,7 +67,7 @@ Follow these steps:
    ``` language="bash">babylond tx checkpointing create - validator [path/to/validator.json] [flags]```.
    Replace `[path/to/validator.json]` with the actual path to the `validator.json` file you created. The `[flags]` may include options such as `--chain - id` to specify the network chain ID, `--from` to indicate the wallet from which you'll sign the transaction (ensure this wallet has enough tokens to cover staking and transaction fees), `--gas` to set the gas limit for the transaction (you can use `auto` to let the system calculate it), `--gas - adjustment` to adjust the calculated gas amount, and `--fees` to specify the transaction fees you're willing to pay.
 
-For more in - depth and detailed information, including specific parameter values, troubleshooting tips, and security best practices, please refer to the [official setup guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/babylon-node/README.md). This guide is regularly updated to reflect the latest changes and requirements of the Babylon network, ensuring you have the most accurate and useful information for setting up your validator successfully.
+For more in - depth and detailed information, including specific parameter values, troubleshooting tips, and security best practices, please refer to the [official setup guide](https://github.com/babylonlabs-io/networks/blob/main/bbn-test-6/babylon-node/README.md). This guide is regularly updated to reflect the latest changes and requirements of the Babylon network, ensuring you have the most accurate and useful information for setting up your validator successfully.
 
 #### Q: What ports should I open for my Babylon node?
 **A:**

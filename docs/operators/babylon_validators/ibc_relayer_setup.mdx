@@ -112,7 +112,7 @@ end = 30000
 buckets = 10
 
 [[chains]]
-id = 'bbn-test-5'
+id = 'bbn-test-6'
 type = "CosmosSdk"
 rpc_addr = 'https://babylon-testnet-rpc.nodes.guru'
 grpc_addr = 'https://babylon-testnet-grpc.nodes.guru'
@@ -218,7 +218,7 @@ Add your seed phrase to a `.mnemonic` file and upload it to the server. Do not u
 Follow the steps at [Adding Keys to Hermes](https://hermes.informal.systems/quick-start/adding-keys-to-hermes/) to add keys for each chain:
 
 ```bash
-hermes keys add --chain bbn-test-5 --mnemonic-file <PATH_TO_MNEMONIC_FILE>
+hermes keys add --chain bbn-test-6 --mnemonic-file <PATH_TO_MNEMONIC_FILE>
 
 hermes keys add --chain mocha-4 --mnemonic-file <PATH_TO_MNEMONIC_FILE>
 ```
@@ -241,12 +241,12 @@ SUCCESS "configuration is valid"
 First, verify that the chains do not have existing clients:
 
 ```bash
-hermes query clients --host-chain mocha-4 --reference-chain bbn-test-5
+hermes query clients --host-chain mocha-4 --reference-chain bbn-test-6
 ```
 To create a new client, use the [`create-client`](https://hermes.informal.systems/documentation/commands/path-setup/clients.html#create-client) command:
 
 ```bash
-hermes create client --host-chain mocha-4 --reference-chain bbn-test-5
+hermes create client --host-chain mocha-4 --reference-chain bbn-test-6
 ```
 
 You should see output like:
@@ -279,7 +279,7 @@ ERROR foreign client error: error raised while creating client for chain mocha-4
 Create a second client:
 
 ```bash
-hermes create client --host-chain bbn-test-5 --reference-chain mocha-4
+hermes create client --host-chain bbn-test-6 --reference-chain mocha-4
 ```
 
 ### Create a connection
@@ -287,7 +287,7 @@ hermes create client --host-chain bbn-test-5 --reference-chain mocha-4
 To create a connection between the two clients run:
 
 ```bash
-hermes create connection --host-chain mocha-4 --reference-chain bbn-test-5
+hermes create connection --host-chain mocha-4 --reference-chain bbn-test-6
 ```
 
 You should see output like:
@@ -315,8 +315,8 @@ SUCCESS Connection {
     b_side: ConnectionSide {
         chain: BaseChainHandle {
             chain_id: ChainId {
-                id: "bbn-test-5",
-                version: 5,
+                id: "bbn-test-6",
+                version: 6,
             },
             runtime_sender: Sender { .. },
         },
@@ -369,8 +369,8 @@ SUCCESS Channel {
     b_side: ChannelSide {
         chain: BaseChainHandle {
             chain_id: ChainId {
-                id: "bbn-test-5",
-                version: 5,
+                id: "bbn-test-6",
+                version: 6,
             },
             runtime_sender: Sender { .. },
         },
@@ -403,7 +403,7 @@ policy = "allow"
 list = [["transfer", "channel-389"]]
 ```
 
-For bbn-test-5 add:
+For bbn-test-6 add:
 
 ```toml
 [chains.packet_filter]
