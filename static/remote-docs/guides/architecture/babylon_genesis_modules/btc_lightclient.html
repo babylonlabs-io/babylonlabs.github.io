@@ -132,10 +132,10 @@ which contains the BTC header along with some metadata.</p>
 message BTCHeaderInfo {
   bytes header = 1
       [ (gogoproto.customtype) =
-            "github.com/babylonlabs-io/babylon/types.BTCHeaderBytes" ];
+            "github.com/babylonlabs-io/babylon/v4/types.BTCHeaderBytes" ];
   bytes hash = 2
       [ (gogoproto.customtype) =
-            "github.com/babylonlabs-io/babylon/types.BTCHeaderHashBytes" ];
+            "github.com/babylonlabs-io/babylon/v4/types.BTCHeaderHashBytes" ];
   uint32 height = 3;
   bytes work = 4
       [ (gogoproto.customtype) = "cosmossdk.io/math.Uint" ];
@@ -160,7 +160,7 @@ at <a href="./keeper/msg_server.go">x/btclightclient/keeper/msg_server.go</a>.</
   string signer = 1;
   repeated bytes headers = 2
       [ (gogoproto.customtype) =
-            "github.com/babylonlabs-io/babylon/types.BTCHeaderBytes" ];
+            "github.com/babylonlabs-io/babylon/v4/types.BTCHeaderBytes" ];
 }
 </code></pre>
 <p>Upon receiving a <code>MsgInsertHeaders</code> message, a Babylon node applies the following

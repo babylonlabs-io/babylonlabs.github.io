@@ -184,9 +184,7 @@ it is needed to register the migration there too.</p>
 <p><strong>Delaying wrapped messages to the end of epochs.</strong> The Epoching module
 maintains a message queue for each epoch. Upon each wrapped message, the
 Epoching module performs basic sanity checks, then enqueues the message to the
-message queue. When the epoch ends, the Epoching module will forward queued
-messages to the Staking module. Consequently, the Staking module receives and
-handles staking-related messages, and performs validator set updates.</p>
+message queue. Before a message is enqueued, the Epoching module locks the associated funds for the duration of the epoch. At epoch completion, it unlocks those funds to enable message execution, making the message eligible for forwarding. When the epoch ends, the Epoching module will forward queued messages to the Staking module. Consequently, the Staking module receives and handles staking-related messages, and performs validator set updates.</p>
 <p><strong>Bitcoin-assisted Unbonding.</strong> Babylon implements the Bitcoin-assisted
 unbonding mechanism by invoking the Staking module upon a checkpointed epoch .
 Specifically, the Staking module's <code>BlockValidatorUpdates</code>
@@ -210,7 +208,27 @@ message Params {
   // epoch_interval is the number of consecutive blocks to form an epoch
   uint64 epoch_interval = 1
       [ (gogoproto.moretags) = "yaml:\"epoch_interval\"" ];
+  
+  // execute_gas defines raw gas for different executions.
+  ExecuteGas execute_gas = 2
+        [ (gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"execute_gas\"" ];
+    
+  // minimum_amount is a minimum amount for staking message cancel_unbonding_delegation
+  uint64 min_amount = 3
+      [ (gogoproto.moretags) = "yaml:\"min_amount\"" ];
 }
+
+// ExecuteGas defines the raw gas for the enqueued message execution.
+  message ExecuteGas {
+    option (gogoproto.equal) = true;
+
+    uint64 delegate = 1 [(gogoproto.moretags) = "yaml:\"delegate\""];
+    uint64 undelegate = 2 [(gogoproto.moretags) = "yaml:\"undelegate\""];
+    uint64 begin_redelegate = 3 [(gogoproto.moretags) = "yaml:\"begin_redelegate\""];
+    uint64 cancel_unbonding_delegation = 4 [(gogoproto.moretags) = "yaml:\"cancel_unbonding_delegation\""];
+    uint64 edit_validator = 5 [(gogoproto.moretags) = "yaml:\"edit_validator\""];
+    uint64 create_validator = 6 [(gogoproto.moretags) = "yaml:\"create_validator\""];
+  }
 </code></pre>
 <h3>Epochs</h3>
 <p>The <a href="./keeper/params.go">epoch storage</a> maintains the metadata of each epoch.
@@ -231,14 +249,17 @@ message Epoch {
   // finalised. The last_block_time field is nil in the epoch's beginning, and
   // is set upon the end of this epoch.
   google.protobuf.Timestamp last_block_time = 4 [ (gogoproto.stdtime) = true ];
+  // app_hash_root is the Merkle root of all AppHashs in this epoch
+  // It will be used for proving a block is in an epoch
+  bytes app_hash_root = 5;
   // sealer is the last block of the sealed epoch
   // sealer_app_hash points to the sealer but stored in the 1st header
   // of the next epoch
-  bytes sealer_app_hash = 5;
+  bytes sealer_app_hash = 6;
   // sealer_block_hash is the hash of the sealer
   // the validator set has generated a BLS multisig on the hash,
   // i.e., hash of the last block in the epoch
-  bytes sealer_block_hash = 6;
+  bytes sealer_block_hash = 7;
 }
 </code></pre>
 <h3>Epoch message queue</h3>
@@ -263,7 +284,7 @@ message QueuedMessage {
   // block_time is the timestamp when this msg is submitted to Babylon
   google.protobuf.Timestamp block_time = 4 [ (gogoproto.stdtime) = true ];
   // msg is the actual message that is sent by a user and is queued by the
-  // epoching module
+  // Epoching module
   oneof msg {
     cosmos.staking.v1beta1.MsgCreateValidator msg_create_validator = 5;
     cosmos.staking.v1beta1.MsgDelegate msg_delegate = 6;
@@ -414,6 +435,7 @@ name "sealer BlockHash".</li>
 following</a> <em>if at the last block of the current epoch</em>:</p>
 <ol>
 <li>Get all queued messages of this epoch in the epoch message queue storage.</li>
+<li>Unescrow (unlock) the funds previously locked for these messages so they are available for staking-message execution.</li>
 <li>Forward each of the queued messages to the corresponding message handler in
 the Staking module.</li>
 <li>Emit events about the execution results of the messages.</li>
@@ -535,7 +557,7 @@ message EventWrappedStakingUpdateParams {
 <h2>Queries</h2>
 <p>The Epoching module provides a set of queries about epochs, validators and
 delegations, listed at
-<a href="https://docs.babylonlabs.io/docs/developer-guides/grpcrestapi#tag/Epoching">docs.babylonlabs.io</a>.</p>
+<a href="https://docs.babylonlabs.io/docs/developer-guides/modules/epoching">docs.babylonlabs.io</a>.</p>
 
   </article>
 </body>
