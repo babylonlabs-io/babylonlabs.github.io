@@ -1,7 +1,7 @@
 {
     "position": 1,
-    "label": "Testnet",
+    "label": "signet",
     "collapsible": true,
     "collapsed": true,
-    "className": "testnet_sidebar_header"
+    "className": "signet_sidebar_header"
 }
