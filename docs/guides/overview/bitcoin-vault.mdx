@@ -1,0 +1,63 @@
+---
+title: Bitcoin Vault — Overview
+sidebar_position: 1
+sidebar_label: Bitcoin Vault
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+## Elevator pitch
+Bitcoin Vault is a toolkit that securely connects Bitcoin on-chain state to external smart contracts and systems. By combining on-chain contracts, light-client proofs (SNARKs), and independent indexers, it enables verifying Bitcoin consensus and UTXO state in other chains or applications without trusting any single third party.
+
+
+## Why it exists
+- Minimize centralized trust: remove the need to trust individual nodes or custodians; security is enforced by cryptographic proofs and on-chain rules.
+- Verifiable light clients: provide provable, compact attestations of Bitcoin consensus to target chains instead of requiring full Bitcoin nodes to remain online.
+- Modular and replaceable: indexer, prover, and contract layers are separated so each can be swapped or upgraded independently.
+
+## Main components
+- bitcoin-vault (core logic, Rust): the main runtime/tools coordinating vault logic, key-management policies, and interactions with provers and indexers.
+- vault-provers (provers, Rust): encodes light-client consensus checks into SNARKs and produces proofs that can be verified on target chains.
+- vault-indexer (indexer, Go): continuously tracks the Bitcoin network and maintains queryable state such as UTXO snapshots, transaction indexes, and block headers.
+- vault-contracts (contracts, Solidity): deployed on the target smart contract platform to verify proofs, maintain on-chain state, and run proof-constrained business logic.
+
+Note: these components are decoupled: the indexer collects data, the prover compresses that data into verifiable proofs, and contracts consume and verify proofs on-chain.
+
+## Architecture diagram
+<div className="flex flex-col items-center justify-center max-w-md mx-auto">
+  <ThemedImage
+    alt="Vault Architecture Diagram"
+    sources={{
+      light: useBaseUrl('/img/guides/vault_architecture.svg'),
+      dark: useBaseUrl('/img/guides/vault_architecture.svg'),
+    }}
+  />
+</div>
+
+## Data flow
+1. The indexer listens to Bitcoin and keeps accurate records of block headers, transactions, and UTXO state.
+2. When an on-chain proof of Bitcoin state is needed (e.g., prove ownership of a UTXO), the prover fetches required data from the indexer and generates a zero-knowledge/recursive proof (SNARK) that includes consensus checks (block chain continuity, POW, transaction validity, UTXO existence).
+3. The proof plus minimal metadata are submitted to the target chain's vault contracts.
+4. The smart contract verifies the proof (an on-chain, deterministic step) and, if valid, executes the requested action (release funds, update state, emit events).
+5. A local bitcoin-vault service handles key policies, coordination, error handling, and audit logs.
+
+
+## Trustless model
+This system minimizes trust by clearly defining what does and does not need to be trusted.
+
+- What you do NOT need to trust:
+- Individual indexer nodes: a single compromised indexer cannot cause irreversible loss — provers can validate the data and reject inconsistent inputs. Multiple indexers and cross-checks further reduce risk.
+- Prover operators: a malicious prover cannot succeed unless it can produce a mathematically valid proof; the contract's verification will reject fake proofs.
+- Middlemen or witnesses: final authority is the on-chain verifier and the proof; human operators or proxies do not have unilateral control.
+
+- What you DO need to trust (minimal surface):
+- The target chain (smart contract platform): the contract execution and consensus of that chain must be trusted to run verification correctly and make state transitions immutable.
+- The verification key (vk) and verifier parameters: initial generation and management of the SNARK verification key must be transparent and secure (e.g., multi-party generation or auditable process). If vk is replaced or corrupted, security is broken.
+
+In summary, trust shifts from running entities (nodes/people) to verifiable cryptographic artifacts (proofs, contract code, and verification keys). If the target chain and verification parameters are trustworthy, the system can be regarded as trust-minimized.
+
+## Attack surface & mitigations
+- Fake data or forged proofs: contracts verify proofs with vk; invalid proofs are rejected.
+- Chain reorgs and replay: include block height and chain continuity checks in proofs; contracts should require sufficient confirmations or finality windows.
+- Verification key tampering: use MPC ceremonies, multisig or governance with time locks for vk updates; make vk generation audit logs public.
+- Reliance on a single indexer: run multiple indexers, cross-validate data, or run an independent light-client as an additional data source.
