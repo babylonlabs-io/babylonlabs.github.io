@@ -135,17 +135,14 @@ parameters. The Finality module's parameters are represented as a <code>Params</
 <pre><code class="language-protobuf">// Params defines the parameters for the module.
 message Params {
   option (gogoproto.goproto_stringer) = false;
-
-  // max_active_finality_providers is the maximum number of active finality providers in the BTC staking protocol
-  uint32 max_active_finality_providers = 1;
   // signed_blocks_window defines the size of the sliding window for tracking finality provider liveness
-  int64 signed_blocks_window  = 2;
+  int64 signed_blocks_window  = 1;
   // finality_sig_timeout defines how much time (in terms of blocks) finality providers have to cast a finality
   // vote before being judged as missing their voting turn on the given block
-  int64 finality_sig_timeout = 3;
+  int64 finality_sig_timeout = 2;
   // min_signed_per_window defines the minimum number of blocks that a finality provider is required to sign
-  // within the sliding window to avoid being jailed
-  bytes min_signed_per_window = 4 [
+  // within the sliding window to avoid being detected as sluggish
+  bytes min_signed_per_window = 3 [
     (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable)   = false,
@@ -153,14 +150,7 @@ message Params {
   ];
   // min_pub_rand is the minimum number of public randomness each
   // message should commit
-  uint64 min_pub_rand = 5;
-  // jail_duration is the minimum period of time that a finality provider remains jailed
-  google.protobuf.Duration jail_duration = 6
-  [(gogoproto.nullable) = false, (amino.dont_omitempty) = true, (gogoproto.stdduration) = true];
-  // finality_activation_height is the babylon block height which the finality module will
-  // start to accept finality voting and the minimum allowed value for the public randomness
-  // commit start height.
-  uint64 finality_activation_height = 7;
+  uint64 min_pub_rand = 4;
 }
 </code></pre>
 <h3>Voting power table</h3>
@@ -235,11 +225,12 @@ secp256k1 secret key, as per EOTS's extractability property.</p>
 // signatures with correct public randomness on two conflicting Babylon headers
 message Evidence {
     // fp_btc_pk is the BTC PK of the finality provider that casts this vote
-    bytes fp_btc_pk = 1 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+    bytes fp_btc_pk = 1 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
     // block_height is the height of the conflicting blocks
     uint64 block_height = 2;
-    // pub_rand is the public randomness the finality provider has committed to
-    bytes pub_rand = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.SchnorrPubRand" ];
+    // master_pub_rand is the master public randomness the finality provider has committed to
+    // encoded as a base58 string
+    string master_pub_rand = 3;
     // canonical_app_hash is the AppHash of the canonical block
     bytes canonical_app_hash = 4;
     // fork_app_hash is the AppHash of the fork block
@@ -248,10 +239,10 @@ message Evidence {
     // where finality signature is an EOTS signature, i.e.,
     // the `s` in a Schnorr signature `(r, s)`
     // `r` is the public randomness that is already committed by the finality provider
-    bytes canonical_finality_sig = 6 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.SchnorrEOTSSig" ];
+    bytes canonical_finality_sig = 6 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.SchnorrEOTSSig" ];
     // fork_finality_sig is the finality signature to the fork block
     // where finality signature is an EOTS signature
-    bytes fork_finality_sig = 7 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.SchnorrEOTSSig" ];
+    bytes fork_finality_sig = 7 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.SchnorrEOTSSig" ];
 }
 </code></pre>
 <h3>Signing info tracker</h3>
@@ -284,7 +275,7 @@ of blocks) of the sliding window used to track finality provider liveness.</p>
 message FinalityProviderSigningInfo {
   // fp_btc_pk is the BTC PK of the finality provider that casts this finality
   // signature
-  bytes fp_btc_pk = 1 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  bytes fp_btc_pk = 1 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // start_height is the block height at which finality provider become active
   int64 start_height = 2;
   // missed_blocks_counter defines a counter to avoid unnecessary array reads.
@@ -315,7 +306,7 @@ message MsgCommitPubRandList {
   option (cosmos.msg.v1.signer) = "signer";
   string signer = 1;
   // fp_btc_pk is the BTC PK of the finality provider that commits the public randomness
-  bytes fp_btc_pk = 2 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  bytes fp_btc_pk = 2 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // start_height is the start block height of the list of public randomness
   uint64 start_height = 3;
   // num_pub_rand is the number of public randomness committed
@@ -326,7 +317,7 @@ message MsgCommitPubRandList {
   // sig is the signature on (start_height || num_pub_rand || commitment) signed by 
   // SK corresponding to fp_btc_pk. This prevents others to commit public
   // randomness on behalf of fp_btc_pk
-  bytes sig = 6 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340Signature" ];
+  bytes sig = 6 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
 }
 </code></pre>
 <p>Upon <code>MsgCommitPubRandList</code>, a Babylon node will execute as follows:</p>
@@ -352,7 +343,7 @@ message MsgAddFinalitySig {
 
     string signer = 1;
     // fp_btc_pk is the BTC PK of the finality provider that casts this vote
-    bytes fp_btc_pk = 2 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+    bytes fp_btc_pk = 2 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
     // block_height is the height of the voted block
     uint64 block_height = 3;
     // block_app_hash is the AppHash of the voted block
@@ -361,7 +352,7 @@ message MsgAddFinalitySig {
     // where finality signature is an EOTS signature, i.e.,
     // the `s` in a Schnorr signature `(r, s)`
     // `r` is the public randomness that is already committed by the finality provider
-    bytes finality_sig = 5 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.SchnorrEOTSSig" ];
+    bytes finality_sig = 5 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.SchnorrEOTSSig" ];
 }
 </code></pre>
 <p>Upon <code>MsgAddFinalitySig</code>, a Babylon node will execute as follows:</p>

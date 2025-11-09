@@ -105,7 +105,7 @@ or whether a staking transaction the staker intended to create has been included
 in the Bitcoin ledger.</li>
 </ul>
 <h3>Stake Creation</h3>
-<h4>Post-staking Registration</h4>
+<h4>Single Step Delegation</h4>
 <p>A Bitcoin staker can receive voting power through their Bitcoin stake delegation
 by following this process:</p>
 <ol>
@@ -131,13 +131,13 @@ This happens by the submission of a <a href="#msgcreatebtcdelegation">MsgCreateB
 for the slashing transactions and unbonding transaction.
 The BTC Delegation is now activated.</li>
 </ol>
-<h4>Pre-staking Registration</h4>
+<h4>Expression of Interest Delegation (EOI)</h4>
 <p>The above mechanism requires the staker to first lock their funds
 and then request the Babylon blockchain to activate the stake.
 For stakers that want to avoid this and prefer to first receive confirmation
-and then lock their funds on Bitcoin, the pre-staking registration
+and then lock their funds on Bitcoin, the Expression of Interest (EOI) procedure
 can be used.</p>
-<p>The pre-staking registration procedure works as follows:</p>
+<p>The EOI procedure works as follows:</p>
 <ol>
 <li>The BTC staker constructs the following transactions (whose specifications
 can be found <a href="../../docs/staking-script.md">here</a>) and sends them on Babylon
@@ -189,9 +189,7 @@ message Params {
   // PARAMETERS COVERING STAKING
   // covenant_pks is the list of public keys held by the covenant committee
   // each PK follows encoding in BIP-340 spec on Bitcoin
-  repeated bytes covenant_pks = 1
-      [ (gogoproto.customtype) =
-            "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  repeated bytes covenant_pks = 1 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // covenant_quorum is the minimum number of signatures needed for the covenant
   // multisignature
   uint32 covenant_quorum = 2;
@@ -199,15 +197,13 @@ message Params {
   int64 min_staking_value_sat = 3;
   // max_staking_value_sat is the maximum of satoshis locked in staking output
   int64 max_staking_value_sat = 4;
-  // min_staking_time is the minimum lock time specified in staking output
-  // script
+  // min_staking_time is the minimum lock time specified in staking output script
   uint32 min_staking_time_blocks = 5;
-  // max_staking_time_blocks is the maximum lock time time specified in staking
-  // output script
+  // max_staking_time_blocks is the maximum lock time time specified in staking output script
   uint32 max_staking_time_blocks = 6;
   // PARAMETERS COVERING SLASHING
-  // slashing_pk_script is the pk_script expected in slashing output ie. the
-  // first output of slashing transaction
+  // slashing_pk_script is the pk_script expected in slashing output ie. the first
+  // output of slashing transaction
   bytes slashing_pk_script = 7;
   // min_slashing_tx_fee_sat is the minimum amount of tx fee (quantified
   // in Satoshi) needed for the pre-signed slashing tx. It covers both:
@@ -217,34 +213,25 @@ message Params {
   // expressed as a decimal (e.g., 0.5 for 50%). Maximal precion is 2 decimal
   // places
   string slashing_rate = 9 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
   ];
   // PARAMETERS COVERING UNBONDING
-  // unbonding_time is the exact unbonding time required from unbonding
-  // transaction it must be larger than `checkpoint_finalization_timeout` from
-  // `btccheckpoint` module
+  // unbonding_time_blocks is the required timelock on unbonding transaction in BTC blocks
   uint32 unbonding_time_blocks = 10;
-  // unbonding_fee exact fee required for unbonding transaction
+  // unbonding_fee_sat is the exact fee required for unbonding transaction
   int64 unbonding_fee_sat = 11;
   // PARAMETERS COVERING FINALITY PROVIDERS
-  // min_commission_rate is the chain-wide minimum commission rate that a
-  // finality provider can charge their delegators expressed as a decimal (e.g.,
-  // 0.5 for 50%). Maximal precion is 2 decimal places
+  // min_commission_rate is the chain-wide minimum commission rate that a finality provider
+  // can charge their delegators expressed as a decimal (e.g., 0.5 for 50%). Maximal precion
+  // is 2 decimal places
   string min_commission_rate = 12 [
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
+    (gogoproto.nullable)   = false
   ];
   // base gas fee for delegation creation
   uint64 delegation_creation_base_gas_fee = 13;
-  // allow_list_expiration_height is the height at which the allow list expires
-  // i.e all staking transactions are allowed to enter Babylon chain afterwards
-  // setting it to 0 means allow list is disabled
-  uint64 allow_list_expiration_height = 14;
-  // btc_activation_height is the btc height from which parameters are activated
-  // (inclusive)
-  uint32 btc_activation_height = 15;
 }
 </code></pre>
 <h3>Finality providers</h3>
@@ -256,42 +243,31 @@ format, and the value is a <code>FinalityProvider</code>
 finality provider.</p>
 <pre><code class="language-protobuf">// FinalityProvider defines a finality provider
 message FinalityProvider {
-  // addr is the bech32 address identifier of the finality provider.
-  string addr = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  // description defines the description terms for the finality provider.
-  cosmos.staking.v1beta1.Description description = 2;
-  // commission defines the commission rate of the finality provider.
-  string commission = 3 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec"
-  ];
-  // btc_pk is the Bitcoin secp256k1 PK of this finality provider
-  // the PK follows encoding in BIP-340 spec
-  bytes btc_pk = 4
-      [ (gogoproto.customtype) =
-            "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
-  // pop is the proof of possession of the btc_pk, where the BTC
-  // private key signs the bech32 bbn addr of the finality provider.
-  ProofOfPossessionBTC pop = 5;
-  // slashed_babylon_height indicates the Babylon height when
-  // the finality provider is slashed.
-  // if it's 0 then the finality provider is not slashed
-  uint64 slashed_babylon_height = 6;
-  // slashed_btc_height indicates the BTC height when
-  // the finality provider is slashed.
-  // if it's 0 then the finality provider is not slashed
-  uint32 slashed_btc_height = 7;
-  // jailed defines whether the finality provider is jailed
-  bool jailed = 8;
-  // highest_voted_height is the highest height for which the
-  // finality provider has voted
-  uint32 highest_voted_height = 9;
-  // consumer_id is the ID of the consumer the finality provider is operating
-  // on. If it's missing / empty, it's assumed the finality provider is
-  // operating in the Babylon chain.
-  string consumer_id = 10;
-  // commission_info contains information details of the finality provider commission.
-  CommissionInfo commission_info = 11;
+    // addr is the bech32 address identifier of the finality provider.
+    string addr = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+    // description defines the description terms for the finality provider.
+    cosmos.staking.v1beta1.Description description = 2;
+    // commission defines the commission rate of the finality provider.
+    string commission = 3  [
+        (cosmos_proto.scalar)  = "cosmos.Dec",
+        (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec"
+    ];
+    // btc_pk is the Bitcoin secp256k1 PK of this finality provider
+    // the PK follows encoding in BIP-340 spec
+    bytes btc_pk = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
+    // pop is the proof of possession of the btc_pk, where the BTC
+    // private key signs the bech32 bbn addr of the finality provider.
+    ProofOfPossessionBTC pop = 5;
+    // slashed_babylon_height indicates the Babylon height when
+    // the finality provider is slashed.
+    // if it's 0 then the finality provider is not slashed
+    uint64 slashed_babylon_height = 6;
+    // slashed_btc_height indicates the BTC height when
+    // the finality provider is slashed.
+    // if it's 0 then the finality provider is not slashed
+    uint32 slashed_btc_height = 7;
+    // jailed defines whether the finality provider is jailed
+    bool jailed = 8;
 }
 </code></pre>
 <h3>BTC delegations</h3>
@@ -309,14 +285,14 @@ message BTCDelegation {
     string staker_addr = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
     // btc_pk is the Bitcoin secp256k1 PK of this BTC delegation
     // the PK follows encoding in BIP-340 spec
-    bytes btc_pk = 2 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+    bytes btc_pk = 2 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
     // pop is the proof of possession of babylon_pk and btc_pk
     ProofOfPossessionBTC pop = 3;
     // fp_btc_pk_list is the list of BIP-340 PKs of the finality providers that
     // this BTC delegation delegates to
-    // If there is more than 1 PKs, then this means the delegation is
-    // multi-staked to multiple finality providers
-    repeated bytes fp_btc_pk_list = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+    // If there is more than 1 PKs, then this means the delegation is restaked
+    // to multiple finality providers
+    repeated bytes fp_btc_pk_list = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
     // staking_time is the number of blocks for which the delegation is locked on BTC chain
     uint32 staking_time = 5;
     // start_height is the start BTC height of the BTC delegation
@@ -339,7 +315,7 @@ message BTCDelegation {
     // delegator_sig is the signature on the slashing tx
     // by the delegator (i.e., SK corresponding to btc_pk).
     // It will be a part of the witness for the staking tx output.
-    bytes delegator_sig = 12 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340Signature" ];
+    bytes delegator_sig = 12 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
     // covenant_sigs is a list of adaptor signatures on the slashing tx
     // by each covenant member
     // It will be a part of the witness for the staking tx output.
@@ -379,7 +355,7 @@ message BTCUndelegation {
     // delegator_slashing_sig is the signature on the slashing tx
     // by the delegator (i.e., SK corresponding to btc_pk).
     // It will be a part of the witness for the unbonding tx output.
-    bytes delegator_slashing_sig = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340Signature" ];
+    bytes delegator_slashing_sig = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
     // covenant_slashing_sigs is a list of adaptor signatures on the slashing tx
     // by each covenant member
     // It will be a part of the witness for the staking tx output.
@@ -431,7 +407,7 @@ message MsgCreateFinalityProvider {
   ];
   // btc_pk is the Bitcoin secp256k1 PK of this finality provider
   // the PK follows encoding in BIP-340 spec
-  bytes btc_pk = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  bytes btc_pk = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // pop is the proof of possession of btc_pk over the FP signer address.
   ProofOfPossessionBTC pop = 5;
 }
@@ -510,10 +486,10 @@ message MsgCreateBTCDelegation {
   // pop is the proof of possession of btc_pk by the staker_addr.
   ProofOfPossessionBTC pop = 2;
   // btc_pk is the Bitcoin secp256k1 PK of the BTC delegator
-  bytes btc_pk = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  bytes btc_pk = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // fp_btc_pk_list is the list of Bitcoin secp256k1 PKs of the finality providers, if there is more than one
   // finality provider pk it means that delegation is re-staked
-  repeated bytes fp_btc_pk_list = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  repeated bytes fp_btc_pk_list = 4 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // staking_time is the time lock used in staking transaction
   uint32 staking_time = 5;
   // staking_value  is the amount of satoshis locked in staking output
@@ -529,7 +505,7 @@ message MsgCreateBTCDelegation {
   // It will be a part of the witness for the staking tx output.
   // The staking tx output further needs signatures from covenant and finality provider in
   // order to be spendable.
-  bytes delegator_slashing_sig = 10 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340Signature" ];
+  bytes delegator_slashing_sig = 10 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
   // unbonding_time is the time lock used when funds are being unbonded. It is be used in:
   // - unbonding transaction, time lock spending path
   // - staking slashing transaction, change output
@@ -547,7 +523,7 @@ message MsgCreateBTCDelegation {
   // Note that the tx itself does not contain signatures, which are off-chain.
   bytes unbonding_slashing_tx = 14 [ (gogoproto.customtype) = "BTCSlashingTx" ];
   // delegator_unbonding_slashing_sig is the signature on the slashing tx by the delegator (i.e., SK corresponding to btc_pk).
-  bytes delegator_unbonding_slashing_sig = 15 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340Signature" ];
+  bytes delegator_unbonding_slashing_sig = 15 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
 }
 </code></pre>
 <p>Upon <code>MsgCreateBTCDelegation</code>, a Babylon node will execute as follows:</p>
@@ -591,10 +567,9 @@ delegation known to Babylon.</li>
 Babylon.</li>
 <li>If the allow-list is enabled, ensure that the staking transaction is
 in the allow-list.</li>
-<li>If the delegation contains an inclusion proof (optional due to the capability
-for pre-staking registration), verify the inclusion proof and ensure that it is
-<code>BTCConfirmationDepth</code>-deep in the Bitcoin blockchain, where
-<code>BTCConfirmationDepth</code> is a module parameter specified in the BTC
+<li>If the delegation contains an inclusion proof (it is optional due to EOI),
+verify the inclusion proof and ensure that it is <code>BTCConfirmationDepth</code>-deep in the Bitcoin
+blockchain, where <code>BTCConfirmationDepth</code> is a module parameter specified in the BTC
 Checkpoint module. </li>
 <li>Create a <code>BTCDelegation</code> object and save it to the BTC delegation storage and
 the BTC delegation index storage.</li>
@@ -605,8 +580,8 @@ the proof of inclusion of a Bitcoin Stake delegation on the
 Bitcoin blockchain.
 This message is utilised for notifying the Babylon blockchain
 that a staking transaction that was previously submitted through
-the pre- staking registration process and is now on Bitcoin and has
-received sufficient confirmations to become active.</p>
+the EOI process is now on Bitcoin and has received sufficient
+confirmations to become active.</p>
 <pre><code class="language-protobuf">// MsgAddBTCDelegationInclusionProof is the message for adding proof of inclusion of BTC delegation on BTC chain
 message MsgAddBTCDelegationInclusionProof {
   option (cosmos.msg.v1.signer) = "signer";
@@ -641,7 +616,7 @@ message MsgAddCovenantSigs {
 
   string signer = 1;
   // pk is the BTC public key of the covenant member
-  bytes pk = 2  [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340PubKey" ];
+  bytes pk = 2  [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340PubKey" ];
   // staking_tx_hash is the hash of the staking tx.
   // It uniquely identifies a BTC delegation
   string staking_tx_hash = 3;
@@ -651,7 +626,7 @@ message MsgAddCovenantSigs {
   repeated bytes slashing_tx_sigs = 4;
   // unbonding_tx_sig is the signature of the covenant on the unbonding tx submitted to babylon
   // the signature follows encoding in BIP-340 spec
-  bytes unbonding_tx_sig = 5 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/types.BIP340Signature" ];
+  bytes unbonding_tx_sig = 5 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
   // slashing_unbonding_tx_sigs is a list of adaptor signatures of the covenant
   // on slashing tx corresponding to unbonding tx submitted to babylon
   // the order of sigs should respect the order of finality providers
@@ -687,15 +662,9 @@ message MsgBTCUndelegate {
   // staking_tx_hash is the hash of the staking tx.
   // It uniquely identifies a BTC delegation
   string staking_tx_hash = 2;
-  // stake_spending_tx is a bitcoin transaction that spends the staking
-  // transaction i.e it has staking output as an input
-  bytes stake_spending_tx = 3;
-  // spend_spending_tx_inclusion_proof is the proof of inclusion of the
-  // stake_spending_tx in the BTC chain
-  InclusionProof stake_spending_tx_inclusion_proof = 4;
-  // funding_transactions is a list of bitcoin transactions that funds the stake_spending_tx
-  // i.e. they are inputs of the stake_spending_tx
-  repeated bytes funding_transactions = 5;
+  // unbonding_tx_sig is the signature of the staker on the unbonding tx submitted to babylon
+  // the signature follows encoding in BIP-340 spec
+  bytes unbonding_tx_sig = 3 [ (gogoproto.customtype) = "github.com/babylonlabs-io/babylon/v4/types.BIP340Signature" ];
 }
 </code></pre>
 <p>Upon <code>BTCUndelegate</code>, a Babylon node will execute as follows:</p>

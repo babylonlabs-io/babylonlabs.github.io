@@ -3,9 +3,5 @@
     "label": "Networks",
     "collapsible": true,
     "collapsed": true,
-    "className": "networks_sidebar_header",
-    "link": {
-      "type": "doc",
-      "id": "guides/networks/networks"
-    }
+    "className": "networks_sidebar_header"
   }

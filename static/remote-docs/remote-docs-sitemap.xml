@@ -28,43 +28,16 @@
     <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/consumer_zone_programs/babylon_contracts.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/consumer_zone_programs/zone_concierge.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin/mainnet/covonent_committee.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-1/mainnet/covonent_committee/covonent_committee.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin/mainnet/finality_provider_registration.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-1/mainnet/finality_provider_registration.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-1/mainnet/global_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-1/testnet/covonent_committee/covonent_committee.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-1/testnet/finality_provider_registration.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-1/testnet/global_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-2/mainnet/mainnet.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/phase-2/testnet/testnet.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/phases_of_the_launch/phase-2/eligibility.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/phases_of_the_launch/phase-2/registration.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin/mainnet/global_parameters.html</loc>
   </url>
   <url>
     <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/specifications/bitcoin_staking_scripts-version-next-v2.x.html?version=next-v2.x</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/specifications/bitcoin_staking_scripts-version-next-v4.x.html?version=next-v4.x</loc>
   </url>
   <url>
     <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/specifications/staking_transactions-version-next-v2.x.html?version=next-v2.x</loc>

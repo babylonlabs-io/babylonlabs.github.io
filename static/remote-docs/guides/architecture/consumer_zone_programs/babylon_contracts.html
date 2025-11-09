@@ -24,15 +24,16 @@
   <article>
     
     <h1>Cosmos BSN Contracts</h1>
-<p>This repository contains the CosmWasm smart contracts that enable
-the integration of Cosmos BSNs with the Babylon BTC Staking protocol.</p>
+<p>This repository contains the CosmWasm smart contracts that enable the
+integration of Cosmos BSNs with the Babylon BTC Staking protocol.</p>
 <h2>Architecture</h2>
 <p>The contracts are written in Rust, and use the CosmWasm framework to interact
-with the BSN's Cosmos application layer.
-There's a thin layer which adds a <a href="https://github.com/babylonlabs-io/babylon-sdk/tree/main/x/babylon"><code>babylon</code> module</a>
-, which provides the necessary functionality to interact with the contracts
-through privileged calls (<code>sudo</code> messages) and custom messages.
-This thin layer is naturally written in Go, and uses the Cosmos SDK.</p>
+with the BSN's Cosmos application layer. There's a thin layer which adds a
+<a href="https://github.com/babylonlabs-io/babylon-sdk/tree/main/x/babylon"><code>babylon</code>
+module</a> ,
+which provides the necessary functionality to interact with the contracts
+through privileged calls (<code>sudo</code> messages) and custom messages. This thin layer
+is naturally written in Go, and uses the Cosmos SDK.</p>
 <p>An integrator can import the <code>babylon</code> module into their Cosmos SDK-based chain,
 and use the provided functionality to interact with the Cosmos BSN contracts,
 following the demo app's guidelines and layout, which is provided in
@@ -41,6 +42,11 @@ following the demo app's guidelines and layout, which is provided in
 integration and future upgrades.</p>
 <p>A broad architecture diagram, along with the contracts' main interfaces, can be
 found in the <a href="docs/ARCHITECTURE.md"><code>docs/ARCHITECTURE.md</code></a> documentation.</p>
+<h2>Contract Migration</h2>
+<p>All contracts support CosmWasm's built-in migration mechanism for upgrading
+contract logic while preserving state. For detailed migration procedures,
+troubleshooting, and best practices, see the <a href="MIGRATION.md"><code>MIGRATION.md</code></a>
+guide.</p>
 <h2>Development</h2>
 <h3>Prerequisites</h3>
 <p>Make sure you have <code>cargo-run-script</code> installed and docker running.</p>
@@ -70,8 +76,8 @@ cargo clippy --all-targets -- -D warnings
 <p>Note: Requires the optimized contract to be built (<code>cargo optimize</code>)</p>
 <pre><code class="language-bash">cargo test --test integration
 </code></pre>
-<p>Alternatively, you can run the following command, that makes sure to build the optimized contract before running
-the integration tests.</p>
+<p>Alternatively, you can run the following command, that makes sure to build the
+optimized contract before running the integration tests.</p>
 <pre><code class="language-bash">cargo run-script integration
 </code></pre>
 <h3>E2E tests</h3>

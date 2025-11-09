@@ -44,7 +44,7 @@ const PRODUCTS = [
   },
   {
     title: 'Build BSNs',
-    link: '/bsns',
+    link: '/guides/overview/bsns',
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
