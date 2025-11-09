@@ -50,7 +50,7 @@ cd babylon
 # tag corresponds to the version of the software
 # you want to install -- depends on which
 # height you sync from
-git checkout v1.0.0-rc.6-fix
+git checkout v2.3.1
 # we use this to ensure that the testnet-specific upgrade data
 # are included in the binary
 BABYLON_BUILD_OPTIONS="testnet" make install
@@ -63,7 +63,7 @@ BABYLON_BUILD_OPTIONS="testnet" make install
 </ul>
 <p>You can verify your installation by executing the <code>version</code> command:</p>
 <pre><code class="language-shell">babylond version
-v1.0.0-rc.6-fix
+v2.3.1
 </code></pre>
 <p>If your shell cannot find the installed binary, make sure <code>$GOPATH/bin</code> is in
 your shell's <code>$PATH</code>. Use the following command to add it to your profile,
@@ -74,7 +74,7 @@ depending on your shell:</p>
 <h2>2. Set up your node, home directory, and configuration</h2>
 <p>In this section we will initialize your node and create the necessary
 configuration directory through the <code>init</code> command.</p>
-<pre><code class="language-shell">babylond init &#x3C;moniker> --chain-id bbn-test-5 --home &#x3C;path>
+<pre><code class="language-shell">babylond init &#x3C;moniker> --chain-id bbn-test-6 --home &#x3C;path>
 </code></pre>
 <p>Parameters:</p>
 <ul>
@@ -163,7 +163,7 @@ to account for network delays.</li>
 the initial state of the blockchain and is crucial for successfully syncing
 your node. You can inspect the file <a href="../README.md#genesis">here</a> or use the
 following commands to download it directly:</p>
-<pre><code class="language-shell">wget https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-test-5/network-artifacts/genesis.json
+<pre><code class="language-shell">wget https://raw.githubusercontent.com/babylonlabs-io/networks/refs/heads/main/bbn-test-6/network-artifacts/genesis.json
 mv genesis.json &#x3C;path>/config/genesis.json # You must insert the home directory of your node
 </code></pre>
 <h2>3. Prepare for sync</h2>
@@ -181,11 +181,11 @@ height. Instead of processing all blocks from the beginning, you can download
 and import this snapshot to quickly reach a recent block height.</p>
 <p>You can obtain the network snapshot <a href="../README.md#state-snapshot">here</a>.</p>
 <p>To extract the snapshot, utilize the following command:</p>
-<pre><code class="language-shell">tar -xvf bbn-test-5.tar.gz -C &#x3C;path>
+<pre><code class="language-shell">tar -xvf bbn-test-6.tar.gz -C &#x3C;path>
 </code></pre>
 <p>Parameters:</p>
 <ul>
-<li><code>bbn-test-5.tar.gz</code>: Name of the compressed blockchain snapshot file</li>
+<li><code>bbn-test-6.tar.gz</code>: Name of the compressed blockchain snapshot file</li>
 <li><code>&#x3C;path></code> : Your node's home directory</li>
 </ul>
 <p>After importing the state, you can now start your node as specified in section
@@ -207,7 +207,7 @@ using the genesis software version <code>v0.9.0</code> in place of <code>&#x3C;t
 </ol>
 <p>Your node will sync blocks until it reaches a software upgrade height.</p>
 <p>At that point, you will have to perform the steps matching the corresponding
-<a href="../upgrades/README.md">upgrade height</a>.</p>
+<a href="./upgrades/README.md">upgrade height</a>.</p>
 <p>Note: When building the upgrade binary, include the following build flag so that
 testnet-specific upgrade data are included in the binary:</p>
 <pre><code class="language-shell">BABYLON_BUILD_OPTIONS="testnet" make install
@@ -216,7 +216,7 @@ testnet-specific upgrade data are included in the binary:</p>
 full blockchain.</p>
 <h2>4. Start the node</h2>
 <p>You can start your node using the following command:</p>
-<pre><code class="language-shell">babylond start --chain-id bbn-test-5 --home &#x3C;path> --x-crisis-skip-assert-invariants
+<pre><code class="language-shell">babylond start --chain-id bbn-test-6 --home &#x3C;path>
 </code></pre>
 <p>Parameters:</p>
 <ul>

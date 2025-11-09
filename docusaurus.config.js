@@ -217,11 +217,6 @@ const config = {
             className: 'operators-top-header',
           },
           {
-            label: 'BSNs',
-            to: '/bsns/',
-            className: 'bsns-top-header',
-          },
-          {
             label: 'API',
             items: [
               {

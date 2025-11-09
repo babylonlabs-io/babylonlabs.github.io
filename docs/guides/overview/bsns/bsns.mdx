@@ -1,0 +1,210 @@
+---
+title: Bitcoin Supercharged Networks
+sidebar_class_name: bitcoin_self_custodial_staking_sidebar
+sidebar_label: Bitcoin Supercharged Networks
+sidebar_position: 1
+keywords:
+  - Bitcoin Supercharged Networks integration
+  - Shared security for consumer chains
+  - Finality provider marketplace
+  - CosmWasm contracts for BSN
+  - IBC channel setup for BSN
+  - Reorg resilience with Bitcoin
+  - Checkpoint verification for BSN
+  - Zone concierge metadata
+---
+
+import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# What is a BSN?
+
+Bitcoin Supercharged Networks (BSNs) are blockchain networks that leverage 
+Bitcoin's security and liquidity through Babylon's native Bitcoin staking 
+protocol. In addition to traditional Proof-of-Stake security mechanisms, 
+BSNs ensure its blocks are final and unchangeable using Bitcoin as stake.
+
+BSNs utilize multi-staking architecture that enables secure Bitcoin staking 
+across multiple networks simultaneously. The technical foundation centers on 
+three key aspects:
+
+**Extractable One-Time Signatures (EOTS)** form the cryptographic backbone 
+of BSNs. Built on Bitcoin's native Schnorr signature algorithm, EOTS 
+enables slashing through cryptographic key extraction. When finality 
+providers generate EOTS key pairs for each block height, any double-signing 
+at the same height exposes their private key, enabling automatic slashing 
+enforcement without requiring social consensus.
+
+**Bitcoin Staking Contracts** operate directly on Bitcoin's blockchain 
+using native UTXO scripting. These contracts have two spending conditions: 
+a timelock condition allowing stakers to withdraw after a specified 
+period, and a slashing condition that enables a covenant committee to 
+burn staked Bitcoin if protocol violations are detected. This design 
+maintains self-custody while ensuring cryptographic security guarantees.
+
+**Babylon Genesis** serves as the control plane and first BSN 
+implementation, orchestrating security and liquidity across the entire 
+ecosystem. Built on Cosmos SDK with CosmWasm support, it provides the 
+coordination layer for Bitcoin staking rewards distribution and 
+cross-chain communication via IBC (Inter-Blockchain Communication) 
+protocol.
+
+<ThemedImage
+  alt="BSN Architecture Diagram"
+  sources={{
+    light: useBaseUrl('/img/guides/bsn.png'),
+    dark: useBaseUrl('/img/guides/bsn_dark.png'),
+  }}
+/>
+
+## BSN Integration Explained
+
+BSNs emerge from Babylon Labs' three-phase development strategy. Phase 1 
+established native Bitcoin staking on Bitcoin mainnet. Phase 2 launched 
+Babylon Genesis as the first BSN and control plane, implementing a dual 
+security model combining Bitcoin staking with BABY token validation. 
+Phase 3 enables the broader ecosystem expansion where L1s and L2s 
+integrate the Babylon Bitcoin staking protocol.
+
+The integration framework supports multiple blockchain architectures 
+including Cosmos SDK chains through native IBC protocol support, OP Stack 
+compatibility for Optimistic rollups, Arbitrum Stack integration for 
+Layer 2 solutions.
+
+BSNs gain access to Bitcoin's security through finality providers - 
+delegated validators that sign blocks using EOTS signatures. When more 
+than 2/3 of the Bitcoin stake signs a block, it achieves finality with 
+Bitcoin-level security guarantees. This process happens independently of 
+the base consensus mechanism, making BSNs compatible with any existing 
+Proof-of-Stake implementation.
+
+## Key Benefits of BSN Architecture
+
+BSNs offer developers several compelling advantages over traditional 
+blockchain networks:
+
+- **Bitcoin-level security** provides unprecedented protection backed by 
+  15+ years of proven network security and the world's largest 
+  cryptocurrency market capitalization
+- **Fast finality** combines Proof-of-Stake efficiency with Bitcoin 
+  security, enabling quick transaction confirmation while maintaining 
+  robust security guarantees
+- **Trustless operation** eliminates the need for wrapped tokens, 
+  bridges, or custodial solutions
+- **Capital efficiency** allows a single Bitcoin stake to secure 
+  multiple networks simultaneously
+- **Modular integration** enables BSNs to work with any Proof-of-Stake 
+  consensus mechanism without requiring changes to existing blockchain 
+  architectures
+- **Liquid staking tokens (LSTs)** provide liquidity while maintaining 
+  staking benefits, enabling DeFi participation and yield optimization 
+  strategies
+
+## Differences from Traditional Blockchains
+
+Traditional blockchain networks face the cold-start problem where new 
+networks struggle to attract sufficient validators and stake to ensure 
+security. BSNs solve this by providing immediate access to Bitcoin's 
+established security model.
+
+### Security Model
+While traditional networks depend on their native token's value and 
+validator set size, BSNs inherit Bitcoin's proven security backed by the 
+world's most secure blockchain. This provides stronger guarantees against 
+attacks and reduces the risk of security failures during network growth 
+phases.
+
+### Liquidity Access
+Traditional networks are limited to their native token holders and 
+ecosystem participants, while BSNs can tap into Bitcoin's massive 
+liquidity pool. This enables deeper markets, more stable economics, and 
+broader participation from Bitcoin holders who previously couldn't 
+participate in staking.
+
+### Decentralization
+BSNs benefit from Bitcoin's globally distributed mining network and 
+established validator ecosystem. Rather than building validator networks 
+from scratch, BSNs leverage Bitcoin's existing decentralization, 
+providing stronger censorship resistance and geographic distribution.
+
+## Unique Features
+
+- **Better economic security**: Native BTC staked to protect the rollup 
+  and improve its economic security, especially important for new 
+  OP-stack chains with fewer adoption. The staked BTC achieves slashable 
+  safety, where equivocations by L2 sequencers are held accountable and 
+  the BTC stake is slashable, even when equivocating L2 sequencers 
+  constitute a majority.
+
+- **Fast finality**: Improved economic security benefits OP stack 
+  chains for fast finality. If users trust votes backed by BTC stake, 
+  they can confirm transactions without waiting for the lengthy 
+  challenging period in optimistic rollups.
+
+- **Reorg resilience of L2 transactions**: Once a transaction is 
+  included in an L2 block signed by the majority of BTC-backed 
+  Finality Providers, the sequencer cannot publish a different L2 block 
+  at the same height on L1.
+
+## Bitcoin Staking Security Model for BSNs
+
+The security model combines Bitcoin's proven Proof-of-Work foundation 
+with efficient Proof-of-Stake consensus:
+
+- **Slashing mechanisms** ensure that any safety violations by finality 
+  providers result in automatic penalties through the EOTS signature 
+  system
+- **Timestamping security** anchors BSN events to Bitcoin's blockchain, 
+  providing immutable checkpoints that prevent long-range attacks
+- **Economic security** scales with Bitcoin's market capitalization, 
+  providing substantial economic barriers to attacks
+- **Isolation boundaries** prevent security issues in one BSN from 
+  affecting others
+- **Chain-specific parameters** allow customization of slashing 
+  conditions and security requirements
+
+## BSN Integration Support
+
+Babylon provides everything a BSN needs to integrate quickly, from 
+ready-made modules to hands-on development and business support.
+
+### Developer Tools
+- **Babylon SDK** – Reference Cosmos SDK modules for BSN integration
+- **babylond CLI** – Command-line tools for node operations and 
+  network interaction
+- **EOTS Manager** – Secure cryptographic key management
+- **Finality Provider Daemon (fpd)** – Validator operations and block 
+  signing
+- **Testing & Deployment** – Edge Devnet, Bitcoin Signet testnet, 
+  token faucets, and Docker-based local environments
+
+### Reference Implementation
+- **Existing Standards** – Integration follows established Cosmos SDK, 
+  CosmWasm, and Bitcoin staking standards
+- **Ready-to-Use Contracts** – Deploy `babylon_contract.wasm`, 
+  `btc_staking.wasm`, and `btc_finality.wasm`
+- **Bridge Module** – `x/babylon` connects Cosmos SDK and CosmWasm 
+  contracts
+- **IBC Support** – Preconfigured for Babylon network communication
+
+With these tools and reference modules, BSNs avoid building from scratch 
+and can focus on network features instead of foundational infrastructure.
+
+### Development & BD Support
+Our team provides:
+- Technical guidance for integration and testing
+- Business development support to connect BSNs with partners, stakers, 
+  and ecosystem programs
+
+Contact our BD team to discuss BSN integration.
+
+## Integration Guides
+
+<Link to="/guides/overview/bsns/cosmos_chains">
+  Cosmos Chain Integration Guide
+</Link>
+
+<Link to="/guides/overview/bsns/op_stack_chains">
+  OP-stack L2 Chain Integration Guide
+</Link>
