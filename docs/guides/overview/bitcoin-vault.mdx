@@ -11,7 +11,7 @@ Bitcoin Vault is a toolkit that securely connects Bitcoin on-chain state to exte
 
 
 ## Why it exists
-- Minimize centralized trust: remove the need to trust individual nodes or custodians; security is enforced by cryptographic proofs and on-chain rules.
+- No need to trust individual nodes or custodians; security is enforced by cryptographic proofs and on-chain rules.
 - Verifiable light clients: provide provable, compact attestations of Bitcoin consensus to target chains instead of requiring full Bitcoin nodes to remain online.
 - Modular and replaceable: indexer, prover, and contract layers are separated so each can be swapped or upgraded independently.
 
@@ -43,7 +43,7 @@ Note: these components are decoupled: the indexer collects data, the prover comp
 
 
 ## Trustless model
-This system minimizes trust by clearly defining what does and does not need to be trusted.
+This system minimizes trust by explicitly separating what must be trusted from what does not.
 
 - What you do NOT need to trust:
 - Individual indexer nodes: a single compromised indexer cannot cause irreversible loss — provers can validate the data and reject inconsistent inputs. Multiple indexers and cross-checks further reduce risk.
