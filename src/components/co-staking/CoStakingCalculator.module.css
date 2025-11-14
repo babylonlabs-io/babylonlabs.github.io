@@ -21,6 +21,10 @@
   color: #333;
 }
 
+[data-theme='dark'] .inputGroup label {
+  color: #e0e0e0;
+}
+
 .input {
   width: 100%;
   padding: 8px;
@@ -30,10 +34,33 @@
   box-sizing: border-box;
 }
 
+/* Hide number input arrows */
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 .input:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  background-color: #f5f5f5;
+}
+
+[data-theme='dark'] .input:disabled {
+  background-color: #2d2d2d;
+  opacity: 0.7;
 }
 
 .helperText {
@@ -41,6 +68,24 @@
   display: block;
   margin-top: 5px;
   font-size: 12px;
+}
+
+.helperText code {
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+}
+
+[data-theme='dark'] .helperText {
+  color: #b0b0b0;
+}
+
+[data-theme='dark'] .helperText code {
+  background: #1e1e1e;
+  color: #90ee90;
+  border: 1px solid #444;
 }
 
 .calculateButton {
@@ -65,6 +110,16 @@
   background: #004085;
 }
 
+.calculateButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.calculateButton:disabled:hover {
+  background: #6c757d;
+}
+
 .results {
   margin-top: 20px;
   padding: 15px;
@@ -79,13 +134,20 @@
 
 .resultsContent {
   line-height: 1.8;
+  color: inherit;
+}
+
+[data-theme='dark'] .resultsContent {
+  color: #e0e0e0;
 }
 
 .infoBox {
   margin-bottom: 15px;
   padding: 10px;
-  background: #e8f4f8;
+  background: #d1ecf1;
   border-radius: 4px;
+  border-left: 4px solid #17a2b8;
+  color: #0c5460;
 }
 
 .recommendationBox {
@@ -98,11 +160,13 @@
 .warningBox {
   background: #fff3cd;
   border-left-color: #ffc107;
+  color: #856404;
 }
 
-.infoBox {
-  background: #d1ecf1;
-  border-left-color: #17a2b8;
+[data-theme='dark'] .warningBox {
+  background: #4a3a1a;
+  border-left-color: #ffc107;
+  color: #ffd700;
 }
 
 .successBox {
@@ -111,11 +175,22 @@
   background: #d4edda;
   border-radius: 4px;
   border-left: 4px solid #28a745;
+  color: #155724;
 }
 
 .successBox h4 {
   margin-top: 0;
   color: #155724;
+}
+
+[data-theme='dark'] .successBox {
+  background: #1a4a2a;
+  border-left-color: #28a745;
+  color: #90ee90;
+}
+
+[data-theme='dark'] .successBox h4 {
+  color: #90ee90;
 }
 
 .rewardAmount {
@@ -125,8 +200,17 @@
   margin: 10px 0;
 }
 
+[data-theme='dark'] .rewardAmount {
+  color: #90ee90;
+}
+
 .rewardDetails {
   margin-top: 10px;
+  color: inherit;
+}
+
+[data-theme='dark'] .rewardDetails {
+  color: #e0e0e0;
 }
 
 .noteBox {
@@ -176,16 +260,11 @@
 
 [data-theme='dark'] .infoBox {
   background: #1a3a4a;
-  color: #e0e0e0;
+  border-left-color: #17a2b8;
+  color: #a0d8ef;
 }
 
-[data-theme='dark'] .warningBox {
-  background: #4a3a1a;
-  color: #e0e0e0;
-}
-
-[data-theme='dark'] .successBox {
-  background: #1a4a2a;
+[data-theme='dark'] .recommendationBox {
   color: #e0e0e0;
 }
 
@@ -196,7 +275,50 @@
 
 [data-theme='dark'] .noteBox code {
   background: #1e1e1e;
+  color: #90ee90;
+  border: 1px solid #444;
+}
+
+[data-theme='dark'] .noteBox strong {
   color: #e0e0e0;
+}
+
+[data-theme='dark'] .resultsContent strong {
+  color: #e0e0e0;
+}
+
+[data-theme='dark'] .infoBox strong {
+  color: #a0d8ef;
+}
+
+[data-theme='dark'] .warningBox strong {
+  color: #ffd700;
+}
+
+[data-theme='dark'] .successBox strong {
+  color: #90ee90;
+}
+
+.weightNotification {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #d4edda;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #155724;
+  border-left: 3px solid #28a745;
+}
+
+[data-theme='dark'] .weightNotification {
+  background: #1a4a2a;
+  color: #90ee90;
+  border: 1px solid #28a745;
+  border-left: 3px solid #28a745;
+}
+
+[data-theme='dark'] .weightNotification strong {
+  color: #90ee90;
+  font-weight: 600;
 }
 
 
