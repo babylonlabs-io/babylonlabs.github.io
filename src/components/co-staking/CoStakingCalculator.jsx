@@ -15,9 +15,7 @@ const getAPIBaseURL = () => {
     return 'https://babylon-archive.nodes.guru'; // Default testnet API
   }
   // Use the same domain for production, or configure via environment
-  return typeof window !== 'undefined'
-    ? `${window.location.protocol}//${window.location.host}`
-    : 'https://babylon-archive.nodes.guru';
+  return 'https://babylon-archive.nodes.guru';
 };
 
 export default function CoStakingCalculator() {
