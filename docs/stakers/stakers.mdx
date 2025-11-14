@@ -22,9 +22,9 @@ import { CardSection, Card } from '@site/src/components/CardComponents';
 
 # Babylon Genesis Stakers Overview
 
-Babylon Genesis implements a **dual-staking model** that combines the security of BTC 
-(a PoW asset) with the efficiency of Proof-of-Stake consensus. This innovative approach 
-allows both **BTC holders** and **BABY token holders** to participate in securing the network 
+Babylon Genesis implements a **dual-staking model** that combines the security of BTC
+(a PoW asset) with the efficiency of Proof-of-Stake consensus. This innovative approach
+allows both **BTC holders** and **BABY token holders** to participate in securing the network
 while earning rewards.
 
 ### Quick Start
@@ -38,6 +38,11 @@ while earning rewards.
     title="BABY Staking Guide"
     description="Learn how to stake BABY tokens"
     to="/stakers/baby_stakers/"
+  />
+  <Card
+    title="Co-Staking Guide"
+    description="Maximize rewards by staking both BTC and BABY"
+    to="/stakers/co_staking/"
   />
 </CardSection>
 
@@ -55,7 +60,8 @@ while earning rewards.
 - **Multi-staking**: Delegate across multiple Finality Providers and BSNs
 
 #### Benefits:
-- **Earn BABY rewards**: Receive a portion of the annual inflation allocated to BTC stakers
+- **Earn BABY rewards**: Receive a portion of the annual inflation allocated to BTC stakers (1% of annual inflation)
+- **Co-staking rewards**: Earn additional 2.35% annual inflation by also staking BABY tokens (see [Co-Staking](#co-staking) below)
 - **Secure the network**: Contribute to Babylon Genesis chain's security
 - **Maintain Bitcoin ownership**: Your BTC remains on the Bitcoin blockchain
 - **Fast unbonding**: ~2 days compared to typical 21 days in most PoS chains
@@ -71,7 +77,8 @@ while earning rewards.
 - **Partial slashing**: 5% slashing for double-signing violations
 
 #### Benefits:
-- **Earn rewards**: Receive a portion of the annual inflation allocated to BABY stakers
+- **Earn rewards**: Receive a portion of the annual inflation allocated to BABY stakers (2% of annual inflation)
+- **Co-staking rewards**: Earn additional 2.35% annual inflation by also staking BTC (see [Co-Staking](#co-staking) below)
 - **Secure the network**: Contribute to the Babylon Genesis chain's security and decentralization
 - **Governance rights**: Participate in shaping the future of the network
 - **Fast unbonding**: Significantly reduced unbonding period
@@ -87,9 +94,12 @@ The dual-staking model creates a robust security framework:
 - Both mechanisms contribute to securing the Babylon Genesis chain
 
 ### Reward Distribution
-The annual inflation (8%) is distributed among:
-- **BTC stakers**: 4% of annual inflation
-- **BABY stakers**: 4% of annual inflation
+The annual inflation (**5.5%**, reduced from 8%) is distributed among:
+- **BTC stakers**: 1% of annual inflation (Finality Providers can charge commission)
+- **BABY stakers**: 2% of annual inflation (CometBFT validators can charge commission)
+- **Co-staking rewards**: 2.35% of annual inflation (for users staking both BTC and BABY)
+- **Finality Provider compensation**: 0.075% of annual inflation (based on delegation size)
+- **Validator compensation**: 0.075% of annual inflation (based on delegation size)
 
 ### Governance
 - **BABY stakers** participate in governance with voting power
@@ -107,6 +117,55 @@ The annual inflation (8%) is distributed among:
 - **Slashing risk**: 5% penalty for validator double-signing
 - **Validator risk**: Choose reliable validators with good track records
 - **Market volatility**: BABY price fluctuations affect staking value
+
+## Co-Staking
+
+**Co-staking** is a powerful feature that allows you to earn **additional rewards** by staking both Bitcoin (BTC) and BABY tokens simultaneously using the **same BABY address**.
+
+### What is Co-Staking?
+
+When you stake both BTC to Finality Providers and BABY to CometBFT validators using the same BABY address, you become eligible for co-staking rewards. These rewards come from a dedicated pool representing **2.35% of annual inflation**, distributed proportionally among all co-stakers.
+
+### How Co-Staking Works
+
+Co-staking rewards are calculated based on a weighted formula:
+
+```
+w = min(B_BABY / 20,000, B_BTC)
+```
+
+Where:
+- `B_BABY` = Total amount of BABY you have staked (across all validators)
+- `B_BTC` = Total amount of BTC you have staked to active Finality Providers
+- `R` = Co-staking factor = 20,000
+
+**Key Points:**
+- Every 20,000 BABY staked makes 1 BTC eligible for co-staking rewards
+- All your BABY delegations are summed together, regardless of how many validators you delegate to
+- The optimal ratio is 20,000 BABY per 1 BTC to maximize rewards
+- Any amount of BTC and BABY will earn rewards proportionally - there's no minimum threshold
+
+### Example
+
+Alice has:
+- 1 BTC staked to a Finality Provider
+- 20,000 BABY staked to validators (could be split across multiple validators)
+
+**Co-staking weight:** min(20,000 / 20,000, 1) = 1.0 BTC-equivalent ✅
+
+Alice earns co-staking rewards proportional to her 1.0 BTC-equivalent weight.
+
+### Important Requirements
+
+⚠️ **CRITICAL:** Both BTC and BABY staking must use the **exact same BABY address**. If the addresses differ, you will receive **ZERO co-staking rewards**.
+
+### Withdrawing Co-Staking Rewards
+
+Co-staking rewards are automatically included when you withdraw BTC staking rewards. Simply click the "Withdraw" button in the BTC Staking section of the dashboard, and both BTC staking rewards and co-staking rewards will be withdrawn together in one transaction.
+
+*For a complete guide on co-staking, including step-by-step instructions and a reward calculator, see the [Co-Staking Guide](/stakers/co_staking/).*
+
+---
 
 ## Advanced Features
 
@@ -126,10 +185,11 @@ BTC stakers can delegate across multiple Finality Providers and BSNs simultaneou
 
 - **BTC Stakers**: Explore [BTC staking guides](/stakers/btc_stakers/)
 - **BABY Stakers**: Explore [BABY staking guides](/stakers/baby_stakers/)
+- **Co-Staking**: Learn how to maximize rewards with [Co-Staking Guide](/stakers/co_staking/)
 - **Learn more**: Read about [Babylon Genesis architecture](/guides/architecture/)
 - **Get support**: Visit [community channels](https://babylonlabs.io/community)
 
-This dual-staking model represents the foundation of Babylon's Bitcoin Secured Network, 
-combining the robustness of Bitcoin with the efficiency of Proof of Stake consensus to 
+This dual-staking model represents the foundation of Babylon's Bitcoin Secured Network,
+combining the robustness of Bitcoin with the efficiency of Proof of Stake consensus to
 create a secure, decentralized, and rewarding staking ecosystem.
 
