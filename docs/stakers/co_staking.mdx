@@ -1,0 +1,402 @@
+---
+sidebar_class_name: co_staking_sidebar_header
+sidebar_position: 3
+sidebar_label: BTC & BABY Co-Staking
+---
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# BTC-BABY Co-Staking Guide
+
+## Before You Start
+
+Before starting co-staking, make sure you have:
+
+- ✅ A [compatible wallet](/stakers/btc_stakers/btc_staking_tools/#wallets) set up
+- ✅ BABY tokens in your wallet
+- ✅ Access to the [Babylon dashboard](https://staking.babylonlabs.io/)
+---
+
+## Co-Staking Reward Calculator
+
+**Want to know how much you can earn?** Use our calculator to estimate your co-staking rewards:
+
+👉 **[Jump to Calculator](#co-staking-reward-calculator-1)**
+
+---
+
+## What is Co-Staking?
+
+Co-staking allows you to earn **extra rewards** by staking both Bitcoin (BTC) and BABY tokens simultaneously. The more BABY you stake alongside your BTC, the more co-staking rewards you'll receive.
+
+**Key Benefits:**
+- Earn additional 2.35% annual inflation rewards on top of regular BTC and BABY staking rewards
+- Maximize your returns by participating in both validation and finality provision
+- Support the Babylon network's security while earning more
+
+---
+
+## Step-by-Step Guide to Co-Staking
+
+### The Simple Flow
+
+Co-staking requires two simple steps that must use the **same BABY address**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Step 1: BTC → Finality Provider → ACTIVE                   │
+│  ┌──────┐      ┌──────────────┐      ┌────────┐             │
+│  │ BTC  │ ───> │ Finality     │ ───> │ ACTIVE │             │
+│  │      │      │ Provider     │      │        │             │
+│  └──────┘      └──────────────┘      └────────┘             │
+│                                                             │
+│  Step 2: BABY → Validator → ACTIVE                          │
+│  ┌──────┐      ┌──────────┐      ┌────────┐                 │
+│  │ BABY │ ───> │ Validator│ ───> │ ACTIVE │                 │
+│  │      │      │          │      │        │                 │
+│  └──────┘      └──────────┘      └────────┘                 │
+│                                                             │
+│  ⚠️  CRITICAL: Both must use the SAME BABY address!         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+:::tip ⚠️ CRITICAL WARNING
+**Wrong Address = Zero Co-Staking Rewards!**
+
+If your BTC staking address and BABY staking address are different, you will receive **ZERO co-staking rewards**. Always ensure both delegations use the exact same BABY address.
+:::
+---
+
+### Step 1: Stake Bitcoin (BTC)
+
+1. **Connect Your Wallet**
+- Open the [Babylon dashboard](https://staking.babylonlabs.io/)
+- Click "Connect Wallet" and select your wallet (Keplr, Cosmostation, etc.)
+
+<ThemedImage
+  alt="Dashboard Connect Wallet"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/dashboard.png'),
+    dark: useBaseUrl('/img/guides/co-staking/dashboard_dark.png'),
+  }}
+/>
+
+<br />
+- Make sure you're connected to the Babylon network
+- **⚠️ Remember the BABY address you're using - you'll need the same address for Step 2!**
+
+2. **Choose a Finality Provider**
+- Navigate to the BTC Staking section
+
+<ThemedImage
+  alt="BTC-Staking Section"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/btc_staking.png'),
+    dark: useBaseUrl('/img/guides/co-staking/btc_staking_dark.png'),
+  }}
+/>
+
+
+- Select an active Finality Provider from the available list
+
+<ThemedImage
+  alt="Choose Finality Provider"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/choose_fp.png'),
+    dark: useBaseUrl('/img/guides/co-staking/choose_fp_dark.png'),
+  }}
+/>
+
+- Consider factors like commission rate, uptime, and reputation
+
+3. **Create a BTC Delegation**
+- Specify the amount of BTC you want to stake
+
+<ThemedImage
+  alt="Enter BTC Amount"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/enter_btc_amount.png'),
+    dark: useBaseUrl('/img/guides/co-staking/enter_btc_amount_dark.png'),
+  }}
+/>
+
+- Click "Preview"
+
+<ThemedImage
+  alt="Preview BTC Staking"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/preview.png'),
+    dark: useBaseUrl('/img/guides/co-staking/preview_dark.png'),
+  }}
+/>
+
+- Complete the EOI (Expression of Interest) process
+
+<ThemedImage
+  alt="EOI Process"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/eoi.png'),
+    dark: useBaseUrl('/img/guides/co-staking/eoi_dark.png'),
+  }}
+/>
+
+- Click "Stake BTC" and broadcast your BTC staking transaction.
+
+<ThemedImage
+  alt="Verified Delegation"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/verified.png'),
+    dark: useBaseUrl('/img/guides/co-staking/verified_dark.png'),
+  }}
+/>
+
+4. **Wait for Activation**
+- Your delegation will move through these stages: `PENDING` → `VERIFIED` → `ACTIVE`
+
+<ThemedImage
+  alt="Activity Status"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/activity.png'),
+    dark: useBaseUrl('/img/guides/co-staking/activity_dark.png'),
+  }}
+/>
+
+- Monitor the status in the dashboard
+- Once `ACTIVE`, your BTC is providing security to the network and earning rewards
+
+---
+
+### Step 2: Stake BABY Tokens
+
+Next, stake BABY tokens to CometBFT validators using the **SAME BABY address** as Step 1.
+
+1. **Ensure Same Wallet Connection**
+- Make sure you're still connected with the same wallet from Step 1
+- Verify the BABY address matches the one used for BTC staking
+- **⚠️ CRITICAL: The address must be EXACTLY the same!**
+
+2. **Choose a Validator**
+- Navigate to the BABY Staking section in the dashboard
+
+<ThemedImage
+  alt="BABY Staking Section"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/baby_staking.png'),
+    dark: useBaseUrl('/img/guides/co-staking/baby_staking_dark.png'),
+  }}
+/>
+
+- Select a CometBFT validator from the validator list
+
+<ThemedImage
+  alt="Validator Selection"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/validators.png'),
+    dark: useBaseUrl('/img/guides/co-staking/validators_dark.png'),
+  }}
+/>
+
+- Consider commission rate, performance, and uptime
+
+3. **Delegate BABY Tokens**
+- Enter the amount of BABY you want to stake
+
+<ThemedImage
+  alt="Enter BABY Amount"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/enter_baby_amount.png'),
+    dark: useBaseUrl('/img/guides/co-staking/enter_baby_amount_dark.png'),
+  }}
+/>
+- Click "Preview"
+
+<ThemedImage
+  alt="BABY Staking Preview"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/baby_preview.png'),
+    dark: useBaseUrl('/img/guides/co-staking/baby_preview_dark.png'),
+  }}
+/>
+
+- Review and confirm the delegation transaction
+
+<ThemedImage
+  alt="Review and Confirm"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/review_confirm.png'),
+    dark: useBaseUrl('/img/guides/co-staking/review_confirm_dark.png'),
+  }}
+/>
+
+4. **Verify Your Delegation**
+- Check that your BABY delegation is active in the dashboard
+
+<ThemedImage
+  alt="Review and Confirm"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/baby_activity.png'),
+    dark: useBaseUrl('/img/guides/co-staking/baby_activity_dark.png'),
+  }}
+/>
+
+
+---
+
+### Step 3: Understand Co-Staking Rewards
+
+Co-staking rewards are calculated based on a **weighted formula** that considers both your BTC and BABY stakes.
+
+#### The Formula
+
+For each co-staker, the weight is calculated as:
+
+```
+w = min(B_BABY / R, B_BTC)
+```
+
+Where:
+- `B_BABY` = Amount of BABY you have staked
+- `B_BTC` = Amount of BTC you have staked to active FPs
+- `R` = Co-staking factor = 20,000
+
+This means: **Every 20,000 BABY staked makes 1 BTC eligible for co-staking rewards.**
+
+**Important:** The weight can be any decimal value - you don't need at least 1 BTC or 20,000 BABY to earn rewards! Even small amounts will earn proportional rewards.
+
+#### Optimal Ratio Visualization
+
+The best ratio for maximizing co-staking rewards is **20,000 BABY per 1 BTC**:
+
+| BTC Staked | Optimal BABY | Co-Staking Weight | Efficiency |
+|------------|--------------|-------------------|------------|
+| 0.1 BTC | 2,000 BABY | 0.1 BTC-equivalent | 100% ✅ |
+| 0.5 BTC | 10,000 BABY | 0.5 BTC-equivalent | 100% ✅ |
+| 1 BTC | 20,000 BABY | 1 BTC-equivalent | 100% ✅ |
+| 1 BTC | 10,000 BABY | 0.5 BTC-equivalent | 50% ⚠️ |
+| 1 BTC | 40,000 BABY | 1 BTC-equivalent | 100% ✅ (excess BABY) |
+| 6 BTC | 120,000 BABY | 6 BTC-equivalent | 100% ✅ |
+
+#### Reward Distribution
+
+Your co-staking reward is calculated as:
+
+```
+Your Reward = Total Co-Staking Pool × (Your Weight / Total Weight of All Co-Stakers)
+```
+
+The total co-staking pool is **2.35% of annual inflation**.
+
+---
+
+
+### Step 4: Monitor Your Rewards
+
+1. **Check Your Co-Staking Status**
+- Verify that both your BTC and BABY stakes are active
+
+2. **Calculate Your Expected Rewards**
+- 👉 **[Use the Co-Staking Calculator](#co-staking-reward-calculator-1)** to estimate your rewards
+- Remember: rewards depend on total network participation
+
+3. **Withdraw Rewards**
+
+**✅ One-Click Withdrawal!** Co-staking rewards are automatically included when you withdraw BTC staking rewards.
+
+**Easiest way: Click the "Rewards" button in the dashboard!**
+
+<ThemedImage
+  alt="Review and Confirm"
+  sources={{
+    light: useBaseUrl('/img/guides/co-staking/rewards.png'),
+    dark: useBaseUrl('/img/guides/co-staking/rewards_dark.png'),
+  }}
+/>
+
+- **Automatically withdraws**:
+- ✅ BTC staking rewards
+- ✅ Co-staking rewards
+- One click to claim all related rewards!
+
+
+## Important Notes
+
+### Requirements
+
+✅ **Must have active BTC delegations** to Finality Providers<br/>
+✅ **Must have active BABY delegations** to CometBFT validators<br/>
+✅ **Must use the same BABY address** for both BTC and BABY staking<br/>
+✅ **BTC delegations must be ACTIVE** (not just VERIFIED)
+
+### Limitations
+
+⚠️ **Commission cannot be charged** on co-staking rewards due to Cosmos SDK limitations<br/>
+⚠️ **Rewards are proportional** - more co-stakers means smaller individual rewards<br/>
+⚠️ **Optimal ratio** - You need 20,000 BABY per BTC to maximize rewards
+
+### Common Misconceptions
+
+❌ **Myth:** "I need at least 1 BTC or 20,000 BABY to earn co-staking rewards"<br/>
+✅ **Reality:** Any amount of BTC and BABY will earn rewards proportionally.<br/> For example:
+- 0.1 BTC + 1,000 BABY = 0.05 BTC-equivalent weight
+- 0.5 BTC + 5,000 BABY = 0.25 BTC-equivalent weight
+- 0.01 BTC + 200 BABY = 0.01 BTC-equivalent weight
+
+The formula works for any amounts - there's no minimum threshold!
+
+❌ **Myth:** "If I delegate BABY to multiple validators, my co-staking rewards are calculated separately for each validator"<br/>
+✅ **Reality:** All your BABY delegations are **summed together** for co-staking reward calculation, regardless of how many validators you delegate to.
+
+**How it works:**
+- The system calculates your total BABY staked across **all validators**
+- All BABY delegations from the same address are combined
+- The co-staking weight formula uses your **total BABY amount**, not per-validator amounts
+
+**Example:**
+- Alice has 1 BTC staked to a Finality Provider
+- Alice delegates BABY to 3 different validators:
+- 5,000 BABY to Validator A
+- 8,000 BABY to Validator B
+- 7,000 BABY to Validator C
+- **Total BABY staked:** 5,000 + 8,000 + 7,000 = 20,000 BABY
+- **Co-staking weight:** min(20,000 / 20,000, 1) = 1.0 BTC-equivalent ✅
+
+**Key Points:**
+- ✅ You can delegate to multiple validators - all BABY counts toward co-staking
+- ✅ The system sums all your BABY delegations automatically
+- ✅ As long as all delegations use the same BABY address as your BTC staking, they all count
+- ✅ Diversifying across validators doesn't reduce your co-staking rewards
+
+### Tips for Maximizing Rewards
+
+1. **Balance Your Stakes**: Aim for a ratio close to 20,000 BABY per BTC
+2. **Monitor Network Participation**: More co-stakers means rewards are shared more
+3. **Keep Both Active**: Ensure both BTC and BABY delegations remain active
+4. **Use Same Address**: Critical for eligibility
+
+---
+
+## Co-Staking Reward Calculator
+
+Use the calculator below to estimate your co-staking rewards based on your current stakes.
+
+import CoStakingCalculator from '@site/src/components/co-staking/CoStakingCalculator';
+
+<CoStakingCalculator />
+
+---
+
+## Summary
+
+Co-staking is a powerful way to maximize your rewards on Babylon by participating in both Bitcoin staking and BABY staking simultaneously. Remember:
+
+1. ✅ Stake BTC to active Finality Providers
+2. ✅ Stake BABY to CometBFT validators
+3. ✅ **Use the same BABY address for both** (Critical!)
+4. ✅ Aim for ~20,000 BABY per BTC for optimal rewards
+5. ✅ Monitor and withdraw rewards regularly
+6. ✅ Click "Withdraw" in BTC Staking section to claim all rewards (including co-staking)
+
+**Start co-staking today and earn extra rewards while supporting the Babylon network!**
+
+---
+
