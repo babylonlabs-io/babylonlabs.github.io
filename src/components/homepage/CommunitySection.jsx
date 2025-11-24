@@ -32,7 +32,7 @@ export default function CommunitySection() {
           <Link
             className="flex w-full items-center justify-center gap-2 border border-solid border-primary-100 px-8 py-2
             hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
-            href="https://www.linkedin.com/company/babylon-chain/o"
+            href="https://www.linkedin.com/company/babylon-labs-official/"
           >
            LinkedIn
           </Link>
