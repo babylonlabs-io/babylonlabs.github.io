@@ -335,3 +335,4 @@ const config = {
   },
 };
 module.exports = config;
+// This documentation website is developed and maintained by Kevin @kkkk666 (Kangtian Liu).
