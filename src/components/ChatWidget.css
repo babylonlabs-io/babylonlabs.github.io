@@ -1,0 +1,143 @@
+.babylon-chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  font-family: var(--ifm-font-family-base);
+  pointer-events: none; /* Allow clicks to pass through wrapper area */
+}
+
+.babylon-chat-widget > * {
+  pointer-events: auto; /* Re-enable clicks for children */
+}
+
+.chat-window {
+  width: 380px;
+  max-width: calc(100vw - 48px);
+  height: 600px;
+  max-height: calc(100vh - 120px);
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Improved shadow for better visibility in light mode */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme='dark'] .chat-window {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  border-color: var(--ifm-color-emphasis-300);
+}
+
+.chat-header {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background-color: var(--ifm-background-surface-color);
+  /* Ensure header color is solid and distinct */
+}
+
+.chat-input {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  background-color: var(--ifm-background-surface-color);
+}
+
+/* Focus styling moved to the input element directly */
+.chat-input input {
+  background-color: var(--ifm-background-color); /* Explicit background for input */
+  color: var(--ifm-color-content);
+  /* Ensure border is uniform */
+  border: 1px solid var(--ifm-color-emphasis-300);
+  outline: none; /* Remove default browser outline */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Full border highlight on focus */
+.chat-input input:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px var(--docs-color-primary-tint);
+}
+
+[data-theme='dark'] .chat-input input {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.chat-trigger-btn {
+  background-color: var(--ifm-color-primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.chat-trigger-btn:hover {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+/* Message Bubbles - Improved Contrast */
+.message-bubble-user {
+  background-color: var(--ifm-color-primary);
+  color: #ffffff;
+}
+
+.message-bubble-ai {
+  /* Lighter gray for light mode to stand out from white bg */
+  background-color: #f0f2f5; 
+  color: var(--ifm-color-content);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme='dark'] .message-bubble-ai {
+  background-color: var(--ifm-color-emphasis-200); /* Keep existing dark mode style */
+  border: none;
+}
+
+/* Close Button Hover */
+.close-btn {
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+.close-btn:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+[data-theme='dark'] .close-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+
+/* Markdown styles inside chat */
+.markdown-body p {
+  margin-bottom: 0.5rem;
+}
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+.markdown-body ul, .markdown-body ol {
+  margin-left: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.markdown-body code {
+  background-color: rgba(0,0,0,0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.markdown-body pre {
+  background-color: rgba(0,0,0,0.05);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+[data-theme='dark'] .markdown-body pre {
+  background-color: rgba(255,255,255,0.1);
+}
+.markdown-body a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

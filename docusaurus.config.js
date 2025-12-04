@@ -333,5 +333,8 @@ const config = {
       },
     }),
   },
+  customFields: {
+    apiBaseUrl: process.env.API_BASE_URL || '',
+  },
 };
 module.exports = config;
