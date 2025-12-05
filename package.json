@@ -20,11 +20,7 @@
     "format:docs": "prettier -w docs",
     "typecheck": "tsc",
     "spell-check": "npx cspell docs/**/*.mdx",
-    "genmd": "docusaurus gen-api-docs all",
-    "test:mongo": "node scripts/test-mongo.js",
-    "ingest:mongo": "node scripts/ingest-mongo.js",
-    "ingest:docs": "node scripts/ingest-advanced.js --repo=babylon-docs --path=./docs --pattern='**/*.{md,mdx}'",
-    "ingest:code": "node scripts/ingest-advanced.js --repo=babylon-code --path=./other-repo --pattern='**/*.go'"
+    "genmd": "docusaurus gen-api-docs all"
   },
   "dependencies": {
     "@docusaurus/core": "^3.7.0",
