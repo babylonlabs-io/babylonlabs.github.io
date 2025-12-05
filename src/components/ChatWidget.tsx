@@ -20,8 +20,8 @@ export default function ChatWidget() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Configure API endpoint via docusaurus.config.js customFields or env, defaulting to local relative path
   const apiBaseUrl = siteConfig.customFields?.apiBaseUrl || '/api';
 
   const scrollToBottom = () => {
@@ -31,6 +31,13 @@ export default function ChatWidget() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isOpen]);
+
+  // Cleanup abort controller on unmount
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -42,41 +49,99 @@ export default function ChatWidget() {
       content: input.trim()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    // Create placeholder for AI response immediately
+    const aiMessageId = (Date.now() + 1).toString();
+    setMessages(prev => [...prev, userMessage, {
+      id: aiMessageId,
+      role: 'assistant',
+      content: ''
+    }]);
     setInput('');
     setIsLoading(true);
 
+    abortControllerRef.current = new AbortController();
+
     try {
-      const endpoint = `${apiBaseUrl}/chat`;
-      
-      const response = await fetch(endpoint, {
+      const response = await fetch(`${apiBaseUrl}/query/stream`, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: userMessage.content }),
+        signal: abortControllerRef.current.signal,
       });
 
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch');
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No response body');
 
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.answer || "I'm sorry, I couldn't get an answer."
-      };
-      setMessages(prev => [...prev, aiMessage]);
+      const decoder = new TextDecoder();
+      let accumulatedContent = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+
+          try {
+            const data = JSON.parse(line.slice(6));
+
+            if (data.type === 'content') {
+              accumulatedContent += data.content;
+              setMessages(prev =>
+                prev.map(msg =>
+                  msg.id === aiMessageId
+                    ? { ...msg, content: accumulatedContent }
+                    : msg
+                )
+              );
+            } else if (data.type === 'error') {
+              throw new Error(data.error);
+            }
+          } catch (parseError) {
+            // Skip invalid JSON
+          }
+        }
+      }
+
+      if (!accumulatedContent) {
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === aiMessageId
+              ? { ...msg, content: "I'm sorry, I couldn't get an answer." }
+              : msg
+          )
+        );
+      }
+
     } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') return;
+
       console.error(error);
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: "Sorry, something went wrong. Please try again later."
-      }]);
+      setMessages(prev => {
+        const lastMsg = prev[prev.length - 1];
+        if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
+          return prev.map(msg =>
+            msg.id === lastMsg.id
+              ? { ...msg, content: "Sorry, something went wrong. Please try again later." }
+              : msg
+          );
+        }
+        return prev;
+      });
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
+  };
+
+  const handleClose = () => {
+    abortControllerRef.current?.abort();
+    setIsOpen(false);
   };
 
   return (
@@ -96,7 +161,7 @@ export default function ChatWidget() {
                 <span>Babylon AI</span>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="close-btn p-1 text-[var(--ifm-color-content)] opacity-70 hover:opacity-100 transition-opacity"
               >
                 <X className="w-5 h-5" />
@@ -122,21 +187,15 @@ export default function ChatWidget() {
                       : 'message-bubble-ai'
                   }`}>
                     <div className="markdown-body">
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      {msg.role === 'assistant' && msg.content === '' && isLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin opacity-60" />
+                      ) : (
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
-              {isLoading && (
-                <div className="flex gap-3 mb-4">
-                   <div className="w-8 h-8 rounded-full bg-[var(--ifm-color-emphasis-200)] flex items-center justify-center shrink-0">
-                    <Bot className="w-5 h-5" />
-                  </div>
-                  <div className="message-bubble-ai rounded-2xl p-3">
-                    <Loader2 className="w-5 h-5 animate-spin opacity-60" />
-                  </div>
-                </div>
-              )}
               <div ref={messagesEndRef} />
             </div>
 
