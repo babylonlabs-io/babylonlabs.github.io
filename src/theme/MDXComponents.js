@@ -1,3 +1,4 @@
+import React from 'react';
 import MDXComponents from '@theme-original/MDXComponents';
 
 import Tabs from '@theme/Tabs';
@@ -10,6 +11,7 @@ import * as icons from '../icons';
 
 export default {
   ...MDXComponents,
+  React,
   ...icons,
   Tabs,
   TabItem,
