@@ -237,6 +237,12 @@ const config = {
             to: 'https://discord.com/invite/babylonglobal',
           },
           {
+            label: 'Ask AI',
+            to: '#',
+            className: 'header-ai-chat-link',
+            position: 'right',
+          },
+          {
             href: 'https://discord.com/invite/babylonglobal',
             position: 'right',
             className: 'header-discord-link',

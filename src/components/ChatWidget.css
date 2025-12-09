@@ -15,129 +15,201 @@
   pointer-events: auto; /* Re-enable clicks for children */
 }
 
+/* Expanded Overlay Wrapper */
+.babylon-chat-widget.expanded-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  pointer-events: none; /* Let clicks pass to backdrop */
+}
+
+.chat-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: auto; /* Catch clicks to close */
+  z-index: -1;
+  backdrop-filter: blur(2px);
+}
+
 .chat-window {
   width: 380px;
-  max-width: calc(100vw - 48px);
   height: 600px;
-  max-height: calc(100vh - 120px);
-  background-color: var(--ifm-background-surface-color);
-  border: 1px solid var(--ifm-color-emphasis-200);
+  max-height: 80vh;
+  background: var(--ifm-background-surface-color);
   border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* Improved shadow for better visibility in light mode */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--ifm-color-emphasis-200);
 }
 
-[data-theme='dark'] .chat-window {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-  border-color: var(--ifm-color-emphasis-300);
+.chat-window.expanded {
+  width: 90vw;
+  max-width: 1200px;
+  height: 85vh;
+  max-height: 900px;
 }
 
+/* Sidebar */
+.chat-sidebar {
+  width: 260px;
+  background: var(--ifm-background-surface-color);
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.new-chat-btn {
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  color: var(--ifm-color-content);
+  transition: all 0.2s;
+}
+
+.new-chat-btn:hover {
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+/* Header Controls */
+.header-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px; /* Ensure width doesn't shrink */
+  min-height: 32px; /* Ensure height doesn't shrink */
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  margin-left: 8px;
+  opacity: 1 !important;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+[data-theme='dark'] .header-control-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--ifm-color-content);
+}
+
+.header-control-btn svg {
+  stroke: currentColor;
+  stroke-width: 2px;
+  display: block; /* Ensure SVG is block */
+  fill: none; /* Ensure no fill */
+  opacity: 1 !important;
+}
+
+.header-control-btn:hover {
+  background-color: var(--ifm-color-emphasis-200);
+  transform: translateY(-1px);
+}
+
+/* Chat Areas */
 .chat-header {
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  background-color: var(--ifm-background-surface-color);
-  /* Ensure header color is solid and distinct */
+  background: var(--ifm-background-surface-color);
 }
 
-.chat-input {
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  background-color: var(--ifm-background-surface-color);
+.chat-messages {
+  scrollbar-width: thin;
 }
 
-/* Focus styling moved to the input element directly */
-.chat-input input {
-  background-color: var(--ifm-background-color); /* Explicit background for input */
-  color: var(--ifm-color-content);
-  /* Ensure border is uniform */
-  border: 1px solid var(--ifm-color-emphasis-300);
-  outline: none; /* Remove default browser outline */
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-/* Full border highlight on focus */
-.chat-input input:focus {
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 2px var(--docs-color-primary-tint);
-}
-
-[data-theme='dark'] .chat-input input {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.chat-trigger-btn {
-  background-color: var(--ifm-color-primary);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.chat-trigger-btn:hover {
-  background-color: var(--ifm-color-primary-dark);
-}
-
-/* Message Bubbles - Improved Contrast */
 .message-bubble-user {
-  background-color: var(--ifm-color-primary);
-  color: #ffffff;
+  background: var(--ifm-color-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
 }
 
 .message-bubble-ai {
-  /* Lighter gray for light mode to stand out from white bg */
-  background-color: #f0f2f5; 
+  background: var(--ifm-color-emphasis-200);
   color: var(--ifm-color-content);
-  border: 1px solid rgba(0,0,0,0.05);
+  border-bottom-left-radius: 4px;
 }
 
-[data-theme='dark'] .message-bubble-ai {
-  background-color: var(--ifm-color-emphasis-200); /* Keep existing dark mode style */
+/* Input */
+.chat-input input {
+  border: 1px solid var(--ifm-color-emphasis-300); /* Explicit border */
+  border-style: solid !important; /* Force solid style */
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-color-content);
+  outline: none; /* Remove default outline */
+  appearance: none; /* Remove browser default styles */
+  -webkit-appearance: none;
+}
+
+/* Trigger Button */
+.chat-trigger-btn {
+  background: var(--ifm-color-primary);
+  color: white;
   border: none;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-/* Close Button Hover */
-.close-btn {
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-.close-btn:hover {
-  background-color: rgba(0,0,0,0.05);
-}
-[data-theme='dark'] .close-btn:hover {
-  background-color: rgba(255,255,255,0.1);
+.chat-trigger-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-
-/* Markdown styles inside chat */
-.markdown-body p {
-  margin-bottom: 0.5rem;
+/* Send Button Styles */
+.chat-input button[type="submit"] {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
 }
-.markdown-body p:last-child {
+
+[data-theme='dark'] .chat-input button[type="submit"] {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+}
+
+/* Dark mode border specific to ensure visibility */
+[data-theme='dark'] .chat-input input {
+  border-color: rgba(255, 255, 255, 0.3) !important; /* Increase opacity for better visibility */
+  box-shadow: none !important; /* Remove box shadow that might cause half-border issue */
+}
+
+.chat-input input:focus {
+  border-color: var(--ifm-color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(52, 143, 148, 0.2) !important; /* Subtle focus ring */
+}
+
+/* Markdown Styles Override inside Chat */
+.chat-messages .markdown-body p {
+  margin-bottom: 0.5em;
+}
+
+.chat-messages .markdown-body p:last-child {
   margin-bottom: 0;
 }
-.markdown-body ul, .markdown-body ol {
-  margin-left: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-.markdown-body code {
-  background-color: rgba(0,0,0,0.1);
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
-  font-size: 0.9em;
-}
-.markdown-body pre {
-  background-color: rgba(0,0,0,0.05);
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin-top: 0.5rem;
-}
-[data-theme='dark'] .markdown-body pre {
-  background-color: rgba(255,255,255,0.1);
-}
-.markdown-body a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+
+.chat-messages .markdown-body pre {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0.5em;
+  border-radius: 4px;
 }
