@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2, User, Bot } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, User, Bot, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ChatWidget.css';
@@ -9,7 +9,24 @@ interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  isError?: boolean;
 }
+
+interface TokenLimits {
+  input_limit: {
+    max_tokens: number;
+    enabled: boolean;
+  };
+  output_limit: {
+    max_tokens: number;
+    enabled: boolean;
+  };
+}
+
+// Approximate token count: ~4 characters per token (cl100k_base encoding estimate)
+const estimateTokens = (text: string): number => {
+  return Math.ceil(text.length / 4);
+};
 
 export default function ChatWidget() {
   const { siteConfig } = useDocusaurusContext();
@@ -19,10 +36,50 @@ export default function ChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [tokenLimits, setTokenLimits] = useState<TokenLimits | null>(null);
+  const [inputError, setInputError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const apiBaseUrl = siteConfig.customFields?.apiBaseUrl || '/api';
+
+  // Fetch token limits on mount
+  useEffect(() => {
+    const fetchLimits = async () => {
+      try {
+        const response = await fetch(`${apiBaseUrl}/limits`);
+        if (response.ok) {
+          const limits = await response.json();
+          setTokenLimits(limits);
+        }
+      } catch (error) {
+        console.error('Failed to fetch token limits:', error);
+      }
+    };
+    fetchLimits();
+  }, [apiBaseUrl]);
+
+  // Validate input on change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInput(value);
+
+    if (tokenLimits?.input_limit.enabled && value.trim()) {
+      const estimatedTokens = estimateTokens(value);
+      if (estimatedTokens > tokenLimits.input_limit.max_tokens) {
+        setInputError(`Message too long (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens). Please shorten your question.`);
+      } else if (estimatedTokens > tokenLimits.input_limit.max_tokens * 0.8) {
+        setInputError(`Approaching limit (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens)`);
+      } else {
+        setInputError(null);
+      }
+    } else {
+      setInputError(null);
+    }
+  };
+
+  const isInputTooLong = tokenLimits?.input_limit.enabled &&
+    estimateTokens(input) > tokenLimits.input_limit.max_tokens;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -41,7 +98,7 @@ export default function ChatWidget() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || isInputTooLong) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -57,6 +114,7 @@ export default function ChatWidget() {
       content: ''
     }]);
     setInput('');
+    setInputError(null);
     setIsLoading(true);
 
     abortControllerRef.current = new AbortController();
@@ -69,7 +127,16 @@ export default function ChatWidget() {
         signal: abortControllerRef.current.signal,
       });
 
-      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+      if (!response.ok) {
+        // Handle input_too_long error from server
+        if (response.status === 400) {
+          const errorData = await response.json();
+          if (errorData.detail?.error === 'input_too_long') {
+            throw new Error(`INPUT_TOO_LONG:${errorData.detail.message}`);
+          }
+        }
+        throw new Error(`HTTP error: ${response.status}`);
+      }
 
       const reader = response.body?.getReader();
       if (!reader) throw new Error('No response body');
@@ -122,12 +189,21 @@ export default function ChatWidget() {
       if (error instanceof Error && error.name === 'AbortError') return;
 
       console.error(error);
+
+      let errorMessage = "Sorry, something went wrong. Please try again later.";
+      let isErrorMessage = false;
+
+      if (error instanceof Error && error.message.startsWith('INPUT_TOO_LONG:')) {
+        errorMessage = `⚠️ **Your message is too long.**\n\n${error.message.replace('INPUT_TOO_LONG:', '')}\n\n*Input limits help ensure faster responses and protect against abuse. Please try breaking your question into smaller, focused parts.*`;
+        isErrorMessage = true;
+      }
+
       setMessages(prev => {
         const lastMsg = prev[prev.length - 1];
         if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
           return prev.map(msg =>
             msg.id === lastMsg.id
-              ? { ...msg, content: "Sorry, something went wrong. Please try again later." }
+              ? { ...msg, content: errorMessage, isError: isErrorMessage }
               : msg
           );
         }
@@ -199,22 +275,34 @@ export default function ChatWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSubmit} className="chat-input p-4 flex gap-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question..."
-                className="flex-1 px-4 py-2 rounded-full"
-                disabled={isLoading}
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="p-2 bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center"
-              >
-                <Send className="w-5 h-5" />
-              </button>
+            <form onSubmit={handleSubmit} className="chat-input p-4">
+              {inputError && (
+                <div className={`text-xs mb-2 flex items-center gap-1 ${
+                  isInputTooLong ? 'text-red-500' : 'text-yellow-600'
+                }`}>
+                  <AlertCircle className="w-3 h-3" />
+                  <span>{inputError}</span>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={handleInputChange}
+                  placeholder="Ask a question..."
+                  className={`flex-1 px-4 py-2 rounded-full ${
+                    isInputTooLong ? 'border-red-500 border-2' : ''
+                  }`}
+                  disabled={isLoading}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || !input.trim() || isInputTooLong}
+                  className="p-2 bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
             </form>
           </motion.div>
         )}
