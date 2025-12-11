@@ -1792,3 +1792,42 @@ div:has(> .openapi-tabs__schema-container) {
   }
 }
 /* CSS for hello bar ends*/
+
+
+/* AI Header Button Styles - Updated Override */
+.header-ai-chat-link {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1rem !important;
+  background-color: var(--ifm-color-primary) !important; /* Match Ask Babylon AI */
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  border: none !important;
+}
+
+.header-ai-chat-link:hover {
+  filter: brightness(0.9); /* Simple darkening for hover */
+  color: #fff !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+.header-ai-chat-link::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  background-image: url('/logo/babylon_symbol.svg') !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  filter: none !important; /* Remove any previous filters */
+}
+
+
