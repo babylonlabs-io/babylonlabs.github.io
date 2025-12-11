@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2, User, Bot, Maximize2, Minimize2, Trash2, Plus, MessageSquare, Pencil, Check } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, User, Bot } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ChatWidget.css';
@@ -9,7 +9,24 @@ interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  isError?: boolean;
 }
+
+interface TokenLimits {
+  input_limit: {
+    max_tokens: number;
+    enabled: boolean;
+  };
+  output_limit: {
+    max_tokens: number;
+    enabled: boolean;
+  };
+}
+
+// Approximate token count: ~4 characters per token (cl100k_base encoding estimate)
+const estimateTokens = (text: string): number => {
+  return Math.ceil(text.length / 4);
+};
 
 interface ChatSession {
   id: string;
@@ -101,6 +118,8 @@ export default function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
+  const [tokenLimits, setTokenLimits] = useState<TokenLimits | null>(null);
+  const [inputError, setInputError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -114,7 +133,7 @@ export default function ChatWidget() {
     e.stopPropagation();
     // e.preventDefault() is not needed for generic events, but good for form submissions
     if (editTitle.trim()) {
-      setSessions(prev => prev.map(s => 
+      setSessions(prev => prev.map(s =>
         s.id === sessionId ? { ...s, title: editTitle.trim().slice(0, 50) } : s
       ));
     }
@@ -129,6 +148,44 @@ export default function ChatWidget() {
   };
 
   const apiBaseUrl = siteConfig.customFields?.apiBaseUrl || '/api';
+
+  // Fetch token limits on mount
+  useEffect(() => {
+    const fetchLimits = async () => {
+      try {
+        const response = await fetch(`${apiBaseUrl}/limits`);
+        if (response.ok) {
+          const limits = await response.json();
+          setTokenLimits(limits);
+        }
+      } catch (error) {
+        console.error('Failed to fetch token limits:', error);
+      }
+    };
+    fetchLimits();
+  }, [apiBaseUrl]);
+
+  // Validate input on change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInput(value);
+
+    if (tokenLimits?.input_limit.enabled && value.trim()) {
+      const estimatedTokens = estimateTokens(value);
+      if (estimatedTokens > tokenLimits.input_limit.max_tokens) {
+        setInputError(`Message too long (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens). Please shorten your question.`);
+      } else if (estimatedTokens > tokenLimits.input_limit.max_tokens * 0.8) {
+        setInputError(`Approaching limit (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens)`);
+      } else {
+        setInputError(null);
+      }
+    } else {
+      setInputError(null);
+    }
+  };
+
+  const isInputTooLong = tokenLimits?.input_limit.enabled &&
+    estimateTokens(input) > tokenLimits.input_limit.max_tokens;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -175,7 +232,7 @@ export default function ChatWidget() {
       alert("Maximum chat limit (15) reached. Please delete an old chat to start a new one.");
       return;
     }
-    
+
     const newSession: ChatSession = {
       id: Date.now().toString(),
       thread_uuid: generateUUID(),
@@ -205,7 +262,7 @@ export default function ChatWidget() {
     setSessions(prev => prev.map(session => {
       if (session.id === currentSessionId) {
         const updatedMessages = updateFn(session.messages);
-        
+
         // Auto-update title if it's "New Chat" and we have a user message
         let newTitle = session.title;
         if (session.title === 'New Chat') {
@@ -228,7 +285,7 @@ export default function ChatWidget() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || isInputTooLong) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -238,7 +295,7 @@ export default function ChatWidget() {
 
     // Create placeholder for AI response immediately
     const aiMessageId = (Date.now() + 1).toString();
-    
+
     updateCurrentSessionMessages(prev => [...prev, userMessage, {
       id: aiMessageId,
       role: 'assistant',
@@ -246,6 +303,7 @@ export default function ChatWidget() {
     }]);
 
     setInput('');
+    setInputError(null);
     setIsLoading(true);
 
     abortControllerRef.current = new AbortController();
@@ -254,14 +312,23 @@ export default function ChatWidget() {
       const response = await fetch(`${apiBaseUrl}/api/query/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           question: userMessage.content,
           thread_uuid: currentSession.thread_uuid
         }),
         signal: abortControllerRef.current.signal,
       });
 
-      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+      if (!response.ok) {
+        // Handle input_too_long error from server
+        if (response.status === 400) {
+          const errorData = await response.json();
+          if (errorData.detail?.error === 'input_too_long') {
+            throw new Error(`INPUT_TOO_LONG:${errorData.detail.message}`);
+          }
+        }
+        throw new Error(`HTTP error: ${response.status}`);
+      }
 
       const reader = response.body?.getReader();
       if (!reader) throw new Error('No response body');
@@ -284,11 +351,11 @@ export default function ChatWidget() {
 
             if (data.type === 'content') {
               accumulatedContent += data.content;
-              
-              updateCurrentSessionMessages(prev => 
-                prev.map(msg => 
-                  msg.id === aiMessageId 
-                    ? { ...msg, content: accumulatedContent } 
+
+              updateCurrentSessionMessages(prev =>
+                prev.map(msg =>
+                  msg.id === aiMessageId
+                    ? { ...msg, content: accumulatedContent }
                     : msg
                 )
               );
@@ -296,7 +363,7 @@ export default function ChatWidget() {
             } else if (data.type === 'metadata') {
               // Update thread_uuid if backend provides a new one or confirms it
               if (data.thread_uuid) {
-                setSessions(prev => prev.map(s => 
+                setSessions(prev => prev.map(s =>
                   s.id === currentSessionId ? { ...s, thread_uuid: data.thread_uuid } : s
                 ));
               }
@@ -323,12 +390,21 @@ export default function ChatWidget() {
       if (error instanceof Error && error.name === 'AbortError') return;
 
       console.error(error);
+
+      let errorMessage = "Sorry, something went wrong. Please try again later.";
+      let isErrorMessage = false;
+
+      if (error instanceof Error && error.message.startsWith('INPUT_TOO_LONG:')) {
+        errorMessage = `⚠️ **Your message is too long.**\n\n${error.message.replace('INPUT_TOO_LONG:', '')}\n\n*Input limits help ensure faster responses and protect against abuse. Please try breaking your question into smaller, focused parts.*`;
+        isErrorMessage = true;
+      }
+
       updateCurrentSessionMessages(prev => {
         const lastMsg = prev[prev.length - 1];
         if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
           return prev.map(msg =>
             msg.id === lastMsg.id
-              ? { ...msg, content: "Sorry, something went wrong. Please try again later." }
+              ? { ...msg, content: errorMessage, isError: isErrorMessage }
               : msg
           );
         }
@@ -356,16 +432,16 @@ export default function ChatWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={isExpanded 
-              ? { opacity: 0, scale: 0.9, x: "-50%", y: "-50%" } 
+            initial={isExpanded
+              ? { opacity: 0, scale: 0.9, x: "-50%", y: "-50%" }
               : { opacity: 0, y: 20, scale: 0.95 }
             }
-            animate={isExpanded 
-              ? { opacity: 1, scale: 1, x: "-50%", y: "-50%", top: "50%", left: "50%" } 
+            animate={isExpanded
+              ? { opacity: 1, scale: 1, x: "-50%", y: "-50%", top: "50%", left: "50%" }
               : { opacity: 1, y: 0, scale: 1, x: 0, top: "auto", left: "auto" }
             }
-            exit={isExpanded 
-              ? { opacity: 0, scale: 0.9 } 
+            exit={isExpanded
+              ? { opacity: 0, scale: 0.9 }
               : { opacity: 0, y: 20, scale: 0.95 }
             }
             transition={{ duration: 0.2 }}
@@ -377,7 +453,7 @@ export default function ChatWidget() {
               {isExpanded && (
                  <div className="chat-sidebar">
                     <div className="p-3 border-b border-[var(--ifm-color-emphasis-200)] flex justify-between items-center bg-[var(--ifm-background-surface-color)]">
-                      <button 
+                      <button
                         onClick={createNewSession}
                         className="new-chat-btn flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity w-full justify-center"
                       >
@@ -387,7 +463,7 @@ export default function ChatWidget() {
                     </div>
                     <div className="overflow-y-auto flex-1 p-2 space-y-1 bg-[var(--ifm-background-surface-color)]">
                       {sessions.map(session => (
-                        <div 
+                        <div
                           key={session.id}
                           onClick={() => setCurrentSessionId(session.id)}
                           className={`group flex items-center justify-between p-2 rounded-md cursor-pointer text-sm transition-colors ${
@@ -398,9 +474,9 @@ export default function ChatWidget() {
                         >
                           {editingSessionId === session.id ? (
                             <div className="flex items-center gap-1 w-full" onClick={e => e.stopPropagation()}>
-                              <input 
+                              <input
                                 autoFocus
-                                type="text" 
+                                type="text"
                                 maxLength={50}
                                 value={editTitle}
                                 onChange={e => setEditTitle(e.target.value)}
@@ -477,7 +553,7 @@ export default function ChatWidget() {
                   ) : (
                     <div className={`flex items-center gap-2 font-semibold text-[var(--ifm-color-content)] group flex-1 mr-2 overflow-hidden ${isExpanded ? 'max-w-[280px]' : 'max-w-[160px]'}`}>
                       <Bot className="w-5 h-5 text-[var(--ifm-color-primary)] shrink-0" />
-                      <span 
+                      <span
                         className="truncate cursor-pointer hover:text-[var(--ifm-color-primary)] transition-colors min-w-0"
                         onClick={(e) => startEditing(e, currentSession)}
                         title="Click to rename"
