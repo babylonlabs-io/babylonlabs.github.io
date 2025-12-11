@@ -30,7 +30,7 @@
     "@docusaurus/preset-classic": "^3.7.0",
     "@docusaurus/remark-plugin-npm2yarn": "^3.7.0",
     "@docusaurus/theme-live-codeblock": "^3.7.0",
-    "@docusaurus/theme-mermaid": "^3.9.2",
+    "@docusaurus/theme-mermaid": "^3.7.0",
     "@fluentui/react-icons": "^2.0.204",
     "@headlessui/react": "^1.7.14",
     "@radix-ui/react-select": "^2.0.0",
