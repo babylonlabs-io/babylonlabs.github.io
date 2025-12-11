@@ -107,7 +107,7 @@ We welcome contributions from the community! Here's how you can help:
 3. **Make Your Changes**
    - Keep changes focused and atomic
    - Test locally
-   - Use `npm run build` to check if there is any broken links (or it will stop deloyment pipeline)
+   - Use `npm run build` to check if there is any broken links (or it will stop deployment pipeline)
 
 4. **Submit a Pull Request**
    - Ensure your PR has a clear title and description
@@ -123,4 +123,4 @@ We welcome contributions from the community! Here's how you can help:
 
 ## Acknowledgments
 
-Thanks to @kkkk666 our Developer Advocate who help make this documentation happen!
+Thanks to @kkkk666 our Developer Advocate who helped make this documentation happen!
