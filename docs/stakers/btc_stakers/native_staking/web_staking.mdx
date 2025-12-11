@@ -12,8 +12,8 @@ import HardwareBadge from '@site/src/components/badge/hardware';
 
 # Staking via web app
 
-Babylon Labs provides a web dApp (BTC Staking Dashboard) for staking BTC to the Babylon Genesis chain.
-Following is a step by step guide to stake BTC using the dashboard.
+Babylon Labs provides a web dApp (BTC Staking Dashboard) for natively staking BTC to the Babylon Genesis chain.
+Following is a step-by-step guide to stake native BTC using the dashboard.
 
 ## 1. For Phase 1 Stakers
 ### How to register your Phase 1 stake to Phase 2
@@ -33,8 +33,7 @@ Visit the [Babylon Staking](https://btcstaking.babylonlabs.io/) website.
 />
 
 #### Step 2: Connect Your Wallet
-Connect your [compatible wallet](/stakers/btc_stakers/native_staking/web_staking/#compatible-wallets) 
-compatible wallet to continue with the staking operation.
+Connect your [compatible wallet](/stakers/btc_stakers/native_staking/web_staking/#compatible-wallets) to continue with the staking operation.
 
 <ThemedImage
   alt="Babylon Staking Web App"
@@ -58,10 +57,10 @@ Staking Dashboard:
 />
 
 - This registration transaction requires a small amount of BABY as a transaction fee.
-- The transaction must include the binding of BTC and BABY addresses to activate staking and requires the staker's signature as consent for penalty security.
+- The transaction must include the binding of BTC and BABY addresses to activate staking and requires the staker's signature as consent for penalty enforcement in the event that slashing occurs.
 
 #### Step 4: Wait for Verification
-After submitting the registration transaction, please wait patiently for it to be verified by Babylon Genesis.
+After submitting the registration transaction, please wait patiently for it to be verified by Babylon Genesis Chain.
 <ThemedImage
   alt="Babylon Staking Web App"
   sources={{
@@ -161,8 +160,10 @@ will be active.
     dark: useBaseUrl('/img/guides/btc_stakers/web_staking/9_dark.png'),
   }}
 />
-**Note:** From this point onward, your stake will be subject to a maximum penalty rate of 0.1%.
 
+:::note
+From this point onward, your stake will be subject to a maximum penalty rate of 0.1%.
+:::
 
 ## Compatible Wallets
 
@@ -210,7 +211,7 @@ Where:
 * <HardwareBadge>Hardware</HardwareBadge> - indicates that the wallet is a hardware wallet.
 
 :::note
-The above list is not exhaustive and is subject to change. Please check the official documentation of the staking wallets for the latest information.
+The above list is not exhaustive and is subject to change. Please check the official documentation of the supported wallets for the latest information.
 :::
 
 ## Staking via CLI
