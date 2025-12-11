@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2, User, Bot } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, User, Bot, Plus, MessageSquare, Pencil, Check, Trash2, Minimize2, Maximize2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ChatWidget.css';
@@ -153,7 +153,7 @@ export default function ChatWidget() {
   useEffect(() => {
     const fetchLimits = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/limits`);
+        const response = await fetch(`${apiBaseUrl}/api/limits`);
         if (response.ok) {
           const limits = await response.json();
           setTokenLimits(limits);
@@ -623,17 +623,26 @@ export default function ChatWidget() {
 
                 {/* Input */}
                 <form onSubmit={handleSubmit} className="chat-input p-4 flex gap-2">
-                  <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask a question..."
-                    className="flex-1 px-4 py-2 rounded-full"
-                    disabled={isLoading}
-                  />
+                  <div className="flex-1 flex flex-col gap-1">
+                    <input
+                      type="text"
+                      value={input}
+                      onChange={handleInputChange}
+                      placeholder="Ask a question..."
+                      className="flex-1 px-4 py-2 rounded-full"
+                      disabled={isLoading}
+                    />
+                    {inputError && (
+                      <p className={`text-xs px-4 ${
+                        isInputTooLong ? 'text-red-500' : 'text-yellow-600'
+                      }`}>
+                        {inputError}
+                      </p>
+                    )}
+                  </div>
                   <button
                     type="submit"
-                    disabled={isLoading || !input.trim()}
+                    disabled={isLoading || !input.trim() || isInputTooLong}
                     className="w-10 h-10 min-w-[40px] min-h-[40px] bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center shrink-0"
                   >
                     <Send className="w-5 h-5" />
