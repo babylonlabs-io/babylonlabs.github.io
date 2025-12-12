@@ -1830,4 +1830,55 @@ div:has(> .openapi-tabs__schema-container) {
   filter: none !important; /* Remove any previous filters */
 }
 
+/* Mobile responsive styles for AI chat button */
+@media screen and (max-width: 996px) {
+  .header-ai-chat-link {
+    padding: 0.35rem 0.6rem !important;
+    margin-right: 4px;
+    font-size: 0.85rem;
+  }
+
+  .header-ai-chat-link::before {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  /* Header bar - icon only */
+  .navbar__items .header-ai-chat-link {
+    padding: 0.3rem 0.5rem !important;
+    margin-right: 2px;
+    font-size: 0;  /* Hide text on very small screens */
+    min-width: 36px;
+    justify-content: center;
+  }
+
+  .navbar__items .header-ai-chat-link::before {
+    width: 20px;
+    height: 20px;
+    margin-right: 0;  /* No margin when text is hidden */
+  }
+}
+
+/* Mobile sidebar menu - show button with text */
+.navbar-sidebar .header-ai-chat-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 8px 16px;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  border-radius: 8px !important;
+}
+
+.navbar-sidebar .header-ai-chat-link::before {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
 
