@@ -87,7 +87,7 @@ that is included in the next block proposal.</p>
 <p>Once a valid checkpoint is generated,
 it is checkpointed into the Bitcoin ledger through
 an off-chain program
-<a href="https://docs.babylonlabs.io/docs/developer-guides/modules/submitter">Vigilante Submitter</a>.
+<a href="https://docs.babylonlabs.io/guides/architecture/vigilantes/submitter/">Vigilante Submitter</a>.
 It is responsible for constructing Bitcoin transactions that
 contain outputs utilizing the
 <a href="https://en.bitcoin.it/wiki/OP_RETURN"><code>OP_RETURN</code></a> script code
@@ -194,7 +194,7 @@ The request message type is defined at
 The message handler is defined at
 <a href="./keeper/msg_server.go">x/checkpointing/keeper/msg_server.go</a>.</p>
 <h3>MsgWrappedCreateValidator</h3>
-<p>The <code>MsgWrappedCreateValidator</code> message wraps the <a href="https://github.com/cosmos/cosmos-sdk/blob/9814f684b9dd7e384064ca86876688c05e685e54/proto/cosmos/staking/v1beta1/tx.proto#L51"><code>MsgCreateValidator</code></a>
+<p>The <code>MsgWrappedCreateValidator</code> message wraps the <a href="https://github.com/cosmos/cosmos-sdk/blob/main/proto/cosmos/staking/v1beta1/tx.proto#L52"><code>MsgCreateValidator</code></a>
 defined in the staking module of the Cosmos SDK
 in order to also include the BLS public key.
 The message is used for registering a new validator and storing its BLS public

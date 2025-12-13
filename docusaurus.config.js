@@ -100,6 +100,7 @@ function create_doc_plugin({
 }
 
 const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
+const webpackReactProvider = require('./plugins/webpack-react-provider.cjs');
 const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
 const plugins = [
   [
@@ -114,6 +115,7 @@ const plugins = [
     },
   ],
   tailwindPlugin,
+  webpackReactProvider,
   ...docs_plugins,
   ...openapiPlugins
 ];
@@ -237,6 +239,12 @@ const config = {
             to: 'https://discord.com/invite/babylonglobal',
           },
           {
+            label: 'Ask AI',
+            to: '#',
+            className: 'header-ai-chat-link',
+            position: 'right',
+          },
+          {
             href: 'https://discord.com/invite/babylonglobal',
             position: 'right',
             className: 'header-discord-link',
@@ -333,5 +341,9 @@ const config = {
       },
     }),
   },
+  customFields: {
+    apiBaseUrl: process.env.API_BASE_URL || '',
+  },
 };
 module.exports = config;
+// This documentation website is developed and maintained by Kevin @kkkk666 (Kangtian Liu).
