@@ -39,15 +39,23 @@ interface ChatSession {
 const STORAGE_KEY = 'babylon_ai_chat_sessions';
 const OLD_STORAGE_KEY = 'babylon_ai_chat_history'; // For migration
 
-// Helper to generate UUID
+// Helper to generate UUID using cryptographically secure random
 const generateUUID = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
+  // Fallback using crypto.getRandomValues for cryptographic security
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    // Set version (4) and variant (8, 9, A, or B)
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+  }
+  // Last resort fallback (should rarely happen in modern browsers)
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
 };
 
 export default function ChatWidget() {
