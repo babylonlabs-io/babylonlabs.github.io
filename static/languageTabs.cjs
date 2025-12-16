@@ -1,4 +1,4 @@
-export const languageTabs = [
+const languageTabs = [
   {
     highlight: 'bash',
     language: 'curl',
@@ -61,3 +61,6 @@ export const languageTabs = [
     logoClass: 'swift',
   },
 ];
+
+module.exports = { languageTabs };
+

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/postinstall.js",
     "docusaurus": "docusaurus",
     "start": "cross-env NODE_ENV=development docusaurus start",
     "dev": "cross-env NODE_ENV=development docusaurus start",

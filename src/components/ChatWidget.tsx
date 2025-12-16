@@ -62,6 +62,7 @@ export default function ChatWidget() {
   const { siteConfig } = useDocusaurusContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isApiHealthy, setIsApiHealthy] = useState<boolean>(false);
   // Removed showSidebar state as it's now strictly tied to isExpanded
 
   // State for sessions
@@ -157,8 +158,39 @@ export default function ChatWidget() {
 
   const apiBaseUrl = siteConfig.customFields?.apiBaseUrl || '/api';
 
-  // Fetch token limits on mount
+  // Check API health on mount
   useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const response = await fetch(`${apiBaseUrl}/health`);
+        if (response.ok) {
+          setIsApiHealthy(true);
+          // Show header AI button
+          document.body.classList.add('ai-chat-available');
+        } else {
+          setIsApiHealthy(false);
+          // Hide header AI button
+          document.body.classList.remove('ai-chat-available');
+        }
+      } catch (error) {
+        console.error('Health check failed:', error);
+        setIsApiHealthy(false);
+        // Hide header AI button
+        document.body.classList.remove('ai-chat-available');
+      }
+    };
+    checkHealth();
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('ai-chat-available');
+    };
+  }, [apiBaseUrl]);
+
+  // Fetch token limits on mount (only if API is healthy)
+  useEffect(() => {
+    if (!isApiHealthy) return;
+    
     const fetchLimits = async () => {
       try {
         const response = await fetch(`${apiBaseUrl}/api/limits`);
@@ -171,7 +203,7 @@ export default function ChatWidget() {
       }
     };
     fetchLimits();
-  }, [apiBaseUrl]);
+  }, [apiBaseUrl, isApiHealthy]);
 
   // Validate input on change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -429,6 +461,11 @@ export default function ChatWidget() {
     setIsOpen(false);
     setIsExpanded(false);
   };
+
+  // Don't render if API is not healthy
+  if (!isApiHealthy) {
+    return null;
+  }
 
   return (
     <div className={`babylon-chat-widget ${isExpanded ? 'expanded-overlay' : ''}`}>

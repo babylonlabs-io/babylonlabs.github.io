@@ -1796,7 +1796,7 @@ div:has(> .openapi-tabs__schema-container) {
 
 /* AI Header Button Styles - Updated Override */
 .header-ai-chat-link {
-  display: flex;
+  display: none; /* Hidden by default until health check passes */
   align-items: center;
   padding: 0.4rem 1rem !important;
   background-color: var(--ifm-color-primary) !important; /* Match Ask Babylon AI */
@@ -1807,6 +1807,11 @@ div:has(> .openapi-tabs__schema-container) {
   margin-right: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
   border: none !important;
+}
+
+/* Show AI chat button only when API is healthy */
+body.ai-chat-available .header-ai-chat-link {
+  display: flex;
 }
 
 .header-ai-chat-link:hover {
@@ -1863,7 +1868,7 @@ div:has(> .openapi-tabs__schema-container) {
 }
 
 /* Mobile sidebar menu - show button with text */
-.navbar-sidebar .header-ai-chat-link {
+body.ai-chat-available .navbar-sidebar .header-ai-chat-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
