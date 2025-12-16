@@ -130,6 +130,9 @@ export default function ChatWidget() {
   const [inputError, setInputError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  
+  // Default fallback limits if API fails
+  const DEFAULT_INPUT_LIMIT = 1000;
 
   const startEditing = (e: React.MouseEvent, session: ChatSession) => {
     e.stopPropagation();
@@ -178,12 +181,17 @@ export default function ChatWidget() {
     const value = e.target.value;
     setInput(value);
 
-    if (tokenLimits?.input_limit.enabled && value.trim()) {
+    // Use tokenLimits if available, otherwise fallback to default
+    const maxTokens = tokenLimits?.input_limit.enabled 
+      ? tokenLimits.input_limit.max_tokens 
+      : DEFAULT_INPUT_LIMIT;
+
+    if (value.trim()) {
       const estimatedTokens = estimateTokens(value);
-      if (estimatedTokens > tokenLimits.input_limit.max_tokens) {
-        setInputError(`Message too long (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens). Please shorten your question.`);
-      } else if (estimatedTokens > tokenLimits.input_limit.max_tokens * 0.8) {
-        setInputError(`Approaching limit (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens)`);
+      if (estimatedTokens > maxTokens) {
+        setInputError(`Message too long  (~${estimatedTokens}/${maxTokens} tokens).Please shorten your question.`);
+      } else if (estimatedTokens > maxTokens * 0.8) {
+        setInputError(`Approaching limit (~${estimatedTokens}/${maxTokens} tokens)`);
       } else {
         setInputError(null);
       }
@@ -192,8 +200,10 @@ export default function ChatWidget() {
     }
   };
 
-  const isInputTooLong = tokenLimits?.input_limit.enabled &&
-    estimateTokens(input) > tokenLimits.input_limit.max_tokens;
+  const maxTokens = tokenLimits?.input_limit.enabled 
+    ? tokenLimits.input_limit.max_tokens 
+    : DEFAULT_INPUT_LIMIT;
+  const isInputTooLong = estimateTokens(input) > maxTokens;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
