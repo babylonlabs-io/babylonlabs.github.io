@@ -34,7 +34,10 @@ jobs:
       # Navigate to the correct working directory and install dependencies
       - name: Install dependencies
         working-directory: ./
-        run: npm ci
+        run: |
+          npm ci
+          npm rebuild @swc/core
+          npm rebuild sass
 
       # Build the project
       - name: Build project
