@@ -41,7 +41,13 @@ jobs:
         run: |
           rm -rf node_modules
           npm ci --verbose
-          npm rebuild
+          npm rebuild @swc/core sass
+          
+      # Verify native bindings are loaded
+      - name: Verify native modules
+        run: |
+          node -e "try { require('@swc/core'); console.log('@swc/core loaded successfully'); } catch(e) { console.error('@swc/core failed:', e.message); }"
+          node -e "try { require('sass'); console.log('sass loaded successfully'); } catch(e) { console.error('sass failed:', e.message); }"
 
       # Build the project
       - name: Build project

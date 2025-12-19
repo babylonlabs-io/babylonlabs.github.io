@@ -326,21 +326,31 @@ const config = {
     }),
 
   webpack: {
-    jsLoader: (isServer) => ({
-      loader: require.resolve('swc-loader'),
-      options: {
-        jsc: {
-          parser: {
-            syntax: 'typescript',
-            tsx: true,
+    jsLoader: (isServer) => {
+      // Try to use SWC, fallback to default Babel if it fails
+      try {
+        require.resolve('swc-loader');
+        require('@swc/core');
+        return {
+          loader: require.resolve('swc-loader'),
+          options: {
+            jsc: {
+              parser: {
+                syntax: 'typescript',
+                tsx: true,
+              },
+              target: 'es2017',
+            },
+            module: {
+              type: isServer ? 'commonjs' : 'es6',
+            },
           },
-          target: 'es2017',
-        },
-        module: {
-          type: isServer ? 'commonjs' : 'es6',
-        },
-      },
-    }),
+        };
+      } catch (e) {
+        console.warn('SWC loader failed to load, falling back to Babel:', e.message);
+        return undefined; // Use Docusaurus default Babel loader
+      }
+    },
   },
   customFields: {
     apiBaseUrl: process.env.API_BASE_URL || '',
