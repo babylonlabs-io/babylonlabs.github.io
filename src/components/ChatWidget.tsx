@@ -681,7 +681,7 @@ export default function ChatWidget() {
           className="chat-trigger-btn shadow-lg flex items-center gap-2 px-4 py-3 rounded-full font-medium"
         >
           {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
-          <span className={isOpen ? 'hidden sm:npm ' : 'inline'}>
+          <span className={isOpen ? 'hidden sm:inline' : 'inline'}>
             {isOpen ? 'Close' : 'Ask Babylon AI'}
           </span>
         </motion.button>
