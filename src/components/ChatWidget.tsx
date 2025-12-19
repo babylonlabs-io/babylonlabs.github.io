@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Loader2, User, Bot, Plus, MessageSquare, Pencil, Check, Trash2, Minimize2, Maximize2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import rehypeSanitize from 'rehype-sanitize';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ChatWidget.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -23,9 +24,9 @@ interface TokenLimits {
   };
 }
 
-// Approximate token count: ~4 characters per token (cl100k_base encoding estimate)
+// Approximate token count: ~3.5 characters per token (cl100k_base encoding estimate)
 const estimateTokens = (text: string): number => {
-  return Math.ceil(text.length / 4);
+  return Math.ceil(text.length / 3.5);
 };
 
 interface ChatSession {
@@ -130,6 +131,9 @@ export default function ChatWidget() {
   const [inputError, setInputError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  
+  // Default fallback limits if API fails
+  const DEFAULT_INPUT_LIMIT = 1000;
 
   const startEditing = (e: React.MouseEvent, session: ChatSession) => {
     e.stopPropagation();
@@ -178,12 +182,17 @@ export default function ChatWidget() {
     const value = e.target.value;
     setInput(value);
 
-    if (tokenLimits?.input_limit.enabled && value.trim()) {
+    // Use tokenLimits if available, otherwise fallback to default
+    const maxTokens = tokenLimits?.input_limit.enabled 
+      ? tokenLimits.input_limit.max_tokens 
+      : DEFAULT_INPUT_LIMIT;
+
+    if (value.trim()) {
       const estimatedTokens = estimateTokens(value);
-      if (estimatedTokens > tokenLimits.input_limit.max_tokens) {
-        setInputError(`Message too long (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens). Please shorten your question.`);
-      } else if (estimatedTokens > tokenLimits.input_limit.max_tokens * 0.8) {
-        setInputError(`Approaching limit (~${estimatedTokens}/${tokenLimits.input_limit.max_tokens} tokens)`);
+      if (estimatedTokens > maxTokens) {
+        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens).Please shorten your question.`);
+      } else if (estimatedTokens > maxTokens * 0.8) {
+        setInputError(`Approaching limit (~${estimatedTokens}/${maxTokens} tokens)`);
       } else {
         setInputError(null);
       }
@@ -192,8 +201,10 @@ export default function ChatWidget() {
     }
   };
 
-  const isInputTooLong = tokenLimits?.input_limit.enabled &&
-    estimateTokens(input) > tokenLimits.input_limit.max_tokens;
+  const maxTokens = tokenLimits?.input_limit.enabled 
+    ? tokenLimits.input_limit.max_tokens 
+    : DEFAULT_INPUT_LIMIT;
+  const isInputTooLong = estimateTokens(input) > maxTokens;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -454,7 +465,7 @@ export default function ChatWidget() {
             }
             transition={{ duration: 0.2 }}
             className={`chat-window ${isExpanded ? 'expanded' : ''}`}
-            style={isExpanded ? { position: 'fixed', transform: 'translate(-50%, -50%)' } : {}}
+            style={isExpanded ? { position: 'fixed' } : {}}
           >
             <div className="flex h-full w-full overflow-hidden">
               {/* Sidebar - ONLY shown when expanded */}
@@ -620,7 +631,7 @@ export default function ChatWidget() {
                           {msg.role === 'assistant' && msg.content === '' && isLoading ? (
                             <Loader2 className="w-5 h-5 animate-spin opacity-60" />
                           ) : (
-                            <ReactMarkdown>{msg.content}</ReactMarkdown>
+                            <ReactMarkdown rehypePlugins={[rehypeSanitize]}>{msg.content}</ReactMarkdown>
                           )}
                         </div>
                       </div>

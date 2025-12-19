@@ -41,7 +41,15 @@
   background: rgba(0, 0, 0, 0.6);
   pointer-events: auto; /* Catch clicks to close */
   z-index: -1;
-  backdrop-filter: blur(2px);
+}
+
+/* Optional backdrop blur - disabled by default for performance */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (backdrop-filter: blur(2px)) {
+    .chat-backdrop {
+      backdrop-filter: blur(2px);
+    }
+  }
 }
 
 .chat-window {
