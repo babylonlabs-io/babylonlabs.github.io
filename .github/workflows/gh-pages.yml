@@ -13,10 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install build dependencies for native modules
-      - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y python3 build-essential
-
       # Set up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -38,16 +34,7 @@ jobs:
       # Navigate to the correct working directory and install dependencies
       - name: Install dependencies
         working-directory: ./
-        run: |
-          rm -rf node_modules
-          npm ci --verbose
-          npm rebuild @swc/core sass
-          
-      # Verify native bindings are loaded
-      - name: Verify native modules
-        run: |
-          node -e "try { require('@swc/core'); console.log('@swc/core loaded successfully'); } catch(e) { console.error('@swc/core failed:', e.message); }"
-          node -e "try { require('sass'); console.log('sass loaded successfully'); } catch(e) { console.error('sass failed:', e.message); }"
+        run: npm ci
 
       # Build the project
       - name: Build project
