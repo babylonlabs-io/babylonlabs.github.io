@@ -325,33 +325,35 @@ const config = {
       },
     }),
 
-  webpack: {
-    jsLoader: (isServer) => {
-      // Try to use SWC, fallback to default Babel if it fails
-      try {
-        require.resolve('swc-loader');
-        require('@swc/core');
-        return {
-          loader: require.resolve('swc-loader'),
-          options: {
-            jsc: {
-              parser: {
-                syntax: 'typescript',
-                tsx: true,
+  // Conditionally enable custom webpack config only if SWC is available
+  ...((() => {
+    try {
+      require.resolve('swc-loader');
+      require('@swc/core');
+      return {
+        webpack: {
+          jsLoader: (isServer) => ({
+            loader: require.resolve('swc-loader'),
+            options: {
+              jsc: {
+                parser: {
+                  syntax: 'typescript',
+                  tsx: true,
+                },
+                target: 'es2017',
               },
-              target: 'es2017',
+              module: {
+                type: isServer ? 'commonjs' : 'es6',
+              },
             },
-            module: {
-              type: isServer ? 'commonjs' : 'es6',
-            },
-          },
-        };
-      } catch (e) {
-        console.warn('SWC loader failed to load, falling back to Babel:', e.message);
-        return undefined; // Use Docusaurus default Babel loader
-      }
-    },
-  },
+          }),
+        },
+      };
+    } catch (e) {
+      console.warn('SWC not available, using Docusaurus default Babel loader:', e.message);
+      return {}; // No custom webpack config, use Docusaurus defaults
+    }
+  })()),
   customFields: {
     apiBaseUrl: process.env.API_BASE_URL || '',
   },
