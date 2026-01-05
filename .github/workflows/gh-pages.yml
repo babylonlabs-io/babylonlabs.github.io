@@ -6,6 +6,12 @@ on:
       - main
       - dev
       - "*"
+
+# For GitHub OIDC authentication to AWS
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
