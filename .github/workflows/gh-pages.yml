@@ -5,9 +5,20 @@ on:
     branches:
       - main
       - dev
+      - "*"
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - environment: dev
+            branch: dev
+          - environment: production
+            branch: main
+
+    environment: ${{ matrix.environment }}
+
     steps:
       # Checkout code
       - name: Checkout code
@@ -44,8 +55,10 @@ jobs:
           ALGOLIA_API_KEY_READONLY: ${{ secrets.ALGOLIA_API_KEY_READONLY }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
           TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+          API_BASE_URL: ${{ vars.API_BASE_URL }}
         run: |
           export NODE_OPTIONS="--max-old-space-size=4096"
+          export API_BASE_URL=$API_BASE_URL
           npm run build
 
       # Upload build files as artifact
