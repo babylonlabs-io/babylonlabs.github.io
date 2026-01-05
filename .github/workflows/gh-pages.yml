@@ -13,8 +13,10 @@ jobs:
         include:
           - environment: dev
             branch: dev
+            s3_bucket: devnet-build-artifacts
           - environment: production
             branch: main
+            s3_bucket: mainnet-build-artifacts
 
     environment: ${{ matrix.environment }}
 
@@ -60,54 +62,12 @@ jobs:
           export API_BASE_URL=$API_BASE_URL
           npm run build
 
-      # Upload build files as artifact
-      - name: Upload artifact for deployment
-        uses: actions/upload-artifact@v4
-        with:
-          path: ./build
-          name: build_artifact
-
-  deploy-gh-pages:
-    needs: build
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      id-token: write
-
-    steps:
-      # Download the artifact
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build_artifact
-          path: ./artifact
-
-  deploy-s3:
-    needs: build
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      id-token: write
-
-    steps:
-      # Download the artifact
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build_artifact
-          path: ./artifact
-
+      # Upload to S3
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ vars.AWS_S3_REGION }}
         run: |
-          tar -czf docs-${{ github.sha }}.tar.gz -C artifact .
-          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
-            aws s3 cp docs-${{ github.sha }}.tar.gz s3://devnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
-          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            aws s3 cp docs-${{ github.sha }}.tar.gz s3://mainnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
-          fi
+          tar -czf docs-${{ github.sha }}.tar.gz -C build .
+          aws s3 cp docs-${{ github.sha }}.tar.gz s3://${{ matrix.s3_bucket }}/docs-website/${{ github.sha }}.tar.gz
