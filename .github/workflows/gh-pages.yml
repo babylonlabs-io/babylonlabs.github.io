@@ -6,6 +6,12 @@ on:
       - main
       - dev
       - "*"
+
+# For GitHub OIDC authentication to AWS
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,10 +20,12 @@ jobs:
         include:
           - environment: dev
             branch: dev
-            s3_bucket: devnet-build-artifacts
+            s3_bucket: devnet-dapp-frontend-build-artifacts
+            account: 537927626649
           - environment: production
             branch: main
-            s3_bucket: mainnet-build-artifacts
+            s3_bucket: mainnet-dapp-frontend-build-artifacts
+            account: 490721144737
 
     environment: ${{ matrix.environment }}
 
@@ -63,12 +71,15 @@ jobs:
           export API_BASE_URL=$API_BASE_URL
           npm run build
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ matrix.account }}:role/gha-deployment
+          role-session-name: gh-terragrunt-plan
+          aws-region: ${{ vars.AWS_ECR_REGION }}
+
       # Upload to S3
       - name: Upload to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ vars.AWS_S3_REGION }}
         run: |
           tar -czf docs-${{ github.sha }}.tar.gz -C build .
           aws s3 cp docs-${{ github.sha }}.tar.gz s3://${{ matrix.s3_bucket }}/docs-website/${{ github.sha }}.tar.gz
