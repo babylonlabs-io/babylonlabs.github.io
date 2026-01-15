@@ -1,0 +1,7 @@
+{
+    "position": 1,
+    "label": "Bitcoin Staking",
+    "collapsible": true,
+    "collapsed": false,
+    "className": "bitcoin_staking_sidebar_header"
+}

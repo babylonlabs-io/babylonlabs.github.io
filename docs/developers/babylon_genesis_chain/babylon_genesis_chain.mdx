@@ -9,9 +9,8 @@ import TabItem from '@theme/TabItem';
 
 # Babylon Genesis Chain
 
-Babylon Genesis is a Cosmos SDK chain, backed by Bitcoin staking. 
-It also facilitates other BSNs in integrating Babylon staking into their protocols. 
-Babylon Genesis is itself a BSN.
+Babylon Genesis is a Cosmos SDK chain, backed by Bitcoin staking.
+It serves as the coordination layer for the Babylon protocol.
 
 | Component | Technology | Version | 
 |-----------|------------|---------|
@@ -20,7 +19,7 @@ Babylon Genesis is itself a BSN.
 | Smart Contracts | CosmWasm | `v2.1.3` |
 | Relayer | IBC | `v1.0.1` |
 
-To learn more about custom modules, please refer to the [Custom Modules Documentation](/guides/architecture/babylon_genesis_modules/epoching).
+The chain implements custom modules for Bitcoin staking, checkpointing, and finality.
 
 To deploy a smart contract on Babylon Genesis, follow the [Smart Contract Deployment Guide](/developers/dapps/smart_contract_deployment).
 

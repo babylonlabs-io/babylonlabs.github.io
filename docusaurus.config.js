@@ -154,11 +154,7 @@ const config = {
           showLastUpdateTime: false,
           docItemComponent: '@theme/ApiItem',
         },
-        blog: {
-          path: 'blog',
-          routeBasePath: 'blog',
-          include: ['**/*.{md,mdx}'],
-        },
+        blog: false,
         theme: {
           customCss: [
             require.resolve('./src/css/custom.css')

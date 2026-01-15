@@ -16,7 +16,7 @@ const PRODUCTS = [
     icon: WalletCreditCardRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
-    text: 'BTC holders that delegate their BTC stake to Bitcoin Supercharged Networks for rewards.',
+    text: 'BTC holders that delegate their BTC stake to Babylon for rewards.',
   },
   {
     title: 'Stake BABY',
@@ -32,23 +32,15 @@ const PRODUCTS = [
     icon: TetrisAppRegular,
     lightImage: 'img/landing-page/hero/infra_providers.png',
     darkImage: 'img/landing-page/hero/infra_providers_dark.png',
-    text: 'The operators that provide the data validation infrastructure for Bitcoin Supercharged Networks (BSNs).',
+    text: 'The operators that provide the data validation infrastructure for the Babylon network.',
   },
   {
-    title: 'Build dApps',
-    link: '/developers/dapps/',
-    icon: DocumentChevronDoubleRegular,
-    lightImage: 'img/landing-page/hero/dapp_developers.png',
-    darkImage: 'img/landing-page/hero/dapp_developers_dark.png',
-    text: 'Smart contract developers that want to build Bitcoin secured decentralized applications.',
-  },
-  {
-    title: 'Build BSNs',
-    link: '/guides/overview/bsns',
+    title: 'Trustless Bitcoin Vault',
+    link: '/guides/overview/bitcoin-vault',
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
-    text: 'Integrate economic security into your PoS blockchain by incorporating Babylon\'s BTC staking protocol.',
+    text: 'Learn about Trustless Bitcoin Vault - connecting Bitcoin state to external smart contracts using SNARKs.',
   },
 ];
 
@@ -94,11 +86,10 @@ export default function HeroSection() {
       <section className="no-underline-links px-4 pt-16 lg:py-0">
         <div className="flex flex-col items-center justify-between py-14">
           <h2 className="mb-4 font-jakarta text-5xl font-bold">
-          Make unbreakable chains & dApps
+          Make your bitcoin productive
           </h2>
           <p className="max-w-xl text-center text-text-400">
-            At Babylon Labs, we're building a more economically secure
-            decentralized future. Learn concepts, create dApps and build Bitcoin Supercharged Networks.
+            At Babylon Labs, we're enabling developer to build Bitcoin-powered economies with trustless protocols.
           </p>
         </div>
       </section>

@@ -1,46 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/babylon_genesis_modules/btc_checkpointing.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin-staking/mainnet/covonent_committee.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/babylon_genesis_modules/btc_lightclient.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin-staking/mainnet/finality_provider_registration.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/babylon_genesis_modules/btc_staking.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin-staking/mainnet/global_parameters.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/babylon_genesis_modules/checkpointing.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/architecture/btc_staking_program/btc_reorg_procedure.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/babylon_genesis_modules/epoching.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/architecture/btc_staking_program/finality_providers.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/babylon_genesis_modules/finality.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/specifications/bitcoin_staking_scripts-version-next-v2.x.html?version=next-v2.x</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/btc_staking_program/btc_reorg_procedure.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/btc_staking_program/finality_providers.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/architecture/consumer_zone_programs/babylon_contracts.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin/mainnet/covonent_committee.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin/mainnet/finality_provider_registration.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/networks/bitcoin/mainnet/global_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/specifications/bitcoin_staking_scripts-version-next-v2.x.html?version=next-v2.x</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/specifications/staking_transactions-version-next-v2.x.html?version=next-v2.x</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/specifications/staking_transactions-version-next-v2.x.html?version=next-v2.x</loc>
   </url>
   <url>
     <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/babylon_node/installation_guide-version-testnet.html?version=testnet</loc>
