@@ -89,7 +89,7 @@ export default function HeroSection() {
           Make your bitcoin productive
           </h2>
           <p className="max-w-xl text-center text-text-400">
-            At Babylon Labs, we're enabling developer to build Bitcoin-powered economies with trustless protocols.
+            At Babylon Labs, we're enabling developers to build Bitcoin-powered economies with trustless protocols.
           </p>
         </div>
       </section>
