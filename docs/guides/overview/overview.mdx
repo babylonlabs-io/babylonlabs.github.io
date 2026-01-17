@@ -38,29 +38,19 @@ import Link from '@docusaurus/Link';
 
 ## Trustless Bitcoin Vault
 
-Only ~1% of Bitcoin participates in DeFi today. The reason? Traditional
-approaches require Bitcoin holders to trust custodians or bridges that
-can seize their assets. Trustless Bitcoin Vault (TBV) changes this.
+Trustless Bitcoin Vault is a toolkit that securely connects Bitcoin on-chain state to
+external smart contracts and systems. By combining on-chain contracts,
+light-client proofs (ZK SNARKs), and independent indexers, it enables verifying
+Bitcoin consensus and UTXO state in other chains or applications without
+trusting any single third party.
 
-TBV is a protocol that allows native Bitcoin to be used in DeFi products
-**without bridging, wrapping, or trusting any third party**. Your Bitcoin
-stays on the Bitcoin blockchain in a self-custodial vault that you create
-and control—but smart contracts on other chains can programmably determine
-who owns it.
-
-Key benefits:
-- **Self-custodial**: Your Bitcoin remains in your vault on the Bitcoin
-  blockchain. No synthetic tokens, no custodians
-- **Trustless**: Ownership transfers are enforced by cryptographic proofs
-  and code, not trusted intermediaries
-- **Segregated**: Each vault is isolated—no pooling, no co-mingling, no
-  rehypothecation of your assets
-- **Programmable**: Smart contracts define the conditions under which
-  your Bitcoin can be claimed, enabling complex DeFi logic
-
-This unlocks Bitcoin-native DeFi: lending with BTC collateral, Bitcoin-backed
-stablecoins, options, insurance, and more—all while maintaining the security
-guarantees Bitcoin holders expect.
+Key capabilities:
+- **Trustless verification**: No need to trust individual nodes or custodians;
+  security is enforced by cryptographic proofs and on-chain rules
+- **Verifiable light clients**: Provide provable, compact attestations of
+  Bitcoin consensus to target chains
+- **Modular architecture**: Indexer, prover, and contract layers are separated
+  so each can be swapped or upgraded independently
 
 [Learn more about Trustless Bitcoin Vault](/guides/overview/bitcoin-vault/)
 

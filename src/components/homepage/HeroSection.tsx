@@ -40,7 +40,7 @@ const PRODUCTS = [
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
-    text: 'Learn about Trustless Bitcoin Vault - connecting Bitcoin state to external smart contracts using SNARKs.',
+    text: 'Learn about Trustlesss Bitcoin Vault - connecting Bitcoin state to Ethereum smart contracts.',
   },
 ];
 
