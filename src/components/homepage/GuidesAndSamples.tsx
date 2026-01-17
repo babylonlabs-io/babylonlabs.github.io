@@ -51,10 +51,10 @@ const samples: Sample[] = [
   {
     title: 'Wallet Integrations Guides',
     platform: 'For wallet developers',
-    blog: '/developers/wallet_integration',
+    blog: '/developers/bitcoin_staking/wallet_integration',
     source:
       'https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/integration/wallet/babylon-wallet.md',
-    demo: '/developers/wallet_integration',
+    demo: '/developers/bitcoin_staking/wallet_integration',
   },
 ];
 

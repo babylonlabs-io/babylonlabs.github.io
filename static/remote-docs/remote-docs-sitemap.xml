@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/networks/bitcoin-staking/mainnet/covonent_committee.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/developers/bitcoin_staking/networks/mainnet/covenant_committee.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/networks/bitcoin-staking/mainnet/finality_provider_registration.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/developers/bitcoin_staking/networks/mainnet/finality_provider_registration.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/networks/bitcoin-staking/mainnet/global_parameters.html</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/developers/bitcoin_staking/networks/mainnet/global_parameters.html</loc>
   </url>
   <url>
     <loc>https://docs.dev.babylonlabs.io/remote-docs/guides/overview/babylon_genesis/architecture/btc_staking_program/btc_reorg_procedure.html</loc>
