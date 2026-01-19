@@ -7,8 +7,7 @@
     "start": "cross-env NODE_ENV=development docusaurus start",
     "dev": "cross-env NODE_ENV=development docusaurus start",
     "fetch": "node plugins/fetch-remote-docs.cjs",
-    "gen-llm": "node plugins/generate-llm-txt.cjs",
-    "build": "npm run fetch && npm run gen-llm && cross-env NODE_ENV=production docusaurus build",
+    "build": "npm run fetch && cross-env NODE_ENV=production docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -49,8 +48,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
-    "react-medium-image-zoom": "^5.2.14",
     "react-markdown": "^8.0.4",
+    "react-medium-image-zoom": "^5.2.14",
     "rehype-sanitize": "^6.0.0"
   },
   "devDependencies": {
