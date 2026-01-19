@@ -23,7 +23,7 @@ const guides: Guide[] = [
   {
     title: 'Trustless Bitcoin Vault',
     icon: ShieldCheckmarkRegular,
-    text: 'Connect Bitcoin on-chain state to external smart contracts using SNARKs and light-client proofs.',
+    text: 'Connect Bitcoin on-chain state to external smart contracts (e.g. Ethereum) using ZK SNARKs and light-client proofs.',
     link: '/guides/overview/bitcoin-vault',
   },
   {

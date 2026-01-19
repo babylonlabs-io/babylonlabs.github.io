@@ -4,7 +4,6 @@ sidebar_position: 1
 sidebar_label: Trustless Bitcoin Vault
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import ThemedImage from '@theme/ThemedImage';
 
 ## The Problem
 
@@ -70,12 +69,9 @@ What you DO need to trust (minimal surface):
 ## Architecture
 
 <div className="flex flex-col items-center justify-center max-w-md mx-auto">
-  <ThemedImage
+  <img
+    src={useBaseUrl('/img/guides/vault_architecture.svg')}
     alt="Vault Architecture Diagram"
-    sources={{
-      light: useBaseUrl('/img/guides/vault_architecture.svg'),
-      dark: useBaseUrl('/img/guides/vault_architecture.svg'),
-    }}
   />
 </div>
 
