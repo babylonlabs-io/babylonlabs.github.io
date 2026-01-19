@@ -1,63 +1,96 @@
 ---
-title: Bitcoin Vault — Overview
+title: Trustless Bitcoin Vault — Overview
 sidebar_position: 1
-sidebar_label: Bitcoin Vault
+sidebar_label: Trustless Bitcoin Vault
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import ThemedImage from '@theme/ThemedImage';
 
-## Elevator pitch
-Bitcoin Vault is a toolkit that securely connects Bitcoin on-chain state to external smart contracts and systems. By combining on-chain contracts, light-client proofs (SNARKs), and independent indexers, it enables verifying Bitcoin consensus and UTXO state in other chains or applications without trusting any single third party.
+## The Problem
 
+Only ~1% of Bitcoin participates in DeFi today. Why? Because traditional approaches
+require Bitcoin holders to surrender their native Bitcoin to a custodian (bridge,
+wrapper, or validator set) in exchange for synthetic tokens. This custodian has
+full control and can potentially seize the assets—an unacceptable trust requirement
+for most Bitcoin holders.
 
-## Why it exists
-- No need to trust individual nodes or custodians; security is enforced by cryptographic proofs and on-chain rules.
-- Verifiable light clients: provide provable, compact attestations of Bitcoin consensus to target chains instead of requiring full Bitcoin nodes to remain online.
-- Modular and replaceable: indexer, prover, and contract layers are separated so each can be swapped or upgraded independently.
+## The Solution
 
-## Main components
-- bitcoin-vault (core logic, Rust): the main runtime/tools coordinating vault logic, key-management policies, and interactions with provers and indexers.
-- vault-provers (provers, Rust): encodes light-client consensus checks into SNARKs and produces proofs that can be verified on target chains.
-- vault-indexer (indexer, Go): continuously tracks the Bitcoin network and maintains queryable state such as UTXO snapshots, transaction indexes, and block headers.
-- vault-contracts (contracts, Solidity): deployed on the target smart contract platform to verify proofs, maintain on-chain state, and run proof-constrained business logic.
+Trustless Bitcoin Vault (TBV) is a protocol that enables native Bitcoin to participate
+in DeFi **without bridges, wrappers, or trusted custodians**. Your Bitcoin stays on
+the Bitcoin blockchain in a self-custodial vault while smart contracts on DeFi chains
+can programmably control its ownership.
 
-Note: these components are decoupled: the indexer collects data, the prover compresses that data into verifiable proofs, and contracts consume and verify proofs on-chain.
+With TBV, using native Bitcoin in DeFi becomes as safe as using ETH in DeFi.
 
-## Architecture diagram
+## What is a Vault?
+
+A vault is **not** a shared capital pool. In TBV:
+
+- **Your Bitcoin stays on Bitcoin**: Locked in a Bitcoin script you create—no bridging
+  or wrapping into synthetic tokens
+- **Segregated, not pooled**: Each vault is isolated. Your Bitcoin is never co-mingled
+  with others' funds
+- **No rehypothecation**: Your vault cannot be used by anyone else as their collateral
+- **Programmable ownership**: Smart contracts define who can claim your Bitcoin and
+  under what conditions
+
+## Use Cases
+
+TBV transforms Bitcoin into programmable collateral for any DeFi application:
+
+- **Bitcoin-backed lending**: Use BTC as collateral for loans without giving up custody
+- **Bitcoin-backed stablecoins**: Mint stablecoins with native BTC backing
+- **Bitcoin options**: Collateralize call/put options with your Bitcoin
+- **Insurance**: Use BTC as reserve capital for on-chain insurance products
+
+## How It Works
+
+TBV uses cryptographic techniques to translate DeFi smart contract execution into
+something the Bitcoin blockchain can understand and act upon:
+
+- **Zero-knowledge proofs (SNARKs)** verify that smart contract conditions were met
+- **Bitcoin scripts** enforce the ownership rules on the Bitcoin side
+- **Challenge mechanisms** ensure fraudulent claims can be disputed
+
+The result: ownership transfers are enforced by cryptographic proofs and code, not
+trusted parties.
+
+## Why It's Trustless
+
+What you do NOT need to trust:
+- **Custodians or bridges**: There are none. Your Bitcoin is self-custodied
+- **Indexer nodes**: A compromised indexer cannot steal funds—proofs validate the data
+- **Prover operators**: A malicious prover cannot produce a valid proof for a false claim
+
+What you DO need to trust (minimal surface):
+- **The DeFi chain**: Its consensus must execute the smart contracts correctly
+- **Verification parameters**: The cryptographic setup must be generated transparently
+
+## Architecture
+
 <div className="flex flex-col items-center justify-center max-w-md mx-auto">
-  <ThemedImage
+  <img
+    src={useBaseUrl('/img/guides/vault_architecture.svg')}
     alt="Vault Architecture Diagram"
-    sources={{
-      light: useBaseUrl('/img/guides/vault_architecture.svg'),
-      dark: useBaseUrl('/img/guides/vault_architecture.svg'),
-    }}
   />
 </div>
 
-## Data flow
-1. The indexer listens to Bitcoin and keeps accurate records of block headers, transactions, and UTXO state.
-2. When an on-chain proof of Bitcoin state is needed (e.g., prove ownership of a UTXO), the prover fetches required data from the indexer and generates a zero-knowledge/recursive proof (SNARK) that includes consensus checks (block chain continuity, POW, transaction validity, UTXO existence).
-3. The proof plus minimal metadata are submitted to the target chain's vault contracts.
-4. The smart contract verifies the proof (an on-chain, deterministic step) and, if valid, executes the requested action (release funds, update state, emit events).
-5. A local bitcoin-vault service handles key policies, coordination, error handling, and audit logs.
+The system is composed of modular, decoupled components:
 
+| Component | Purpose |
+|-----------|---------|
+| **Indexer** | Tracks Bitcoin network state (blocks, transactions, UTXOs) |
+| **Prover** | Generates zero-knowledge proofs that smart contracts can verify |
+| **Vault Contracts** | Verifies proofs on the DeFi chain and enforces ownership rules |
+| **Core Runtime** | Coordinates vault creation, key management, and proof workflows |
 
-## Trustless model
-This system minimizes trust by explicitly separating what must be trusted from what does not.
+## Security
 
-- What you do NOT need to trust:
-- Individual indexer nodes: a single compromised indexer cannot cause irreversible loss — provers can validate the data and reject inconsistent inputs. Multiple indexers and cross-checks further reduce risk.
-- Prover operators: a malicious prover cannot succeed unless it can produce a mathematically valid proof; the contract's verification will reject fake proofs.
-- Middlemen or witnesses: final authority is the on-chain verifier and the proof; human operators or proxies do not have unilateral control.
+TBV is designed to minimize attack surface:
 
-- What you DO need to trust (minimal surface):
-- The target chain (smart contract platform): the contract execution and consensus of that chain must be trusted to run verification correctly and make state transitions immutable.
-- The verification key (vk) and verifier parameters: initial generation and management of the SNARK verification key must be transparent and secure (e.g., multi-party generation or auditable process). If vk is replaced or corrupted, security is broken.
-
-In summary, trust shifts from running entities (nodes/people) to verifiable cryptographic artifacts (proofs, contract code, and verification keys). If the target chain and verification parameters are trustworthy, the system can be regarded as trust-minimized.
-
-## Attack surface & mitigations
-- Fake data or forged proofs: contracts verify proofs with vk; invalid proofs are rejected.
-- Chain reorgs and replay: include block height and chain continuity checks in proofs; contracts should require sufficient confirmations or finality windows.
-- Verification key tampering: use MPC ceremonies, multisig or governance with time locks for vk updates; make vk generation audit logs public.
-- Reliance on a single indexer: run multiple indexers, cross-validate data, or run an independent light-client as an additional data source.
+| Threat | Mitigation |
+|--------|------------|
+| Forged proofs | Contracts cryptographically verify all proofs; invalid proofs are rejected |
+| Compromised indexer | Multiple indexers can cross-validate; provers verify data consistency |
+| Chain reorganizations | Proofs include block height checks; contracts require sufficient confirmations |
+| Malicious claims | Challenge period allows disputes; fraudulent claims can be blocked |

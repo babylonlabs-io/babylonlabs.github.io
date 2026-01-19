@@ -3,10 +3,9 @@ import Layout from '@theme/Layout';
 
 import HeroSection from '../components/homepage/HeroSection';
 import CommunitySection from '../components/homepage/CommunitySection';
-import HomeFooter from '../components/homepage/HomeFooter';
 import Head from '@docusaurus/Head';
-import ToolsAndInfra from '../components/homepage/ToolsAndInfra';
-import BlogSection from '../components/homepage/BlogSection';
+import GuidesAndSamples from '../components/homepage/GuidesAndSamples';
+
 export default function Homepage() {
   return (
     <Layout
@@ -19,10 +18,8 @@ export default function Homepage() {
       </Head>
       <div></div>
       <HeroSection/>
-      <ToolsAndInfra/>
-      <BlogSection />
+      <GuidesAndSamples/>
       <CommunitySection/>
-      <HomeFooter/>
     </Layout>
   );
 }

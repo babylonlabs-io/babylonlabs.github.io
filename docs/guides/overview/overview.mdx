@@ -1,133 +1,107 @@
 ---
-title: "Guide"
+title: "Babylon Protocol"
 sidebar_class_name: guide_sidebar_index
 sidebar_label: Overview
 keywords:
   - Babylon protocol overview
-  - Native Bitcoin staking architecture
-  - Babylon Genesis features
-  - Bitcoin light client guide
-  - Bitcoin checkpointing guide
-  - Epoching module guide
-  - Incentive and rewards module
-  - Governance parameters guide
+  - Trustless Bitcoin Vault
+  - Native Bitcoin staking
+  - Babylon Genesis
+  - Bitcoin light client
+  - SNARK proofs
 ---
 
-# Babylon Bitcoin Staking Protocol Overview
+# Babylon Protocol Overview
 
-Babylon is a decentralized protocol that enables native bitcoin staking directly 
-on the Bitcoin blockchain without intermediaries. The protocol implements a novel 
-shared-security architecture that extends Bitcoin's security model to the broader 
-decentralized ecosystem. Through its architecture, BTC holders can participate in 
-multi-staking operations while maintaining their assets on Bitcoin, 
-providing verifiable security guarantees to Bitcoin Supercharged Networks (BSNs).
-
-The protocol's primary function is to enhance Proof-of-Stake (PoS) consensus security by 
-implementing Bitcoin staking mechanisms. Through cryptographic primitives and 
-protocol-level innovations, Babylon protocol enables trustless Bitcoin staking with 
-efficient unbonding periods.
+Babylon provides Bitcoin-native infrastructure for the decentralized economy.
+Our protocol enables trustless interaction with Bitcoin state and native
+Bitcoin staking directly on the Bitcoin blockchain.
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import ThemedImage from '@theme/ThemedImage';
 import Link from '@docusaurus/Link';
 
-<div className="flex flex-col items-center justify-center">
-  <ThemedImage
-    alt="Overview of Babylon Bitcoin Statking Protocol"
-    sources={{
-      light: useBaseUrl('/img/guides/overview.png'),
-      dark: useBaseUrl('/img/guides/overview_dark.png'),
-    }}
-  />
-  <em>Babylon Overview</em><br/>
-</div>
-
-Key features of Babylon Bitcoin Staking Protocol:
-
--  Trustless staking architecture - BTC remains native with no wrapped assets
--  Fast unbonding - Stake withdrawal period of just a few days
--  Configurable slashing - Protocol violations trigger configrable penalties
--  Modular security - Compatible with any PoS consensus implementation
-
-When implemented at scale, Bitcoin represents the largest potential staking capital 
-pool in the web3 ecosystem.
-
-## Core Concepts 
+## Products
 
 <CardSection
-  id="core-concepts"
+  id="products"
 >
+  <Card
+    title="Trustless Bitcoin Vault"
+    to="/guides/overview/bitcoin-vault"
+  />
   <Card
     title="Bitcoin Staking"
     to="/guides/overview/bitcoin_staking"
   />
-  <Card
-    title="Bitcoin Secured Systems (BSNs)"
-    to="/guides/overview/bsns"
-  />
-  <Card
-    title="Babylon Genesis"
-    to="/guides/overview/babylon_genesis"
-  />
 </CardSection>
 
-## Multi-staking Architecture
+## Trustless Bitcoin Vault
 
-The Babylon multi-staking architecture enables secure BTC staking across 
-multiple networks simultaneously. The system implements integration endpoints for any 
-BSN requiring economic security guarantees. The architecture comprises cryptographic 
-mechanisms that ensure:
+Trustless Bitcoin Vault is a toolkit that securely connects Bitcoin on-chain state to
+external smart contracts (e.g. Ethereum) and systems. By combining on-chain contracts,
+light-client proofs (ZK SNARKs), and independent indexers, it enables verifying
+Bitcoin consensus and UTXO state in other chains or applications without
+trusting any single third party.
 
-- Reliable cross-chain data synchronization
-- Secure inter-chain message passing
-- Robust asset locking mechanisms
-- Automated reward distribution
-- Configurable slashing
+Key capabilities:
+- **Trustless verification**: No need to trust individual nodes or custodians;
+  security is enforced by cryptographic proofs and on-chain rules
+- **Verifiable light clients**: Provide provable, compact attestations of
+  Bitcoin consensus to target chains
+- **Modular architecture**: Indexer, prover, and contract layers are separated
+  so each can be swapped or upgraded independently
 
-Read more on modules of the multi-staking architecture [here](/guides/architecture/).
+[Learn more about Trustless Bitcoin Vault](/guides/overview/bitcoin-vault/)
 
-## Bitcoin Supercharged Networks (BSNs)
+## Bitcoin Staking
 
-The Babylon multi-staked bitcoins are used to secure BSNs. BSNs can be broadly defined as 
-any system that requires finality that has a data-driven application. 
-In most cases, a BSN is a blockchain of some kind, for example, an L1 or L2 rollup 
-chain. It can also be versatile such as a DeFi protocol, blockchain infrastructure 
-project like a swap or bridge, or a decentralized network such as a compute network, etc. 
+Babylon enables native bitcoin staking directly on the Bitcoin blockchain
+without intermediaries. The protocol implements trustless Bitcoin staking with
+efficient unbonding periods through cryptographic primitives and protocol-level
+innovations.
 
-Read more on how to integrate BSNs with Babylon [here](/guides/overview/bsns).
+Key features:
+- **Trustless staking**: BTC remains native with no wrapped assets
+- **Self-custody**: Stakers maintain direct control of their Bitcoin
+- **Fast unbonding**: Stake withdrawal period of just a few days
+- **Slashing capability**: Protocol-enforced penalties for security violations
 
-## Security Specifications
+When implemented at scale, Bitcoin represents the largest potential staking
+capital pool in the web3 ecosystem.
 
-Babylon Network implements the following security guarantees:
+[Learn more about Bitcoin Staking](/guides/overview/bitcoin_staking/)
 
-- **PoS Security:** Security violations trigger automatic slashing of a portion 
-of the Bitcoin stake.
-- **Staker's Security:** Staked Bitcoin remains recoverable contingent on network 
-compliance by the staker or delegated validator.
-- **Withdrawal Assurance:** Unbonding operations execute securely without requiring 
-consensus coordination.
+## Security Model
+
+Babylon implements the following security guarantees:
+
+- **PoS Security**: Security violations trigger automatic slashing of a portion
+  of the Bitcoin stake
+- **Staker's Security**: Staked Bitcoin remains recoverable contingent on
+  network compliance by the staker or delegated validator
+- **Withdrawal Assurance**: Unbonding operations execute securely without
+  requiring consensus coordination
+
+## Babylon Genesis
+
+Babylon Genesis is a Cosmos SDK-based blockchain that serves as the
+coordination layer for the Babylon protocol. It provides native IBC
+(Inter-Blockchain Communication) protocol support and CosmWasm compatibility
+for smart contract deployment.
+
+For detailed technical documentation on Babylon Genesis, including architecture,
+network information, and governance:
+
+- [Babylon Genesis Overview](/guides/overview/babylon_genesis/)
+- [Architecture Documentation](/guides/overview/babylon_genesis/architecture/)
+- [Network Information](/developers/babylon_genesis_chain/)
+- [Governance](/guides/overview/babylon_genesis/governance/)
 
 ## Technical Integration
 
-For developers looking to integrate to Babylon protocol, we 
-provide a comprehensive set of tools and documentation to help you get started. 
+For developers looking to integrate with the Babylon protocol:
 
-* [Babylon node](/operators/babylon_node/installation_guide)
-* [Babylon RPC](/api/babylon-gRPC/babylon-grpc-api-docs)
-* [Babylon SDK (Cosmos SDK reference smart contracts)](/guides/overview/bsns/cosmos_chains/babylon_sdk)
-
-Interchain communication is handled through [IBC protocol](https://tutorials.cosmos.network/academy/3-ibc/).
-
-## Babylon Genesis Chain
-
-Babylon Genesis implements a Cosmos SDK-based blockchain with native IBC (Inter-
-Blockchain Communication) protocol support. Babylon Genesis will be the first 
-BSN and will serve as the control plane for BTC security 
-and liquidity orchestration to other BSNs to come.   
-
-For smart contract deployment, Babylon Genesis provides CosmWasm compatibility. 
-Developers familiar with the Cosmos ecosystem can deploy standard contracts (e.g., 
-CW-20 implementations) through trusted  or self-hosted RPC endpoints.
-
-More about Babylon Genesis [here](/developers/babylon_genesis_chain).
-
+- [Babylon Node](/operators/babylon_node/installation_guide)
+- [Babylon RPC](/api/babylon-gRPC/babylon-grpc-api-docs)
+- [Staking API](/api/staking-api/babylon-staking-api)

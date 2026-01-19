@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { themes } = require('prism-react-renderer');
-const { languageTabs } = require('./static/languageTabs.cjs');
+const { languageTabs } = require('./static/languageTabs.mjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
 const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
 const code_themes = {
@@ -108,8 +108,119 @@ const plugins = [
     {
       redirects: [
         {
-          from: '/guides/baby_stakers/baby_staking_tools/', // the old URL
-          to: '/stakers/baby_stakers/',   // the new URL
+          from: '/guides/baby_stakers/baby_staking_tools/',
+          to: '/stakers/baby_stakers/',
+        },
+        // Architecture redirects (moved under babylon_genesis)
+        {
+          from: '/guides/architecture/',
+          to: '/guides/overview/babylon_genesis/architecture/',
+        },
+        {
+          from: '/guides/architecture/btc_staking_program/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/',
+        },
+        {
+          from: '/guides/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+        },
+        // Governance redirects
+        {
+          from: '/guides/governance/',
+          to: '/guides/overview/babylon_genesis/governance/',
+        },
+        {
+          from: '/guides/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+        },
+        {
+          from: '/guides/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+        },
+        {
+          from: '/guides/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+        },
+        // Specifications redirects
+        {
+          from: '/guides/specifications/',
+          to: '/guides/overview/babylon_genesis/specifications/bitcoin_staking_scripts/',
+        },
+        {
+          from: '/guides/specifications/bitcoin_staking_scripts/',
+          to: '/guides/overview/babylon_genesis/specifications/bitcoin_staking_scripts/',
+        },
+        {
+          from: '/guides/specifications/staking_transactions/',
+          to: '/guides/overview/babylon_genesis/specifications/staking_transactions/',
+        },
+        // Network redirects (Babylon Genesis)
+        {
+          from: '/guides/networks/',
+          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+        },
+        {
+          from: '/guides/networks/babylon-genesis/',
+          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+        },
+        {
+          from: '/guides/networks/babylon-genesis/mainnet/',
+          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+        },
+        {
+          from: '/guides/networks/babylon-genesis/testnet/',
+          to: '/guides/overview/babylon_genesis/networks/testnet/',
+        },
+        // Network redirects (Bitcoin -> developers)
+        {
+          from: '/guides/networks/bitcoin/',
+          to: '/developers/bitcoin_staking/networks/',
+        },
+        {
+          from: '/guides/networks/bitcoin/mainnet/',
+          to: '/developers/bitcoin_staking/networks/mainnet/',
+        },
+        {
+          from: '/guides/networks/bitcoin/signet/',
+          to: '/developers/bitcoin_staking/networks/signet/',
+        },
+        // Developer section reorganization
+        {
+          from: '/developers/wallet_integration/',
+          to: '/developers/bitcoin_staking/wallet_integration/',
+        },
+        {
+          from: '/developers/wallet_integration/babylon_wallet_integration/',
+          to: '/developers/bitcoin_staking/wallet_integration/babylon_wallet_integration/',
+        },
+        {
+          from: '/developers/wallet_integration/bitcoin_wallet_integration/',
+          to: '/developers/bitcoin_staking/wallet_integration/bitcoin_wallet_integration/',
+        },
+        {
+          from: '/developers/staking_backend/',
+          to: '/developers/bitcoin_staking/staking_backend/',
+        },
+        {
+          from: '/developers/wallet_setup/',
+          to: '/developers/babylon_genesis_chain/wallet_setup/',
+        },
+        {
+          from: '/developers/dapps/',
+          to: '/developers/babylon_genesis_chain/dapps/',
+        },
+        // BSN content removed - redirect to overview
+        {
+          from: '/guides/overview/bsns/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/guides/architecture/consumer_zone_programs/',
+          to: '/guides/overview/babylon_genesis/architecture/',
+        },
+        {
+          from: '/guides/architecture/babylon_genesis_modules/',
+          to: '/guides/overview/babylon_genesis/architecture/',
         },
       ],
     },
@@ -154,12 +265,7 @@ const config = {
           showLastUpdateTime: false,
           docItemComponent: '@theme/ApiItem',
         },
-        blog: {
-          path: 'blog',
-          routeBasePath: 'blog',
-          include: ['**/*.{md,mdx}'],
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: [
             require.resolve('./src/css/custom.css')
@@ -238,12 +344,6 @@ const config = {
           {
             label: 'Support',
             to: 'https://discord.com/invite/babylonglobal',
-          },
-          {
-            label: 'Ask AI',
-            to: '#',
-            className: 'header-ai-chat-link',
-            position: 'right',
           },
           {
             href: 'https://discord.com/invite/babylonglobal',
@@ -325,37 +425,22 @@ const config = {
       },
     }),
 
-  // Conditionally enable custom webpack config only if SWC is available
-  ...((() => {
-    try {
-      require.resolve('swc-loader');
-      require('@swc/core');
-      return {
-        webpack: {
-          jsLoader: (isServer) => ({
-            loader: require.resolve('swc-loader'),
-            options: {
-              jsc: {
-                parser: {
-                  syntax: 'typescript',
-                  tsx: true,
-                },
-                target: 'es2017',
-              },
-              module: {
-                type: isServer ? 'commonjs' : 'es6',
-              },
-            },
-          }),
+  webpack: {
+    jsLoader: (isServer) => ({
+      loader: require.resolve('swc-loader'),
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
+          },
+          target: 'es2017',
         },
-      };
-    } catch (e) {
-      console.warn('SWC not available, using Docusaurus default Babel loader:', e.message);
-      return {}; // No custom webpack config, use Docusaurus defaults
-    }
-  })()),
-  customFields: {
-    apiBaseUrl: process.env.API_BASE_URL || '',
+        module: {
+          type: isServer ? 'commonjs' : 'es6',
+        },
+      },
+    }),
   },
 };
 module.exports = config;
