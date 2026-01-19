@@ -11,6 +11,22 @@ import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 
 const PRODUCTS = [
   {
+    title: 'Trustless Bitcoin Vault',
+    link: '/guides/overview/bitcoin-vault',
+    icon: DiversityRegular,
+    lightImage: 'img/landing-page/hero/bsn_developers.png',
+    darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
+    text: 'Learn about Trustlesss Bitcoin Vault - connecting Bitcoin state to Ethereum smart contracts.',
+  },
+  {
+    title: 'Become Operators',
+    link: '/operators',
+    icon: TetrisAppRegular,
+    lightImage: 'img/landing-page/hero/infra_providers.png',
+    darkImage: 'img/landing-page/hero/infra_providers_dark.png',
+    text: 'The operators that provide the data validation infrastructure for the Babylon network.',
+  },
+  {
     title: 'Stake BTC',
     link: '/stakers/btc_stakers',
     icon: WalletCreditCardRegular,
@@ -25,22 +41,6 @@ const PRODUCTS = [
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
     text: 'BABY holders can delegate their token to Babylon Genesis chain to participate in governance.',
-  },
-  {
-    title: 'Become Operators',
-    link: '/operators',
-    icon: TetrisAppRegular,
-    lightImage: 'img/landing-page/hero/infra_providers.png',
-    darkImage: 'img/landing-page/hero/infra_providers_dark.png',
-    text: 'The operators that provide the data validation infrastructure for the Babylon network.',
-  },
-  {
-    title: 'Trustless Bitcoin Vault',
-    link: '/guides/overview/bitcoin-vault',
-    icon: DiversityRegular,
-    lightImage: 'img/landing-page/hero/bsn_developers.png',
-    darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
-    text: 'Learn about Trustlesss Bitcoin Vault - connecting Bitcoin state to Ethereum smart contracts.',
   },
 ];
 
