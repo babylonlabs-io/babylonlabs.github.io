@@ -1,0 +1,47 @@
+---
+sidebar_class_name: architecture_sidebar
+sidebar_position: 2
+---
+
+# Architecture
+
+The Babylon network has a layered architecture composed of Bitcoin scripts, Babylon node
+built on Cosmos SDK, Finality Providers, and peripheral software solutions that
+are designed to securely interact with Bitcoin Chain so it can facilitate Bitcoin staking.
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+<div className="flex flex-col items-center justify-center" id="babylon_architecture">
+  <ThemedImage
+    alt="Overview of Babylon Bitcoin Staking Protocol"
+    sources={{
+      light: useBaseUrl('/img/guides/architecture.png'),
+      dark: useBaseUrl('/img/guides/architecture_dark.png'),
+    }}
+  />
+  <em>Babylon Architecture</em><br/>
+</div>
+
+On the top layer, Babylon ensures Bitcoin Chain and Babylon Genesis are securely connected 
+and synchronized by using Checkpointing. It also keeps track of Bitcoin holders' staking 
+transactions with a BTC staking monitor and indexer. The Vigilante network is used to 
+monitor the Bitcoin Chain and Babylon Genesis for any malicious activities. Anyone can run 
+these nodes and help maintain the security of the network.
+
+The middle layer is the Babylon node. It is built on Cosmos SDK and implements the 
+Babylon Bitcoin staking logic. It implements the eight core modules of: Babylon 
+Epoching, Checkpointing, BTC Checkpointing, BTC Light Client, Zone Concierge, BTC 
+Staking, Finality, and Rewards. It also includes the Babylon Genesis and the Validators and Finality Providers set and runs on CometBFT for consensus.
+
+At the bottom layer, EOTS Manager and Finality Provider nodes provide the means for 
+group signatures and validating the data of an external network. Covenant Emulator 
+provides enforcements on the transaction data for staking, unbonding and slashing. The 
+IBC relayer and Babylon Contracts, which are usually implemented by BSNs consuming 
+Bitcoin security help to communicate and standardize the data exchange between them.
+
+## Components
+
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />
