@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { themes } = require('prism-react-renderer');
-const { languageTabs } = require('./static/languageTabs.mjs');
+const { languageTabs } = require('./static/languageTabs.cjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
 const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
 const code_themes = {
@@ -346,6 +346,12 @@ const config = {
             to: 'https://discord.com/invite/babylonglobal',
           },
           {
+            label: 'Ask AI',
+            to: '#',
+            className: 'header-ai-chat-link',
+            position: 'right',
+          },
+          {
             href: 'https://discord.com/invite/babylonglobal',
             position: 'right',
             className: 'header-discord-link',
@@ -425,23 +431,38 @@ const config = {
       },
     }),
 
-  webpack: {
-    jsLoader: (isServer) => ({
-      loader: require.resolve('swc-loader'),
-      options: {
-        jsc: {
-          parser: {
-            syntax: 'typescript',
-            tsx: true,
-          },
-          target: 'es2017',
+  // Conditionally enable custom webpack config only if SWC is available
+  ...((() => {
+    try {
+      require.resolve('swc-loader');
+      require('@swc/core');
+      return {
+        webpack: {
+          jsLoader: (isServer) => ({
+            loader: require.resolve('swc-loader'),
+            options: {
+              jsc: {
+                parser: {
+                  syntax: 'typescript',
+                  tsx: true,
+                },
+                target: 'es2017',
+              },
+              module: {
+                type: isServer ? 'commonjs' : 'es6',
+              },
+            },
+          }),
         },
-        module: {
-          type: isServer ? 'commonjs' : 'es6',
-        },
-      },
-    }),
+      };
+    } catch (e) {
+      console.warn('SWC not available, using Docusaurus default Babel loader:', e.message);
+      return {}; // No custom webpack config, use Docusaurus defaults
+    }
+  })()),
+  customFields: {
+    apiBaseUrl: process.env.API_BASE_URL || '',
   },
 };
 module.exports = config;
-// This documentation website is developed and maintained by Kevin @kkkk666 (Kangtian Liu).
+// This documentation website is developed and maintained by Kevin @kkkk666.
