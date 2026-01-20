@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { themes } = require('prism-react-renderer');
-const { languageTabs } = require('./static/languageTabs.mjs');
+const { languageTabs } = require('./static/languageTabs.cjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
 const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
 const code_themes = {
