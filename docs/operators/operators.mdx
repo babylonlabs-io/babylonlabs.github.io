@@ -20,10 +20,9 @@ like to participate in the Babylon network.
 
 Some example user stories: 
 * I am an experienced PoS chain Validator and want to help secure the Babylon network and earn block rewards.
-* I want to run a Finality Provider node to receive BTC delegation and earn staking rewards commission.
+* I want to run a Finality Provider node to receive BTC delegation and earn commission from stakers.
 * I am a serious institutional staker and want to enable scalable access to the Babylon network.
-* I am an infrastructure provider and want to build an explorer and RPC service for the Babylon network. 
-* I am a Bitcoin Supercharged Network (BSN) builder and want to be able to achieve new real-time data availability with Babylon for my users.
+* I am an infrastructure provider and want to build an explorer and RPC service for the Babylon network.
 
 ## Node Types
 ### Full Node
@@ -40,17 +39,17 @@ Validator nodes are full nodes that participate in consensus by:
 - Earning rewards and transaction fees
 
 ### Finality Provider Node
-Finality Provider nodes are specialized nodes that participate in BSN finalization by:
-- Committing public randomness for BSN blocks
+Finality Provider nodes are specialized nodes that participate in finalization by:
+- Committing public randomness for blocks
 - Signing blocks using EOTS (Extractable One-Time Signatures)
-- Submitting finality signatures to BSNs
-- Securing BSNs through BTC staking
-- Earning rewards from BSNs
+- Submitting finality signatures
+- Securing the network through BTC staking
+- Earning commission from delegated stakes
 
 :::note
 The difference between a Validator and Finality Provider is that Validator nodes are responsible 
 for proposing blocks and voting on Babylon Genesis, while Finality Provider nodes are responsible for 
-committing public randomness and signing blocks for BSNs.
+committing public randomness and signing blocks.
 :::
 
 ### Archive Node
@@ -83,8 +82,8 @@ Babylon nodes provides following RPC/gRPC APIs:
 ## Key Management
 Types of keys important to node operators: 
 * Bitcoin schnorr private key (critical for staking and EOTS signing)
-* BSN Validator account private key (critical for proposing blocks)
-* BSN Finality Provider account private keys (critical for signing finality of BSNs)
+* Validator account private key (critical for proposing blocks)
+* Finality Provider account private keys (critical for signing finality)
 
 Operators should use hardware security modules (HSMs) when possible, maintain physical security 
 for key storage, and keep backups in separate locations.
