@@ -125,12 +125,12 @@ export default function Footer() {
             <Link href="https://x.com/babylonlabs_io" aria-label="Twitter">
               <XIcon className="h-7 w-7 text-zinc-400 hover:text-primary"/>
             </Link>
-            <Link
-              href="https://www.youtube.com/@babylonlabs"
-              aria-label="Babylon Labs YouTube Channel"
-            >
-              <Youtube className="h-7 w-7 text-zinc-400 hover:text-primary"/>
-            </Link>
+            {/*<Link*/}
+            {/*  href="https://www.youtube.com/@babylonlabs"*/}
+            {/*  aria-label="Babylon Labs YouTube Channel"*/}
+            {/*>*/}
+            {/*  <Youtube className="h-7 w-7 text-zinc-400 hover:text-primary"/>*/}
+            {/*</Link>*/}
           </div>
         </div>
       </div>
