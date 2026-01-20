@@ -86,15 +86,18 @@ jobs:
           name: build_artifact
           path: ./artifact
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/gha-deployment
+          role-session-name: gh-terragrunt-plan
+          aws-region: ${{ vars.AWS_S3_REGION }}
+
       - name: Upload to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ vars.AWS_S3_REGION }}
         run: |
           tar -czf docs-${{ github.sha }}.tar.gz -C artifact .
           if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
-            aws s3 cp docs-${{ github.sha }}.tar.gz s3://devnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+            aws s3 cp docs-${{ github.sha }}.tar.gz s3://devnet-dapp-frontend-build-artifacts/docs-website/${{ github.sha }}.tar.gz
           elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            aws s3 cp docs-${{ github.sha }}.tar.gz s3://mainnet-build-artifacts/docs-website/${{ github.sha }}.tar.gz
+            aws s3 cp docs-${{ github.sha }}.tar.gz s3://mainnet-dapp-frontend-build-artifacts/docs-website/${{ github.sha }}.tar.gz
           fi
