@@ -1784,3 +1784,98 @@ div:has(> .openapi-tabs__schema-container) {
   }
 }
 /* CSS for hello bar ends*/
+
+
+/* AI Header Button Styles - Updated Override */
+.header-ai-chat-link {
+  display: none; /* Hidden by default until health check passes */
+  align-items: center;
+  padding: 0.4rem 1rem !important;
+  background-color: var(--ifm-color-primary) !important; /* Match Ask Babylon AI */
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  border: none !important;
+}
+
+/* Show AI chat button only when API is healthy */
+body.ai-chat-available .header-ai-chat-link {
+  display: flex;
+}
+
+.header-ai-chat-link:hover {
+  filter: brightness(0.9); /* Simple darkening for hover */
+  color: #fff !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+.header-ai-chat-link::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  background-image: url('/logo/babylon_symbol.svg') !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  filter: none !important; /* Remove any previous filters */
+}
+
+/* Mobile responsive styles for AI chat button */
+@media screen and (max-width: 996px) {
+  .header-ai-chat-link {
+    padding: 0.35rem 0.6rem !important;
+    margin-right: 4px;
+    font-size: 0.85rem;
+  }
+
+  .header-ai-chat-link::before {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  /* Header bar - icon only */
+  .navbar__items .header-ai-chat-link {
+    padding: 0.3rem 0.5rem !important;
+    margin-right: 2px;
+    font-size: 0;  /* Hide text on very small screens */
+    min-width: 36px;
+    justify-content: center;
+  }
+
+  .navbar__items .header-ai-chat-link::before {
+    width: 20px;
+    height: 20px;
+    margin-right: 0;  /* No margin when text is hidden */
+  }
+}
+
+/* Mobile sidebar menu - show button with text */
+body.ai-chat-available .navbar-sidebar .header-ai-chat-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 8px 16px;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  border-radius: 8px !important;
+}
+
+.navbar-sidebar .header-ai-chat-link::before {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+

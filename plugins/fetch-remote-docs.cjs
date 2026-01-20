@@ -20,6 +20,7 @@ function extractJsAndRemoteMD(content) {
   const lines = content.split('\n');
   const codeLines = [];
   let inFrontmatter = false;
+  let inCodeBlock = false;
   let inRemoteMD = false, remoteMdBlock = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -28,6 +29,13 @@ function extractJsAndRemoteMD(content) {
     if (line.trim() === '---' && !inFrontmatter) { inFrontmatter = true; continue; }
     if (line.trim() === '---' && inFrontmatter) { inFrontmatter = false; continue; }
     if (inFrontmatter) continue;
+
+    // Track code block boundaries
+    if (line.trim().startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+      continue;
+    }
+    if (inCodeBlock) continue;
 
     if (line.includes('<RemoteMD')) inRemoteMD = true;
     if (inRemoteMD) {

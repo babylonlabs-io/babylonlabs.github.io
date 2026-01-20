@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the official Babylon Labs documentation site built with Docusaurus 3.7. The site provides comprehensive documentation for Babylon Labs' Bitcoin staking protocol, including guides for stakers, developers, operators, and Bitcoin Secured Networks (BSNs).
+This is the official Babylon Labs documentation site built with Docusaurus 3.7. The site provides comprehensive documentation for Babylon Labs' Bitcoin staking protocol, including guides for stakers, developers, operators, and Bitcoin Supercharged Networks (BSNs).
 
 **Site Launched**: March 21, 2025
 
@@ -74,18 +74,53 @@ npm run genmd         # Generate OpenAPI markdown docs
 
 ```
 docs/                    # Main documentation content (MDX files)
-├── guides/             # Overview, architecture, networks, governance
-├── stakers/            # BTC stakers and BABY stakers docs
-├── developers/         # Developer guides and integration docs
-├── operators/          # Node operators, validators, finality providers
-├── bsns/               # Bitcoin Secured Networks documentation
-└── api/                # Auto-generated API docs (from OpenAPI specs)
+├── guides/             # Overview and conceptual documentation
+│   ├── overview/       # Landing and intro pages
+│   │   └── babylon_genesis/  # Core Babylon Genesis docs
+│   │       ├── architecture/     # System architecture
+│   │       │   ├── btc_staking_program/  # BTC staking details
+│   │       │   └── vigilantes/           # Vigilante services
+│   │       ├── governance/       # Governance processes
+│   │       ├── networks/         # Mainnet and testnet info
+│   │       └── specifications/   # Technical specs
+│   ├── research/       # Research papers and whitepapers
+│   ├── security/       # Security audits and bug bounty
+│   └── support/        # FAQ and Discord links
+├── stakers/            # Staker documentation
+│   ├── btc_stakers/    # BTC staking guides
+│   │   ├── native_staking/   # Direct staking
+│   │   ├── liquid_staking/   # LST protocols
+│   │   └── campaigns/        # Staking campaigns
+│   └── baby_stakers/   # BABY token staking
+├── developers/         # Developer documentation
+│   ├── bitcoin_staking/      # Bitcoin staking integration
+│   │   ├── wallet_integration/   # Wallet guides
+│   │   ├── staking_backend/      # Backend setup
+│   │   └── networks/             # Network configs
+│   └── babylon_genesis_chain/    # Babylon chain development
+│       ├── dapps/                # dApp development
+│       ├── wallet_setup/         # Wallet configuration
+│       └── explorers/            # Block explorers
+├── operators/          # Node operator documentation
+│   ├── babylon_node/       # Full node setup
+│   │   └── babylon_cli/    # CLI reference
+│   ├── babylon_validators/ # Validator guides
+│   ├── finality_providers/ # FP operation
+│   ├── covenant_emulator/  # Covenant setup
+│   ├── vigilantes/         # Vigilante services
+│   └── staker_cli/         # Staker CLI tools
+└── api/                # Auto-generated API docs
+    ├── staking-api/        # Staking API reference
+    ├── babylon-gRPC/       # Babylon gRPC API
+    └── comet-bft/          # CometBFT RPC API
 
 src/
 ├── components/         # React components
-│   ├── RemoteMD.jsx   # Component for fetching/rendering remote GitHub markdown
+│   ├── RemoteMD.jsx       # Remote GitHub markdown fetcher
+│   ├── ChatWidget.tsx     # AI assistant chat widget
+│   ├── ChatWidget.css     # Chat widget styles
 │   ├── ApiVersionSelector.tsx
-│   └── homepage/      # Homepage components
+│   └── homepage/          # Homepage components
 ├── theme/             # Docusaurus theme customizations
 ├── css/               # Custom CSS and Tailwind
 └── pages/             # Custom pages (non-doc content)
@@ -98,7 +133,8 @@ static/
 
 plugins/
 ├── fetch-remote-docs.cjs  # Fetches docs from GitHub repos
-└── tailwind-plugin.cjs    # Tailwind CSS integration
+├── tailwind-plugin.cjs    # Tailwind CSS integration
+└── webpack-react-provider.cjs  # React polyfills for browser
 
 docusaurus.config.js   # Main Docusaurus configuration
 sidebars-default.js    # Sidebar navigation structure
@@ -151,6 +187,57 @@ Three API documentation sources are configured in `docusaurus.config.js`:
 
 Generated docs appear in `docs/api/` directories.
 
+### AI Chat Widget (Babylon AI Assistant)
+
+The site includes an AI-powered chat assistant (`src/components/ChatWidget.tsx`) that helps users find information in the documentation.
+
+**Key Features:**
+- Streaming responses for real-time feedback
+- Multi-session support (up to 15 concurrent chat sessions)
+- Session persistence in localStorage
+- Token limit validation with visual feedback
+- Expandable/minimizable UI with sidebar for session management
+- Markdown rendering with sanitization
+
+**Architecture:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ChatWidget.tsx                                              │
+│  ├── Health Check: GET {apiBaseUrl}/health                  │
+│  │   └── If healthy → Show widget + "Ask AI" navbar button  │
+│  │   └── If unhealthy → Hide widget completely              │
+│  ├── Token Limits: GET {apiBaseUrl}/api/limits              │
+│  └── Chat API: POST {apiBaseUrl}/api/query/stream           │
+│       └── Server-Sent Events (SSE) for streaming            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Visibility Control:**
+- The "Ask AI" button in the navbar is hidden by default via CSS
+- ChatWidget adds `ai-chat-available` class to `<body>` when API health check passes
+- CSS rule shows the button only when this class is present:
+  ```css
+  .header-ai-chat-link { display: none; }
+  body.ai-chat-available .header-ai-chat-link { display: flex; }
+  ```
+
+**Configuration:**
+- `API_BASE_URL` environment variable configures the backend endpoint
+- Accessed via `siteConfig.customFields.apiBaseUrl` in the component
+- Falls back to `/api` if not set
+
+**Session Management:**
+- Sessions stored in localStorage under key `babylon_ai_chat_sessions`
+- Each session has: `id`, `thread_uuid`, `title`, `messages[]`, `timestamp`
+- Auto-titles based on first user message
+- Sessions can be renamed, deleted, or created via the expanded sidebar
+
+**Dependencies:**
+- `lucide-react` - Icons
+- `react-markdown` - Markdown rendering
+- `rehype-sanitize` - HTML sanitization
+- `framer-motion` - Animations
+
 ### Environment Variables
 
 Required variables (see `.env-example`):
@@ -158,6 +245,7 @@ Required variables (see `.env-example`):
 - `ALGOLIA_API_KEY_READONLY`: Algolia read-only API key
 - `TRACKING_ID`: Google Analytics tracking ID (optional)
 - `BRANCH_NAME`: Determines which Algolia index to use (main vs dev)
+- `API_BASE_URL`: Backend API URL for AI chat widget (optional, defaults to `/api`)
 
 ### Webpack Configuration
 
@@ -284,13 +372,31 @@ When transitioning to a new production release:
 
 The site is organized into distinct sections for different audiences:
 
-- **Overview** - Protocol core concepts (staking, BSNs, Finality Providers)
-- **Architecture** - Technical overview with infographics explaining Babylon's architecture
-- **Phases of Launch** - Explains different project phases (Phase 1, 2, 3)
-- **Stakers** - User guides for staking, building LSTs, wallet integrations
-- **Operators** - Guides for Finality Providers, nodes, Vigilantes
-- **Developers** - BSN development guides and smart contract development
-- **Specifications** - Bitcoin script, transactions, APIs, CLIs
+### Main Navigation Sections
+
+- **Overview** (`/guides/overview/`) - Protocol introduction and core concepts
+  - Babylon Genesis architecture, networks (mainnet/testnet), governance, specifications
+  - BTC staking program details, vigilante services
+
+- **Stakers** (`/stakers/`) - User guides for all staking options
+  - BTC Stakers: Native staking, liquid staking (LSTs), staking campaigns
+  - BABY Stakers: BABY token staking guides
+
+- **Developers** (`/developers/`) - Technical integration guides
+  - Bitcoin Staking: Wallet integration, backend setup, network configs
+  - Babylon Genesis Chain: dApp development, wallet setup, explorers
+
+- **Operators** (`/operators/`) - Node operation documentation
+  - Babylon Node: Installation, CLI reference
+  - Validators: Setup and operation guides
+  - Finality Providers: FP setup and management
+  - Covenant Emulator, Vigilantes, Staker CLI
+
+- **API** (`/api/`) - Auto-generated API reference
+  - Staking API, Babylon gRPC, CometBFT RPC
+
+### Supporting Sections
+
 - **Research** - Bitcoin staking and timestamping research papers
 - **Security** - Audit reports and bug bounty program
 - **Support** - Discord community links and FAQ

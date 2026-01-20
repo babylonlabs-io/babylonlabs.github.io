@@ -8,10 +8,11 @@
 
  Create as many sidebars as you want.
  */
-import stakingApiSidebar from './docs/api/staking-api/sidebar';
-import babylongRpcSidebar from './docs/api/babylon-gRPC/sidebar';
-import cometBFTSidebar from './docs/api/comet-bft/sidebar'
 // @ts-check
+
+const stakingApiSidebar = require('./docs/api/staking-api/sidebar').default;
+const babylongRpcSidebar = require('./docs/api/babylon-gRPC/sidebar').default;
+const cometBFTSidebar = require('./docs/api/comet-bft/sidebar').default;
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
