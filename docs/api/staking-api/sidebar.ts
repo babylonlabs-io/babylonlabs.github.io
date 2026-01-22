@@ -90,6 +90,12 @@ const sidebar: SidebarsConfig = {
           label: "getStatsV2",
           className: "api-method get",
         },
+        {
+          type: "doc",
+          id: "api/staking-api/get-personalized-staking-apr",
+          label: "Get personalized staking APR",
+          className: "api-method get",
+        },
       ],
     },
     {
