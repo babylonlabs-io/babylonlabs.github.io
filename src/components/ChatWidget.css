@@ -156,6 +156,25 @@
   border-bottom-left-radius: 4px;
 }
 
+/* Prevent long content from breaking layout */
+.chat-messages .markdown-body {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.chat-messages .markdown-body pre {
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  overflow-x: auto;
+}
+
+.chat-messages .markdown-body code {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* Input */
 .chat-input input {
   border: 1px solid var(--ifm-color-emphasis-300); /* Explicit border */
