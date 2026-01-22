@@ -63,6 +63,7 @@ export default function ChatWidget() {
   const { siteConfig } = useDocusaurusContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasUserToggledExpand, setHasUserToggledExpand] = useState(false);
   const [isApiHealthy, setIsApiHealthy] = useState<boolean>(false);
   // Removed showSidebar state as it's now strictly tied to isExpanded
 
@@ -264,12 +265,34 @@ export default function ChatWidget() {
         e.preventDefault();
         setIsOpen(true);
         setIsExpanded(true);
+        setHasUserToggledExpand(true);
       }
     };
 
     document.addEventListener('click', handleHeaderClick);
     return () => document.removeEventListener('click', handleHeaderClick);
   }, []);
+
+ 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const isSmallScreen = width < 768;
+      const isDesktop = width >= 1024;
+
+      if (isSmallScreen) {
+        setIsExpanded(false);
+      } else if (isOpen && isDesktop && !hasUserToggledExpand) {
+        setIsExpanded(true);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, hasUserToggledExpand]);
 
   // Cleanup abort controller on unmount
   useEffect(() => {
@@ -471,6 +494,7 @@ export default function ChatWidget() {
     abortControllerRef.current?.abort();
     setIsOpen(false);
     setIsExpanded(false);
+    setHasUserToggledExpand(false);
   };
 
   // Don't render if API is not healthy
@@ -627,7 +651,10 @@ export default function ChatWidget() {
                   )}
                   <div className="flex items-center gap-2 shrink-0">
                     <button
-                      onClick={() => setIsExpanded(!isExpanded)}
+                      onClick={() => {
+                        setHasUserToggledExpand(true);
+                        setIsExpanded(prev => !prev);
+                      }}
                       title={isExpanded ? "Minimize" : "Expand"}
                       className="header-control-btn"
                       aria-label={isExpanded ? "Minimize chat" : "Expand chat"}
@@ -714,7 +741,17 @@ export default function ChatWidget() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            if (isOpen) {
+              setIsOpen(false);
+              setIsExpanded(false);
+              setHasUserToggledExpand(false);
+            } else {
+              setHasUserToggledExpand(true); 
+              setIsExpanded(false);
+              setIsOpen(true);
+            }
+          }}
           className="chat-trigger-btn shadow-lg flex items-center gap-2 px-4 py-3 rounded-full font-medium"
         >
           {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
