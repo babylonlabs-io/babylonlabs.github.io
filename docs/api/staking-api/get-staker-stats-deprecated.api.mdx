@@ -1,0 +1,77 @@
+---
+id: get-staker-stats-deprecated
+title: "Get Staker Stats (Deprecated)"
+description: "[DEPRECATED] Fetches staker stats for babylon staking including tvl, total delegations, active tvl and active delegations. Please use /v2/staker/stats instead."
+sidebar_label: "Get Staker Stats (Deprecated)"
+hide_title: true
+hide_table_of_contents: true
+api: eJztVttu4kgQ/ZWWn3YlLkm0TzwtBGeElIEsOCONZpHVtgvoSeP2drdJEOLfp6rbBgfIXDKv+4BM3+qcPlVdVbsgg0JDyi1kQc/qElo4Y1ItCitUHvSCL8PwYRre9qNwOGd3YNMVGGYsfwJNH2vYQmmW8GQrVe4WRL5kIk9lmdE/u5EtZpXlkmUgYcnJrmkxnlqxAVpmPM/qYWNLhz1I4AZYib/u5qbrQbseVOTGAs86/+ajRUUnTmwaF0/svxL0lhVc8zVYZCkMK7TaiAyyFhOWPQspmQZb6rxxA7sCZgpIxUKklUE0PsFp/SwMnJ2k/VYV1VbDNM+fIGPJtnGzTtAKDjxM0PuyOxH3oUwkwj3BlqmFp+CVtYotSGs0IGijuxMOcrSFw1cXxmmDXlnzoLcL7LbwGzSKH+z3rTNIvhS5U9jB1kAOPIcXi8ItwbE5Xu4NFsXBVIymvktj3go0mALdCobWb66u6POa2r0w9gT5tZ4IkarcQm7pMC8KFM/hd78asrBrMECXF6Ct8HgZt25WWFib82UPETeir3EJgYhL0MG+Ve8jKhfXK78UT/EKXi7o0ArcS/gxkN/2Bg6t+ymVfIXUoixWWEkTm2sDeiNS6MwclRnFt4+y4HiMa823ND568FwTCgbn10tR9SaBFT5miU/naHla+f2njnmq9ZG2IxofLhVfuNSezP51KZxCrZXusQHP2BQwdI19f/yA1vhBJCCjtyoDN5uXa3zVwWgchdNx/z6ehdNPo9swDqfTyRTRPvXvR8N+NJqMD1PjSRTfTR7HQ/w/6A/jafjPYziLcHQ3mQ5Gw2E4xv+P44fp5DaczfqDezQ3jkbRZ5yuNsfR6GM4eYyCeevENa3gpU2s2huu6ZUaRw+vjCM58yo6XYgclyJz169nxsreqTLPiBrPjqLdKZ2ILIOcmOWoTArG8ERCmKMD6eVXeyOxBlVax6vyLPEznfAgm38ltjS1iL8Q3UthV2USp2odVwVH8sS0hYqrutPmhWjXwSKqa8dmxTVkcYOJCxsC4kun0OaaKGOaXqmMcMC6zG1XOOhurn3NqQoQ5TlEqBN6qSXFr7WF6XW7DR4di4LkYDsNqh2hgtMCO6hK56wqnf2HEYv80YDS99sA7zD8kYvcGZ5TSl8ocgA9CUxsLqDXXBBaNfX3CcL+FCLConEJRi0WlLwJQa99seEJBkZd4izU9a4+PYhuDxbMFmv7GqvvZ1VqTP8Uba5JoE4Aq/lSofq5L7ZkgxD7ftc9Oh4TB5PCVWOsbglI9UyFWPoll9p8/To/h9tey52p1Jzo3OXGAEbDQkgwXQo4z7BdAXSKbOFybRW0F/RBGIofr+FN58qlYmXsmucNeh/AMp/wmMt47I/hoVf789Tbu2Nm+79l+82WrUo/Fgtgt5D4Ysg/Li52VVJwGcMnMhPUZZ9SyAq9SMu7XYI6PGq539O0b5xc/ydc4sQss+DSnHbbTS/+TG94kamr2Wct4obLkva6nPILLN7XLn6H2FnXeGQ2p4EWRA3FmuORFQYMKkvK+dP0XgvbOHVWxffNTP4hjDDXfwNv74aj
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Staker Stats (Deprecated)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/stats/staker"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Fetches staker stats for babylon staking including tvl, total delegations, active tvl and active delegations. Please use /v2/staker/stats instead.
+If staker_btc_pk query parameter is provided, it will return stats for the specific staker.
+Otherwise, it will return the top stakers ranked by active tvl.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Public key of the staker to fetch","in":"query","name":"staker_btc_pk","schema":{"type":"string"}},{"description":"Pagination key to fetch the next page of top stakers","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"List of top stakers by active tvl","content":{"application/json":{"schema":{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"staker_pk_hex":{"type":"string"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.StakerStatsPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v1service_StakerStatsPublic"}}}},"400":{"description":"Error: Bad Request","content":{"application/json":{"schema":{"properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

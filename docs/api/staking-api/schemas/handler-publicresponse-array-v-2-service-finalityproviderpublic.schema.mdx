@@ -1,0 +1,33 @@
+---
+id: handler-publicresponse-array-v-2-service-finalityproviderpublic
+title: "handler.PublicResponse-array_v2service_FinalityProviderPublic"
+description: ""
+sidebar_label: "handler.PublicResponse-array_v2service_FinalityProviderPublic"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":[{"active_delegations":0,"active_tvl":0,"btc_pk":"string","commission":"string","description":{"details":"string","identity":"string","moniker":"string","security_contact":"string","website":"string"},"logo_url":"string","state":"FINALITY_PROVIDER_STATUS_ACTIVE","type":"string"}],"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"handler.PublicResponse-array_v2service_FinalityProviderPublic"}
+>
+</Heading>
+
+
+
+
+
+<Schema
+  schema={{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"types.FinalityProviderDescription"},"logo_url":{"type":"string"},"state":{"description":"Status of a finality provider","enum":["FINALITY_PROVIDER_STATUS_ACTIVE","FINALITY_PROVIDER_STATUS_INACTIVE"],"type":"string","x-enum-varnames":["FinalityProviderStatusActive","FinalityProviderStatusInactive"],"title":"types.FinalityProviderQueryingState"},"type":{"type":"string"}},"type":"object","title":"v2service.FinalityProviderPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v2service_FinalityProviderPublic"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

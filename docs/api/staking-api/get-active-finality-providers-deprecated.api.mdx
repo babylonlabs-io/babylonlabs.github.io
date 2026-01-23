@@ -1,0 +1,75 @@
+---
+id: get-active-finality-providers-deprecated
+title: "Get Active Finality Providers (Deprecated)"
+description: "[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead."
+sidebar_label: "Get Active Finality Providers (Deprecated)"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVlGP2zYM/iuCn1ogia/3mKelvbtiwAYEXfYwdEEg23SiRpY0kXEXBPnvo6Q4ycW+trc97YDgYEkkP34iP+qQVeA8lJKgyqbkdzDiFSy9cqSsyabZ54fH+afHD7PF48NSPAGVG0BRAUmlUdhaSK2FLEm1IGplpFa0F87bVlXgUaD17FkUe0EbUL47SZakFq3UOxDalls+8mYWtxatfiuUEQEEmEqZtbCeXU3EXINEEDv+5e193gUbX4IpgwSymmSjzEkvGyBezaafDzcpzXeFVqXYwj4kwMD6yBmhqEOy7EsFm7924Pf8Ydgtf9ZuVVC5clteQqakkdn0kNHehU0kz7iz43HUiyzXHCl8xOhdkIjBwN8knFxDANWn8gUg7uxxxR6/iWY5yjygswYBw/793V349xzhTGiFNAzh6jbPlzV0V4yitIbAUPAvnWO2I8T8C4YghyuQ7NyBJ5UgVZLiqiJosL+dqmdVgYZ1dIhXeSqOuObgx1F3jlo9vH+6uj5HAXjTKESVcPa2n5HVQ5+6YtCQCTTEbA5uNtaoLUMb2kMod54NV4FSTmzw0FcokDkbrMFuxRZfgM35W5EOC+07BN+qEiZP7uGSV+qO4DV26ffZTsdeIPuH40fqrmInI+m93IfvS533eQ+dE6v/VelvpKk0C8vF86dTd/yQWYLamYwj0NU5pVUvpfDHXuQ6KBLnnnE7skJtLOtutgaKokUb/sjbdwPqFlqbfXeKtvM6gCFyOM1zJLnlfMfSqQkBkgGaFLLYa2u0LHCibHar6+/TtvgtmYrZ/GexSKZZEK6XA/wLx79KZaLjZVCx2oabuqpn1gIVop2WfrqJcNt32YLlciiMres0B2rrmySzsrA7ivrKKRB0gt9Zv198OHvAPY+PZvKn+cPuwqQqAVHwbceRo1CsLbNvztMsRpylU7/wlXMVsHaaMMtY1wvQ9muYRDptxTpNkt2342PP6a5siTc85xIRCLkyNGDO9zBOCMenABNX1bFxTnU6wA+HCfWTOLyf3MW+skiNNFfwPgKd5F08dSNgfh4Bbx7O74W3t1d/uMj+//TZcGp6YkHJneaiDRTFqzmcujO27igb6E8u7Q2TGY4cDgXH/N3r4zEsp5Ed3yEKZaHDU6uWGm/fWtf8vfKNMgg8SuKzp0qkjtdih78CzH96tnwDW+/1cgG4DB9eBYRM3ZJNNnxJYUgyj8k6NJGjK6veU+N4LbIfHxcsw/8A0jrbGw==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Active Finality Providers (Deprecated)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/finality-providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Public key of the finality provider to fetch","in":"query","name":"fp_btc_pk","schema":{"type":"string"}},{"description":"Pagination key to fetch the next page of finality providers","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"A list of finality providers sorted by ActiveTvl in descending order","content":{"application/json":{"schema":{"properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"v1service.FpDescriptionPublic"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.FpDetailsPublic"},"type":"array"},"pagination":{"properties":{"next_key":{"type":"string"}},"type":"object","title":"handler.paginationResponse"}},"type":"object","title":"handler.PublicResponse-array_v1service_FpDetailsPublic"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
