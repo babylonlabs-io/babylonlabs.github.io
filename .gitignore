@@ -136,3 +136,7 @@ dist
 
 # ignore temporary files
 tmp/
+
+# Playwright test results
+tests/load-testing/test-results/
+tests/load-testing/playwright-report/

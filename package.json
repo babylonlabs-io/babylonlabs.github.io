@@ -20,7 +20,12 @@
     "format:docs": "prettier -w docs",
     "typecheck": "tsc",
     "spell-check": "npx cspell docs/**/*.mdx",
-    "genmd": "docusaurus gen-api-docs all"
+    "genmd": "docusaurus gen-api-docs all",
+    "test:load": "npx playwright test --config=tests/load-testing/playwright.config.ts",
+    "test:load:50": "CONVERSATION_COUNT=50 npx playwright test --config=tests/load-testing/playwright.config.ts",
+    "test:load:100": "CONVERSATION_COUNT=100 npx playwright test --config=tests/load-testing/playwright.config.ts",
+    "test:load:dev": "TARGET_URL=https://docs-dev.babylonlabs.io npx playwright test --config=tests/load-testing/playwright.config.ts",
+    "test:load:prod": "TARGET_URL=https://docs.babylonlabs.io npx playwright test --config=tests/load-testing/playwright.config.ts"
   },
   "dependencies": {
     "@docusaurus/core": "^3.7.0",
@@ -43,16 +48,17 @@
     "framer-motion": "^12.4.1",
     "lucide-react": "^0.554.0",
     "prism-react-renderer": "^2.3.0",
-    "rehype-sanitize": "^6.0.0",
     "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-medium-image-zoom": "^5.2.14",
+    "rehype-sanitize": "^6.0.0",
     "sanitize-html": "^2.17.0"
   },
   "devDependencies": {
     "@docusaurus/tsconfig": "3.7.0",
+    "@playwright/test": "^1.58.0",
     "@styled-icons/bootstrap": "^10.47.0",
     "@styled-icons/boxicons-logos": "^10.47.0",
     "@swc/core": "^1.3.42",
