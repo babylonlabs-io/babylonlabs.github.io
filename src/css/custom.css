@@ -1158,6 +1158,14 @@ details p {
   @apply !text-xs;
 }
 
+/* Hide AI header button on small screens, keep on desktop */
+@media (max-width: 768px) {
+  .navbar__items .header-ai-chat-link,
+  .navbar-sidebar .header-ai-chat-link {
+    display: none !important;
+  }
+}
+
 article ol {
   list-style-type: decimal !important;
 }
