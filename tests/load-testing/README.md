@@ -4,15 +4,23 @@ This directory contains Playwright-based load tests for the Babylon AI Chatbot.
 
 ## Overview
 
-The load testing suite:
+The load testing suite provides two modes:
+
+| Mode | Throughput | Use Case |
+|------|------------|----------|
+| **Sequential** | ~8/min | Baseline testing, debugging |
+| **Parallel** | 30-100+/min | Stress testing, load testing |
+
+Features:
 - Opens the chatbot widget on the Babylon docs site
-- Sends a configurable number of questions (50 or 100)
-- Waits for each streaming response to complete
-- Starts a new conversation session for each question
+- Sends configurable number of questions (50, 100, or custom)
+- Waits for streaming responses to complete
 - Collects metrics (response time, success rate, response length)
-- Generates detailed reports
+- Generates detailed HTML and JSON reports
 
 ## Quick Start
+
+### Sequential Testing (Default)
 
 ```bash
 # Run 50 conversations against production
@@ -23,14 +31,26 @@ npm run test:load:100
 
 # Run against dev environment
 npm run test:load:dev
+```
 
-# Run against production (explicit)
-npm run test:load:prod
+### Parallel Testing (High Throughput)
+
+```bash
+# Run 50 parallel conversations (5 workers)
+npm run test:load:parallel
+
+# Stress test: 100 conversations, 10 workers, no delay
+npm run test:load:parallel:stress
+
+# Custom: 200 conversations, 20 workers
+WORKERS=20 CONVERSATION_COUNT=200 npm run test:load:parallel
 ```
 
 ## Configuration
 
 All configuration is done via environment variables:
+
+### Sequential Mode Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -39,6 +59,26 @@ All configuration is done via environment variables:
 | `RESPONSE_TIMEOUT` | `120000` | Max wait time for response (ms) |
 | `DELAY_BETWEEN_CONVERSATIONS` | `2000` | Delay between conversations (ms) |
 | `RANDOM_QUESTIONS` | `true` | Randomize question order |
+
+### Parallel Mode Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `TARGET_URL` | `https://docs.babylonlabs.io` | Target site URL |
+| `CONVERSATION_COUNT` | `50` | Total conversations to run |
+| `WORKERS` | `5` | Number of parallel browser instances |
+| `DELAY_BETWEEN` | `500` | Stagger delay between workers (ms) |
+| `RESPONSE_TIMEOUT` | `120000` | Max wait time per response (ms) |
+| `RANDOM_QUESTIONS` | `true` | Randomize question order |
+
+### Throughput Calculation
+
+```
+Throughput ≈ (WORKERS × 60) / avg_response_time_seconds
+
+Example with 10 workers and 6s avg response:
+  (10 × 60) / 6 = 100 conversations/minute
+```
 | `HEADLESS` | `true` | Run browser in headless mode |
 
 ### Examples

@@ -139,4 +139,6 @@ tmp/
 
 # Playwright test results
 tests/load-testing/test-results/
+tests/load-testing/test-results-parallel/
 tests/load-testing/playwright-report/
+tests/load-testing/playwright-report-parallel/

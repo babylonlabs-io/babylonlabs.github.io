@@ -25,7 +25,9 @@
     "test:load:50": "CONVERSATION_COUNT=50 npx playwright test --config=tests/load-testing/playwright.config.ts",
     "test:load:100": "CONVERSATION_COUNT=100 npx playwright test --config=tests/load-testing/playwright.config.ts",
     "test:load:dev": "TARGET_URL=https://docs-dev.babylonlabs.io npx playwright test --config=tests/load-testing/playwright.config.ts",
-    "test:load:prod": "TARGET_URL=https://docs.babylonlabs.io npx playwright test --config=tests/load-testing/playwright.config.ts"
+    "test:load:prod": "TARGET_URL=https://docs.babylonlabs.io npx playwright test --config=tests/load-testing/playwright.config.ts",
+    "test:load:parallel": "npx playwright test --config=tests/load-testing/playwright-parallel.config.ts",
+    "test:load:parallel:stress": "WORKERS=10 CONVERSATION_COUNT=100 DELAY_BETWEEN=0 npx playwright test --config=tests/load-testing/playwright-parallel.config.ts"
   },
   "dependencies": {
     "@docusaurus/core": "^3.7.0",
