@@ -163,33 +163,65 @@ export default function ChatWidget() {
 
   const apiBaseUrl = siteConfig.customFields?.apiBaseUrl || '/api';
 
-  // Check API health on mount
+  // Style tag ID for AI button visibility
+  const STYLE_TAG_ID = 'babylon-ai-button-style';
+
+  // Check API health on mount - inject style tag to show button when API is available
   useEffect(() => {
-    const checkHealth = async () => {
-      try {
-        const response = await fetch(`${apiBaseUrl}/health`);
-        if (response.ok) {
-          setIsApiHealthy(true);
-          // Show header AI button
-          document.body.classList.add('ai-chat-available');
-        } else {
-          setIsApiHealthy(false);
-          // Hide header AI button
-          document.body.classList.remove('ai-chat-available');
+    if (typeof window === 'undefined') return;
+
+    // Inject or remove style tag to control button visibility
+    const setButtonVisible = (visible: boolean) => {
+      let styleTag = document.getElementById(STYLE_TAG_ID) as HTMLStyleElement | null;
+      
+      if (visible) {
+        // Create style tag if it doesn't exist
+        if (!styleTag) {
+          styleTag = document.createElement('style');
+          styleTag.id = STYLE_TAG_ID;
+          document.head.appendChild(styleTag);
         }
-      } catch (error) {
-        console.error('Health check failed:', error);
-        setIsApiHealthy(false);
-        // Hide header AI button
-        document.body.classList.remove('ai-chat-available');
+        // CSS to show the button - this overrides the default display:none
+        styleTag.textContent = `
+          .header-ai-chat-link { display: flex !important; }
+          .navbar-sidebar .header-ai-chat-link { display: inline-flex !important; }
+          @media (max-width: 768px) {
+            .navbar__items .header-ai-chat-link { display: none !important; }
+          }
+        `;
+      } else {
+        // Remove style tag to hide button (falls back to CSS default: display:none)
+        if (styleTag) {
+          styleTag.remove();
+        }
       }
     };
-    checkHealth();
-    
-    // Cleanup on unmount
-    return () => {
-      document.body.classList.remove('ai-chat-available');
+
+    const checkHealth = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
+      try {
+        const response = await fetch(`${apiBaseUrl}/health`, {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        const healthy = response.ok;
+        setIsApiHealthy(healthy);
+        setButtonVisible(healthy);
+      } catch (error) {
+        clearTimeout(timeoutId);
+        console.error('Health check failed:', error);
+        setIsApiHealthy(false);
+        setButtonVisible(false);
+      }
     };
+
+    checkHealth();
+
+    // Cleanup: remove style tag when component unmounts (optional, keeps it clean)
+    // Note: We don't remove it because we want the button to stay visible across navigations
   }, [apiBaseUrl]);
 
   // Fetch token limits on mount (only if API is healthy)
