@@ -33,6 +33,8 @@ paths:
         - shared
   /v1/delegation:
     get:
+      operationId: getDelegationV1
+      summary: Get delegation (Deprecated)
       deprecated: true
       description: "[DEPRECATED] Retrieves a delegation by a given transaction hash.
         Please use /v2/delegation instead."
@@ -49,14 +51,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v1service_DelegationPublic"
+                $ref: "#/components/schemas/v1service.DelegationPublicObject"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       tags:
         - v1
   /v1/finality-providers:
@@ -82,13 +83,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-array_v1service_FpDetailsPub\
-                  lic"
+                $ref: "#/components/schemas/v1service.FpDetailsPublicArray"
       summary: Get Active Finality Providers (Deprecated)
       tags:
         - v1
   /v1/global-params:
     get:
+      operationId: getGlobalParamsV1
+      summary: Get global params (Deprecated)
       deprecated: true
       description: "[DEPRECATED] Retrieves the global parameters for Babylon,
         including finality provider details. Please use /v2/network-info
@@ -99,11 +101,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v1service_GlobalParamsPublic"
+                $ref: "#/components/schemas/v1service.GlobalParamsPublicObject"
       tags:
         - v1
   /v1/staker/delegation/check:
     get:
+      operationId: checkDelegationV1
+      summary: Check delegation status
       description: >-
         Check if a staker has an active delegation by the staker BTC address
         (Taproot or Native Segwit).
@@ -137,12 +141,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       tags:
         - shared
   /v1/staker/delegations:
     get:
+      operationId: getStakerDelegationsV1
+      summary: Get staker delegations
       description: >-
         Retrieves phase-1 delegations for a given staker. This endpoint will be
         deprecated once all phase-1 delegations are either withdrawn or
@@ -173,15 +178,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-array_v1service_DelegationPu\
-                  blic"
+                $ref: "#/components/schemas/v1service.DelegationPublicArray"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       tags:
         - v1
   /v1/staker/pubkey-lookup:
@@ -212,21 +215,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-map_string_string"
+                $ref: "#/components/schemas/types.PublicKeyMapResponse"
         "400":
           description: "Bad Request: Invalid input parameters"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Get stakers' public keys
       tags:
         - shared
@@ -242,7 +243,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v1service_OverallStatsPublic"
+                $ref: "#/components/schemas/v1service.OverallStatsPublicObject"
       summary: Get Overall Stats (Deprecated)
       tags:
         - v1
@@ -274,15 +275,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-array_v1service_StakerStatsP\
-                  ublic"
+                $ref: "#/components/schemas/v1service.StakerStatsPublicArray"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Get Staker Stats (Deprecated)
       tags:
         - v1
@@ -309,8 +308,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Unbond phase-1 delegation
       tags:
         - v1
@@ -334,8 +332,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Check unbonding eligibility
       tags:
         - v1
@@ -361,14 +358,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v2service_StakingAPRPublic"
+                $ref: "#/components/schemas/v2service.StakingAPRPublicObject"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Get personalized staking APR
       tags:
         - v2
@@ -388,28 +384,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v2service_DelegationPublic"
+                $ref: "#/components/schemas/v2service.DelegationPublicObject"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "404":
           description: "Error: Not Found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "500":
           description: "Error: Internal Server Error"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Get a delegation
       tags:
         - v2
@@ -446,29 +439,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-array_v2service_DelegationPu\
-                  blic"
+                $ref: "#/components/schemas/v2service.DelegationPublicArray"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "404":
           description: "Error: Not Found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "500":
           description: "Error: Internal Server Error"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: Get Delegations
       tags:
         - v2
@@ -487,34 +476,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-array_v2service_FinalityProv\
-                  iderPublic"
+                $ref: "#/components/schemas/v2service.FinalityProviderPublicArray"
         "400":
           description: Invalid pagination token
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "404":
           description: No finality providers found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "500":
           description: Internal server error occurred
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       summary: List Finality Providers
       tags:
         - v2
   /v2/network-info:
     get:
+      operationId: getNetworkInfo
+      summary: Get network info
       description: Get network info, including params
       responses:
         "200":
@@ -528,12 +515,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       tags:
         - v2
   /v2/prices:
     get:
+      operationId: getPrices
+      summary: Get prices
       description: Get latest prices for all available symbols
       responses:
         "200":
@@ -541,18 +529,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-map_string_float64"
+                $ref: "#/components/schemas/types.PricesResponse"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       tags:
         - v2
   /v2/staker/stats:
     get:
+      operationId: getStakerStatsV2
+      summary: Get staker stats
       description: Fetches staker stats for babylon staking including active tvl,
       parameters:
         - description: Public key of the staker to fetch
@@ -572,33 +561,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v2service_StakerStatsPublic"
+                $ref: "#/components/schemas/v2service.StakerStatsPublicObject"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "404":
           description: "Error: Not Found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
         "500":
           description: "Error: Internal Server Error"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
-      summary: Get Staker Stats
+                $ref: "#/components/schemas/types.Error"
       tags:
         - v2
   /v2/stats:
     get:
+      operationId: getStatsV2
+      summary: Get overall stats
       description: Overall system stats including max staking APR (BTC + co-staking)
       responses:
         "200":
@@ -606,14 +593,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.PublicResponse-v2service_OverallStatsPublic"
+                $ref: "#/components/schemas/v2service.OverallStatsPublicObject"
         "400":
           description: "Error: Bad Request"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/github_com_babylonlabs-io_staking-api-service_inter\
-                  nal_shared_types.Error"
+                $ref: "#/components/schemas/types.Error"
       tags:
         - v2
 tags:
@@ -625,7 +611,8 @@ tags:
     name: v1
 components:
   schemas:
-    github_com_babylonlabs-io_staking-api-service_internal_shared_types.Error:
+    types.Error:
+      description: Standard error response returned by all API endpoints when an error occurs.
       properties:
         err: {}
         errorCode:
@@ -633,115 +620,130 @@ components:
         statusCode:
           type: integer
       type: object
-    handler.PublicResponse-array_v1service_DelegationPublic:
+    v1service.DelegationPublicArray:
+      description: Paginated array response containing Phase-1 delegation objects.
       properties:
         data:
           items:
             $ref: "#/components/schemas/v1service.DelegationPublic"
           type: array
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-array_v1service_FpDetailsPublic:
+    v1service.FpDetailsPublicArray:
+      description: Paginated array response containing Phase-1 finality provider details.
       properties:
         data:
           items:
             $ref: "#/components/schemas/v1service.FpDetailsPublic"
           type: array
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-array_v1service_StakerStatsPublic:
+    v1service.StakerStatsPublicArray:
+      description: Paginated array response containing Phase-1 staker statistics.
       properties:
         data:
           items:
             $ref: "#/components/schemas/v1service.StakerStatsPublic"
           type: array
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-array_v2service_DelegationPublic:
+    v2service.DelegationPublicArray:
+      description: Paginated array response containing Phase-2 delegation objects.
       properties:
         data:
           items:
             $ref: "#/components/schemas/v2service.DelegationPublic"
           type: array
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-array_v2service_FinalityProviderPublic:
+    v2service.FinalityProviderPublicArray:
+      description: Paginated array response containing Phase-2 finality provider objects.
       properties:
         data:
           items:
             $ref: "#/components/schemas/v2service.FinalityProviderPublic"
           type: array
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-map_string_float64:
+    types.PricesResponse:
+      description: Response containing cryptocurrency price data as a map of symbol to price.
       properties:
         data:
-          $ref: "#/components/schemas/map_string_float64"
+          $ref: "#/components/schemas/types.MapStringFloat64"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-map_string_string:
+    types.PublicKeyMapResponse:
+      description: Response containing a map of BTC addresses to their corresponding public keys.
       properties:
         data:
-          $ref: "#/components/schemas/map_string_string"
+          $ref: "#/components/schemas/types.MapStringString"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v1service_DelegationPublic:
+    v1service.DelegationPublicObject:
+      description: Response containing a single Phase-1 delegation object.
       properties:
         data:
           $ref: "#/components/schemas/v1service.DelegationPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v1service_GlobalParamsPublic:
+    v1service.GlobalParamsPublicObject:
+      description: Response containing Phase-1 global staking parameters.
       properties:
         data:
           $ref: "#/components/schemas/v1service.GlobalParamsPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v1service_OverallStatsPublic:
+    v1service.OverallStatsPublicObject:
+      description: Response containing Phase-1 overall staking statistics.
       properties:
         data:
           $ref: "#/components/schemas/v1service.OverallStatsPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v2service_DelegationPublic:
+    v2service.DelegationPublicObject:
+      description: Response containing a single Phase-2 delegation object.
       properties:
         data:
           $ref: "#/components/schemas/v2service.DelegationPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v2service_OverallStatsPublic:
+    v2service.OverallStatsPublicObject:
+      description: Response containing Phase-2 overall staking statistics.
       properties:
         data:
           $ref: "#/components/schemas/v2service.OverallStatsPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v2service_StakerStatsPublic:
+    v2service.StakerStatsPublicObject:
+      description: Response containing Phase-2 staker statistics for a specific staker.
       properties:
         data:
           $ref: "#/components/schemas/v2service.StakerStatsPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.PublicResponse-v2service_StakingAPRPublic:
+    v2service.StakingAPRPublicObject:
+      description: Response containing personalized staking APR information.
       properties:
         data:
           $ref: "#/components/schemas/v2service.StakingAPRPublic"
         pagination:
-          $ref: "#/components/schemas/handler.paginationResponse"
+          $ref: "#/components/schemas/types.PaginationResponse"
       type: object
-    handler.paginationResponse:
+    types.PaginationResponse:
+      description: Pagination metadata for paginated API responses.
       properties:
         next_key:
           type: string
@@ -792,12 +794,14 @@ components:
         version:
           type: integer
       type: object
-    map_string_float64:
+    types.MapStringFloat64:
+      description: Generic map of string keys to float64 values, used for price data.
       additionalProperties:
         format: float64
         type: number
       type: object
-    map_string_string:
+    types.MapStringString:
+      description: Generic map of string keys to string values, used for public key lookups.
       additionalProperties:
         type: string
       type: object

@@ -1,12 +1,12 @@
 ---
 id: types-finalityproviderqueryingstate
 title: "types.FinalityProviderQueryingState"
-description: ""
+description: "Status of a finality provider"
 sidebar_label: "types.FinalityProviderQueryingState"
 hide_title: true
 hide_table_of_contents: true
 schema: true
-sample: "active"
+sample: "FINALITY_PROVIDER_STATUS_ACTIVE"
 custom_edit_url: null
 ---
 
@@ -22,10 +22,10 @@ import Heading from "@theme/Heading";
 
 
 
-
+Status of a finality provider
 
 <Schema
-  schema={{"enum":["active","standby"],"type":"string","x-enum-varnames":["FinalityProviderStateActive","FinalityProviderStateStandby"],"title":"types.FinalityProviderQueryingState"}}
+  schema={{"description":"Status of a finality provider","enum":["FINALITY_PROVIDER_STATUS_ACTIVE","FINALITY_PROVIDER_STATUS_INACTIVE"],"type":"string","x-enum-varnames":["FinalityProviderStatusActive","FinalityProviderStatusInactive"],"title":"types.FinalityProviderQueryingState"}}
   schemaType={"response"}
 >
   

@@ -1,0 +1,33 @@
+---
+id: types-pricesresponse
+title: "types.PricesResponse"
+description: "Response containing cryptocurrency price data as a map of symbol to price."
+sidebar_label: "types.PricesResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":{},"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"types.PricesResponse"}
+>
+</Heading>
+
+
+
+Response containing cryptocurrency price data as a map of symbol to price.
+
+<Schema
+  schema={{"description":"Response containing cryptocurrency price data as a map of symbol to price.","properties":{"data":{"description":"Generic map of string keys to float64 values, used for price data.","additionalProperties":{"format":"float64","type":"number"},"type":"object","title":"types.MapStringFloat64"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"types.PricesResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

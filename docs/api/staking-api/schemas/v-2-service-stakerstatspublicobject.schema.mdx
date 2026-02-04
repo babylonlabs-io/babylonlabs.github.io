@@ -1,0 +1,33 @@
+---
+id: v-2-service-stakerstatspublicobject
+title: "v2service.StakerStatsPublicObject"
+description: "Response containing Phase-2 staker statistics for a specific staker."
+sidebar_label: "v2service.StakerStatsPublicObject"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":{"active_delegations":0,"active_tvl":0,"slashed_delegations":0,"slashed_tvl":0,"unbonding_delegations":0,"unbonding_tvl":0,"withdrawable_delegations":0,"withdrawable_tvl":0},"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"v2service.StakerStatsPublicObject"}
+>
+</Heading>
+
+
+
+Response containing Phase-2 staker statistics for a specific staker.
+
+<Schema
+  schema={{"description":"Response containing Phase-2 staker statistics for a specific staker.","properties":{"data":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"slashed_delegations":{"type":"integer"},"slashed_tvl":{"type":"integer"},"unbonding_delegations":{"type":"integer"},"unbonding_tvl":{"type":"integer"},"withdrawable_delegations":{"type":"integer"},"withdrawable_tvl":{"type":"integer"}},"type":"object","title":"v2service.StakerStatsPublic"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"v2service.StakerStatsPublicObject"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

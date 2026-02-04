@@ -139,3 +139,4 @@ static/remote-docs/
 
 # ignore temporary files
 tmp/
+tests/
