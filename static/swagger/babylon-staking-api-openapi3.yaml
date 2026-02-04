@@ -13,10 +13,10 @@ info:
   title: Babylon Staking API
   version: '2.0'
 servers:
-  - url: 'https://staking-api.testnet.babylonlabs.io'
-    description: 'Babylon Staking API Testnet'
   - url: 'https://staking-api.babylonlabs.io'
     description: 'Babylon Staking API Mainnet'
+  - url: 'https://staking-api.testnet.babylonlabs.io'
+    description: 'Babylon Staking API Testnet'
 paths:
   /healthcheck:
     get:

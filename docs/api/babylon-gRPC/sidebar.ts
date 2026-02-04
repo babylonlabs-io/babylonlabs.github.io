@@ -216,6 +216,40 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "costaking",
+      link: {
+        type: "doc",
+        id: "api/babylon-gRPC/costaking",
+      },
+      items: [
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/costaker-rewards-tracker",
+          label: "CostakerRewardsTracker",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/current-rewards",
+          label: "CurrentRewards",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/historical-rewards",
+          label: "HistoricalRewards",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/babylon-gRPC/costaking-params",
+          label: "CostakingParams",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "checkpointing",
       link: {
         type: "doc",
