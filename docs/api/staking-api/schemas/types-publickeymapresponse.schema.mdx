@@ -1,0 +1,33 @@
+---
+id: types-publickeymapresponse
+title: "types.PublicKeyMapResponse"
+description: "Response containing a map of BTC addresses to their corresponding public keys."
+sidebar_label: "types.PublicKeyMapResponse"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":{},"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"types.PublicKeyMapResponse"}
+>
+</Heading>
+
+
+
+Response containing a map of BTC addresses to their corresponding public keys.
+
+<Schema
+  schema={{"description":"Response containing a map of BTC addresses to their corresponding public keys.","properties":{"data":{"description":"Generic map of string keys to string values, used for public key lookups.","additionalProperties":{"type":"string"},"type":"object","title":"types.MapStringString"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"types.PublicKeyMapResponse"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

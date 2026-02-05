@@ -6,7 +6,7 @@ sidebar_label: "v2service.DelegationUnbonding"
 hide_title: true
 hide_table_of_contents: true
 schema: true
-sample: {"covenant_unbonding_signatures":[{"covenant_btc_pk_hex":"string","signature_hex":"string"}],"slashing":{"spending_height":0,"unbonding_slashing_tx_hex":"string"},"unbonding_timelock":0,"unbonding_tx":"string"}
+sample: {"covenant_unbonding_signatures":[{"covenant_btc_pk_hex":"string","signature_hex":"string","stake_expansion_signature_hex":"string"}],"slashing":{"spending_height":0,"unbonding_slashing_tx_hex":"string"},"unbonding_timelock":0,"unbonding_tx":"string"}
 custom_edit_url: null
 ---
 
@@ -25,7 +25,7 @@ import Heading from "@theme/Heading";
 
 
 <Schema
-  schema={{"properties":{"covenant_unbonding_signatures":{"items":{"properties":{"covenant_btc_pk_hex":{"type":"string"},"signature_hex":{"type":"string"}},"type":"object","title":"v2service.CovenantSignature"},"type":"array"},"slashing":{"properties":{"spending_height":{"type":"integer"},"unbonding_slashing_tx_hex":{"type":"string"}},"type":"object","title":"v2service.UnbondingSlashing"},"unbonding_timelock":{"type":"integer"},"unbonding_tx":{"type":"string"}},"type":"object","title":"v2service.DelegationUnbonding"}}
+  schema={{"properties":{"covenant_unbonding_signatures":{"items":{"properties":{"covenant_btc_pk_hex":{"type":"string"},"signature_hex":{"type":"string"},"stake_expansion_signature_hex":{"type":"string"}},"type":"object","title":"v2service.CovenantSignature"},"type":"array"},"slashing":{"properties":{"spending_height":{"type":"integer"},"unbonding_slashing_tx_hex":{"type":"string"}},"type":"object","title":"v2service.UnbondingSlashing"},"unbonding_timelock":{"type":"integer"},"unbonding_tx":{"type":"string"}},"type":"object","title":"v2service.DelegationUnbonding"}}
   schemaType={"response"}
 >
   

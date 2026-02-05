@@ -6,7 +6,7 @@ sidebar_label: "indexertypes.BtcCheckpointParams"
 hide_title: true
 hide_table_of_contents: true
 schema: true
-sample: {"btc_confirmation_depth":0,"version":0}
+sample: {"btc_confirmation_depth":0,"checkpoint_finalization_timeout":0,"version":0}
 custom_edit_url: null
 ---
 
@@ -25,7 +25,7 @@ import Heading from "@theme/Heading";
 
 
 <Schema
-  schema={{"properties":{"btc_confirmation_depth":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"indexertypes.BtcCheckpointParams"}}
+  schema={{"properties":{"btc_confirmation_depth":{"type":"integer"},"checkpoint_finalization_timeout":{"type":"integer"},"version":{"type":"integer"}},"type":"object","title":"indexertypes.BtcCheckpointParams"}}
   schemaType={"response"}
 >
   
