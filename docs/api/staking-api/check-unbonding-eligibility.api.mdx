@@ -1,0 +1,71 @@
+---
+id: check-unbonding-eligibility
+title: "Check unbonding eligibility"
+description: "Checks if a delegation identified by its staking transaction hash is eligible for unbonding. This endpoint will be deprecated once all phase-1 delegations are either withdrawn or registered into phase-2."
+sidebar_label: "Check unbonding eligibility"
+hide_title: true
+hide_table_of_contents: true
+api: eJzdVU1v2zgQ/SuELt0FYjsJ9pTTOomyNZDYXVsuUOwWBiWNLTYyqZJUEsPQf983lOzaidsCPe5JIjkfb958baOcXGZV5ZXR0VV0U1D26IRaCilyKmkl+UGonLRXS0W5SDdCeSecl49Kr4S3UjuZBalCukIoJ6hUK5WWJJbGilqnRucQ7Yuk4EedV0ZpL55VWYqU4KaylEkP20ZnJCSuK5ii3sUBBCekJUHKF2Sh6ovcymct4MDSSjlPFvowazrdy350FlXSyjXhzUVX/2xfhTrrIkgOInjPEbynF+gqlvlak93goGEGxy7ohX9ZcKyLIkha+loruI+uvK3pLHJZQWsZXW0jv6laNQutqGk+s7CrEA05fr88P+fPMa6koCPqv8dn1JxFf5wy8KCc48AgrPSTLFUu3p1A/k6E6MSeJISSGe2RabYpq6pUWcAw+OLY8PYgsjdU6lzaXJC1ISNtjPjxtdVt0XBahx9G+/w78VyQFlJ3SibLautC1qypyHrVcoRXfBBrELsxOYVbXa+R02g0TuLpeHi/mMXTj6ObeBFPp5MpjHwc3o9uh8loMt5fjSfJ4m4yH9/i/3p4u5jGf8/jWYLT3WR6Pbq9jcf4n48/TCc38Ww2vL6HuXEySj7huhNeJKOHeDJPIqTyOLtn0UuPUfWepOVycQEe6MSpnJF9UhnFHAKD46QEanc3Y+PvTK1zhibzKSqKnGdkxqYqR/cxMg1mMnJOohZi9KPn0uxkE7UmU/uAS/mSgTE+14/3tIFDlIGv3Y7ELgAkg1ZIf9PsYzLpF8rY/wlbkGuCqFyFGJ8u2CkqqDBogWhFPnSeL3AYPF0M9gU7aOtYlS1wB052nVnbEtKF95W7Ggy6Yu3JSvVTmW5Ko0uZur4yUDuuvOv2WeyamSvsQSqtgaI5+5FhD9Ig9SsOklY14n5WemmYS+4cDJFQm2up2Gt39ecrD81rF9zwp9yY5RL8CPZg1+0wkClyLDADef56gkg47LSvk5u9BbfBUFz3/9WfTG2FzLhw0G25qNGYGCorA/a73mQb7HHYSt2jVLl9S6UfIYCZmlJpnrk3y/aJw+xm4ls9iB3TnpvMveJ5IJ0j7wZLVZIbIB+9FmGvc9Cv8iUztau/E/zADddPy+Fl/5zFK+P8WuoDeGGhfRua4rgGjxKx/Tb+/md7sOtqTy9+UJVoD+Yq5GjbdWpoY9ztlwvm7QFTKPQC1LLcdpvC7tyWTcPX7YYM21WFwYQZsJSlox+Q+9u025i/i58s4ZPAH2nz3V2MdVezRuhNTGLFkADvM/QKkjnGHGNtTXDZVv5A683Oaw4n219xgtn3H7WzNKY=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Check unbonding eligibility"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/unbonding/eligibility"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Checks if a delegation identified by its staking transaction hash is eligible for unbonding. This endpoint will be deprecated once all phase-1 delegations are either withdrawn or registered into phase-2.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Staking Transaction Hash Hex","in":"query","name":"staking_tx_hash_hex","required":true,"schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"The delegation is eligible for unbonding"},"400":{"description":"Missing or invalid 'staking_tx_hash_hex' query parameter","content":{"application/json":{"schema":{"description":"Standard error response returned by all API endpoints when an error occurs.","properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"types.Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

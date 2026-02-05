@@ -1,0 +1,33 @@
+---
+id: v-1-service-stakerstatspublicarray
+title: "v1service.StakerStatsPublicArray"
+description: "Paginated array response containing Phase-1 staker statistics."
+sidebar_label: "v1service.StakerStatsPublicArray"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":[{"active_delegations":0,"active_tvl":0,"staker_pk_hex":"string","total_delegations":0,"total_tvl":0}],"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"v1service.StakerStatsPublicArray"}
+>
+</Heading>
+
+
+
+Paginated array response containing Phase-1 staker statistics.
+
+<Schema
+  schema={{"description":"Paginated array response containing Phase-1 staker statistics.","properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"staker_pk_hex":{"type":"string"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.StakerStatsPublic"},"type":"array"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"v1service.StakerStatsPublicArray"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

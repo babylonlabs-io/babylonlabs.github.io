@@ -1,0 +1,33 @@
+---
+id: types-error
+title: "types.Error"
+description: "Standard error response returned by all API endpoints when an error occurs."
+sidebar_label: "types.Error"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"err":{},"errorCode":"INTERNAL_SERVICE_ERROR","statusCode":0}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"types.Error"}
+>
+</Heading>
+
+
+
+Standard error response returned by all API endpoints when an error occurs.
+
+<Schema
+  schema={{"description":"Standard error response returned by all API endpoints when an error occurs.","properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"types.Error"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            
