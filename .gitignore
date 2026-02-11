@@ -136,3 +136,6 @@ dist
 
 # ignore temporary files
 tmp/
+
+# Test artifacts
+tests/
