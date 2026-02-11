@@ -110,6 +110,9 @@ dist
 # Docusaurus cache and generated files
 .docusaurus
 
+# Remote docs fetched during build (generated content)
+static/remote-docs/
+
 # Serverless directories
 .serverless/
 
@@ -136,6 +139,4 @@ dist
 
 # ignore temporary files
 tmp/
-
-# Test artifacts
 tests/

@@ -6,7 +6,7 @@ sidebar_label: "v2service.OverallStatsPublic"
 hide_title: true
 hide_table_of_contents: true
 schema: true
-sample: {"active_delegations":0,"active_finality_providers":0,"active_stakers":0,"active_tvl":0,"total_finality_providers":0}
+sample: {"active_delegations":0,"active_finality_providers":0,"active_tvl":0,"btc_staking_apr":0,"max_staking_apr":0,"total_active_delegations":0,"total_active_tvl":0,"total_finality_providers":0}
 custom_edit_url: null
 ---
 
@@ -25,7 +25,7 @@ import Heading from "@theme/Heading";
 
 
 <Schema
-  schema={{"properties":{"active_delegations":{"type":"integer"},"active_finality_providers":{"type":"integer"},"active_stakers":{"type":"integer"},"active_tvl":{"type":"integer"},"total_finality_providers":{"type":"integer"}},"type":"object","title":"v2service.OverallStatsPublic"}}
+  schema={{"properties":{"active_delegations":{"type":"integer"},"active_finality_providers":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_staking_apr":{"description":"Represents the APR for BTC staking as a decimal (e.g., 0.035 = 3.5%)","type":"number"},"max_staking_apr":{"description":"Represents the max staking APR (BTC + Co-staking) as a decimal","type":"number"},"total_active_delegations":{"description":"This represents the total active delegations on BTC chain which includes\nboth phase-1 and phase-2 active delegations","type":"integer"},"total_active_tvl":{"description":"This represents the total active tvl on BTC chain which includes\nboth phase-1 and phase-2 active tvl","type":"integer"},"total_finality_providers":{"type":"integer"}},"type":"object","title":"v2service.OverallStatsPublic"}}
   schemaType={"response"}
 >
   
