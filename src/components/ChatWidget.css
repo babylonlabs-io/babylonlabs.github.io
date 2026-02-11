@@ -200,6 +200,21 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Dark mode: ghost/outlined style */
+[data-theme='dark'] .chat-trigger-btn {
+  background: transparent;
+  color: rgb(var(--docs-color-primary-100));
+  border: 1px solid rgb(var(--docs-color-primary-100));
+}
+
+[data-theme='dark'] .chat-trigger-btn:hover {
+  transform: scale(1.05);
+  border-color: rgb(var(--docs-color-primary-200));
+  color: #33C5CE;
+  background: transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 /* Send Button Styles */
 .chat-input button[type="submit"] {
   border: none !important;
