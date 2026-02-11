@@ -226,6 +226,41 @@
   box-shadow: 0 0 0 2px rgba(52, 143, 148, 0.2) !important; /* Subtle focus ring */
 }
 
+/* Privacy Consent Screen */
+.chat-consent {
+  text-align: center;
+}
+
+.consent-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.consent-text-box {
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  text-align: left;
+}
+
+.consent-btn {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.consent-btn-agree:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.consent-btn-decline:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
 /* Markdown Styles Override inside Chat */
 .chat-messages .markdown-body p {
   margin-bottom: 0.5em;

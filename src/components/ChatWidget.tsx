@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2, User, Bot, Plus, MessageSquare, Pencil, Check, Trash2, Minimize2, Maximize2 } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, User, Bot, Plus, MessageSquare, Pencil, Check, Trash2, Minimize2, Maximize2, ShieldCheck } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import rehypeSanitize from 'rehype-sanitize';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -39,6 +39,10 @@ interface ChatSession {
 
 const STORAGE_KEY = 'babylon_ai_chat_sessions';
 const OLD_STORAGE_KEY = 'babylon_ai_chat_history'; // For migration
+const CONSENT_KEY = 'babylon_ai_chat_consent';
+
+const PRIVACY_CONSENT_TEXT =
+  'This chatbot is intended for technical and informational purposes only. Please do not provide any personal data, including information that can directly or indirectly identify an individual. Your chat history may be used for improving the bot\'s responses and will be permanently deleted after two months.';
 
 // Helper to generate UUID using cryptographically secure random
 const generateUUID = () => {
@@ -65,7 +69,12 @@ export default function ChatWidget() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasUserToggledExpand, setHasUserToggledExpand] = useState(false);
   const [isApiHealthy, setIsApiHealthy] = useState<boolean>(false);
-  // Removed showSidebar state as it's now strictly tied to isExpanded
+  const [hasConsented, setHasConsented] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(CONSENT_KEY) === 'true';
+    }
+    return false;
+  });
 
   // State for sessions
   const [sessions, setSessions] = useState<ChatSession[]>(() => {
@@ -490,6 +499,20 @@ export default function ChatWidget() {
     }
   };
 
+  const handleConsent = () => {
+    setHasConsented(true);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(CONSENT_KEY, 'true');
+    }
+  };
+
+  const handleDeclineConsent = () => {
+    // Close the chat widget when the user declines
+    setIsOpen(false);
+    setIsExpanded(false);
+    setHasUserToggledExpand(false);
+  };
+
   const handleClose = () => {
     abortControllerRef.current?.abort();
     setIsOpen(false);
@@ -529,8 +552,8 @@ export default function ChatWidget() {
             style={isExpanded ? { position: 'fixed' } : {}}
           >
             <div className="flex h-full w-full overflow-hidden">
-              {/* Sidebar - ONLY shown when expanded */}
-              {isExpanded && (
+              {/* Sidebar - ONLY shown when expanded and consented */}
+              {isExpanded && hasConsented && (
                  <div className="chat-sidebar">
                     <div className="p-3 border-b border-[var(--ifm-color-emphasis-200)] flex justify-between items-center bg-[var(--ifm-background-surface-color)]">
                       <button
@@ -608,7 +631,12 @@ export default function ChatWidget() {
               <div className="flex-1 flex flex-col h-full relative bg-[var(--ifm-background-surface-color)]">
                 {/* Header */}
                 <div className="chat-header flex justify-between items-center p-4">
-                  {editingSessionId === currentSession.id ? (
+                  {!hasConsented ? (
+                    <div className="flex items-center gap-2 font-semibold text-[var(--ifm-color-content)]">
+                      <ShieldCheck className="w-5 h-5 text-[var(--ifm-color-primary)] shrink-0" />
+                      <span>Privacy Notice</span>
+                    </div>
+                  ) : editingSessionId === currentSession.id ? (
                     <div className={`flex items-center gap-2 flex-1 mr-2 ${isExpanded ? 'max-w-[280px]' : 'max-w-[160px]'}`} onClick={e => e.stopPropagation()}>
                       <Bot className="w-5 h-5 text-[var(--ifm-color-primary)] shrink-0" />
                       <input
@@ -650,17 +678,19 @@ export default function ChatWidget() {
                     </div>
                   )}
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => {
-                        setHasUserToggledExpand(true);
-                        setIsExpanded(prev => !prev);
-                      }}
-                      title={isExpanded ? "Minimize" : "Expand"}
-                      className="header-control-btn"
-                      aria-label={isExpanded ? "Minimize chat" : "Expand chat"}
-                    >
-                      {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-                    </button>
+                    {hasConsented && (
+                      <button
+                        onClick={() => {
+                          setHasUserToggledExpand(true);
+                          setIsExpanded(prev => !prev);
+                        }}
+                        title={isExpanded ? "Minimize" : "Expand"}
+                        className="header-control-btn"
+                        aria-label={isExpanded ? "Minimize chat" : "Expand chat"}
+                      >
+                        {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                      </button>
+                    )}
                     <button
                       onClick={handleClose}
                       className="header-control-btn chat-close-btn"
@@ -672,65 +702,96 @@ export default function ChatWidget() {
                   </div>
                 </div>
 
-                {/* Messages */}
-                <div className="chat-messages flex-1 p-4 overflow-y-auto bg-[var(--ifm-background-color)]">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`flex gap-3 mb-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
-                    >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                        msg.role === 'user' 
-                          ? 'bg-[var(--ifm-color-primary)] text-white' 
-                          : 'bg-[var(--ifm-color-emphasis-200)] text-[var(--ifm-color-content)]'
-                      }`}>
-                        {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
-                      </div>
-                      <div className={`max-w-[80%] rounded-2xl p-3 text-sm ${
-                        msg.role === 'user'
-                          ? 'message-bubble-user'
-                          : 'message-bubble-ai'
-                      }`}>
-                        <div className="markdown-body">
-                          {msg.role === 'assistant' && msg.content === '' && isLoading ? (
-                            <Loader2 className="w-5 h-5 animate-spin opacity-60" />
-                          ) : (
-                            <ReactMarkdown rehypePlugins={[rehypeSanitize]}>{msg.content}</ReactMarkdown>
-                          )}
-                        </div>
-                      </div>
+                {/* Privacy Consent Screen */}
+                {!hasConsented ? (
+                  <div className="chat-consent flex-1 flex flex-col items-center justify-center p-6 bg-[var(--ifm-background-color)]">
+                    <div className="consent-icon-wrapper mb-4">
+                      <ShieldCheck className="w-12 h-12 text-[var(--ifm-color-primary)]" />
                     </div>
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-
-                {/* Input */}
-                <form onSubmit={handleSubmit} className="chat-input p-4 flex gap-2">
-                  <div className="flex-1 flex flex-col gap-1">
-                    <input
-                      type="text"
-                      value={input}
-                      onChange={handleInputChange}
-                      placeholder="Ask a question..."
-                      className="flex-1 px-4 py-2 rounded-full"
-                      disabled={isLoading}
-                    />
-                    {inputError && (
-                      <p className={`text-xs px-4 ${
-                        isInputTooLong ? 'text-red-500' : 'text-yellow-600'
-                      }`}>
-                        {inputError}
-                      </p>
-                    )}
+                    <h3 className="text-base font-semibold text-[var(--ifm-color-content)] mb-3 text-center">
+                      Before You Begin
+                    </h3>
+                    <div className="consent-text-box rounded-lg p-4 mb-6 text-sm leading-relaxed text-[var(--ifm-color-content-secondary)] bg-[var(--ifm-color-emphasis-100)] border border-[var(--ifm-color-emphasis-200)]">
+                      {PRIVACY_CONSENT_TEXT}
+                    </div>
+                    <div className="flex gap-3 w-full">
+                      <button
+                        onClick={handleDeclineConsent}
+                        className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-[var(--ifm-color-emphasis-300)] text-[var(--ifm-color-content-secondary)] bg-transparent hover:bg-[var(--ifm-color-emphasis-100)] transition-colors"
+                      >
+                        Decline
+                      </button>
+                      <button
+                        onClick={handleConsent}
+                        className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-[var(--ifm-color-primary)] text-white hover:opacity-90 transition-opacity border-none"
+                      >
+                        I Agree
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={isLoading || !input.trim() || isInputTooLong}
-                    className="w-10 h-10 min-w-[40px] min-h-[40px] bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center shrink-0"
-                  >
-                    <Send className="w-5 h-5" />
-                  </button>
-                </form>
+                ) : (
+                  <>
+                    {/* Messages */}
+                    <div className="chat-messages flex-1 p-4 overflow-y-auto bg-[var(--ifm-background-color)]">
+                      {messages.map((msg) => (
+                        <div
+                          key={msg.id}
+                          className={`flex gap-3 mb-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                            msg.role === 'user' 
+                              ? 'bg-[var(--ifm-color-primary)] text-white' 
+                              : 'bg-[var(--ifm-color-emphasis-200)] text-[var(--ifm-color-content)]'
+                          }`}>
+                            {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
+                          </div>
+                          <div className={`max-w-[80%] rounded-2xl p-3 text-sm ${
+                            msg.role === 'user'
+                              ? 'message-bubble-user'
+                              : 'message-bubble-ai'
+                          }`}>
+                            <div className="markdown-body">
+                              {msg.role === 'assistant' && msg.content === '' && isLoading ? (
+                                <Loader2 className="w-5 h-5 animate-spin opacity-60" />
+                              ) : (
+                                <ReactMarkdown rehypePlugins={[rehypeSanitize]}>{msg.content}</ReactMarkdown>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <div ref={messagesEndRef} />
+                    </div>
+
+                    {/* Input */}
+                    <form onSubmit={handleSubmit} className="chat-input p-4 flex gap-2">
+                      <div className="flex-1 flex flex-col gap-1">
+                        <input
+                          type="text"
+                          value={input}
+                          onChange={handleInputChange}
+                          placeholder="Ask a question..."
+                          className="flex-1 px-4 py-2 rounded-full"
+                          disabled={isLoading}
+                        />
+                        {inputError && (
+                          <p className={`text-xs px-4 ${
+                            isInputTooLong ? 'text-red-500' : 'text-yellow-600'
+                          }`}>
+                            {inputError}
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={isLoading || !input.trim() || isInputTooLong}
+                        className="w-10 h-10 min-w-[40px] min-h-[40px] bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center shrink-0"
+                      >
+                        <Send className="w-5 h-5" />
+                      </button>
+                    </form>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
