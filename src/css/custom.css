@@ -1826,6 +1826,23 @@ div:has(> .openapi-tabs__schema-container) {
   box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
 }
 
+/* Dark mode: ghost/outlined button style */
+html[data-theme='dark'] .header-ai-chat-link {
+  background-color: transparent !important;
+  color: rgb(var(--docs-color-primary-100)) !important;
+  border: 1px solid rgb(var(--docs-color-primary-100)) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .header-ai-chat-link:hover {
+  filter: none !important;
+  border-color: rgb(var(--docs-color-primary-200)) !important;
+  color: #33C5CE !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
 .header-ai-chat-link::before {
   content: '';
   width: 20px;
