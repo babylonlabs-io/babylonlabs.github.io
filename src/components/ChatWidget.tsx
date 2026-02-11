@@ -42,7 +42,7 @@ const OLD_STORAGE_KEY = 'babylon_ai_chat_history'; // For migration
 const CONSENT_KEY = 'babylon_ai_chat_consent';
 
 const PRIVACY_CONSENT_TEXT =
-  'This chatbot is intended for technical and informational purposes only. Please do not provide any personal data, including information that can directly or indirectly identify an individual. Your chat history may be used for improving the bot\'s responses and will be permanently deleted after 2 months.';
+  'This chatbot is intended for technical and informational purposes only. Please do not provide any personal data, including information that can directly or indirectly identify an individual. Your chat history may be used for improving the bot\'s responses and will be permanently deleted after two months.';
 
 // Helper to generate UUID using cryptographically secure random
 const generateUUID = () => {
