@@ -311,6 +311,11 @@ const config = {
             className: 'guides-top-header',
           },
           {
+            label: 'Vaults',
+            to: '/vaults/overview/',
+            className: 'vaults-top-header',
+          },
+          {
             label: 'Stakers',
             to: '/stakers/',
             className: 'stakers-top-header',
