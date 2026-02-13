@@ -756,14 +756,16 @@ export default function ChatWidget() {
                     <div className="chat-consent-actions flex-shrink-0 p-4 pt-2 safe-area-bottom">
                       <div className="flex gap-3 w-full">
                         <button
+                          type="button"
                           onClick={handleDeclineConsent}
-                          className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-[var(--ifm-color-emphasis-300)] text-[var(--ifm-color-content-secondary)] bg-transparent hover:bg-[var(--ifm-color-emphasis-100)] transition-colors"
+                          className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 text-sm"
                         >
                           Decline
                         </button>
                         <button
+                          type="button"
                           onClick={handleConsent}
-                          className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-[var(--ifm-color-primary)] text-white hover:opacity-90 transition-opacity border-none"
+                          className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 text-sm"
                         >
                           I Agree
                         </button>
