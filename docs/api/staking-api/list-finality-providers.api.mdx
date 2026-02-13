@@ -1,0 +1,71 @@
+---
+id: list-finality-providers
+title: "List Finality Providers"
+description: "Fetches finality providers with its stats with pagination support"
+sidebar_label: "List Finality Providers"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWN1v4jgQ/1esPPOxQnsvfTpawilSF1gIlVZ3VeQkA3gJds526CLE/34zdqAUsr1e9x77BLHH8/HzbyYz2Qc5mEyL0golg5tgCDZbgWELIXkh7I6VWm1FDtqwJ2FXTFjDjOW2fiz5EgXpLDNVWSptg1ZQcs03YPFMcPPn/sLA5PnEGnbMKrYgk8yugEn4YUklMLVo8ABVC1LxdwV6hw8SreDjsw8JasR1gxFseHCzD+yuJAljtZDL4HB4bAUaTKmkAUP7vU+f6Oelh/fC2GYHLiBAU5mSFqQlJbwsC5E5P7rfDWnan3nSCALkjGvNd+zoFCN9XEj0lk1W3EC7d+0GU+l3yKzpENRalaCt8OHk3DpjwsLGLbzc5pkVW0hyKGDp/DRnGAkMZAk6OLSOcnZbNO+nNkvKdQO+hMdmI4wRPvyr7RcoXLqXA4ZemMaDGLe0CELj5kZJsUbXmvYMZJXGg4lDNrONQk+QGsSsiTGt44oHHSFHNwpaoHXTGda3M6kvZ3AWIR4u1FIllS6afUMSwTU5ZrhcGWIgv758dABktcHECobRqH8fxd+SyXT8EA3CaTKL+/F8lvTv4ughRMmfSuC6l3lsXbjVCn60yUB7yzXll3GWLoL0HvYdTchM43YkPY+cjVcx+0r5jMZnDo8T5P/lMrY9A3orMrhSPqlSTMtnrYHLOHp+rhs/TVCqUljJOCUWWyh9rHeYuP1JdErbhlSkUubK0Ts49Wx8Whv4pdj7PuAD6fjcVPAiucVj+Xkxt2oN8v31DW9S5lznDLRG1E7lTYOttET00h3jReFABJmXCqsLVtcVSMZlfUhlmLkNyOIu/mAsTuxO5Y4qx6SIRnE4RdYns3D6EN2FSTidjqeo5AEzYdCPo/HotDQax8lwPB8N8P9tf5BMw6/zcBYTo8fT22gwCEf4fz7C7LkLZ7P+7T2qG8WYULhcCydx9CUcz+M3ZlKEcOJTMfM3FlII5Bzh76A9royUHapK5uQaz6eA7zxDlz5UOhV57i5nLhGZDIzhaQGhr4/omJeNxQZUZa+zLzzBVpegyhxBvCz1/8pU7+2RWp+viTBSTa/RRR3ZB7s+2PVGdv3WXLh8vIwKIDZGZ1er4YNgHwR7M8FIlC9djNseGcW3/krlKLkEP9LYFT50t73usZ61z+cST0A/77h2L1hZW5qbbhddXCOebV6KTsrTXaFkwVPTESq46IcRKbfNZv6Io9cXnAYkunBovabYImIo9R4DsT8a0Gwk5EIRkGe9MuaHIKv10u8XFi57+iDGMa7JjFosqPKTBb3xPQZP8YLd3OcaYWp47dnp2/jupMHsDI40nb/kN1VpxjNiDaZazirMSmHYUiH6dWKSDrLY91L3yFPK3ULINQrgvJlCoZ4oMQu/5do1P0pen0Oxl7DnKjMXOHe5MWANMqMA08X7aHsP27WBTpkvXANak68BHzRD/PEY9jqfXH+qjN1weeaem0yPTR6bnPHvYrA61b3/ZZ6vk8hiS9stCyQkeVcPNT4xXNa0gobUQFatMA4S2e9TnGjnujgcaNlP8e4DgXAlALNtwQsDr0Tzax8PGuNwPfr1NwTsiCsSdnmBJVCQh+jtIx5ZAadJjFz3p4kypT07dfWyOZyXlD/CGIvOP5YPErA=
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List Finality Providers"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v2/finality-providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Fetches finality providers with its stats with pagination support
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Pagination key to fetch the next page of finality providers","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"List of finality providers with its stats","content":{"application/json":{"schema":{"description":"Paginated array response containing Phase-2 finality provider objects.","properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"types.FinalityProviderDescription"},"logo_url":{"type":"string"},"state":{"description":"Status of a finality provider","enum":["FINALITY_PROVIDER_STATUS_ACTIVE","FINALITY_PROVIDER_STATUS_INACTIVE"],"type":"string","x-enum-varnames":["FinalityProviderStatusActive","FinalityProviderStatusInactive"],"title":"types.FinalityProviderQueryingState"},"type":{"type":"string"}},"type":"object","title":"v2service.FinalityProviderPublic"},"type":"array"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"v2service.FinalityProviderPublicArray"}}}},"400":{"description":"Invalid pagination token","content":{"application/json":{"schema":{"description":"Standard error response returned by all API endpoints when an error occurs.","properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"types.Error"}}}},"404":{"description":"No finality providers found","content":{"application/json":{"schema":{"description":"Standard error response returned by all API endpoints when an error occurs.","properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"types.Error"}}}},"500":{"description":"Internal server error occurred","content":{"application/json":{"schema":{"description":"Standard error response returned by all API endpoints when an error occurs.","properties":{"err":{},"errorCode":{"enum":["INTERNAL_SERVICE_ERROR","VALIDATION_ERROR","NOT_FOUND","BAD_REQUEST","FORBIDDEN","UNPROCESSABLE_ENTITY","REQUEST_TIMEOUT"],"type":"string","x-enum-varnames":["InternalServiceError","ValidationError","NotFound","BadRequest","Forbidden","UnprocessableEntity","RequestTimeout"],"title":"types.ErrorCode"},"statusCode":{"type":"integer"}},"type":"object","title":"types.Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

@@ -16,6 +16,8 @@ tags:
     description: Manages BTC staking, finality providers, and delegations.
   - name: btcstkconsumer
     description: Manages consumer chain registration and interaction with BTC-staked finality providers.
+  - name: costaking
+    description: Manages co-staking rewards calculation and distribution for BTC and BABY stakers.
   - name: checkpointing
     description: Handles the creation, signing, and status tracking of Babylon checkpoints submitted to Bitcoin.
   - name: epoching
@@ -7491,6 +7493,279 @@ paths:
       operationId: BtcStkConsumerParams
       summary: BtcStkConsumerParams
       description: Parameters queries the parameters of the module.
+  '/babylon/costaking/v1/costakers/{costaker_address}/rewards_tracker':
+    get:
+      parameters:
+        - description: costakerAddress defines the delegator address to query for.
+          in: path
+          name: costaker_address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                description: >-
+                  QueryCostakerRewardsTrackerResponse is the response type for the
+                  Query/CostakerRewardsTracker RPC method.
+                properties:
+                  start_period_cumulative_reward:
+                    type: string
+                    format: uint64
+                    description: >-
+                      StartPeriodCumulativeReward the starting period the costaker
+                      made his last withdraw of costaking rewards or modified his active staking
+                      amount of satoshis or baby.
+                  active_satoshis:
+                    type: string
+                    format: byte
+                    description: >-
+                      ActiveSatoshis is the total amount of active satoshi delegated
+                      from this costaker babylon address.
+                  active_baby:
+                    type: string
+                    format: byte
+                    description: >-
+                      ActiveBaby is the total amount of active baby delegated
+                      from this costaker babylon address.
+                  total_score:
+                    type: string
+                    format: byte
+                    description: >-
+                      TotalScore is the total amount of calculated score
+                      of this costaker.
+                type: object
+          description: A successful response.
+        default:
+          content:
+            '*/*':
+              schema:
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+                type: object
+          description: An unexpected error response.
+      tags:
+        - costaking
+      operationId: CostakerRewardsTracker
+      summary: CostakerRewardsTracker
+      description: CostakerRewardsTracker queries the costaker reward tracker.
+  /babylon/costaking/v1/current_rewards:
+    get:
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                description: >-
+                  QueryCurrentRewardsResponse is response type for the
+                  Query/CurrentRewards RPC method.
+                properties:
+                  rewards:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+                    description: >-
+                      Rewards is the current rewards for the single pool of rewards for all the
+                      costakers for the whole chain.
+                  period:
+                    type: string
+                    format: uint64
+                    description: >-
+                      Period stores the current period that serves as a reference for
+                      creating new historical rewards and correlate with
+                      CostakerRewardsTracker StartPeriodCumulativeReward.
+                  total_score:
+                    type: string
+                    format: byte
+                    description: >-
+                      TotalScore is the total amount of score calculated over
+                      all the stakers score in the chain.
+                type: object
+          description: A successful response.
+        default:
+          content:
+            '*/*':
+              schema:
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+                type: object
+          description: An unexpected error response.
+      tags:
+        - costaking
+      operationId: CurrentRewards
+      summary: CurrentRewards
+      description: >-
+        CurrentRewards queries the current rewards structure for costaking single pool.
+  '/babylon/costaking/v1/historical_rewards/{period}':
+    get:
+      parameters:
+        - description: Period is the historical period which the HistoricalRewards was stored.
+          in: path
+          name: period
+          required: true
+          schema:
+            type: string
+            format: uint64
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                description: >-
+                  QueryHistoricalRewardsResponse is response type for the
+                  Query/HistoricalRewards RPC method.
+                properties:
+                  cumulative_rewards_per_score:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+                    description: >-
+                      CumulativeRewardsPerScore is the cumulative rewards of that period.
+                type: object
+          description: A successful response.
+        default:
+          content:
+            '*/*':
+              schema:
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+                type: object
+          description: An unexpected error response.
+      tags:
+        - costaking
+      operationId: HistoricalRewards
+      summary: HistoricalRewards
+      description: >-
+        HistoricalRewards queries the historical rewards structure per period for
+        costaking single pool.
+  /babylon/costaking/v1/params:
+    get:
+      responses:
+        '200':
+          content:
+            '*/*':
+              schema:
+                description: QueryParamsResponse is response type for the Query/Params RPC method.
+                properties:
+                  params:
+                    description: Params holds all the parameters of this module.
+                    type: object
+                    properties:
+                      costaking_portion:
+                        type: string
+                        description: >-
+                          CostakingPortion is the portion of rewards that goes to costakers.
+                          NOTE: This portion of costakers is taken after the incentive module
+                          takes part of the fee_collector to give out to BTC stakers.
+                      score_ratio_btc_by_baby:
+                        type: string
+                        format: byte
+                        description: >-
+                          ScoreRatioBtcByBaby defines the amount of ubbn necessary for the
+                          sats staked to count as score in the formula.
+                          score: min(costakers_sats_staked, (costakers_ubbn_staked / score_ratio_btc_by_baby))
+                      validators_portion:
+                        type: string
+                        description: >-
+                          ValidatorsPortion is the portion of rewards that goes to Babylon Validators.
+                          NOTE: This portion of validators is taken after the incentive module
+                          takes part of the fee_collector balance to give out to validators that
+                          correctly voted.
+                type: object
+          description: A successful response.
+        default:
+          content:
+            '*/*':
+              schema:
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+                type: object
+          description: An unexpected error response.
+      tags:
+        - costaking
+      operationId: CostakingParams
+      summary: CostakingParams
+      description: Params queries the parameters of the module.
   /babylon/checkpointing/v1/bls_public_keys/{epoch_num}:
     get:
       parameters:
