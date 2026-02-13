@@ -1,0 +1,33 @@
+---
+id: v-2-service-stakingaprpublicobject
+title: "v2service.StakingAPRPublicObject"
+description: "Response containing personalized staking APR information."
+sidebar_label: "v2service.StakingAPRPublicObject"
+hide_title: true
+hide_table_of_contents: true
+schema: true
+sample: {"data":{"additional_baby_needed_for_boost":0,"boost":{"baby_staking_apr":0,"btc_staking_apr":0,"co_staking_apr":0,"total_apr":0},"current":{"baby_staking_apr":0,"btc_staking_apr":0,"co_staking_apr":0,"total_apr":0}},"pagination":{"next_key":"string"}}
+custom_edit_url: null
+---
+
+import Schema from "@theme/Schema";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"v2service.StakingAPRPublicObject"}
+>
+</Heading>
+
+
+
+Response containing personalized staking APR information.
+
+<Schema
+  schema={{"description":"Response containing personalized staking APR information.","properties":{"data":{"properties":{"additional_baby_needed_for_boost":{"type":"number"},"boost":{"properties":{"baby_staking_apr":{"type":"number"},"btc_staking_apr":{"type":"number"},"co_staking_apr":{"type":"number"},"total_apr":{"type":"number"}},"type":"object","title":"v2service.apr"},"current":{"properties":{"baby_staking_apr":{"type":"number"},"btc_staking_apr":{"type":"number"},"co_staking_apr":{"type":"number"},"total_apr":{"type":"number"}},"type":"object","title":"v2service.apr"}},"type":"object","title":"v2service.StakingAPRPublic"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"v2service.StakingAPRPublicObject"}}
+  schemaType={"response"}
+>
+  
+</Schema>
+            

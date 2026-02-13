@@ -156,6 +156,25 @@
   border-bottom-left-radius: 4px;
 }
 
+/* Prevent long content from breaking layout */
+.chat-messages .markdown-body {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.chat-messages .markdown-body pre {
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  overflow-x: auto;
+}
+
+.chat-messages .markdown-body code {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* Input */
 .chat-input input {
   border: 1px solid var(--ifm-color-emphasis-300); /* Explicit border */
@@ -179,6 +198,21 @@
 .chat-trigger-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode: ghost/outlined style */
+[data-theme='dark'] .chat-trigger-btn {
+  background: transparent;
+  color: rgb(var(--docs-color-primary-100));
+  border: 1px solid rgb(var(--docs-color-primary-100));
+}
+
+[data-theme='dark'] .chat-trigger-btn:hover {
+  transform: scale(1.05);
+  border-color: rgb(var(--docs-color-primary-200));
+  color: #33C5CE;
+  background: transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Send Button Styles */
@@ -205,6 +239,41 @@
 .chat-input input:focus {
   border-color: var(--ifm-color-primary) !important;
   box-shadow: 0 0 0 2px rgba(52, 143, 148, 0.2) !important; /* Subtle focus ring */
+}
+
+/* Privacy Consent Screen */
+.chat-consent {
+  text-align: center;
+}
+
+.consent-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.consent-text-box {
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  text-align: left;
+}
+
+.consent-btn {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.consent-btn-agree:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.consent-btn-decline:hover {
+  background: var(--ifm-color-emphasis-100);
 }
 
 /* Markdown Styles Override inside Chat */

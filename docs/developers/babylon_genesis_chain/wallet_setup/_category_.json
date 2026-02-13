@@ -1,0 +1,7 @@
+{
+    "position": 99,
+    "label": "Wallet Setup",
+    "collapsible": true,
+    "collapsed": true,
+    "className": "wallet_setup_sidebar_header"
+}

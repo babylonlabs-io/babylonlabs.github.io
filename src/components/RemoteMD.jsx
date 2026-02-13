@@ -195,7 +195,10 @@ export default function RemoteMD({
     }
 
     if (!initialKey && defaultRelease) {
-      initialKey = defaultRelease;
+      // Only use defaultRelease if it exists in the available releases
+      if (releases.some(r => r.key === defaultRelease)) {
+        initialKey = defaultRelease;
+      }
     }
 
     if (!initialKey && releases.length > 0) {

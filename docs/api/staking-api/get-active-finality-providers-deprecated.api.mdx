@@ -1,0 +1,75 @@
+---
+id: get-active-finality-providers-deprecated
+title: "Get Active Finality Providers (Deprecated)"
+description: "[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead."
+sidebar_label: "Get Active Finality Providers (Deprecated)"
+hide_title: true
+hide_table_of_contents: true
+api: eJzVVttu2zgQ/RVCTy3gS5JHP63bJEWBFjBa78OiGxiUNLJZUyRLjtU1DP/7zpCSr0q76T41gBGI5PCcOXPjLivBeSgkQplN0G9gQCuh8MqhsiabZF/uH2afHt5O5w/3T+IRsFhBECWgVDoIWwmptZAFqgZEpYzUCrfCeduoEnwQwXq6WeRbgStQvjuJFqUWjdQbENoWazryahq35o1+LZQRTAJMqcxSWE9XjcRMgwwgNvQbN3fjDmx4BFMmIMhylA0yJ72sAWk1m3zZXbg02+RaFWINW3aAiF0zJ4aiYmfpLsU23zbgt/Rh6Fr6rNwix2Lh1rQUSJJaZpNdhlvHmwE98c72+8EVslwSEn9E9A4kcjDwDwonl8CkrqV8hog73LigG3/I5mmQeQjOmgCB9+9ubvjfOcOp0CpgP4WTaB6C1RcrYlFYg2CQ75fOkdqR4vhrYJDdCclefQhDei+3ouMr+D6pDEPMVpQGw9uemLVZGePvrQOPKnlaSoxgCqGOC+fbKSkXJWhYRp7hRD5FjizJp/2gO4eN7t9vM+JaetajrlUIKrl/tX2mwiW91q1eQ/LbIInQu1lbo9ZErW8vQLHxZLiIyhbYe+g75IE0603tbsXmX4HM6Vuh5oXmNoBvVAGjR3d/9CsVHd8ai//naqdjz4j9n/GjdCfYyShmF38fy+fZZORipVYiOYlEZb1whySdzt4fUrQn7biiY1W+SD9eD6Mj+KcW4NecniZP+Y9OyyX3QzqdUTMgp1aWun62BIwtE1f0MW5ue3orNxYC6PrpxlNUshWiC5PxOKBck1dD6dQol/lWW6NlHkbKZpfT5E3aFp+TSVTwIxW2IQrcLp+/GCEgnfoVgHkyzbgDKlNZjsdJ2lMnUozaLv1xgXBZntmcmnUfjK2qNIUoSeqUNzK3G4zdnVxB6MZNZ/1m/vZwQ9jS8KpHf5u/7IbnZAEhCGnKOPBUEEtL6pvDLI2I03TqA8Wdm6RWhicpTZUctP3OCanTVszGNDCu7ejYueylLcKFzmMZAmCgzNAQxhSPYWI4bAFGrqxifbX52KMPwXD+JA3vRjex/GzAWpoTeu8A2+EiHrsGPzsMoFf3h9fK68vQ745D5zd9tLTFjdQ2xk5TVbBEMTS7tjpj6Q6ynvqk1F6RmHxkt8sJ80+v93teTg+G+ApSQeaaH3qV1OHypXeq3wtfSL3EY+M7eyhF6WgtVvoLyPyvR9MPuF29nY4En/jDK2ZI0j2RyYqCxLOUdEzWXEQOT6yuHjr70yb77mFObfhfnxAICg==
+sidebar_class_name: "get api-method"
+info_path: api/staking-api/babylon-staking-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Active Finality Providers (Deprecated)"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/finality-providers"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+:::caution deprecated
+
+This endpoint has been deprecated and may be replaced or removed in future versions of the API.
+
+:::
+
+[DEPRECATED] Fetches details of all active finality providers sorted by their active total value locked (ActiveTvl) in descending order. Please use /v2/finality-providers instead.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"description":"Public key of the finality provider to fetch","in":"query","name":"fp_btc_pk","schema":{"type":"string"}},{"description":"Pagination key to fetch the next page of finality providers","in":"query","name":"pagination_key","schema":{"type":"string"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"A list of finality providers sorted by ActiveTvl in descending order","content":{"application/json":{"schema":{"description":"Paginated array response containing Phase-1 finality provider details.","properties":{"data":{"items":{"properties":{"active_delegations":{"type":"integer"},"active_tvl":{"type":"integer"},"btc_pk":{"type":"string"},"commission":{"type":"string"},"description":{"properties":{"details":{"type":"string"},"identity":{"type":"string"},"moniker":{"type":"string"},"security_contact":{"type":"string"},"website":{"type":"string"}},"type":"object","title":"v1service.FpDescriptionPublic"},"total_delegations":{"type":"integer"},"total_tvl":{"type":"integer"}},"type":"object","title":"v1service.FpDetailsPublic"},"type":"array"},"pagination":{"description":"Pagination metadata for paginated API responses.","properties":{"next_key":{"type":"string"}},"type":"object","title":"types.PaginationResponse"}},"type":"object","title":"v1service.FpDetailsPublicArray"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

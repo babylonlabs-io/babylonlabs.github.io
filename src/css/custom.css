@@ -1158,6 +1158,13 @@ details p {
   @apply !text-xs;
 }
 
+@media (max-width: 768px) {
+  .navbar__items .header-ai-chat-link,
+  .navbar-sidebar .header-ai-chat-link {
+    display: none !important;
+  }
+}
+
 article ol {
   list-style-type: decimal !important;
 }
@@ -1794,12 +1801,12 @@ div:has(> .openapi-tabs__schema-container) {
 /* CSS for hello bar ends*/
 
 
-/* AI Header Button Styles - Updated Override */
+/* AI Header Button Styles - Hidden by default, shown via injected style when API available */
 .header-ai-chat-link {
-  display: none; /* Hidden by default until health check passes */
+  display: none; /* Hidden by default */
   align-items: center;
   padding: 0.4rem 1rem !important;
-  background-color: var(--ifm-color-primary) !important; /* Match Ask Babylon AI */
+  background-color: var(--ifm-color-primary) !important;
   color: #fff !important;
   border-radius: 8px !important;
   font-weight: 700;
@@ -1809,10 +1816,7 @@ div:has(> .openapi-tabs__schema-container) {
   border: none !important;
 }
 
-/* Show AI chat button only when API is healthy */
-body.ai-chat-available .header-ai-chat-link {
-  display: flex;
-}
+/* Note: Button visibility is controlled by dynamically injected <style> tag in ChatWidget.tsx */
 
 .header-ai-chat-link:hover {
   filter: brightness(0.9); /* Simple darkening for hover */
@@ -1820,6 +1824,23 @@ body.ai-chat-available .header-ai-chat-link {
   text-decoration: none;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Dark mode: ghost/outlined button style */
+html[data-theme='dark'] .header-ai-chat-link {
+  background-color: transparent !important;
+  color: rgb(var(--docs-color-primary-100)) !important;
+  border: 1px solid rgb(var(--docs-color-primary-100)) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .header-ai-chat-link:hover {
+  filter: none !important;
+  border-color: rgb(var(--docs-color-primary-200)) !important;
+  color: #33C5CE !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transform: none;
 }
 
 .header-ai-chat-link::before {
@@ -1867,9 +1888,8 @@ body.ai-chat-available .header-ai-chat-link {
   }
 }
 
-/* Mobile sidebar menu - show button with text */
-body.ai-chat-available .navbar-sidebar .header-ai-chat-link {
-  display: inline-flex;
+/* Mobile sidebar menu - styles only, visibility controlled by injected style */
+.navbar-sidebar .header-ai-chat-link {
   align-items: center;
   justify-content: center;
   width: auto;

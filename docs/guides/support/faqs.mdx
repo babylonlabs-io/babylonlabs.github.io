@@ -32,4 +32,24 @@ This means that, when slashing happens,
 only a certain portion of the staked bitcoins will be slashed,
 with the portion being a parameter of the protocol.
 
+### How many Bitcoin block confirmations are required for my stake to become active?
+
+**30 BTC block confirmations** are required for your stake to become active, 
+assuming that the Finality Provider you delegated to is already active and has timestamped randomness.
+
+### What is the minimum staking period?
+
+The staking period is fixed at **64,000 BTC blocks**, which is roughly **15 months**. 
+This is currently the only possible staking period on mainnet.
+
+### Is partial unbonding possible for BTC staking?
+
+**No**, partial unbonding is not supported for BTC staking. 
+Every BTC stake must be unbonded fully - you cannot unbond just a portion of your staked amount.
+
+### Are there any minimum amount or frequency restrictions for claiming rewards?
+
+**No**, there are no minimum amount or frequency restrictions for claiming rewards. 
+You can claim your rewards at any time without any limitations.
+
 Send a [GitHub issue](https://github.com/babylonlabs-io/babylonlabs.github.io/issues) if you would like more questions included in this FAQ.

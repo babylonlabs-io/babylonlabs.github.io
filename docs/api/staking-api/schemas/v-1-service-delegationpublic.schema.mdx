@@ -6,7 +6,7 @@ sidebar_label: "v1service.DelegationPublic"
 hide_title: true
 hide_table_of_contents: true
 schema: true
-sample: {"finality_provider_pk_hex":"string","is_eligible_for_transition":true,"is_overflow":true,"is_slashed":true,"staker_pk_hex":"string","staking_tx":{"output_index":0,"start_height":0,"start_timestamp":"string","timelock":0,"tx_hex":"string"},"staking_tx_hash_hex":"string","staking_value":0,"state":"string","unbonding_tx":{"output_index":0,"start_height":0,"start_timestamp":"string","timelock":0,"tx_hex":"string"}}
+sample: {"finality_provider_pk_hex":"string","is_eligible_for_transition":true,"is_overflow":true,"is_slashed":true,"staker_pk_hex":"string","staking_tx":{"output_index":0,"start_height":0,"start_timestamp":"string","timelock":0,"tx_hex":"string"},"staking_tx_hash_hex":"string","staking_value":0,"state":"active","unbonding_tx":{"output_index":0,"start_height":0,"start_timestamp":"string","timelock":0,"tx_hex":"string"}}
 custom_edit_url: null
 ---
 
@@ -25,7 +25,7 @@ import Heading from "@theme/Heading";
 
 
 <Schema
-  schema={{"properties":{"finality_provider_pk_hex":{"type":"string"},"is_eligible_for_transition":{"type":"boolean"},"is_overflow":{"type":"boolean"},"is_slashed":{"type":"boolean"},"staker_pk_hex":{"type":"string"},"staking_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"},"staking_tx_hash_hex":{"type":"string"},"staking_value":{"type":"integer"},"state":{"type":"string"},"unbonding_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"}},"type":"object","title":"v1service.DelegationPublic"}}
+  schema={{"properties":{"finality_provider_pk_hex":{"type":"string"},"is_eligible_for_transition":{"type":"boolean"},"is_overflow":{"type":"boolean"},"is_slashed":{"type":"boolean"},"staker_pk_hex":{"type":"string"},"staking_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"},"staking_tx_hash_hex":{"type":"string"},"staking_value":{"type":"integer"},"state":{"enum":["active","unbonding_requested","unbonding","unbonded","withdrawable","withdrawn","transitioned","slashed"],"type":"string","x-enum-varnames":["Active","UnbondingRequested","Unbonding","Unbonded","Withdrawable","Withdrawn","Transitioned","Slashed"],"title":"types.DelegationState"},"unbonding_tx":{"properties":{"output_index":{"type":"integer"},"start_height":{"type":"integer"},"start_timestamp":{"type":"string"},"timelock":{"type":"integer"},"tx_hex":{"type":"string"}},"type":"object","title":"v1service.TransactionPublic"}},"type":"object","title":"v1service.DelegationPublic"}}
   schemaType={"response"}
 >
   
