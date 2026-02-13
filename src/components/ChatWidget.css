@@ -246,6 +246,16 @@
   text-align: center;
 }
 
+/* Scrollable content area so buttons stay visible on short viewports (e.g. mobile) */
+.chat-consent-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Stick buttons at bottom with safe area for notches/home indicator */
+.chat-consent-actions.safe-area-bottom {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
 .consent-icon-wrapper {
   display: flex;
   align-items: center;
@@ -344,6 +354,17 @@
     width: 24px;
     height: 24px;
   }
+
+  /* Privacy consent: ensure buttons are visible and content scrolls on mobile */
+  .chat-consent-scroll {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .chat-consent-actions {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -397,5 +418,19 @@
   .chat-trigger-btn {
     padding: 10px;
     border-radius: 50%;
+  }
+
+  .chat-consent-scroll {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .chat-consent-actions {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .chat-consent-actions.safe-area-bottom {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 }
