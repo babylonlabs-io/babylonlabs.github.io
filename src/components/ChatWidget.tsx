@@ -68,6 +68,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasUserToggledExpand, setHasUserToggledExpand] = useState(false);
+  const openedFromHeaderRef = useRef(false);
   const [isApiHealthy, setIsApiHealthy] = useState<boolean>(false);
   const [hasConsented, setHasConsented] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -304,6 +305,7 @@ export default function ChatWidget() {
       const target = e.target as HTMLElement;
       if (target.closest('.header-ai-chat-link')) {
         e.preventDefault();
+        openedFromHeaderRef.current = true;
         setIsOpen(true);
         setIsExpanded(true);
         setHasUserToggledExpand(true);
@@ -324,7 +326,9 @@ export default function ChatWidget() {
       const isDesktop = width >= 1024;
 
       if (isSmallScreen) {
-        setIsExpanded(false);
+        if (!openedFromHeaderRef.current) {
+          setIsExpanded(false);
+        }
       } else if (isOpen && isDesktop && !hasUserToggledExpand) {
         setIsExpanded(true);
       }
@@ -539,13 +543,14 @@ export default function ChatWidget() {
   };
 
   const handleDeclineConsent = () => {
-    // Close the chat widget when the user declines
+    openedFromHeaderRef.current = false;
     setIsOpen(false);
     setIsExpanded(false);
     setHasUserToggledExpand(false);
   };
 
   const handleClose = () => {
+    openedFromHeaderRef.current = false;
     abortControllerRef.current?.abort();
     setIsOpen(false);
     setIsExpanded(false);
@@ -736,29 +741,35 @@ export default function ChatWidget() {
 
                 {/* Privacy Consent Screen */}
                 {!hasConsented ? (
-                  <div className="chat-consent flex-1 flex flex-col items-center justify-center p-6 bg-[var(--ifm-background-color)]">
-                    <div className="consent-icon-wrapper mb-4">
-                      <ShieldCheck className="w-12 h-12 text-[var(--ifm-color-primary)]" />
+                  <div className="chat-consent flex-1 flex flex-col min-h-0 bg-[var(--ifm-background-color)]">
+                    <div className="chat-consent-scroll flex-1 min-h-0 overflow-y-auto flex flex-col items-center p-4 pb-2">
+                      <div className="consent-icon-wrapper mb-4">
+                        <ShieldCheck className="w-12 h-12 text-[var(--ifm-color-primary)]" />
+                      </div>
+                      <h3 className="text-base font-semibold text-[var(--ifm-color-content)] mb-3 text-center">
+                        Before You Begin
+                      </h3>
+                      <div className="consent-text-box rounded-lg p-4 mb-4 text-sm leading-relaxed text-[var(--ifm-color-content-secondary)] bg-[var(--ifm-color-emphasis-100)] border border-[var(--ifm-color-emphasis-200)] w-full">
+                        {PRIVACY_CONSENT_TEXT}
+                      </div>
                     </div>
-                    <h3 className="text-base font-semibold text-[var(--ifm-color-content)] mb-3 text-center">
-                      Before You Begin
-                    </h3>
-                    <div className="consent-text-box rounded-lg p-4 mb-6 text-sm leading-relaxed text-[var(--ifm-color-content-secondary)] bg-[var(--ifm-color-emphasis-100)] border border-[var(--ifm-color-emphasis-200)]">
-                      {PRIVACY_CONSENT_TEXT}
-                    </div>
-                    <div className="flex gap-3 w-full">
-                      <button
-                        onClick={handleDeclineConsent}
-                        className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-[var(--ifm-color-emphasis-300)] text-[var(--ifm-color-content-secondary)] bg-transparent hover:bg-[var(--ifm-color-emphasis-100)] transition-colors"
-                      >
-                        Decline
-                      </button>
-                      <button
-                        onClick={handleConsent}
-                        className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-[var(--ifm-color-primary)] text-white hover:opacity-90 transition-opacity border-none"
-                      >
-                        I Agree
-                      </button>
+                    <div className="chat-consent-actions flex-shrink-0 p-4 pt-2 safe-area-bottom">
+                      <div className="flex gap-3 w-full">
+                        <button
+                          type="button"
+                          onClick={handleDeclineConsent}
+                          className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 text-sm"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleConsent}
+                          className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 text-sm"
+                        >
+                          I Agree
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -836,11 +847,12 @@ export default function ChatWidget() {
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             if (isOpen) {
+              openedFromHeaderRef.current = false;
               setIsOpen(false);
               setIsExpanded(false);
               setHasUserToggledExpand(false);
             } else {
-              setHasUserToggledExpand(true); 
+              setHasUserToggledExpand(true);
               setIsExpanded(false);
               setIsOpen(true);
             }

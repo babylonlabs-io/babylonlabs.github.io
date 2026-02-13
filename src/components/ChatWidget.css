@@ -246,6 +246,16 @@
   text-align: center;
 }
 
+/* Scrollable content area so buttons stay visible on short viewports (e.g. mobile) */
+.chat-consent-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Stick buttons at bottom with safe area for notches/home indicator */
+.chat-consent-actions.safe-area-bottom {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
 .consent-icon-wrapper {
   display: flex;
   align-items: center;
@@ -263,17 +273,60 @@
   text-align: left;
 }
 
+/* Privacy Notice: Decline (secondary) & I Agree (primary) */
 .consent-btn {
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 500;
 }
 
-.consent-btn-agree:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.consent-btn:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Left: Decline — use inset box-shadow as “border” so all four edges stay visible (not clipped) */
+.consent-btn-decline {
+  background: transparent;
+  border: none;
+  box-shadow: inset 0 0 0 1.5px var(--ifm-color-emphasis-300);
+  box-sizing: border-box;
+  color: var(--ifm-color-content-secondary);
 }
 
 .consent-btn-decline:hover {
   background: var(--ifm-color-emphasis-100);
+  box-shadow: inset 0 0 0 1.5px var(--ifm-color-emphasis-400);
+  color: var(--ifm-color-content);
+}
+
+/* Right: I Agree — use fixed dark teal so white text always has ≥4.5:1 contrast (light & dark theme) */
+.consent-btn-agree {
+  background: #247077;
+  color: #fff;
+  border: none;
+}
+
+html[data-theme='dark'] .consent-btn-agree,
+[data-theme='dark'] .consent-btn-agree {
+  background: #247077;
+  color: #fff;
+}
+
+.consent-btn-agree:hover {
+  background: #1e5c62;
+  opacity: 1;
+  box-shadow: 0 2px 12px rgba(36, 112, 119, 0.4);
+}
+
+.consent-btn-agree:active,
+.consent-btn-decline:active {
+  transform: scale(0.98);
 }
 
 /* Markdown Styles Override inside Chat */
@@ -344,6 +397,17 @@
     width: 24px;
     height: 24px;
   }
+
+  /* Privacy consent: ensure buttons are visible and content scrolls on mobile */
+  .chat-consent-scroll {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .chat-consent-actions {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -397,5 +461,19 @@
   .chat-trigger-btn {
     padding: 10px;
     border-radius: 50%;
+  }
+
+  .chat-consent-scroll {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .chat-consent-actions {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .chat-consent-actions.safe-area-bottom {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 }
