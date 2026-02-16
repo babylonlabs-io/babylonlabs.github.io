@@ -134,5 +134,13 @@ dist
 
 .idea
 
+# Claude Code local settings (user-specific, do NOT commit)
+.claude/settings.local.json
+
+# Claude Code skills are tracked in version control
+# Skills in .claude/skills/ should be committed for team sharing
+
 # ignore temporary files
 tmp/
+tests/
+test-results/
