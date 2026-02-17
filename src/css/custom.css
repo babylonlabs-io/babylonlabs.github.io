@@ -620,11 +620,36 @@ ul.emoji-list span {
   --ifm-menu-color-background-active: var(--docs-color-primary-tint);
 }
 
+/* RemoteMD anchor links */
+.anchor-heading {
+  position: relative;
+}
+
+.anchor-heading .hash-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.anchor-heading:hover .hash-link::before {
+  content: '#';
+  position: absolute;
+  left: -1.2em;
+  top: 0;
+  font-weight: 300;
+  color: var(--ifm-color-primary);
+  opacity: 0.6;
+}
+
 table {
   border-collapse: collapse;
   border: none;
   background-color: transparent;
-
+  display: block;
+  overflow-x: auto;
   text-align: left;
   font-size: 90%;
 }

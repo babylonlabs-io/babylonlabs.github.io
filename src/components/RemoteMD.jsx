@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { Tag } from '@styled-icons/bootstrap/Tag';
 import Admonition from '@theme/Admonition';
 
@@ -48,6 +50,7 @@ export default function RemoteMD({
   const [loading, setLoading] = React.useState(true);
   const [currentMdUrl, setCurrentMdUrl] = React.useState(rawUrl);
   const lastH2 = React.useRef('');
+  const h1Count = React.useRef(0);
 
   const resolveRelativePath = (href, renderUrl) => {
     const [path, anchor] = href.split('#');
@@ -69,6 +72,17 @@ export default function RemoteMD({
     return anchor ? `${resolvedPath}#${anchor}` : resolvedPath;
   };
 
+  const HeadingWithAnchor = ({ level, children }) => {
+    const id = generateId(String(children));
+    const Tag = `h${level}`;
+    return (
+      <Tag id={id} className="anchor-heading">
+        {children}
+        <a href={`#${id}`} className="hash-link" aria-label={`Direct link to ${String(children)}`}>&#8203;</a>
+      </Tag>
+    );
+  };
+
   const components = {
     img: ({ node }) => {
       const { alt, src } = node.properties;
@@ -78,16 +92,14 @@ export default function RemoteMD({
       return <img src={newSrc} alt={alt} />;
     },
     h1: ({ children }) => {
-      let count = 0;
-      const id = generateId(String(children));
-      return count++ === 0 ? null : <h1 id={id}>{children}</h1>;
+      h1Count.current += 1;
+      if (h1Count.current === 1) return null;
+      return <HeadingWithAnchor level={1}>{children}</HeadingWithAnchor>;
     },
     h2: ({ children }) => {
       lastH2.current = String(children);
-      const id = generateId(String(children));
-      return String(children).includes('Table of Contents') ? null : (
-        <h2 id={id}>{children}</h2>
-      );
+      if (String(children).includes('Table of Contents')) return null;
+      return <HeadingWithAnchor level={2}>{children}</HeadingWithAnchor>;
     },
     ol: ({ children }) => {
       return lastH2.current === 'Table of Contents' ? null : (
@@ -103,8 +115,7 @@ export default function RemoteMD({
       return <a href={resolvedHref}>{children}</a>;
     },
     h3: ({ children }) => {
-      const id = generateId(String(children));
-      return <h3 id={id}>{children}</h3>;
+      return <HeadingWithAnchor level={3}>{children}</HeadingWithAnchor>;
     },
   };
 
@@ -169,6 +180,7 @@ export default function RemoteMD({
 
   const fetchMarkdown = async (mdUrl) => {
     setLoading(true);
+    h1Count.current = 0;
     try {
       setCurrentMdUrl(mdUrl);
       const response = await fetch(mdUrl);
@@ -185,7 +197,19 @@ export default function RemoteMD({
   };
 
   React.useEffect(() => {
-    if (hideRelease || releases.length <= 1) return;
+    if (loading || !markdown) return;
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    if (hash) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(hash.slice(1));
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, markdown]);
+
+  React.useEffect(() => {
+    if (hideRelease || releases.length === 0) return;
 
     const urlParam = getQueryParam('release');
     let initialKey = urlParam;
@@ -209,7 +233,7 @@ export default function RemoteMD({
   }, [releases, defaultRelease, hideRelease]);
 
   React.useEffect(() => {
-    if (hideRelease || releases.length <= 1) {
+    if (hideRelease || releases.length === 0) {
       fetchMarkdown(rawUrl);
       return;
     }
@@ -247,25 +271,36 @@ export default function RemoteMD({
 
   return (
     <>
-      {!hideRelease && releases.length > 1 && (
+      {!hideRelease && releases.length > 0 && (
         <div style={{ marginBottom: '20px' }} className="babylon-dropdown">
           <Tag
             className="h-5"
             onClick={handleTagClick}
             style={{ cursor: 'pointer', marginRight: 8 }}
           />
-          <label htmlFor="version-select" style={{ marginRight: 8 }}>Release tag: </label>
-          <select
-            id="version-select"
-            value={selectedRelease}
-            onChange={handleReleaseChange}
-          >
-            {releases.map((release) => (
-              <option key={release.key} value={release.key}>
-                {release.label}
-              </option>
-            ))}
-          </select>
+          {releases.length === 1 ? (
+            <span
+              onClick={handleTagClick}
+              style={{ cursor: 'pointer' }}
+            >
+              Release tag: <strong>{releases[0].label}</strong>
+            </span>
+          ) : (
+            <>
+              <label htmlFor="version-select" style={{ marginRight: 8 }}>Release tag: </label>
+              <select
+                id="version-select"
+                value={selectedRelease}
+                onChange={handleReleaseChange}
+              >
+                {releases.map((release) => (
+                  <option key={release.key} value={release.key}>
+                    {release.label}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
         </div>
       )}
 
@@ -275,7 +310,7 @@ export default function RemoteMD({
         </Admonition>
       )}
 
-      <ReactMarkdown components={components}>{markdown}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>{markdown}</ReactMarkdown>
 
       {!errorMessage && !loading && (
         <Admonition>
