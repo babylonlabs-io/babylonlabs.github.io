@@ -647,6 +647,39 @@ table th {
   color: var(--docs-color-text-100);
 }
 
+/* Copy to Markdown button */
+.copy-markdown-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--docs-color-border);
+}
+
+.copy-markdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--docs-color-text-100);
+  background: var(--docs-color-background-100);
+  border: 1px solid var(--docs-color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-markdown-btn:hover {
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  background: var(--docs-color-background);
+}
+
+.copy-markdown-btn span {
+  font-weight: 500;
+}
+
 .tabs {
   border-bottom: 1px solid var(--docs-color-border);
 }
