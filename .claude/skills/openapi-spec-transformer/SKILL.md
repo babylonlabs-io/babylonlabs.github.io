@@ -44,11 +44,11 @@ Download Swagger 2.0 specs from source repositories into `/tmp/`:
 
 ```bash
 # Babylon gRPC spec
-curl -sL -o /tmp/babylon-swagger2.yaml \
+curl -fsSL --retry 3 --retry-delay 5 -o /tmp/babylon-swagger2.yaml \
   https://raw.githubusercontent.com/babylonlabs-io/babylon/main/client/docs/swagger-ui/swagger.yaml
 
 # Staking API spec
-curl -sL -o /tmp/staking-swagger2.yaml \
+curl -fsSL --retry 3 --retry-delay 5 -o /tmp/staking-swagger2.yaml \
   https://raw.githubusercontent.com/babylonlabs-io/staking-api-service/main/docs/swagger.yaml
 ```
 
@@ -83,8 +83,8 @@ grep -c "operationId:" static/swagger/babylon-staking-api-openapi3.yaml
 Use `swagger2openapi` for mechanical Swagger 2.0 → OpenAPI 3.0 conversion:
 
 ```bash
-npx swagger2openapi /tmp/babylon-swagger2.yaml -o /tmp/babylon-openapi3-base.yaml
-npx swagger2openapi /tmp/staking-swagger2.yaml -o /tmp/staking-openapi3-base.yaml
+npx --yes swagger2openapi@7.0.8 /tmp/babylon-swagger2.yaml -o /tmp/babylon-openapi3-base.yaml
+npx --yes swagger2openapi@7.0.8 /tmp/staking-swagger2.yaml -o /tmp/staking-openapi3-base.yaml
 ```
 
 ### 3b. Babylon gRPC Enhancements
@@ -158,6 +158,10 @@ tags:
     description: Reward calculation and distribution
   - name: mint
     description: Token inflation and minting parameters
+  - name: monitor
+    description: Monitor module for checkpoint and epoch verification
+  - name: zoneconcierge
+    description: Zone Concierge module for cross-chain header and finalization queries
 ```
 
 **5. Add x-tagGroups extension** (see references/tag-mapping.md for full structure).
@@ -173,7 +177,10 @@ tags:
 - `/babylon/finality/` → `finalityprovider`
 - `/babylon/incentive/` → `incentive`
 - `/babylon/mint/` → `mint`
+- `/babylon/monitor/` → `monitor`
+- `/babylon/zoneconcierge/` → `zoneconcierge`
 - `/cosmos/` → Keep original tag or assign `CometBFT`
+- Any unmapped `/babylon/<module>/` prefix → Log a warning and assign `other`
 
 ### 3c. Staking API Enhancements
 

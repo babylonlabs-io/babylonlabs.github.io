@@ -16,7 +16,11 @@
 | `/babylon/finality/` | `finalityprovider` | Finality provider registration and status |
 | `/babylon/incentive/` | `incentive` | Reward calculation and distribution |
 | `/babylon/mint/` | `mint` | Token inflation and minting parameters |
+| `/babylon/monitor/` | `monitor` | Monitor module for checkpoint and epoch verification |
+| `/babylon/zoneconcierge/` | `zoneconcierge` | Zone Concierge cross-chain header and finalization queries |
 | `/cosmos/` | Keep original | Standard Cosmos SDK endpoints |
+
+> **Fallback**: Any unmapped `/babylon/<module>/` prefix should be logged as a warning and assigned to an `other` tag. Update this table when new modules appear in the source spec.
 
 ### x-tagGroups Structure
 
@@ -77,6 +81,17 @@ x-tagGroups:
       - mint-params
       - inflation
     description: Mint queries
+  - name: monitor
+    tags:
+      - monitor-checkpoints
+      - monitor-epochs
+    description: Monitor queries
+  - name: zoneconcierge
+    tags:
+      - zone-chain-info
+      - zone-headers
+      - zone-finalization
+    description: Zone Concierge queries
 ```
 
 ---
@@ -122,12 +137,18 @@ function assignTag(path) {
     '/babylon/finality/': 'finalityprovider',
     '/babylon/incentive/': 'incentive',
     '/babylon/mint/': 'mint',
+    '/babylon/monitor/': 'monitor',
+    '/babylon/zoneconcierge/': 'zoneconcierge',
   };
 
   for (const [prefix, tag] of Object.entries(tagMap)) {
     if (path.startsWith(prefix)) {
       return tag;
     }
+  }
+  // Log unmapped Babylon modules so they can be added to this mapping
+  if (path.startsWith('/babylon/')) {
+    console.warn(`Unmapped Babylon module path: ${path}`);
   }
   return 'other';
 }
