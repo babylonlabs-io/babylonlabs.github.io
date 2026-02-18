@@ -69,6 +69,17 @@ export default function RemoteMD({
     return anchor ? `${resolvedPath}#${anchor}` : resolvedPath;
   };
 
+  const HashLink = ({ id, children }) => (
+    <a
+      className="hash-link"
+      href={`#${id}`}
+      title={`Direct link to ${typeof children === 'string' ? children : id}`}
+      aria-label={`Direct link to ${typeof children === 'string' ? children : id}`}
+    >
+      &#8203;
+    </a>
+  );
+
   const components = {
     img: ({ node }) => {
       const { alt, src } = node.properties;
@@ -86,7 +97,10 @@ export default function RemoteMD({
       lastH2.current = String(children);
       const id = generateId(String(children));
       return String(children).includes('Table of Contents') ? null : (
-        <h2 id={id}>{children}</h2>
+        <h2 id={id} className="anchor anchorWithStickyNavbar">
+          {children}
+          <HashLink id={id}>{children}</HashLink>
+        </h2>
       );
     },
     ol: ({ children }) => {
@@ -104,7 +118,21 @@ export default function RemoteMD({
     },
     h3: ({ children }) => {
       const id = generateId(String(children));
-      return <h3 id={id}>{children}</h3>;
+      return (
+        <h3 id={id} className="anchor anchorWithStickyNavbar">
+          {children}
+          <HashLink id={id}>{children}</HashLink>
+        </h3>
+      );
+    },
+    h4: ({ children }) => {
+      const id = generateId(String(children));
+      return (
+        <h4 id={id} className="anchor anchorWithStickyNavbar">
+          {children}
+          <HashLink id={id}>{children}</HashLink>
+        </h4>
+      );
     },
   };
 
@@ -244,6 +272,22 @@ export default function RemoteMD({
       window.open(`https://github.com/${owner}/${repo}/releases/tag/${selectedRelease}`, '_blank');
     }
   };
+
+  // Scroll to hash fragment after content loads
+  React.useEffect(() => {
+    if (loading || !markdown) return;
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    // Small delay to let React render the markdown content
+    const timer = setTimeout(() => {
+      const el = document.getElementById(hash.slice(1));
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [loading, markdown]);
 
   return (
     <>
