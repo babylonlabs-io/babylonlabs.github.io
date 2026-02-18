@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Tag } from '@styled-icons/bootstrap/Tag';
 import Admonition from '@theme/Admonition';
+import { useDynamicTOC } from './DynamicTOCContext';
 
 function extractRepoInfo(url) {
   const urlParts = url.split('/');
@@ -48,6 +49,7 @@ export default function RemoteMD({
   const [loading, setLoading] = React.useState(true);
   const [currentMdUrl, setCurrentMdUrl] = React.useState(rawUrl);
   const lastH2 = React.useRef('');
+  const { setTocItems } = useDynamicTOC();
 
   const resolveRelativePath = (href, renderUrl) => {
     const [path, anchor] = href.split('#');
@@ -272,6 +274,29 @@ export default function RemoteMD({
       window.open(`https://github.com/${owner}/${repo}/releases/tag/${selectedRelease}`, '_blank');
     }
   };
+
+  // Extract headings from markdown and populate right-side TOC
+  React.useEffect(() => {
+    if (loading || !markdown) {
+      setTocItems([]);
+      return;
+    }
+    const headingRegex = /^(#{2,4})\s+(.+)$/gm;
+    const items = [];
+    let match;
+    while ((match = headingRegex.exec(markdown)) !== null) {
+      const level = match[1].length;
+      const value = match[2].replace(/[*_`\[\]()]/g, '').trim();
+      if (value.toLowerCase().includes('table of contents')) continue;
+      items.push({
+        value,
+        id: generateId(value),
+        level,
+      });
+    }
+    setTocItems(items);
+    return () => setTocItems([]);
+  }, [loading, markdown, setTocItems]);
 
   // Scroll to hash fragment after content loads
   React.useEffect(() => {
