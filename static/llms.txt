@@ -1,0 +1,86 @@
+# Babylon Labs Documentation
+
+> Babylon is a Bitcoin staking protocol that enables BTC holders to stake their Bitcoin to provide security to Proof-of-Stake chains. The Babylon Genesis chain is a Cosmos SDK-based blockchain that serves as the coordination layer, combining BTC staking with native BABY token staking in a dual-staking model. This documentation covers the protocol architecture, staking guides, developer integration resources, and node operator instructions.
+
+## Core Documentation
+
+- [Protocol Overview](https://docs.babylonlabs.io/guides/overview/): Introduction to the Babylon protocol, Bitcoin staking mechanism, and Trustless Bitcoin Vault
+- [Bitcoin Staking](https://docs.babylonlabs.io/guides/overview/bitcoin_staking/): How Bitcoin staking works using UTXO model, slashing conditions, and staking architecture
+- [Babylon Genesis Overview](https://docs.babylonlabs.io/guides/overview/babylon_genesis/): The coordination layer, multi-staking consensus, Bitcoin timestamping, and BABY token
+- [Architecture](https://docs.babylonlabs.io/guides/overview/babylon_genesis/architecture/): Layered architecture covering Bitcoin scripts, Babylon node, Finality Providers, and Vigilantes
+- [BTC Staking Program](https://docs.babylonlabs.io/guides/overview/babylon_genesis/architecture/btc_staking_program/): Core staking implementation including Finality Providers and EOTS
+- [Finality Providers](https://docs.babylonlabs.io/guides/overview/babylon_genesis/architecture/btc_staking_program/finality_providers/): Role, responsibilities, and Extractable One-Time Signatures management
+- [BABY Tokenomics](https://docs.babylonlabs.io/guides/overview/babylon_genesis/baby_tokenomics/): BABY token economics, inflation parameters, and staking rewards
+- [Governance](https://docs.babylonlabs.io/guides/overview/babylon_genesis/governance/): On-chain governance, BABY voting, proposal lifecycle, and network parameters
+
+## Networks
+
+- [Mainnet](https://docs.babylonlabs.io/guides/overview/babylon_genesis/networks/mainnet/): Babylon Genesis Mainnet information (chain ID: bbn-1)
+- [Testnet](https://docs.babylonlabs.io/guides/overview/babylon_genesis/networks/testnet/): Babylon Genesis Testnet information (chain ID: bbn-test-6)
+- [Chain Information](https://docs.babylonlabs.io/developers/babylon_genesis_chain/chain_information/): Chain IDs, genesis files, seed nodes, and peers for all networks
+- [Node Information](https://docs.babylonlabs.io/developers/babylon_genesis_chain/node_information/): RPC, LCD, and gRPC endpoints for mainnet and testnet
+
+## Staker Guides
+
+- [Stakers Overview](https://docs.babylonlabs.io/stakers/): Dual-staking model overview combining BTC and BABY staking
+- [BTC Staking](https://docs.babylonlabs.io/stakers/btc_stakers/): How to stake Bitcoin on Babylon
+- [Staking via Web App](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/web_staking/): Step-by-step web dashboard staking guide with wallet compatibility
+- [Staking via CLI](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/staking_via_cli/): Command-line staking for advanced users
+- [Unbonding via Web](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/unbonding_via_web/): How to unstake BTC through the web dashboard
+- [Liquid Staking Tokens](https://docs.babylonlabs.io/stakers/btc_stakers/liquid_staking/liquid_staking_tokens/): LST protocol information and supported providers
+- [BABY Staking](https://docs.babylonlabs.io/stakers/baby_stakers/): Staking BABY tokens on Babylon Genesis
+- [Co-Staking Guide](https://docs.babylonlabs.io/stakers/co_staking/): Dual BTC+BABY staking rewards and weighted formula
+
+## Developer Resources
+
+- [Developers Overview](https://docs.babylonlabs.io/developers/): Developer pathways for Bitcoin staking integration and smart contracts
+- [Babylon Genesis Chain](https://docs.babylonlabs.io/developers/babylon_genesis_chain/): Cosmos SDK chain with CosmWasm support
+- [Smart Contract Deployment](https://docs.babylonlabs.io/developers/babylon_genesis_chain/dapps/smart_contract_deployment/): CosmWasm smart contract deployment guide
+- [Simple Staking dApp](https://docs.babylonlabs.io/developers/babylon_genesis_chain/dapps/simple_staking_dapp/): Example staking dApp implementation
+- [Wallet Integration](https://docs.babylonlabs.io/developers/bitcoin_staking/wallet_integration/): Overview of Bitcoin and Babylon wallet integration options
+- [Bitcoin Wallet Integration](https://docs.babylonlabs.io/developers/bitcoin_staking/wallet_integration/bitcoin_wallet_integration/): BTC wallet integration guide for extension, mobile, and hardware wallets
+- [Staking Backend](https://docs.babylonlabs.io/developers/bitcoin_staking/staking_backend/): Backend infrastructure for staking services including API, indexer, and expiry checker
+- [Global Parameters](https://docs.babylonlabs.io/developers/bitcoin_staking/networks/mainnet/global_parameters/): Mainnet staking protocol parameters
+- [Developer FAQs](https://docs.babylonlabs.io/developers/faqs/): Developer-specific frequently asked questions
+
+## Operator Guides
+
+- [Operators Overview](https://docs.babylonlabs.io/operators/): Node types overview, networks, CLI reference, and monitoring
+- [Node Installation](https://docs.babylonlabs.io/operators/babylon_node/installation_guide/): Full node installation guide
+- [Babylon CLI Overview](https://docs.babylonlabs.io/operators/babylon_node/babylon_cli/overview/): babylond CLI command reference
+- [Validator Setup](https://docs.babylonlabs.io/operators/babylon_validators/validator_setup/): Creating and configuring a validator node
+- [Finality Provider Operations](https://docs.babylonlabs.io/operators/finality_providers/fp_operations/): Finality provider setup and management
+- [FP Registration Guide](https://docs.babylonlabs.io/operators/finality_providers/phase_2_registration_guide/): Finality Provider registration process
+- [Covenant Emulator](https://docs.babylonlabs.io/operators/covenant_emulator/): Covenant committee software setup
+- [Vigilantes](https://docs.babylonlabs.io/operators/vigilantes/): Monitoring and reporting software
+- [Staker CLI](https://docs.babylonlabs.io/operators/staker_cli/): Command-line BTC staking tool
+- [Operator FAQs](https://docs.babylonlabs.io/operators/faqs/): Operator-specific frequently asked questions
+
+## Specifications
+
+- [Bitcoin Staking Scripts](https://docs.babylonlabs.io/guides/overview/babylon_genesis/specifications/bitcoin_staking_scripts/): Technical Bitcoin script specifications for staking
+- [Staking Transactions](https://docs.babylonlabs.io/guides/overview/babylon_genesis/specifications/staking_transactions/): Transaction format specifications
+
+## API Reference
+
+- [Staking API](https://docs.babylonlabs.io/api/staking-api/babylon-staking-api/): REST API for querying staking data
+- [Babylon gRPC API](https://docs.babylonlabs.io/api/babylon-gRPC/babylon-grpc-api-docs/): Babylon chain gRPC API reference
+
+## Security
+
+- [Audit Reports](https://docs.babylonlabs.io/guides/security/audit_reports/): Security audit documentation and reports
+- [Bug Bounties](https://docs.babylonlabs.io/guides/security/bug_bounties/): Bug bounty program details
+
+## Optional
+
+- [Research: BTC Staking Litepaper](https://docs.babylonlabs.io/guides/research/btc_staking_litepaper/): Technical research paper on Bitcoin staking protocol
+- [Research: Bitcoin Timestamping](https://docs.babylonlabs.io/guides/research/btc_timestamping/): Bitcoin timestamping protocol research
+- [Research: Trustless Bitcoin Vault](https://docs.babylonlabs.io/guides/research/btc_trustless_vault/): Vault protocol technical paper
+- [Block Explorers](https://docs.babylonlabs.io/developers/babylon_genesis_chain/explorers/): Available block explorers for mainnet and testnet
+- [BABY Faucets](https://docs.babylonlabs.io/developers/babylon_genesis_chain/baby_faucets/): Getting testnet BABY tokens
+- [BTC Faucets](https://docs.babylonlabs.io/developers/babylon_genesis_chain/btc_faucets/): Getting testnet Bitcoin
+- [Wallet Setup](https://docs.babylonlabs.io/developers/babylon_genesis_chain/wallet_setup/): Setting up development wallets
+- [IBC Relayer Setup](https://docs.babylonlabs.io/operators/babylon_validators/ibc_relayer_setup/): Setting up an IBC relayer between chains
+- [Slashing Protection](https://docs.babylonlabs.io/operators/finality_providers/slashing_protection/): Preventing finality provider slashing violations
+- [HMAC Security](https://docs.babylonlabs.io/operators/finality_providers/hmac_security/): HMAC key security practices for finality providers
+- [General FAQs](https://docs.babylonlabs.io/guides/support/faqs/): Frequently asked questions about Babylon
