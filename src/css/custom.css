@@ -644,12 +644,20 @@ ul.emoji-list span {
   opacity: 0.6;
 }
 
+/* Scrollable wrapper for RemoteMD tables — restores table layout inside wrapper */
+.remote-md-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--ifm-spacing-vertical);
+}
+
+.remote-md-table-wrapper table {
+  display: table;
+}
+
 table {
   border-collapse: collapse;
   border: none;
   background-color: transparent;
-  display: block;
-  overflow-x: auto;
   text-align: left;
   font-size: 90%;
 }
