@@ -169,6 +169,9 @@ export default function RemoteMD({
 
   const fetchMarkdown = async (mdUrl) => {
     setLoading(true);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('remoteMdLoadStart'));
+    }
     try {
       setCurrentMdUrl(mdUrl);
       const response = await fetch(mdUrl);
@@ -181,6 +184,9 @@ export default function RemoteMD({
       setErrorMessage('Documentation not found for the selected release.');
     } finally {
       setLoading(false);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('remoteMdLoadComplete'));
+      }
     }
   };
 

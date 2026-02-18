@@ -246,10 +246,12 @@ const config = {
 
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
 
   presets: [
     [

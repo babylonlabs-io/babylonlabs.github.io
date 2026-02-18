@@ -1,6 +1,6 @@
 /**
- * Swizzled DocItem/Layout to add PageActionsDropdown at the top-right of doc content.
- * Based on @docusaurus/theme-classic DocItem/Layout.
+ * Swizzled ApiItem/Layout to add PageActionsDropdown at the top-right of doc content.
+ * Based on docusaurus-theme-openapi-docs ApiItem/Layout.
  */
 import React from 'react';
 import clsx from 'clsx';
@@ -16,7 +16,7 @@ import DocItemContent from '@theme/DocItem/Content';
 import DocBreadcrumbs from '@theme/DocBreadcrumbs';
 import ContentVisibility from '@theme/ContentVisibility';
 import PageActionsDropdown from '@site/src/components/PageActionsDropdown';
-import styles from '@docusaurus/theme-classic/lib/theme/DocItem/Layout/styles.module.css';
+import styles from 'docusaurus-theme-openapi-docs/lib/theme/ApiItem/Layout/styles.module.css';
 
 function useDocTOC() {
   const { frontMatter, toc } = useDoc();
@@ -33,7 +33,9 @@ function useDocTOC() {
 
 export default function DocItemLayout({ children }) {
   const docTOC = useDocTOC();
-  const { metadata } = useDoc();
+  const { metadata, frontMatter } = useDoc();
+  const api = frontMatter.api;
+  const schema = frontMatter.schema;
   return (
     <div className="row">
       <div className={clsx('col', !docTOC.hidden && styles.docItemCol)}>
@@ -48,9 +50,17 @@ export default function DocItemLayout({ children }) {
               <PageActionsDropdown />
               <DocItemContent>{children}</DocItemContent>
             </div>
-            <DocItemFooter />
+            <div className="row">
+              <div className={clsx('col', api || schema ? 'col--7' : 'col--12')}>
+                <DocItemFooter />
+              </div>
+            </div>
           </article>
-          <DocItemPaginator />
+          <div className="row">
+            <div className={clsx('col', api || schema ? 'col--7' : 'col--12')}>
+              <DocItemPaginator />
+            </div>
+          </div>
         </div>
       </div>
       {docTOC.desktop && <div className="col col--3">{docTOC.desktop}</div>}
