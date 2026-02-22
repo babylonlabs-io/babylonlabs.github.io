@@ -357,14 +357,14 @@ in [Create a Babylon keyring with funds](#create-a-babylon-keyring-keyring-backe
 stored.
 3. Ensure to use the `test` keyring backend.
 4. Ensure you use the correct `ChainID` for the network you're connecting to. For
-example, for Babylon devnet, the chain ID is `bbn-dev-5`.
+example, for Babylon testnet, the chain ID is `bbn-test-6`.
 5. To change the Babylon RPC/GRPC address, update the following:
 
  ```bash
- RPCAddr = https://rpc.devnet.babylonlabs.io:443 # rpc node address
- GRPCAddr = https://grpc.devnet.babylonlabs.io:443 # grpc node address
+ RPCAddr = https://rpc.testnet.babylonlabs.io:443 # rpc node address
+ GRPCAddr = https://grpc.testnet.babylonlabs.io:443 # grpc node address
     ```
-The above addresses are for Babylon devnet.
+The above addresses are for Babylon testnet.
 
 6. If you encounter any gas-related errors while performing staking operations,
 consider adjusting the `GasAdjustment` and `GasPrices` parameters. For example,
