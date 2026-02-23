@@ -1906,4 +1906,43 @@ html[data-theme='dark'] .header-ai-chat-link:hover {
   margin-right: 8px;
 }
 
+/* Copy as Markdown button */
+.doc-item-with-copy {
+  position: relative;
+}
+
+.copy-markdown-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -0.5rem;
+  padding-right: 0;
+}
+
+.copy-markdown-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-600);
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.copy-markdown-button:hover {
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest);
+}
+
+.copy-markdown-button svg {
+  flex-shrink: 0;
+}
+
 
