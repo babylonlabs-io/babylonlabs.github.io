@@ -89,8 +89,7 @@ docs/                    # Main documentation content (MDX files)
 ├── stakers/            # Staker documentation
 │   ├── btc_stakers/    # BTC staking guides
 │   │   ├── native_staking/   # Direct staking
-│   │   ├── liquid_staking/   # LST protocols
-│   │   └── campaigns/        # Staking campaigns
+│   │   └── liquid_staking/   # LST protocols
 │   └── baby_stakers/   # BABY token staking
 ├── developers/         # Developer documentation
 │   ├── bitcoin_staking/      # Bitcoin staking integration
@@ -379,7 +378,7 @@ The site is organized into distinct sections for different audiences:
   - BTC staking program details, vigilante services
 
 - **Stakers** (`/stakers/`) - User guides for all staking options
-  - BTC Stakers: Native staking, liquid staking (LSTs), staking campaigns
+  - BTC Stakers: Native staking, liquid staking (LSTs)
   - BABY Stakers: BABY token staking guides
 
 - **Developers** (`/developers/`) - Technical integration guides
