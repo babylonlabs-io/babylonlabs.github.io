@@ -71,7 +71,13 @@ export default function TextSelectionToolbar() {
   // Listen for mouseup on document
   useEffect(() => {
     document.addEventListener('mouseup', handleMouseUp);
-    return () => document.removeEventListener('mouseup', handleMouseUp);
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp);
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
+      }
+    };
   }, [handleMouseUp]);
 
   // Hide on scroll or resize
