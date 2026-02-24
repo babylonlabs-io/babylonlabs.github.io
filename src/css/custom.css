@@ -749,7 +749,7 @@ html[data-theme='dark'] .page-actions-menu {
 
 @media (max-width: 576px) {
   .page-actions-dropdown {
-    position: static;
+    position: relative; /* keep as positioning context so menu appears below trigger */
     display: flex;
     justify-content: flex-end;
     margin-bottom: 8px;
