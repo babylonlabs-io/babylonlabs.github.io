@@ -38,7 +38,6 @@ interface ChatSession {
 }
 
 const STORAGE_KEY = 'babylon_ai_chat_sessions';
-const OLD_STORAGE_KEY = 'babylon_ai_chat_history'; // For migration
 const CONSENT_KEY = 'babylon_ai_chat_consent';
 
 const PRIVACY_CONSENT_TEXT =
@@ -77,36 +76,21 @@ export default function ChatWidget() {
     return false;
   });
 
-  // State for sessions
+  // State for sessions (with two-calendar-month expiry to match backend retention policy)
   const [sessions, setSessions] = useState<ChatSession[]>(() => {
     if (typeof window !== 'undefined') {
-      // Try new format first
       const savedSessions = localStorage.getItem(STORAGE_KEY);
       if (savedSessions) {
         try {
-          return JSON.parse(savedSessions);
+          const parsed: ChatSession[] = JSON.parse(savedSessions);
+          // Prune sessions older than two calendar months
+          const cutoff = new Date();
+          cutoff.setMonth(cutoff.getMonth() - 2);
+          const cutoffTs = cutoff.getTime();
+          const fresh = parsed.filter(s => s.timestamp >= cutoffTs);
+          if (fresh.length > 0) return fresh;
         } catch (e) {
           console.error('Failed to parse sessions', e);
-        }
-      }
-
-      // Migration: Check for old format
-      const oldHistory = localStorage.getItem(OLD_STORAGE_KEY);
-      if (oldHistory) {
-        try {
-          const messages = JSON.parse(oldHistory);
-          if (Array.isArray(messages) && messages.length > 0) {
-             const migratedSession: ChatSession = {
-               id: Date.now().toString(),
-               thread_uuid: generateUUID(), // Best effort migration
-               title: 'Previous Chat',
-               messages: messages,
-               timestamp: Date.now()
-             };
-             return [migratedSession];
-          }
-        } catch (e) {
-          console.error('Failed to migrate old history', e);
         }
       }
     }
@@ -141,8 +125,10 @@ export default function ChatWidget() {
   const [editTitle, setEditTitle] = useState('');
   const [tokenLimits, setTokenLimits] = useState<TokenLimits | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
+  const pendingQueryRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const handleSubmitRef = useRef<(e?: React.FormEvent, directQuestion?: string) => Promise<void>>();
   
   // Default fallback limits if API fails
   const DEFAULT_INPUT_LIMIT = 1000;
@@ -265,7 +251,7 @@ export default function ChatWidget() {
     if (value.trim()) {
       const estimatedTokens = estimateTokens(value);
       if (estimatedTokens > maxTokens) {
-        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens).Please shorten your question.`);
+        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens). Please shorten your question.`);
       } else if (estimatedTokens > maxTokens * 0.8) {
         setInputError(`Approaching limit (~${estimatedTokens}/${maxTokens} tokens)`);
       } else {
@@ -290,12 +276,10 @@ export default function ChatWidget() {
     scrollToBottom();
   }, [messages, isOpen, isExpanded, currentSessionId]);
 
-  // Persist sessions
+  // Persist sessions (expired sessions pruned on load)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-      // Clean up old key if exists
-      localStorage.removeItem(OLD_STORAGE_KEY);
     }
   }, [sessions]);
 
@@ -345,6 +329,42 @@ export default function ChatWidget() {
       abortControllerRef.current?.abort();
     };
   }, []);
+
+  // Keep handleSubmitRef in sync with latest handleSubmit
+  useEffect(() => {
+    handleSubmitRef.current = handleSubmit;
+  });
+
+  // Listen for AI query events (from PageActionsDropdown, TextSelectionToolbar, HeroSearch)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleAIQuery = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const question = customEvent.detail?.question;
+      if (!question) return;
+
+      pendingQueryRef.current = question;
+      openedFromHeaderRef.current = true;
+      setIsOpen(true);
+      setIsExpanded(true);
+      setHasUserToggledExpand(true);
+    };
+
+    window.addEventListener('babylon-ai-query', handleAIQuery);
+    return () => window.removeEventListener('babylon-ai-query', handleAIQuery);
+  }, []);
+
+  // Auto-submit pending query once the widget is open, consented, and not loading.
+  // Uses a ref (not state) to avoid re-render cleanup killing the submission.
+  useEffect(() => {
+    if (!isOpen || !hasConsented || isLoading) return;
+    const query = pendingQueryRef.current;
+    if (!query) return;
+
+    pendingQueryRef.current = null;
+    handleSubmitRef.current?.(undefined, query);
+  }, [isOpen, hasConsented, isLoading]);
 
   const createNewSession = () => {
     if (sessions.length >= 15) {
@@ -402,14 +422,15 @@ export default function ChatWidget() {
     }));
   };
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent, directQuestion?: string) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading || isInputTooLong) return;
+    const queryText = directQuestion || input;
+    if (!queryText.trim() || isLoading || (!directQuestion && isInputTooLong)) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim()
+      content: queryText.trim()
     };
 
     // Create placeholder for AI response immediately

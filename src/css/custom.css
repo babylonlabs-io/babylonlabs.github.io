@@ -680,6 +680,203 @@ table th {
   color: var(--docs-color-text-100);
 }
 
+/* ─── Page Actions Dropdown ───────────────────────────── */
+
+.doc-content-with-actions {
+  position: relative;
+}
+
+/* Prevent the h1 title from overlapping the trigger button */
+.doc-content-with-actions .theme-doc-markdown > header {
+  padding-right: 40px;
+}
+
+.page-actions-dropdown {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  z-index: 10;
+}
+
+.page-actions-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-700);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.page-actions-trigger:hover {
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.page-actions-trigger[aria-expanded='true'] {
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.page-actions-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 210px;
+  padding: 4px 0;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+html[data-theme='dark'] .page-actions-menu {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.page-actions-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  background: none;
+  color: var(--ifm-font-color-base);
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.12s;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.page-actions-item:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.page-actions-item svg {
+  flex-shrink: 0;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.page-actions-item--ai {
+  color: var(--ifm-color-primary);
+}
+
+.page-actions-item--ai svg {
+  color: var(--ifm-color-primary);
+}
+
+.page-actions-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--ifm-color-emphasis-200);
+}
+
+@media (max-width: 576px) {
+  .page-actions-dropdown {
+    position: relative; /* keep as positioning context so menu appears below trigger */
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+  }
+
+  .doc-content-with-actions .theme-doc-markdown > header {
+    padding-right: 0;
+  }
+
+  .page-actions-menu {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* ─── Text Selection Toolbar ──────────────────────────── */
+
+.text-selection-toolbar {
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  animation: textSelectionToolbarIn 0.12s ease;
+}
+
+html[data-theme='dark'] .text-selection-toolbar {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes textSelectionToolbarIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text-selection-toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: none;
+  background: none;
+  color: var(--ifm-font-color-base);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.12s;
+  white-space: nowrap;
+}
+
+.text-selection-toolbar-btn:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.text-selection-toolbar-btn svg {
+  flex-shrink: 0;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.text-selection-toolbar-btn--ai {
+  color: var(--ifm-color-primary);
+}
+
+.text-selection-toolbar-btn--ai svg {
+  color: var(--ifm-color-primary);
+}
+
+.text-selection-toolbar-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 2px;
+  background: var(--ifm-color-emphasis-200);
+  flex-shrink: 0;
+}
+
+/* Hide text selection toolbar on mobile - touch selection UX is different */
+@media (max-width: 768px) {
+  .text-selection-toolbar {
+    display: none;
+  }
+}
+
 .tabs {
   border-bottom: 1px solid var(--docs-color-border);
 }
