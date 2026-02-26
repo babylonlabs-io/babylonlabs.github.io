@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "@docusaurus/tsconfig": "3.7.0",
+    "@playwright/test": "^1.58.2",
     "@styled-icons/bootstrap": "^10.47.0",
     "@styled-icons/boxicons-logos": "^10.47.0",
     "@swc/core": "^1.3.42",
