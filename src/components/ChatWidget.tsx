@@ -125,8 +125,10 @@ export default function ChatWidget() {
   const [editTitle, setEditTitle] = useState('');
   const [tokenLimits, setTokenLimits] = useState<TokenLimits | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
+  const pendingQueryRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const handleSubmitRef = useRef<(e?: React.FormEvent, directQuestion?: string) => Promise<void>>();
   
   // Default fallback limits if API fails
   const DEFAULT_INPUT_LIMIT = 1000;
@@ -328,6 +330,42 @@ export default function ChatWidget() {
     };
   }, []);
 
+  // Keep handleSubmitRef in sync with latest handleSubmit
+  useEffect(() => {
+    handleSubmitRef.current = handleSubmit;
+  });
+
+  // Listen for AI query events (from PageActionsDropdown, TextSelectionToolbar, HeroSearch)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleAIQuery = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const question = customEvent.detail?.question;
+      if (!question) return;
+
+      pendingQueryRef.current = question;
+      openedFromHeaderRef.current = true;
+      setIsOpen(true);
+      setIsExpanded(true);
+      setHasUserToggledExpand(true);
+    };
+
+    window.addEventListener('babylon-ai-query', handleAIQuery);
+    return () => window.removeEventListener('babylon-ai-query', handleAIQuery);
+  }, []);
+
+  // Auto-submit pending query once the widget is open, consented, and not loading.
+  // Uses a ref (not state) to avoid re-render cleanup killing the submission.
+  useEffect(() => {
+    if (!isOpen || !hasConsented || isLoading) return;
+    const query = pendingQueryRef.current;
+    if (!query) return;
+
+    pendingQueryRef.current = null;
+    handleSubmitRef.current?.(undefined, query);
+  }, [isOpen, hasConsented, isLoading]);
+
   const createNewSession = () => {
     if (sessions.length >= 15) {
       alert("Maximum chat limit (15) reached. Please delete an old chat to start a new one.");
@@ -384,14 +422,15 @@ export default function ChatWidget() {
     }));
   };
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent, directQuestion?: string) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading || isInputTooLong) return;
+    const queryText = directQuestion || input;
+    if (!queryText.trim() || isLoading || (!directQuestion && isInputTooLong)) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim()
+      content: queryText.trim()
     };
 
     // Create placeholder for AI response immediately
