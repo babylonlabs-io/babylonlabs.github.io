@@ -34,32 +34,23 @@
     <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/covenant_emulator/covenant_emulator.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/finality_providers-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/finality_providers.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/finality_providers-version-v1.0.0.html?version=v1.0.0</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_core_specs.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_core_specs-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_finality_votes.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_finality_votes-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_operations.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_operations-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_public_randomness.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_operations-version-v1.0.0.html?version=v1.0.0</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/hmac_security.html</loc>
   </url>
   <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_public_randomness-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/fp_public_randomness-version-v1.0.0.html?version=v1.0.0</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/hmac_security-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
-  </url>
-  <url>
-    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/slashing_protection-version-v1.1.0-rc.1.html?version=v1.1.0-rc.1</loc>
+    <loc>https://docs.dev.babylonlabs.io/remote-docs/operators/finality_providers/slashing_protection.html</loc>
   </url> </urlset>
