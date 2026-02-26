@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import { Tag } from '@styled-icons/bootstrap/Tag';
 import Admonition from '@theme/Admonition';
 
@@ -20,9 +23,24 @@ function getQueryParam(name) {
 const generateId = (text) => {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, '')
+    .replace(/[^a-z0-9 -]/g, '')
     .replace(/\s+/g, '-');
 };
+
+// Module-scope component — stable reference avoids unnecessary remounts
+function HeadingWithAnchor({ level, children, idCounterMap }) {
+  const baseId = generateId(String(children));
+  const count = idCounterMap.get(baseId) || 0;
+  idCounterMap.set(baseId, count + 1);
+  const id = count === 0 ? baseId : `${baseId}-${count}`;
+  const HeadingTag = `h${level}`;
+  return (
+    <HeadingTag id={id} className="anchor-heading">
+      {children}
+      <a href={`#${id}`} className="hash-link" aria-label={`Direct link to ${String(children)}`}>&#8203;</a>
+    </HeadingTag>
+  );
+}
 
 const defaultReleaseVersions = {};
 
@@ -43,11 +61,20 @@ export default function RemoteMD({
                                  }) {
   const [markdown, setMarkdown] = React.useState('');
   const [releases, setReleases] = React.useState([]); // [{key, label, url}]
+  const [releasesLoaded, setReleasesLoaded] = React.useState(hideRelease);
   const [selectedRelease, setSelectedRelease] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [loading, setLoading] = React.useState(true);
   const [currentMdUrl, setCurrentMdUrl] = React.useState(rawUrl);
   const lastH2 = React.useRef('');
+  const h1Count = React.useRef(0);
+  const idCounterMap = React.useRef(new Map());
+
+  // Capture URL hash on mount for one-time anchor scroll
+  const initialHashRef = React.useRef(
+    typeof window !== 'undefined' ? window.location.hash : ''
+  );
+  const hasScrolledRef = React.useRef(false);
 
   const resolveRelativePath = (href, renderUrl) => {
     const [path, anchor] = href.split('#');
@@ -69,6 +96,11 @@ export default function RemoteMD({
     return anchor ? `${resolvedPath}#${anchor}` : resolvedPath;
   };
 
+  // Reset render-pass counters before ReactMarkdown processes headings
+  h1Count.current = 0;
+  lastH2.current = '';
+  idCounterMap.current.clear();
+
   const components = {
     img: ({ node }) => {
       const { alt, src } = node.properties;
@@ -78,17 +110,32 @@ export default function RemoteMD({
       return <img src={newSrc} alt={alt} />;
     },
     h1: ({ children }) => {
-      let count = 0;
-      const id = generateId(String(children));
-      return count++ === 0 ? null : <h1 id={id}>{children}</h1>;
+      h1Count.current += 1;
+      if (h1Count.current === 1) return null;
+      return <HeadingWithAnchor level={1} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
     },
     h2: ({ children }) => {
       lastH2.current = String(children);
-      const id = generateId(String(children));
-      return String(children).includes('Table of Contents') ? null : (
-        <h2 id={id}>{children}</h2>
-      );
+      if (String(children).includes('Table of Contents')) return null;
+      return <HeadingWithAnchor level={2} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
     },
+    h3: ({ children }) => {
+      return <HeadingWithAnchor level={3} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
+    },
+    h4: ({ children }) => {
+      return <HeadingWithAnchor level={4} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
+    },
+    h5: ({ children }) => {
+      return <HeadingWithAnchor level={5} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
+    },
+    h6: ({ children }) => {
+      return <HeadingWithAnchor level={6} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
+    },
+    table: ({ children }) => (
+      <div className="remote-md-table-wrapper">
+        <table>{children}</table>
+      </div>
+    ),
     ol: ({ children }) => {
       return lastH2.current === 'Table of Contents' ? null : (
         <ol>{children}</ol>
@@ -102,62 +149,63 @@ export default function RemoteMD({
         : href;
       return <a href={resolvedHref}>{children}</a>;
     },
-    h3: ({ children }) => {
-      const id = generateId(String(children));
-      return <h3 id={id}>{children}</h3>;
-    },
   };
 
   React.useEffect(() => {
     let cancelled = false;
 
     async function fetchReleases() {
-      const { owner, repo } = extractRepoInfo(rawUrl);
-      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases`;
-      const response = await fetch(apiUrl);
-      const data = await response.json();
+      try {
+        const { owner, repo } = extractRepoInfo(rawUrl);
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-      const stableReleases = data.filter(release =>
-        !release.tag_name.includes('-') && !release.prerelease
-      );
-
-      const allReleases = [
-        ...Object.entries(releaseVersions).map(([key, url]) => ({
-          key,
-          label: key,
-          url,
-          isCustom: true
-        })),
-        ...stableReleases.map(release => {
-          let url;
-          if (rawUrl.includes('release/')) {
-            url = rawUrl.replace(/release\/v[\d.]+\w*/, `${release.tag_name}`);
-          } else {
-            url = rawUrl.replace(/refs\/heads\/[^/]+/, release.tag_name);
-          }
-          return {
-            key: release.tag_name,
-            label: release.tag_name,
-            url,
-            publishedAt: release.published_at
-          }
-        })
-      ];
-
-
-      const customReleases = allReleases.filter(r => r.isCustom);
-      const apiReleases = allReleases.filter(r => !r.isCustom).sort(sortBySemVer);
-      const sortedReleases = [...customReleases, ...apiReleases];
-
-      if (apiReleases.length > 0) {
-        const latestMajor = apiReleases[0].key.split('.')[0];
-        const sameMajorReleases = apiReleases.filter(r =>
-          r.key.split('.')[0] === latestMajor
+        const stableReleases = data.filter(release =>
+          !release.tag_name.includes('-') && !release.prerelease
         );
-        const finalReleases = customReleases.concat(sameMajorReleases);
-        setReleases(finalReleases);
-      } else {
-        setReleases(sortedReleases);
+
+        const allReleases = [
+          ...Object.entries(releaseVersions).map(([key, url]) => ({
+            key,
+            label: key,
+            url,
+            isCustom: true
+          })),
+          ...stableReleases.map(release => {
+            let url;
+            if (rawUrl.includes('release/')) {
+              url = rawUrl.replace(/release\/v[\d.]+\w*/, `${release.tag_name}`);
+            } else {
+              url = rawUrl.replace(/refs\/heads\/[^/]+/, release.tag_name);
+            }
+            return {
+              key: release.tag_name,
+              label: release.tag_name,
+              url,
+              publishedAt: release.published_at
+            }
+          })
+        ];
+
+        const customReleases = allReleases.filter(r => r.isCustom);
+        const apiReleases = allReleases.filter(r => !r.isCustom).sort(sortBySemVer);
+
+        if (!cancelled) {
+          if (apiReleases.length > 0) {
+            const latestMajor = apiReleases[0].key.split('.')[0];
+            const sameMajorReleases = apiReleases.filter(r =>
+              r.key.split('.')[0] === latestMajor
+            );
+            setReleases(customReleases.concat(sameMajorReleases));
+          } else {
+            setReleases([...customReleases, ...apiReleases]);
+          }
+        }
+      } catch {
+        // Release fetch failed — releasesLoaded will trigger rawUrl fallback
+      } finally {
+        if (!cancelled) setReleasesLoaded(true);
       }
     }
 
@@ -184,8 +232,28 @@ export default function RemoteMD({
     }
   };
 
+  // Anchor scroll — fires once after the first meaningful content load
   React.useEffect(() => {
-    if (hideRelease || releases.length <= 1) return;
+    if (loading || !markdown || hasScrolledRef.current) return;
+    const hash = initialHashRef.current;
+    if (!hash) {
+      hasScrolledRef.current = true;
+      return;
+    }
+
+    // useEffect runs after paint, so DOM headings are already rendered
+    const el = document.getElementById(hash.slice(1));
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      hasScrolledRef.current = true;
+    }
+    // If element not found, keep trying on next content load (e.g. version-specific
+    // content may have the heading even if the initial rawUrl fallback did not)
+  }, [loading, markdown]);
+
+  // Determine initial release from URL param or default
+  React.useEffect(() => {
+    if (hideRelease || !releasesLoaded || releases.length === 0) return;
 
     const urlParam = getQueryParam('release');
     let initialKey = urlParam;
@@ -195,7 +263,6 @@ export default function RemoteMD({
     }
 
     if (!initialKey && defaultRelease) {
-      // Only use defaultRelease if it exists in the available releases
       if (releases.some(r => r.key === defaultRelease)) {
         initialKey = defaultRelease;
       }
@@ -206,13 +273,21 @@ export default function RemoteMD({
     }
 
     setSelectedRelease(initialKey);
-  }, [releases, defaultRelease, hideRelease]);
+  }, [releases, defaultRelease, hideRelease, releasesLoaded]);
 
+  // Fetch markdown for the selected release (or rawUrl as fallback)
   React.useEffect(() => {
-    if (hideRelease || releases.length <= 1) {
+    if (hideRelease) {
       fetchMarkdown(rawUrl);
       return;
     }
+    if (!releasesLoaded) return; // Still loading releases — wait
+    if (releases.length === 0) {
+      // No releases found, fall back to rawUrl
+      fetchMarkdown(rawUrl);
+      return;
+    }
+    if (!selectedRelease) return; // Release selection pending
 
     const found = releases.find(r => r.key === selectedRelease);
     if (found) {
@@ -221,11 +296,13 @@ export default function RemoteMD({
       setMarkdown('');
       setErrorMessage('Selected release not found');
     }
-  }, [selectedRelease, releases, hideRelease, rawUrl]);
+  }, [selectedRelease, releases, releasesLoaded, hideRelease, rawUrl]);
 
   const handleReleaseChange = (event) => {
     const key = event.target.value;
     setSelectedRelease(key);
+    // User-driven version change — don't re-scroll to initial anchor
+    hasScrolledRef.current = true;
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       params.set('release', key);
@@ -247,25 +324,36 @@ export default function RemoteMD({
 
   return (
     <>
-      {!hideRelease && releases.length > 1 && (
+      {!hideRelease && releases.length > 0 && (
         <div style={{ marginBottom: '20px' }} className="babylon-dropdown">
           <Tag
             className="h-5"
             onClick={handleTagClick}
             style={{ cursor: 'pointer', marginRight: 8 }}
           />
-          <label htmlFor="version-select" style={{ marginRight: 8 }}>Release tag: </label>
-          <select
-            id="version-select"
-            value={selectedRelease}
-            onChange={handleReleaseChange}
-          >
-            {releases.map((release) => (
-              <option key={release.key} value={release.key}>
-                {release.label}
-              </option>
-            ))}
-          </select>
+          {releases.length === 1 ? (
+            <span
+              onClick={handleTagClick}
+              style={{ cursor: 'pointer' }}
+            >
+              Release tag: <strong>{releases[0].label}</strong>
+            </span>
+          ) : (
+            <>
+              <label htmlFor="version-select" style={{ marginRight: 8 }}>Release tag: </label>
+              <select
+                id="version-select"
+                value={selectedRelease}
+                onChange={handleReleaseChange}
+              >
+                {releases.map((release) => (
+                  <option key={release.key} value={release.key}>
+                    {release.label}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
         </div>
       )}
 
@@ -275,7 +363,7 @@ export default function RemoteMD({
         </Admonition>
       )}
 
-      <ReactMarkdown components={components}>{markdown}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSanitize]} components={components}>{markdown}</ReactMarkdown>
 
       {!errorMessage && !loading && (
         <Admonition>
