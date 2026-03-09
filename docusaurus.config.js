@@ -197,6 +197,15 @@ const plugins = [
           from: '/developers/wallet_integration/bitcoin_wallet_integration/',
           to: '/developers/bitcoin_staking/wallet_integration/bitcoin_wallet_integration/',
         },
+        // Wallet integration: category pages -> single doc pages
+        {
+          from: '/category/babylon-wallet-integration/',
+          to: '/developers/bitcoin_staking/wallet_integration/babylon_wallet_integration/',
+        },
+        {
+          from: '/category/bitcoin-wallet-integration/',
+          to: '/developers/bitcoin_staking/wallet_integration/bitcoin_wallet_integration/',
+        },
         {
           from: '/developers/staking_backend/',
           to: '/developers/bitcoin_staking/staking_backend/',
