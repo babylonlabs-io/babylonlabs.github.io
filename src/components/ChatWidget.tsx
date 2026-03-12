@@ -335,11 +335,11 @@ export default function ChatWidget() {
     handleSubmitRef.current = handleSubmit;
   });
 
-  // Listen for AI query events (from PageActionsDropdown, TextSelectionToolbar, HeroSearch)
+  // Listen for hero search query events from the landing page
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const handleAIQuery = (e: Event) => {
+    const handleHeroQuery = (e: Event) => {
       const customEvent = e as CustomEvent;
       const question = customEvent.detail?.question;
       if (!question) return;
@@ -351,8 +351,8 @@ export default function ChatWidget() {
       setHasUserToggledExpand(true);
     };
 
-    window.addEventListener('babylon-ai-query', handleAIQuery);
-    return () => window.removeEventListener('babylon-ai-query', handleAIQuery);
+    window.addEventListener('babylon-ai-query', handleHeroQuery);
+    return () => window.removeEventListener('babylon-ai-query', handleHeroQuery);
   }, []);
 
   // Auto-submit pending query once the widget is open, consented, and not loading.
