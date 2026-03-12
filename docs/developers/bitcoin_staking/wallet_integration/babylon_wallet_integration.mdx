@@ -1,11 +1,12 @@
 ---
-sidebar_label: Wallet Integration Guide
-sidebar_position: 1
+title: Babylon Wallet Integration
+sidebar_label: Babylon Wallet Integration
+sidebar_position: 2
 ---
 
 # BABY Wallet & Staking Integration Guide
 
-The Babylon Genesis is a PoS chain built using the 
+The Babylon Genesis is a PoS chain built using the
 Cosmos SDK and utilises most of the vanilla Cosmos SDK functionality
 shared among chains developed using it. Therefore,
 a wallet already supporting chains built using
@@ -18,6 +19,7 @@ the Babylon Genesis blockchain into your wallet:
 * [Accounts, message signing, token balance, and token transfer](#accounts-message-signing-token-balance-and-token-transfer)
 * [Staking](#staking)
 * [Unbonding](#unbonding)
+* [Wallet Integration Recommendation](#wallet-integration-recommendation)
 
 ### Babylon Genesis Network Information
 
@@ -121,9 +123,89 @@ works in practice:
 * **Epoch Processing**:
   * The unbonding transaction is queued and processed at
     the end of the epoch (block 300).
-  * The user’s status is updated to unbonding, and the epoch’s
+  * The user's status is updated to unbonding, and the epoch's
     state is timestamped on Bitcoin.
 * **Finalization**:
   * After ~50 hours, the Bitcoin timestamp reaches 300 confirmations.
   * Babylon Genesis detects this and completes the unbonding process,
-    fully unbonds the user’s stake.
+    fully unbonds the user's stake.
+
+## Wallet Integration Recommendation
+
+To provide the best experience for users here are some suggestions to wallet
+developers:
+
+1.  **Epochised Staking UI**:
+
+    *   Show a clear indication that staking operations are queued for
+        end-of-epoch execution
+
+    *   Display estimated time until the end of current epoch
+
+    *   Provide a way to view all pending staking operations
+
+2.  **Fast Unbonding UI**:
+
+    *   Accurately communicate the unbonding period
+
+    *   Indicate that unbonding leverages Bitcoin security
+
+    *   If possible, show progress of Bitcoin confirmations for unbonding
+        requests
+
+3.  **Slashing Warnings**:
+
+    *   Include clear warnings about the slashing risk
+
+    *   Highlight the importance of choosing reliable validators
+
+### Implementation Best Practices
+
+1.  **Proper Error Handling**:
+
+    *   Handle epoch transition edge cases
+
+    *   Manage potential failures due to users spending funds before epoch
+        processing
+
+2.  **Refresh Strategies**:
+
+    *   Implement proper cache refreshing after expected epoch boundaries
+
+    *   Update delegation status after expected unbonding completion times
+
+3.  **Testing**:
+
+    *   Test thoroughly against Babylon testnet before mainnet integration
+
+    *   Verify all epoch-based operations complete as expected
+
+4.  **User Communication**:
+
+    *   Clearly explain the unique aspects of BABY staking (epochised staking,
+        fast unbonding)
+
+    *   Provide educational content about the relationship between Bitcoin
+        security and BABY staking
+
+### Common Integration Challenges
+
+1.  **Epochised Staking Transition**:
+
+    *   Users transferring funds after staking transaction but before epoch
+        processing
+
+    *   Solution: Clear warnings about not transferring funds until end of epoch
+
+2.  **Fast Unbonding Expectations**:
+
+    *   Managing user expectations around unbonding times, which depend on
+        Bitcoin block times
+
+    *   Solution: Provide estimated time ranges rather than exact times
+
+3.  **Validator Selection**:
+
+    *   Helping users choose reliable validators to minimize slashing risk
+
+    *   Solution: Display validator uptime, commission rates, and voting power
