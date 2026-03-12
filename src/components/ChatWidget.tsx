@@ -38,7 +38,6 @@ interface ChatSession {
 }
 
 const STORAGE_KEY = 'babylon_ai_chat_sessions';
-const OLD_STORAGE_KEY = 'babylon_ai_chat_history'; // For migration
 const CONSENT_KEY = 'babylon_ai_chat_consent';
 
 const PRIVACY_CONSENT_TEXT =
@@ -77,36 +76,21 @@ export default function ChatWidget() {
     return false;
   });
 
-  // State for sessions
+  // State for sessions (with two-calendar-month expiry to match backend retention policy)
   const [sessions, setSessions] = useState<ChatSession[]>(() => {
     if (typeof window !== 'undefined') {
-      // Try new format first
       const savedSessions = localStorage.getItem(STORAGE_KEY);
       if (savedSessions) {
         try {
-          return JSON.parse(savedSessions);
+          const parsed: ChatSession[] = JSON.parse(savedSessions);
+          // Prune sessions older than two calendar months
+          const cutoff = new Date();
+          cutoff.setMonth(cutoff.getMonth() - 2);
+          const cutoffTs = cutoff.getTime();
+          const fresh = parsed.filter(s => s.timestamp >= cutoffTs);
+          if (fresh.length > 0) return fresh;
         } catch (e) {
           console.error('Failed to parse sessions', e);
-        }
-      }
-
-      // Migration: Check for old format
-      const oldHistory = localStorage.getItem(OLD_STORAGE_KEY);
-      if (oldHistory) {
-        try {
-          const messages = JSON.parse(oldHistory);
-          if (Array.isArray(messages) && messages.length > 0) {
-             const migratedSession: ChatSession = {
-               id: Date.now().toString(),
-               thread_uuid: generateUUID(), // Best effort migration
-               title: 'Previous Chat',
-               messages: messages,
-               timestamp: Date.now()
-             };
-             return [migratedSession];
-          }
-        } catch (e) {
-          console.error('Failed to migrate old history', e);
         }
       }
     }
@@ -267,7 +251,7 @@ export default function ChatWidget() {
     if (value.trim()) {
       const estimatedTokens = estimateTokens(value);
       if (estimatedTokens > maxTokens) {
-        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens).Please shorten your question.`);
+        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens). Please shorten your question.`);
       } else if (estimatedTokens > maxTokens * 0.8) {
         setInputError(`Approaching limit (~${estimatedTokens}/${maxTokens} tokens)`);
       } else {
@@ -292,12 +276,10 @@ export default function ChatWidget() {
     scrollToBottom();
   }, [messages, isOpen, isExpanded, currentSessionId]);
 
-  // Persist sessions
+  // Persist sessions (expired sessions pruned on load)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-      // Clean up old key if exists
-      localStorage.removeItem(OLD_STORAGE_KEY);
     }
   }, [sessions]);
 
