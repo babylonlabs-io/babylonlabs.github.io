@@ -43,16 +43,18 @@ export default function DocItemLayout({ children }) {
         <DocVersionBanner />
         <div className={styles.docItemContainer}>
           <article>
-            <DocBreadcrumbs />
-            <DocVersionBadge />
-            {docTOC.mobile}
-            <div className="doc-content-with-actions">
+            <div className="doc-breadcrumbs-row">
+              <DocBreadcrumbs />
               <BrowserOnly>
                 {() => {
                   const PageActionsDropdown = require('@site/src/components/PageActionsDropdown').default;
                   return <PageActionsDropdown />;
                 }}
               </BrowserOnly>
+            </div>
+            <DocVersionBadge />
+            {docTOC.mobile}
+            <div className="doc-content-with-actions">
               <DocItemContent>{children}</DocItemContent>
             </div>
             <div className="row">

@@ -647,47 +647,81 @@ table th {
   color: var(--docs-color-text-100);
 }
 
-/* ─── Page Actions Dropdown ───────────────────────────── */
+/* ─── Page Actions Dropdown (in breadcrumb row) ────────── */
 
-.doc-content-with-actions {
-  position: relative;
+/* Row: breadcrumbs on the left, Ask AI button on the right */
+.doc-breadcrumbs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  min-height: 0;
 }
 
-/* Prevent the h1 title from overlapping the trigger button */
-.doc-content-with-actions .theme-doc-markdown > header {
-  padding-right: 40px;
+.doc-breadcrumbs-row > *:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-breadcrumbs-row .breadcrumbs {
+  min-width: 0;
 }
 
 .page-actions-dropdown {
-  position: absolute;
-  top: 4px;
-  right: 0;
-  z-index: 10;
+  position: relative; /* so .page-actions-menu positions below the button */
+  flex-shrink: 0;
+  z-index: 20; /* above breadcrumb area so clicks reach the button */
 }
 
 .page-actions-trigger {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  gap: 6px;
   height: 32px;
-  padding: 0;
-  border: 1px solid var(--ifm-color-emphasis-300);
+  padding: 0 12px;
+  border: none;
   border-radius: 6px;
-  background: var(--ifm-background-color);
-  color: var(--ifm-color-emphasis-700);
+  background: var(--ifm-color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition: background-color 0.15s, filter 0.15s;
 }
 
 .page-actions-trigger:hover {
-  background: var(--ifm-color-emphasis-100);
-  border-color: var(--ifm-color-emphasis-400);
+  filter: brightness(0.9);
 }
 
 .page-actions-trigger[aria-expanded='true'] {
-  background: var(--ifm-color-emphasis-100);
-  border-color: var(--ifm-color-emphasis-400);
+  filter: brightness(0.9);
+}
+
+.page-actions-trigger-icon,
+.page-actions-trigger-chevron {
+  flex-shrink: 0;
+}
+
+.page-actions-trigger-label {
+  white-space: nowrap;
+}
+
+/* Dark theme: outlined style for sidebar Ask AI button */
+html[data-theme='dark'] .page-actions-trigger {
+  background: transparent;
+  color: rgb(var(--docs-color-primary-100));
+  border: 1px solid rgb(var(--docs-color-primary-100));
+}
+
+html[data-theme='dark'] .page-actions-trigger:hover,
+html[data-theme='dark'] .page-actions-trigger[aria-expanded='true'] {
+  filter: none;
+  border-color: rgb(var(--docs-color-primary-200));
+  color: #33c5ce;
 }
 
 .page-actions-menu {
@@ -748,15 +782,8 @@ html[data-theme='dark'] .page-actions-menu {
 }
 
 @media (max-width: 576px) {
-  .page-actions-dropdown {
-    position: relative; /* keep as positioning context so menu appears below trigger */
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 8px;
-  }
-
-  .doc-content-with-actions .theme-doc-markdown > header {
-    padding-right: 0;
+  .doc-breadcrumbs-row {
+    gap: 8px;
   }
 
   .page-actions-menu {

@@ -346,7 +346,7 @@ const config = {
             to: 'https://discord.com/invite/babylonglobal',
           },
           {
-            label: 'Ask AI',
+            label: 'Babylon AI',
             to: '#',
             className: 'header-ai-chat-link',
             position: 'right',
