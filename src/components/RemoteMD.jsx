@@ -20,16 +20,27 @@ function getQueryParam(name) {
   return params.get(name);
 }
 
+// Recursively extract plain text from React children (handles inline markup like <code>, <em>, etc.)
+function extractText(node) {
+  if (node == null) return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  if (typeof node === 'object' && node.props) return extractText(node.props.children);
+  return '';
+}
+
 const generateId = (text) => {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9 -]/g, '')
-    .replace(/\s+/g, '-');
+    .replace(/\s+/g, '-')
+    .replace(/^-+|-+$/g, '');
 };
 
 // Module-scope component — stable reference avoids unnecessary remounts
 function HeadingWithAnchor({ level, children, idCounterMap }) {
-  const baseId = generateId(String(children));
+  const plainText = extractText(children);
+  const baseId = generateId(plainText) || 'heading';
   const count = idCounterMap.get(baseId) || 0;
   idCounterMap.set(baseId, count + 1);
   const id = count === 0 ? baseId : `${baseId}-${count}`;
@@ -37,7 +48,7 @@ function HeadingWithAnchor({ level, children, idCounterMap }) {
   return (
     <HeadingTag id={id} className="anchor-heading">
       {children}
-      <a href={`#${id}`} className="hash-link" aria-label={`Direct link to ${String(children)}`}>&#8203;</a>
+      <a href={`#${id}`} className="hash-link" aria-label={`Direct link to ${plainText}`}>#</a>
     </HeadingTag>
   );
 }
@@ -76,6 +87,16 @@ export default function RemoteMD({
   );
   const hasScrolledRef = React.useRef(false);
 
+  // Reset releasesLoaded when rawUrl or releaseVersions change so stale state
+  // doesn't cause the wrong document to render briefly.
+  React.useEffect(() => {
+    if (!hideRelease) {
+      setReleasesLoaded(false);
+      setReleases([]);
+      setSelectedRelease('');
+    }
+  }, [rawUrl, releaseVersions, hideRelease]);
+
   const resolveRelativePath = (href, renderUrl) => {
     const [path, anchor] = href.split('#');
     let baseUrl = renderUrl.replace(/\/[^/]+$/, '');
@@ -96,12 +117,14 @@ export default function RemoteMD({
     return anchor ? `${resolvedPath}#${anchor}` : resolvedPath;
   };
 
-  // Reset render-pass counters before ReactMarkdown processes headings
-  h1Count.current = 0;
-  lastH2.current = '';
-  idCounterMap.current.clear();
-
-  const components = {
+  // Memoize components object and reset render-pass counters inside the memo.
+  // This avoids mutating refs directly during render (React anti-pattern) while
+  // still ensuring counters are fresh for each ReactMarkdown pass.
+  const components = React.useMemo(() => {
+    h1Count.current = 0;
+    lastH2.current = '';
+    idCounterMap.current.clear();
+    return {
     img: ({ node }) => {
       const { alt, src } = node.properties;
       let rootUrl = (currentMdUrl || rawUrl).replace(/\/[^/]+\.md$/, '/');
@@ -115,8 +138,9 @@ export default function RemoteMD({
       return <HeadingWithAnchor level={1} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
     },
     h2: ({ children }) => {
-      lastH2.current = String(children);
-      if (String(children).includes('Table of Contents')) return null;
+      const text = extractText(children);
+      lastH2.current = text;
+      if (text.includes('Table of Contents')) return null;
       return <HeadingWithAnchor level={2} idCounterMap={idCounterMap.current}>{children}</HeadingWithAnchor>;
     },
     h3: ({ children }) => {
@@ -150,6 +174,8 @@ export default function RemoteMD({
       return <a href={resolvedHref}>{children}</a>;
     },
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [markdown, currentMdUrl, rawUrl]);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -301,15 +327,19 @@ export default function RemoteMD({
   const handleReleaseChange = (event) => {
     const key = event.target.value;
     setSelectedRelease(key);
-    // User-driven version change — don't re-scroll to initial anchor
-    hasScrolledRef.current = true;
+    // Allow re-scroll to the same anchor after version change so the user
+    // lands at the same section in the new version's document.
+    hasScrolledRef.current = false;
+    initialHashRef.current = typeof window !== 'undefined' ? window.location.hash : '';
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       params.set('release', key);
+      // Preserve the existing hash fragment so anchor continuity is maintained
+      const hash = window.location.hash;
       window.history.replaceState(
         {},
         '',
-        `${window.location.pathname}?${params}`
+        `${window.location.pathname}?${params}${hash}`
       );
     }
   };
