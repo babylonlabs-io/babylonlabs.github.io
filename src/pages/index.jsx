@@ -11,7 +11,6 @@ export default function Homepage() {
     <Layout
       title="Babylon Labs Documentation"
       wrapperClassName="homepage flex flex-col"
-      noFooter
     >
       <Head>
         <link rel="prefetch" href="/assets/css/elements.min.css"/>
