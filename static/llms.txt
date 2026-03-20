@@ -24,9 +24,9 @@
 
 - [Stakers Overview](https://docs.babylonlabs.io/stakers/): Dual-staking model overview combining BTC and BABY staking
 - [BTC Staking](https://docs.babylonlabs.io/stakers/btc_stakers/): How to stake Bitcoin on Babylon
-- [Staking via Web App](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/web_staking/): Step-by-step web dashboard staking guide with wallet compatibility
-- [Staking via CLI](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/staking_via_cli/): Command-line staking for advanced users
-- [Unbonding via Web](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/unbonding_via_web/): How to unstake BTC through the web dashboard
+- [BTC Staking Tools](https://docs.babylonlabs.io/stakers/btc_stakers/btc_staking_tools/): Supported wallets, exchanges, and staking platforms
+- [Unbonding via CLI](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/unbonding_via_cli/): How to unstake BTC using the command-line interface
+- [Geo Blocking](https://docs.babylonlabs.io/stakers/btc_stakers/native_staking/geo_blocking/): Geographic restrictions and compliance information
 - [Liquid Staking Tokens](https://docs.babylonlabs.io/stakers/btc_stakers/liquid_staking/liquid_staking_tokens/): LST protocol information and supported providers
 - [BABY Staking](https://docs.babylonlabs.io/stakers/baby_stakers/): Staking BABY tokens on Babylon Genesis
 - [Co-Staking Guide](https://docs.babylonlabs.io/stakers/co_staking/): Dual BTC+BABY staking rewards and weighted formula
