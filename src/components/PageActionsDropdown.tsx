@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Bot,
+  ChevronDown,
   MessageSquare,
-  MoreVertical,
   Sparkles,
 } from 'lucide-react';
 
@@ -74,7 +74,9 @@ export default function PageActionsDropdown() {
         aria-haspopup="true"
         title="Chat about this page"
       >
-        <MoreVertical size={18} />
+        <Sparkles size={16} className="page-actions-trigger-icon" />
+        <span className="page-actions-trigger-label">Ask AI</span>
+        <ChevronDown size={16} className="page-actions-trigger-chevron" />
       </button>
 
       {isOpen && (
