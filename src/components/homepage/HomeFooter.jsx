@@ -4,6 +4,7 @@ import {Linkedin, Youtube, Github} from '@styled-icons/boxicons-logos';
 import {XIcon} from '@site/src/icons';
 import ThemedImage from '@theme/ThemedImage';
 import {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
+import LlmCopyButton from '@site/src/components/LlmCopyButton';
 
 const developers = [
   {
@@ -110,6 +111,7 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-4">
+            <LlmCopyButton />
             <Link
               href="https://github.com/babylonlabs-io"
               aria-label="Babylon LabsGitHub Organization"
