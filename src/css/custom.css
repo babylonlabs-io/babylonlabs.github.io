@@ -2152,7 +2152,7 @@ html[data-theme='dark'] .header-ai-chat-link:hover {
 /* LLM Notification Toast */
 .llm-notification {
   position: fixed;
-  bottom: 24px;
+  bottom: 80px;
   right: 24px;
   display: flex;
   align-items: flex-start;
