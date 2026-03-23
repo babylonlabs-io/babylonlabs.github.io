@@ -8,6 +8,7 @@ import {
 } from '@fluentui/react-icons';
 import clsx from 'clsx';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
+import HeroSearch from './HeroSearch';
 
 const PRODUCTS = [
   {
@@ -89,9 +90,13 @@ export default function HeroSection() {
           Make your bitcoin productive
           </h2>
           <p className="max-w-xl text-center text-text-400">
-            At Babylon Labs, we're enabling developers to build Bitcoin-powered economies with trustless protocols.
+            Made for builders, by builders. Powered by AI.
           </p>
         </div>
+      </section>
+
+      <section className="px-4">
+        <HeroSearch />
       </section>
 
       <section className="mx-auto flex w-full max-w-6xl flex-wrap justify-center gap-6 px-4">
