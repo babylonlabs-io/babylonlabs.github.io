@@ -1,69 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Link from '@docusaurus/Link';
 import {Linkedin, Youtube, Github} from '@styled-icons/boxicons-logos';
 import {XIcon} from '@site/src/icons';
 import ThemedImage from '@theme/ThemedImage';
 import {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
-
-const developers = [
-  {
-    name: 'Docs',
-    href: '/guides/overview/',
-  },
-  {
-    name: 'Developer Events',
-    href: 'https://linktr.ee/buildonbabylon',
-  },
-  {
-    name: 'Project Showcase',
-    href: 'https://dorahacks.io/hackathon/babylon-hakcer-house-bangkok/buidl',
-  }
-];
-
-function Links({ name, links, isAccordion }) {
-  //To control accordion in footer
-  const [activeAccordion, setActiveAccordion] = useState(null);
-
-  const toggleAccordion = (href) => {
-    setActiveAccordion((prevAccordion) =>
-      prevAccordion === href ? null : href
-    );
-  };
-
-  return (
-    <div>
-      <h3 className="font-jakarta text-base font-semibold uppercase text-gray-400 dark:text-[#fff]">
-        {name}
-      </h3>
-      <div className="flex flex-col gap-3">
-        {links.map(({ name, href, isAccordion, content }) => (
-          <Link
-            key={name}
-            href={href}
-            className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9] hover:dark:text-primary"
-            onClick={() => (isAccordion ? toggleAccordion(href) : null)}
-          >
-            {name}
-            {isAccordion && activeAccordion === href && (
-              <ul style={{ paddingLeft: '1rem', listStyle: 'unset' }}>
-                {content.map((item, index) => (
-                  <li key={index}>
-                    <Link
-                      href={item.href}
-                      className="text-base text-gray-700 hover:text-primary hover:no-underline dark:text-[#f9f9f9] hover:dark:text-primary"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
+import LlmCopyButton from '@site/src/components/LlmCopyButton';
 
 export default function Footer() {
   const { withBaseUrl } = useBaseUrlUtils();
@@ -81,12 +22,6 @@ export default function Footer() {
             }}
           />
         </div>
-
-        <div className="grid grid-cols-2 gap-6 gap-y-12 md:justify-between lg:flex lg:flex-wrap dark:hover:text-[#BEDCC9]">
-          <Links name="Developers" links={developers} className="dark:hover:text-[#00e0ff]"/>
-        </div>
-
-        <hr className="my-12 !bg-gray-300 dark:!bg-[#999]"/>
 
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-0">
           <div className="flex flex-wrap gap-2 text-sm text-gray-500">
@@ -110,6 +45,7 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-4">
+            <LlmCopyButton />
             <Link
               href="https://github.com/babylonlabs-io"
               aria-label="Babylon LabsGitHub Organization"

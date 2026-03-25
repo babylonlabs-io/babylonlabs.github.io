@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /llms.txt
+Allow: /llms-ctx.txt
+
+Sitemap: https://docs.babylonlabs.io/sitemap.xml
