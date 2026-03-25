@@ -65,6 +65,7 @@
 
 - [Staking API](https://docs.babylonlabs.io/api/staking-api/babylon-staking-api/): REST API for querying staking data
 - [Babylon gRPC API](https://docs.babylonlabs.io/api/babylon-gRPC/babylon-grpc-api-docs/): Babylon chain gRPC API reference
+- [CometBFT RPC](https://docs.babylonlabs.io/api/comet-bft/babylon-grpc-api-docs/): CometBFT RPC API reference for Babylon node
 
 ## Security
 
