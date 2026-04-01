@@ -74,7 +74,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ matrix.account }}:role/gha-deployment
+          role-to-assume: arn:aws:iam::${{ matrix.account }}:role/gha-s3-frontend-deployment
           role-session-name: gh-terragrunt-plan
           aws-region: ${{ vars.AWS_ECR_REGION }}
 
