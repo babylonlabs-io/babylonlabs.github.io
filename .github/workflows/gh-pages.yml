@@ -75,7 +75,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ matrix.account }}:role/gha-s3-frontend-deployment
-          role-session-name: gh-terragrunt-plan
+          role-session-name: gha-s3-frontend-deployment
           aws-region: ${{ vars.AWS_ECR_REGION }}
 
       # Upload to S3
