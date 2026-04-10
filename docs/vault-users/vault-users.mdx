@@ -1,0 +1,87 @@
+---
+title: "Vault Users"
+sidebar_label: "Overview"
+sidebar_position: 0
+keywords:
+  - Trustless Bitcoin Vault
+  - TBV overview
+  - Bitcoin DeFi
+  - Vault creation
+  - Vault redemption
+  - Self-custodial Bitcoin
+  - BitVM3
+  - WOTS signatures
+---
+
+# Trustless Bitcoin Vault — User Guide
+
+Trustless Bitcoin Vault (TBV) enables native Bitcoin to participate in DeFi
+**without bridges, wrappers, or trusted custodians**. Your Bitcoin stays on the
+Bitcoin blockchain in a self-custodial vault while smart contracts on DeFi chains
+can programmably control its ownership.
+
+## Three-Layer Architecture
+
+TBV is built on a three-layer architecture that eliminates the need for trusted
+intermediaries:
+
+### 1. Bitcoin Vault Layer
+
+Your Bitcoin is locked in a Taproot script on the Bitcoin network. The script
+encodes all possible outcomes (repayment, liquidation, fraud challenge) as
+pre-signed transactions. No single party can move your BTC without satisfying
+the conditions agreed upon during vault creation.
+
+### 2. Cross-Chain Coordination
+
+The **BTCVaultRegistry** contract on Ethereum tracks vault state and coordinates
+the lifecycle of each vault. When a vault is redeemed, an **HTLC atomic swap**
+mechanism ensures that ownership transfer is atomic — either the full operation
+completes or nothing happens, with no partial states.
+
+### 3. Proof Generation
+
+When Bitcoin needs to learn about events on Ethereum (such as a vault redemption),
+the protocol generates cryptographic proofs:
+
+- **Winternitz One-Time Signatures (WOTS)** provide compact, efficient signing
+  for the BitVM3 verification circuit — requiring only 4 WOTS signatures per
+  challenge assertion.
+- **BitVM3 garbled circuits** verify zero-knowledge proofs on the Bitcoin network,
+  using 6 garbled circuit (GC) instances per counterparty relationship with a
+  ChallengeAssert transaction size under 10 kvB.
+
+## Key Properties
+
+- **No bridges**: Your Bitcoin never leaves the Bitcoin blockchain. There are no
+  wrapped tokens, no custodial bridges, and no validator sets controlling your funds.
+- **Self-custodial**: You create the vault, you sign the transactions, and you
+  retain the ability to redeem your Bitcoin at any time (after repaying any
+  outstanding debt).
+- **Trustless verification**: Redemption proofs are verified on Bitcoin using
+  BitVM3 — no trusted oracle or committee decides whether your BTC can be released.
+- **~1 hour activation**: From deposit request to active vault takes approximately
+  1 hour, including Bitcoin confirmation time.
+- **Composable**: Active vaults can be used as collateral across multiple DeFi
+  applications, starting with Aave v4 integration.
+
+## Vault Lifecycle
+
+The vault lifecycle consists of two main operations:
+
+1. **[Vault Creation (Peg-In)](/vault-users/vault-creation/)** — Lock your Bitcoin
+   and make it available as collateral on Ethereum.
+2. **[Vault Redemption (Peg-Out)](/vault-users/vault-redemption/)** — Unlock your
+   Bitcoin after you are done using it as collateral.
+
+## Learn More
+
+- **[Vault Creation](/vault-users/vault-creation/)** — Step-by-step walkthrough of
+  the peg-in process.
+- **[Vault Redemption](/vault-users/vault-redemption/)** — How to redeem your
+  Bitcoin, including liquidation scenarios.
+- **[Protocol Actors](/vault-users/protocol-actors/)** — The participants that make
+  the protocol work: vault providers, vault keepers, universal challengers, and the
+  security council.
+- **[Fees](/vault-users/fees/)** — Complete breakdown of protocol fees, Bitcoin
+  transaction costs, and Ethereum gas costs.

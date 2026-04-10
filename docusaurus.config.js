@@ -311,19 +311,19 @@ const config = {
             className: 'guides-top-header',
           },
           {
-            label: 'Stakers',
-            to: '/stakers/',
-            className: 'stakers-top-header',
+            label: 'Vault Users',
+            to: '/vault-users/',
+            className: 'vault-users-top-header',
           },
           {
-            label: 'Developers',
-            to: '/developers/',
-            className: 'developers-top-header',
+            label: 'Vault Builders',
+            to: '/vault-builders/',
+            className: 'vault-builders-top-header',
           },
           {
-            label: 'Operators',
-            to: '/operators/',
-            className: 'operators-top-header',
+            label: 'Vault Operators',
+            to: '/vault-operators/',
+            className: 'vault-operators-top-header',
           },
           {
             label: 'API',

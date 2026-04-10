@@ -1,0 +1,11 @@
+{
+  "position": 1,
+  "label": "Vault Operators",
+  "collapsible": false,
+  "collapsed": false,
+  "className": "vault_operators_sidebar_header",
+  "link": {
+    "type": "doc",
+    "id": "vault-operators/vault-operators"
+  }
+}

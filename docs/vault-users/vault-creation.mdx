@@ -1,0 +1,269 @@
+---
+title: "Vault Creation"
+sidebar_label: "Vault Creation"
+sidebar_position: 1
+keywords:
+  - Vault creation
+  - Peg-in
+  - Bitcoin collateral
+  - BTCVaultRegistry
+  - Transaction graph
+  - WOTS keypair
+  - Garbled circuits
+  - BitVM3
+---
+
+# Vault Creation
+
+Creating a vault is the process of locking Bitcoin on the Bitcoin network and
+making it available as collateral on Ethereum. This is called a **peg-in**. The
+process involves multiple participants coordinating to construct a set of
+pre-signed Bitcoin transactions that encode all possible outcomes (repayment,
+liquidation, fraud challenge) before any Bitcoin moves.
+
+## Overview of the Peg-In Flow
+
+The peg-in process has nine stages:
+
+1. **Deposit Request** — You submit an on-chain request on Ethereum declaring
+   your intent to create a vault.
+2. **Transaction Graph Construction** — The vault provider and vault keepers
+   create a set of pre-signed Bitcoin transactions covering every possible
+   future outcome.
+3. **Winternitz OTS Keypair Setup** — Participants generate WOTS keypairs and
+   exchange garbled circuit data for the BitVM3 verification system.
+4. **Payout Signing** — You sign the payout transactions, authorizing the
+   conditions under which your BTC can be released.
+5. **ACK Collection** — Each participant submits an on-chain acknowledgment
+   (ACK) confirming they have all necessary pre-signed transactions.
+6. **Bitcoin Broadcast** — You sign and broadcast the actual Bitcoin transaction,
+   sending your BTC to the vault's Taproot address.
+7. **Inclusion Proof & Activation** — The vault provider submits a Merkle
+   inclusion proof to Ethereum, verifying the Bitcoin transaction was mined.
+   The vault is now active.
+
+## Stage 1: Submit Deposit Request
+
+You begin by constructing an unsigned Bitcoin transaction that sends BTC to a
+special Taproot script address. This address encodes spending conditions for all
+participants — you (the depositor), a vault provider, vault keepers, and
+universal challengers.
+
+On Ethereum, you call `submitPeginRequest` on the **BTCVaultRegistry** contract
+with:
+
+- Your Ethereum address
+- Your Bitcoin public key (x-only, 32 bytes)
+- A BTC Proof of Possession (BIP-322 signature proving you own the Bitcoin key)
+- The unsigned Bitcoin transaction (hex)
+- The vault provider's Ethereum address
+
+The contract parses the Bitcoin transaction to extract the deposit amount (in
+satoshis), validates that the vault provider is registered, and creates a vault
+record with status **PendingPrePegInConfirmations**.
+
+A unique vault identifier is generated as:
+```
+vaultId = keccak256(peginTxHash, depositorAddress)
+```
+
+An event `PegInPending` is emitted, which signals off-chain participants to
+begin the next phase.
+
+**Requirements:**
+- The deposit amount must meet the minimum peg-in amount (a protocol parameter).
+- The vault provider must be registered and active.
+- A peg-in fee (in ETH) must be included to prevent spam.
+
+## Stage 2: Transaction Graph Construction
+
+When the vault provider and vault keepers detect the `PegInPending` event, they
+automatically construct a **transaction graph** — a set of pre-signed Bitcoin
+transactions that cover every possible outcome for the vault.
+
+The vault initially enters the **PendingPrePegInConfirmations** state while the
+system waits for sufficient confirmations on the deposit request.
+
+Each participant creates their own graph containing:
+
+- **Claim transaction** — Claims the vault's Bitcoin output.
+- **Payout Optimistic transaction** — Releases BTC back to the depositor (the
+  happy path when no challenge occurs).
+- **ChallengeAssertX transaction** — The first half of the split challenge
+  assertion, used when a challenge is raised.
+- **ChallengeAssertY transaction** — The second half of the split challenge
+  assertion, completing the proof verification.
+- **Payout transaction** — Releases BTC to the depositor through the challenge
+  resolution path.
+- **NoProof transaction** — Handles the timeout case if a proof is never
+  submitted.
+- **NoPayout transactions** — One per challenger, handling timeout if payout
+  never occurs.
+
+The participants then exchange and cross-sign each other's graphs via **gRPC**
+calls between their daemons. This ensures that every party holds a complete set
+of pre-signed transactions for all outcomes.
+
+This entire process happens automatically in the background — the vault provider
+daemon and vault keeper daemons coordinate without manual intervention.
+
+## Stage 3: Winternitz OTS Keypair Setup
+
+Each participant generates **Winternitz One-Time Signature (WOTS) keypairs** for
+the BitVM3 verification system. WOTS provides compact signatures that are
+efficient for on-chain verification on Bitcoin.
+
+For each counterparty relationship, the setup produces:
+
+- **4 WOTS signatures** that will be used during challenge assertion
+- **6 garbled circuit (GC) instances** that encode the ZK proof verification logic
+- A **ChallengeAssert transaction** size of under **10 kvB**, keeping Bitcoin
+  transaction costs manageable
+
+The WOTS keypairs and garbled circuit data are exchanged between participants
+via gRPC. Each participant stores the received data locally — this is the
+WOTS translation gadget that converts between the proof format and the
+garbled circuit input format.
+
+The storage requirement is approximately 43 GB per counterparty relationship
+due to the garbled circuit data.
+
+## Stage 4: Payout Signing
+
+Once the transaction graphs are constructed, you (the depositor) need to sign
+the payout transactions. This authorizes the conditions under which your BTC
+can be released after a successful DeFi operation.
+
+You retrieve the claim and payout transactions from the vault provider's
+**gRPC endpoint**, then sign two types of payout transactions for each claimer:
+
+- **Payout Optimistic** — For the happy path (no challenge). You sign input 0 of
+  this transaction, which spends from the original peg-in transaction.
+- **Payout (Challenge Path)** — For the dispute resolution path. You sign input 0,
+  which also spends from the peg-in transaction but references the assert
+  transaction.
+
+Your signatures are Schnorr signatures (64 bytes) using Taproot script-path
+spending. After signing, you submit all signatures back to the vault provider.
+
+If you're using the SDK, the `PayoutManager` handles this:
+
+```typescript
+// Sign optimistic payout
+const optimisticSig = await payoutManager.signPayoutOptimisticTransaction({
+  payoutOptimisticTxHex,
+  peginTxHex,
+  claimTxHex,
+  vaultProviderBtcPubkey,
+  vaultKeeperBtcPubkeys,
+  universalChallengerBtcPubkeys,
+});
+
+// Sign challenge-path payout
+const challengeSig = await payoutManager.signPayoutTransaction({
+  payoutTxHex,
+  peginTxHex,
+  assertTxHex,
+  vaultProviderBtcPubkey,
+  vaultKeeperBtcPubkeys,
+  universalChallengerBtcPubkeys,
+});
+```
+
+## Stage 5: ACK Collection
+
+After receiving your payout signatures, the vault provider distributes them to
+all vault keepers and collects acknowledgments (ACKs) from each participant.
+
+Each participant signs an ACK message:
+`keccak256("PEGIN_ACK:" + pegInTxHash)` using their Ethereum private key.
+
+The vault provider submits all ACKs to the **BTCVaultRegistry** contract on
+Ethereum via **gRPC**. Each ACK is verified via ECDSA signature recovery,
+confirming the signer is an authorized participant.
+
+The vault provider implements **periodic retry** for ACK collection — if an ACK
+from a participant is not received within the expected timeframe, the provider
+retries the request automatically until all required ACKs are gathered or the
+timeout expires.
+
+Once all required ACKs are collected (from the vault provider and every vault
+keeper), the vault status transitions from **Pending** to **Verified**. The
+event `PeginRequestVerified` is emitted.
+
+If all ACKs are not received before the peg-in activation timeout (measured in
+Ethereum blocks), the vault expires.
+
+## Stage 6: Bitcoin Broadcast
+
+With the vault now in **Verified** status and all transaction graphs fully
+signed, you can safely broadcast the Bitcoin transaction.
+
+You sign the unsigned peg-in transaction with your Bitcoin private key and
+broadcast it to the Bitcoin network. Your BTC is sent to the vault's Taproot
+script address, where it is locked with the pre-agreed spending conditions.
+
+If you're using the SDK, the `PeginManager.signAndBroadcast()` method handles
+PSBT construction, signing, and broadcasting via the mempool API.
+
+You then wait for the transaction to be mined and confirmed (the protocol
+requires a minimum confirmation depth for reorg protection).
+
+## Stage 7: Inclusion Proof & Activation
+
+Once the Bitcoin transaction has sufficient confirmations, the vault provider
+generates a Merkle inclusion proof demonstrating that the transaction was
+included in a Bitcoin block.
+
+The vault provider submits this proof to the Ethereum contract via its **gRPC
+endpoint**, which verifies it against the on-chain Bitcoin light client
+(BtcPrism). BtcPrism maintains Bitcoin block headers and can verify that a
+given transaction is part of the Bitcoin blockchain at a specific depth.
+
+**Taproot Output Verification.** The contract also verifies that the vault's
+Taproot output correctly commits to all expected participants — the depositor,
+vault provider, vault keepers, and universal challengers. This is done by
+reconstructing the expected Taproot script tree from the participant public keys
+and comparing it against the actual transaction output.
+
+Upon successful verification, the vault status transitions from **Verified** to
+**Active**. The vault is now ready to be used as collateral in DeFi applications.
+
+## After Activation
+
+Once active, the vault can be:
+
+- **Added as collateral** to a lending position on Aave v4 (or other integrated
+  applications).
+- **Combined with other vaults** — you can add multiple vaults to a single
+  lending position.
+- **Left idle** — an active vault doesn't need to be used immediately. It remains
+  available until you decide to use it or redeem it.
+
+The vault's Bitcoin remains locked on the Bitcoin network throughout. Only the
+accounting token (vaultBTC) is minted on Ethereum when you actively deposit the
+vault as collateral.
+
+## Timeouts and Expiration
+
+If the peg-in process is not completed within the activation timeout (a protocol
+parameter measured in Ethereum blocks), the vault expires. This prevents
+indefinite resource locking and ensures participants are not committed to stale
+transaction graphs.
+
+The timeout is measured from the block when the peg-in request was submitted. If
+the Bitcoin transaction is not broadcast and proven within this window, the vault
+cannot be activated.
+
+## Timeline Summary
+
+| Stage | Description | Duration |
+|-------|-------------|----------|
+| 1 | Deposit request on Ethereum | ~1 Ethereum block |
+| 2 | Transaction graph construction | ~1-2 minutes |
+| 3 | WOTS keypair setup with 6 GC instances | ~5-10 minutes |
+| 4 | Payout signing | ~30 seconds |
+| 5 | ACK collection (with periodic retry) | ~1-2 minutes |
+| 6 | Bitcoin broadcast + confirmations | ~30-60 minutes |
+| 7 | Inclusion proof & activation | ~1 Ethereum block |
+| **Total** | **End-to-end** | **~1 hour** |

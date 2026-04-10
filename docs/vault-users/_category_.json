@@ -1,0 +1,11 @@
+{
+  "position": 1,
+  "label": "Vault Users",
+  "collapsible": false,
+  "collapsed": false,
+  "className": "vault_users_sidebar_header",
+  "link": {
+    "type": "doc",
+    "id": "vault-users/vault-users"
+  }
+}
