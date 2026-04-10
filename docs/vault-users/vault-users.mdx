@@ -20,6 +20,27 @@ Trustless Bitcoin Vault (TBV) enables native Bitcoin to participate in DeFi
 Bitcoin blockchain in a self-custodial vault while smart contracts on DeFi chains
 can programmably control its ownership.
 
+```mermaid
+graph TB
+    subgraph Bitcoin["Bitcoin Network"]
+        BTC[Your BTC] --> Taproot[Taproot Script Address]
+        Taproot --> |Repayment| Payout[Payout to Depositor]
+        Taproot --> |Liquidation| Claim[Claim by Keeper]
+        Taproot --> |Fraud| Challenge[Challenge Resolution]
+    end
+    subgraph Ethereum["Ethereum"]
+        Registry[BTCVaultRegistry] --> vBTC[vaultBTC Token]
+        vBTC --> Aave[Aave v4 Lending]
+        Registry --> |Coordinates| Lifecycle[Vault Lifecycle]
+    end
+    subgraph Proofs["Proof Generation"]
+        ZK[ZK Proof SP1] --> BitVM[BitVM3 + WOTS]
+        BitVM --> |Verifies on| Bitcoin
+    end
+    Ethereum --> |HTLC Atomic Swap| Bitcoin
+    Bitcoin --> |Events monitored| Ethereum
+```
+
 ## Three-Layer Architecture
 
 TBV is built on a three-layer architecture that eliminates the need for trusted

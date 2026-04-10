@@ -21,6 +21,32 @@ process involves multiple participants coordinating to construct a set of
 pre-signed Bitcoin transactions that encode all possible outcomes (repayment,
 liquidation, fraud challenge) before any Bitcoin moves.
 
+```mermaid
+sequenceDiagram
+    participant D as Depositor
+    participant ETH as Ethereum (BTCVaultRegistry)
+    participant VP as Vault Provider
+    participant VK as Vault Keepers
+    participant UC as Universal Challengers
+    participant BTC as Bitcoin
+
+    D->>ETH: 1. submitPeginRequest
+    Note over ETH: Vault status: PendingPrePegInConfirmations
+    ETH-->>VP: PegInPending event
+    ETH-->>VK: PegInPending event
+    VP->>VK: 2. Create tx graphs + cross-sign via gRPC
+    VP->>VK: 3. WOTS keypair setup (6 GC instances)
+    UC->>VP: 3. Exchange WOTS/GC data
+    D->>VP: 4. Sign payout transactions
+    VP->>ETH: 5. Submit ACKs (all participants)
+    Note over ETH: Vault status: Verified
+    D->>BTC: 6. Sign & broadcast peg-in tx
+    Note over BTC: Wait for confirmations
+    VP->>ETH: 7. Submit Merkle inclusion proof
+    Note over ETH: Vault status: Active
+    Note over D: Vault ready — mint & borrow
+```
+
 ## Overview of the Peg-In Flow
 
 The peg-in process has nine stages:

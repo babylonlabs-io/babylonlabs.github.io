@@ -20,6 +20,33 @@ Ethereum and Bitcoin operations. This page covers the base protocol fees. For
 Aave-specific lending fees (interest rates, liquidation bonuses), see the
 Aave v4 Fees page.
 
+```mermaid
+graph TD
+    subgraph "Depositor Pays"
+        PIF[Peg-in Fee ETH]
+        PPTX[Pre-PegIn tx fee BTC]
+        GAS1[Ethereum Gas]
+    end
+    subgraph "Vault Provider Pays"
+        REG[Registration Fee ETH]
+        BOND[SetupChallenge Bond BTC]
+        CLMTX[Claim/Payout tx fees BTC]
+    end
+    subgraph "During Liquidation"
+        LIQFEE[Liquidation Fee]
+        FAIR[Fairness Payment]
+        LLPFEE[LLP Settlement Fee]
+    end
+    PIF --> FC[Fee Collector]
+    REG --> FC
+    LIQFEE --> FP[Protocol Fee Recipient]
+    FAIR --> D[Depositor]
+    LLPFEE --> FP
+    PPTX --> M[Bitcoin Miners]
+    BOND --> BTC[Locked on Bitcoin]
+    CLMTX --> M
+```
+
 ## Peg-In Fee
 
 When submitting a vault creation request, a peg-in fee is charged in ETH. This

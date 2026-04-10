@@ -20,6 +20,30 @@ with distinct responsibilities. Understanding these roles is important for
 grasping how the system maintains security without requiring trust in any single
 party.
 
+```mermaid
+graph LR
+    subgraph "Protocol Level"
+        UC[Universal Challengers]
+        SC[Security Council]
+    end
+    subgraph "Application Level"
+        VP[Vault Providers]
+        VK[Vault Keepers]
+    end
+    subgraph Users
+        D[Depositors]
+        L[Liquidators]
+    end
+    D --> |Creates vault with| VP
+    VP --> |Coordinates with| VK
+    VP --> |BaBe setup via gRPC| UC
+    UC --> |Monitors & challenges| VP
+    UC --> |Monitors & challenges| VK
+    SC --> |Emergency backstop| UC
+    L --> |Triggers liquidation| VK
+    VK --> |LLP Settlement| L
+```
+
 ## Vault Providers
 
 Vault providers are the primary infrastructure operators of the protocol. They

@@ -24,6 +24,35 @@ In both cases, the fundamental challenge is the same: proving to the Bitcoin
 network that the correct events happened on Ethereum — without Bitcoin having
 native smart contract capabilities.
 
+```mermaid
+sequenceDiagram
+    participant D as Depositor
+    participant ETH as Ethereum (Aave/Registry)
+    participant VP as Vault Provider
+    participant UC as Universal Challengers
+    participant BTC as Bitcoin
+
+    D->>ETH: 1. depositorRedeem(vaultId)
+    Note over ETH: Vault status: Redeemed, vaultBTC burned
+    ETH-->>VP: VaultRedeemable event
+    VP->>VP: 2. Generate 4-stage ZK proof (SP1 CUDA)
+    Note over VP: Beacon → Execution → Receipt → Groth16
+    VP->>BTC: 3. Broadcast Claim tx (with proof commitment)
+    Note over BTC: Challenge period begins
+    alt No challenge (happy path)
+        VP->>BTC: 4a. Broadcast Payout tx
+        BTC-->>D: BTC released to depositor
+    else Challenge raised
+        UC->>BTC: 4b. Broadcast Challenge tx
+        VP->>BTC: 5. Broadcast ChallengeAssertX/Y (WOTS + BitVM3)
+        alt Proof valid
+            BTC-->>D: Payout proceeds, challenger loses bond
+        else Proof invalid
+            BTC-->>UC: Challenger extracts secret, claimer loses bond
+        end
+    end
+```
+
 ## Redemption Triggers
 
 A vault can be redeemed when:
