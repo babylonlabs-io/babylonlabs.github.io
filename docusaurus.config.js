@@ -222,6 +222,19 @@ const plugins = [
           from: '/guides/architecture/babylon_genesis_modules/',
           to: '/guides/overview/babylon_genesis/architecture/',
         },
+        // Retired top-nav redirects
+        {
+          from: '/stakers/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/developers/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/operators/',
+          to: '/guides/overview/',
+        },
       ],
     },
   ],

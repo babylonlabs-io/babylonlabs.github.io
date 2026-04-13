@@ -1,6 +1,10 @@
 {
-    "label": "Drafting Proposals",
-    "position": 2,
-    "collapsible": true,
-    "collapsed": true
+  "label": "Drafting Proposals",
+  "position": 2,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "guides/overview/babylon_genesis/governance/drafting_proposals/drafting-proposals"
+  }
 }

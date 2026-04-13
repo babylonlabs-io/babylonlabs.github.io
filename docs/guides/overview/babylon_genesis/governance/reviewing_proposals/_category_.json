@@ -1,6 +1,10 @@
 {
-    "label": "Reviewing Proposals",
-    "position": 1,
-    "collapsible": true,
-    "collapsed": true
+  "label": "Reviewing Proposals",
+  "position": 1,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "guides/overview/babylon_genesis/governance/reviewing_proposals/proposal-review-guide"
+  }
 }

@@ -1,7 +1,11 @@
 {
-    "position": 1,
-    "label": "BTC Stakers",
-    "collapsible": false, 
-    "collapsed": true,
-    "className": "btc_stakers_sidebar_header"
-  } 
+  "position": 1,
+  "label": "BTC Stakers",
+  "collapsible": false,
+  "collapsed": true,
+  "className": "btc_stakers_sidebar_header",
+  "link": {
+    "type": "doc",
+    "id": "stakers/btc_stakers/btc_stakers"
+  }
+}

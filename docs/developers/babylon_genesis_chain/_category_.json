@@ -2,5 +2,9 @@
   "position": 1,
   "label": "Babylon Genesis Chain",
   "collapsible": true,
-  "collapsed": false
+  "collapsed": false,
+  "link": {
+    "type": "doc",
+    "id": "developers/babylon_genesis_chain/babylon_genesis_chain"
+  }
 }
