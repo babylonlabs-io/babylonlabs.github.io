@@ -20,8 +20,6 @@ Trustless Bitcoin Vaults (TBV) let you use your Bitcoin as collateral in DeFi
 Bitcoin blockchain in a self-custodial vault while you borrow stablecoins and
 other assets on Ethereum.
 
-{/* Diagram placeholder */}
-
 ## What You Can Do
 
 With TBV, the typical user flow looks like this:
@@ -52,9 +50,10 @@ without satisfying the conditions agreed upon during vault creation.
 ### Ethereum Coordination Layer
 
 The **BTCVaultRegistry** contract on Ethereum tracks vault state and coordinates
-the lifecycle of each vault. When you create or redeem a vault, an atomic swap
-mechanism ensures the operation either completes fully or not at all -- there are
-no partial states that could put your BTC at risk.
+the lifecycle of each vault. During creation, it records the vault request,
+participant acknowledgments, and the Bitcoin inclusion proof that activates the
+vault. During redemption, it records the Ethereum-side state changes that allow
+the Bitcoin release flow to begin.
 
 ### Proof Generation Layer
 

@@ -2,7 +2,8 @@ require('dotenv').config();
 const { themes } = require('prism-react-renderer');
 const { languageTabs } = require('./static/languageTabs.cjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
-const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const ALGOLIA_INDEX_NAME =
+  BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
 const code_themes = {
   light: themes.github,
   dark: themes.dracula,
@@ -52,18 +53,17 @@ const openapiPlugins = [
           hideSendButton: false,
           showSchemas: false,
         },
-        
-          cometBFT:{
-            specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml'
-          ,outputDir: 'docs/api/comet-bft',
+
+        cometBFT: {
+          specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml',
+          outputDir: 'docs/api/comet-bft',
           sidebarOptions: {
             groupPathsBy: 'tag',
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,
           showSchemas: false,
-
-          }
+        },
       },
     },
   ],
@@ -162,15 +162,15 @@ const plugins = [
         },
         {
           from: '/guides/governance/drafting_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting_proposals_overview/',
         },
         {
           from: '/guides/governance/reviewing_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals_overview/',
         },
         {
           from: '/guides/governance/submit_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
         },
         // Specifications redirects
         {
@@ -188,19 +188,19 @@ const plugins = [
         // Network redirects (Babylon Genesis)
         {
           from: '/guides/networks/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/mainnet/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/testnet/',
-          to: '/guides/overview/babylon_genesis/networks/testnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         // Network redirects (Bitcoin -> developers)
         {
@@ -272,7 +272,7 @@ const plugins = [
   tailwindPlugin,
   webpackReactProvider,
   ...docs_plugins,
-  ...openapiPlugins
+  ...openapiPlugins,
 ];
 
 // @ts-ignore
@@ -311,17 +311,17 @@ const config = {
         },
         blog: false,
         theme: {
-          customCss: [
-            require.resolve('./src/css/custom.css')
-          ],
+          customCss: [require.resolve('./src/css/custom.css')],
         },
         sitemap: {
           ignorePatterns: ['**/tags/**', '/api/*'],
         },
-        gtag: process.env.TRACKING_ID ? {
-          trackingID: process.env.TRACKING_ID,
-          anonymizeIP: true,
-        } : false,
+        gtag: process.env.TRACKING_ID
+          ? {
+              trackingID: process.env.TRACKING_ID,
+              anonymizeIP: true,
+            }
+          : false,
       }),
     ],
   ],
@@ -380,9 +380,10 @@ const config = {
                 label: 'Babylon gRPC',
                 to: '/api/babylon-gRPC/babylon-grpc-api-docs',
               },
-              {label: 'CometBFT',
-                to:'api/comet-bft/babylon-grpc-api-docs'
-              }
+              {
+                label: 'CometBFT',
+                to: '/api/comet-bft/babylon-grpc-api-docs',
+              },
             ],
           },
           {
@@ -476,7 +477,7 @@ const config = {
     }),
 
   // Conditionally enable custom webpack config only if SWC is available
-  ...((() => {
+  ...(() => {
     try {
       require.resolve('swc-loader');
       require('@swc/core');
@@ -500,10 +501,13 @@ const config = {
         },
       };
     } catch (e) {
-      console.warn('SWC not available, using Docusaurus default Babel loader:', e.message);
+      console.warn(
+        'SWC not available, using Docusaurus default Babel loader:',
+        e.message
+      );
       return {}; // No custom webpack config, use Docusaurus defaults
     }
-  })()),
+  })(),
   customFields: {
     apiBaseUrl: process.env.API_BASE_URL || '',
   },

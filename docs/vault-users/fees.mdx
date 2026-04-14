@@ -16,8 +16,6 @@ This page covers the fees you encounter when using Trustless Bitcoin Vaults.
 For Aave-specific lending fees (interest rates, liquidation bonuses), see the
 Aave v4 documentation.
 
-{/* Diagram placeholder */}
-
 ## What You Pay
 
 ### Peg-In Fee
@@ -74,14 +72,14 @@ worth of value to the liquidator.
 ### Fairness Payment
 
 Even during liquidation, you receive a **fairness payment** -- a portion of
-value returned to you as the original depositor. This is denominated in the
-fairness payment token (typically USDC).
+value returned to you as the original depositor. The exact settlement asset
+depends on the liquidation flow.
 
-### Core Spoke Liquidation Fee
+### Aave Liquidation Fee
 
-When a lending position on the Aave v4 Core Spoke is liquidated, the protocol
-charges a fee calculated as a percentage of the liquidation bonus. This is paid
-by the liquidator as part of the liquidation execution.
+When an Aave-backed lending position is liquidated, the protocol charges a fee
+calculated as a percentage of the liquidation bonus. This is paid by the
+liquidator as part of the liquidation execution.
 
 ## BTCVaultSwap Fees
 
@@ -107,14 +105,13 @@ You pay:
   +-- Bitcoin tx fee (BTC) ---------------> Bitcoin miners
   +-- Ethereum gas (ETH) -----------------> Ethereum validators
 
-Vault provider pays:
-  +-- Registration fee (ETH, one-time) ---> Protocol fee collector
-  +-- Challenge bonds (BTC) --------------> Locked on Bitcoin
+Other participants pay:
   +-- Claim/payout tx fees (BTC) ---------> Bitcoin miners
-  +-- Ethereum gas for proofs (ETH) ------> Ethereum validators
+  +-- Ethereum gas for redemption proofs -> Ethereum validators
+  +-- Challenge bonds (BTC) --------------> Locked on Bitcoin
 
 During liquidation:
-  +-- Liquidation fee --------------------> Protocol fee recipient
+  +-- Liquidation fee --------------------> Protocol fee collector
   +-- Fairness payment -------------------> You (the depositor)
-  +-- Settlement fees --------------------> Protocol fee recipient
+  +-- Settlement fees --------------------> Protocol fee collector
 ```

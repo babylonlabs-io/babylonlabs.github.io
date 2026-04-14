@@ -17,8 +17,6 @@ The Trustless Bitcoin Vault protocol relies on several types of participants
 working together. No single party controls your Bitcoin -- security comes from
 the interaction between independent actors with different roles and incentives.
 
-{/* Diagram placeholder */}
-
 ## Vault Providers
 
 Vault providers are the infrastructure operators you interact with most
@@ -33,8 +31,8 @@ the process.
   acknowledgments.
 - **Generate proofs for redemption.** When you redeem your vault, the vault
   provider generates the zero-knowledge proof that allows Bitcoin to verify the
-  Ethereum-side events. This is computationally intensive work requiring
-  specialized GPU infrastructure.
+  Ethereum-side events. This is computationally intensive proving work handled
+  by the provider's infrastructure.
 - **Manage Bitcoin claims.** The vault provider broadcasts the claim and payout
   transactions on Bitcoin during the redemption process, delivering your BTC
   back to you.

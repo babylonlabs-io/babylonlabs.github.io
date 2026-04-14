@@ -25,16 +25,14 @@ is protected from the start.
 
 You can perform vault creation through the **web portal** or the **CLI**.
 
-{/* Diagram placeholder */}
-
 ## The User Experience
 
 At a high level, creating a vault involves three phases:
 
 ### Phase 1: Initiate
 
-You start by submitting a vault creation request on Ethereum and broadcasting
-a preliminary Bitcoin transaction. Specifically:
+You start by submitting a vault creation request on Ethereum and preparing for
+your Bitcoin deposit. Specifically:
 
 - You declare your intent to create a vault by submitting a request to the
   **BTCVaultRegistry** contract on Ethereum. This includes your Bitcoin public
@@ -54,7 +52,7 @@ any action beyond signing when prompted. Here is what happens behind the scenes:
 
 1. **Transaction graph construction.** The vault provider and vault keepers
    create a complete set of pre-signed Bitcoin transactions covering every
-   possible vault outcome. These participants coordinate via secure channels and
+   possible vault outcome. These participants coordinate off-chain and
    cross-sign each other's transaction sets.
 
 2. **WOTS keypair setup.** Participants generate Winternitz One-Time Signature
@@ -101,9 +99,9 @@ Once active, your vault can be:
 - **Left idle** until you are ready to use it -- an active vault does not need
   to be used immediately.
 
-Your Bitcoin remains locked on the Bitcoin network throughout. The accounting
-token (vaultBTC) is minted on Ethereum only when you actively deposit the vault
-as collateral.
+Your Bitcoin remains locked on the Bitcoin network throughout. Once activated,
+the vault can be deposited into the Aave integration on Ethereum and used as
+collateral there.
 
 ## Timeouts and Refunds
 
