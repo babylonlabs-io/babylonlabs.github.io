@@ -7,271 +7,129 @@ keywords:
   - Vault keeper
   - Universal challenger
   - Security council
-  - BTCVaultRegistry
-  - WOTS
+  - Protocol participants
   - Liquidation Liquidity Provider
-  - LLP
 ---
 
 # Protocol Actors
 
-The Trustless Bitcoin Vault protocol involves several types of participants, each
-with distinct responsibilities. Understanding these roles is important for
-grasping how the system maintains security without requiring trust in any single
-party.
+The Trustless Bitcoin Vault protocol relies on several types of participants
+working together. No single party controls your Bitcoin -- security comes from
+the interaction between independent actors with different roles and incentives.
 
-```mermaid
-graph LR
-    subgraph "Protocol Level"
-        UC[Universal Challengers]
-        SC[Security Council]
-    end
-    subgraph "Application Level"
-        VP[Vault Providers]
-        VK[Vault Keepers]
-    end
-    subgraph Users
-        D[Depositors]
-        L[Liquidators]
-    end
-    D --> |Creates vault with| VP
-    VP --> |Coordinates with| VK
-    VP --> |BaBe setup via gRPC| UC
-    UC --> |Monitors & challenges| VP
-    UC --> |Monitors & challenges| VK
-    SC --> |Emergency backstop| UC
-    L --> |Triggers liquidation| VK
-    VK --> |LLP Settlement| L
-```
+{/* Diagram placeholder */}
 
 ## Vault Providers
 
-Vault providers are the primary infrastructure operators of the protocol. They
-coordinate the vault creation process, generate zero-knowledge proofs for
-redemption, and maintain the off-chain systems that keep the protocol running.
+Vault providers are the infrastructure operators you interact with most
+directly. When you create a vault, you select a vault provider to coordinate
+the process.
+
+**What they do for you:**
+
+- **Coordinate vault creation.** When you submit a vault request, the vault
+  provider's systems automatically handle the complex setup -- constructing
+  transaction graphs, exchanging signatures with vault keepers, and collecting
+  acknowledgments.
+- **Generate proofs for redemption.** When you redeem your vault, the vault
+  provider generates the zero-knowledge proof that allows Bitcoin to verify the
+  Ethereum-side events. This is computationally intensive work requiring
+  specialized GPU infrastructure.
+- **Manage Bitcoin claims.** The vault provider broadcasts the claim and payout
+  transactions on Bitcoin during the redemption process, delivering your BTC
+  back to you.
+- **Submit inclusion proofs.** After you broadcast your Bitcoin during vault
+  creation, the vault provider monitors for confirmations and submits the
+  proof that activates your vault.
+
+Vault providers are registered on-chain and must meet infrastructure and
+economic requirements to participate.
+
+## Vault Keepers
+
+Vault keepers serve as the economic backstop for vault security. They are
+independent operators who co-sign transaction graphs during vault creation and
+can step in during liquidation scenarios.
 
 **What they do:**
 
-- **Peg-in coordination.** When a depositor submits a vault creation request, the
-  vault provider's daemon detects the on-chain event and automatically begins
-  constructing the transaction graph. It creates pre-signed Bitcoin transactions,
-  exchanges signatures with vault keepers, and collects the depositor's payout
-  signatures.
-- **ACK submission.** The vault provider collects acknowledgments from all
-  participants and submits them on-chain, advancing the vault from Pending to
-  Verified status.
-- **Inclusion proof generation.** After the depositor broadcasts their Bitcoin
-  transaction, the vault provider monitors the Bitcoin network for confirmations
-  and submits the Merkle inclusion proof to Ethereum.
-- **ZK proof generation.** When a vault is redeemed, the vault provider generates
-  the 4-stage aggregated burn event proof using SP1 CUDA provers. This is
-  computationally intensive work requiring GPU infrastructure.
-- **Bitcoin claim management.** The vault provider broadcasts claim and payout
-  transactions on Bitcoin during the redemption process.
+- **Co-sign transactions.** During vault creation, vault keepers create their
+  own set of pre-signed Bitcoin transactions and cross-sign with the vault
+  provider. This means multiple independent parties hold the transaction data
+  needed for every vault outcome.
+- **Provide liquidation liquidity.** In liquidation scenarios, vault keepers can
+  act as Liquidation Liquidity Providers (LLPs), acquiring liquidated vaults and
+  handling the Bitcoin claim process. This ensures liquidated vaults are settled
+  promptly.
+- **Participate in challenges.** As holders of pre-signed transactions and WOTS
+  key material, vault keepers can challenge fraudulent claims if they detect
+  them.
 
-**Registration.** Vault providers must register on-chain by providing their
-Ethereum address, a Bitcoin x-only public key, and a BTC Proof of Possession
-(proving they control the Bitcoin key). Registration requires a non-refundable
-fee and must be acknowledged by vault keepers.
-
-**Infrastructure requirements.** Running a vault provider requires:
-- Bitcoin full node
-- Ethereum execution and consensus clients
-- GPU infrastructure for proof generation
-- Significant storage for garbled circuits (~43 GB per counterparty relationship)
-- gRPC endpoints with TLS support for secure inter-daemon communication
-
-## Vault Keepers (Well Keep Her Operators)
-
-Vault keepers are application-specific participants who serve as the economic
-backstop for vault security. In the context of the Aave v4 integration, vault
-keepers ensure that liquidated vaults can be properly claimed on Bitcoin.
-
-**What they do:**
-
-- **Transaction graph participation.** During vault creation, vault keepers create
-  their own transaction graphs and cross-sign with the vault provider. This
-  ensures multiple independent parties hold the pre-signed transactions needed for
-  all vault outcomes.
-- **ACK provision.** Vault keepers submit on-chain acknowledgments during the
-  peg-in process, confirming they have properly set up their transaction graphs.
-- **Redemption claims.** Vault keepers can act as claimers for vault redemption,
-  particularly in liquidation scenarios where they serve as Liquidation Liquidity
-  Providers (LLPs) acquiring vaults through the liquidation settlement process.
-- **Challenge participation.** As holders of pre-signed transaction graphs and
-  WOTS keypairs, vault keepers can participate in the challenge mechanism if they
-  detect fraudulent claims. The WOTS signatures enable efficient verification
-  through the ChallengeAssertX and ChallengeAssertY split transactions.
-
-**Registration.** Vault keepers are registered per application through the
-**BTCVaultRegistry** contract. Each application maintains a versioned set of
-vault keepers (ETH + BTC key pairs). Vault keepers are immutable once registered
-for a given version — changes require creating a new version.
-
-**Infrastructure requirements.** Running a vault keeper requires:
-- Bitcoin full node
-- Ethereum execution and consensus clients
-- gRPC endpoints with TLS support for secure inter-daemon communication
-- Storage for garbled circuits and WOTS data
-
-**Relationship to LLPs.** In the Aave v4 integration, registered vault keepers
-can also act as Liquidation Liquidity Providers (LLPs) in the liquidation
-settlement process, acquiring liquidated vaults at a discount and redeeming the
-underlying Bitcoin.
+Vault keepers are registered per application through the BTCVaultRegistry
+contract and are versioned -- changes require creating a new version, so
+existing vaults are never affected by keeper changes.
 
 ## Universal Challengers
 
-Universal challengers are protocol-level fraud monitors. Their role is to detect
-and challenge any fraudulent proof submissions during the vault redemption
-process, regardless of which application the vault belongs to.
+Universal challengers are protocol-level fraud monitors. Their job is to watch
+for invalid proof submissions during vault redemption and challenge them.
 
 **What they do:**
 
-- **Fraud monitoring.** Universal challengers watch for claim transactions on
-  Bitcoin and verify that the associated ZK proofs are valid. If they detect an
-  invalid proof, they can initiate a challenge.
-- **Challenge execution.** When fraud is detected, a universal challenger
-  broadcasts a challenge transaction on Bitcoin during the challenge period. This
-  triggers the dispute resolution process using BitVM3 garbled circuits, where
-  WOTS signatures are used to verify the proof data through the ChallengeAssertX
-  and ChallengeAssertY split transactions.
-- **Taproot commitment.** Universal challengers' Bitcoin public keys are committed
-  into every vault's Taproot script tree. This means they are cryptographically
-  bound to each vault and have the ability to challenge claims.
+- **Monitor all claims.** Universal challengers watch for claim transactions on
+  Bitcoin across all vaults and verify that the associated proofs are valid.
+- **Challenge fraud.** If an invalid proof is detected, a universal challenger
+  broadcasts a challenge transaction on Bitcoin, triggering the dispute
+  resolution process using BitVM3 garbled circuits and WOTS signatures.
+- **Earn rewards.** Challengers who successfully prove fraud claim the
+  fraudulent claimer's bond as a reward.
 
-**Registration.** Universal challengers are registered at the protocol level (not
-per-application) through the ProtocolParams contract. They are stored as a
-versioned array of ETH + BTC key pairs. Each vault records which version of
-universal challengers was active when it was created, and that set remains fixed
-for the vault's entire lifetime.
+Universal challengers' public keys are committed into every vault's Taproot
+script, giving them the cryptographic ability to challenge any claim. They
+operate at the protocol level, not per-application, providing security across
+all vaults.
 
-**Infrastructure requirements:**
-- Bitcoin monitoring node
-- gRPC endpoints with TLS support for receiving challenge data
-
-**Why they matter.** Universal challengers are the protocol's last line of
-defense against fraudulent redemptions. Even if a vault provider and all vault
-keepers collude, universal challengers can prevent invalid Bitcoin claims by
-initiating challenges. Their participation is incentivized through challenge
-bonds — challengers who successfully prove fraud claim the claimer's bond.
+**Why they matter.** Even if a vault provider and all vault keepers were to
+collude, universal challengers can prevent invalid Bitcoin claims by initiating
+challenges. They are the protocol's last line of defense.
 
 ## Security Council
 
-The security council is a group of trusted entities whose Bitcoin public keys are
-committed into the protocol's offchain parameters. They serve as an emergency
-backstop for extreme scenarios.
+The security council is a group of entities that serves as an emergency
+backstop. Their keys are committed into the protocol's parameters.
 
 **What they do:**
 
-- **Emergency intervention.** The security council can intervene if the normal
-  challenge mechanism fails to prevent fraud, or if there is a critical protocol
-  issue that requires immediate action.
-- **Quorum-based decisions.** Actions require a configurable quorum of security
-  council member signatures, preventing any single council member from acting
-  unilaterally.
+- **Emergency intervention only.** The security council can intervene if the
+  normal challenge mechanism fails or if a critical protocol issue requires
+  immediate action.
+- **Quorum-based decisions.** Any action requires multiple council member
+  signatures, preventing any single member from acting alone.
 
-**Configuration.** Security council keys and quorum requirements are set through
-the ProtocolParams contract as versioned offchain parameters. Changes to the
-security council composition create a new parameter version and only affect newly
-created vaults.
+The security council is **not** involved in normal protocol operation. The
+protocol is designed to function entirely without their intervention under
+standard conditions.
 
-The security council is not involved in normal protocol operation. Their role is
-strictly limited to emergency scenarios, and the protocol is designed to function
-without their intervention under normal conditions.
+## Why Multiple Actors Means Trustless
 
-## How Actors Interact During Key Operations
+The reason TBV can be trustless is that no single party has unilateral control
+over your Bitcoin:
 
-### During Vault Creation (Peg-In)
+- Your vault provider coordinates the process, but vault keepers independently
+  co-sign all transactions.
+- If your vault provider disappears, you can self-claim using your WOTS key
+  material.
+- If anyone submits a fraudulent proof, universal challengers will catch it.
+- If all else fails, the security council provides a last-resort backstop.
 
-```
-Depositor  ──submits request──>  Ethereum Contract
-                                      │
-                                 emits PegInPending
-                                      │
-              ┌───────────────────────┴───────────────────────┐
-              ▼                                               ▼
-      Vault Provider                                   Vault Keepers
-   (creates tx graphs)                              (create tx graphs)
-              │                                               │
-              └──────── cross-sign via gRPC ────────────────┘
-                                │
-                    Depositor signs payouts
-                                │
-                    Vault Provider collects ACKs
-                                │
-                    All ACKs submitted on-chain
-                                │
-                    Depositor broadcasts BTC tx
-                                │
-                    Vault Provider submits inclusion proof
-                                │
-                          Vault Active
-```
+This layered approach means you do not need to trust any individual participant
+-- security comes from the system's design.
 
-### During Liquidation
+## Actor Summary
 
-```
-   Health Factor < 1.0 detected
-              │
-       Liquidator repays debt
-              │
-    All vaults seized & ownership transferred
-              │
-     ┌────────┴─────────┐
-     ▼                   ▼
-  LLP Settlement     Direct Claim
-  (sell vault)       (if liquidator has BTC infra)
-     │
-  LLP buys vault
-  (registered vault keeper)
-     │
-  ZK proof generated
-     │
-  Claim on Bitcoin
-     │
-  Challenge period (universal challengers monitor)
-     │
-  BTC released to redeemer
-```
-
-### During Challenge
-
-```
-  Claimer broadcasts claim on Bitcoin
-              │
-  Universal Challenger detects invalid proof
-              │
-  Challenge transaction broadcast
-              │
-  Claimer must respond with ChallengeAssertX/Y transactions
-  (WOTS signatures verified via BitVM3 garbled circuits)
-              │
-     ┌────────┴─────────┐
-     ▼                   ▼
-  Proof Valid         Proof Invalid
-  (payout proceeds)   (challenger extracts secret)
-  (challenger loses    (claimer loses bond)
-   bond)               (BTC protected)
-```
-
-## Actor Responsibilities Summary
-
-| Actor | Operates | Registered | Versioned | Main Responsibility |
-|-------|----------|------------|-----------|-------------------|
-| Vault Provider | Bitcoin + Ethereum nodes, GPU prover | Per-application | No | Vault lifecycle, proof generation |
-| Vault Keeper | Bitcoin + Ethereum nodes | Per-application | Yes | Transaction graph co-signing, LLP |
-| Universal Challenger | Bitcoin monitoring | Protocol-level | Yes | Fraud detection, challenges |
-| Security Council | Emergency multisig | Protocol-level | Yes (offchain params) | Emergency intervention only |
-
-## Note on Permissionless Participation
-
-The protocol is designed to progressively decentralize participation. While vault
-providers and vault keepers currently require registration, the challenge
-mechanism is designed so that universal challengers provide permissionless
-security monitoring. Anyone with the economic incentive and technical capability
-can monitor for fraud and earn rewards by challenging invalid claims.
-
-Liquidation on the Ethereum side is also permissionless — any address can call
-the liquidation function when a position's health factor drops below 1.0. This
-ensures positions are liquidated promptly regardless of whether dedicated
-liquidator bots are running.
+| Actor | Role | Scope | Key Responsibility |
+|-------|------|-------|--------------------|
+| Vault Provider | Infrastructure operator | Per-application | Vault lifecycle management, proof generation |
+| Vault Keeper | Security backstop | Per-application (versioned) | Transaction co-signing, liquidation settlement |
+| Universal Challenger | Fraud monitor | Protocol-wide (versioned) | Detecting and challenging invalid proofs |
+| Security Council | Emergency backstop | Protocol-wide | Emergency intervention only |

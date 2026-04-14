@@ -16,203 +16,134 @@ keywords:
 
 Vault redemption (also called **peg-out**) is the process of unlocking your
 Bitcoin on the Bitcoin network after you are done using it as collateral. There
-are two paths to redemption: **depositor redemption** (the normal case, after
-repaying your loan) and **liquidation redemption** (when a position is liquidated
-and the vault is seized).
+are three paths to getting your BTC back, depending on the situation.
 
-In both cases, the fundamental challenge is the same: proving to the Bitcoin
-network that the correct events happened on Ethereum — without Bitcoin having
-native smart contract capabilities.
+{/* Diagram placeholder */}
 
-```mermaid
-sequenceDiagram
-    participant D as Depositor
-    participant ETH as Ethereum (Aave/Registry)
-    participant VP as Vault Provider
-    participant UC as Universal Challengers
-    participant BTC as Bitcoin
+## Redemption Paths
 
-    D->>ETH: 1. depositorRedeem(vaultId)
-    Note over ETH: Vault status: Redeemed, vaultBTC burned
-    ETH-->>VP: VaultRedeemable event
-    VP->>VP: 2. Generate 4-stage ZK proof (SP1 CUDA)
-    Note over VP: Beacon → Execution → Receipt → Groth16
-    VP->>BTC: 3. Broadcast Claim tx (with proof commitment)
-    Note over BTC: Challenge period begins
-    alt No challenge (happy path)
-        VP->>BTC: 4a. Broadcast Payout tx
-        BTC-->>D: BTC released to depositor
-    else Challenge raised
-        UC->>BTC: 4b. Broadcast Challenge tx
-        VP->>BTC: 5. Broadcast ChallengeAssertX/Y (WOTS + BitVM3)
-        alt Proof valid
-            BTC-->>D: Payout proceeds, challenger loses bond
-        else Proof invalid
-            BTC-->>UC: Challenger extracts secret, claimer loses bond
-        end
-    end
-```
+### 1. Normal Redemption (You Repay Your Loan)
 
-## Redemption Triggers
+This is the standard path. When you are ready to get your Bitcoin back:
 
-A vault can be redeemed when:
+1. **Repay your loan.** Pay back any outstanding debt on Aave v4.
+2. **Withdraw your vault.** Remove the vault from your lending position. It
+   transitions from InUse to Available.
+3. **Initiate redemption.** Call the redemption function through the web portal
+   or CLI. The vault transitions to **Redeemed** status and any associated
+   vaultBTC tokens are burned.
 
-1. **You withdraw it from your lending position** after repaying all debt. The
-   vault transitions from InUse to Available, and you can then initiate a
-   depositor redemption.
-2. **Your position is liquidated.** A liquidator repays your debt, seizes your
-   vaults, and the vault transitions directly to Redeemed. The liquidator (or a
-   subsequent arbitrageur) can then claim the underlying Bitcoin.
+From here, the vault provider handles the Bitcoin-side claim process
+automatically. You receive your BTC at the Bitcoin address you specified during
+vault creation.
 
-In both cases, the on-chain contract emits a `VaultRedeemable` event containing
-the vault ID, the BTC amount, the public keys of authorized redeemers, and the
-depositor's address. This event is the starting signal for the off-chain proof
-generation and Bitcoin claim process.
+### 2. Self-Claim (WOTS Key Fallback)
 
-## Depositor Redemption (Normal Path)
+If the vault provider becomes unresponsive after you have initiated redemption,
+you are not stuck. As a depositor, you hold WOTS key material from vault
+creation that enables you to initiate a claim on Bitcoin directly. This
+self-claim path ensures you can always recover your BTC, even if your vault
+provider goes offline.
 
-When you have repaid all debt and withdrawn your vault from the lending position:
+### 3. Liquidation
 
-1. You call `depositorRedeem(vaultId)` on the AaveIntegrationController.
-2. The contract validates that you are the original depositor and the vault is in
-   Available status.
-3. The vault status transitions to **Redeemed** (terminal state).
-4. The contract burns any associated vaultBTC tokens.
-5. A `VaultRedeemable` event is emitted with the vault provider's BTC public key
-   as the authorized redeemer.
+If your lending position's health factor drops below 1.0, your position can be
+liquidated by any participant on the network:
 
-The vault provider, upon detecting this event, initiates the Bitcoin-side claim
-process.
+1. A liquidator repays your debt and seizes your vaults.
+2. The vaults transition to **Redeemed** status.
+3. The liquidator (or a vault keeper acting as a Liquidation Liquidity Provider)
+   claims the underlying Bitcoin through the same proof-and-claim mechanism.
 
-## Liquidation Redemption
+During liquidation, you receive a **fairness payment** -- a portion of value
+returned to you even though your position was liquidated. The liquidator pays
+a fee to the protocol.
 
-When your position is liquidated:
+## Activate-and-Redeem Shortcut
 
-1. A liquidator calls `liquidateCorePosition()` and repays your debt.
-2. All vaults in the position are seized — ownership transfers from you to the
-   liquidator.
-3. Vaults transition to Redeemed status.
-4. `VaultRedeemable` events are emitted, but this time the authorized redeemer is
-   the liquidator (not the vault provider).
+If you have a vault in **Active** status that you have not yet used as
+collateral, you can skip the lending step entirely and go straight to
+redemption. This is useful if you created a vault but changed your mind before
+borrowing anything.
 
-The liquidator can then either claim the BTC directly or sell the vault through
-the liquidation settlement process to an arbitrageur, who will handle the Bitcoin
-claim.
+## What Happens Behind the Scenes
 
-## The ZK Proof Generation Process
+Regardless of which path triggers the redemption, the same trustless mechanism
+ensures your Bitcoin is released correctly.
 
-The key innovation of the protocol is how Bitcoin learns about events that
-happened on Ethereum. Since Bitcoin cannot natively verify Ethereum state, the
-protocol uses zero-knowledge proofs generated off-chain and verified on Bitcoin
-using BitVM3 garbled circuits.
+### ZK Proof Generation
 
-### 4-Stage Aggregated Burn Event Proof
+When a vault is redeemed and vaultBTC is burned on Ethereum, the protocol needs
+to prove to the Bitcoin network that this actually happened. Since Bitcoin cannot
+natively verify Ethereum state, a zero-knowledge proof is generated:
 
-When a vault is redeemed and vaultBTC is burned on Ethereum, a proof must be
-generated that this burn actually occurred. This proof has four stages:
+1. **Beacon finality proof** -- Confirms that a specific Ethereum block has been
+   finalized.
+2. **Execution finality proof** -- Links the finalized block to the execution
+   layer containing the burn transaction.
+3. **Receipt inclusion proof** -- Proves the specific burn event exists in a
+   transaction receipt within that block.
+4. **Compressed Groth16 proof** -- Aggregates and compresses the above into a
+   compact 128-byte proof plus 32 bytes of public input.
 
-**Stage 1: Beacon Finality Proof.** Proves that a specific Ethereum beacon chain
-block has been finalized by the consensus layer. This establishes that the
-Ethereum state at that block height is final and cannot be reverted.
+This entire process is handled by the vault provider's infrastructure using
+SP1 CUDA provers and typically takes **5-10 minutes**. You do not need to do
+anything during this step.
 
-**Stage 2: Execution Finality Proof.** Links the beacon chain block to the
-execution layer, proving that a specific execution block (containing the burn
-transaction) is part of the finalized chain.
+### Claim and Payout on Bitcoin
 
-**Stage 3: Receipt Inclusion Proof.** Proves that the specific `BurnExecuted`
-event log exists in a transaction receipt within the finalized block. This is the
-actual proof that vaultBTC was burned for a specific vault.
+Once the proof is ready, the Bitcoin-side claim process begins:
 
-**Stage 4: Compressed Groth16 Proof.** The first three proofs are aggregated and
-compressed into a single Groth16 proof — just 128 bytes of proof data plus 32
-bytes of public input. This compact proof is what gets verified on the Bitcoin
-network.
+1. **Claim transaction.** The authorized redeemer broadcasts a claim transaction
+   on Bitcoin, spending from the vault's Taproot output. This includes a
+   commitment to the ZK proof.
 
-The entire proof generation pipeline uses SP1 CUDA provers and typically takes
-5-10 minutes per vault on GPU hardware. This is handled by the vault provider's
-infrastructure.
+2. **Challenge period.** A timelock window opens during which universal
+   challengers can verify the proof. If everything is valid (the expected case),
+   no challenge is raised.
 
-## Claim and Challenge Periods
+3. **Payout transaction.** After the challenge period passes without dispute,
+   the payout transaction is broadcast, releasing your BTC to the designated
+   Bitcoin address.
 
-Once the proof is generated, the Bitcoin-side claim process begins. This uses a
-carefully designed sequence of transactions with timelocks and challenge
-opportunities.
+This is the **optimistic path** -- in a properly functioning system, the vast
+majority of redemptions follow it without any challenges.
 
-### The Claim Process
+### If a Challenge Is Raised
 
-1. **Claim Transaction.** The authorized redeemer (vault provider or liquidator)
-   broadcasts a claim transaction on Bitcoin, spending from the vault's Taproot
-   output. This transaction includes a commitment to the ZK proof.
+In the rare case that a universal challenger detects an invalid proof:
 
-2. **Payout (Optimistic Path).** If no challenge is raised within the timelock
-   period, the payout transaction is broadcast, releasing the BTC to the
-   depositor's Bitcoin address. This is the happy path — in a properly functioning
-   system, most redemptions follow this path.
+1. The challenger broadcasts a challenge transaction during the timelock window.
+2. The claimer responds by posting their proof on-chain via ChallengeAssert
+   transactions, which are verified using BitVM3 garbled circuits and WOTS
+   signatures.
+3. **If the proof is valid:** The payout proceeds and the challenger loses their
+   bond.
+4. **If the proof is invalid:** The challenger extracts the claimer's secret,
+   proving fraud. The claimer loses their bond and your BTC is protected.
 
-3. **Challenge Period.** During the timelock window, any universal challenger can
-   challenge the claim by broadcasting a challenge transaction. Challenges are
-   appropriate when a claim is made with an invalid proof.
-
-### Challenge Resolution
-
-If a challenge is raised:
-
-1. **Assert Transaction.** The claimer broadcasts an assert transaction, providing
-   their ZK proof on-chain.
-
-2. **Verification via BitVM3.** The proof is verified using BitVM3 garbled
-   circuits. These circuits were pre-exchanged between participants during vault
-   creation (Stage 2 of the peg-in process).
-
-3. **Outcomes:**
-   - **Valid proof:** The claimer's assertion holds. The payout transaction
-     proceeds, releasing BTC to the correct recipient. The challenger loses their
-     bond.
-   - **Invalid proof:** The challenger can extract the claimer's secret from the
-     garbled circuit off-chain, proving fraud. The challenger claims the claimer's
-     bond, and the vault's BTC is protected.
-
-### Timelock Parameters
-
-The protocol uses Bitcoin block-based timelocks for the claim and challenge
-periods:
-
-- **t1 (Claimer Proof Time):** Time window for the claimer to post their proof
-  after a claim.
-- **t2 (Challenger Challenge Time):** Time window for challengers to submit a
-  challenge after seeing a claim.
-- **t3 (Claimer Disprove Time):** Time window for the claimer to disprove a
-  challenge.
-
-These parameters are set as protocol-level configuration (offchain parameters)
-and apply to all vaults. They are versioned, so changes to timelock values only
-affect newly created vaults — existing vaults retain the parameters from when
-they were created.
+Challenges are a security mechanism, not a routine operation. They serve as a
+deterrent against fraud.
 
 ## Bitcoin Transaction Costs
 
-The normal redemption path (no challenge) requires three Bitcoin transactions:
+The normal redemption path (no challenge) involves a small number of Bitcoin
+transactions with a total cost of approximately **2,000-3,000 satoshis** in
+miner fees at typical fee rates. These costs are paid by the claimer (vault
+provider or vault keeper), not by you.
 
-- **Claim transaction** — broadcast by the claimer
-- **Proof transaction** — posts the ZK proof commitment
-- **Payout transaction** — releases BTC to the depositor
-
-Total cost for the normal path is approximately 2,000-3,000 satoshis in Bitcoin
-network fees at typical fee rates.
-
-If a challenge occurs, additional transactions are needed (ChallengeAssertX,
-ChallengeAssertY), which increases costs significantly. However, challenges are
-expected to be rare in a properly functioning system — they serve as a deterrent
-against fraud rather than a routine operation.
+If a challenge occurs, additional transactions increase costs, but this is
+expected to be rare.
 
 ## Redemption Summary
 
-| Path | Trigger | Authorized Redeemer | BTC Goes To |
-|------|---------|-------------------|-------------|
-| Depositor Redemption | Loan repaid, vault withdrawn | Vault Provider | Depositor's BTC address |
-| Liquidation (Direct) | Position liquidated | Liquidator | Liquidator's BTC address |
-| Liquidation (via LLP Settlement) | Liquidator sells to LLP | LLP (vault keeper) | LLP's BTC address |
+| Path | Trigger | Who Claims on Bitcoin | BTC Goes To |
+|------|---------|----------------------|-------------|
+| Normal redemption | Loan repaid, vault withdrawn | Vault provider | Your BTC address |
+| Self-claim | Vault provider unresponsive | You (via WOTS key) | Your BTC address |
+| Liquidation (direct) | Position liquidated | Liquidator | Liquidator's BTC address |
+| Liquidation (via settlement) | Liquidator sells to vault keeper | Vault keeper (LLP) | Vault keeper's BTC address |
 
-In all cases, the ZK proof generation and challenge mechanism ensures that
-Bitcoin is only released when the correct Ethereum-side conditions have been
-met — without requiring any trust in intermediaries.
+In all cases, the ZK proof generation and challenge mechanism ensure that
+Bitcoin is only released when the correct conditions have been met on Ethereum
+-- without requiring trust in any single intermediary.
