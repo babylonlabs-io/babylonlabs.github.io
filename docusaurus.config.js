@@ -122,7 +122,38 @@ const plugins = [
         },
         {
           from: '/guides/architecture/vigilantes/',
-          to: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        // Vigilantes moved under btc_staking_program
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        // Networks removed
+        {
+          from: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/networks/testnet/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/networks/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        // Governance proposals flattened
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
         },
         // Governance redirects
         {
