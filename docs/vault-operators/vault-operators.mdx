@@ -8,24 +8,118 @@ sidebar_position: 0
 
 Run infrastructure for the Trustless Bitcoin Vault protocol.
 
-The Vault Operators section is being prepared for teams running vault provider,
-vault keeper, and universal challenger infrastructure.
+This section is for teams running vault provider (VP), vault keeper (VK), and
+universal challenger (UC) infrastructure. Detailed setup guides, runbooks, and
+configuration references are being prepared. The architectural overview below
+reflects the current daemon layout.
 
-## Coming Soon
+## Daemon Architecture
 
-### Vault Provider Operations
-- **Setup Guide** — Hardware requirements, software installation, and configuration
-- **Network and Security** — Connectivity, authentication, and key-management guidance
-- **Proof Generation** — Proving capacity planning and operational requirements
-- **Monitoring** — Logs, metrics, and alerting guidance
+A vault operator runs two cooperating daemons that coordinate to participate in
+the protocol:
 
-### Vault Keeper Operations  
-- **Registration** — On-chain registration and BTC key management
-- **Transaction Graph Management** — Storage, backup, and recovery
-- **Settlement Operations** — Liquidation handling, including BTCVaultSwap settlement flows
+### `vaultd` — Protocol Coordination
 
-### Universal Challenger
-- **Deployment** — Node setup and chain monitoring
-- **Challenge Execution** — Fraud detection and response
+The main daemon that handles protocol-level work:
 
-For operational support, reach out on [Discord](https://discord.com/invite/babylonglobal).
+- Monitors Ethereum events for vault lifecycle changes
+- Coordinates BaBe sessions and transaction-graph presigning with peer daemons
+- Generates and verifies WOTS commitments and challenge artifacts
+- Drives peg-in and peg-out claims, payouts, and challenge responses
+- Connects to a separate Bitcoin signing daemon for any operation that needs
+  Bitcoin keys
+
+### `btcwd` — Remote BTC Signer
+
+The Bitcoin wallet daemon (`btcwd`) is a separate process that holds the
+operator's Bitcoin signing keys and exposes a protocol-agnostic gRPC API to
+`vaultd`. It is responsible for:
+
+- Funding and signing claim, assert, payout, and challenge transactions
+- Managing UTXOs, fee estimation, and CPFP for fee bumping
+- Returning signed PSBTs back to `vaultd`
+
+Splitting the wallet from `vaultd` provides several operational benefits:
+
+- **Smaller attack surface** — only the wallet daemon needs access to private
+  keys; `vaultd` only sees signed transactions
+- **HSM / KMS integration** — the wallet can be backed by external signers
+  through the same gRPC interface
+- **Independent restarts** — wallet outages don't lose protocol session state
+- **Identity binding** — `vaultd` and `btcwd` authenticate to each other using
+  HMAC-bound identities so a misconfigured wallet cannot serve another
+  operator's vaultd
+
+`vaultd` and `btcwd` communicate over an authenticated gRPC channel. Both
+daemons must be configured with matching HMAC credentials and identity pins
+before they will accept requests from each other.
+
+## Daemon-to-Daemon Communication
+
+All inter-daemon traffic between vault operators uses gRPC:
+
+- **BaBe setup** between claimers and challengers runs over gRPC streams with
+  CWT bearer tokens that automatically refresh during long-running sessions
+- **Transaction-graph presigning** between vault providers and vault keepers
+  uses authenticated gRPC RPCs
+- **Depositor-to-VP requests** (peg-in setup, signature submission) use gRPC
+  authenticated with an auth anchor or BIP-322 fallback
+
+Operators expose a public gRPC endpoint that other daemons connect to.
+`vaultd` exposes a public RPC server for routine queries and a separate
+loopback-only admin RPC for operator commands; `--disable-auth` is restricted
+to loopback binds so an operator cannot accidentally expose unauthenticated
+control-plane methods to the network.
+
+## Vault Provider Operations
+
+Vault providers act as claimers in their own right and as the coordinator that
+drives a vault's setup. Documentation in progress will cover:
+
+- **Setup guide** — software installation, configuration, and bootstrapping
+  the on-chain registration and metadata
+- **`btcwd` configuration** — wallet provisioning, HMAC identity setup, and
+  optional HSM / KMS integration
+- **Network and TLS** — gRPC endpoint exposure with optional TLS termination
+  through reverse proxies (nginx, etc.)
+- **Proof generation** — operating the SP1 prover, GPU capacity planning, and
+  prover-side recovery from interrupted proofs
+- **Monitoring** — Prometheus metrics, structured tracing, and recommended
+  alert thresholds for ETH wallet balance, BaBe session counts, and stuck
+  peg-ins
+
+## Vault Keeper Operations
+
+Vault keepers are application-level participants who co-sign the transaction
+graph during peg-in and act as challengers and arbitrageurs. Topics in
+progress:
+
+- **Registration** — on-chain registration through `BTCVaultRegistry`, BTC key
+  management, and metadata publication
+- **Transaction graph storage** — persisting and backing up presigned graphs
+  and BaBe artifacts in `babe.db`
+- **Liquidation settlement** — operating as an arbitrageur for `BTCVaultSwap`
+  and other liquidation liquidity providers (LLPs)
+
+## Universal Challenger Operations
+
+Universal challengers are protocol-level monitors that watch for fraudulent
+claims and execute challenges. Topics in progress:
+
+- **Deployment** — running the daemon, connecting to Ethereum and Bitcoin
+  data sources, and managing challenge bonds
+- **Challenge execution** — detecting invalid Assert transactions and
+  broadcasting `ChallengeAssert` transactions
+
+## Status Monitoring
+
+Operators monitor running peg-ins, peg-outs, and challenges through:
+
+- The peg-in invariants documented in the protocol specification (status
+  transitions, retry behavior, expiry handling)
+- The vault debugger UI (operator URL provided by your devops contact)
+- gRPC `getPeginStatus` / `getPegoutStatus` calls for individual flows
+- Standard Prometheus metrics emitted by `vaultd` and `btcwd`
+
+For operational support, reach out on
+[Discord](https://discord.com/invite/babylonglobal).
