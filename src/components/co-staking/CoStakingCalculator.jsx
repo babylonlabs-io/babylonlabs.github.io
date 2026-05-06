@@ -8,15 +8,10 @@ const SATOSHIS_PER_BTC = 100000000; // 1 BTC = 100,000,000 satoshis
 const UBBN_PER_BABY = 1000000; // 1 BABY = 1,000,000 ubbn (micro BBN)
 
 // API endpoints
-const COSTAKING_REWARDS_API = 'https://babylon-archive.nodes.guru/babylon/costaking/v1/current_rewards';
+const COSTAKING_API_BASE = 'https://babylon-archive-api.polkachu.com';
+const COSTAKING_REWARDS_API = `${COSTAKING_API_BASE}/babylon/costaking/v1/current_rewards`;
 
-const getAPIBaseURL = () => {
-  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-    return 'https://babylon-archive.nodes.guru'; // Default testnet API
-  }
-  // Use the same domain for production, or configure via environment
-  return 'https://babylon-archive.nodes.guru';
-};
+const getAPIBaseURL = () => COSTAKING_API_BASE;
 
 export default function CoStakingCalculator() {
   const [btcAmount, setBtcAmount] = useState('');
