@@ -324,15 +324,6 @@ Babylon Genesis Testnet is a public testing environment for developers and the c
 
 Endpoints for Phase 2 Babylon Genesis Mainnet (`bbn-1`).
 
-**Nodes Guru:**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC (Pruned) | `https://babylon.nodes.guru/rpc` |
-| RPC (Archive) | `https://babylon-archive.nodes.guru/rpc` |
-| LCD (Pruned) | `https://babylon.nodes.guru/api` |
-| LCD (Archive) | `https://babylon-archive.nodes.guru/api` |
-| gRPC (Pruned) | `babylon.nodes.guru:443` |
-
 **Polkachu:**
 | Endpoint Type | URL |
 |-------------|----------|
@@ -347,21 +338,12 @@ Endpoints for Phase 2 Babylon Genesis Mainnet (`bbn-1`).
 
 Endpoints for Phase 2 Babylon Genesis Testnet (`bbn-test-6`).
 
-**Nodes Guru:**
-| Endpoint Type | URL |
-|-------------|----------|
-| RPC | `https://babylon-testnet-rpc.nodes.guru` |
-| RPC Archive | `https://babylon-testnet-rpc-archive-1.nodes.guru` |
-| LCD | `https://babylon-testnet-api.nodes.guru` |
-| LCD Archive | `https://babylon-testnet-api-archive-1.nodes.guru` |
-| gRPC | `https://babylon-testnet-grpc.nodes.guru` |
-
 **Polkachu:**
 | Endpoint Type | URL |
 |-------------|----------|
 | RPC | `https://babylon-testnet-rpc.polkachu.com` |
 | LCD | `https://babylon-testnet-api.polkachu.com` |
-| gRPC | `http://babylon-testnet-grpc.polkachu.com:20690` |
+| gRPC | `babylon-testnet-grpc.polkachu.com:20690` |
 
 ## Staker Guides
 
@@ -1084,7 +1066,6 @@ Block scanners for Phase 2 Babylon Genesis Mainnet (`bbn-1`).
 | Service | URL |
 |---------|-----|
 | [MintScan](https://www.mintscan.io/babylon) | `https://www.mintscan.io/babylon` |
-| [Node Guru](https://babylon.explorers.guru/) | `https://babylon.explorers.guru/` |
 | [NodeStake](https://explorer.nodestake.org/babylon) | `https://explorer.nodestake.org/babylon` |
 | [Xangle](https://babylon-explorer.xangle.io/mainnet/home) | `https://babylon-explorer.xangle.io/mainnet/home` |
 
@@ -1095,8 +1076,6 @@ Block scanners for Phase 2 Babylon Genesis Testnet (`bbn-test-6`).
 | Service | URL |
 |---------|-----|
 | [MintScan](https://www.mintscan.io/babylon-testnet) | `https://www.mintscan.io/babylon-testnet` |
-| [Node Guru](https://testnet.babylon.explorers.guru/) | `https://testnet.babylon.explorers.guru/` |
-| [NodeStake](https://explorer.nodestake.org/babylon-testnet) | `https://explorer.nodestake.org/babylon-testnet` |
 | [Xangle](https://babylon-explorer.xangle.io/testnet/home) | `https://babylon-explorer.xangle.io/testnet/home` |
 
 ### Getting Testnet BABYs
@@ -1361,8 +1340,8 @@ buckets = 10
 [[chains]]
 id = 'bbn-test-6'
 type = "CosmosSdk"
-rpc_addr = 'https://babylon-testnet-rpc.nodes.guru'
-grpc_addr = 'https://babylon-testnet-grpc.nodes.guru'
+rpc_addr = 'https://babylon-testnet-rpc.polkachu.com'
+grpc_addr = 'http://babylon-testnet-grpc.polkachu.com:20690'
 rpc_timeout = "10s"
 trusted_node = false
 account_prefix = "bbn"
@@ -1383,7 +1362,7 @@ sequential_batch_tx = false
 
 [chains.event_source]
 mode = "push"
-url = "wss://babylon-testnet-rpc.nodes.guru/websocket"
+url = "wss://babylon-testnet-rpc.polkachu.com/websocket"
 batch_delay = "500ms"
 
 [chains.trust_threshold]

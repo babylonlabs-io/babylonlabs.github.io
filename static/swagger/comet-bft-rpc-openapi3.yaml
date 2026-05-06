@@ -82,11 +82,11 @@ info:
     ```
  
 servers:
-  - url: https://babylon.nodes.guru/rpc
+  - url: https://babylon-rpc.polkachu.com
     description: Mainnet RPC (Pruned)
-  - url: https://babylon-testnet-rpc-archive-1.nodes.guru
-    description: Testnet RPC (Archive)
-  - url: https://babylon-testnet-rpc.nodes.guru
+  - url: https://babylon-archive-rpc.polkachu.com
+    description: Mainnet RPC (Archive)
+  - url: https://babylon-testnet-rpc.polkachu.com
     description: Testnet RPC (Pruned)
   - url: http://localhost:9090
     description: Run Babylon gRPC Gateway locally with default port 9090.
