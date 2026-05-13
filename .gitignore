@@ -113,6 +113,11 @@ dist
 # Remote docs fetched during build (generated content)
 static/remote-docs/
 
+# LLM.txt files — managed by generate-llmstxt workflow via S3, not git
+static/llms.txt
+static/llms-full.txt
+static/llms-ctx.txt
+
 # Serverless directories
 .serverless/
 
