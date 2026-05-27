@@ -73,7 +73,7 @@ RPCListener = "127.0.0.1:12581"         # FPD service address
 [babylon]
 Key = "fp-key-1"                        # Key name from Step 4
 ChainID = "bbn-test-6"                  # Testnet chain ID
-RPCAddr = "https://babylon-testnet-rpc.nodes.guru"  # Public RPC node
+RPCAddr = "https://babylon-testnet-rpc.polkachu.com"  # Public RPC node
 KeyDirectory = "~/.fpd"                 # Key directory
 ```
 
@@ -114,7 +114,7 @@ fpd finality-provider-info <pubkey_hex from Step 2>
 ```
 #### View rewards:
 ```bash
-fpd reward-gauges <address from Step 4> --node https://babylon-testnet-rpc.nodes.guru
+fpd reward-gauges <address from Step 4> --node https://babylon-testnet-rpc.polkachu.com
 ```
 #### Monitoring metrics (optional):
   - Finality Provider metrics: http://localhost:2112/metrics
@@ -267,7 +267,7 @@ RPCListener = 0.0.0.0:12581
 [babylon]
 Key = fp-key-1
 ChainID = bbn-test-6
-RPCAddr = https://babylon-testnet-rpc.nodes.guru
+RPCAddr = https://babylon-testnet-rpc.polkachu.com
 KeyringBackend = test
 ```
 ### Step 7: Start Services
@@ -308,7 +308,7 @@ docker exec -it finality-provider \
 # View rewards
 docker exec -it finality-provider \
   fpd reward-gauges <address from Step 4> \
-  --node https://babylon-testnet-rpc.nodes.guru
+  --node https://babylon-testnet-rpc.polkachu.com
 ```
 
 ### Docker-Specific Common Issues
@@ -325,12 +325,12 @@ docker exec -it finality-provider \
     3. Verify the balance (replace `<your-address>` with your account address):
     ```bash
     # For local deployment:
-    fpd query bank balances <your-address> --node https://babylon-testnet-rpc.nodes.guru
+    fpd query bank balances <your-address> --node https://babylon-testnet-rpc.polkachu.com
 
     # For Docker deployment:
     docker exec -it finality-provider \
     fpd query bank balances <your-address> \
-    --node https://babylon-testnet-rpc.nodes.guru
+    --node https://babylon-testnet-rpc.polkachu.com
     ```
     4. Retry the registration command after confirming the balance is received.
 This error is resolved once the account has sufficient tbaby to cover transaction fees (typically a small amount, e.g., 1-10 tbaby).

@@ -115,8 +115,8 @@ buckets = 10
 [[chains]]
 id = 'bbn-test-6'
 type = "CosmosSdk"
-rpc_addr = 'https://babylon-testnet-rpc.nodes.guru'
-grpc_addr = 'https://babylon-testnet-grpc.nodes.guru'
+rpc_addr = 'https://babylon-testnet-rpc.polkachu.com'
+grpc_addr = 'http://babylon-testnet-grpc.polkachu.com:20690'
 rpc_timeout = "10s"
 trusted_node = false
 account_prefix = "bbn"
@@ -137,7 +137,7 @@ sequential_batch_tx = false
 
 [chains.event_source]
 mode = "push"
-url = "wss://babylon-testnet-rpc.nodes.guru/websocket"
+url = "wss://babylon-testnet-rpc.polkachu.com/websocket"
 batch_delay = "500ms"
 
 [chains.trust_threshold]
