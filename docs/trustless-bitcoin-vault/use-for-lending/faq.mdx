@@ -5,24 +5,247 @@ sidebar_position: 6
 
 # TBV Testnet FAQ
 
-:::info Coming soon
-This page is a placeholder. The FAQ will grow over time as Testnet questions arrive — initial seed of 5–8 questions to be written based on anticipated areas of confusion, then expanded with real Testnet user questions.
-:::
+Common questions about the Trustless Bitcoin Vault (TBV) Testnet: wallets, deposits, borrowing, redemption, and recovery. Each entry stands alone and links to the deeper page where the topic is covered in full.
 
-The FAQ will prioritise the following questions for its initial seed:
+If a question is missing here, add it via inline comment or in the support channel listed on [Community & support](../reference/community-and-support). The FAQ grows as Testnet usage exposes new areas of confusion.
 
-* Is my BTC safe?
-* What happens if the Vault Provider goes offline?
-* How is TBV different from wrapped Bitcoin tokens or bridges?
-* When mainnet?
-* How long does peg-in take?
-* What does liquidation cost me?
+## Wallets and setup
 
-In the meantime, the following pages cover the most common areas:
+### Which wallets do I need?
 
-* For protocol safety properties and trust assumptions: [Safety & trust assumptions](../start-here/safety-and-trust-assumptions)
-* For the conceptual mechanism: [How it works](../start-here/how-it-works)
-* For the differences from wrapped tokens and bridges: [TBV vs alternatives](../start-here/tbv-vs-alternatives)
-* For peg-in timing: [Create a vault](./create-a-vault)
-* For liquidation costs and mechanics: [Liquidation risk](./liquidation-risk)
-* For where to ask questions: [Community & support](../reference/community-and-support)
+Two wallets: a Bitcoin wallet on signet and an Ethereum wallet on the supported testnet.
+
+* The Bitcoin wallet must produce Taproot (P2TR) addresses and support PSBT signing with BIP-322 or ECDSA message signing.
+* The Ethereum wallet must support WalletConnect or be an injected wallet compatible with the demo app.
+
+For the current supported list, networks, and faucet links, see [Setup](../testnet-info/setup).
+
+### Why does the Bitcoin wallet need a Taproot address?
+
+TBV locks BTC in a Taproot output. The wallet has to produce Taproot (P2TR) addresses to participate. Addresses of different types do not share balance, so if the wallet was previously configured for SegWit or Legacy, switch to Taproot and re-fund from the signet faucet before connecting.
+
+### I cannot connect my wallets. What should I check?
+
+1. The Bitcoin wallet is set to signet, not mainnet.
+2. The Ethereum wallet is on Sepolia (chain ID `11155111`), not another network.
+3. Both wallets are unlocked before opening the demo app.
+4. If several Bitcoin extensions are installed, disable the ones not in use so the app detects the correct one.
+5. Refresh the page once and reconnect.
+
+If a multisig setup (for example, Safe via WalletConnect) does not produce a signing prompt, try a direct extension wallet for the same flow.
+
+### Why is my balance not showing?
+
+Two common causes:
+
+* The connected wallet address differs from the one holding the funds. Reconnect with the correct address.
+* The signet faucet transaction is not yet confirmed. Bitcoin confirmations are required before the balance becomes spendable; this typically takes a few minutes on signet.
+
+## The deposit (peg-in)
+
+### How long does peg-in take?
+
+About 2 hours on signet from Deposit click to Active vault, mostly waiting for 12 Bitcoin confirmations. Off-chain setup runs concurrently and takes 6 to 10 minutes once confirmations land. Activation itself is one Ethereum transaction. Mainnet requires only 6 Bitcoin confirmations, reducing the total to roughly 70 minutes.
+
+For the stage-by-stage breakdown, see [Create a vault](./create-a-vault).
+
+### Why does the app recommend splitting BTC into two vaults?
+
+Each vault is a single Bitcoin UTXO and cannot be partially seized. With one vault, liquidation seizes the whole vault. With two correctly-sized vaults, the protocol can do partial-position liquidation: only the first vault (the sacrificial vault) is seized, and the rest stays in the position (the protected vault).
+
+The app sizes the split dynamically from on-chain parameters. At current Testnet parameters (target health factor 1.24, collateral factor 78%, max liquidation bonus 10%), the sacrificial vault is the larger of the two and sits first in the order. See [Liquidation risk](./liquidation-risk) for the worked example.
+
+### How do I change the vault order?
+
+From the Collateral section, you can reorder vaults at any time while they are `InUse`. The vault at the front of the list is seized first during a liquidation. Reordering takes one Ethereum transaction. Vaults in `Available` status (not part of a position) are not part of any seizure order.
+
+### What if peg-in stalls or expires?
+
+Two failure modes both lead to BTC recovery via the Pre-PegIn refund path on Bitcoin:
+
+* Off-chain setup does not complete within ~24 hours (`pegInAckTimeout`). The vault expires and the peg-in fee is refunded automatically.
+* Activation does not happen within ~48 hours of vault creation (`pegInActivationTimeout`), even for a Verified vault. The peg-in fee is non-refundable, but BTC is still recoverable.
+
+In both cases, sign the refund path with the original Bitcoin key after the `tRefund` 3-day timelock elapses. The refund is unilateral: no cooperation from the Vault Provider, Vault Keepers, or any other participant is required. See [Create a vault](./create-a-vault) for the full flow.
+
+### Why am I asked to download claimer artifacts?
+
+The artifacts plus the Winternitz One-Time Signature (WOTS) keypair are the inputs to the depositor self-claim path: the fallback that lets you broadcast the Bitcoin claim yourself if the Vault Provider becomes unresponsive at redemption.
+
+Back them up at peg-in alongside the wallet seed phrase. The bundle is per-vault and large (~43 GB per counterparty relationship); cold storage is acceptable. Without both inputs, and with a non-responsive Vault Provider, recovery requires Security Council escalation. See [Withdraw & redeem](./withdraw-and-redeem) for the self-claim path.
+
+## Borrowing and repaying
+
+### How is the interest rate set?
+
+The rate for each borrowable asset is a function of utilization (the ratio of borrowed to supplied for that asset on the Aave v4 Hub). Below the optimal-utilization pivot, the rate climbs gently; above it, much faster.
+
+* USDC and USDT: optimal utilization 92%, slope 4% below the pivot, slope 20% above. At 92% the rate is 4%; at 100% it reaches 24%.
+* WBTC: optimal utilization 80%, slope 4% below, slope 60% above (reflecting WBTC scarcity). At 80% the rate is 4.25%; at 100% it reaches roughly 64%.
+
+The protocol additionally collects 10% of accrued interest as a fee, taken out of the interest portion rather than added on top. The Aave displayed rate is the effective cost. See [Borrow & repay](./borrow-and-repay) for the full interest model.
+
+### Why does repayment ask for two wallet confirmations?
+
+Repaying an ERC-20 debt involves two transactions:
+
+* ERC-20 approval: authorizes the AaveAdapter to spend the repayment token up to a cap.
+* Repayment: the actual debt-clearing transaction.
+
+Both prompts are standard ERC-20 behaviour, not specific to TBV.
+
+### Why should I repay with a small buffer?
+
+Interest accrues every Ethereum block. The amount displayed when the Repay dialog opens is correct at that moment; by the time the transaction confirms, a fractional amount of new interest has accrued. Repaying exactly the displayed amount can leave a tiny residual debt that blocks a full withdrawal.
+
+Approve a slightly larger amount than the displayed debt. Any excess is refunded. If a residual still remains, repeat the repayment with another small buffer until `getUserTotalDebt()` on the Spoke returns zero for every borrowed reserve.
+
+### Can someone else repay my debt?
+
+Yes. The AaveAdapter accepts repayments from any address; the debt simply decreases on the position regardless of who paid. This is the same mechanism liquidators use during a seizure, and it is exposed as a general feature.
+
+### Why is my borrow rate or remaining debt different from what I expected?
+
+A few common causes:
+
+* The displayed rate is annual (APR), not per block. The amount accrued over a short period is much smaller.
+* After repayment, very small residual debt (dust) may remain if interest accrued between the query and the transaction.
+* The protocol's 10% interest fee is collected first on each repay, before principal reduction. Partial repayments smaller than the accrued-interest fee may not reduce principal at all.
+
+## Health factor and liquidation
+
+### What is the health factor and what number is safe?
+
+The health factor compares the risk-adjusted value of the collateral to the value of the debt:
+
+```
+Health Factor = (Total Collateral Value * Collateral Factor) / Total Debt Value
+```
+
+The collateral factor for vaultBTC on Testnet is 78%. A position becomes liquidatable when the health factor drops below 1.0.
+
+| Health factor | What it means |
+| --- | --- |
+| Above 1.5 | Comfortable margin |
+| 1.2 to 1.5 | Approaching risk |
+| 1.0 to 1.2 | High risk |
+| Below 1.0 | Liquidatable |
+
+The zones above 1.0 are guidance, not contract values. The only on-chain threshold is the 1.0 boundary. See [Liquidation risk](./liquidation-risk) for the inputs that move the health factor.
+
+### What happens if the health factor drops below 1.0?
+
+The position becomes liquidatable. Any Ethereum address can call the liquidation function and earn a bonus paid out of the seized collateral (up to 10% on Testnet).
+
+The protocol walks the vault list in order and takes whole vaults from the front until the cumulative value covers the target seizure. At current Testnet parameters the target seizure is roughly 62% of total BTC, so a correctly-sized two-vault split limits the loss to the sacrificial vault. Any over-seizure surplus is returned through the fairness mechanism.
+
+To reduce risk: repay debt, add more collateral, or maintain a buffer well above 1.0.
+
+### What is the fairness payment?
+
+Because vaults are indivisible UTXOs, a partial-position liquidation almost always overshoots what a perfectly divisible seizure would have taken. The fairness mechanism returns the over-seizure surplus:
+
+* Surplus smaller than remaining debt: the surplus reduces remaining debt (fairness debt repay). No WBTC is paid out.
+* Surplus larger than remaining debt: the leftover is paid in WBTC (fairness payment).
+
+WBTC is the denomination because the seized vault's BTC has already moved to the liquidator on Bitcoin. The over-seizure value is discounted using the ratio of debt liquidated to collateral liquidated, not at the raw BTC price. See [Liquidation risk](./liquidation-risk) for the full mechanism.
+
+### Can I trigger a liquidation on the Testnet to see how it behaves?
+
+The portal prevents user actions that would push a position below 1.0 (over-borrowing, withdrawing too much collateral). Liquidation triggers only on price movement against the position or enough accrued interest. To observe the mechanism without triggering it, open a position close to the minimum health factor and check how the dashboard reports the target seizure and protected portion. The math is on [Liquidation risk](./liquidation-risk).
+
+## Withdrawing and redeeming (peg-out)
+
+### Why does withdrawal take ~3 days?
+
+Bitcoin cannot natively verify Ethereum state. The protocol generates a zero-knowledge proof of the burn event and verifies it on Bitcoin via the BABE construction, with a ~3 day challenge window during which any Universal Challenger can dispute an invalid claim. If no challenge appears, the payout finalizes.
+
+The 3-day window is `timelockAssert` = 432 BTC blocks on Testnet. The Ethereum-side actions complete in minutes; the challenge window dominates wall-clock time. See [Withdraw & redeem](./withdraw-and-redeem).
+
+### Why is Withdraw disabled for one of my vaults?
+
+The portal disables vault selection if removing that vault would drop the health factor below 1.0 with the remaining debt. Repay enough debt first and the vault becomes selectable.
+
+For a full withdrawal, debt must be zero on every borrowed reserve (USDC, USDT, WBTC). A single satoshi of remaining debt on any reserve blocks a full withdrawal.
+
+### Why does the dashboard still show Pending Withdraw after the wallet confirms?
+
+The Ethereum transaction only starts redemption. After it confirms, the protocol runs the Bitcoin-side claim, the assert, and the challenge-window wait before BTC is released. The dashboard displays **Pending Withdraw** for the full duration. Plan for ~3 days from the Withdraw click to BTC arrival on Bitcoin.
+
+### The Vault Provider is unresponsive during redemption. What now?
+
+Use the self-claim path. The protocol pre-signed the Bitcoin transactions for both Vault-Provider-as-claimer and depositor-as-claimer at peg-in. Once `VaultClaimableBy` has been emitted on Ethereum for the depositor's Bitcoin public key:
+
+1. Locate the WOTS keypair file and claimer artifacts saved at peg-in.
+2. Run the `watchtower` CLI the protocol ships. It broadcasts the Claim, Assert, and Payout transactions on Bitcoin on the depositor's behalf.
+3. Wait through the same ~3 day challenge window.
+4. The payout reaches the Bitcoin address recorded at vault creation.
+
+Self-claim requires no cooperation from any Vault Keeper, Universal Challenger, or Vault Provider. See [Withdraw & redeem](./withdraw-and-redeem) for the full self-claim walkthrough.
+
+## Trust and recovery
+
+### Who holds my BTC during all of this?
+
+No third party. The BTC sits in a Taproot output whose spend paths are committed by all participants at vault creation. After creation, no party can fabricate a new spend; the only spends Bitcoin will accept are the ones already encoded in the script.
+
+The Vault Provider, Vault Keepers, Universal Challengers, and Security Council have operational roles (coordinating setup, generating proofs, monitoring for fraud) but never custody. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions) for the full trust model.
+
+### Can Babylon, the Vault Provider, or anyone else take my BTC?
+
+No. The BTC's destination on every spend path is fixed at vault creation: the depositor's own Bitcoin address (on repayment, self-claim, and refund), or an arbitrageur's address (on liquidation paths). Bitcoin will not accept any other spend, because no other spend was ever signed.
+
+The Security Council has emergency keys, but its only on-chain power is to block a payout via `CouncilNoPayout` in catastrophic-bug scenarios. It cannot redirect BTC anywhere.
+
+### What if I lose my WOTS keypair file and claimer artifacts?
+
+If the Vault Provider is still responsive, the standard redemption path works: the Vault Provider drives the claim and BTC reaches the address recorded at vault creation. The self-claim fallback is unavailable for that vault, but it is not needed.
+
+If both inputs are lost *and* the Vault Provider is unresponsive, the Security Council can authorize recovery through the multi-sig path. Contact the team via the channels on [Community & support](../reference/community-and-support).
+
+To avoid this scenario: back up the WOTS keypair file and the claimer artifacts at peg-in alongside the wallet seed phrase.
+
+## Troubleshooting and support
+
+### My peg-in appears stuck. What should I do?
+
+1. Save the Pre-PegIn and PegIn transaction hashes.
+2. Confirm the Pre-PegIn transaction is propagated on a Bitcoin block explorer (see [Setup](../testnet-info/setup)).
+3. Refresh the page once and reconnect the same wallets.
+4. If the portal status still does not update, contact support with both transaction hashes and the current stage name shown on the dashboard.
+
+Signet block times can be irregular. Slow confirmations are usually a property of the network, not of the protocol.
+
+### What if I refresh the page or cancel a wallet signature mid-flow?
+
+The flow is resumable. Reopen the portal with the same Bitcoin and Ethereum wallets used for the in-flight vault. Refresh once and look for any pending deposit or existing vault on the dashboard. Do not switch to a different Bitcoin address for a deposit already in progress.
+
+If the flow does not resume, contact support with screenshots, wallet addresses, and any transaction hashes.
+
+### The dashboard looks stale. What should I do?
+
+Refresh the page, reconnect the same wallets, and verify the connected addresses match the original position. Stale browser tabs may not auto-fetch the latest on-chain data.
+
+For programmatic state, query `AaveAdapterLens` directly. Function names and addresses are on [Contract addresses](../testnet-info/contract-addresses).
+
+### What should I include when contacting support?
+
+* Bitcoin wallet address and Ethereum wallet address.
+* Relevant transaction hashes (Pre-PegIn, PegIn, activation, borrow, repay, withdrawal).
+* The exact step name shown in the portal at the time of the issue.
+* The Bitcoin wallet's current network (must be signet).
+* Whether the page was refreshed, a modal was closed, or a signature was cancelled.
+* A screenshot of the dashboard or progress modal.
+
+Security disclosures go through the channel on [Audits & security](../reference/audits-and-security), not through community channels. The TBV team will never request a private key, seed phrase, or signed transaction in any community channel.
+
+## Related guides
+
+* [Setup](../testnet-info/setup)
+* [Quickstart](./quickstart)
+* [Create a vault](./create-a-vault)
+* [Borrow & repay](./borrow-and-repay)
+* [Withdraw & redeem](./withdraw-and-redeem)
+* [Liquidation risk](./liquidation-risk)
+* [Safety & trust assumptions](../start-here/safety-and-trust-assumptions)
+* [Glossary](../reference/glossary)

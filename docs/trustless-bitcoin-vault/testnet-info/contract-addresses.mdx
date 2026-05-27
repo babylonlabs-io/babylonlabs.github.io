@@ -5,11 +5,7 @@ sidebar_position: 2
 
 # Contract addresses
 
-:::info Pending team data
-Addresses below are *(placeholder for team data)*. Contract names and groupings are stable; only the address column and explorer links will change once the team provides current deployments.
-:::
-
-This page lists the deployed contract addresses for the current Trustless Bitcoin Vault (TBV) Testnet release. **Audience:** developers, integrators, and security researchers. Depositors using the demo app do not need to interact with contracts directly.
+This page lists the deployed contract addresses for the current Trustless Bitcoin Vault (TBV) Testnet release on **Sepolia** (chain ID `11155111`). **Audience:** developers, integrators, and security researchers. Depositors using the demo app do not need to interact with contracts directly.
 
 For wallet and network setup, see [Setup](./setup). For the live values of protocol parameters (thresholds, timeouts), see [Protocol parameters](./protocol-parameters).
 
@@ -23,35 +19,35 @@ The Bitcoin side has no protocol contracts: each vault corresponds to a single T
 
 Core contracts that manage vault accounting, protocol parameters, and the application registry.
 
-| Contract | Purpose | Address | Explorer |
-| --- | --- | --- | --- |
-| `BTCVaultRegistry` | Vault lifecycle, state, hashlock and WOTS commitments | *(placeholder for team data)* | *(placeholder for team data)* |
-| `BTCVaultsMetadataRegistry` | Publishes Vault Provider RPC endpoints | *(placeholder for team data)* | *(placeholder for team data)* |
-| `ProtocolParams` | Versioned protocol parameters (timelocks, confirmation depth, Security Council keys, off-chain parameters) | *(placeholder for team data)* | *(placeholder for team data)* |
-| `ApplicationRegistry` | Lists DeFi applications approved to receive vaults | *(placeholder for team data)* | *(placeholder for team data)* |
-| `CapPolicy` | Per-application and per-address BTC exposure caps | *(placeholder for team data)* | *(placeholder for team data)* |
-| `FeeEscrow` | Collects the peg-in fee and distributes it to participants | *(placeholder for team data)* | *(placeholder for team data)* |
+| Contract | Purpose | Address |
+| --- | --- | --- |
+| `BTCVaultRegistry` | Vault lifecycle, state, hashlock and WOTS commitments | [`0xE976a4f2B90E64A9A9374453bC526e67625cC750`](https://sepolia.etherscan.io/address/0xE976a4f2B90E64A9A9374453bC526e67625cC750) |
+| `BTCVaultsMetadataRegistry` | Publishes Vault Provider RPC endpoints | [`0x8F23a8C6Dd0Bd8E55295c60906737fE453626a41`](https://sepolia.etherscan.io/address/0x8F23a8C6Dd0Bd8E55295c60906737fE453626a41) |
+| `ProtocolParams` | Versioned protocol parameters (timelocks, confirmation depth, Security Council keys, off-chain parameters) | [`0x64ccB1F028Ceb186A1f9630C9D58c59E4845CCcB`](https://sepolia.etherscan.io/address/0x64ccB1F028Ceb186A1f9630C9D58c59E4845CCcB) |
+| `ApplicationRegistry` | Lists DeFi applications approved to receive vaults | [`0xC1D604C2221536Ea5811a88f0B8B0367375ef65E`](https://sepolia.etherscan.io/address/0xC1D604C2221536Ea5811a88f0B8B0367375ef65E) |
+| `CapPolicy` | Per-application and per-address BTC exposure caps | [`0x75688dbFe97010bb87B2f764EDf8e65e7924bDBb`](https://sepolia.etherscan.io/address/0x75688dbFe97010bb87B2f764EDf8e65e7924bDBb) |
+| `FeeEscrow` | Collects the peg-in fee and distributes it to participants | [`0xC432348b1e2de21B47977832fc3960f2B58186e1`](https://sepolia.etherscan.io/address/0xC432348b1e2de21B47977832fc3960f2B58186e1) |
 
 ## Ethereum side — Aave v4 integration
 
 Contracts deployed for the Aave v4 integration. The collateral asset is `vaultBTC`. For the architecture, see [Aave v4 integration](../technical-details/aave-v4-integration).
 
-| Contract | Purpose | Address | Explorer |
-| --- | --- | --- | --- |
-| `vaultBTC` | ERC-20 accounting token, 8 decimals, transfer-restricted to protocol contracts | *(placeholder for team data)* | *(placeholder for team data)* |
-| `BabylonCoreSpoke` | Dedicated Aave v4 market accepting vaultBTC as collateral | *(placeholder for team data)* | *(placeholder for team data)* |
-| `AaveAdapter` | User-facing entry point for TBV-on-Aave operations | *(placeholder for team data)* | *(placeholder for team data)* |
-| `AaveAdapterConfig` | LLP registration, position-size parameters, resolver registration | *(placeholder for team data)* | *(placeholder for team data)* |
-| `AaveAdapterLens` | Read-only state queries (positions, vaults, reserves) | *(placeholder for team data)* | *(placeholder for team data)* |
-| `AaveHub` | Aave v4 Hub central liquidity contract | *(placeholder for team data)* | *(placeholder for team data)* |
+| Contract | Purpose | Address |
+| --- | --- | --- |
+| `vaultBTC` | ERC-20 accounting token, 8 decimals, transfer-restricted to protocol contracts | [`0x5BD51C84244fA23a567970cdaC6f655866E58b07`](https://sepolia.etherscan.io/address/0x5BD51C84244fA23a567970cdaC6f655866E58b07) |
+| `BabylonCoreSpoke` | Dedicated Aave v4 market accepting vaultBTC as collateral | [`0x4B7E02c29367d9f8C1825eD38b3BB6386513A725`](https://sepolia.etherscan.io/address/0x4B7E02c29367d9f8C1825eD38b3BB6386513A725) |
+| `AaveAdapter` | User-facing entry point for TBV-on-Aave operations | [`0xb08dfb1D04373a30A33CA64Ae85061e452E5CeF7`](https://sepolia.etherscan.io/address/0xb08dfb1D04373a30A33CA64Ae85061e452E5CeF7) |
+| `AaveAdapterConfig` | LLP registration, position-size parameters, resolver registration | [`0xC89A41e473951cCB9A114B8f7908E2906E2950fd`](https://sepolia.etherscan.io/address/0xC89A41e473951cCB9A114B8f7908E2906E2950fd) |
+| `AaveAdapterLens` | Read-only state queries (positions, vaults, reserves) | [`0xF76c3E3A7c94E73497fdA00CbcDE56dbdcdDD8da`](https://sepolia.etherscan.io/address/0xF76c3E3A7c94E73497fdA00CbcDE56dbdcdDD8da) |
+| `AaveHub` | Aave v4 Hub central liquidity contract | [`0x6ca0d39f8bD5Cf226878DA80BC073227d6E52C34`](https://sepolia.etherscan.io/address/0x6ca0d39f8bD5Cf226878DA80BC073227d6E52C34) |
 
 ## LLP framework
 
 The default Liquidation Liquidity Provider (LLP) for vaultBTC liquidations. Other LLPs may be registered over time; the address below is the launch default.
 
-| Contract | Purpose | Address | Explorer |
-| --- | --- | --- | --- |
-| `BTCVaultSwap` | Default LLP. Escrows seized vaults; pays liquidators WBTC immediately; arbitrageurs later acquire escrowed vaults | *(placeholder for team data)* | *(placeholder for team data)* |
+| Contract | Purpose | Address |
+| --- | --- | --- |
+| `BTCVaultSwap` | Default LLP. Escrows seized vaults; pays liquidators WBTC immediately; arbitrageurs later acquire escrowed vaults | [`0xCaf3DE0ec631e2DEB3b4A33679037488B545f5a2`](https://sepolia.etherscan.io/address/0xCaf3DE0ec631e2DEB3b4A33679037488B545f5a2) |
 
 ## Per-user contracts
 
@@ -65,22 +61,22 @@ The AaveAdapterPositionProxy is deployed per depositor, on first interaction wit
 
 The Babylon Core Spoke uses Chainlink-compatible price feeds.
 
-| Feed | Purpose | Address |
-| --- | --- | --- |
-| BTC/USD | vaultBTC collateral valuation; health factor calculations | *(placeholder for team data)* |
-| WBTC/USD | Fairness payment and Vault Swap conversion | *(placeholder for team data)* |
-| USDC/USD | USDC reserve valuation | *(placeholder for team data)* |
-| USDT/USD | USDT reserve valuation | *(placeholder for team data)* |
+| Feed | Address |
+| --- | --- |
+| BTC/USD | [`0xF9C48C4C694cb1101081c4402F95Cf5Dd33fb316`](https://sepolia.etherscan.io/address/0xF9C48C4C694cb1101081c4402F95Cf5Dd33fb316) |
+| WBTC/USD | [`0xF9C48C4C694cb1101081c4402F95Cf5Dd33fb316`](https://sepolia.etherscan.io/address/0xF9C48C4C694cb1101081c4402F95Cf5Dd33fb316) |
+| USDC/USD | [`0xdd04B859B3bF9aAfBb3cBe175E6159b1ED998765`](https://sepolia.etherscan.io/address/0xdd04B859B3bF9aAfBb3cBe175E6159b1ED998765) |
+| USDT/USD | [`0xdd04B859B3bF9aAfBb3cBe175E6159b1ED998765`](https://sepolia.etherscan.io/address/0xdd04B859B3bF9aAfBb3cBe175E6159b1ED998765) |
 
 ## Test borrowable assets
 
 Test versions of the borrowable assets supported on Testnet.
 
-| Asset | Decimals | Address | Explorer |
-| --- | --- | --- | --- |
-| `USDC` (test) | 6 | *(placeholder for team data)* | *(placeholder for team data)* |
-| `USDT` (test) | 6 | *(placeholder for team data)* | *(placeholder for team data)* |
-| `WBTC` (test) | 8 | *(placeholder for team data)* | *(placeholder for team data)* |
+| Asset | Decimals | Address |
+| --- | --- | --- |
+| `USDC` (test) | 6 | [`0xB588C1bd8A6cd3F114A52a0AD916778B419ECf48`](https://sepolia.etherscan.io/address/0xB588C1bd8A6cd3F114A52a0AD916778B419ECf48) |
+| `USDT` (test) | 6 | [`0xCFf21358114814258635524588f74521762A6c04`](https://sepolia.etherscan.io/address/0xCFf21358114814258635524588f74521762A6c04) |
+| `WBTC` (test) | 8 | [`0x504579d0424B7B7cB4b17e16626f6A2f67bCa054`](https://sepolia.etherscan.io/address/0x504579d0424B7B7cB4b17e16626f6A2f67bCa054) |
 
 ## Read-only query helpers
 
