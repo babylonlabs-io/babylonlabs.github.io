@@ -81,7 +81,7 @@ You don't manage these paths directly. They are part of the pre-signed Taproot s
 
 If you chose the two-vault split, the portal broadcasts a single Pre-PegIn transaction with two HTLC outputs (one per vault), saving on Bitcoin fees and ensuring both vaults activate together.
 
-## Step 4: Wait
+## Step 4: Wait for confirmations and off-chain setup
 
 After submission, two processes run in parallel.
 
@@ -89,27 +89,75 @@ After submission, two processes run in parallel.
 
 **Off-chain setup.** The Vault Provider, Vault Keepers, and Universal Challengers coordinate the vault's pre-signed transaction graph: the complete set of pre-signed Bitcoin transactions covering every possible vault outcome (redemption, liquidation, fraud challenge, refund). Each participant signs their share and posts on-chain acknowledgments to confirm readiness. This sequence takes about **6 to 10 minutes** once the Pre-PegIn has the required confirmations.
 
-You don't need to do anything during this period. The portal shows progress against each milestone. When all acknowledgments are collected, the vault transitions to **Verified**.
+![Vault Pending state while confirmations and off-chain setup run](/img/trustless-bitcoin-vault/use-for-lending/create-vault-016-pending-state.png)
+
+The portal shows progress against each milestone. Once setup reaches the signing phase, the portal will prompt **you** to sign two batches of Bitcoin transactions in your wallet — the next two steps below cover each.
 
 Behind the scenes, the off-chain setup builds a tamper-evident Bitcoin transaction graph: every legitimate spend path is signed up front by every required participant. After the vault is created, no participant can fabricate a new spend. For the full mechanism (the cryptographic primitives, the cut-and-choose protocol, and the challenge transactions), see [Protocol architecture](../technical-details/protocol-architecture).
 
-## Step 5: Activate the vault
+## Step 5: Sign the Claim transaction graph
+
+Once the off-chain setup reaches the depositor-signature phase, the portal prompts you to sign the **Claim transaction graph** — your set of Bitcoin Schnorr signatures (Taproot script-path) over the pre-signed Claim, Assert, ChallengeAssert, and supporting transactions that the protocol will use during peg-out. Each signature commits you to the agreed exit paths before any BTC is moved into the vault.
+
+![Setup Claim TX Signing prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-020-setup-claim-tx-signing.png)
+
+Approve the signing prompts in your Bitcoin wallet. There are multiple transactions to sign; the portal batches them so you only see a small number of wallet prompts.
+
+![Claim TX graph signed; ready for payout signing](/img/trustless-bitcoin-vault/use-for-lending/create-vault-022-claim-signed.png)
+
+What you're actually signing: the depositor leg of the vault's pre-signed transaction graph. After this step, the protocol can build a valid Claim+Payout sequence on Bitcoin only on the spend paths you've signed off on. You can't be surprised later by a new spend the protocol could take — the set is fixed here.
+
+## Step 6: Sign the Payout transactions
+
+The portal next prompts you to sign the **Payout transactions** — the depositor-side signatures on the BTC payout outputs. These are what authorise the protocol to release your BTC back to the address recorded in the vault at peg-out time.
+
+![Sign Payout Transactions prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-028-sign-payout-prompt.png)
+
+Approve the signing prompts in your Bitcoin wallet.
+
+![Payout transactions signed](/img/trustless-bitcoin-vault/use-for-lending/create-vault-031-payout-signed.png)
+
+Together, the Claim graph signatures (Step 5) and the Payout signatures (Step 6) are what give the depositor cryptographic control over which Bitcoin destinations the vault can ever settle to.
+
+## Step 7: Download claimer artifacts
+
+When signing completes, the portal offers a **Download Claimer Artifacts** action. This bundle contains the BABE garbled circuit instances, your WOTS keypair, and the transaction graph data needed for the **depositor self-claim path** — the fallback that lets you broadcast the Bitcoin claim yourself if the Vault Provider becomes unresponsive during redemption.
+
+![Download Claimer Artifacts prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-035-download-artifacts.png)
+
+:::warning Back this up alongside your seed phrase
+Without the claimer artifacts plus the WOTS keypair file, the self-claim fallback is unavailable for this vault. If you also lose access to the Vault Provider, recovery would require Security Council intervention. The bundle is per-vault and large (~43 GB per counterparty relationship for full artifacts; cold storage is acceptable).
+:::
+
+![Artifacts downloaded; ready to activate](/img/trustless-bitcoin-vault/use-for-lending/create-vault-036-artifacts-downloaded.png)
+
+Once the artifacts are saved, the off-chain setup completes and the vault transitions to **Verified**.
+
+See [Withdraw & redeem → The self-claim path](./withdraw-and-redeem) for how these artifacts are used at peg-out if you ever need the fallback.
+
+## Step 8: Activate the vault
 
 When the vault reaches **Verified**, the portal prompts you to **Activate**. Click it and confirm the Ethereum transaction.
 
+![Activate prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-042-activate-prompt.png)
+
+![Activation Ethereum transaction in wallet](/img/trustless-bitcoin-vault/use-for-lending/create-vault-043-activate-wallet-confirm.png)
+
 Activation submits the peg-in secret to Ethereum. The contract verifies that the secret's SHA-256 hash matches the original hashlock, then transitions the vault to **Active**. This emits an event the Vault Provider and Vault Keepers detect. They construct the final Bitcoin transaction witness using the secret along with the pre-signed signatures, and broadcast the PegIn transaction. The PegIn transaction spends the Pre-PegIn output and moves your BTC into its vault Taproot output.
+
+![Activation complete; vault Active](/img/trustless-bitcoin-vault/use-for-lending/create-vault-045-activation-complete.png)
 
 After the PegIn transaction confirms on Bitcoin, the vault is fully active. The BTC is locked in a Bitcoin script whose only spend paths are the ones agreed at creation.
 
 Activate within the 48-hour activation window. The window starts when you submit the peg-in request. If the vault is not activated before `pegInActivationTimeout` closes, the vault enters **Expired** state and BTC recovery moves to the refund path.
 
-## Step 6: Add as collateral
+## Step 9: After activation — vault supplied as collateral
 
-After activation, you have an Active vault in **Available** status. Decide what to do with it.
+vaultBTC for the vault's BTC amount is **automatically minted and supplied** to your position on the Babylon Core Spoke (the Aave v4 market for vaultBTC) at activation. The vault's status moves to **InUse**; you can now [borrow stablecoins or WBTC](./borrow-and-repay) against it.
 
-The portal mints vaultBTC into a position contract registered to your wallet and supplies it to the lending market. The vault's status moves from **Available** to **InUse**. You can now borrow stablecoins or WBTC against it. See [Borrow & repay](./borrow-and-repay).
+![Vault in use as collateral](/img/trustless-bitcoin-vault/use-for-lending/create-vault-in-use.png)
 
-**Combine with other vaults.** You can add multiple vaults to the same lending position in a single transaction. All vaults must be in Available status and belong to your wallet. Position-level limits apply: up to 10 vaults per position, and up to 0.4 BTC total per position on the current Testnet.
+**Combine with other vaults.** Subsequent vault activations append to the same lending position automatically. Position-level limits apply: up to 10 vaults per position, and up to 0.4 BTC total per position on the current Testnet.
 
 ## Reorder vaults later
 

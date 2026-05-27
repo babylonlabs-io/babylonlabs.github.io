@@ -18,9 +18,7 @@ The largest asset in crypto sits mostly idle. The reason is structural: the Bitc
 
 The trust assumption is the protocol's cryptography, not an intermediary's solvency.
 
-:::note Diagram
-*Diagram placeholder — to be updated with Vlad's pending screenshot.*
-:::
+![TBV cross-chain mechanism: BTC stays on Bitcoin, Ethereum coordination contract, BABE construction for ZK verification](/img/trustless-bitcoin-vault/start-here/what-is-tbv-cross-chain-diagram.png)
 
 ## What a vault is — and what it is not
 
@@ -45,10 +43,6 @@ Beyond the chains themselves, residual trust sits with the protocol's governance
 
 * **The TBV protocol.** The core, application-agnostic protocol. It owns vault creation (peg-in), vault redemption (peg-out), the BABE fraud-detection mechanism, the Bitcoin light client on Ethereum, and the vaultBTC accounting token. Vaults exist independently of any particular DeFi application — a vault can be supplied as collateral to any registered application over its lifetime.
 * **DeFi applications on top.** Each registered consumer of vaultBTC. An application defines its own product — lending, stablecoins, options, insurance — and is responsible for its own borrowing, liquidation, and reward logic. The first application is **Aave v4 lending**.
-
-:::note Diagram
-*Two-layer architecture diagram placeholder — to be updated with Vlad's pending screenshot.*
-:::
 
 The protocol's safety properties (self-custody, pre-signed exits, BABE fraud detection, depositor self-claim) apply to every vault regardless of which application is currently using it.
 

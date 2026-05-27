@@ -14,10 +14,6 @@ Two cryptographic primitives connect the chains:
 * A hash time-locked contract (HTLC) on Bitcoin pairs with a hashlock commitment on Ethereum. Revealing the preimage on Ethereum unlocks the matching Bitcoin transaction. This is how a vault activates.
 * A zero-knowledge proof of an Ethereum state change (loan repaid, position liquidated, depositor exit) is generated off-chain, then verified directly on Bitcoin via the BABE construction (a cut-and-choose protocol in the BitVM3 family that fits inside Bitcoin's existing script primitives). This is how a vault is redeemed.
 
-:::note Diagram
-*Cross-chain flow diagram placeholder — to be updated with Vlad's pending screenshot.*
-:::
-
 An on-Ethereum Bitcoin light client (implemented as smart contracts) verifies the state of Bitcoin-side vaults in the opposite direction, so Ethereum applications can act on Bitcoin events without trusting an off-chain oracle.
 
 Each chain independently verifies the cryptographic evidence it receives. The Bitcoin side holds the BTC in a Taproot script with multiple spending paths agreed at vault creation. The Ethereum side holds an internal accounting token, **vaultBTC**, that represents the vault for DeFi purposes and is minted only when a vault is supplied as collateral.
@@ -36,10 +32,6 @@ Two safety properties are built into the peg-in flow:
 
 * **Pre-signed transactions.** Every spend path is signed at vault creation by all required participants. After creation, no party can fabricate a new spend. Each path the BTC could ever take is committed up front.
 * **Refund timelock.** If the peg-in stalls (the depositor never reveals the secret, or participants fail to complete setup), the depositor recovers the BTC unilaterally via a Bitcoin-side refund timelock on the Pre-PegIn output.
-
-:::note Diagram
-*Peg-in flow diagram placeholder — to be updated with Vlad's pending screenshot.*
-:::
 
 ## Using TBV as collateral
 

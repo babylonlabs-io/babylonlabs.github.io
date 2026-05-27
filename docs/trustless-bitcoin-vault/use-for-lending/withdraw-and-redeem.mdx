@@ -28,6 +28,8 @@ Check the following on your position:
 
 The portal surfaces all three of these on the Loans card. For programmatic access, query `getUserAccountData()` on the Babylon Core Spoke through your proxy address to read current debt, collateral value, and health factor in one call.
 
+![Position ready for withdrawal — no debt](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-01-position-check.png)
+
 ## Step 1: Repay your debt (Aave v4 application)
 
 If you have any outstanding debt, repay it before attempting a full withdrawal. For each borrowed reserve:
@@ -36,11 +38,33 @@ If you have any outstanding debt, repay it before attempting a full withdrawal. 
 2. Call `repayToCorePosition` with your position ID, the debt reserve ID, and an amount slightly larger than the current debt. Interest can accrue between the moment you read the debt balance and the moment the transaction is mined; the protocol's 10% interest fee is collected first from any accrued interest. Any excess from your repayment is refunded.
 3. Confirm the balance is zero by calling `getUserTotalDebt()` on the Spoke.
 
+![Repay before withdrawal](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-02-repay.png)
+
 Clear debt on every reserve you have borrowed from. A single satoshi of remaining debt on any reserve blocks a full withdrawal. For the full repayment flow, see [Borrow & repay](./borrow-and-repay).
 
 ## Step 2: Withdraw collateral and start redemption (application → protocol handoff)
 
 With debt cleared (full exit) or a healthy buffer left in place (partial exit), call `withdrawCollaterals(bytes32[] vaultsToWithdraw)` on the AaveAdapter with the list of vault IDs to remove. This step is the handoff from the Aave application layer to the TBV protocol layer: the AaveAdapter releases the vaults, and the TBV protocol takes over the Bitcoin-side redemption from here.
+
+From the portal:
+
+**1. Open the Collateral card and click Withdraw. Select the vault you want to withdraw.**
+
+![Withdraw form](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-03-withdraw-form.png)
+
+![Withdraw — vault selected](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-04-select-vault.png)
+
+**2. Review the withdrawal amount, network fee rate, VP commission, and the nominated Bitcoin address.**
+
+![Withdraw review screen](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-05-review.png)
+
+**3. Confirm the Ethereum transaction in your wallet.**
+
+![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-06-bitcoin-address.png)
+
+![Withdraw initiated](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-07-confirm.png)
+
+![Withdraw pending on dashboard](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-08-progress.png)
 
 **Partial withdrawal.** Pass a subset of your vault IDs. The contract verifies your health factor stays above 1.0 after the listed vaults are removed. If removing them would push the position into liquidatable territory, the transaction reverts. Use partial withdrawal to free up an over-collateralised vault while keeping the position open.
 
