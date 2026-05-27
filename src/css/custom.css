@@ -2303,3 +2303,66 @@ html[data-theme='dark'] .header-ai-chat-link:hover {
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * Markdown <img> click-to-zoom + wider prose-column display
+ *
+ * Pairs with src/theme/MDXComponents.js which wraps `<img>` in react-medium-
+ * image-zoom. The CSS here:
+ *   1. Surfaces a zoom-in cursor so readers know images are interactive.
+ *   2. Forces images to fill the prose column (no awkward small renderings).
+ *   3. On wide viewports, breaks images slightly past the column edges so
+ *      4K screenshots get more real estate before the user has to click to
+ *      zoom into the full-resolution overlay.
+ * --------------------------------------------------------------------------- */
+
+article .markdown img,
+.markdown img {
+  display: block;
+  margin: 1.5rem auto;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  cursor: zoom-in;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme='dark'] article .markdown img,
+html[data-theme='dark'] .markdown img {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Don't shadow/border inline icons (small images inside paragraphs that
+   aren't the dominant element). Inline images keep their default look. */
+.markdown p > img:not(:only-child) {
+  display: inline-block;
+  margin: 0 0.25rem;
+  vertical-align: middle;
+  width: auto;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  cursor: zoom-in;
+}
+
+/* On wide viewports allow the image to extend ~80 px past the prose column.
+   prose column is ~720-800 px; this gives ~880-960 px effective width. */
+@media (min-width: 1280px) {
+  article .markdown > p > img,
+  article .markdown > p > a > img {
+    max-width: calc(100% + 80px);
+    margin-left: -40px;
+    margin-right: -40px;
+  }
+}
+
+/* Keep react-medium-image-zoom's open overlay above the docs sidebar and
+   navbar. Default z-index for the lib is 100; bump to 9999 so it always
+   wins. */
+[data-rmiz-modal-overlay='visible'],
+[data-rmiz-modal-content] {
+  z-index: 9999 !important;
+}
+
