@@ -2304,22 +2304,23 @@ html[data-theme='dark'] .header-ai-chat-link:hover {
 }
 
 /* ---------------------------------------------------------------------------
- * Markdown <img> click-to-zoom + wider prose-column display
+ * Markdown <img> click-to-zoom + responsive sizing
  *
  * Pairs with src/theme/MDXComponents.js which wraps `<img>` in react-medium-
  * image-zoom. The CSS here:
  *   1. Surfaces a zoom-in cursor so readers know images are interactive.
- *   2. Forces images to fill the prose column (no awkward small renderings).
- *   3. On wide viewports, breaks images slightly past the column edges so
- *      4K screenshots get more real estate before the user has to click to
- *      zoom into the full-resolution overlay.
+ *   2. Sizes images to 70% of the prose column on desktop (>=996px) — keeps
+ *      tall screenshots from dominating the page while still leaving plenty
+ *      of room to read before clicking for the full 4K overlay.
+ *   3. Expands to 100% below 996px (Docusaurus's sidebar-collapse breakpoint)
+ *      so on tablet/phone the image fills the available width.
  * --------------------------------------------------------------------------- */
 
 article .markdown img,
 .markdown img {
   display: block;
   margin: 1.5rem auto;
-  width: 100%;
+  width: 70%;
   max-width: 100%;
   height: auto;
   cursor: zoom-in;
@@ -2334,6 +2335,15 @@ html[data-theme='dark'] .markdown img {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* At/below Docusaurus's sidebar-collapse breakpoint (996px), images fill
+   the full available width since horizontal space is already constrained. */
+@media (max-width: 996px) {
+  article .markdown img,
+  .markdown img {
+    width: 100%;
+  }
+}
+
 /* Don't shadow/border inline icons (small images inside paragraphs that
    aren't the dominant element). Inline images keep their default look. */
 .markdown p > img:not(:only-child) {
@@ -2345,17 +2355,6 @@ html[data-theme='dark'] .markdown img {
   box-shadow: none;
   border-radius: 0;
   cursor: zoom-in;
-}
-
-/* On wide viewports allow the image to extend ~80 px past the prose column.
-   prose column is ~720-800 px; this gives ~880-960 px effective width. */
-@media (min-width: 1280px) {
-  article .markdown > p > img,
-  article .markdown > p > a > img {
-    max-width: calc(100% + 80px);
-    margin-left: -40px;
-    margin-right: -40px;
-  }
 }
 
 /* Keep react-medium-image-zoom's open overlay above the docs sidebar and
