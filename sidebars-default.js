@@ -29,7 +29,7 @@ const sidebars = {
         id: 'guides/overview/overview',
       },
       items: [
-        { type: 'doc', id: 'guides/overview/bitcoin-vault' },
+        { type: 'link', label: 'Trustless Bitcoin Vault', href: '/trustless-bitcoin-vault/' },
         {
           type: 'category',
           label: 'Bitcoin Staking',

@@ -111,6 +111,11 @@ const plugins = [
           from: '/guides/baby_stakers/baby_staking_tools/',
           to: '/stakers/baby_stakers/',
         },
+        // Old Bitcoin Vault overview page → consolidated Trustless Bitcoin Vault section
+        {
+          from: '/guides/overview/bitcoin-vault/',
+          to: '/trustless-bitcoin-vault/',
+        },
         // Architecture redirects (moved under babylon_genesis)
         {
           from: '/guides/architecture/',
