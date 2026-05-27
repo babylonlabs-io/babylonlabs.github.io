@@ -1,0 +1,103 @@
+---
+title: Contract addresses
+sidebar_position: 2
+---
+
+# Contract addresses
+
+:::info Pending team data
+Addresses below are *(placeholder for team data)*. Contract names and groupings are stable; only the address column and explorer links will change once the team provides current deployments.
+:::
+
+This page lists the deployed contract addresses for the current Trustless Bitcoin Vault (TBV) Testnet release. **Audience:** developers, integrators, and security researchers. Depositors using the demo app do not need to interact with contracts directly.
+
+For wallet and network setup, see [Setup](./setup). For the live values of protocol parameters (thresholds, timeouts), see [Protocol parameters](./protocol-parameters).
+
+Addresses can change between Testnet releases. Always check this page before sending a transaction or interacting with a contract directly.
+
+## Bitcoin side
+
+The Bitcoin side has no protocol contracts: each vault corresponds to a single Taproot UTXO created at peg-in. The vault's spending paths are committed in the Taproot script at creation. See [Protocol architecture](../technical-details/protocol-architecture) for the script structure.
+
+## Ethereum side — protocol-level contracts
+
+Core contracts that manage vault accounting, protocol parameters, and the application registry.
+
+| Contract | Purpose | Address | Explorer |
+| --- | --- | --- | --- |
+| `BTCVaultRegistry` | Vault lifecycle, state, hashlock and WOTS commitments | *(placeholder for team data)* | *(placeholder for team data)* |
+| `BTCVaultsMetadataRegistry` | Publishes Vault Provider RPC endpoints | *(placeholder for team data)* | *(placeholder for team data)* |
+| `ProtocolParams` | Versioned protocol parameters (timelocks, confirmation depth, Security Council keys, off-chain parameters) | *(placeholder for team data)* | *(placeholder for team data)* |
+| `ApplicationRegistry` | Lists DeFi applications approved to receive vaults | *(placeholder for team data)* | *(placeholder for team data)* |
+| `CapPolicy` | Per-application and per-address BTC exposure caps | *(placeholder for team data)* | *(placeholder for team data)* |
+| `FeeEscrow` | Collects the peg-in fee and distributes it to participants | *(placeholder for team data)* | *(placeholder for team data)* |
+
+## Ethereum side — Aave v4 integration
+
+Contracts deployed for the Aave v4 integration. The collateral asset is `vaultBTC`. For the architecture, see [Aave v4 integration](../technical-details/aave-v4-integration).
+
+| Contract | Purpose | Address | Explorer |
+| --- | --- | --- | --- |
+| `vaultBTC` | ERC-20 accounting token, 8 decimals, transfer-restricted to protocol contracts | *(placeholder for team data)* | *(placeholder for team data)* |
+| `BabylonCoreSpoke` | Dedicated Aave v4 market accepting vaultBTC as collateral | *(placeholder for team data)* | *(placeholder for team data)* |
+| `AaveAdapter` | User-facing entry point for TBV-on-Aave operations | *(placeholder for team data)* | *(placeholder for team data)* |
+| `AaveAdapterConfig` | LLP registration, position-size parameters, resolver registration | *(placeholder for team data)* | *(placeholder for team data)* |
+| `AaveAdapterLens` | Read-only state queries (positions, vaults, reserves) | *(placeholder for team data)* | *(placeholder for team data)* |
+| `AaveHub` | Aave v4 Hub central liquidity contract | *(placeholder for team data)* | *(placeholder for team data)* |
+
+## LLP framework
+
+The default Liquidation Liquidity Provider (LLP) for vaultBTC liquidations. Other LLPs may be registered over time; the address below is the launch default.
+
+| Contract | Purpose | Address | Explorer |
+| --- | --- | --- | --- |
+| `BTCVaultSwap` | Default LLP. Escrows seized vaults; pays liquidators WBTC immediately; arbitrageurs later acquire escrowed vaults | *(placeholder for team data)* | *(placeholder for team data)* |
+
+## Per-user contracts
+
+The AaveAdapterPositionProxy is deployed per depositor, on first interaction with the adapter. There is no single global address; the proxy for a given depositor can be looked up through the AaveAdapterLens or by inspecting the deploying transaction.
+
+| Contract | Purpose | How to find |
+| --- | --- | --- |
+| `AaveAdapterPositionProxy` | Per-depositor isolated lending position; deployed deterministically on first deposit | Query `AaveAdapterLens.getPosition(userAddress)` or inspect the user's first interaction transaction |
+
+## Oracles
+
+The Babylon Core Spoke uses Chainlink-compatible price feeds.
+
+| Feed | Purpose | Address |
+| --- | --- | --- |
+| BTC/USD | vaultBTC collateral valuation; health factor calculations | *(placeholder for team data)* |
+| WBTC/USD | Fairness payment and Vault Swap conversion | *(placeholder for team data)* |
+| USDC/USD | USDC reserve valuation | *(placeholder for team data)* |
+| USDT/USD | USDT reserve valuation | *(placeholder for team data)* |
+
+## Test borrowable assets
+
+Test versions of the borrowable assets supported on Testnet.
+
+| Asset | Decimals | Address | Explorer |
+| --- | --- | --- | --- |
+| `USDC` (test) | 6 | *(placeholder for team data)* | *(placeholder for team data)* |
+| `USDT` (test) | 6 | *(placeholder for team data)* | *(placeholder for team data)* |
+| `WBTC` (test) | 8 | *(placeholder for team data)* | *(placeholder for team data)* |
+
+## Read-only query helpers
+
+Functions developers can call to read protocol state without sending a transaction:
+
+* `BTCVaultRegistry.getPegInFee(vaultProvider)` — current peg-in fee for a chosen VP
+* `BTCVaultRegistry.getVaultProviderCommission(vpAddress)` — VP's commission in BPS
+* `BTCVaultRegistry.getBtcVaultBasicInfo(vaultId)` — vault status and basic info
+* `AaveAdapter.getPosition(depositorEOA)` — position summary
+* `AaveAdapterPositionProxy.getUserAccountData()` — health factor and values
+* `AaveAdapterPositionProxy.getReserveTotalDebt(reserveId)` — current debt per reserve
+* `CapPolicy.getAvailableAppCapacity(appEntryPoint)` — remaining application cap
+* `CapPolicy.getAvailableUserAppCapacity(appEntryPoint, user)` — remaining user cap
+
+## Related
+
+* [Setup](./setup) — wallets, networks, faucets
+* [Protocol parameters](./protocol-parameters) — current parameter values
+* [Protocol architecture](../technical-details/protocol-architecture) — how the contracts fit together
+* [Aave v4 integration](../technical-details/aave-v4-integration) — adapter and Hub interaction

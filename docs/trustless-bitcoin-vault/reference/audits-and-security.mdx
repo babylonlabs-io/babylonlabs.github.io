@@ -1,0 +1,75 @@
+---
+title: Audits & security
+sidebar_position: 3
+---
+
+# Audits & security
+
+:::info Pending team data
+Sections are stable. Audit firm names, report links, disclosure contact, and bug bounty details are *(placeholder for team data)* until the team publishes the audit pack and the responsible-disclosure process.
+:::
+
+This page lists the security reviews performed on the Trustless Bitcoin Vault (TBV) contracts and supporting infrastructure, and how to report a vulnerability. For the underlying protocol design, see [Protocol architecture](../technical-details/protocol-architecture). For depositor-facing safety properties and trust assumptions, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions).
+
+This is the Testnet release. The contracts may differ from the version that will be deployed on mainnet. Audit reports listed here cover the Testnet codebase scope unless explicitly stated otherwise.
+
+## Audits
+
+| Firm | Scope | Date | Report |
+| --- | --- | --- | --- |
+| *(placeholder for team data)* | *(placeholder for team data)* | *(placeholder for team data)* | *(placeholder for team data)* |
+| *(placeholder for team data)* | *(placeholder for team data)* | *(placeholder for team data)* | *(placeholder for team data)* |
+
+## Cryptographic review
+
+The TBV design uses a pre-signed Bitcoin transaction graph, Winternitz One-Time Signature (WOTS) commitments, a ZK proof system for redemption (SP1 with Groth16 compression), and BitVM3-style fraud-detection primitives. Reviews of the cryptographic protocol are listed separately from contract audits.
+
+| Reviewer | Scope | Date | Report |
+| --- | --- | --- | --- |
+| *(placeholder for team data)* | *(placeholder for team data)* | *(placeholder for team data)* | *(placeholder for team data)* |
+
+## Responsible disclosure
+
+Vulnerabilities can be reported through the channel below. Do not disclose suspected vulnerabilities publicly, in community channels, or in GitHub issues before they have been triaged.
+
+| Field | Value |
+| --- | --- |
+| Disclosure email | *(placeholder for team data)* |
+| PGP key | *(placeholder for team data)* |
+| Expected response time | *(placeholder for team data)* |
+| Scope | *(placeholder for team data)* |
+
+## Bug bounty
+
+| Field | Value |
+| --- | --- |
+| Status | *(placeholder for team data)* |
+| Platform | *(placeholder for team data)* |
+| Reward range | *(placeholder for team data)* |
+| In-scope assets | *(placeholder for team data)* |
+| Out-of-scope items | *(placeholder for team data)* |
+
+## Known limitations
+
+The Testnet is a beta. Issues that may surface and how they are handled:
+
+* **Contract changes between releases.** The team can redeploy contracts during Testnet. Always check [Contract addresses](../testnet-info/contract-addresses) before transacting.
+* **Operator dependencies.** Activation requires the [Vault Provider and Vault Keepers](../technical-details/protocol-actors) to be online. Two distinct timeouts apply: `pegInAckTimeout` (~24h) for off-chain setup completion, and `pegInActivationTimeout` (~48h) for the depositor's secret reveal. If the Vault Provider is unreachable for redemption, the depositor's self-claim path (WOTS + claimer artifacts via a command-line tool the protocol ships) remains available for already-active vaults. See [Withdraw & redeem](../use-for-lending/withdraw-and-redeem).
+* **Conservative caps.** Per-address (`perAddressCapBTC` = 0.4 BTC) and per-application (`totalCapBTC` = 10 BTC for the Aave application) caps are intentionally tight on Testnet. These limits will grow as the protocol matures.
+* **Pause states.** The protocol can enter soft pause or full pause in response to incidents, by 3-of-5 Security Council quorum. Behaviour during pause is described in [Safety & trust assumptions](../start-here/safety-and-trust-assumptions).
+
+## Path to mainnet
+
+Mainnet deployment will be a distinct release process from Testnet:
+
+* **Separate audit pass.** The production codebase will receive its own audit, scoped to mainnet contracts and parameters.
+* **Expanded Security Council.** The Security Council quorum will move from team-controlled keys to an independent-signer setup.
+* **Wider operator sets.** Multiple Vault Providers competing on commission, an expanded Vault Keeper set per application, and an opened-up Universal Challenger registry.
+* **Bug bounty transition.** The bug bounty program will transition from Testnet best-effort scope to production scope with full reward tiers.
+* **Production-scale caps.** Per-application and per-address BTC caps will be raised significantly, with values published when mainnet parameters are finalized.
+
+## Related
+
+* [Safety & trust assumptions](../start-here/safety-and-trust-assumptions): protocol trust model and what the audits are protecting
+* [Protocol architecture](../technical-details/protocol-architecture): components covered by the audits
+* [Community & support](./community-and-support): non-security questions go here, not to the disclosure email

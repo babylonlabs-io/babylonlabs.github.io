@@ -1,0 +1,10 @@
+{
+  "label": "Start Here",
+  "position": 2,
+  "collapsible": true,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Top-of-funnel reading for anyone new to TBV: what it is, how it works, why it exists, and what trust assumptions it relies on."
+  }
+}

@@ -1,0 +1,68 @@
+---
+title: How it works
+sidebar_position: 2
+---
+
+# How it works
+
+## The big picture
+
+A **Trustless Bitcoin Vault (TBV)** spans two networks. BTC stays on the Bitcoin network for the vault's entire lifetime. Ethereum runs a coordination contract that tracks each vault's state and integrates with DeFi applications such as Aave v4. The trust assumption is cryptographic evidence — no bridge, no off-chain oracle, no wrapping custodian.
+
+Two cryptographic primitives connect the chains:
+
+* A hash time-locked contract (HTLC) on Bitcoin pairs with a hashlock commitment on Ethereum. Revealing the preimage on Ethereum unlocks the matching Bitcoin transaction. This is how a vault activates.
+* A zero-knowledge proof of an Ethereum state change (loan repaid, position liquidated, depositor exit) is generated off-chain, then verified directly on Bitcoin via the BABE construction (a cut-and-choose protocol in the BitVM3 family that fits inside Bitcoin's existing script primitives). This is how a vault is redeemed.
+
+:::note Diagram
+*Cross-chain flow diagram placeholder — to be updated with Vlad's pending screenshot.*
+:::
+
+An on-Ethereum Bitcoin light client (implemented as smart contracts) verifies the state of Bitcoin-side vaults in the opposite direction, so Ethereum applications can act on Bitcoin events without trusting an off-chain oracle.
+
+Each chain independently verifies the cryptographic evidence it receives. The Bitcoin side holds the BTC in a Taproot script with multiple spending paths agreed at vault creation. The Ethereum side holds an internal accounting token, **vaultBTC**, that represents the vault for DeFi purposes and is minted only when a vault is supplied as collateral.
+
+## Peg-in: vault creation
+
+Vault creation locks BTC into a Bitcoin transaction and registers the vault on Ethereum.
+
+The depositor submits a peg-in request to the Ethereum coordination contract. The request includes a hashlock — the SHA-256 hash of a secret only the depositor knows. The depositor then broadcasts the Pre-PegIn Bitcoin transaction that locks BTC into a Taproot address committed to that hashlock.
+
+While the Pre-PegIn transaction accumulates Bitcoin confirmations, the depositor and the Vault Keepers (off-chain participants that co-sign the vault's transaction graph; none of them have custody of your BTC) complete an off-chain setup. They construct the vault's transaction graph — the complete set of pre-signed transactions covering every legitimate spend path (repayment, liquidation, refund, challenge). Each participant signs their part.
+
+The vault enters its Active state when the depositor reveals the hashlock secret on Ethereum. The protocol uses the secret to construct the final witness for the Bitcoin transaction that moves BTC into its vault location.
+
+Two safety properties are built into the peg-in flow:
+
+* **Pre-signed transactions.** Every spend path is signed at vault creation by all required participants. After creation, no party can fabricate a new spend. Each path the BTC could ever take is committed up front.
+* **Refund timelock.** If the peg-in stalls (the depositor never reveals the secret, or participants fail to complete setup), the depositor recovers the BTC unilaterally via a Bitcoin-side refund timelock on the Pre-PegIn output.
+
+:::note Diagram
+*Peg-in flow diagram placeholder — to be updated with Vlad's pending screenshot.*
+:::
+
+## Using TBV as collateral
+
+An active vault is automatically supplied as collateral. On activation, the protocol mints vaultBTC for the vault's BTC amount and supplies it to the **Babylon Core Spoke** — a dedicated Aave v4 market for vaultBTC collateral. The vault is appended to the depositor's lending position; subsequent activations add to the same position.
+
+The depositor can then borrow stablecoins (USDC, USDT) or WBTC against that collateral.
+
+The vaultBTC token never leaves the protocol contracts. It cannot be transferred to arbitrary addresses or traded on secondary markets. Its only purpose is internal accounting of vault-backed collateral.
+
+Additional vaults can be created at any time; each is supplied automatically on activation. Vaults can be withdrawn individually as long as the position remains healthy (its health factor — the ratio of risk-adjusted collateral to debt — stays above 1.0). With multiple vaults in a position, the protocol can do partial-position liquidation: if liquidation is triggered, it seizes only the subset of vaults required to restore the health factor, leaving the rest in the position. With a single-vault position, liquidation seizes the whole vault.
+
+In multi-vault positions the order matters. The protocol walks the vault list in order during liquidation and seizes the minimum prefix needed. Vaults at the front are taken first. This is why the app recommends splitting BTC between a sacrificial vault (sized to cover the protocol's expected seizure, placed first) and a protected vault (whatever remains, placed second). At current Testnet parameters the sacrificial vault is the larger of the two; see [Liquidation risk](../use-for-lending/liquidation-risk) for the sizing logic.
+
+When a vault is withdrawn from a position — either by the depositor exiting, or by liquidation — the corresponding vaultBTC is burned. The vault then enters the redemption flow on Bitcoin.
+
+## Peg-out: vault redemption
+
+When a depositor is done with a vault, or when liquidation triggers, the vault enters the redemption flow on Bitcoin. There are two main paths and one safety fallback.
+
+**Path 1: repay and exit.** After repaying the loan, the depositor withdraws the vault from the lending position. This burns the corresponding vaultBTC and triggers vault redemption on the Bitcoin side. The Vault Provider generates a zero-knowledge proof that the burn event happened on Ethereum, submits a claim transaction on Bitcoin, and after the challenge period ends, the BTC is released to the depositor's Bitcoin address (minus the Vault Provider's commission).
+
+**Path 2: liquidation.** If the position's health factor drops below 1.0, anyone can call the liquidation function on Ethereum. The liquidator repays the debt and the protocol seizes the necessary vaults. The seized vaults then enter the same redemption flow, but with the claimer being an arbitrageur — either one with a Bitcoin redeem key (redeeming directly), or one who acquires the vault from BTCVaultSwap after a permissionless liquidation. The depositor receives a fairness payment in WBTC for any seized value exceeding what was owed to the liquidator.
+
+**Trustless safety fallback: depositor self-claim.** If the Vault Provider becomes unresponsive (offline, refusing to process the redemption), the depositor can independently claim the BTC using a one-time signature key committed at vault creation, plus the depositor's locally-stored claimer artifacts. This path is **trustless**: it requires no cooperation from any Vault Keeper, Universal Challenger, or Vault Provider, and is always available as a fallback for normal exits.
+
+All three paths share the same finalization mechanism: a zero-knowledge proof verified on Bitcoin via the BABE construction, followed by a ~3 day challenge period during which any Universal Challenger or Vault Keeper — or the depositor themselves — can dispute an invalid claim. If unchallenged, the BTC is released.

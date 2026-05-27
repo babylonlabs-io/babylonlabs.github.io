@@ -1,0 +1,74 @@
+---
+title: Setup
+sidebar_position: 1
+---
+
+# Setup
+
+:::info Pending team data
+Values marked *(placeholder for team data)* are awaiting confirmation from the protocol team. The page structure is stable; only the marked values will change.
+:::
+
+Reference for wallets, networks, faucets, and the demo app URL used by the Trustless Bitcoin Vault (TBV) Testnet. The walkthrough that uses these values is on [Quickstart](../use-for-lending/quickstart).
+
+**Testnet limits.** The current Beta Testnet caps each address at **0.4 BTC** of collateral across all positions in the Aave application, and the whole application at 10 BTC total. Each vault is also capped at 0.4 BTC. Plan your test runs around these limits; see [Protocol parameters](./protocol-parameters) for the full list.
+
+## Recommended amounts
+
+For a full Testnet cycle (peg-in, borrow, repay, redeem), plan for:
+
+* **Signet BTC:** ~0.05 to 0.4 BTC, depending on what you want to test. The minimum vault size is 0.01 BTC; the per-vault and per-position maximum is 0.4 BTC.
+* **Testnet ETH:** ~0.05 ETH covers gas for the full cycle (peg-in submission, activation, borrow, repay, withdraw) plus the peg-in fee paid at submission.
+
+## Supported wallets
+
+### Bitcoin (signet)
+
+* **UniSat** — browser extension with signet support. Other Bitcoin wallets supporting signet may work; the team will confirm a fuller list before launch.
+
+**Set the address type to Taproot before connecting.** TBV uses Taproot scripts on Bitcoin, so the wallet must produce Taproot (P2TR) addresses.
+
+In UniSat: **Settings → Address Type → Taproot (P2TR)**. If you started with a different address type, switch first; you may need to fund the new Taproot address from the signet faucet after switching, because addresses of different types do not share balance.
+
+**Message signing support required.** The wallet must support PSBT signing and either BIP-322 or ECDSA message signing — used for the depositor proof-of-possession submitted to Ethereum during peg-in.
+
+### Ethereum (testnet)
+
+* *(placeholder for team data: list of supported EVM wallets)*
+
+If your preferred wallet isn't listed, see [Community & support](../reference/community-and-support) for help — additional wallets may be added based on demand.
+
+## Bitcoin signet network
+
+| Field | Value |
+| --- | --- |
+| Network | signet |
+| Faucet | *(placeholder for team data)* |
+| Block explorer | *(placeholder for team data)* |
+
+If the signet faucet is unavailable, see [Community & support](../reference/community-and-support) for alternative signet BTC sources.
+
+## Ethereum testnet
+
+| Field | Value |
+| --- | --- |
+| Network name | *(placeholder for team data)* |
+| Chain ID | *(placeholder for team data)* |
+| RPC URL | *(placeholder for team data)* |
+| Gas token | *(placeholder for team data)* |
+| Gas faucet | *(placeholder for team data)* |
+| Block explorer | *(placeholder for team data)* |
+
+## Demo app
+
+Open the demo app to start a peg-in. The walkthrough begins on [Quickstart](../use-for-lending/quickstart).
+
+| Field | Value |
+| --- | --- |
+| Demo app URL | *(placeholder for team data)* |
+
+## Related
+
+* [Quickstart](../use-for-lending/quickstart): step-by-step walkthrough
+* [Contract addresses](./contract-addresses): deployed contract addresses
+* [Protocol parameters](./protocol-parameters): live parameter values and Testnet caps

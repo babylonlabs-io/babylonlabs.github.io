@@ -1,0 +1,10 @@
+{
+  "label": "Use TBV Testnet for Lending",
+  "position": 4,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Depositor critical path for the Aave v4 lending product built on TBV — step-by-step walkthroughs of every action a Testnet user takes, from the first peg-in to redeeming BTC."
+  }
+}

@@ -355,19 +355,9 @@ const config = {
             className: 'guides-top-header',
           },
           {
-            label: 'Vault Users',
-            to: '/vault-users/',
-            className: 'vault-users-top-header',
-          },
-          {
-            label: 'Vault Builders',
-            to: '/vault-builders/',
-            className: 'vault-builders-top-header',
-          },
-          {
-            label: 'Vault Operators',
-            to: '/vault-operators/',
-            className: 'vault-operators-top-header',
+            label: 'Trustless Bitcoin Vault',
+            to: '/trustless-bitcoin-vault/',
+            className: 'trustless-bitcoin-vault-top-header',
           },
           {
             label: 'API',

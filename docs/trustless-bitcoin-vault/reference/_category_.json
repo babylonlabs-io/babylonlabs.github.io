@@ -1,0 +1,10 @@
+{
+  "label": "Reference",
+  "position": 6,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Lookup material — terms, fees, audits, and where to find support."
+  }
+}

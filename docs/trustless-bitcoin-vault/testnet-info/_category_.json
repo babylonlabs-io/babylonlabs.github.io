@@ -1,0 +1,10 @@
+{
+  "label": "Testnet Info",
+  "position": 3,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Practical setup info: signet faucet, supported wallets, contract addresses, and protocol parameters live on the current Testnet."
+  }
+}

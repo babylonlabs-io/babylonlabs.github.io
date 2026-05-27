@@ -1,0 +1,114 @@
+---
+title: Glossary
+sidebar_position: 1
+---
+
+# TBV Glossary
+
+Terms used throughout the documentation. Each entry links to the page where the concept is expanded.
+
+**AaveAdapter.** The user-facing entry point for TBV-on-Aave operations on Ethereum. Coordinates adding vaults as collateral, borrowing, repaying, withdrawing, and triggering redemption. Registered in the ApplicationRegistry as the first DeFi integration. Auxiliary contracts in the same family: AaveAdapterConfig (LLP and resolver registration) and AaveAdapterLens (read-only state queries). See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**Aave v4 Hub.** Central liquidity contract in Aave v4 from which spokes draw borrowable assets. Lenders supply assets (USDC, USDT, WBTC) to the Hub and earn interest. The Babylon Core Spoke draws from the Hub when a depositor borrows; repays restore liquidity. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**ApplicationRegistry.** Ethereum contract listing the DeFi applications approved to receive vaults as collateral. Currently the only registered application is the Aave v4 integration (AaveAdapter). See [Protocol architecture](../technical-details/protocol-architecture).
+
+**BABE.** Cut-and-choose protocol used to establish the challenge framework between each claimer-challenger pair at vault creation. Generates many candidate garbled circuit instances (307 on Testnet), then reveals all but a small number (6 on Testnet) — the survivors are used during dispute resolution; the revealed ones verify honest construction. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Babylon Core Spoke.** A dedicated, isolated Aave v4 market that accepts vaultBTC as collateral. Has its own risk parameters (collateral factor, liquidation bonus, target health factor) and draws borrowable assets from the Aave v4 Hub. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**BitVM3.** Bitcoin-side mechanism that lets a zero-knowledge proof generated off-chain be verified by Bitcoin's existing script capabilities, without requiring a Bitcoin soft fork. The protocol uses a BitVM3-style construction with WOTS commitments and garbled circuits. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**BTC/USD oracle.** Chainlink price feed used by the Babylon Core Spoke to value vaultBTC collateral for health factor calculations. Paired with a separate WBTC/USD feed for fairness payment denomination and BTCVaultSwap conversion (WBTC trades very close to but slightly below BTC parity). See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**BTCVaultRegistry.** The Ethereum coordination contract holding each vault's state, the depositor's hashlock, and the depositor's WOTS commitment. Emits events that off-chain participants watch to know which pre-signed Bitcoin transaction to broadcast next. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**BTCVaultSwap.** The default Liquidation Liquidity Provider. When a liquidator seizes a vault via the LLP path, calling `swapVaultForWbtc` routes the vault into BTCVaultSwap escrow and pays the liquidator in WBTC immediately. A registered arbitrageur later acquires the escrowed vault by calling `swapWbtcForVault`, paying the Hub debt, and finalizes the BTC redemption on Bitcoin. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**BTCVaultsMetadataRegistry.** Ethereum contract that publishes Vault Provider RPC endpoints so peers can discover and connect during peg-in setup. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**CapPolicy.** Ethereum contract enforcing per-application and per-address BTC exposure caps. At vault activation, the contract checks that the activation would not exceed either cap. On the current Testnet, the Aave application is capped at 10 BTC total and 0.4 BTC per address. See [Protocol parameters](../testnet-info/protocol-parameters).
+
+**Challenge period.** A window of approximately three days (`timelockAssert` = 432 BTC blocks on Testnet) during which any Universal Challenger (and any Vault Keeper) can dispute a claim on the Bitcoin side by broadcasting a ChallengeAssert. If no challenge arrives before the window closes, the claim finalizes and the BTC is released to the claimer. See [How it works](../start-here/how-it-works).
+
+**ChallengeAssert.** Bitcoin transactions broadcast by a Universal Challenger (or Vault Keeper) to dispute an invalid claim. Split into ChallengeAssertX and ChallengeAssertY to fit Bitcoin script size limits. Verified through BitVM3-style garbled circuits. If the claim cannot defend itself (no `WronglyChallenged` response), the challenger broadcasts `NoPayout` after `timelockChallengeAssert` (~18 hours on Testnet) expires and the claimer's bond is forfeited. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Cliff effect.** The risk that a single-vault position is fully seized at liquidation because each vault is indivisible. Splitting a depositor's BTC into a sacrificial vault and a protected vault at peg-in mitigates this. See [Liquidation risk](../use-for-lending/liquidation-risk).
+
+**Collateral factor.** The fraction of a collateral asset's value counted toward borrowing capacity. With a collateral factor of 78% (the Testnet value for vaultBTC), $60,000 of BTC supports up to $46,800 of borrows. Set per asset on the Babylon Core Spoke. See [Borrow & repay](../use-for-lending/borrow-and-repay).
+
+**Depositor.** The Bitcoin holder who creates a vault to use BTC as collateral. The depositor's keys are required at vault creation and at every release path. Also called the borrower in lending contexts. See [TBV Protocol actors](../technical-details/protocol-actors).
+
+**Depositor claim output.** A small Bitcoin output produced by the PegIn transaction (Output 1) controlled solely by the depositor's key. Serves as the structural anchor for the depositor's self-claim path during peg-out — if the Vault Provider goes offline, the depositor can spend this output as part of the independent claim. See [Withdraw & redeem](../use-for-lending/withdraw-and-redeem).
+
+**Fairness debt repay.** Compensation mechanism used during partial-position liquidation when the over-seizure surplus is less than the depositor's remaining debt: the surplus reduces the depositor's debt rather than being paid out in WBTC. See [Liquidation risk](../use-for-lending/liquidation-risk).
+
+**Fairness payment.** Compensation paid to the depositor in WBTC when partial-position liquidation seizes more collateral than the debt plus liquidation bonus would have required, and the over-seizure surplus exceeds remaining debt. The over-seizure value is discounted using the ratio of debt liquidated to collateral liquidated, not valued at raw BTC price. WBTC is the denomination because the seized vault's BTC has already moved to the liquidator on Bitcoin; WBTC trades very close to (but slightly below) BTC parity. The complementary mechanism for the smaller-surplus case is fairness debt repay. See [Liquidation risk](../use-for-lending/liquidation-risk).
+
+**FeeEscrow.** Ethereum contract that collects the multi-component peg-in fee from the depositor and distributes it to the Vault Provider, Universal Challengers, and Application Vault Keepers. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Full-vault liquidation.** Each individual vault is seized whole. UTXO indivisibility means a vault's BTC cannot be partially seized. To minimize what gets seized across a multi-vault position, see Partial-position liquidation below. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**Garbled circuit (GC).** A cryptographic construction used in BitVM3-style verification to evaluate complex predicates on the Bitcoin network. The protocol generates 307 candidate GC instances per claimer-challenger pair during BABE setup, retains 6 after the cut-and-choose. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Hashlock.** The SHA-256 hash of a 32-byte secret generated by the depositor at peg-in. The hash is committed on Ethereum; the secret stays with the depositor until activation. Revealing the secret on Ethereum unlocks the matching Bitcoin transaction. See [How it works](../start-here/how-it-works).
+
+**Health factor.** Ratio of risk-adjusted collateral value to total debt value. A position is liquidatable when the health factor drops below 1.0. See [Liquidation risk](../use-for-lending/liquidation-risk).
+
+**HTLC atomic swap.** Hash time-locked contract structure used to activate a vault. The depositor commits a hashlock at peg-in and reveals the preimage on Ethereum at activation. The same secret then enables the matching Bitcoin transaction. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Liquidation bonus.** A discount on collateral granted to the liquidator as an incentive to maintain protocol solvency. On Testnet, the maximum is 10% (`maxLiquidationBonus`) — a liquidator can receive collateral worth up to 110% of the debt repaid. With the current Testnet configuration (`healthFactorForMaxBonus` ≈ 1.0), this max bonus applies immediately when a position becomes liquidatable. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**LLP (Liquidation Liquidity Provider).** A contract that provides instant WBTC liquidity to liquidators while the underlying BTC redemption finalizes asynchronously. Multiple LLPs can coexist; BTCVaultSwap is the default. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**Partial-position liquidation.** When a position holds multiple vaults and only the minimum subset of vaults needed to restore the health factor gets seized; the rest remain in the position. The protocol walks vaults in their stored order during liquidation. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**Peg-in / peg-out.** Peg-in is the process of locking BTC into a vault on Bitcoin and registering the vault on Ethereum. Peg-out is the reverse: a vault is redeemed and the BTC is released back to a Bitcoin address. See [How it works](../start-here/how-it-works).
+
+**Position proxy.** Per-depositor contract on Ethereum (AaveAdapterPositionProxy) that holds the depositor's isolated lending position. Deployed deterministically on first deposit. Ensures position isolation between depositors. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**Pre-PegIn HTLC.** Bitcoin Taproot output that briefly holds the depositor's BTC during peg-in. Has two spending leaves: a hashlock plus multi-party path used for normal activation, and a refund leaf with a Bitcoin timelock (`tRefund` = 3 days on Testnet) for unilateral depositor recovery if peg-in stalls. The Pre-PegIn transaction also includes a small CPFP anchor output (BIP-86 keypath) for fee bumping if Bitcoin mempool fees rise. See [How it works](../start-here/how-it-works).
+
+**Protected vault.** In a two-vault position, the vault placed second in the liquidation order. Designed to remain untouched during partial-position liquidation while the sacrificial vault is seized. Depending on the target health factor, the protected vault can be either the smaller or the larger of the two — the app computes the optimal sizing from on-chain parameters. See [Liquidation risk](../use-for-lending/liquidation-risk).
+
+**ProtocolParams.** Ethereum contract holding versioned protocol parameters: timelocks, confirmation depths, actor set versions, Security Council keys. New vaults are bound to the parameter version live at their creation. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Refund path.** A Taproot script leaf on the Pre-PegIn HTLC output that lets the depositor reclaim BTC unilaterally after `tRefund` (3 days on Testnet) if peg-in does not activate. The depositor signs at spend time; no other party is needed. The timelock is set such that it cannot fire during the normal activation window. See [Create a vault](../use-for-lending/create-a-vault).
+
+**Sacrificial vault.** In a two-vault position, the vault placed first in the liquidation order. Sized to cover the protocol's expected seizure amount so that only this vault is seized if the position becomes liquidatable. Depending on the target health factor, the sacrificial vault can be either the smaller or the larger of the two; at Testnet THF=1.24 the sacrificial vault is the larger of the two. See [Liquidation risk](../use-for-lending/liquidation-risk).
+
+**Security Council.** A quorum of off-chain signers (3 of 5 on Testnet) whose Bitcoin public keys are committed in the protocol's versioned off-chain parameters. The council can produce a `CouncilNoPayout` transaction by quorum in catastrophic scenarios (such as a soundness bug in the ZK system) to prevent a specific payout. The council can prevent payouts but never holds funds and cannot move them. See [TBV Protocol actors](../technical-details/protocol-actors).
+
+**Soft pause / Full pause.** Operational states set by the Security Council. *Soft pause* blocks new deposits, borrows, and withdrawals; repay, liquidate, and Vault Swap operations remain available. *Full pause* blocks all state-changing actions on the Aave application surface. The depositor refund path and depositor self-claim are never blocked by a protocol pause, because they execute on Bitcoin using pre-signed transactions and the depositor's own keys. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions).
+
+**SP1 proof.** A zero-knowledge proof system used by the Vault Provider to generate the proof that an Ethereum burn event occurred. Run by an SP1 prover (locally or via an external prover service), typically on GPU hardware (5-10 minutes per vault). The proof is then aggregated to Groth16 form and verified on Bitcoin. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Target health factor (THF).** The health factor the protocol aims to restore after partial-position liquidation. Set per-spoke by governance. Used to compute how many vaults to seize. On Testnet, THF = 1.24. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**Taproot script.** A Bitcoin output type with multiple spending paths encoded as separate leaves in a Merkle tree. Each vault's BTC sits in a Taproot address whose leaves include repayment, liquidation, refund, and challenge paths. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Transaction graph.** The set of pre-signed Bitcoin transactions covering every legitimate spending path for a vault (Claim, Assert, ChallengeAssertX/Y, Payout, NoProof, NoPayout, refund). Constructed and signed by all required participants at vault creation. After creation, no participant can fabricate a new spend. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Trustless Bitcoin Vault (TBV).** A Bitcoin position that stays on the Bitcoin network and is usable as collateral in Ethereum DeFi applications without bridges, wrapped tokens, or third-party custodians. See [What is TBV?](../start-here/what-is-tbv).
+
+**Two-vault distribution.** The recommended app default at peg-in: split a depositor's BTC into two vaults so the protocol can do partial-position liquidation. One vault (the sacrificial vault) is sized to cover the protocol's expected seizure amount and placed first; the other (the protected vault) holds whatever BTC remains and is placed second. The sizes depend on protocol parameters (target health factor in particular); the app computes the optimal split dynamically. See [Create a vault](../use-for-lending/create-a-vault).
+
+**Universal Challenger.** Protocol-level fraud monitor. Watches every claim transaction on Bitcoin and can block a fraudulent payout by broadcasting a ChallengeAssert. Universal Challengers are registered protocol-wide rather than per application; they are a redundant safety layer — the depositor (and their Vault Provider) can also dispute fraudulent claims using the BABE artifacts received at peg-in. See [TBV Protocol actors](../technical-details/protocol-actors).
+
+**UTXO.** Unspent Transaction Output. Bitcoin's accounting model: each piece of bitcoin in circulation is a UTXO, indivisible, that gets fully consumed when spent. Each vault corresponds to exactly one UTXO. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**Vault Keeper.** An application-scoped participant that co-signs the transaction graph at vault creation, can claim BTC after liquidation, and can challenge invalid claims. The Aave v4 integration has a versioned set of Vault Keepers; in that integration, they act as arbitrageurs. See [TBV Protocol actors](../technical-details/protocol-actors).
+
+**Vault Provider.** The actor that coordinates a vault's lifecycle: drives the peg-in setup, posts data the protocol needs on-chain, generates the SP1 zero-knowledge proof at peg-out, and broadcasts the claim transaction on Bitcoin. Each vault is served by one Vault Provider, chosen at peg-in and immutable for that vault's lifetime. Distinct from Vault Keeper (application-scoped co-signer) and Universal Challenger (protocol-level fraud monitor). See [TBV Protocol actors](../technical-details/protocol-actors).
+
+**Vault Provider commission.** The percentage of BTC a Vault Provider takes from a vault's redemption payout. Set per-VP, at or above a protocol-enforced floor (`minVpCommissionBps`, currently 1% on Testnet). The commission rate is embedded in the pre-signed Payout transactions at vault creation; depositors accept the VP's commission rate when they choose the VP. See [TBV Protocol actors](../technical-details/protocol-actors).
+
+**Vault states.** The five states a vault can be in: Pending (peg-in request submitted, awaiting acknowledgments), Verified (acknowledgments collected, ready for activation), Active (secret revealed, vault is supplied as collateral), Redeemed (vault has been redeemed; BTC claimable on Bitcoin), Expired (activation timeout exceeded; depositor recovers via refund timelock). See [Protocol architecture](../technical-details/protocol-architecture).
+
+**vaultBTC.** An ERC-20 token (8 decimals) minted 1:1 with each onboarded BTC vault. Acts as the translation layer between indivisible BTC vaults and Aave's collateral system. Restricted: minted only when a vault is supplied as collateral, burned when withdrawn or liquidated, not transferable to arbitrary addresses. See [Aave v4 integration](../technical-details/aave-v4-integration).
+
+**VaultClaimableBy.** Ethereum event emitted by BTCVaultRegistry when a vault becomes claimable on Bitcoin. Names the authorized claimer's Bitcoin public key. Triggers the off-chain Bitcoin claim flow. Two events are emitted per redemption: one for the Vault Provider and one for the depositor (enabling the WOTS self-claim fallback). See [Withdraw & redeem](../use-for-lending/withdraw-and-redeem).
+
+**WOTS (Winternitz One-Time Signature).** Compact signature scheme used in the ChallengeAssert mechanism. Keeps the ChallengeAssert transaction size under 10 kvB. Each vault commits a WOTS public key hash at peg-in; the corresponding private key can only be used once and is the depositor's authorization for the self-claim path. See [Protocol architecture](../technical-details/protocol-architecture).
+
+**ZK proof.** A cryptographic proof that a statement is true without revealing why. The protocol uses ZK proofs to attest, on Bitcoin, that specific Ethereum events (such as a vaultBTC burn) occurred on the finalized Ethereum chain. Verified on Bitcoin via a BitVM3-style mechanism. See [How it works](../start-here/how-it-works).

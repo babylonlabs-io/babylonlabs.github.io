@@ -1,0 +1,126 @@
+---
+title: Aave v4 integration
+sidebar_position: 3
+---
+
+# Aave v4 integration
+
+This page describes **the Aave v4 integration** — the first DeFi application registered with the TBV protocol. TBV itself is application-agnostic and lives one layer below this: it owns vault creation, redemption, and security. Aave v4 is one specific consumer of vaultBTC. For the underlying protocol, see [How it works](../start-here/how-it-works) and [Protocol architecture](./protocol-architecture). For the layered overview, see [What is TBV?](../start-here/what-is-tbv) → "Two layers".
+
+The Trustless Bitcoin Vault (TBV) protocol is application-agnostic at the registry level. Aave v4 is the first DeFi integration, plugging into the ApplicationRegistry via the AaveAdapter contract. The collateral asset on this integration is vaultBTC, the accounting token described later on this page. In the Aave v4 integration, the Application Vault Keepers act as arbitrageurs.
+
+## Architecture
+
+Aave v4 organizes lending into a hub-and-spoke architecture:
+
+* **Aave v4 Hub.** Central liquidity contract. Lenders supply borrowable assets (USDC, USDT, WBTC) to the Hub and earn interest. The Hub holds the aggregate liquidity for each asset and manages interest rate calculations.
+* **Babylon Core Spoke.** A dedicated, isolated lending market for vaultBTC collateral. Has its own risk parameters independent from other spokes. Draws borrowable assets from the Aave v4 Hub when a depositor borrows; restores them to the Hub on repay.
+* **AaveAdapter.** The user-facing entry point. Coordinates adding vaults as collateral, borrowing, repaying, withdrawing, and triggering redemption. Calls into the depositor's position proxy and through it to the Babylon Core Spoke.
+* **AaveAdapterPositionProxy.** Per-depositor proxy contract that holds the depositor's isolated lending position. Deployed deterministically on first deposit. One proxy per depositor address; multiple vaults can back the single position held by that proxy. The proxy isolates each depositor's lending position from every other depositor's — a bug or attack affecting one position cannot bleed into another.
+
+A borrow flows through the layers: depositor, AaveAdapter, position proxy, Babylon Core Spoke, Aave v4 Hub. The Hub releases the borrowed tokens; they travel back the same path to the depositor. Repays follow the inverse direction.
+
+Two supporting contracts handle registration and read access:
+
+* **AaveAdapterConfig.** Manages LLP registration (BTCVaultSwap and any future LLPs), position-size parameters, and borrow-delegation resolver registration. Gated by the protocol's TimelockController.
+* **AaveAdapterLens.** Read-only contract for aggregated state queries (positions, vaults, reserves).
+
+## vaultBTC
+
+vaultBTC is an ERC-20 token used as the collateral asset on the Babylon Core Spoke. Key properties:
+
+* **8 decimals,** matching Bitcoin's satoshi precision. 1 vaultBTC = 1 BTC = 100,000,000 satoshis.
+* **Mint and burn only.** vaultBTC is minted only when a vault is added as collateral and burned only when the vault is withdrawn or liquidated. No other minting paths exist.
+* **Just-in-time supply.** Total vaultBTC in circulation equals the BTC actively backing lending positions. A vault that exists but has not been added as collateral has no vaultBTC associated.
+* **Transfer whitelist.** vaultBTC can only move between authorized protocol contracts: the Babylon Core Spoke, the Aave v4 Hub, the AaveAdapter, and the depositor's position proxy. Any transfer to an arbitrary address reverts. There is no vaultBTC market and no secondary trading.
+* **Pricing.** The Babylon Core Spoke uses a Chainlink BTC/USD oracle to determine the USD value of vaultBTC for health factor calculations. Since each unit represents one satoshi of real Bitcoin, the price feed tracks BTC directly. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle (WBTC trades very close to but slightly below BTC parity).
+
+The accounting role of vaultBTC means it never exists in user-controlled wallets. Its mint, burn, and transfer paths are all initiated through the AaveAdapter, ensuring that the supply invariant (total vaultBTC equals total locked BTC in active positions) holds at all times.
+
+## Borrowable assets
+
+Reserves available on the Babylon Core Spoke at Testnet:
+
+* USDC
+* USDT
+* WBTC
+
+Each asset has per-asset Hub-level configuration:
+
+* **Add cap:** maximum amount that can be supplied to the Hub.
+* **Draw cap:** maximum amount that can be borrowed from the Hub by all spokes combined (10,000,000 units per asset on Testnet).
+* **Hub liquidity fee:** Aave's reserve factor charged on accrued interest (set per asset at the Hub level).
+* **Interest rate strategy:** the contract determining borrowing rates as a function of utilization (kinked model — see [Protocol parameters](../testnet-info/protocol-parameters) for per-asset values).
+
+Each asset accrues interest continuously based on utilization (ratio of borrows to supply). Higher utilization yields higher rates, incentivizing repayment and additional supply.
+
+The depositor's debt for a given asset is tracked using two share components on the position proxy: drawn shares (principal) and premium shares (interest). As interest accrues, the share-to-value ratio increases, so the same shares correspond to a larger debt over time. To check current debt, query `getUserTotalDebt(proxyAddress, reserveId)` on the Babylon Core Spoke.
+
+Current numeric values for Testnet (caps and rates) are listed on the [Protocol parameters](../testnet-info/protocol-parameters) page.
+
+## Operations
+
+Operations on the AaveAdapter, in lifecycle order:
+
+* `activateVault(vaultId, ...)`. Called by `BTCVaultRegistry.activateVaultWithSecret`: deploys per-depositor position proxy (if first vault), mints vaultBTC, supplies as collateral. The vault is automatically added to the depositor's position on activation.
+* `borrowFromCorePosition(uint256 debtReserveId, uint256 amount, address receiver)`. Borrows the specified amount of the chosen asset against the position. Validates that the resulting health factor stays above 1.0.
+* `repayToCorePosition(address borrower, uint256 debtReserveId, uint256 amount)`. Repays debt. Anyone may repay another depositor's debt.
+* `withdrawCollaterals(bytes32[] vaultsToWithdraw)`. Removes the listed vaults from the position and initiates their redemption. Validates that the resulting health factor stays above 1.0 if any debt remains.
+* `reorderVaults(uint256[] newOrder)`. Reorders the vaults in the position. The new order determines liquidation seizure order.
+* `liquidate(address borrower, bytes32 directBtcRedeemKey, uint256[] amounts, uint256[] priorityOrder)`. Direct-redemption liquidation path — permissioned. Requires the liquidator to be a registered arbitrageur (Application Vault Keeper) with a Bitcoin redeem key.
+* `liquidateWithLLP(address borrower, address llp, ...)`. Permissionless LLP-routed liquidation path. Triggered when the position's health factor drops below 1.0. The seized vault is escrowed in the LLP (BTCVaultSwap by default) and the liquidator receives WBTC immediately.
+
+The AaveAdapterLens contract exposes corresponding read-only queries: position state, vault state per vault, reserve state per asset.
+
+## Liquidation model and settlement
+
+A position becomes liquidatable when its health factor drops below 1.0. Two liquidation paths exist on the AaveAdapter:
+
+* **Direct-redemption (`liquidate`) — permissioned.** The liquidator is a registered arbitrageur (Application Vault Keeper). They repay the necessary debt and redeem the seized vault directly to a Bitcoin redeem key.
+* **LLP-routed (`liquidateWithLLP`) — permissionless.** Any Ethereum address can trigger. The liquidator repays the debt and receives WBTC immediately from the LLP; the seized vault enters LLP escrow for later acquisition by an arbitrageur. BTCVaultSwap is the default LLP.
+
+### Full-vault constraint
+
+UTXOs are indivisible: a Bitcoin output cannot be partially spent. The protocol therefore seizes vaults whole, never fractionally. A vault's BTC amount cannot be split between the liquidator and the depositor as part of the same liquidation.
+
+### Partial-position support
+
+A position holds one or more vaults. When liquidation is triggered, the protocol walks the ordered vault list (prefix walk) and seizes the minimum subset needed to restore the health factor to the target health factor (1.24 on Testnet). Vaults at the front of the list are seized first.
+
+* If a small subset of vaults is enough to restore the health factor, the rest remain in the depositor's position. This is partial-position liquidation.
+* If the position is severely underwater or contains only one vault, all of it is seized. The position closes.
+
+The depositor controls the vault order. The recommended pattern is two vaults: a sacrificial vault at the front (sized to cover the expected seizure target) and a protected vault later (kept if possible). The relative sizes depend on the target health factor — at Testnet THF = 1.24, the sacrificial vault is the larger of the two. The app computes the optimal split dynamically.
+
+### Fairness mechanism
+
+Because vault granularity may overshoot what a perfectly divisible liquidation would seize, the over-seizure surplus is returned to the depositor:
+
+* **Fairness payment** is paid to the depositor in WBTC (provided by the liquidator on full-position liquidation) when the surplus exceeds remaining debt. The over-seizure value is not paid at the raw BTC price — it is discounted using the ratio of debt liquidated to collateral liquidated. For example, if Aave cleared $24,000 of debt for $25,000 of seized collateral, each dollar of seized collateral is valued at ~$0.96 for fairness purposes. This prevents the depositor from receiving more fairness value than the liquidation economics justify.
+* **Fairness debt repay** reduces the depositor's remaining debt when the surplus is less than remaining debt. No WBTC is paid out; the depositor's debt position shrinks by the surplus amount.
+
+The fairness mechanism is what distinguishes this protocol's liquidation from a naive full-vault model: the depositor is not punished for the indivisibility of UTXOs. Note that WBTC trades very close to but slightly below BTC parity (~0.9975) — fairness payments reflect the WBTC/USD oracle.
+
+### LLP framework
+
+Permissionless liquidation on Ethereum, combined with multi-day BTC settlement on Bitcoin, requires a liquidity bridge. The Liquidation Liquidity Provider (LLP) framework solves this:
+
+* Liquidators receive instant WBTC liquidity from an LLP when seizing a vault via `liquidateWithLLP`.
+* The LLP escrows the seized vault.
+* A registered arbitrageur (Application Vault Keeper) later acquires the escrowed vault for WBTC and finalizes the BTC redemption on Bitcoin.
+
+The WBTC liquidity comes from the WBTC reserve on the Aave v4 Hub. When a liquidation occurs, the LLP draws WBTC from that reserve, pays the liquidator, and later replenishes the reserve when an arbitrageur acquires the escrowed vault.
+
+Multiple LLPs can register through `AaveAdapterConfig.registerLLP(address llp)`, gated by the TimelockController. The depositor's fairness settlement is paid through the LLP that handles their liquidation.
+
+### BTCVaultSwap (default LLP)
+
+The first registered LLP is BTCVaultSwap. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Spoke. Its flow:
+
+1. Liquidator calls `swapVaultForWbtc(vaultId)` after liquidation.
+2. The vault enters BTCVaultSwap escrow.
+3. The liquidator receives WBTC immediately, drawn from the Aave v4 Hub's WBTC reserve.
+4. A registered arbitrageur monitors escrowed vaults. They acquire one by calling `swapWbtcForVault(vaultId, maxWbtcIn)`, paying the Hub debt (principal + accrued interest). Acquisition is first-come-first-served on Ethereum — the first successful `swapWbtcForVault` call wins the vault.
+5. The arbitrageur acquires vault ownership. They then initiate the standard peg-out flow on Bitcoin: a ZK proof of the burn event, the claim transaction, the challenge period, and the payout.
+
+Hub interest accrues on escrowed vaults over time. If interest erodes the arbitrageur's profit margin, the vault becomes unprofitable to purchase. Anyone can top up the accrued interest via `repayVaultInterest`, extending the profitable purchase window.
