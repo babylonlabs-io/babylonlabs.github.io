@@ -25,20 +25,9 @@ approximately 2 days compared to the typical 21 days in most PoS chains.
 - **Governance participation**: BABY staking gives stakers voting power in the
 chain’s governance to help shape the future of the network.
 
-
-## The Staking Process
-
-When you have acquired BABY and decide to stake your BABY tokens, the general
-process is as follows:
-
-1. **Submission**: You send a BABY staking request through supported wallets.
-2. **Confirmation**: The system confirms it received your request.
-3. **Queuing**: Your request joins the queue, waiting for the current epoch to
-end.
-4. **Funds Status**: Important: Your funds remain available in your wallet
-until the epoch ends.
-
-*More on the staking mechanism can be found [here](/stakers/baby_stakers/staking_mechanism).*
+BABY staking uses an epoch-based staking flow, delayed execution, and Bitcoin
+timestamping for fast unbonding. See [Staking Mechanism](/stakers/baby_stakers/staking_mechanism/)
+for the canonical mechanism details.
 
 ## Slashing Conditions
 
@@ -59,32 +48,8 @@ delegation decisions.
 - **Partial Slashing**: Calibrated slashing parameters in percentage help
 protect delegators from catastrophic loss.
 
-*More on the slashing conditions can be found [here](/stakers/baby_stakers/staking_mechanism).*
-
-## Fast Unbonding
-
-Babylon Genesis employs the Bitcoin Timestamping protocol, which enables a
-fast unbonding process:
-
-### Unbonding Initiation:
-- Delegator submits an unbonding request transaction.
-- Request is queued for processing at the epoch boundary.
-- At epoch conclusion, the token delegation status changes to "unbonding".
-
-### Bitcoin Checkpoint Verification:
-- The protocol commits a cryptographic hash of the Babylon Genesis chain
-state to the Bitcoin blockchain.
-- The system monitors the Bitcoin chain for confirmation of the block that
-contains the checkpoint.
-- Required confirmation depth: 300 Bitcoin blocks (~2 days).
-
-### Token Release:
-- Once Bitcoin confirmations reach the required threshold, tokens are
-automatically released and returned to the delegator.
-- Released tokens become fully liquid and transferable; there are no more
-restrictions.
-
-*More on fast unbonding process [here](/stakers/baby_stakers/staking_mechanism).*
+For slashing, epoch processing, and fast unbonding details, see
+[Staking Mechanism](/stakers/baby_stakers/staking_mechanism/).
 
 ## Relationship with Bitcoin Staking
 

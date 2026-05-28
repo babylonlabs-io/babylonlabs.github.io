@@ -6,6 +6,7 @@ const ALGOLIA_INDEX_NAME =
   BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
 const ENABLE_GTAG =
   process.env.NODE_ENV === 'production' && Boolean(process.env.TRACKING_ID);
+const ENABLE_LOCAL_GTAG_STUB = process.env.NODE_ENV !== 'production';
 const code_themes = {
   light: themes.github,
   dark: themes.dracula,
@@ -125,7 +126,7 @@ const plugins = [
         },
         {
           from: '/guides/research/babe_verification/',
-          to: '/guides/overview/bitcoin_staking/research/babe_verification/',
+          to: '/trustless-bitcoin-vault/research/babe_verification/',
         },
         {
           from: '/guides/research/btc_staking_litepaper/',
@@ -137,7 +138,15 @@ const plugins = [
         },
         {
           from: '/guides/research/btc_trustless_vault/',
-          to: '/guides/overview/bitcoin_staking/research/btc_trustless_vault/',
+          to: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
+        },
+        {
+          from: '/guides/overview/bitcoin_staking/research/babe_verification/',
+          to: '/trustless-bitcoin-vault/research/babe_verification/',
+        },
+        {
+          from: '/guides/overview/bitcoin_staking/research/btc_trustless_vault/',
+          to: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
         },
         {
           from: '/guides/security/',
@@ -319,6 +328,7 @@ const plugins = [
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...meta,
+  scripts: ENABLE_LOCAL_GTAG_STUB ? [{ src: '/local-gtag-stub.js' }] : [],
   plugins,
 
   trailingSlash: true,

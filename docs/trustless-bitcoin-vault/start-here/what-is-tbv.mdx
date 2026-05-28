@@ -7,9 +7,9 @@ sidebar_position: 1
 
 TBV is currently running on Bitcoin signet and Ethereum testnet. Funds involved are test-only and have no monetary value. For current Testnet announcements and support channels, see [Community & support](../reference/community-and-support.mdx).
 
-## The problem: only ~1% of Bitcoin is used in DeFi
+## The problem
 
-The largest asset in crypto sits mostly idle. The reason is structural: the Bitcoin Network has no general smart-contract execution, and DeFi lives on chains that do. To bring BTC into DeFi today, the holder has to give the BTC to a custodian (who issues a BTC token on another chain), trust a cross-chain bridge, or accept a federation of signers as a substitute for self-custody. Every existing path replaces Bitcoin's trustless settlement with a new trust assumption.
+**Only ~1% of Bitcoin is used in DeFi.** The largest asset in crypto sits mostly idle. The reason is structural: the Bitcoin Network has no general smart-contract execution, and DeFi lives on chains that do. To bring BTC into DeFi today, the holder has to give the BTC to a custodian (who issues a BTC token on another chain), trust a cross-chain bridge, or accept a federation of signers as a substitute for self-custody. Every existing path replaces Bitcoin's trustless settlement with a new trust assumption.
 
 **Trustless Bitcoin Vault (TBV)** is Babylon's protocol for closing this gap. The depositor's BTC stays on the Bitcoin Network, held in a Taproot script that the depositor co-signs at creation. An Ethereum-side coordination contract tracks each vault and lets a DeFi application use it as collateral. Cross-chain state moves both ways through cryptography, not through an intermediary:
 
@@ -18,7 +18,7 @@ The largest asset in crypto sits mostly idle. The reason is structural: the Bitc
 
 The trust assumption is the protocol's cryptography, not an intermediary's solvency.
 
-![TBV cross-chain mechanism: BTC stays on Bitcoin, Ethereum coordination contract, BABE construction for ZK verification](/img/trustless-bitcoin-vault/start-here/what-is-tbv-cross-chain-diagram.png)
+![TBV flow: BTC locked on Bitcoin, ZK proof verification, vaultBTC accounting on Ethereum, Aave v4 borrowing, and repayment back to Bitcoin](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV1-flow.png)
 
 ## What a vault is — and what it is not
 
@@ -39,7 +39,11 @@ With TBV, the trust set is shorter:
 
 Beyond the chains themselves, residual trust sits with the protocol's governance and emergency-response multi-sigs — transitional safety nets that the protocol can retire over time. There is no custodian, no bridge contract holding the BTC, and no federation of signers required to release funds. The depositor's own keys participate at every depositor-controlled release path, and a self-claim path is committed at vault creation so the depositor can exit independently if the Vault Provider becomes unresponsive. See [Safety & trust assumptions](./safety-and-trust-assumptions.mdx) for the full picture.
 
-## Two layers: the TBV protocol and the DeFi applications on top
+## Two layers
+
+**The TBV protocol and the DeFi applications on top.**
+
+![TBV two-layer model: TBV protocol layer under Aave v4 lending and future DeFi applications](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV2-LAYERS.png)
 
 * **The TBV protocol.** The core, application-agnostic protocol. It owns vault creation (peg-in), vault redemption (peg-out), the BABE fraud-detection mechanism, the Bitcoin light client on Ethereum, and the vaultBTC accounting token. Vaults exist independently of any particular DeFi application — a vault can be supplied as collateral to any registered application over its lifetime.
 * **DeFi applications on top.** Each registered consumer of vaultBTC. An application defines its own product — lending, stablecoins, options, insurance — and is responsible for its own borrowing, liquidation, and reward logic. The first application is **Aave v4 lending**.

@@ -18,6 +18,8 @@ An on-Ethereum Bitcoin light client (implemented as smart contracts) verifies th
 
 Each chain independently verifies the cryptographic evidence it receives. The Bitcoin side holds the BTC in a Taproot script with multiple spending paths agreed at vault creation. The Ethereum side holds an internal accounting token, **vaultBTC**, that represents the vault for DeFi purposes and is minted automatically when the vault is activated as collateral.
 
+![TBV cross-network architecture: Bitcoin vault, Ethereum coordination contract, BABE on Bitcoin, and Bitcoin light client on Ethereum](/img/trustless-bitcoin-vault/confluence/start-here/how-it-works/TBV4-networks.png)
+
 ## Peg-in: vault creation
 
 Vault creation locks BTC into a Bitcoin transaction and registers the vault on Ethereum.
@@ -33,6 +35,8 @@ Two safety properties are built into the peg-in flow:
 * **Pre-signed transactions.** Every spend path is signed at vault creation by all required participants. After creation, no party can fabricate a new spend. Each path the BTC could ever take is committed up front.
 * **Refund timelock.** If the peg-in stalls (the depositor never reveals the secret, or participants fail to complete setup), the depositor recovers the BTC unilaterally via a Bitcoin-side refund timelock on the Pre-PegIn output.
 
+![TBV peg-in flow: lock BTC, prepare vault, and activate vault through Ethereum coordination](/img/trustless-bitcoin-vault/confluence/start-here/how-it-works/TBV5-networks.png)
+
 ## Using TBV as collateral
 
 An active vault is automatically supplied as collateral. On activation, the protocol mints vaultBTC for the vault's BTC amount and supplies it to the **Babylon Core Spoke** — a dedicated Aave v4 market for vaultBTC collateral. The vault is appended to the depositor's lending position; subsequent activations add to the same position.
@@ -46,6 +50,8 @@ Additional vaults can be created at any time; each is supplied automatically on 
 In multi-vault positions the order matters. The protocol walks the vault list in order during liquidation and seizes the minimum prefix needed. Vaults at the front are taken first. This is why the app recommends splitting BTC between a sacrificial vault (sized to cover the protocol's expected seizure, placed first) and a protected vault (whatever remains, placed second). At current Testnet parameters the sacrificial vault is the larger of the two; see [Liquidation risk](../use-for-lending/liquidation-risk.mdx) for the sizing logic.
 
 When a vault is withdrawn from a position — either by the depositor exiting, or by liquidation — the corresponding vaultBTC is burned. The vault then enters the redemption flow on Bitcoin.
+
+![TBV liquidation model: ordered vaults allow liquidation to seize only what is needed while leaving protected vaults untouched](/img/trustless-bitcoin-vault/confluence/start-here/how-it-works/TBV3-LIQUIDATION.png)
 
 ## Peg-out: vault redemption
 
