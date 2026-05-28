@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Protocol architecture
 
-The components and participants below are conveniences. Every safety-critical action they perform can also be performed by the depositor independently, using artifacts and keys held since vault creation. Trust is optional and removable — see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions) for the full framing.
+The components and participants below are conveniences. Every safety-critical action they perform can also be performed by the depositor independently, using artifacts and keys held since vault creation. Trust is optional and removable — see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx) for the full framing.
 
 The Trustless Bitcoin Vault (TBV) protocol spans three layers: Bitcoin-side scripts and transactions, Ethereum-side contracts, and off-chain participant software. The first two are protocol-defined and application-agnostic. Specific DeFi integrations such as Aave v4 plug into the Ethereum-side coordination contract. The on-Ethereum accounting collateral token used by the Aave v4 integration is vaultBTC.
 
@@ -41,7 +41,7 @@ The protocol is application-agnostic at the registry level. Additional applicati
 Off-chain refers to participant software and protocols, not centralized infrastructure. Three categories:
 
 * **Protocols:** the BABE cut-and-choose protocol establishes garbled circuit instances between claimer-challenger pairs at vault creation. Signature exchange among participants assembles the transaction graph. The SP1 zero-knowledge proof pipeline (run by an SP1 prover, locally or via an external prover service, on GPU hardware) generates the proofs needed for peg-out claims.
-* **Participants:** the Depositor, the Vault Provider, Vault Keepers, and Universal Challengers each run vault management software. The Security Council holds emergency multi-sig keys (3 of 5 quorum on Testnet). Per-actor responsibilities are on [TBV Protocol actors](./protocol-actors).
+* **Participants:** the Depositor, the Vault Provider, Vault Keepers, and Universal Challengers each run vault management software. The Security Council holds emergency multi-sig keys (3 of 5 quorum on Testnet). Per-actor responsibilities are on [TBV Protocol actors](./protocol-actors.mdx).
 * **Storage:** Vault Keepers store garbled circuit artifacts needed for fraud detection. The depositor also receives a copy of their own claimer artifacts plus a WOTS keypair file, both required for the self-claim fallback.
 
 ## Vault lifecycle and states

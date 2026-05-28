@@ -5,7 +5,7 @@ sidebar_position: 3
 
 # Protocol parameters
 
-This page lists the live parameter values for the current Trustless Bitcoin Vault (TBV) Testnet release. For deployed contract addresses, see [Contract addresses](./contract-addresses). Parameters are versioned and can change between releases through governance.
+This page lists the live parameter values for the current Trustless Bitcoin Vault (TBV) Testnet release. For deployed contract addresses, see [Contract addresses](./contract-addresses.mdx). Parameters are versioned and can change between releases through governance.
 
 ## Vault and position size limits
 
@@ -100,10 +100,10 @@ Thresholds used by the Aave v4 integration to determine when a position is liqui
 | `name` | BTC Vault | Token name |
 | `symbol` | vaultBTC | Token symbol |
 | `decimals` | 8 | Matches Bitcoin's satoshi precision (1 vaultBTC = 1 BTC = 100,000,000 satoshis) |
-| Transfer restrictions | Mint and burn only by `AaveAdapter` | vaultBTC is not freely transferable. It exists only as an internal accounting unit; see [Aave v4 integration](../technical-details/aave-v4-integration). |
+| Transfer restrictions | Mint and burn only by `AaveAdapter` | vaultBTC is not freely transferable. It exists only as an internal accounting unit; see [Aave v4 integration](../technical-details/aave-v4-integration.mdx). |
 
 ## Related
 
-* [Contract addresses](./contract-addresses): deployed contracts that read these parameters.
-* [Aave v4 integration](../technical-details/aave-v4-integration): how liquidation parameters are used.
-* [Glossary](../reference/glossary): term definitions for the parameters above.
+* [Contract addresses](./contract-addresses.mdx): deployed contracts that read these parameters.
+* [Aave v4 integration](../technical-details/aave-v4-integration.mdx): how liquidation parameters are used.
+* [Glossary](../reference/glossary.mdx): term definitions for the parameters above.

@@ -5,9 +5,9 @@ sidebar_position: 2
 
 # TBV Protocol actors
 
-The actors described below are conveniences. Every safety-critical action they perform can also be performed by the depositor independently, using artifacts and keys held since vault creation. Trust is optional and removable — see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions) for the full framing.
+The actors described below are conveniences. Every safety-critical action they perform can also be performed by the depositor independently, using artifacts and keys held since vault creation. Trust is optional and removable — see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx) for the full framing.
 
-The [Trustless Bitcoin Vault (TBV)](../start-here/what-is-tbv) protocol involves four actor types, each with a distinct operational role. None of them has custody of BTC, and none of them is a required intermediary — the depositor can step in for any of them at any time. This page describes what each actor does at the protocol level.
+The [Trustless Bitcoin Vault (TBV)](../start-here/what-is-tbv.mdx) protocol involves four actor types, each with a distinct operational role. None of them has custody of BTC, and none of them is a required intermediary — the depositor can step in for any of them at any time. This page describes what each actor does at the protocol level.
 
 ## Who runs these actors today
 
@@ -47,7 +47,7 @@ Vault Providers register on-chain by submitting an Ethereum address, a Bitcoin x
 
 ## Vault Keeper
 
-Vault Keepers are application-scoped participants who serve as the economic backstop for vault security. In the context of the [Aave v4 integration](./aave-v4-integration), the Application Vault Keepers act as **arbitrageurs**.
+Vault Keepers are application-scoped participants who serve as the economic backstop for vault security. In the context of the [Aave v4 integration](./aave-v4-integration.mdx), the Application Vault Keepers act as **arbitrageurs**.
 
 ### What the Vault Keeper does
 
@@ -92,7 +92,7 @@ The Security Council is a quorum of off-chain signers whose Bitcoin public keys 
 
 * **Emergency intervention.** If the standard challenge mechanism fails to prevent a fraudulent payout, or if a critical protocol issue requires immediate action, the council can act.
 * **CouncilNoPayout transactions.** The council's on-chain power is to produce a `CouncilNoPayout` transaction by quorum, blocking payout on a specific vault. The council cannot direct BTC to any address; it can only prevent release.
-* **Operational pause states.** The council can place the protocol into a soft pause (blocking new peg-ins and new borrows) or a full pause (blocking all state-changing actions except depositor recovery paths). The depositor's refund path and WOTS self-claim are never affected by a protocol pause, because they execute on Bitcoin using pre-signed transactions and the depositor's own keys. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions) for the pause-state matrix.
+* **Operational pause states.** The council can place the protocol into a soft pause (blocking new peg-ins and new borrows) or a full pause (blocking all state-changing actions except depositor recovery paths). The depositor's refund path and WOTS self-claim are never affected by a protocol pause, because they execute on Bitcoin using pre-signed transactions and the depositor's own keys. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx) for the pause-state matrix.
 * **Depositor-recovery escalation.** If a depositor loses both their WOTS keypair file and their claimer artifacts (the two inputs to self-claim) and the Vault Provider is also unresponsive, the Security Council can authorize recovery through the multi-sig path.
 
 ### Configuration
@@ -124,4 +124,4 @@ The protocol is designed to progressively decentralize participation. Two protoc
 * **Fraud monitoring.** Anyone can monitor for fraudulent claims by running a watcher and checking Ethereum-side events. Broadcasting an on-chain `ChallengeAssert` requires being a registered Universal Challenger in the current `ProtocolParams` set; the registry is governed at the protocol level. The Testnet roadmap includes progressive opening of the challenger set so additional operators can earn challenger rewards by successfully disputing invalid claims.
 * **Liquidation triggering.** Calling `liquidateWithLLP` on the Ethereum side is permissionless: any address can call the function once a position's health factor drops below 1.0. The direct-redemption variant `liquidate` requires being a registered arbitrageur (with a Bitcoin redeem key). Permissionless liquidation ensures positions are liquidated promptly regardless of which dedicated parties are running.
 
-For the underlying protocol mechanics that connect these actors, see [Protocol architecture](./protocol-architecture). For definitions of the protocol-specific terms used throughout this page, see [Glossary](../reference/glossary).
+For the underlying protocol mechanics that connect these actors, see [Protocol architecture](./protocol-architecture.mdx). For definitions of the protocol-specific terms used throughout this page, see [Glossary](../reference/glossary.mdx).

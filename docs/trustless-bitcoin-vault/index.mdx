@@ -19,53 +19,52 @@ TBV is currently running on **Bitcoin signet** and **Ethereum testnet**. Funds i
 
 This section follows five tracks. Pick the entry that matches what you want to do.
 
-### [Start Here](./start-here/what-is-tbv)
+### [Start Here](./start-here/what-is-tbv.mdx)
 
 Top-of-funnel reading for anyone new to TBV. Answers four questions:
 
-- **[What is TBV?](./start-here/what-is-tbv)** — the protocol value proposition and what a vault actually is.
-- **[How it works](./start-here/how-it-works)** — conceptual walkthrough of peg-in, collateral, peg-out.
-- **[TBV vs alternatives](./start-here/tbv-vs-alternatives)** — positioning against wrapped tokens and cross-chain bridges.
-- **[Safety & trust assumptions](./start-here/safety-and-trust-assumptions)** — what each participant is trusted with, and the depositor's recovery paths.
+- **[What is TBV?](./start-here/what-is-tbv.mdx)** — the protocol value proposition and what a vault actually is.
+- **[How it works](./start-here/how-it-works.mdx)** — conceptual walkthrough of peg-in, collateral, peg-out.
+- **[TBV vs alternatives](./start-here/tbv-vs-alternatives.mdx)** — positioning against wrapped tokens and cross-chain bridges.
+- **[Safety & trust assumptions](./start-here/safety-and-trust-assumptions.mdx)** — what each participant is trusted with, and the depositor's recovery paths.
 
-### [Testnet Info](./testnet-info/setup)
+### [Testnet Info](./testnet-info/setup.mdx)
 
 Practical setup before doing anything on the open Testnet:
 
-- **[Setup](./testnet-info/setup)** — wallets, signet faucet, network details.
-- **[Contract addresses](./testnet-info/contract-addresses)** — deployed contract addresses.
-- **[Protocol parameters](./testnet-info/protocol-parameters)** — live parameter values (caps, timelocks, fee values).
+- **[Setup](./testnet-info/setup.mdx)** — wallets, signet faucet, network details.
+- **[Contract addresses](./testnet-info/contract-addresses.mdx)** — deployed contract addresses.
+- **[Protocol parameters](./testnet-info/protocol-parameters.mdx)** — live parameter values (caps, timelocks, fee values).
 
-### [Use TBV Testnet for Lending](./use-for-lending/quickstart)
+### [Use TBV Testnet for Lending](./use-for-lending/quickstart.mdx)
 
 Depositor critical path for the Aave v4 lending product:
 
-- **[Quickstart](./use-for-lending/quickstart)** — 5-minute happy-path walkthrough end to end.
-- **[Create a vault](./use-for-lending/create-a-vault)** — full peg-in flow at the TBV protocol layer.
-- **[Borrow & repay](./use-for-lending/borrow-and-repay)** — borrowing USDC, USDT, or WBTC against your vault.
-- **[Withdraw & redeem](./use-for-lending/withdraw-and-redeem)** — unwinding a position and getting BTC back on Bitcoin.
-- **[Liquidation risk](./use-for-lending/liquidation-risk)** — what happens if a position goes underwater, and how to avoid it.
-- **[FAQ](./use-for-lending/faq)** — answers to common Testnet questions.
+- **[Quickstart](./use-for-lending/quickstart.mdx)** — 5-minute happy-path walkthrough end to end.
+- **[Create a vault](./use-for-lending/create-a-vault.mdx)** — full peg-in flow at the TBV protocol layer.
+- **[Borrow & repay](./use-for-lending/borrow-and-repay.mdx)** — borrowing USDC, USDT, or WBTC against your vault.
+- **[Withdraw & redeem](./use-for-lending/withdraw-and-redeem.mdx)** — unwinding a position and getting BTC back on Bitcoin.
+- **[Liquidation risk](./use-for-lending/liquidation-risk.mdx)** — what happens if a position goes underwater, and how to avoid it.
+- **[FAQ](./use-for-lending/faq.mdx)** — answers to common Testnet questions.
 
-### [Technical Details](./technical-details/protocol-architecture)
+### [Technical Details](./technical-details/protocol-architecture.mdx)
 
 Optional deeper reading for technical readers:
 
-- **[Protocol architecture](./technical-details/protocol-architecture)** — Bitcoin scripts, Ethereum contracts, off-chain components.
-- **[Protocol actors](./technical-details/protocol-actors)** — Vault Providers, Vault Keepers, Universal Challengers, Security Council.
-- **[Aave v4 integration](./technical-details/aave-v4-integration)** — Babylon Core Spoke, vaultBTC mechanics, liquidation model.
+- **[Protocol architecture](./technical-details/protocol-architecture.mdx)** — Bitcoin scripts, Ethereum contracts, off-chain components.
+- **[Protocol actors](./technical-details/protocol-actors.mdx)** — Vault Providers, Vault Keepers, Universal Challengers, Security Council.
+- **[Aave v4 integration](./technical-details/aave-v4-integration.mdx)** — Babylon Core Spoke, vaultBTC mechanics, liquidation model.
 
-### [Reference](./reference/glossary)
+### [Reference](./reference/glossary.mdx)
 
 Lookup material:
 
-- **[Glossary](./reference/glossary)** — terms used throughout the docs.
-- **[Audits & security](./reference/audits-and-security)** — audit reports and responsible disclosure.
-- **[Community & support](./reference/community-and-support)** — Discord, GitHub, contact channels.
+- **[Glossary](./reference/glossary.mdx)** — terms used throughout the docs.
+- **[Community & support](./reference/community-and-support.mdx)** — Discord, GitHub, contact channels.
 
 ## Two layers: TBV protocol and the DeFi applications on top
 
 A common point of confusion: **TBV** is the underlying Bitcoin collateral protocol; the **Aave v4 lending** integration is the first DeFi application built on top of it. Most user-facing pages in this section describe how things work specifically within the Aave v4 integration. Protocol-layer pages (How it works, Protocol architecture, Safety & trust assumptions, Protocol actors) describe TBV itself and apply across any future application.
 
-If you are here to **try the Testnet**, start with [Quickstart](./use-for-lending/quickstart).
-If you are here to **understand the protocol**, start with [What is TBV?](./start-here/what-is-tbv).
+If you are here to **try the Testnet**, start with [Quickstart](./use-for-lending/quickstart.mdx).
+If you are here to **understand the protocol**, start with [What is TBV?](./start-here/what-is-tbv.mdx).

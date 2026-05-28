@@ -1,13 +1,10 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import {
-  AppsAddInRegular,
   ArrowRightFilled,
-  DocumentRegular,
   OpenRegular,
-  RecordRegular,
-  VideoRegular,
   ShieldCheckmarkRegular,
+  WalletCreditCardRegular,
 } from '@fluentui/react-icons';
 import clsx from 'clsx';
 import { ChevronRight, GitHub } from 'react-feather';
@@ -23,14 +20,14 @@ const guides: Guide[] = [
   {
     title: 'Trustless Bitcoin Vault',
     icon: ShieldCheckmarkRegular,
-    text: 'Connect Bitcoin on-chain state to external smart contracts (e.g. Ethereum) using ZK SNARKs and light-client proofs.',
-    link: '/guides/overview/bitcoin-vault',
+    text: 'Native Bitcoin collateral for Ethereum DeFi, with BTC remaining locked on Bitcoin.',
+    link: '/trustless-bitcoin-vault/',
   },
   {
-    title: 'Babylon Genesis Chain Basics',
-    icon: ArrowRightFilled,
-    text: 'Learn about the Babylon Genesis Chain architecture and how it works.',
-    link: '/developers/babylon_genesis_chain',
+    title: 'Bitcoin Staking',
+    icon: WalletCreditCardRegular,
+    text: 'Native BTC staking docs, research papers, and staking security reports.',
+    link: '/guides/overview/bitcoin_staking/',
   },
 ];
 
@@ -38,23 +35,19 @@ interface Sample {
   title: string;
   platform?: string;
   source?: string;
-  blog?: string;
   demo?: string;
 }
 
 const samples: Sample[] = [
   {
-    title: 'Bitcoin Staking',
-    platform: 'Native BTC staking protocol',
-    demo: '/guides/overview/bitcoin_staking/',
+    title: 'Babylon Genesis',
+    platform: 'Chain basics, governance, developers, and operators',
+    demo: '/guides/overview/babylon_genesis/',
   },
   {
-    title: 'Wallet Integrations Guides',
-    platform: 'For wallet developers',
-    blog: '/developers/bitcoin_staking/wallet_integration',
-    source:
-      'https://github.com/babylonlabs-io/networks/blob/main/bbn-test-5/integration/wallet/babylon-wallet.md',
-    demo: '/developers/bitcoin_staking/wallet_integration',
+    title: 'API reference',
+    platform: 'Staking API, Babylon gRPC, and CometBFT',
+    demo: '/api/staking-api/babylon-staking-api/',
   },
 ];
 
@@ -76,7 +69,7 @@ function Guide({ title, text, icon: Icon, link }: (typeof guides)[0]) {
   );
 }
 
-function Sample({ title, platform, blog, source, demo }: Sample) {
+function Sample({ title, platform, source, demo }: Sample) {
   return (
     <div className="group flex cursor-pointer items-center justify-between rounded-lg border-2 border-transparent p-3 text-text-400/60 transition-colors hover:border-primary hover:text-primary">
       <div className="flex flex-col">
@@ -87,12 +80,6 @@ function Sample({ title, platform, blog, source, demo }: Sample) {
       </div>
 
       <div className="flex items-center gap-2.5">
-        {blog && (
-          <Link to={blog} className="text-inherit">
-            <DocumentRegular className="h-5 w-5" />
-          </Link>
-        )}
-
         {demo && (
           <Link to={demo} className="text-inherit">
             <OpenRegular className="h-5 w-5" />
@@ -118,9 +105,9 @@ export default function GuidesAndSamples() {
     <section className="no-underline-links mx-auto my-10 flex w-full max-w-5xl flex-col gap-10 p-4 py-0 md:flex-row md:gap-0">
       <div className="flex-1">
         <div className="mb-8 flex items-center justify-between">
-          <h3 className="m-0">Key Concepts</h3>
+          <h3 className="m-0">Primary Docs</h3>
 
-          <Link to="/guides" className="font-jakarta text-sm font-semibold">
+          <Link to="/trustless-bitcoin-vault/" className="font-jakarta text-sm font-semibold">
             More <ArrowRightFilled className="ml-1" />
           </Link>
         </div>
@@ -141,9 +128,9 @@ export default function GuidesAndSamples() {
 
       <div className="w-full md:max-w-sm">
         <div className="mb-8 flex items-center justify-between">
-          <h3 className="m-0">Resources & Guides</h3>
+          <h3 className="m-0">Other Entry Points</h3>
 
-          <Link to="/guides" className="font-jakarta text-sm font-semibold">
+          <Link to="/guides/overview/" className="font-jakarta text-sm font-semibold">
             More <ArrowRightFilled className="ml-1" />
           </Link>
         </div>

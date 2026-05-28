@@ -5,7 +5,7 @@ sidebar_position: 3
 
 # Aave v4 integration
 
-This page describes **the Aave v4 integration** — the first DeFi application registered with the TBV protocol. TBV itself is application-agnostic and lives one layer below this: it owns vault creation, redemption, and security. Aave v4 is one specific consumer of vaultBTC. For the underlying protocol, see [How it works](../start-here/how-it-works) and [Protocol architecture](./protocol-architecture). For the layered overview, see [What is TBV?](../start-here/what-is-tbv) → "Two layers".
+This page describes **the Aave v4 integration** — the first DeFi application registered with the TBV protocol. TBV itself is application-agnostic and lives one layer below this: it owns vault creation, redemption, and security. Aave v4 is one specific consumer of vaultBTC. For the underlying protocol, see [How it works](../start-here/how-it-works.mdx) and [Protocol architecture](./protocol-architecture.mdx). For the layered overview, see [What is TBV?](../start-here/what-is-tbv.mdx) → "Two layers".
 
 The Trustless Bitcoin Vault (TBV) protocol is application-agnostic at the registry level. Aave v4 is the first DeFi integration, plugging into the ApplicationRegistry via the AaveAdapter contract. The collateral asset on this integration is vaultBTC, the accounting token described later on this page. In the Aave v4 integration, the Application Vault Keepers act as arbitrageurs.
 
@@ -50,13 +50,13 @@ Each asset has per-asset Hub-level configuration:
 * **Add cap:** maximum amount that can be supplied to the Hub.
 * **Draw cap:** maximum amount that can be borrowed from the Hub by all spokes combined (10,000,000 units per asset on Testnet).
 * **Hub liquidity fee:** Aave's reserve factor charged on accrued interest (set per asset at the Hub level).
-* **Interest rate strategy:** the contract determining borrowing rates as a function of utilization (kinked model — see [Protocol parameters](../testnet-info/protocol-parameters) for per-asset values).
+* **Interest rate strategy:** the contract determining borrowing rates as a function of utilization (kinked model — see [Protocol parameters](../testnet-info/protocol-parameters.mdx) for per-asset values).
 
 Each asset accrues interest continuously based on utilization (ratio of borrows to supply). Higher utilization yields higher rates, incentivizing repayment and additional supply.
 
 The depositor's debt for a given asset is tracked using two share components on the position proxy: drawn shares (principal) and premium shares (interest). As interest accrues, the share-to-value ratio increases, so the same shares correspond to a larger debt over time. To check current debt, query `getUserTotalDebt(proxyAddress, reserveId)` on the Babylon Core Spoke.
 
-Current numeric values for Testnet (caps and rates) are listed on the [Protocol parameters](../testnet-info/protocol-parameters) page.
+Current numeric values for Testnet (caps and rates) are listed on the [Protocol parameters](../testnet-info/protocol-parameters.mdx) page.
 
 ## Operations
 

@@ -5,7 +5,7 @@ sidebar_position: 4
 
 # Safety & trust assumptions
 
-A [Trustless Bitcoin Vault (TBV)](./what-is-tbv) is designed so that the depositor never has to trust a third party for the safety of the deposited BTC — subject only to the protocol's own cryptographic invariants and the chains it runs on. The accounting token used on Ethereum is vaultBTC. This page describes the protocol's safety guarantees, the optional roles other parties play, how a depositor can participate without trusting any of them, the operational pause states, the risk surface, and the caveats that apply specifically to the open Testnet release.
+A [Trustless Bitcoin Vault (TBV)](./what-is-tbv.mdx) is designed so that the depositor never has to trust a third party for the safety of the deposited BTC — subject only to the protocol's own cryptographic invariants and the chains it runs on. The accounting token used on Ethereum is vaultBTC. This page describes the protocol's safety guarantees, the optional roles other parties play, how a depositor can participate without trusting any of them, the operational pause states, the risk surface, and the caveats that apply specifically to the open Testnet release.
 
 ![Safety and trust model overview](/img/trustless-bitcoin-vault/start-here/safety-and-trust-overview.png)
 
@@ -47,11 +47,11 @@ As an additional security mechanism, a **Security Council** can block payouts in
 
 ## No rehypothecation
 
-The collateral cannot be transferred, rehypothecated, lent out, or repurposed by any participant. Each vault is a single Bitcoin output bound by its Taproot script at creation. The vaultBTC accounting token on Ethereum is restricted by the contracts that issue it: it is minted only when a vault is supplied as collateral on a registered application, burned when the vault is withdrawn or liquidated, and is not freely transferable as a general-purpose asset. There is no protocol path along which a third party can route a depositor's BTC into a different position, an internal balance sheet, or an off-protocol product.
+The collateral cannot be transferred, rehypothecated, lent out, or repurposed by any participant. Each vault is a single Bitcoin output bound by its Taproot script at creation. The vaultBTC accounting token on Ethereum is restricted by the contracts that issue it: it is minted automatically when a vault is activated as collateral on a registered application, burned when the vault is withdrawn or liquidated, and is not freely transferable as a general-purpose asset. There is no protocol path along which a third party can route a depositor's BTC into a different position, an internal balance sheet, or an off-protocol product.
 
 ## What each actor is trusted to do
 
-The protocol involves four actor types. None has custody of BTC. Each one performs a convenience that the depositor could otherwise perform independently — or, in the case of the Vault Provider, self-host. The full description of each actor's responsibilities is on [TBV Protocol actors](../technical-details/protocol-actors).
+The protocol involves four actor types. None has custody of BTC. Each one performs a convenience that the depositor could otherwise perform independently — or, in the case of the Vault Provider, self-host. The full description of each actor's responsibilities is on [TBV Protocol actors](../technical-details/protocol-actors.mdx).
 
 ### Vault Provider
 
@@ -108,7 +108,7 @@ The protocol supports two pause states for operational safety, both governed by 
 
 ## Risk surface
 
-* **Smart-contract risk.** The Ethereum contracts (`BTCVaultRegistry`, `AaveAdapter`, the vaultBTC token, the Babylon Core Spoke, `CapPolicy`, `FeeEscrow`) are subject to standard smart-contract risk. Audit reports and the bug bounty program are listed on [Audits & security](../reference/audits-and-security).
+* **Smart-contract risk.** The Ethereum contracts (`BTCVaultRegistry`, `AaveAdapter`, the vaultBTC token, the Babylon Core Spoke, `CapPolicy`, `FeeEscrow`) are subject to standard smart-contract risk. The current Testnet is beta software and may change as issues are found.
 * **Smart-contract upgradability and governance.** Several protocol contracts are upgradeable through governance. An upgrade can change protocol behavior and may also be required to follow Ethereum upgrades for compatibility. Mitigations: upgrades go through a TimelockController so changes are publicly visible before they take effect; existing vaults retain the parameter version active at their creation, which limits the scope of changes that can affect a live vault.
 * **Oracle risk.** The liquidation health factor depends on a BTC/USD price oracle. Liquidation settlement and fairness payment additionally use a WBTC/USD oracle. A stale or manipulated price could trigger a liquidation at an incorrect price, or fail to trigger one when needed.
 * **Bitcoin reorganization risk.** The peg-in confirmation depth and the timelocks on Pre-PegIn and Vault outputs are calibrated against expected Bitcoin reorg behavior. Deeper-than-expected reorgs would extend timing rather than enable theft.
@@ -137,5 +137,4 @@ The current Testnet uses signet BTC, not mainnet BTC. Funds on signet have no ec
 * Protocol contracts may be redeployed or upgraded during the Testnet phase. Existing test positions may be reset between deployments. Vault state, balances, and addresses are not guaranteed to persist across upgrades.
 * The demo app, the Vault Provider, and other supporting services operate on a best-effort liveness basis. Brief outages are expected.
 * Per-application and per-address BTC caps are conservatively set on Testnet. These limits will grow as the protocol matures.
-* The audit posture for Testnet is tracked on [Audits & security](../reference/audits-and-security).
-* Bugs and unexpected behavior should be reported through the channels listed on [Community & support](../reference/community-and-support).
+* Bugs and unexpected behavior should be reported through the channels listed on [Community & support](../reference/community-and-support.mdx).

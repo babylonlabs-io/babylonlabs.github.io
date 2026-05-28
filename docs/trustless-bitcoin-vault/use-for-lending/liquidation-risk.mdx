@@ -5,9 +5,9 @@ sidebar_position: 5
 
 # Liquidation risk
 
-This page describes liquidation in the context of the **Aave v4 integration** — the first DeFi application built on TBV. Other applications that may register with the protocol in the future could have different liquidation mechanisms. What is constant across applications is the underlying TBV protocol layer (vault creation, redemption, fraud detection); see [What is TBV?](../start-here/what-is-tbv) → "Two layers" for the overview.
+This page describes liquidation in the context of the **Aave v4 integration** — the first DeFi application built on TBV. Other applications that may register with the protocol in the future could have different liquidation mechanisms. What is constant across applications is the underlying TBV protocol layer (vault creation, redemption, fraud detection); see [What is TBV?](../start-here/what-is-tbv.mdx) → "Two layers" for the overview.
 
-Liquidation is what happens when your debt outgrows the value of your collateral. This page is written from the depositor's side: when it triggers, what gets seized, what you keep, and how to avoid it. For the protocol-side mechanics, see [Aave v4 integration](../technical-details/aave-v4-integration).
+Liquidation is what happens when your debt outgrows the value of your collateral. This page is written from the depositor's side: when it triggers, what gets seized, what you keep, and how to avoid it. For the protocol-side mechanics, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
 
 ## When liquidation can happen
 
@@ -55,7 +55,7 @@ If the position becomes liquidatable, the protocol walks your vaults in order. T
 
 Without the split — if you peg in 0.4 BTC as a single vault — the same liquidation seizes the full 0.4 BTC. That is the cliff effect.
 
-You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](./create-a-vault) for the two-vault setup at peg-in.
+You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](./create-a-vault.mdx) for the two-vault setup at peg-in.
 
 ## Fairness payment: you do not lose the excess
 
@@ -87,13 +87,13 @@ There is no separate per-vault liquidation fee on BTC vault collateral — vault
 * **Direct-redemption path** (registered arbitrageur with a Bitcoin redeem key): a 5% liquidation redemption fee applies (`liquidationRedemptionFeeBps` = 500 BPS), deducted from your seized-vault value.
 * **LLP path (BTCVaultSwap)**: a 30% LLP commission applies on the arbitrageur's margin (`discountCommissionBps`), plus a 1.5% sell discount that the LLP takes on the WBTC paid to the liquidator. Both reduce the value available for your fairness payment.
 
-Specific bonus parameters and fees are listed on the [Protocol parameters](../testnet-info/protocol-parameters) and [Fees](../reference/fees) pages.
+Specific bonus parameters are listed on the [Protocol parameters](../testnet-info/protocol-parameters.mdx) page.
 
 ## What is left after liquidation
 
 After the liquidation transaction settles:
 
-* Seized vaults move to `Redeemed` status. Their underlying BTC is the liquidator's, who can either redeem on Bitcoin directly (registered arbitrageurs) or sell the vault through the BTCVaultSwap LLP. See [Aave v4 integration](../technical-details/aave-v4-integration).
+* Seized vaults move to `Redeemed` status. Their underlying BTC is the liquidator's, who can either redeem on Bitcoin directly (registered arbitrageurs) or sell the vault through the BTCVaultSwap LLP. See [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
 * Unseized vaults stay in your position as `InUse` collateral. The position remains open as long as some debt and some collateral remain.
 * Your debt is reduced by the liquidator's repayment, plus the fairness debt repay if applicable.
 * The fairness payment, if any, lands in your Ethereum address as WBTC.
@@ -118,9 +118,9 @@ The zones above 1.0 are guidance, not contract values. The only on-chain thresho
 * **Use the two-vault split.** It is the most effective protection against the cliff effect, and the portal recommends it by default at peg-in. The portal also sizes the split for current parameters; don't manually undersize the sacrificial vault.
 * **Trust the portal's ordering.** The recommended order (sacrificial first) is what the protocol walks during liquidation. Reordering matters; review your order when parameters change.
 * **Monitor BTC price and health factor.** Call `getUserAccountData()` on the Babylon Core Spoke to read the live health factor.
-* **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Borrow & repay](./borrow-and-repay).
+* **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Borrow & repay](./borrow-and-repay.mdx).
 * **Add collateral.** Add more vaults to the position (up to the position cap of 0.4 BTC on Testnet). Each added vault raises collateral value and the health factor; you may need to reorder afterwards.
-* **Withdraw redundant vaults.** If a vault is not needed for collateral, withdrawing it does not reduce safety because the health factor check applies to the post-withdrawal position. See [Withdraw & redeem](./withdraw-and-redeem).
+* **Withdraw redundant vaults.** If a vault is not needed for collateral, withdrawing it does not reduce safety because the health factor check applies to the post-withdrawal position. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
 ## What is structurally bounded
 
@@ -128,13 +128,13 @@ A few protections sit at the contract level, not the user level:
 
 * **You never owe more than your collateral covers.** Liquidation discharges debt against the seized vault. Excess collateral is paid back to you as the fairness payment. The protocol does not pursue residual debt against you outside the position.
 * **A healthy position cannot be liquidated.** The 1.0 threshold is enforced on-chain at the moment of liquidation.
-* **No rehypothecation of the underlying BTC.** The bitcoin sitting in a vault's Taproot output is not lent or repurposed by any party during the life of the vault. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions).
+* **No rehypothecation of the underlying BTC.** The bitcoin sitting in a vault's Taproot output is not lent or repurposed by any party during the life of the vault. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
 
 ## Related pages
 
-* [Borrow & repay](./borrow-and-repay)
-* [Withdraw & redeem](./withdraw-and-redeem)
-* [Create a vault](./create-a-vault)
-* [Aave v4 integration](../technical-details/aave-v4-integration)
-* [Safety & trust assumptions](../start-here/safety-and-trust-assumptions)
-* [Glossary](../reference/glossary)
+* [Borrow & repay](./borrow-and-repay.mdx)
+* [Withdraw & redeem](./withdraw-and-redeem.mdx)
+* [Create a vault](./create-a-vault.mdx)
+* [Aave v4 integration](../technical-details/aave-v4-integration.mdx)
+* [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx)
+* [Glossary](../reference/glossary.mdx)

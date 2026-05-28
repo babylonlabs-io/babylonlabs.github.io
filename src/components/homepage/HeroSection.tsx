@@ -1,10 +1,9 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import {
-  WalletCreditCardRegular,
   DiversityRegular,
-  TetrisAppRegular,
   DocumentChevronDoubleRegular,
+  RocketRegular,
 } from '@fluentui/react-icons';
 import clsx from 'clsx';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
@@ -12,36 +11,28 @@ import HeroSearch from './HeroSearch';
 
 const PRODUCTS = [
   {
-    title: 'Trustless Bitcoin Vault',
-    link: '/guides/overview/bitcoin-vault',
+    title: 'TBV Testnet docs',
+    link: '/trustless-bitcoin-vault/',
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',
-    text: 'Learn about Trustless Bitcoin Vault - connecting Bitcoin state to external smart contracts (Ethereum).',
+    text: 'Start with the open Testnet documentation for Babylon Trustless Bitcoin Vault and the Aave v4 lending integration.',
   },
   {
-    title: 'Become Operators',
-    link: '/operators',
-    icon: TetrisAppRegular,
+    title: 'Create a vault',
+    link: '/trustless-bitcoin-vault/use-for-lending/create-a-vault',
+    icon: RocketRegular,
     lightImage: 'img/landing-page/hero/infra_providers.png',
     darkImage: 'img/landing-page/hero/infra_providers_dark.png',
-    text: 'The operators that provide the data validation infrastructure for the Babylon network.',
+    text: 'Lock signet BTC on Bitcoin, activate the vault, and have vaultBTC supplied automatically as collateral.',
   },
   {
-    title: 'Stake BTC',
-    link: '/stakers/btc_stakers',
-    icon: WalletCreditCardRegular,
+    title: 'Borrow and redeem',
+    link: '/trustless-bitcoin-vault/use-for-lending/quickstart',
+    icon: DocumentChevronDoubleRegular,
     lightImage: 'img/landing-page/hero/btc_stakers.png',
     darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
-    text: 'BTC holders that delegate their BTC stake to Babylon for rewards.',
-  },
-  {
-    title: 'Stake BABY',
-    link: '/stakers/baby_stakers',
-    icon: WalletCreditCardRegular,
-    lightImage: 'img/landing-page/hero/btc_stakers.png',
-    darkImage: 'img/landing-page/hero/btc_stakers_dark.png',
-    text: 'BABY holders can delegate their token to Babylon Genesis chain to participate in governance.',
+    text: 'Walk through peg-in, borrow, repay, withdraw, and Bitcoin redemption end to end.',
   },
 ];
 
@@ -87,10 +78,13 @@ export default function HeroSection() {
       <section className="no-underline-links px-4 pt-16 lg:py-0">
         <div className="flex flex-col items-center justify-between py-14">
           <h2 className="mb-4 font-jakarta text-5xl font-bold">
-          Make your bitcoin productive
+            Trustless Bitcoin Vault
           </h2>
           <p className="max-w-xl text-center text-text-400">
-            Made for builders, by builders. Powered by AI.
+            Use native Bitcoin as collateral in Ethereum DeFi without bridges,
+            wrapped custody, or pooled BTC. The open Testnet docs are the main
+            entry point for creating a vault, borrowing on Aave v4, and
+            redeeming back to Bitcoin.
           </p>
         </div>
       </section>

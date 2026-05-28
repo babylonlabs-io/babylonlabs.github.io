@@ -11,10 +11,10 @@ This page is the full happy path end to end: connect a wallet, deposit signet BT
 
 A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin network and makes it usable as collateral on Ethereum without bridges or wrapping. The demo app drives a full peg-in, borrow, repay, and peg-out cycle end to end.
 
-Testnet runs on signet, a Bitcoin test network. The BTC and stablecoins involved have no monetary value. Some flows are still under active development; report issues to the team via the channels listed in [Community & support](../reference/community-and-support).
+Testnet runs on signet, a Bitcoin test network. The BTC and stablecoins involved have no monetary value. Some flows are still under active development; report issues to the team via the channels listed in [Community & support](../reference/community-and-support.mdx).
 
 :::info Testnet limits
-Each address can hold at most **0.4 BTC** of collateral on the Aave application, across all positions. Each individual vault is also capped at 0.4 BTC. The whole Aave application is capped at 10 BTC. See [Protocol parameters](../testnet-info/protocol-parameters) for the full list of limits.
+Each address can hold at most **0.4 BTC** of collateral on the Aave application, across all positions. Each individual vault is also capped at 0.4 BTC. The whole Aave application is capped at 10 BTC. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the full list of limits.
 :::
 
 ## Before you start
@@ -23,20 +23,20 @@ You need:
 
 * A Bitcoin wallet that supports signet.
 * An Ethereum wallet on the supported testnet.
-* Signet BTC to deposit. Get it from the faucet listed in [Setup](../testnet-info/setup). Plan for ~0.01 to 0.4 BTC depending on what you want to test (0.4 BTC is the Testnet maximum).
+* Signet BTC to deposit. Get it from the faucet listed in [Setup](../testnet-info/setup.mdx). Plan for ~0.01 to 0.4 BTC depending on what you want to test (0.4 BTC is the Testnet maximum).
 * A small amount of testnet ETH for gas. Same page lists the faucet. ~0.05 ETH is plenty for a full cycle.
 
-For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup).
+For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup.mdx).
 
 ## Step 1: Open the testnet app
 
-Navigate to the demo app at the URL listed in [Setup](../testnet-info/setup).
+Navigate to the demo app at the URL listed in [Setup](../testnet-info/setup.mdx).
 
 ![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/use-for-lending/quickstart-01-landing.png)
 
 ## Step 2: Connect a wallet
 
-Click the **Connect** button at the top of the app or on any card.
+Click the **Connect** button at the top of the app or in any section.
 
 The wallet picker then opens. Select a Bitcoin wallet (ensure the Taproot address type is in use) to sign the Pre-PegIn transaction and your payout signatures, and an Ethereum wallet to sign the on-chain calls.
 
@@ -48,7 +48,7 @@ The Collateral and Loans sections are empty until a vault exists.
 
 A peg-in moves BTC into a vault that backs a vaultBTC accounting token on Ethereum. The BTC stays on Bitcoin throughout, locked in a Taproot output. Nothing is bridged or wrapped. This step is at the TBV protocol layer — the same vault could later be supplied to any registered application; today, only the Aave v4 integration is available.
 
-From the **Collateral** card, click **Deposit**. Then:
+From the **Collateral** section, click **Deposit**. Then:
 
 **1. Enter the amount in BTC** (between 0.01 and 0.4 on Testnet).
 
@@ -62,7 +62,7 @@ From the **Collateral** card, click **Deposit**. Then:
 
 ![Confirm Bitcoin + Ethereum transactions](/img/trustless-bitcoin-vault/use-for-lending/quickstart-05-confirm-txs.png)
 
-The app then runs the off-chain setup automatically: authentication, signature collection, acknowledgments. During this period the app will prompt you to sign the **Claim transaction graph** and the **Payout transactions**, and download the **claimer artifacts** (essential for the self-claim fallback). The full walkthrough is on [Create a vault](./create-a-vault).
+The app then runs the off-chain setup automatically: authentication, signature collection, acknowledgments. During this period the app will prompt you to sign the **Claim transaction graph** and the **Payout transactions**, and download the **claimer artifacts** (essential for the self-claim fallback). The full walkthrough is on [Create a vault](./create-a-vault.mdx).
 
 The app recommends splitting your deposit into two vaults: a sacrificial vault sized to cover the protocol's expected seizure amount (placed first in liquidation order), and a protected vault holding the rest (placed second).
 
@@ -74,7 +74,7 @@ When the vault reaches **Verified** status, the app prompts you to **Activate**.
 
 Your vault is already supplied as collateral on the integrated Aave v4 market — minted and supplied automatically when you activated. From this step on, you are interacting with the Aave v4 application layer; the underlying vault on Bitcoin sits unchanged.
 
-Open the **Loans** card and click **Borrow**:
+Open the **Loans** section and click **Borrow**:
 
 **1. Select an asset: USDC, USDT, or WBTC.**
 
@@ -96,13 +96,13 @@ Open the **Loans** card and click **Borrow**:
 
 The borrowed asset arrives in your Ethereum wallet. The app now shows your **health factor**, a single number summarizing how close the position is to liquidation. A higher number is safer.
 
-![Borrowed balance visible in the Loans card](/img/trustless-bitcoin-vault/use-for-lending/quickstart-12-borrowed.png)
+![Borrowed balance visible in the Loans section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-12-borrowed.png)
 
 ## Step 5: Repay your debt (Aave v4 application layer)
 
 To close the position, repay what you borrowed.
 
-From the **Loans** card, click **Repay**:
+From the **Loans** section, click **Repay**:
 
 * **Repay full** closes the entire borrow and unlocks redemption.
 * **Repay partial** pays down a portion; the position stays open with reduced debt.
@@ -123,7 +123,7 @@ Interest accrues continuously until repayment, so the exact amount due is slight
 
 Redeeming releases the underlying BTC from the vault back to your Bitcoin wallet. This step crosses back from the Aave v4 application layer into the TBV protocol layer.
 
-From the **Collateral** card, select an **InUse** vault and click **Withdraw**.
+From the **Collateral** section, select an **InUse** vault and click **Withdraw**.
 
 ![Withdraw form — selected vault](/img/trustless-bitcoin-vault/use-for-lending/quickstart-16-withdraw-form.png)
 
@@ -151,12 +151,12 @@ The 3-day window is inherent to the fraud-detection mechanism.
 
 Common scenarios and where to look:
 
-* **Pre-PegIn still pending after ~3 hours:** check the Bitcoin block explorer (see [Setup](../testnet-info/setup)). If the transaction is propagated but not confirmed, wait — signet block times can be irregular.
-* **Vault stuck in Pending past ~24 hours:** the off-chain setup likely failed. The vault will transition to Expired and your peg-in fee will be refunded. See the refund path on [Create a vault](./create-a-vault) for BTC recovery.
-* **Wallet won't connect or transaction rejected:** verify the wallet is on the correct network (see [Setup](../testnet-info/setup) for chain IDs).
-* **Vault Provider not responding during redemption:** the depositor self-claim path applies. See [Withdraw & redeem](./withdraw-and-redeem).
+* **Pre-PegIn still pending after ~3 hours:** check the Bitcoin block explorer (see [Setup](../testnet-info/setup.mdx)). If the transaction is propagated but not confirmed, wait — signet block times can be irregular.
+* **Vault stuck in Pending past ~24 hours:** the off-chain setup likely failed. The vault will transition to Expired and your peg-in fee will be refunded. See the refund path on [Create a vault](./create-a-vault.mdx) for BTC recovery.
+* **Wallet won't connect or transaction rejected:** verify the wallet is on the correct network (see [Setup](../testnet-info/setup.mdx) for chain IDs).
+* **Vault Provider not responding during redemption:** the depositor self-claim path applies. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
-For anything else, ask in the Testnet support channel listed on [Community & support](../reference/community-and-support).
+For anything else, ask in the Testnet support channel listed on [Community & support](../reference/community-and-support.mdx).
 
 ## You've completed a full cycle
 

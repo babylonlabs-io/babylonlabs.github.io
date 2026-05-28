@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # What is TBV?
 
-TBV is currently running on Bitcoin signet and Ethereum testnet. Funds involved are test-only and have no monetary value. For mainnet plans, see [Audits & security](../reference/audits-and-security) and [Community & support](../reference/community-and-support).
+TBV is currently running on Bitcoin signet and Ethereum testnet. Funds involved are test-only and have no monetary value. For current Testnet announcements and support channels, see [Community & support](../reference/community-and-support.mdx).
 
 ## The problem: only ~1% of Bitcoin is used in DeFi
 
@@ -37,7 +37,7 @@ With TBV, the trust set is shorter:
 * Trust in the **Bitcoin Network** and in the Bitcoin script the depositor co-signed at vault creation.
 * Trust in the **Ethereum network** and in the target DeFi smart contract.
 
-Beyond the chains themselves, residual trust sits with the protocol's governance and emergency-response multi-sigs — transitional safety nets that the protocol can retire over time. There is no custodian, no bridge contract holding the BTC, and no federation of signers required to release funds. The depositor's own keys participate at every depositor-controlled release path, and a self-claim path is committed at vault creation so the depositor can exit independently if the Vault Provider becomes unresponsive. See [Safety & trust assumptions](./safety-and-trust-assumptions) for the full picture.
+Beyond the chains themselves, residual trust sits with the protocol's governance and emergency-response multi-sigs — transitional safety nets that the protocol can retire over time. There is no custodian, no bridge contract holding the BTC, and no federation of signers required to release funds. The depositor's own keys participate at every depositor-controlled release path, and a self-claim path is committed at vault creation so the depositor can exit independently if the Vault Provider becomes unresponsive. See [Safety & trust assumptions](./safety-and-trust-assumptions.mdx) for the full picture.
 
 ## Two layers: the TBV protocol and the DeFi applications on top
 
@@ -46,10 +46,10 @@ Beyond the chains themselves, residual trust sits with the protocol's governance
 
 The protocol's safety properties (self-custody, pre-signed exits, BABE fraud detection, depositor self-claim) apply to every vault regardless of which application is currently using it.
 
-On Testnet today, only the Aave v4 lending application is live. Most user-facing pages in these docs ([Borrow & repay](../use-for-lending/borrow-and-repay), [Withdraw & redeem](../use-for-lending/withdraw-and-redeem), [Liquidation risk](../use-for-lending/liquidation-risk)) describe how things work specifically within that integration. Protocol-layer pages ([How it works](./how-it-works), [Protocol architecture](../technical-details/protocol-architecture), [Safety & trust assumptions](./safety-and-trust-assumptions), [TBV Protocol actors](../technical-details/protocol-actors)) describe TBV itself and apply across any future application.
+On Testnet today, only the Aave v4 lending application is live. Most user-facing pages in these docs ([Borrow & repay](../use-for-lending/borrow-and-repay.mdx), [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx), [Liquidation risk](../use-for-lending/liquidation-risk.mdx)) describe how things work specifically within that integration. Protocol-layer pages ([How it works](./how-it-works.mdx), [Protocol architecture](../technical-details/protocol-architecture.mdx), [Safety & trust assumptions](./safety-and-trust-assumptions.mdx), [TBV Protocol actors](../technical-details/protocol-actors.mdx)) describe TBV itself and apply across any future application.
 
 ## What you can test today
 
 On the open Testnet, a depositor with an active vault can **test** borrowing stablecoins (USDC, USDT) or WBTC against it. The borrowed funds and the underlying BTC are signet and testnet assets with no monetary value — this is an **experiment** in trustless Bitcoin DeFi, end to end. After repayment, the vault is unlocked and the BTC is released back to the depositor's Bitcoin address.
 
-Multiple vaults can combine into a single borrowing position. The app recommends splitting BTC into two vaults so that if the position faces a liquidation event, only the first vault is seized and the rest stays as collateral. The mechanism is explained on [Liquidation risk](../use-for-lending/liquidation-risk).
+Multiple vaults can combine into a single borrowing position. The app recommends splitting BTC into two vaults so that if the position faces a liquidation event, only the first vault is seized and the rest stays as collateral. The mechanism is explained on [Liquidation risk](../use-for-lending/liquidation-risk.mdx).

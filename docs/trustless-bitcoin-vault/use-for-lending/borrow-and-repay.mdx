@@ -5,27 +5,27 @@ sidebar_position: 3
 
 # Borrow & repay
 
-This page describes borrow and repay flows on the **Aave v4 integration** — the first DeFi application built on TBV. The TBV protocol layer below it (vault creation, redemption, security) is application-agnostic and the same across any future integration; what differs application-to-application is the borrowing mechanism, the interest model, and the liquidation rules. See [What is TBV?](../start-here/what-is-tbv) → "Two layers" for the overview.
+This page describes borrow and repay flows on the **Aave v4 integration** — the first DeFi application built on TBV. The TBV protocol layer below it (vault creation, redemption, security) is application-agnostic and the same across any future integration; what differs application-to-application is the borrowing mechanism, the interest model, and the liquidation rules. See [What is TBV?](../start-here/what-is-tbv.mdx) → "Two layers" for the overview.
 
-This page covers borrowing USDC, USDT, or WBTC against an active vault, how interest accrues, and how to repay. The vault creation step that comes before is on [Create a vault](./create-a-vault). The redemption step that comes after is on [Withdraw & redeem](./withdraw-and-redeem).
+This page covers borrowing USDC, USDT, or WBTC against an active vault, how interest accrues, and how to repay. The vault creation step that comes before is on [Create a vault](./create-a-vault.mdx). The redemption step that comes after is on [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
-An Active vault becomes usable collateral the moment you supply it to the lending market. From there, the day-to-day life of a position is the standard DeFi borrow-and-repay loop, with vault-specific behaviour around collateral structure and liquidation. This page is the operating guide for that loop.
+An activated vault becomes usable collateral automatically: the activation transaction moves the vault to `InUse` and the contracts mint and supply the corresponding vaultBTC to the lending market. From there, the day-to-day life of a position is the standard DeFi borrow-and-repay loop, with vault-specific behaviour around collateral structure and liquidation. This page is the operating guide for that loop.
 
 :::info Testnet position cap
-Each address can hold at most **0.4 BTC** of collateral across all positions in the Aave application. Each position can also hold at most 10 vaults. See [Protocol parameters](../testnet-info/protocol-parameters) for the full list.
+Each address can hold at most **0.4 BTC** of collateral across all positions in the Aave application. Each position can also hold at most 10 vaults. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the full list.
 :::
 
 ## Before you start
 
 You need:
 
-* At least one Active vault. If you don't have one, start at [Create a vault](./create-a-vault).
+* At least one activated vault in `InUse` status. If you don't have one, start at [Create a vault](./create-a-vault.mdx).
 * A small balance of testnet ETH for gas on each transaction.
-* Familiarity with basic DeFi borrowing concepts: collateral, health factor, liquidation. See [Glossary](../reference/glossary) for short definitions.
+* Familiarity with basic DeFi borrowing concepts: collateral, health factor, liquidation. See [Glossary](../reference/glossary.mdx) for short definitions.
 
-## Supply your vault as collateral
+## Confirm collateral after activation
 
-From the **Collateral** section, select an Active vault in **Available** status and click **Add as collateral**. Confirm the Ethereum transaction.
+After a vault reaches **Verified**, you manually click **Activate** and confirm the Ethereum transaction because activation reveals the peg-in secret and completes the Bitcoin-side transition. Once activation succeeds, the contract automatically mints vaultBTC and supplies it to the Babylon Core Spoke. There is no separate collateral-add or manual vaultBTC mint step.
 
 ![Collateral and Loans sections at the start of borrow flow](/img/trustless-bitcoin-vault/use-for-lending/borrow-repay-01-add-collateral.png)
 
@@ -33,12 +33,12 @@ What happens behind the scenes:
 
 * vaultBTC is minted equal to the vault's BTC amount, at 8-decimal precision (1 vaultBTC = 1 BTC = 100,000,000 satoshis).
 * The vaultBTC is supplied to the Babylon Core Spoke, the dedicated lending market that accepts vaultBTC as collateral.
-* The vault's status moves from **Available** to **InUse**.
+* The vault's status moves to **InUse**.
 * The position's collateral value and health factor update.
 
-You can add multiple vaults in a single transaction. All must be in Available status and belong to your wallet, and the position's total must remain under the cap (0.4 BTC on Testnet).
+Activating additional vaults appends them to the same lending position automatically. Each vault must belong to your wallet, and the position's total must remain under the cap (0.4 BTC on Testnet).
 
-vaultBTC never leaves the protocol contracts. It is not transferable to arbitrary addresses, has no secondary market, and exists purely as the internal accounting token for vault-backed collateral. For the full architecture, see [Aave v4 integration](../technical-details/aave-v4-integration).
+vaultBTC never leaves the protocol contracts. It is not transferable to arbitrary addresses, has no secondary market, and exists purely as the internal accounting token for vault-backed collateral. For the full architecture, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
 
 ## Borrow stablecoins or WBTC
 
@@ -48,7 +48,7 @@ Borrowable assets on the current Testnet release:
 * **USDT**
 * **WBTC**
 
-Each asset has its own interest rate, supply cap, and borrow cap configured at the Aave v4 Hub level. For full numerical values and the rate-model parameters, see [Protocol parameters](../testnet-info/protocol-parameters).
+Each asset has its own interest rate, supply cap, and borrow cap configured at the Aave v4 Hub level. For full numerical values and the rate-model parameters, see [Protocol parameters](../testnet-info/protocol-parameters.mdx).
 
 From the **Loans** section, click **Borrow**:
 
@@ -124,7 +124,7 @@ The health factor changes with three inputs:
 * **Accrued interest** moves the debt value upward over time.
 * **Your actions:** borrowing more lowers the health factor; repaying or adding collateral raises it.
 
-For the liquidation mechanism in detail, including what happens when the health factor reaches 1.0 and how the fairness payment returns any over-seized value, see [Liquidation risk](./liquidation-risk).
+For the liquidation mechanism in detail, including what happens when the health factor reaches 1.0 and how the fairness payment returns any over-seized value, see [Liquidation risk](./liquidation-risk.mdx).
 
 ## Repay your debt
 
@@ -155,39 +155,39 @@ On each repayment, the protocol's 10% interest fee is collected first from the a
 
 The protocol allows third-party repayment: anyone can repay debt on your position's behalf. This is the mechanism liquidators use to repay debt during seizure, and it is supported as a general feature. The borrower's debt decreases regardless of who paid.
 
-After all debt is repaid across all asset reserves, the position is eligible to withdraw collateral. See [Withdraw & redeem](./withdraw-and-redeem).
+After all debt is repaid across all asset reserves, the position is eligible to withdraw collateral. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
 ## Add more collateral
 
 To grow a position over time, add more vaults.
 
-From the **Collateral** card, select one or more Active vaults in Available status and click **Add as collateral**. Confirm the Ethereum transaction.
+Create and activate another vault. Once the activation transaction succeeds, the contract mints the additional vaultBTC and supplies it to the same lending position automatically.
 
-Adding collateral:
+Activating another vault:
 
 * Mints additional vaultBTC and supplies it to the lending market.
 * Increases the position's collateral value.
 * Raises the health factor.
 
-Adding collateral is one of three actions that raise the health factor: add collateral, repay debt, or wait for BTC price to rise.
+Adding collateral is one of three actions that raise the health factor: activate another vault, repay debt, or wait for BTC price to rise.
 
 Position cap reminder: on Testnet, total BTC across all vaults in one position cannot exceed 0.4 BTC, and you can have at most 10 vaults per position. Per-address cap across all your positions is also 0.4 BTC.
 
-If the position now contains multiple vaults, the order of the list determines which vault is seized first during a liquidation. The vault at the front of the list goes first. See [Create a vault](./create-a-vault) for the two-vault distribution recommendation and [Liquidation risk](./liquidation-risk) for why ordering matters.
+If the position now contains multiple vaults, the order of the list determines which vault is seized first during a liquidation. The vault at the front of the list goes first. See [Create a vault](./create-a-vault.mdx) for the two-vault distribution recommendation and [Liquidation risk](./liquidation-risk.mdx) for why ordering matters.
 
 ## Monitor your position
 
-The portal surfaces the position's state on the **Loans** card:
+The portal surfaces the position's state on the **Loans** section:
 
 * **Health factor**, current.
 * **Total collateral value**, the sum of vault BTC amounts priced at the current BTC/USD oracle value.
 * **Outstanding debt**, per asset and aggregate.
 * **Borrow rate**, per asset, the live rate driven by utilization.
 
-For programmatic access, the Babylon Core Spoke and the AaveAdapterLens contract expose read-only queries returning the same data. See [Aave v4 integration](../technical-details/aave-v4-integration) for the contract surfaces.
+For programmatic access, the Babylon Core Spoke and the AaveAdapterLens contract expose read-only queries returning the same data. See [Aave v4 integration](../technical-details/aave-v4-integration.mdx) for the contract surfaces.
 
 ## Next steps
 
-* [Withdraw & redeem](./withdraw-and-redeem): close the position and recover the underlying BTC.
-* [Liquidation risk](./liquidation-risk): what triggers liquidation, what is seized, and how the fairness payment works.
-* [Aave v4 integration](../technical-details/aave-v4-integration): the protocol-level architecture of the lending stack.
+* [Withdraw & redeem](./withdraw-and-redeem.mdx): close the position and recover the underlying BTC.
+* [Liquidation risk](./liquidation-risk.mdx): what triggers liquidation, what is seized, and how the fairness payment works.
+* [Aave v4 integration](../technical-details/aave-v4-integration.mdx): the protocol-level architecture of the lending stack.

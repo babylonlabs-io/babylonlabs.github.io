@@ -16,7 +16,7 @@ Two cryptographic primitives connect the chains:
 
 An on-Ethereum Bitcoin light client (implemented as smart contracts) verifies the state of Bitcoin-side vaults in the opposite direction, so Ethereum applications can act on Bitcoin events without trusting an off-chain oracle.
 
-Each chain independently verifies the cryptographic evidence it receives. The Bitcoin side holds the BTC in a Taproot script with multiple spending paths agreed at vault creation. The Ethereum side holds an internal accounting token, **vaultBTC**, that represents the vault for DeFi purposes and is minted only when a vault is supplied as collateral.
+Each chain independently verifies the cryptographic evidence it receives. The Bitcoin side holds the BTC in a Taproot script with multiple spending paths agreed at vault creation. The Ethereum side holds an internal accounting token, **vaultBTC**, that represents the vault for DeFi purposes and is minted automatically when the vault is activated as collateral.
 
 ## Peg-in: vault creation
 
@@ -43,7 +43,7 @@ The vaultBTC token never leaves the protocol contracts. It cannot be transferred
 
 Additional vaults can be created at any time; each is supplied automatically on activation. Vaults can be withdrawn individually as long as the position remains healthy (its health factor — the ratio of risk-adjusted collateral to debt — stays above 1.0). With multiple vaults in a position, the protocol can do partial-position liquidation: if liquidation is triggered, it seizes only the subset of vaults required to restore the health factor, leaving the rest in the position. With a single-vault position, liquidation seizes the whole vault.
 
-In multi-vault positions the order matters. The protocol walks the vault list in order during liquidation and seizes the minimum prefix needed. Vaults at the front are taken first. This is why the app recommends splitting BTC between a sacrificial vault (sized to cover the protocol's expected seizure, placed first) and a protected vault (whatever remains, placed second). At current Testnet parameters the sacrificial vault is the larger of the two; see [Liquidation risk](../use-for-lending/liquidation-risk) for the sizing logic.
+In multi-vault positions the order matters. The protocol walks the vault list in order during liquidation and seizes the minimum prefix needed. Vaults at the front are taken first. This is why the app recommends splitting BTC between a sacrificial vault (sized to cover the protocol's expected seizure, placed first) and a protected vault (whatever remains, placed second). At current Testnet parameters the sacrificial vault is the larger of the two; see [Liquidation risk](../use-for-lending/liquidation-risk.mdx) for the sizing logic.
 
 When a vault is withdrawn from a position — either by the depositor exiting, or by liquidation — the corresponding vaultBTC is burned. The vault then enters the redemption flow on Bitcoin.
 

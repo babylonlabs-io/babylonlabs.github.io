@@ -7,13 +7,13 @@ sidebar_position: 2
 
 This page lists the deployed contract addresses for the current Trustless Bitcoin Vault (TBV) Testnet release on **Sepolia** (chain ID `11155111`). **Audience:** developers, integrators, and security researchers. Depositors using the demo app do not need to interact with contracts directly.
 
-For wallet and network setup, see [Setup](./setup). For the live values of protocol parameters (thresholds, timeouts), see [Protocol parameters](./protocol-parameters).
+For wallet and network setup, see [Setup](./setup.mdx). For the live values of protocol parameters (thresholds, timeouts), see [Protocol parameters](./protocol-parameters.mdx).
 
 Addresses can change between Testnet releases. Always check this page before sending a transaction or interacting with a contract directly.
 
 ## Bitcoin side
 
-The Bitcoin side has no protocol contracts: each vault corresponds to a single Taproot UTXO created at peg-in. The vault's spending paths are committed in the Taproot script at creation. See [Protocol architecture](../technical-details/protocol-architecture) for the script structure.
+The Bitcoin side has no protocol contracts: each vault corresponds to a single Taproot UTXO created at peg-in. The vault's spending paths are committed in the Taproot script at creation. See [Protocol architecture](../technical-details/protocol-architecture.mdx) for the script structure.
 
 ## Ethereum side — protocol-level contracts
 
@@ -30,7 +30,7 @@ Core contracts that manage vault accounting, protocol parameters, and the applic
 
 ## Ethereum side — Aave v4 integration
 
-Contracts deployed for the Aave v4 integration. The collateral asset is `vaultBTC`. For the architecture, see [Aave v4 integration](../technical-details/aave-v4-integration).
+Contracts deployed for the Aave v4 integration. The collateral asset is `vaultBTC`. For the architecture, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
 
 | Contract | Purpose | Address |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ Functions developers can call to read protocol state without sending a transacti
 
 ## Related
 
-* [Setup](./setup) — wallets, networks, faucets
-* [Protocol parameters](./protocol-parameters) — current parameter values
-* [Protocol architecture](../technical-details/protocol-architecture) — how the contracts fit together
-* [Aave v4 integration](../technical-details/aave-v4-integration) — adapter and Hub interaction
+* [Setup](./setup.mdx) — wallets, networks, faucets
+* [Protocol parameters](./protocol-parameters.mdx) — current parameter values
+* [Protocol architecture](../technical-details/protocol-architecture.mdx) — how the contracts fit together
+* [Aave v4 integration](../technical-details/aave-v4-integration.mdx) — adapter and Hub interaction

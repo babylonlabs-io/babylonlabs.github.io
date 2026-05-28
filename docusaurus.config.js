@@ -116,6 +116,39 @@ const plugins = [
           from: '/guides/overview/bitcoin-vault/',
           to: '/trustless-bitcoin-vault/',
         },
+        // Staking research/security moved under Bitcoin Staking
+        {
+          from: '/guides/research/',
+          to: '/guides/overview/bitcoin_staking/research/',
+        },
+        {
+          from: '/guides/research/babe_verification/',
+          to: '/guides/overview/bitcoin_staking/research/babe_verification/',
+        },
+        {
+          from: '/guides/research/btc_staking_litepaper/',
+          to: '/guides/overview/bitcoin_staking/research/btc_staking_litepaper/',
+        },
+        {
+          from: '/guides/research/btc_timestamping/',
+          to: '/guides/overview/bitcoin_staking/research/btc_timestamping/',
+        },
+        {
+          from: '/guides/research/btc_trustless_vault/',
+          to: '/guides/overview/bitcoin_staking/research/btc_trustless_vault/',
+        },
+        {
+          from: '/guides/security/',
+          to: '/guides/overview/bitcoin_staking/security/',
+        },
+        {
+          from: '/guides/security/audit_reports/',
+          to: '/guides/overview/bitcoin_staking/security/audit_reports/',
+        },
+        {
+          from: '/guides/security/bug_bounties/',
+          to: '/guides/overview/bitcoin_staking/security/bug_bounties/',
+        },
         // Architecture redirects (moved under babylon_genesis)
         {
           from: '/guides/architecture/',
@@ -150,11 +183,11 @@ const plugins = [
         // Governance proposals flattened
         {
           from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals_overview/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
         },
         {
           from: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/drafting_proposals_overview/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
         },
         {
           from: '/guides/overview/babylon_genesis/governance/submit_proposals/',
@@ -167,11 +200,11 @@ const plugins = [
         },
         {
           from: '/guides/governance/drafting_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/drafting_proposals_overview/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
         },
         {
           from: '/guides/governance/reviewing_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals_overview/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
         },
         {
           from: '/guides/governance/submit_proposals/',
@@ -355,14 +388,14 @@ const config = {
         },
         items: [
           {
-            label: 'Overview',
-            to: '/guides/overview/',
-            className: 'guides-top-header',
-          },
-          {
             label: 'Trustless Bitcoin Vault',
             to: '/trustless-bitcoin-vault/',
             className: 'trustless-bitcoin-vault-top-header',
+          },
+          {
+            label: 'Bitcoin Staking',
+            to: '/guides/overview/bitcoin_staking/',
+            className: 'guides-top-header',
           },
           {
             label: 'API',
@@ -384,22 +417,6 @@ const config = {
           {
             label: 'Support',
             to: 'https://discord.com/invite/babylonglobal',
-          },
-          {
-            label: 'Babylon AI',
-            to: '#',
-            className: 'header-ai-chat-link',
-            position: 'right',
-          },
-          {
-            href: 'https://discord.com/invite/babylonglobal',
-            position: 'right',
-            className: 'header-discord-link',
-          },
-          {
-            href: 'https://github.com/babylonlabs-io/',
-            position: 'right',
-            className: 'header-github-link',
           },
           {
             type: 'search',
