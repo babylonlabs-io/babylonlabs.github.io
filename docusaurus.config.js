@@ -4,6 +4,8 @@ const { languageTabs } = require('./static/languageTabs.cjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
 const ALGOLIA_INDEX_NAME =
   BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const ENABLE_GTAG =
+  process.env.NODE_ENV === 'production' && Boolean(process.env.TRACKING_ID);
 const code_themes = {
   light: themes.github,
   dark: themes.dracula,
@@ -354,7 +356,7 @@ const config = {
         sitemap: {
           ignorePatterns: ['**/tags/**', '/api/*'],
         },
-        gtag: process.env.TRACKING_ID
+        gtag: ENABLE_GTAG
           ? {
               trackingID: process.env.TRACKING_ID,
               anonymizeIP: true,
