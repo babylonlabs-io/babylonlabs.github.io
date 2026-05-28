@@ -178,6 +178,22 @@ const plugins = [
           from: '/guides/overview/babylon_genesis/architecture/vigilantes/',
           to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
         },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/monitor/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/monitor/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/reporter/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/reporter/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/submitter/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/submitter/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
         // Networks removed
         {
           from: '/guides/overview/babylon_genesis/networks/mainnet/',
@@ -197,12 +213,48 @@ const plugins = [
           to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
         },
         {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/proposal-review-guide/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/voting-via-cli/',
+          to: '/guides/overview/babylon_genesis/governance/voting-via-cli/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/voting_via_web/',
+          to: '/guides/overview/babylon_genesis/governance/voting_via_web/',
+        },
+        {
           from: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
           to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
         },
         {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/drafting-proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/proposal_templates/',
+          to: '/guides/overview/babylon_genesis/governance/proposal_templates/',
+        },
+        {
           from: '/guides/overview/babylon_genesis/governance/submit_proposals/',
           to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_via_cli/',
+          to: '/guides/overview/babylon_genesis/governance/submit_via_cli/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_via_web/',
+          to: '/guides/overview/babylon_genesis/governance/submit_via_web/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/smart_contract_deployment/',
+          to: '/guides/overview/babylon_genesis/governance/smart_contract_deployment/',
         },
         // Governance redirects
         {
