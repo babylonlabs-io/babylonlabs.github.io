@@ -16,7 +16,7 @@ If a question is missing here, ask in the support channel listed on [Community &
 Two wallets: a Bitcoin wallet on signet and an Ethereum wallet on the supported testnet.
 
 * The Bitcoin wallet must produce Taproot (P2TR) addresses and support PSBT signing with BIP-322 or ECDSA message signing.
-* The Ethereum wallet must support WalletConnect or be an injected wallet compatible with the demo app.
+* The Ethereum wallet must support WalletConnect or be an injected wallet compatible with the test app.
 
 For the current supported list, networks, and faucet links, see [Setup](../testnet-info/setup.mdx).
 
@@ -28,7 +28,7 @@ TBV locks BTC in a Taproot output. The wallet has to produce Taproot (P2TR) addr
 
 1. The Bitcoin wallet is set to signet, not mainnet.
 2. The Ethereum wallet is on Sepolia (chain ID `11155111`), not another network.
-3. Both wallets are unlocked before opening the demo app.
+3. Both wallets are unlocked before opening the test app.
 4. If several Bitcoin extensions are installed, disable the ones not in use so the app detects the correct one.
 5. Refresh the page once and reconnect.
 
@@ -83,7 +83,7 @@ The rate for each borrowable asset is a function of utilization (the ratio of bo
 * USDC and USDT: optimal utilization 92%, slope 4% below the pivot, slope 20% above. At 92% the rate is 4%; at 100% it reaches 24%.
 * WBTC: optimal utilization 80%, slope 4% below, slope 60% above (reflecting WBTC scarcity). At 80% the rate is 4.25%; at 100% it reaches roughly 64%.
 
-The protocol additionally collects 10% of accrued interest as a fee, taken out of the interest portion rather than added on top. The Aave displayed rate is the effective cost. See [Borrow & repay](./borrow-and-repay.mdx) for the full interest model.
+Rate-model anchors per asset live on [Protocol parameters](../testnet-info/protocol-parameters.mdx). See [Borrow & repay](./borrow-and-repay.mdx) for the full interest model.
 
 ### Why does repayment ask for two wallet confirmations?
 
@@ -110,7 +110,7 @@ A few common causes:
 
 * The displayed rate is annual (APR), not per block. The amount accrued over a short period is much smaller.
 * After repayment, very small residual debt (dust) may remain if interest accrued between the query and the transaction.
-* The protocol's 10% interest fee is collected first on each repay, before principal reduction. Partial repayments smaller than the accrued-interest fee may not reduce principal at all.
+* Very small residual debt may remain if the repayment amount does not include enough buffer for interest and rounding.
 
 ## Health factor and liquidation
 

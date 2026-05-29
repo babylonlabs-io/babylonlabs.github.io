@@ -35,8 +35,8 @@ The portal surfaces all three of these on the Loans section. For programmatic ac
 If you have any outstanding debt, repay it before attempting a full withdrawal. For each borrowed reserve:
 
 1. Approve the AaveAdapter to spend the repayment token (standard ERC-20 approval).
-2. Call `repayToCorePosition` with your position ID, the debt reserve ID, and an amount slightly larger than the current debt. Interest can accrue between the moment you read the debt balance and the moment the transaction is mined; the protocol's 10% interest fee is collected first from any accrued interest. Any excess from your repayment is refunded.
-3. Confirm the balance is zero by calling `getUserTotalDebt()` on the Spoke.
+2. Call `repayToCorePosition(borrower, debtReserveId, amount)` with the borrower address, the debt reserve ID, and an amount slightly larger than the current debt. Interest can accrue between the moment you read the debt balance and the moment the transaction is mined. Any excess from your repayment is refunded.
+3. Confirm the balance is zero by calling `getReserveTotalDebt(reserveId)` on the position proxy for every borrowed reserve.
 
 ![Repay before withdrawal](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-02-repay.png)
 
@@ -50,17 +50,17 @@ From the portal:
 
 **1. Open the Collateral section and click Withdraw. Select the vault you want to withdraw.**
 
-![Withdraw form](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-03-withdraw-form.png)
-
-![Withdraw — vault selected](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-04-select-vault.png)
+![Withdraw form with a selected vault](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-03-withdraw-form.png)
 
 **2. Review the withdrawal amount, network fee rate, VP commission, and the nominated Bitcoin address.**
 
-![Withdraw review screen](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-05-review.png)
+![Withdraw review screen](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-04-select-vault.png)
 
 **3. Confirm the Ethereum transaction in your wallet.**
 
-![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-06-bitcoin-address.png)
+![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-05-review.png)
+
+![Withdraw processing](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-06-bitcoin-address.png)
 
 ![Withdraw initiated](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-07-confirm.png)
 
@@ -68,11 +68,11 @@ From the portal:
 
 **Partial withdrawal.** Pass a subset of your vault IDs. The contract verifies your health factor stays above 1.0 after the listed vaults are removed. If removing them would push the position into liquidatable territory, the transaction reverts. Use partial withdrawal to free up an over-collateralised vault while keeping the position open.
 
-**Full withdrawal.** Pass every vault in your position. The contract verifies that all debt — principal, interest, and any pending protocol-fee accruals — is fully repaid on every borrowed reserve.
+**Full withdrawal.** Pass every vault in your position. The contract verifies that all debt — principal and interest — is fully repaid on every borrowed reserve.
 
 **What this single call does:**
 
-1. vaultBTC for the withdrawn vaults is burned. Total vaultBTC supply always equals the BTC currently held as active collateral.
+1. Internal accounting for the withdrawn vaults is cleared.
 2. Each withdrawn vault transitions from `InUse` to `Available`, then on to `Redeemed`. `withdrawCollaterals` always starts redemption — vaults cannot be withdrawn into Available status and held there for later re-supply.
 3. The contract emits two `VaultClaimableBy` events per vault: one naming the Vault Provider's BTC public key as claimer, and one naming your BTC public key. The second event is what enables self-claim.
 
@@ -83,19 +83,23 @@ From the depositor's point of view, `withdrawCollaterals` is a single transactio
 After redemption starts on Ethereum, the Vault Provider drives the Bitcoin side. Bitcoin cannot natively verify Ethereum state, so the protocol uses a ZK proof of the burn event, verified on Bitcoin via Babylon's BABE construction. This step is protocol-level — the same flow applies regardless of which application released the vault. The flow on Bitcoin runs in four steps:
 
 1. **Claim.** The Vault Provider broadcasts a claim transaction that spends from the vault's Taproot output. (Automatic; you don't need to do anything.)
-2. **Assert.** The Vault Provider broadcasts an assert transaction containing the ZK proof. (Automatic; proof generation takes 5-10 minutes on GPU hardware.)
-3. **Challenge window.** Any Universal Challenger can post a `ChallengeAssert` during this window, which runs approximately **3 days** (`timelockAssert` = 432 BTC blocks on Testnet). In the happy path no challenge is raised. This is a passive wait — nothing for you to do.
-4. **Payout.** Once the window closes, the Vault Provider broadcasts the payout, releasing BTC to your Bitcoin address. The Vault Provider's commission (currently at least 1% on Testnet, set per-VP) is deducted at this step.
+2. **Assert.** The Vault Provider broadcasts an assert transaction containing the ZK proof. (Automatic; proof generation runs on the prover service.)
+3. **Challenge window.** A Vault Keeper or Universal Challenger may dispute the claim during this window, which runs approximately **3 days** (`timelockAssert` = 432 BTC blocks on the public testnet). In the happy path no challenge is raised. This is a passive wait — nothing for you to do.
+4. **Payout.** Once the window closes, the Vault Provider broadcasts the payout, releasing BTC to your Bitcoin address. The Vault Provider's commission, set per VP and embedded in the pre-signed payout transactions, is deducted at this step.
 
 If a challenger objects to a legitimate claim, the Vault Provider posts a `WronglyChallenged` transaction to disprove the challenge. The challenger forfeits a bond and your payout proceeds. For the cryptographic detail of the assert, challenge, and payout interactions, see [Protocol architecture](../technical-details/protocol-architecture.mdx).
 
 The wall-clock time from `withdrawCollaterals` on Ethereum to BTC arriving on your Bitcoin address is dominated by the challenge window: plan for around three days.
 
-The payout BTC equals your vault's BTC amount minus the Vault Provider's commission. On signet (Testnet), this is informational only; on mainnet, the commission directly reduces your BTC received.
+The payout BTC equals your vault's BTC amount minus the Vault Provider's commission. On signet (public testnet), this is informational only; on mainnet, the commission directly reduces your BTC received.
 
 ## Activate and exit in one step
 
-If you peg in but decide you do not want to borrow against the vault, you can skip the collateral and debt steps entirely. Call `activateVaultWithSecretAndRedeem(vaultId, s)`. The contract activates the vault with your peg-in secret and initiates redemption in the same transaction, so vaultBTC is never minted into a lending position.
+If you peg in but decide you do not want to borrow against the vault, you can skip the collateral and debt steps entirely. A shortcut variant of `activateVaultWithSecret` activates the vault and initiates redemption in the same transaction, so the internal accounting token is never minted into a lending position.
+
+:::caution Engineering verification pending
+The exact function name for the activate-and-redeem shortcut, for example `activateVaultWithSecretAndRedeem`, is being confirmed with the protocol team. Until confirmed, use this path through the portal UI rather than calling the function directly.
+:::
 
 Use this path to test the round trip end to end, or to abort a peg-in once it has reached the activation step.
 
@@ -103,7 +107,7 @@ Use this path to test the round trip end to end, or to abort a peg-in once it ha
 
 The Vault Provider drives most redemptions. You do not depend on the Vault Provider to recover your BTC — the protocol exposes a self-claim path you can always invoke. Self-claim is a protocol-level feature, available to depositors of any application built on TBV.
 
-During vault creation, you committed a WOTS public key hash on Ethereum, shared the full WOTS public key with the Vault Provider, and downloaded a set of claimer artifacts (transaction graph, BaBe session data per challenger, verifying key). The Vault Provider generated a parallel set of pre-signed Bitcoin transactions naming the depositor as authorized claimer. The PegIn transaction also produced a small "depositor claim output" controlled solely by your Bitcoin key. All of these sit dormant unless you need them.
+During vault creation, you committed a WOTS public key hash on Ethereum, shared the full WOTS public key with the Vault Provider, and downloaded a set of claimer artifacts (transaction graph, BABE session data per challenger, verifying key). The Vault Provider generated a parallel set of pre-signed Bitcoin transactions naming the depositor as authorized claimer. The PegIn transaction also produced a small "depositor claim output" controlled solely by your Bitcoin key. All of these sit dormant unless you need them.
 
 ### When to self-claim
 
@@ -114,7 +118,7 @@ During vault creation, you committed a WOTS public key hash on Ethereum, shared 
 ### What you need
 
 * **WOTS keypair file** for the specific vault you are redeeming. Each vault has its own WOTS key; that key can be used exactly once. The portal stores the file alongside your wallet; you can export it from the portal's keys section for offline backup.
-* **Claimer artifacts** downloaded at peg-in: transaction graph JSON, verifying key, and per-challenger BaBe session artifacts. Total size is approximately 43 GB per counterparty relationship — plan storage accordingly.
+* **Claimer artifacts** downloaded at peg-in: transaction graph JSON, verifying key, and per-challenger BABE session artifacts.
 * **The `watchtower` CLI tool** — a command-line program the protocol ships for the self-claim path. It is idempotent (commands can be retried safely) and no long-running daemon is required.
 
 ### How to self-claim
@@ -122,7 +126,7 @@ During vault creation, you committed a WOTS public key hash on Ethereum, shared 
 1. Confirm that a `VaultClaimableBy` event has been emitted for the vault with your BTC public key as the claimer.
 2. Run the `watchtower` CLI with your WOTS keypair file, the claimer artifacts, and the vault ID. The tool broadcasts the Claim, Assert, and Payout transactions on your behalf.
 3. The Assert transaction uses your WOTS key to commit the ZK proof. (The proof itself is generated by an SP1 prover service; the tool coordinates this or accepts an externally-generated proof.)
-4. Wait through the challenge window (~3 days on Testnet). Universal Challengers will verify the proof; if your claim is valid, the payout completes on schedule.
+4. Wait through the challenge window, approximately 3 days on the public testnet. Universal Challengers will verify the proof; if your claim is valid, the payout completes on schedule.
 5. Once the window closes, the tool broadcasts the Payout. Your BTC arrives at the address committed at vault creation.
 
 ### Backups and recovery
@@ -130,7 +134,7 @@ During vault creation, you committed a WOTS public key hash on Ethereum, shared 
 The self-claim path is the protocol's bottom-line safety net. Back up both inputs at peg-in:
 
 * Export the WOTS keypair file from the portal and store it alongside your seed phrase. Each vault needs its own WOTS file.
-* Download the claimer artifacts and store them in a place you'll still have access to in 6 months. The artifacts are large (~43 GB per counterparty); cold storage is acceptable.
+* Download the claimer artifacts and store them in a place you'll still have access to in 6 months. Cold storage is acceptable.
 
 If you lose the WOTS file *or* the artifacts (but not both), self-claim is no longer possible for that vault, but the standard path (Vault Provider drives the claim) still works — you only need the self-claim fallback if the VP is also unresponsive.
 
@@ -162,13 +166,13 @@ The Ethereum-side actions complete in minutes. The Bitcoin-side challenge window
 
 **Withdrawal reverts with insufficient health factor.** The vault subset you specified would drop the health factor below 1.0. Repay more debt first, or withdraw fewer vaults.
 
-**Withdrawal reverts with non-zero debt.** A full withdrawal requires zero debt on every borrowed reserve. Query `getUserTotalDebt()` on every reserve you have ever borrowed from, including a small buffer for interest accrued since the last query. The protocol's 10% interest fee is collected first on repay; partial repayments smaller than the fee may not clear the debt.
+**Withdrawal reverts with non-zero debt.** A full withdrawal requires zero debt on every borrowed reserve. Query `getReserveTotalDebt(reserveId)` on every reserve you have ever borrowed from, including a small buffer for interest accrued since the last query. Very small repayments may not reduce principal due to rounding; repay with a buffer.
 
 **The Vault Provider does not initiate the Bitcoin claim.** Move to the self-claim path. The pre-signed transactions for depositor-as-claimer are already in place; no cooperation is needed.
 
 **A challenge is raised against your claim.** If the claim is legitimate, the claimer (Vault Provider or you, in self-claim) broadcasts `WronglyChallenged` to disprove the challenge. The challenger forfeits a bond. The payout proceeds.
 
-**You cannot find the vault ID or position details.** Look up the position on the demo portal Collateral or Loans section. Programmatically, query `getPosition()` on the AaveAdapter with your address, or look up the vault registry by your depositor address.
+**You cannot find the vault ID or position details.** Look up the position on the test app Collateral or Loans section. Programmatically, query `getPosition()` on the AaveAdapter with your address, or look up the vault registry by your depositor address.
 
 ## Related pages
 

@@ -39,21 +39,21 @@ If your position contains a single vault, partial-position is not possible: that
 
 The portal recommends splitting your BTC into two vaults at peg-in: a **sacrificial vault** (sized to cover the protocol's expected seizure amount, placed first in the liquidation order) and a **protected vault** (whatever BTC remains, placed second).
 
-The sacrificial vault's size depends on the target health factor (THF) and other protocol parameters. The portal computes the recommended split dynamically from the on-chain values. At current Testnet parameters (THF = 1.24, collateral factor = 78%, max liquidation bonus = 10%), the protocol's target seizure is approximately **62% of your total BTC** when a position becomes liquidatable — so the sacrificial vault must be sized to cover roughly two-thirds of your position. At these parameters, the sacrificial vault is the **larger** of the two and is placed first.
+The sacrificial vault's size depends on the target health factor (THF) and other protocol parameters. The portal computes the recommended split dynamically from the on-chain values. At current public-testnet parameters, the protocol's target seizure is approximately **62% of your total BTC** when a position becomes liquidatable — so the sacrificial vault must be sized to cover roughly two-thirds of your position. At these parameters, the sacrificial vault is the **larger** of the two and is placed first. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the live numeric inputs.
 
 **Note on ordering.** At lower THF values (1.05–1.22), the seized fraction is smaller (under 50%) and the sacrificial vault would be the smaller of the two. The "smaller-or-larger sacrificial" choice depends on THF; the portal handles this automatically. The principle is constant: the sacrificial vault is whichever size matches the expected seizure, and it always sits first in the order.
 
-### Worked example with Testnet parameters
+### Worked example with public-testnet parameters
 
-Suppose you peg in the Testnet maximum of **0.4 BTC** and split it as recommended. With THF = 1.24, collateral factor = 78%, max liquidation bonus = 10%, and a typical worst-case health factor at liquidation of 0.97:
+Suppose you peg in **1 BTC** and split it as recommended. With the current public-testnet target seizure of approximately 62.5% and a small safety margin:
 
-* Target seizure = 0.4 × 62.5% ≈ **0.25 BTC**
-* Sacrificial vault = 0.25 × 1.05 (safety margin) ≈ **0.26 BTC** — placed first
-* Protected vault = 0.4 − 0.26 ≈ **0.14 BTC** — placed second
+* Target seizure = 1 × 62.5% ≈ **0.625 BTC**
+* Sacrificial vault = 0.625 × 1.05 (safety margin) ≈ **0.66 BTC** — placed first
+* Protected vault = 1 − 0.66 ≈ **0.34 BTC** — placed second
 
-If the position becomes liquidatable, the protocol walks your vaults in order. The 0.26 BTC sacrificial vault alone covers the target seizure of 0.25 BTC, so only that one vault is seized. The 0.14 BTC protected vault stays in your position.
+If the position becomes liquidatable, the protocol walks your vaults in order. The sacrificial vault alone covers the target seizure, so only that one vault is seized. The protected vault stays in your position.
 
-Without the split — if you peg in 0.4 BTC as a single vault — the same liquidation seizes the full 0.4 BTC. That is the cliff effect.
+Without the split, the same liquidation seizes the full single vault. That is the cliff effect.
 
 You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](./create-a-vault.mdx) for the two-vault setup at peg-in.
 
@@ -119,7 +119,7 @@ The zones above 1.0 are guidance, not contract values. The only on-chain thresho
 * **Trust the portal's ordering.** The recommended order (sacrificial first) is what the protocol walks during liquidation. Reordering matters; review your order when parameters change.
 * **Monitor BTC price and health factor.** Call `getUserAccountData()` on the Babylon Core Spoke to read the live health factor.
 * **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Borrow & repay](./borrow-and-repay.mdx).
-* **Add collateral.** Add more vaults to the position (up to the position cap of 0.4 BTC on Testnet). Each added vault raises collateral value and the health factor; you may need to reorder afterwards.
+* **Add collateral.** Add more vaults to the position up to the current public-testnet caps. Each added vault raises collateral value and the health factor; you may need to reorder afterwards. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the live limits.
 * **Withdraw redundant vaults.** If a vault is not needed for collateral, withdrawing it does not reduce safety because the health factor check applies to the post-withdrawal position. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
 ## What is structurally bounded
