@@ -27,8 +27,6 @@ You need:
 
 After a vault reaches **Verified**, you manually click **Activate** and confirm the Ethereum transaction because activation reveals the peg-in secret and completes the Bitcoin-side transition. Once activation succeeds, the contract automatically mints vaultBTC and supplies it to the Babylon Core Spoke. There is no separate collateral-add or manual vaultBTC mint step.
 
-![Collateral and Loans sections at the start of borrow flow](/img/trustless-bitcoin-vault/use-for-lending/borrow-repay-01-add-collateral.png)
-
 What happens behind the scenes:
 
 * vaultBTC is minted equal to the vault's BTC amount, at 8-decimal precision (1 vaultBTC = 1 BTC = 100,000,000 satoshis).
@@ -135,8 +133,6 @@ Choose:
 :::info Two MetaMask prompts
 Repaying usually shows an ERC-20 spending cap approval first, then the repayment transaction. Approve a small buffer because interest can accrue while the transaction is pending; any excess stays in your wallet.
 :::
-
-![Repay spending cap approval](/img/trustless-bitcoin-vault/use-for-lending/borrow-repay-08-repay-approve.png)
 
 ![Repay MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/borrow-repay-09-repay-confirm.png)
 
