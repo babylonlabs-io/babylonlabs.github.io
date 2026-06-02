@@ -29,7 +29,7 @@ You need:
 
 For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup.mdx).
 
-## Step 1: Open the Aave v4 Lending Dashboard
+## Step 1: Open the Aave v4 Lending
 
 Navigate to the Aave v4 Lending Dashboard URL listed in [Setup](../testnet-info/setup.mdx).
 
@@ -69,7 +69,7 @@ When the vault reaches **Verified** status, the app prompts you to **Activate**.
 
 ![Active vault in the Collateral section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-06-activate-prompt.png)
 
-## Step 4: Borrow stablecoins (Aave v4 application layer)
+## Step 4: Borrow stablecoins
 
 Your vault is already supplied as collateral on the integrated Aave v4 market — minted and supplied automatically when you activated. From this step on, you are interacting with the Aave v4 application layer; the underlying vault on Bitcoin sits unchanged.
 
@@ -95,7 +95,7 @@ Open the **Loans** section and click **Borrow**:
 
 The borrowed asset arrives in your Ethereum wallet. The app now shows your **health factor**, a single number summarizing how close the position is to liquidation. A higher number is safer.
 
-## Step 5: Repay the debt (Aave v4 application layer)
+## Step 5: Repay the debt
 
 To close the position, repay what you borrowed.
 
@@ -116,7 +116,7 @@ Repaying usually shows an ERC-20 spending cap approval first, then the repayment
 
 Interest accrues continuously until repayment, so the exact amount due is slightly higher than the principal borrowed. After full repayment, the vault is eligible for redemption.
 
-## Step 6: Withdraw and redeem the BTC (peg-out — TBV protocol layer)
+## Step 6: Withdraw and redeem
 
 Redeeming releases the underlying BTC from the vault back to your Bitcoin wallet. This step crosses back from the Aave v4 application layer into the TBV protocol layer.
 

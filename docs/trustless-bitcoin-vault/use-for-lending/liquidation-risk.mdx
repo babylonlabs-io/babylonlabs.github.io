@@ -64,7 +64,7 @@ The portal recommends splitting your BTC into two vaults at peg-in: a **sacrific
 
 The sacrificial vault's size depends on the target health factor (THF) and other protocol parameters. The portal computes the recommended split dynamically from the on-chain values.
 
-### Worked example with public-testnet parameters
+### A worked example
 
 Suppose you peg in the public-testnet maximum and split it as recommended. With THF = 1.24, CF = 78%, max LB = 10%, and a typical worst-case health factor at liquidation of ~0.97:
 
@@ -78,7 +78,7 @@ Without the split, the same liquidation seizes the full single vault. That is th
 
 You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/) for the two-vault setup at peg-in.
 
-## Fairness payment: you do not lose the excess
+## Fairness payment
 
 Because vaults are indivisible, the seized vault almost always carries slightly more BTC than a perfectly divisible partial liquidation would have taken. The **fairness mechanism** returns the excess to you.
 
