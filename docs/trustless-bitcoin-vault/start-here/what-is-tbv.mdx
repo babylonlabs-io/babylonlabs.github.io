@@ -14,7 +14,9 @@ TBV is currently running on Bitcoin signet and Ethereum testnet. Funds involved 
 
 **Only ~1% of Bitcoin is used in DeFi.** Bitcoin, the largest asset in crypto, sits mostly idle in DeFi. Existing approaches force the holder to give up custody, accept a bridging step, wrap the asset, or trust intermediaries. These are precisely the trade-offs many Bitcoin holders reject.
 
-**Trustless Bitcoin Vault (TBV)** is Babylon's protocol that lets Bitcoin holders use BTC as collateral in decentralized finance without giving up custody, bridging, wrapping, or trusting an intermediary. The depositor's BTC stays on the Bitcoin Network, held in a Taproot script that the depositor co-signs at creation. An Ethereum-side protocol contract tracks each BTC vault, which is a single Bitcoin output (one UTXO) holding the depositor's locked BTC, and lets an integrated DeFi application use it as collateral.
+**Trustless Bitcoin Vault (TBV)** is Babylon's protocol that lets Bitcoin holders use BTC as collateral in decentralized finance without giving up custody, bridging, wrapping, or trusting an intermediary. Bringing Bitcoin into DeFi through a custodian or cross-chain bridge requires the Bitcoin holder to trust that entity. With TBV, the depositor trusts the protocol's cryptography, the Bitcoin and Ethereum networks, and the application where they deposit collateral instead of a third party that holds the BTC.
+
+The depositor's BTC stays on the Bitcoin Network, held in a Taproot script that the depositor co-signs at creation. An Ethereum-side protocol contract tracks each BTC vault, which is a single Bitcoin output (one UTXO) holding the depositor's locked BTC, and lets an integrated DeFi application use it as collateral.
 
 Cross-chain state transitions are enforced through cryptography, not by a trusted intermediary:
 

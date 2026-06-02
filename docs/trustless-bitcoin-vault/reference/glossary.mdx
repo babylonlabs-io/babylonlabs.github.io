@@ -23,11 +23,15 @@ application is the Aave v4 integration.
 
 **Application Vault Keeper (AVK).** An application-scoped Vault Keeper that
 holds redemption rights over a vault. Under defined conditions it can claim the
-vault, and it can challenge invalid claims made by other claimers.
+vault, and it can challenge invalid claims made by other claimers. Each
+application may name this role differently; in the Aave v4 integration, the
+Application Vault Keeper is the arbitrageur.
 
 **BABE.** Proof-verification construction used by the protocol. BABE
 establishes the challenge framework between each claimer-challenger pair at
-vault creation. See [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
+vault creation. It uses a cut-and-choose protocol with many candidate
+garbled-circuit instances for dispute resolution. See
+[How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
 
 **Babylon Core Spoke.** A dedicated, isolated Aave v4 market that accepts
 `vaultBTC` as collateral. It has its own risk parameters and draws borrowable
@@ -39,7 +43,9 @@ without requiring a Bitcoin soft fork.
 
 **BTCVaultSwap.** The first Liquidation Liquidity Provider registered for the
 Aave v4 integration. It lets a seized vault be swapped for a fungible asset so
-that liquidators on the permissionless path can be paid instantly.
+that liquidators on the permissionless path can be paid instantly. A registered
+Application Vault Keeper later acquires the escrowed vault and finalizes the BTC
+redemption on the Bitcoin Network.
 
 **CapPolicy.** Ethereum contract enforcing per-application and per-address BTC
 exposure caps. At vault activation, the contract checks that the activation
@@ -57,13 +63,15 @@ a sacrificial vault and a protected vault at peg-in mitigates this. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Collateral factor.** The fraction of a collateral asset's value counted
-toward borrowing capacity. With a collateral factor of 78%, $60,000 of BTC
-supports up to $46,800 of borrows. See
+toward borrowing capacity. With a collateral factor of 78%, the current
+public-testnet value for vaultBTC, $60,000 of BTC supports up to $46,800 of
+borrows. See
 [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
 
 **Depositor.** The Bitcoin holder who creates a vault to use BTC as collateral.
 The depositor's keys are required at vault creation and at every
-depositor-controlled release path.
+depositor-controlled release path. In lending contexts, the depositor is also
+the borrower.
 
 **Depositor claim output.** A small Bitcoin output produced by the PegIn
 transaction and controlled solely by the depositor's key. It anchors the
@@ -77,8 +85,9 @@ out in WBTC. See [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liq
 
 **Fairness payment.** Compensation paid to the depositor in WBTC on
 full-position liquidation when all debt is covered by the seizure and a surplus
-remains. The complementary mechanism for partial-position liquidation is
-fairness debt repay. See
+remains. The over-seizure value is discounted using the ratio of debt liquidated
+to collateral liquidated, not valued at raw BTC price. The complementary
+mechanism for partial-position liquidation is fairness debt repay. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Garbled circuit (GC).** A cryptographic construction used in the BABE
@@ -93,7 +102,8 @@ A position is liquidatable when the health factor drops below 1.0. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Liquidation bonus.** A discount on seized collateral granted to the liquidator
-as an incentive to keep the protocol solvent.
+as an incentive to keep the protocol solvent. On the current public testnet,
+the maximum bonus is 10%.
 
 **Liquidation Liquidity Provider (LLP).** A contract that provides instant
 fungible-asset liquidity, such as a wrapped-BTC token, to liquidators while the
@@ -101,7 +111,8 @@ underlying BTC redemption finalizes asynchronously.
 
 **Partial-position liquidation.** When a position holds multiple vaults and only
 the minimum subset of vaults needed to restore the health factor gets seized.
-The protocol walks vaults in their stored order during liquidation.
+The rest remain in the position. The protocol walks vaults in their stored
+order during liquidation.
 
 **Peg-in / peg-out.** Peg-in is the process of locking BTC into a vault on
 Bitcoin and registering the vault on Ethereum. Peg-out is the reverse: a vault
@@ -123,7 +134,8 @@ Ethereum event occurred. The proof is then aggregated and verified on Bitcoin
 through the protocol's proof-verification construction.
 
 **Target health factor (THF).** The health factor the protocol aims to restore
-after partial-position liquidation. See
+after partial-position liquidation. It is used to compute how many vaults to
+seize. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Taproot script.** A Bitcoin output type with multiple spending paths encoded

@@ -33,7 +33,7 @@ For the full list of supported wallets, network and RPC details, and faucet URLs
 
 Navigate to the Aave v4 Lending Dashboard URL listed in [Setup](../testnet-info/setup.mdx).
 
-![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/use-for-lending/quickstart-01-landing.png)
+![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-084545.png)
 
 ## Step 2: Connect wallets
 
@@ -43,7 +43,7 @@ Important: the Bitcoin wallet must be set to **Taproot (P2TR)** address type bef
 
 The wallet picker then opens. Select a Bitcoin wallet using a Taproot address type and an Ethereum wallet to sign the on-chain calls.
 
-![Wallet picker](/img/trustless-bitcoin-vault/use-for-lending/quickstart-02-wallet-picker.png)
+![Wallet picker](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-084735.png)
 
 ## Step 3: Create a vault (peg-in)
 
@@ -53,13 +53,13 @@ From the **Collateral** section, click **Deposit**. Then:
 
 **1. Enter the amount in BTC** within the public-testnet caps. See [Protocol parameters](../testnet-info/protocol-parameters.mdx).
 
-![Peg-in deposit amount entry](/img/trustless-bitcoin-vault/use-for-lending/quickstart-03-deposit-amount.png)
+![Peg-in deposit amount entry](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-091245.png)
 
 **2. Select a Vault Provider from the dropdown.**
 
 **3. Confirm the Bitcoin and Ethereum transactions.**
 
-![Confirm Bitcoin + Ethereum transactions](/img/trustless-bitcoin-vault/use-for-lending/quickstart-05-confirm-txs.png)
+![Confirm Bitcoin + Ethereum transactions](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-091308.png)
 
 The app then runs the off-chain setup automatically: authentication, signature collection, acknowledgments. The full walkthrough is on [Create a vault](./create-a-vault.mdx).
 
@@ -77,19 +77,19 @@ Open the **Loans** section and click **Borrow**:
 
 **1. Select an asset: USDC, USDT, or WBTC.**
 
-![Borrow modal — select asset](/img/trustless-bitcoin-vault/use-for-lending/quickstart-07-borrow-select-asset.png)
+![Borrow modal — select asset](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-092-20260601-043442.png)
 
 **2. Enter the amount and sign the borrow transaction.**
 
-![Borrow modal — enter amount](/img/trustless-bitcoin-vault/use-for-lending/quickstart-08-borrow-enter-amount.png)
+![Borrow modal — enter amount](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-093-20260601-043515.png)
 
 **3. Confirm the Ethereum transaction.**
 
-![Borrow MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/quickstart-09-borrow-metamask.png)
+![Borrow MetaMask transaction request](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-097-20260601-043549.png)
 
 **4. Wait for the portal to refresh the position preview and health factor.**
 
-![Borrow confirmed](/img/trustless-bitcoin-vault/use-for-lending/quickstart-10-borrow-processing.png)
+![Borrow confirmed](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-100-20260601-043705.png)
 
 ![Loan visible in the Loans section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-11-borrow-confirm.png)
 
@@ -104,15 +104,15 @@ From the **Loans** section, click **Repay**:
 * **Repay full** closes the entire borrow and unlocks redemption.
 * **Repay partial** pays down a portion; the position stays open with reduced debt.
 
-![Repay form](/img/trustless-bitcoin-vault/use-for-lending/quickstart-12-borrowed.png)
+![Repay form](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-101-20260601-043734.png)
 
 :::info Two MetaMask prompts
 Repaying usually shows an ERC-20 spending cap approval first, then the repayment transaction. Approve a small buffer because interest can accrue while the transaction is pending; any excess stays in your wallet.
 :::
 
-![Repay MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/quickstart-13-repay-form.png)
+![Repay MetaMask transaction request](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-102-20260601-043800.png)
 
-![Repay confirmed](/img/trustless-bitcoin-vault/use-for-lending/quickstart-15-repay-confirm.png)
+![Repay confirmed](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-105-20260601-043835.png)
 
 Interest accrues continuously until repayment, so the exact amount due is slightly higher than the principal borrowed. After full repayment, the vault is eligible for redemption.
 
@@ -122,15 +122,15 @@ Redeeming releases the underlying BTC from the vault back to your Bitcoin wallet
 
 From the **Collateral** section, select an **in use** vault and click **Withdraw**.
 
-![Withdraw form — selected vault](/img/trustless-bitcoin-vault/use-for-lending/quickstart-16-withdraw-form.png)
+![Withdraw form — selected vault](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/30-withdraw-selected-vault.jpg)
 
 Review the withdrawal amount, network fee rate, VP commission, and the nominated Bitcoin address.
 
-![Withdraw review screen](/img/trustless-bitcoin-vault/use-for-lending/quickstart-17-withdraw-review.png)
+![Withdraw review screen](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/31-withdraw-review.jpg)
 
 Confirm the Ethereum transaction.
 
-![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/quickstart-18-withdraw-confirm.png)
+![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/32-withdraw-metamask-transaction-request.jpg)
 
 The redemption then runs in three protocol-side phases:
 
@@ -138,11 +138,11 @@ The redemption then runs in three protocol-side phases:
 2. **Challenge period.** A window of about **3 days** opens during which an Application Vault Keeper or Universal Challenger may dispute the claim. If no valid challenge appears, the claim finalizes.
 3. **Payout.** Your BTC arrives at the address recorded in the vault.
 
-![Withdraw processing](/img/trustless-bitcoin-vault/use-for-lending/quickstart-19-redemption-progress.png)
+![Withdraw processing](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/33-withdraw-processing.jpg)
 
-![Withdraw initiated](/img/trustless-bitcoin-vault/use-for-lending/quickstart-20-redemption-complete.png)
+![Withdraw initiated](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/34-withdraw-initiated.jpg)
 
-![Withdraw pending on dashboard](/img/trustless-bitcoin-vault/use-for-lending/quickstart-21-withdraw-pending-dashboard.png)
+![Withdraw pending on dashboard](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/35-withdraw-pending-dashboard.jpg)
 
 The 3-day window is inherent to the proof-verification mechanism.
 

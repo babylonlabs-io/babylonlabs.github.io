@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # TBV vs alternatives
 
-Bringing Bitcoin into DeFi requires moving or representing value that lives on a chain without native smart contracts. The approaches that exist today fall into a few categories. Each category asks the depositor to accept a specific trust assumption when locking BTC. A **Trustless Bitcoin Vault (TBV)** is a different approach that keeps the BTC on Bitcoin and uses cryptographic proofs to gate its release against Ethereum events.
+Bringing Bitcoin into DeFi requires moving or representing value that lives on a chain without native smart contracts. The approaches that exist today fall into a few categories. Each category asks the depositor to accept a specific trust assumption when locking BTC. A [Trustless Bitcoin Vault (TBV)](./what-is-tbv.mdx) is a different approach that keeps the BTC on Bitcoin and uses cryptographic proofs to gate its release against Ethereum events.
 
 This page describes the categories that exist today, what each one asks the depositor to trust, and how TBV's design differs structurally.
 
@@ -60,9 +60,9 @@ The TBV design depends on three Bitcoin-and-cryptography developments that have 
 * **Bitcoin's Taproot upgrade (activated 2021)** introduced multi-leaf script trees and Schnorr signatures. The vault's many legitimate spending paths each live as a separate Taproot leaf; before Taproot, encoding this many paths in a single Bitcoin output was impractical.
 * **BitVM-style constructions (2023+)** showed how to verify arbitrary off-chain computation using only existing Bitcoin script primitives: hashes, signatures, and timelocks.
 * **Practical ZK proof systems (SP1, 2024+)** made it operationally feasible to prove an Ethereum state change quickly and compress the proof to a few hundred bytes for Bitcoin verification.
-* **Babylon's BABE construction (2025+)** combines Taproot's pre-signed spending paths, BitVM-style verification, and a succinct SP1 proof of the Ethereum event into a single challenge procedure that Bitcoin can verify using only existing script primitives.
+* **Babylon's BABE construction (2025+)** is what makes TBV practical. It combines Taproot's pre-signed spending paths, BitVM-style verification, and a succinct SP1 proof of the Ethereum event into a single challenge procedure that Bitcoin can verify using only existing script primitives.
 
-The Bitcoin features TBV depends on, including Taproot, Schnorr signatures, and hash time-locked contracts, have been part of standard Bitcoin consensus for years.
+The Bitcoin features TBV depends on, including Taproot, Schnorr signatures, and hash time-locked outputs, have been part of standard Bitcoin consensus for years.
 
 ## What this means for the depositor
 
