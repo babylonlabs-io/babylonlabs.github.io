@@ -83,7 +83,7 @@ You don't manage these paths directly. They are part of the pre-signed Taproot s
 
 If you chose the two-vault split, the portal broadcasts a single Pre-PegIn transaction with two HTLC outputs (one per vault), saving on Bitcoin fees and ensuring both vaults activate together.
 
-## Step 4: Wait for confirmations and off-chain setup
+## Step 4: Wait for confirmations & setup
 
 After submission, two processes run in parallel.
 
@@ -151,7 +151,7 @@ After the PegIn transaction confirms on Bitcoin, the vault is fully active. The 
 
 Activate within the 48-hour activation window. The window starts when you submit the peg-in request. If the vault is not activated before `pegInActivationTimeout` closes, the vault enters **Expired** state and BTC recovery moves to the refund path.
 
-## Step 9: After activation — vaultBTC is supplied automatically
+## Step 9: Post activation
 
 vaultBTC for the vault's BTC amount is **automatically minted and supplied** to your position on the Babylon Core Spoke (the Aave v4 market for vaultBTC) at activation. The manual action is the **Activate** transaction above; there is no separate mint or supply step. The vault's status moves to **InUse**; you can now [borrow stablecoins or WBTC](./borrow-and-repay.mdx) against it.
 
