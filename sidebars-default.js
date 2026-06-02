@@ -296,6 +296,17 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Research',
+      collapsible: true,
+      collapsed: true,
+      className: 'research_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault/research/btc_trustless_vault',
+        'trustless-bitcoin-vault/research/babe_verification',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Reference',
       collapsible: true,
       collapsed: true,
