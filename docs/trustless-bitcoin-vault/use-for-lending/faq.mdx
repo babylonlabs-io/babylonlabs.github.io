@@ -28,12 +28,12 @@ Sepolia.
 For the current supported list, networks, and faucet links, see
 [Setup](/trustless-bitcoin-vault/testnet-info/setup/).
 
-### Why does the Bitcoin wallet need a Taproot address?
+### Why do I need a Taproot address?
 
 TBV locks BTC in a Taproot output. The wallet has to produce Taproot (P2TR)
 addresses to participate. Addresses of different types do not share balance.
 
-### I cannot connect my wallets. What should I check?
+### I cannot connect my wallets, what next?
 
 1. The UniSat Bitcoin wallet is set to signet, not mainnet.
 2. The Ethereum wallet is on Sepolia (chain ID `11155111`), not another network.
@@ -66,7 +66,7 @@ minutes once confirmations land. Activation itself is one Ethereum transaction.
 For the stage-by-stage breakdown, see
 [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/).
 
-### Why does the app recommend splitting BTC into two vaults?
+### Why splitting BTC into two vaults?
 
 Each vault is a single Bitcoin UTXO and cannot be partially seized. With one
 vault, liquidation seizes the whole vault. With two correctly-sized vaults, the
@@ -138,7 +138,7 @@ Both prompts are standard ERC-20 behaviour, not specific to TBV.
 Yes. The Aave Adapter accepts repayments from any address; the debt simply
 decreases on the position regardless of who paid.
 
-### Why is my borrow rate or remaining debt different from what I expected?
+### Why is my borrow rate different?
 
 A few common causes:
 
@@ -209,7 +209,7 @@ For a full withdrawal, debt must be zero on every borrowed reserve: USDC, USDT,
 and WBTC. A single satoshi of remaining debt on any reserve blocks a full
 withdrawal.
 
-### Why does the dashboard still show Pending Withdraw after the wallet confirms?
+### Why does the dashboard still show Pending Withdraw?
 
 The Ethereum transaction only starts redemption. After it confirms, the protocol
 runs the Bitcoin-side claim, the assert, and the challenge-window wait before
@@ -272,7 +272,7 @@ alongside the wallet seed phrase.
 Signet block times can be irregular. Slow confirmations are usually a property
 of the network, not of the protocol.
 
-### What if I refresh the page or cancel a wallet signature mid-flow?
+### What if I refresh the page while signing?
 
 The flow is resumable. Reopen the portal with the same Bitcoin and Ethereum
 wallets used for the in-flight vault. Refresh once and look for any pending

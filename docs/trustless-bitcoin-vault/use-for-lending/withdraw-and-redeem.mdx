@@ -29,7 +29,7 @@ Check the following on your position:
 
 The portal surfaces all three of these on the Loans section. For programmatic access, query `getUserAccountData()` on the Babylon Core Spoke through your proxy address to read current debt, collateral value, and health factor in one call.
 
-## Step 1: Repay your debt (Aave v4 application)
+## Step 1: Repay your debt
 
 If you have any outstanding debt, repay it before attempting a full withdrawal. For each borrowed reserve:
 
@@ -39,7 +39,7 @@ If you have any outstanding debt, repay it before attempting a full withdrawal. 
 
 Clear debt on every reserve you have borrowed from. A single satoshi of remaining debt on any reserve blocks a full withdrawal. For the full repayment flow, see [Borrow & repay](./borrow-and-repay.mdx).
 
-## Step 2: Withdraw collateral and start redemption (application → protocol handoff)
+## Step 2: Withdraw collateral and start redemption
 
 With debt cleared (full exit) or a healthy buffer left in place (partial exit), call `withdrawCollaterals(bytes32[] vaultsToWithdraw)` on the AaveAdapter with the list of vault IDs to remove. This step is the handoff from the Aave application layer to the TBV protocol layer: the AaveAdapter releases the vaults, and the TBV protocol takes over the Bitcoin-side redemption from here.
 
@@ -75,7 +75,7 @@ From the portal:
 
 From the depositor's point of view, `withdrawCollaterals` is a single transaction that removes vaults from the lending position and starts the Bitcoin claim.
 
-## Step 3: Wait through the challenge period (TBV protocol)
+## Step 3: Wait for the challenge period
 
 After redemption starts on Ethereum, the Vault Provider drives the Bitcoin side. Bitcoin cannot natively verify Ethereum state, so the protocol uses a ZK proof of the burn event, verified on Bitcoin via Babylon's BABE construction. This step is protocol-level — the same flow applies regardless of which application released the vault. The flow on Bitcoin runs in four steps:
 
