@@ -1,11 +1,12 @@
 ---
 title: Withdraw & redeem
+sidebar_label: Withdraw & Redeem
 sidebar_position: 4
 ---
 
 # Withdraw & redeem
 
-This page covers **both layers** of the exit flow: the *application-side* withdrawal of collateral from your Aave v4 position, and the *protocol-side* peg-out that moves BTC back to Bitcoin. The protocol-side flow (claim, assert, challenge window, payout, self-claim fallback) is application-agnostic — it would be the same for any future DeFi application built on TBV. The application-side steps (repay debt, withdraw collateral) are specific to the Aave v4 integration. See [What is TBV?](../start-here/what-is-tbv.mdx) → "Two layers" for the overview.
+This page covers **both layers** of the exit flow: the application-side withdrawal of collateral from your Aave v4 position, and the protocol-side peg-out that moves BTC back to Bitcoin. The application-side steps are specific to the Aave v4 integration; the Bitcoin-side redemption flow is handled by TBV.
 
 Redemption (peg-out) is the reverse of vault creation. It unlocks the bitcoin sitting in the vault's Taproot output and sends it back to your Bitcoin address. This page covers the two paths you can take to redeem, what each step changes on Ethereum and on Bitcoin, and how long the round trip takes.
 
@@ -28,8 +29,6 @@ Check the following on your position:
 
 The portal surfaces all three of these on the Loans section. For programmatic access, query `getUserAccountData()` on the Babylon Core Spoke through your proxy address to read current debt, collateral value, and health factor in one call.
 
-![Position ready for withdrawal — no debt](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-01-position-check.png)
-
 ## Step 1: Repay your debt (Aave v4 application)
 
 If you have any outstanding debt, repay it before attempting a full withdrawal. For each borrowed reserve:
@@ -37,10 +36,6 @@ If you have any outstanding debt, repay it before attempting a full withdrawal. 
 1. Approve the AaveAdapter to spend the repayment token (standard ERC-20 approval).
 2. Call `repayToCorePosition(borrower, debtReserveId, amount)` with the borrower address, the debt reserve ID, and an amount slightly larger than the current debt. Interest can accrue between the moment you read the debt balance and the moment the transaction is mined. Any excess from your repayment is refunded.
 3. Confirm the balance is zero by calling `getReserveTotalDebt(reserveId)` on the position proxy for every borrowed reserve.
-
-![Repay before withdrawal](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-02-repay.png)
-
-![Repay success](/img/trustless-bitcoin-vault/use-for-lending/withdraw-redeem-03-repay-success.png)
 
 Clear debt on every reserve you have borrowed from. A single satoshi of remaining debt on any reserve blocks a full withdrawal. For the full repayment flow, see [Borrow & repay](./borrow-and-repay.mdx).
 
@@ -86,24 +81,14 @@ After redemption starts on Ethereum, the Vault Provider drives the Bitcoin side.
 
 1. **Claim.** The Vault Provider broadcasts a claim transaction that spends from the vault's Taproot output. (Automatic; you don't need to do anything.)
 2. **Assert.** The Vault Provider broadcasts an assert transaction containing the ZK proof. (Automatic; proof generation runs on the prover service.)
-3. **Challenge window.** A Vault Keeper or Universal Challenger may dispute the claim during this window, which runs approximately **3 days** (`timelockAssert` = 432 BTC blocks on the public testnet). In the happy path no challenge is raised. This is a passive wait — nothing for you to do.
+3. **Challenge window.** An Application Vault Keeper or Universal Challenger may dispute the claim during this window, which runs approximately **3 days** (`timelockAssert` = 432 BTC blocks on the public testnet). In the happy path no challenge is raised. This is a passive wait — nothing for you to do.
 4. **Payout.** Once the window closes, the Vault Provider broadcasts the payout, releasing BTC to your Bitcoin address. The Vault Provider's commission, set per VP and embedded in the pre-signed payout transactions, is deducted at this step.
 
-If a challenger objects to a legitimate claim, the Vault Provider posts a `WronglyChallenged` transaction to disprove the challenge. The challenger forfeits a bond and your payout proceeds. For the cryptographic detail of the assert, challenge, and payout interactions, see [Protocol architecture](../technical-details/protocol-architecture.mdx).
+If a challenger objects to a legitimate claim, the Vault Provider posts a `WronglyChallenged` transaction to disprove the challenge. The challenger forfeits a bond and your payout proceeds.
 
 The wall-clock time from `withdrawCollaterals` on Ethereum to BTC arriving on your Bitcoin address is dominated by the challenge window: plan for around three days.
 
-The payout BTC equals your vault's BTC amount minus the Vault Provider's commission. On signet (public testnet), this is informational only; on mainnet, the commission directly reduces your BTC received.
-
-## Activate and exit in one step
-
-If you peg in but decide you do not want to borrow against the vault, you can skip the collateral and debt steps entirely. A shortcut variant of `activateVaultWithSecret` activates the vault and initiates redemption in the same transaction, so the internal accounting token is never minted into a lending position.
-
-:::caution Engineering verification pending
-The exact function name for the activate-and-redeem shortcut, for example `activateVaultWithSecretAndRedeem`, is being confirmed with the protocol team. Until confirmed, use this path through the portal UI rather than calling the function directly.
-:::
-
-Use this path to test the round trip end to end, or to abort a peg-in once it has reached the activation step.
+The payout BTC equals your vault's BTC amount minus the Vault Provider's commission.
 
 ## The self-claim path (TBV protocol)
 
@@ -147,10 +132,8 @@ If you lose *both* the WOTS file and the artifacts, and the Vault Provider is al
 vaultBTC is an accounting token. It exists only while your BTC is supplying a lending position.
 
 * When you withdraw a vault, the corresponding vaultBTC is burned in the same transaction.
-* Total vaultBTC supply always equals BTC currently held as active collateral across all positions.
+* Total vaultBTC supply always equals BTC currently held as active collateral across all positions in the integration.
 * vaultBTC cannot be transferred to an arbitrary address. It moves only between authorized protocol contracts. It does not exist on any secondary market.
-
-For the full vaultBTC accounting model, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
 
 ## Timeline summary
 
@@ -174,12 +157,9 @@ The Ethereum-side actions complete in minutes. The Bitcoin-side challenge window
 
 **A challenge is raised against your claim.** If the claim is legitimate, the claimer (Vault Provider or you, in self-claim) broadcasts `WronglyChallenged` to disprove the challenge. The challenger forfeits a bond. The payout proceeds.
 
-**You cannot find the vault ID or position details.** Look up the position on the test app Collateral or Loans section. Programmatically, query `getPosition()` on the AaveAdapter with your address, or look up the vault registry by your depositor address.
+**You cannot find the vault ID or position details.** Look up the position on the Aave v4 Lending Dashboard Collateral or Loans section. Programmatically, query `getPosition()` on the AaveAdapter with your address, or look up the vault registry by your depositor address.
 
 ## Related pages
 
 * [Borrow & repay](./borrow-and-repay.mdx)
 * [Liquidation risk](./liquidation-risk.mdx)
-* [Protocol architecture](../technical-details/protocol-architecture.mdx)
-* [Aave v4 integration](../technical-details/aave-v4-integration.mdx)
-* [Glossary](../reference/glossary.mdx)

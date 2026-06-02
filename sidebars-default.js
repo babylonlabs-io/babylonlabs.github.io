@@ -252,22 +252,19 @@ const sidebars = {
   // Trustless Bitcoin Vault sidebar — top-nav home for the open Testnet docs
   trustlessBitcoinVault: [
     {
-      type: 'doc',
-      label: 'Overview',
-      id: 'trustless-bitcoin-vault/index',
-      className: 'tbv_overview_sidebar_header',
-    },
-    {
       type: 'category',
       label: 'Start Here',
       collapsible: true,
       collapsed: true,
       className: 'overview_sidebar_header',
+      link: {
+        type: 'doc',
+        id: 'trustless-bitcoin-vault/start-here/what-is-tbv',
+      },
       items: [
         'trustless-bitcoin-vault/start-here/what-is-tbv',
         'trustless-bitcoin-vault/start-here/how-it-works',
         'trustless-bitcoin-vault/start-here/tbv-vs-alternatives',
-        'trustless-bitcoin-vault/start-here/safety-and-trust-assumptions',
       ],
     },
     {
@@ -284,7 +281,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Use TBV Testnet for Lending',
+      label: 'Use TBV Testnet For Lending',
       collapsible: true,
       collapsed: true,
       className: 'btc_stakers_sidebar_header',
@@ -298,35 +295,11 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Technical Details',
-      collapsible: true,
-      collapsed: true,
-      className: 'architecture_sidebar_header',
-      items: [
-        'trustless-bitcoin-vault/technical-details/protocol-architecture',
-        'trustless-bitcoin-vault/technical-details/protocol-actors',
-        'trustless-bitcoin-vault/technical-details/aave-v4-integration',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Research',
-      collapsible: true,
-      collapsed: true,
-      className: 'research_sidebar_header',
-      items: [
-        'trustless-bitcoin-vault/research/btc_trustless_vault',
-        'trustless-bitcoin-vault/research/babe_verification',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Reference',
       collapsible: true,
       collapsed: true,
       className: 'support_sidebar_header',
       items: [
-        'trustless-bitcoin-vault/reference/glossary',
         'trustless-bitcoin-vault/reference/community-and-support',
       ],
     },

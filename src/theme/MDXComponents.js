@@ -22,7 +22,7 @@ function ZoomableImg(props) {
     return <img {...props} />;
   }
   return (
-    <Zoom>
+    <Zoom wrapElement="span">
       <img {...props} />
     </Zoom>
   );

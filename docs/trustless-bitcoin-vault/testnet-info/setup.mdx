@@ -1,19 +1,26 @@
 ---
 title: Setup
+sidebar_label: Setup
 sidebar_position: 1
 ---
 
 # Setup
 
-Reference for wallets, networks, faucets, and the Test app URL used by the Trustless Bitcoin Vault (TBV) public testnet. The walkthrough that uses these values is on [Quickstart](../use-for-lending/quickstart.mdx). For the live numeric values of per-vault, per-position, and per-application caps, see [Protocol parameters](./protocol-parameters.mdx).
+Reference for wallets, networks, faucets, and the Aave v4 Lending Dashboard URL used by the Trustless Bitcoin Vault (TBV) public testnet. The walkthrough that uses these values is on [Quickstart](../use-for-lending/quickstart.mdx). For the live numeric values of per-vault, per-position, and per-application caps, see [Protocol parameters](./protocol-parameters.mdx).
 
-The current public testnet enforces conservative per-vault, per-position, and per-application caps. Plan test runs accordingly; the canonical numbers live on the [Protocol parameters](./protocol-parameters.mdx) page so they stay in one place as values evolve.
+## Aave v4 Lending Dashboard
 
-## What to plan for
+Open the Aave v4 Lending Dashboard to start a deposit (peg-in).
 
-For a full public-testnet cycle (peg-in, borrow, repay, redeem), plan for:
+| Field | Value |
+| --- | --- |
+| Aave v4 Lending Dashboard URL | [https://btc-vaults.testnet.babylonlabs.io/](https://btc-vaults.testnet.babylonlabs.io/) |
 
-* **Signet BTC:** a small amount, sized to fit within the current per-vault and per-position caps. See [Protocol parameters](./protocol-parameters.mdx) for the live limits.
+## Prerequisites
+
+For a full public-testnet cycle (peg-in, borrow, repay, redeem):
+
+* **Signet BTC:** needed both to fund the vault you create and to pay the Bitcoin network transaction fees for the peg-in. Size it to fit within the current per-vault and per-position caps. See [Protocol parameters](./protocol-parameters.mdx) for the live limits.
 * **Sepolia ETH:** a small amount for gas across the full cycle (peg-in submission, activation, borrow, repay, withdraw) plus the peg-in fee paid at submission.
 
 ## Supported wallets
@@ -50,7 +57,7 @@ If the signet faucet is unavailable, see [Community & support](../reference/comm
 | --- | --- |
 | Network name | Ethereum Sepolia (Sepolia testnet) |
 | Chain ID | `11155111` |
-| RPC URL | [https://ethereum-sepolia-rpc.publicnode.com/](https://ethereum-sepolia-rpc.publicnode.com/) |
+| RPC URL | Use any Sepolia RPC endpoint your wallet provides |
 | Gas token | SepoliaETH |
 | Gas faucet | [https://tbv-faucet.testnet.babylonlabs.io/](https://tbv-faucet.testnet.babylonlabs.io/) |
 | Block explorer | [https://sepolia.etherscan.io/](https://sepolia.etherscan.io/) |
@@ -74,24 +81,11 @@ If the TBV faucet ([tbv-faucet.testnet.babylonlabs.io](https://tbv-faucet.testne
 | Alchemy Sepolia Faucet | [https://www.alchemy.com/faucets/ethereum-sepolia](https://www.alchemy.com/faucets/ethereum-sepolia) | 0.1 ETH per day; requires an Alchemy account |
 | Chainlink Faucet | [https://faucets.chain.link/sepolia](https://faucets.chain.link/sepolia) | Multiple testnet assets available; requires wallet connection |
 
-### ERC-20 tokens (USDC, USDT, WBTC)
+### Mock ERC-20 tokens (USDC, USDT, WBTC)
 
-| Faucet | Tokens supported | URL | Notes |
-| --- | --- | --- | --- |
-| Aave Testnet Faucet | USDC, USDT, WBTC, and others | [https://staging.aave.com/faucet/](https://staging.aave.com/faucet/) | None |
-| Circle Testnet Faucet | USDC | [https://faucet.circle.com/](https://faucet.circle.com/) | None |
-| Chainlink Faucet | ETH | [https://faucets.chain.link/sepolia](https://faucets.chain.link/sepolia) | Wallet |
-
-## Test app for Aave integration
-
-Open the test app to start a peg-in. The walkthrough begins on [Quickstart](../use-for-lending/quickstart.mdx).
-
-| Field | Value |
-| --- | --- |
-| Test app URL | [https://btc-vaults.testnet.babylonlabs.io/](https://btc-vaults.testnet.babylonlabs.io/) |
+The USDC, USDT, and WBTC used on the testnet are mock tokens deployed for the Trustless Bitcoin Vault testnet. They carry the names USDC, USDT, and WBTC but are not the real assets. Only the project faucet ([tbv-faucet.testnet.babylonlabs.io](https://tbv-faucet.testnet.babylonlabs.io/)) dispenses them; third-party faucets do not provide these tokens.
 
 ## Related
 
 * [Quickstart](../use-for-lending/quickstart.mdx): step-by-step walkthrough
-* [Contract addresses](./contract-addresses.mdx): deployed contract addresses
 * [Protocol parameters](./protocol-parameters.mdx): live parameter values and public-testnet caps

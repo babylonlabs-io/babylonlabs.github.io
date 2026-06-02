@@ -12,7 +12,7 @@ import HeroSearch from './HeroSearch';
 const PRODUCTS = [
   {
     title: 'TBV Testnet docs',
-    link: '/trustless-bitcoin-vault/',
+    link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
     icon: DiversityRegular,
     lightImage: 'img/landing-page/hero/bsn_developers.png',
     darkImage: 'img/landing-page/hero/bsn_developers_dark.png',

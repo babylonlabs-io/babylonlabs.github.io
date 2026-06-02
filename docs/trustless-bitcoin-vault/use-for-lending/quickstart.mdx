@@ -1,15 +1,16 @@
 ---
 title: Quickstart
+sidebar_label: Quickstart
 sidebar_position: 1
 ---
 
 # Quickstart
 
-This walkthrough goes through the **Aave v4 integration** — the first DeFi application built on TBV.
+This walkthrough goes through the **Aave v4 integration** — the first supported DeFi use case for TBV on the public testnet.
 
 This page is the full happy path end to end: connect a wallet, deposit signet BTC, borrow stablecoins, repay, redeem. About 5 minutes of clicking, plus a ~2-hour wait for Bitcoin confirmations during peg-in and a ~3-day challenge window during redemption. Each step links to the matching deep page for full detail.
 
-A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin network and makes it usable as collateral on Ethereum without bridges or wrapping. The test app for Aave integration drives a full peg-in, borrow, repay, and peg-out cycle end to end.
+A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin Network and makes it usable as collateral on Ethereum without bridges or wrapping. The Aave v4 Lending Dashboard drives a full peg-in, borrow, repay, and peg-out cycle end to end.
 
 The public testnet runs on signet, a Bitcoin test network. The BTC and stablecoins involved have no monetary value. Some flows are still under active development; report issues to the team via the channels listed in [Community & support](../reference/community-and-support.mdx).
 
@@ -21,16 +22,16 @@ Each address and each position is capped on the Aave application. See [Protocol 
 
 You need:
 
-* A Bitcoin wallet that supports signet.
+* A UniSat Bitcoin wallet that supports signet.
 * An Ethereum wallet on Sepolia.
 * Signet BTC to deposit. Get it from the faucet listed in [Setup](../testnet-info/setup.mdx).
 * A small amount of Sepolia ETH for gas. The same page lists the faucet.
 
 For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup.mdx).
 
-## Step 1: Open the test app
+## Step 1: Open the Aave v4 Lending Dashboard
 
-Navigate to the test app at the URL listed in [Setup](../testnet-info/setup.mdx).
+Navigate to the Aave v4 Lending Dashboard URL listed in [Setup](../testnet-info/setup.mdx).
 
 ![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/use-for-lending/quickstart-01-landing.png)
 
@@ -44,8 +45,6 @@ The wallet picker then opens. Select a Bitcoin wallet using a Taproot address ty
 
 ![Wallet picker](/img/trustless-bitcoin-vault/use-for-lending/quickstart-02-wallet-picker.png)
 
-The Collateral and Loans sections are empty until a vault exists.
-
 ## Step 3: Create a vault (peg-in)
 
 A peg-in moves BTC into a vault on Bitcoin and registers it on Ethereum. The BTC stays on Bitcoin throughout, locked in a Taproot output. Nothing is bridged or wrapped.
@@ -56,9 +55,7 @@ From the **Collateral** section, click **Deposit**. Then:
 
 ![Peg-in deposit amount entry](/img/trustless-bitcoin-vault/use-for-lending/quickstart-03-deposit-amount.png)
 
-**2. Select a vault provider from the dropdown.**
-
-![Vault provider dropdown](/img/trustless-bitcoin-vault/use-for-lending/quickstart-04-provider-dropdown.png)
+**2. Select a Vault Provider from the dropdown.**
 
 **3. Confirm the Bitcoin and Ethereum transactions.**
 
@@ -94,6 +91,8 @@ Open the **Loans** section and click **Borrow**:
 
 ![Borrow confirmed](/img/trustless-bitcoin-vault/use-for-lending/quickstart-10-borrow-processing.png)
 
+![Loan visible in the Loans section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-11-borrow-confirm.png)
+
 The borrowed asset arrives in your Ethereum wallet. The app now shows your **health factor**, a single number summarizing how close the position is to liquidation. A higher number is safer.
 
 ## Step 5: Repay the debt (Aave v4 application layer)
@@ -105,13 +104,13 @@ From the **Loans** section, click **Repay**:
 * **Repay full** closes the entire borrow and unlocks redemption.
 * **Repay partial** pays down a portion; the position stays open with reduced debt.
 
-![Repay form](/img/trustless-bitcoin-vault/use-for-lending/quickstart-13-repay-form.png)
+![Repay form](/img/trustless-bitcoin-vault/use-for-lending/quickstart-12-borrowed.png)
 
 :::info Two MetaMask prompts
 Repaying usually shows an ERC-20 spending cap approval first, then the repayment transaction. Approve a small buffer because interest can accrue while the transaction is pending; any excess stays in your wallet.
 :::
 
-![Repay spending cap approval](/img/trustless-bitcoin-vault/use-for-lending/quickstart-14-repay-approve.png)
+![Repay MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/quickstart-13-repay-form.png)
 
 ![Repay confirmed](/img/trustless-bitcoin-vault/use-for-lending/quickstart-15-repay-confirm.png)
 
@@ -127,6 +126,8 @@ From the **Collateral** section, select an **in use** vault and click **Withdraw
 
 Review the withdrawal amount, network fee rate, VP commission, and the nominated Bitcoin address.
 
+![Withdraw review screen](/img/trustless-bitcoin-vault/use-for-lending/quickstart-17-withdraw-review.png)
+
 Confirm the Ethereum transaction.
 
 ![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/use-for-lending/quickstart-18-withdraw-confirm.png)
@@ -134,10 +135,14 @@ Confirm the Ethereum transaction.
 The redemption then runs in three protocol-side phases:
 
 1. **Claim.** The Vault Provider generates a zero-knowledge proof in the background showing the debt is repaid, then submits a redemption claim on Bitcoin. The app shows progress.
-2. **Challenge period.** A window of about **3 days** opens during which a Vault Keeper or Universal Challenger may dispute the claim. If no valid challenge appears, the claim finalizes.
+2. **Challenge period.** A window of about **3 days** opens during which an Application Vault Keeper or Universal Challenger may dispute the claim. If no valid challenge appears, the claim finalizes.
 3. **Payout.** Your BTC arrives at the address recorded in the vault.
 
-![Withdraw initiated](/img/trustless-bitcoin-vault/use-for-lending/quickstart-19-redemption-progress.png)
+![Withdraw processing](/img/trustless-bitcoin-vault/use-for-lending/quickstart-19-redemption-progress.png)
+
+![Withdraw initiated](/img/trustless-bitcoin-vault/use-for-lending/quickstart-20-redemption-complete.png)
+
+![Withdraw pending on dashboard](/img/trustless-bitcoin-vault/use-for-lending/quickstart-21-withdraw-pending-dashboard.png)
 
 The 3-day window is inherent to the proof-verification mechanism.
 

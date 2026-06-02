@@ -1,5 +1,6 @@
 ---
 title: Create a vault
+sidebar_label: Create A Vault
 sidebar_position: 2
 ---
 
@@ -19,7 +20,7 @@ The current public testnet enforces conservative per-vault, per-position, and pe
 
 You need:
 
-* A Bitcoin wallet with signet support, holding enough BTC for the vault size you want.
+* A UniSat Bitcoin wallet with signet support, set to Taproot (P2TR) address type and holding enough BTC for the vault size you want.
 * An Ethereum wallet on Sepolia, with a small balance of Sepolia ETH for gas and the peg-in fee.
 * Signet BTC and Sepolia ETH from the faucets listed in [Setup](../testnet-info/setup.mdx).
 
@@ -37,7 +38,7 @@ If the off-chain setup fails to complete within ~24 hours, the vault enters **Ex
 
 Before filling in the deposit form, decide how to structure the deposit.
 
-**Single vault.** One vault holds your full BTC. If your position is ever liquidated, the entire vault is seized whole: that is the smallest unit the protocol can take.
+**Single vault.** One vault holds your full BTC amount. If your position is ever liquidated, the entire vault is seized whole; any over-seizure is handled by the fairness payment on Ethereum in WBTC.
 
 **Two-vault split (recommended).** Split your BTC across two vaults of different sizes: a **sacrificial vault** (sized to cover the protocol's expected seizure amount, placed first in the liquidation order) and a **protected vault** (whatever BTC remains, placed second). During a liquidation the protocol seizes vaults from the front of your order until it has enough to cover the target seizure.
 
@@ -86,15 +87,15 @@ If you chose the two-vault split, the portal broadcasts a single Pre-PegIn trans
 
 After submission, two processes run in parallel.
 
-**Bitcoin confirmations.** The Pre-PegIn transaction must reach 12 Bitcoin confirmations on signet (about **120 minutes**, at one signet block every ~10 minutes) before the protocol can finalize the vault setup. Mainnet will require 6 confirmations. Leave the portal open or close it: progress is tied to your wallet address, not to the browser session.
+**Bitcoin confirmations.** The Pre-PegIn transaction must reach 12 Bitcoin confirmations on signet (about **120 minutes**, at one signet block every ~10 minutes) before the protocol can finalize the vault setup. Leave the portal open or close it: progress is tied to your wallet address, not to the browser session.
 
-**Off-chain setup.** The Vault Provider, Application Vault Keepers, and Universal Challengers coordinate the vault's pre-signed transaction graph: the complete set of pre-signed Bitcoin transactions covering every possible vault outcome (redemption, liquidation, challenge, refund). Each participant signs their share and posts on-chain acknowledgments to confirm readiness. This sequence takes about **6 to 10 minutes** once the Pre-PegIn has the required confirmations.
+**Off-chain setup.** The Vault Provider, Application Vault Keepers, and Universal Challengers coordinate the vault's pre-signed transaction graph: the complete set of pre-signed Bitcoin transactions covering every possible vault outcome (withdrawal after repayment, liquidation, fraud-challenge response, Pre-PegIn refund). Each participant signs their share and posts on-chain acknowledgments to confirm readiness. This sequence takes about **6 to 10 minutes** once the Pre-PegIn has the required confirmations.
 
 ![Vault Pending state while confirmations and off-chain setup run](/img/trustless-bitcoin-vault/use-for-lending/create-vault-016-pending-state.png)
 
-The portal shows progress against each milestone. Once setup reaches the signing phase, the portal will prompt **you** to sign two batches of Bitcoin transactions in your wallet — the next two steps below cover each.
+The portal shows progress against each milestone. Once setup reaches the signing phase, the portal prompts **you** to sign two batches of Bitcoin transactions in your wallet — the next two steps below cover each — and then to download claimer artifacts. After those three depositor actions, the vault transitions to **Verified**.
 
-Behind the scenes, the off-chain setup builds a tamper-evident Bitcoin transaction graph: every legitimate spend path is signed up front by every required participant. After the vault is created, no participant can fabricate a new spend. For the full mechanism (the cryptographic primitives, the cut-and-choose protocol, and the challenge transactions), see [Protocol architecture](../technical-details/protocol-architecture.mdx).
+Behind the scenes, the off-chain setup builds a tamper-evident Bitcoin transaction graph: every legitimate spend path is signed up front by every required participant. After the vault is created, no participant can fabricate a new spend.
 
 ## Step 5: Sign the Claim transaction graph
 
@@ -116,21 +117,17 @@ The portal next prompts you to sign the **Payout transactions** — the deposito
 
 Approve the signing prompts in your Bitcoin wallet.
 
-![Payout transactions signed](/img/trustless-bitcoin-vault/use-for-lending/create-vault-031-payout-signed.png)
-
 Together, the Claim graph signatures (Step 5) and the Payout signatures (Step 6) are what give the depositor cryptographic control over which Bitcoin destinations the vault can ever settle to.
 
 ## Step 7: Download claimer artifacts
 
 When signing completes, the portal offers a **Download Claimer Artifacts** action. This bundle contains the BABE garbled circuit instances, your WOTS keypair, and the transaction graph data needed for the **depositor self-claim path** — the fallback that lets you broadcast the Bitcoin claim yourself if the Vault Provider becomes unresponsive during redemption.
 
-![Download Claimer Artifacts prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-035-download-artifacts.png)
+![Download Claimer Artifacts prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-031-payout-signed.png)
 
 :::warning Back this up alongside your seed phrase
-Without the claimer artifacts plus the WOTS keypair file, the self-claim fallback is unavailable for this vault. If you also lose access to the Vault Provider, recovery would require Security Council intervention. The bundle is per-vault and large (~43 GB per counterparty relationship for full artifacts; cold storage is acceptable).
+Without the claimer artifacts plus the WOTS keypair file, the self-claim fallback is unavailable for this vault. If you also lose access to the Vault Provider, recovery would require Security Council intervention. The bundle is per-vault; cold storage is acceptable.
 :::
-
-![Artifacts downloaded; ready to activate](/img/trustless-bitcoin-vault/use-for-lending/create-vault-036-artifacts-downloaded.png)
 
 Once the artifacts are saved, the off-chain setup completes and the vault transitions to **Verified**.
 
@@ -140,11 +137,17 @@ See [Withdraw & redeem → The self-claim path](./withdraw-and-redeem.mdx) for h
 
 When the vault reaches **Verified**, the portal prompts you to **Activate**. Click it and confirm the Ethereum transaction.
 
-![Activate prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-042-activate-prompt.png)
+![Activate prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-035-download-artifacts.png)
 
-Activation submits the peg-in secret to Ethereum. The contract verifies that the secret's SHA-256 hash matches the original hashlock, then transitions the vault to **Active**. This emits an event the Vault Provider and Vault Keepers detect. They construct the final Bitcoin transaction witness using the secret along with the pre-signed signatures, and broadcast the PegIn transaction. The PegIn transaction spends the Pre-PegIn output and moves your BTC into its vault Taproot output.
+Activation submits the peg-in secret to Ethereum. The contract verifies that the secret's SHA-256 hash matches the original hashlock, then transitions the vault to **Active**. This emits an event the Vault Provider and Application Vault Keepers detect. They construct the final Bitcoin transaction witness using the secret along with the pre-signed signatures, and broadcast the PegIn transaction. The PegIn transaction spends the Pre-PegIn output and locks the bitcoin inside the BTC Vault Taproot output.
+
+![Retrieve secret signing prompt](/img/trustless-bitcoin-vault/use-for-lending/create-vault-036-artifacts-downloaded.png)
+
+![Ethereum activation transaction confirmation](/img/trustless-bitcoin-vault/use-for-lending/create-vault-042-activate-prompt.png)
 
 After the PegIn transaction confirms on Bitcoin, the vault is fully active. The BTC is locked in a Bitcoin script whose only spend paths are the ones agreed at creation.
+
+![Activation confirmation pending](/img/trustless-bitcoin-vault/use-for-lending/create-vault-043-activate-wallet-confirm.png)
 
 Activate within the 48-hour activation window. The window starts when you submit the peg-in request. If the vault is not activated before `pegInActivationTimeout` closes, the vault enters **Expired** state and BTC recovery moves to the refund path.
 
@@ -152,11 +155,17 @@ Activate within the 48-hour activation window. The window starts when you submit
 
 vaultBTC for the vault's BTC amount is **automatically minted and supplied** to your position on the Babylon Core Spoke (the Aave v4 market for vaultBTC) at activation. The manual action is the **Activate** transaction above; there is no separate mint or supply step. The vault's status moves to **InUse**; you can now [borrow stablecoins or WBTC](./borrow-and-repay.mdx) against it.
 
+![Vault supplied as collateral](/img/trustless-bitcoin-vault/use-for-lending/create-vault-045-activation-complete.png)
+
 **Combine with other vaults.** Subsequent vault activations append to the same lending position automatically. Position-level limits apply; see [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the current caps.
 
 ## Reorder vaults later
 
 Once vaults are part of a position, the order of the list controls which vault is seized first during a liquidation. You can reorder vaults from the **Collateral** section at any time, as long as no liquidation is in progress.
+
+![Reorder vaults view](/img/trustless-bitcoin-vault/use-for-lending/create-vault-19-reorder.png)
+
+![Reorder confirmation](/img/trustless-bitcoin-vault/use-for-lending/create-vault-20-reorder-confirm.png)
 
 Reordering is useful when:
 
@@ -172,7 +181,7 @@ If the off-chain setup fails to complete, or you change your mind before activat
 
 The refund path is a Taproot leaf locked behind a Bitcoin timelock (`tRefund` = 3 days on the current Testnet). The timelock is set such that the refund window opens only after the protocol's normal activation window has closed. Once the timelock elapses, sign with your Bitcoin key and broadcast a refund transaction that returns the Pre-PegIn output to your wallet.
 
-The refund is unilateral. It does not require cooperation from the Vault Provider, the Vault Keepers, or any other participant. As long as you control the original Bitcoin signing key, the BTC is recoverable.
+The refund is unilateral. It does not require cooperation from the Vault Provider, the Application Vault Keepers, or any other participant. As long as you control the original Bitcoin signing key, the BTC is recoverable.
 
 Two distinct failure modes both lead to refund:
 
@@ -189,11 +198,8 @@ Two distinct failure modes both lead to refund:
 | PegIn broadcast on Bitcoin | ~10 minutes |
 | **Total** | **~2 hours from Deposit to Active** |
 
-Mainnet (when launched) requires only 6 Bitcoin confirmations, bringing total peg-in time closer to ~70 minutes.
-
 ## Next steps
 
 * [Borrow & repay](./borrow-and-repay.mdx): borrow USDC, USDT, or WBTC against your activated vault.
 * [Liquidation risk](./liquidation-risk.mdx): health factor mechanics, what happens during a seizure, and how the two-vault split protects you.
 * [Withdraw & redeem](./withdraw-and-redeem.mdx): releasing the underlying BTC back to your Bitcoin wallet.
-* [Protocol architecture](../technical-details/protocol-architecture.mdx): the full technical breakdown of the peg-in flow, including transaction graph construction and cryptographic primitives.

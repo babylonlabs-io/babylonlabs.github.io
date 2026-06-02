@@ -21,7 +21,7 @@ const guides: Guide[] = [
     title: 'Trustless Bitcoin Vault',
     icon: ShieldCheckmarkRegular,
     text: 'Native Bitcoin collateral for Ethereum DeFi, with BTC remaining locked on Bitcoin.',
-    link: '/trustless-bitcoin-vault/',
+    link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
   },
   {
     title: 'Bitcoin Staking',
@@ -107,7 +107,7 @@ export default function GuidesAndSamples() {
         <div className="mb-8 flex items-center justify-between">
           <h3 className="m-0">Primary Docs</h3>
 
-          <Link to="/trustless-bitcoin-vault/" className="font-jakarta text-sm font-semibold">
+          <Link to="/trustless-bitcoin-vault/start-here/what-is-tbv/" className="font-jakarta text-sm font-semibold">
             More <ArrowRightFilled className="ml-1" />
           </Link>
         </div>

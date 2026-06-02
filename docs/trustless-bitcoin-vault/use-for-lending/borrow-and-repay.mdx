@@ -1,11 +1,12 @@
 ---
 title: Borrow & repay
+sidebar_label: Borrow & Repay
 sidebar_position: 3
 ---
 
 # Borrow & repay
 
-This page describes borrow and repay flows on the **Aave v4 integration** — the first DeFi application built on TBV. The TBV protocol layer below it (vault creation, redemption, security) is application-agnostic and the same across any future integration; what differs application-to-application is the borrowing mechanism, the interest model, and the liquidation rules. See [What is TBV?](../start-here/what-is-tbv.mdx) → "Two layers" for the overview.
+This page describes borrow and repay flows on the **Aave v4 integration** — the first supported DeFi use case for TBV on the public testnet. TBV handles the Bitcoin vault underneath; the Aave v4 integration handles borrowing, repayment, health factor, and liquidation.
 
 This page covers borrowing USDC, USDT, or WBTC against an active vault, how interest accrues, and how to repay. The vault creation step that comes before is on [Create a vault](./create-a-vault.mdx). The redemption step that comes after is on [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
@@ -21,22 +22,7 @@ You need:
 
 * At least one activated vault in `InUse` status. If you don't have one, start at [Create a vault](./create-a-vault.mdx).
 * A small balance of Sepolia ETH for gas on each transaction.
-* Familiarity with basic DeFi borrowing concepts: collateral, health factor, liquidation. See [Glossary](../reference/glossary.mdx) for short definitions.
-
-## Confirm collateral after activation
-
-After a vault reaches **Verified**, you manually click **Activate** and confirm the Ethereum transaction because activation reveals the peg-in secret and completes the Bitcoin-side transition. Once activation succeeds, the contract automatically mints vaultBTC and supplies it to the Babylon Core Spoke. There is no separate collateral-add or manual vaultBTC mint step.
-
-What happens behind the scenes:
-
-* vaultBTC is minted equal to the vault's BTC amount, at 8-decimal precision (1 vaultBTC = 1 BTC = 100,000,000 satoshis).
-* The vaultBTC is supplied to the Babylon Core Spoke, the dedicated lending market that accepts vaultBTC as collateral.
-* The vault's status moves to **InUse**.
-* The position's collateral value and health factor update.
-
-Activating additional vaults appends them to the same lending position automatically. Each vault must belong to your wallet, and the position's total must remain under the caps listed in [Protocol parameters](../testnet-info/protocol-parameters.mdx).
-
-vaultBTC never leaves the protocol contracts. It is not transferable to arbitrary addresses, has no secondary market, and exists purely as the internal accounting token for vault-backed collateral. For the full architecture, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
+* Familiarity with basic DeFi borrowing concepts: collateral, health factor, and liquidation.
 
 ## Borrow stablecoins or WBTC
 
@@ -46,7 +32,7 @@ Borrowable assets on the current public testnet:
 * **USDT**
 * **WBTC**
 
-Each asset has its own interest rate, supply cap, and borrow cap configured at the Aave v4 Hub level. For full numerical values and the rate-model parameters, see [Protocol parameters](../testnet-info/protocol-parameters.mdx).
+Each asset has its own interest rate, supply cap, and borrow cap configured at the Aave v4 Hub level.
 
 From the **Loans** section, click **Borrow**:
 
@@ -71,7 +57,7 @@ The borrowed asset arrives in your Ethereum wallet, or in any address you specif
 The borrow is rejected if:
 
 * The resulting health factor would drop below 1.0.
-* The amount exceeds the Hub's draw cap for that asset. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for current values.
+* The amount exceeds the Hub's draw cap for that asset.
 * The reserve is paused or frozen.
 
 You can borrow from multiple asset reserves at once (up to 4 reserves combined, per `maxUserReservesLimit`). For example, borrow USDC and USDT in parallel against the same vaultBTC collateral. Each debt is tracked independently, but the health factor reflects the aggregate of all debts.
@@ -83,8 +69,6 @@ You can also return to **Borrow** repeatedly and borrow more as long as the resu
 Interest on borrowed assets accrues continuously, not at scheduled intervals.
 
 **Rate set by utilization.** Each asset's interest rate is a function of utilization: the ratio of total borrowed to total supplied for that asset on the Aave v4 Hub. Below the optimal utilization pivot, the rate climbs linearly at one slope; above the pivot, it climbs much faster.
-
-Rate-model anchors per asset live on [Protocol parameters](../testnet-info/protocol-parameters.mdx).
 
 **Continuous accrual.** Interest is applied on every Ethereum block. There is no "interest cycle" or "billing period". The exact amount owed at any moment is the principal borrowed plus the interest accumulated up to that block.
 
@@ -175,11 +159,8 @@ The portal surfaces the position's state on the **Loans** section:
 * **Outstanding debt**, per asset and aggregate.
 * **Borrow rate**, per asset, the live rate driven by utilization.
 
-For programmatic access, the Babylon Core Spoke and the AaveAdapterLens contract expose read-only queries returning the same data. See [Aave v4 integration](../technical-details/aave-v4-integration.mdx) for the contract surfaces.
-
 ## Next steps
 
 * [Withdraw & redeem](./withdraw-and-redeem.mdx): close the position and recover the underlying BTC.
 * [Create a vault](./create-a-vault.mdx#reorder-vaults-later): change the liquidation priority of multiple vaults in one position.
 * [Liquidation risk](./liquidation-risk.mdx): what triggers liquidation, what is seized, and how the fairness payment works.
-* [Aave v4 integration](../technical-details/aave-v4-integration.mdx): the protocol-level architecture of the lending stack.
