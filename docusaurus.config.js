@@ -148,14 +148,6 @@ const plugins = [
           from: '/trustless-bitcoin-vault/research/babe_verification/',
           to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
         },
-        {
-          from: '/trustless-bitcoin-vault/reference/glossary/',
-          to: '/trustless-bitcoin-vault/reference/community-and-support/',
-        },
-        {
-          from: '/trustless-bitcoin-vault/use-for-lending/faq/',
-          to: '/trustless-bitcoin-vault/reference/community-and-support/',
-        },
         // Staking research/security moved under Bitcoin Staking
         {
           from: '/guides/research/',

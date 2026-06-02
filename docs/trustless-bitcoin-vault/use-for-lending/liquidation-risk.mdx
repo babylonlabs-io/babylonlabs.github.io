@@ -23,13 +23,35 @@ On the current Testnet, the collateral factor for vaultBTC is 78%. Two things mo
 * **BTC price drops.** Your vaultBTC collateral loses value in USD terms while debt stays denominated in the borrowed token.
 * **Interest accrues.** Your debt grows continuously under the Aave v4 interest rate model.
 
-Once the health factor crosses below 1.0, any Ethereum address can call the liquidation function. Liquidation is permissionless by design: anyone can execute it, and the protocol pays a bonus to whoever does. In practice, professional liquidator bots compete for these events; once a position falls below 1.0, a liquidation typically clears within the next block or two.
+Once the health factor crosses below 1.0, liquidation becomes available. In practice, professional liquidator bots compete for these events; once a position falls below 1.0, a liquidation typically clears within the next block or two.
+
+## Why a BTC vault is indivisible
+
+A BTC vault is a single Bitcoin UTXO. It can be claimed in full or not at all; the protocol cannot seize half of a vault. This is structural, not a design choice: Bitcoin transactions can only spend whole outputs.
+
+This is why liquidation behaves differently here than on a typical Aave market. The mechanism walks a list of whole vaults and decides which ones to seize as a group, rather than scaling a single collateral pool by a fraction.
+
+## How liquidation works in TBV
+
+On a standard Ethereum market, liquidation is both atomic and permissionless:
+
+* **Atomic.** In a single transaction, the liquidator repays the debt and receives the collateral. There is no gap between the two.
+* **Permissionless.** Anyone can liquidate, so a competitive market of liquidator bots closes a position the moment it crosses 1.0, before its collateral can fall below the debt it backs.
+
+This cannot work directly when the collateral is BTC on the Bitcoin Network and the market is on Ethereum. Releasing a vault's BTC runs through the redemption flow on Bitcoin — claim, challenge window, payout — which takes days and cannot settle inside a single Ethereum transaction. The standard "repay now, take the collateral now" loop is impossible across the two chains.
+
+A **Liquidation Liquidity Provider (LLP)** closes this gap. The LLP supplies instant settlement liquidity on Ethereum, so liquidation stays atomic there while the slower BTC redemption happens in the background. At liquidation, the liquidator is paid immediately from the LLP in WBTC, the seized vault is escrowed in the LLP, and a registered arbitrageur later acquires that vault and finalizes the redemption on Bitcoin.
+
+Two liquidation paths exist once a position becomes liquidatable:
+
+* **Permissionless (LLP-routed).** The liquidator repays the debt and is settled instantly in a fungible wrapped-BTC asset, WBTC at launch, drawn from the LLP plus the liquidation bonus. The seized vault enters LLP escrow. The first LLP is `BTCVaultSwap`, registered as its own WBTC spoke on the Aave v4 Hub.
+* **Permissioned (direct redemption).** Restricted to registered arbitrageurs, also called Application Vault Keepers, that took part in the vault's creation and hold its Bitcoin redeem key. They repay the debt and take the seized vault directly into the BTC redemption flow themselves, without drawing on LLP liquidity.
 
 ## What "liquidation" actually seizes
 
 Two terms describe distinct things, and they apply at the same time:
 
-* **Full-vault liquidation.** Each individual vault is seized whole. This is structural: a vault is backed by an indivisible Bitcoin UTXO, so the protocol cannot seize "half" of a vault. When a vault is seized, the whole vault moves.
+* **Full-vault liquidation.** Each individual vault is seized whole. When a vault is seized, the whole vault moves.
 * **Partial-position liquidation.** When your position contains multiple vaults, the protocol seizes only the subset of vaults needed to restore the health factor to its target. The rest stay in your position.
 
 The protocol walks your vault list in order during liquidation and takes consecutive vaults from the front until their cumulative value covers the protocol's target seizure amount. The target seizure depends on the target health factor (THF) and your collateral and debt sizes.
@@ -54,7 +76,7 @@ If the position becomes liquidatable, the protocol walks your vaults in order. T
 
 Without the split, the same liquidation seizes the full single vault. That is the cliff effect.
 
-You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](./create-a-vault.mdx) for the two-vault setup at peg-in.
+You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/) for the two-vault setup at peg-in.
 
 ## Fairness payment: you do not lose the excess
 
@@ -87,11 +109,12 @@ The zones above 1.0 are guidance, not contract values. The only on-chain thresho
 * **Borrow conservatively.** Stay well below the maximum your collateral allows. A health factor above 1.5 leaves headroom for normal BTC volatility.
 * **Use the two-vault split.** It is the most effective protection against the cliff effect, and the portal recommends it by default at peg-in. The portal also sizes the split for current parameters; don't manually undersize the sacrificial vault.
 * **Trust the portal's ordering.** The recommended order (sacrificial first) is what the protocol walks during liquidation. Reordering matters; review your order when parameters change.
-* **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Borrow & repay](./borrow-and-repay.mdx).
+* **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
 * **Add collateral.** Add more vaults to the position. Each added vault raises collateral value and the health factor; reorder afterwards if needed.
 
 ## Related pages
 
-* [Borrow & repay](./borrow-and-repay.mdx)
-* [Withdraw & redeem](./withdraw-and-redeem.mdx)
-* [Create a vault](./create-a-vault.mdx)
+* [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/)
+* [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
+* [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/)
+* [Glossary](/trustless-bitcoin-vault/reference/glossary/)

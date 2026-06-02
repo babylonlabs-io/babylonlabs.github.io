@@ -291,6 +291,7 @@ const sidebars = {
         'trustless-bitcoin-vault/use-for-lending/borrow-and-repay',
         'trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem',
         'trustless-bitcoin-vault/use-for-lending/liquidation-risk',
+        'trustless-bitcoin-vault/use-for-lending/faq',
       ],
     },
     {
@@ -300,6 +301,7 @@ const sidebars = {
       collapsed: true,
       className: 'support_sidebar_header',
       items: [
+        'trustless-bitcoin-vault/reference/glossary',
         'trustless-bitcoin-vault/reference/community-and-support',
       ],
     },
