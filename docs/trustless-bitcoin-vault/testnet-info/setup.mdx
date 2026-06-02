@@ -1,0 +1,91 @@
+---
+title: Setup
+sidebar_label: Setup
+sidebar_position: 1
+---
+
+# Setup
+
+Reference for wallets, networks, faucets, and the Aave v4 Lending Dashboard URL used by the Trustless Bitcoin Vault (TBV) public testnet. The walkthrough that uses these values is on [Quickstart](../use-for-lending/quickstart.mdx). For the live numeric values of per-vault, per-position, and per-application caps, see [Protocol parameters](./protocol-parameters.mdx).
+
+## Aave v4 Lending Dashboard
+
+Open the Aave v4 Lending Dashboard to start a deposit (peg-in).
+
+| Field | Value |
+| --- | --- |
+| Aave v4 Lending Dashboard URL | [https://btc-vaults.testnet.babylonlabs.io/](https://btc-vaults.testnet.babylonlabs.io/) |
+
+## Prerequisites
+
+For a full public-testnet cycle (peg-in, borrow, repay, redeem):
+
+* **Signet BTC:** needed both to fund the vault you create and to pay the Bitcoin network transaction fees for the peg-in. Size it to fit within the current per-vault and per-position caps. See [Protocol parameters](./protocol-parameters.mdx) for the live limits.
+* **Sepolia ETH:** a small amount for gas across the full cycle (peg-in submission, activation, borrow, repay, withdraw) plus the peg-in fee paid at submission.
+
+## Supported wallets
+
+### Bitcoin (signet)
+
+* **UniSat** — browser extension with signet support. Other Bitcoin wallets supporting signet may work; the team will confirm a fuller list before launch.
+
+**Set the address type to Taproot before connecting.** TBV uses Taproot scripts on Bitcoin, so the wallet must produce Taproot (P2TR) addresses.
+
+In UniSat: **Settings → Address Type → Taproot (P2TR)**. If you started with a different address type, switch first; you may need to fund the new Taproot address from the signet faucet after switching, because addresses of different types do not share balance.
+
+The wallet must support PSBT signing and message signing (BIP-322 or ECDSA). Both schemes are auto-detected by the app; no manual action is needed beyond connecting the wallet.
+
+### Ethereum (Sepolia)
+
+* All Ethereum wallets compatible with [WalletConnect](https://walletconnect.com/).
+
+If a preferred wallet is not listed, see [Community & support](../reference/community-and-support.mdx); additional wallets may be added based on demand.
+
+## Bitcoin signet network
+
+| Field | Value |
+| --- | --- |
+| Network | signet |
+| Faucet | [https://tbv-faucet.testnet.babylonlabs.io/](https://tbv-faucet.testnet.babylonlabs.io/) |
+| Block explorer | [https://mempool.space/signet](https://mempool.space/signet) |
+
+If the signet faucet is unavailable, see [Community & support](../reference/community-and-support.mdx) for alternative signet BTC sources.
+
+## Ethereum testnet
+
+| Field | Value |
+| --- | --- |
+| Network name | Ethereum Sepolia (Sepolia testnet) |
+| Chain ID | `11155111` |
+| RPC URL | [https://ethereum-sepolia-rpc.publicnode.com/](https://ethereum-sepolia-rpc.publicnode.com/) |
+| Gas token | SepoliaETH |
+| Gas faucet | [https://tbv-faucet.testnet.babylonlabs.io/](https://tbv-faucet.testnet.babylonlabs.io/) |
+| Block explorer | [https://sepolia.etherscan.io/](https://sepolia.etherscan.io/) |
+
+## Alternative public faucets
+
+If the TBV faucet ([tbv-faucet.testnet.babylonlabs.io](https://tbv-faucet.testnet.babylonlabs.io/)) is temporarily unavailable, the following public faucets can be used instead.
+
+### Signet BTC
+
+| Faucet | URL | Notes |
+| --- | --- | --- |
+| Signet Faucet | [https://signetfaucet.com/](https://signetfaucet.com/) | 0.00001-0.01 BTC per request; no account required |
+| Alt Signet Faucet | [https://alt.signetfaucet.com/](https://alt.signetfaucet.com/) | Community-run alternative; no account required |
+
+### Sepolia ETH
+
+| Faucet | URL | Notes |
+| --- | --- | --- |
+| Google Cloud Web3 Faucet | [https://cloud.google.com/application/web3/faucet/ethereum/sepolia](https://cloud.google.com/application/web3/faucet/ethereum/sepolia) | Requires a Google account |
+| Alchemy Sepolia Faucet | [https://www.alchemy.com/faucets/ethereum-sepolia](https://www.alchemy.com/faucets/ethereum-sepolia) | 0.1 ETH per day; requires an Alchemy account |
+| Chainlink Faucet | [https://faucets.chain.link/sepolia](https://faucets.chain.link/sepolia) | Multiple testnet assets available; requires wallet connection |
+
+### Mock ERC-20 tokens (USDC, USDT, WBTC)
+
+The USDC, USDT, and WBTC used on the testnet are mock tokens deployed for the Trustless Bitcoin Vault (TBV) testnet. They carry the names USDC, USDT, and WBTC but are not the real assets. Only the project faucet ([tbv-faucet.testnet.babylonlabs.io](https://tbv-faucet.testnet.babylonlabs.io/)) dispenses them; third-party faucets do not provide these tokens.
+
+## Related
+
+* [Quickstart](../use-for-lending/quickstart.mdx): step-by-step walkthrough
+* [Protocol parameters](./protocol-parameters.mdx): live parameter values and public-testnet caps

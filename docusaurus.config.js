@@ -2,7 +2,11 @@ require('dotenv').config();
 const { themes } = require('prism-react-renderer');
 const { languageTabs } = require('./static/languageTabs.cjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
-const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const ALGOLIA_INDEX_NAME =
+  BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const ENABLE_GTAG =
+  process.env.NODE_ENV === 'production' && Boolean(process.env.TRACKING_ID);
+const ENABLE_LOCAL_GTAG_STUB = process.env.NODE_ENV !== 'production';
 const code_themes = {
   light: themes.github,
   dark: themes.dracula,
@@ -52,18 +56,17 @@ const openapiPlugins = [
           hideSendButton: false,
           showSchemas: false,
         },
-        
-          cometBFT:{
-            specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml'
-          ,outputDir: 'docs/api/comet-bft',
+
+        cometBFT: {
+          specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml',
+          outputDir: 'docs/api/comet-bft',
           sidebarOptions: {
             groupPathsBy: 'tag',
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,
           showSchemas: false,
-
-          }
+        },
       },
     },
   ],
@@ -111,6 +114,73 @@ const plugins = [
           from: '/guides/baby_stakers/baby_staking_tools/',
           to: '/stakers/baby_stakers/',
         },
+        // Old Bitcoin Vault overview page → Trustless Bitcoin Vault Start Here
+        {
+          from: '/guides/overview/bitcoin-vault/',
+          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+        },
+        // Phase-2 TBV docs are kept off the public-testnet release path
+        {
+          from: '/trustless-bitcoin-vault/tbv-vs-alternatives/',
+          to: '/trustless-bitcoin-vault/start-here/tbv-vs-alternatives/',
+        },
+        {
+          from: '/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/',
+          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+        },
+        {
+          from: '/trustless-bitcoin-vault/technical-details/protocol-architecture/',
+          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+        },
+        {
+          from: '/trustless-bitcoin-vault/technical-details/protocol-actors/',
+          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+        },
+        {
+          from: '/trustless-bitcoin-vault/technical-details/aave-v4-integration/',
+          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+        },
+        // Staking research/security moved under Bitcoin Staking
+        {
+          from: '/guides/research/',
+          to: '/guides/overview/bitcoin_staking/research/',
+        },
+        {
+          from: '/guides/research/babe_verification/',
+          to: '/trustless-bitcoin-vault/research/babe_verification/',
+        },
+        {
+          from: '/guides/research/btc_staking_litepaper/',
+          to: '/guides/overview/bitcoin_staking/research/btc_staking_litepaper/',
+        },
+        {
+          from: '/guides/research/btc_timestamping/',
+          to: '/guides/overview/bitcoin_staking/research/btc_timestamping/',
+        },
+        {
+          from: '/guides/research/btc_trustless_vault/',
+          to: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
+        },
+        {
+          from: '/guides/overview/bitcoin_staking/research/babe_verification/',
+          to: '/trustless-bitcoin-vault/research/babe_verification/',
+        },
+        {
+          from: '/guides/overview/bitcoin_staking/research/btc_trustless_vault/',
+          to: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
+        },
+        {
+          from: '/guides/security/',
+          to: '/guides/overview/bitcoin_staking/security/',
+        },
+        {
+          from: '/guides/security/audit_reports/',
+          to: '/guides/overview/bitcoin_staking/security/audit_reports/',
+        },
+        {
+          from: '/guides/security/bug_bounties/',
+          to: '/guides/overview/bitcoin_staking/security/bug_bounties/',
+        },
         // Architecture redirects (moved under babylon_genesis)
         {
           from: '/guides/architecture/',
@@ -122,7 +192,90 @@ const plugins = [
         },
         {
           from: '/guides/architecture/vigilantes/',
-          to: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        // Vigilantes moved under btc_staking_program
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/monitor/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/monitor/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/reporter/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/reporter/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/submitter/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/submitter/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        // Networks removed
+        {
+          from: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/networks/testnet/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/networks/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        // Governance proposals flattened
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/proposal-review-guide/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/voting-via-cli/',
+          to: '/guides/overview/babylon_genesis/governance/voting-via-cli/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/voting_via_web/',
+          to: '/guides/overview/babylon_genesis/governance/voting_via_web/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/drafting-proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/proposal_templates/',
+          to: '/guides/overview/babylon_genesis/governance/proposal_templates/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_via_cli/',
+          to: '/guides/overview/babylon_genesis/governance/submit_via_cli/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_via_web/',
+          to: '/guides/overview/babylon_genesis/governance/submit_via_web/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/smart_contract_deployment/',
+          to: '/guides/overview/babylon_genesis/governance/smart_contract_deployment/',
         },
         // Governance redirects
         {
@@ -131,15 +284,15 @@ const plugins = [
         },
         {
           from: '/guides/governance/drafting_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
         },
         {
           from: '/guides/governance/reviewing_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
         },
         {
           from: '/guides/governance/submit_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
         },
         // Specifications redirects
         {
@@ -157,19 +310,19 @@ const plugins = [
         // Network redirects (Babylon Genesis)
         {
           from: '/guides/networks/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/mainnet/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/testnet/',
-          to: '/guides/overview/babylon_genesis/networks/testnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         // Network redirects (Bitcoin -> developers)
         {
@@ -222,19 +375,33 @@ const plugins = [
           from: '/guides/architecture/babylon_genesis_modules/',
           to: '/guides/overview/babylon_genesis/architecture/',
         },
+        // Retired top-nav redirects
+        {
+          from: '/stakers/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/developers/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/operators/',
+          to: '/guides/overview/',
+        },
       ],
     },
   ],
   tailwindPlugin,
   webpackReactProvider,
   ...docs_plugins,
-  ...openapiPlugins
+  ...openapiPlugins,
 ];
 
 // @ts-ignore
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...meta,
+  scripts: ENABLE_LOCAL_GTAG_STUB ? [{ src: '/local-gtag-stub.js' }] : [],
   plugins,
 
   trailingSlash: true,
@@ -267,17 +434,17 @@ const config = {
         },
         blog: false,
         theme: {
-          customCss: [
-            require.resolve('./src/css/custom.css')
-          ],
+          customCss: [require.resolve('./src/css/custom.css')],
         },
         sitemap: {
           ignorePatterns: ['**/tags/**', '/api/*'],
         },
-        gtag: process.env.TRACKING_ID ? {
-          trackingID: process.env.TRACKING_ID,
-          anonymizeIP: true,
-        } : false,
+        gtag: ENABLE_GTAG
+          ? {
+              trackingID: process.env.TRACKING_ID,
+              anonymizeIP: true,
+            }
+          : false,
       }),
     ],
   ],
@@ -306,24 +473,14 @@ const config = {
         },
         items: [
           {
-            label: 'Overview',
-            to: '/guides/overview/',
+            label: 'Trustless Bitcoin Vault',
+            to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+            className: 'trustless-bitcoin-vault-top-header',
+          },
+          {
+            label: 'Bitcoin Staking',
+            to: '/guides/overview/bitcoin_staking/',
             className: 'guides-top-header',
-          },
-          {
-            label: 'Stakers',
-            to: '/stakers/',
-            className: 'stakers-top-header',
-          },
-          {
-            label: 'Developers',
-            to: '/developers/',
-            className: 'developers-top-header',
-          },
-          {
-            label: 'Operators',
-            to: '/operators/',
-            className: 'operators-top-header',
           },
           {
             label: 'API',
@@ -336,30 +493,15 @@ const config = {
                 label: 'Babylon gRPC',
                 to: '/api/babylon-gRPC/babylon-grpc-api-docs',
               },
-              {label: 'CometBFT',
-                to:'api/comet-bft/babylon-grpc-api-docs'
-              }
+              {
+                label: 'CometBFT',
+                to: '/api/comet-bft/babylon-grpc-api-docs',
+              },
             ],
           },
           {
             label: 'Support',
             to: 'https://discord.com/invite/babylonglobal',
-          },
-          {
-            label: 'Babylon AI',
-            to: '#',
-            className: 'header-ai-chat-link',
-            position: 'right',
-          },
-          {
-            href: 'https://discord.com/invite/babylonglobal',
-            position: 'right',
-            className: 'header-discord-link',
-          },
-          {
-            href: 'https://github.com/babylonlabs-io/',
-            position: 'right',
-            className: 'header-github-link',
           },
           {
             type: 'search',
@@ -432,7 +574,7 @@ const config = {
     }),
 
   // Conditionally enable custom webpack config only if SWC is available
-  ...((() => {
+  ...(() => {
     try {
       require.resolve('swc-loader');
       require('@swc/core');
@@ -456,10 +598,13 @@ const config = {
         },
       };
     } catch (e) {
-      console.warn('SWC not available, using Docusaurus default Babel loader:', e.message);
+      console.warn(
+        'SWC not available, using Docusaurus default Babel loader:',
+        e.message
+      );
       return {}; // No custom webpack config, use Docusaurus defaults
     }
-  })()),
+  })(),
   customFields: {
     apiBaseUrl: process.env.API_BASE_URL || '',
   },

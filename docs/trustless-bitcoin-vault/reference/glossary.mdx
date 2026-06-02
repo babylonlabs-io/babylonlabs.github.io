@@ -1,0 +1,166 @@
+---
+title: Glossary
+sidebar_label: Glossary
+sidebar_position: 1
+---
+
+# TBV Glossary
+
+Terms used throughout the Trustless Bitcoin Vault (TBV) public testnet
+documentation.
+
+**Aave Adapter.** An Ethereum smart contract for TBV-on-Aave operations. It
+coordinates adding vaults as collateral, borrowing, repaying, withdrawing, and
+triggering redemption.
+
+**Aave v4 Hub.** The central liquidity contract in Aave v4 from which spokes
+draw borrowable assets. The Babylon Core Spoke draws from the Hub when a
+depositor borrows; repays and liquidations restore liquidity.
+
+**Application Registry.** Ethereum contract listing the DeFi applications
+approved to receive vaults as collateral. Currently the only registered
+application is the Aave v4 integration.
+
+**Application Vault Keeper (AVK).** An application-scoped Vault Keeper that
+holds redemption rights over a vault. Under defined conditions it can claim the
+vault, and it can challenge invalid claims made by other claimers. Each
+application may name this role differently; in the Aave v4 integration, the
+Application Vault Keeper is the arbitrageur.
+
+**BABE.** Proof-verification construction used by the protocol. BABE
+establishes the challenge framework between each claimer-challenger pair at
+vault creation. It uses a cut-and-choose protocol with many candidate
+garbled-circuit instances for dispute resolution. See
+[How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
+
+**Babylon Core Spoke.** A dedicated, isolated Aave v4 market that accepts
+`vaultBTC` as collateral. It has its own risk parameters and draws borrowable
+assets from the Aave v4 Hub.
+
+**BitVM3.** Bitcoin-side construction family that lets a zero-knowledge proof
+generated off-chain be verified by Bitcoin's existing script capabilities,
+without requiring a Bitcoin soft fork.
+
+**BTCVaultSwap.** The first Liquidation Liquidity Provider registered for the
+Aave v4 integration. It lets a seized vault be swapped for a fungible asset so
+that liquidators on the permissionless path can be paid instantly. A registered
+Application Vault Keeper later acquires the escrowed vault and finalizes the BTC
+redemption on the Bitcoin Network.
+
+**CapPolicy.** Ethereum contract enforcing per-application and per-address BTC
+exposure caps. At vault activation, the contract checks that the activation
+would not exceed either cap. See
+[Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/).
+
+**Challenge period.** A window during which Vault Keepers or Universal
+Challengers can dispute a claim on the Bitcoin Network. If no challenge arrives
+before the window closes, the claim finalizes and the BTC is released to the
+claimer. See [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
+
+**Cliff effect.** The risk that a single-vault position is fully seized at
+liquidation because each vault is indivisible. Splitting a depositor's BTC into
+a sacrificial vault and a protected vault at peg-in mitigates this. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Collateral factor.** The fraction of a collateral asset's value counted
+toward borrowing capacity. With a collateral factor of 78%, the current
+public-testnet value for vaultBTC, $60,000 of BTC supports up to $46,800 of
+borrows. See
+[Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
+
+**Depositor.** The Bitcoin holder who creates a vault to use BTC as collateral.
+The depositor's keys are required at vault creation and at every
+depositor-controlled release path. In lending contexts, the depositor is also
+the borrower.
+
+**Depositor claim output.** A small Bitcoin output produced by the PegIn
+transaction and controlled solely by the depositor's key. It anchors the
+depositor self-claim path during peg-out. See
+[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+
+**Fairness debt repay.** Compensation mechanism during partial-position
+liquidation when the over-seizure surplus is less than the depositor's
+remaining debt. The surplus reduces the depositor's debt rather than being paid
+out in WBTC. See [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Fairness payment.** Compensation paid to the depositor in WBTC on
+full-position liquidation when all debt is covered by the seizure and a surplus
+remains. The over-seizure value is discounted using the ratio of debt liquidated
+to collateral liquidated, not valued at raw BTC price. The complementary
+mechanism for partial-position liquidation is fairness debt repay. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Garbled circuit (GC).** A cryptographic construction used in the BABE
+construction to evaluate complex predicates on the Bitcoin Network.
+
+**Hashlock.** The SHA-256 hash of a 32-byte secret generated at peg-in. The hash
+is committed on Ethereum; the secret is revealed at activation to unlock the
+matching Bitcoin transaction. See [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
+
+**Health factor.** Ratio of risk-adjusted collateral value to total debt value.
+A position is liquidatable when the health factor drops below 1.0. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Liquidation bonus.** A discount on seized collateral granted to the liquidator
+as an incentive to keep the protocol solvent. On the current public testnet,
+the maximum bonus is 10%.
+
+**Liquidation Liquidity Provider (LLP).** A contract that provides instant
+fungible-asset liquidity, such as a wrapped-BTC token, to liquidators while the
+underlying BTC redemption finalizes asynchronously.
+
+**Partial-position liquidation.** When a position holds multiple vaults and only
+the minimum subset of vaults needed to restore the health factor gets seized.
+The rest remain in the position. The protocol walks vaults in their stored
+order during liquidation.
+
+**Peg-in / peg-out.** Peg-in is the process of locking BTC into a vault on
+Bitcoin and registering the vault on Ethereum. Peg-out is the reverse: a vault
+is redeemed and the BTC is released back to a Bitcoin address. See
+[How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
+
+**Protected vault.** In a two-vault position, the vault placed second in the
+liquidation order. It is designed to remain untouched during partial-position
+liquidation while the sacrificial vault is seized. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Sacrificial vault.** In a two-vault position, the vault placed first in the
+liquidation order. It is sized to cover the protocol's expected seizure amount
+so that only this vault is seized if the position becomes liquidatable. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**SP1 proof.** A zero-knowledge proof generated off-chain to prove that an
+Ethereum event occurred. The proof is then aggregated and verified on Bitcoin
+through the protocol's proof-verification construction.
+
+**Target health factor (THF).** The health factor the protocol aims to restore
+after partial-position liquidation. It is used to compute how many vaults to
+seize. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Taproot script.** A Bitcoin output type with multiple spending paths encoded
+as separate leaves in a Merkle tree. Each vault's BTC sits in a Taproot address
+whose leaves cover the protocol's valid spend paths.
+
+**Transaction graph.** The set of pre-signed Bitcoin transactions covering every
+legitimate spending path for a vault. It is constructed and signed by all
+required participants at vault creation. After creation, no participant can
+fabricate a new spend.
+
+**UTXO.** Unspent Transaction Output. Bitcoin's accounting model: each piece of
+bitcoin in circulation is a UTXO that gets fully consumed when spent. Each vault
+corresponds to exactly one UTXO.
+
+**Vault Provider commission.** The percentage of BTC a Vault Provider takes from
+a vault's redemption payout. The rate is embedded in the pre-signed payout
+transactions at vault creation.
+
+**WOTS (Winternitz One-Time Signature).** Each vault commits a WOTS public key
+hash at peg-in. The corresponding private key can only be used once and is the
+depositor's authorization for the self-claim path. See
+[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+
+**ZK proof.** A cryptographic proof that a statement is true without revealing
+why. The protocol uses ZK proofs to attest, on Bitcoin, that specific Ethereum
+events occurred on the finalized Ethereum chain. See
+[How it works](/trustless-bitcoin-vault/start-here/how-it-works/).

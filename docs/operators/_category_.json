@@ -1,8 +1,8 @@
 {
-    "label": "BabylonOperators",
-    "position": 1,
-    "link": {
-        "type": "generated-index",
-        "slug": "/operators"
-    }
+  "label": "Node Operators",
+  "position": 1,
+  "link": {
+    "type": "doc",
+    "id": "operators/operators"
+  }
 }

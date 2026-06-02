@@ -1,0 +1,95 @@
+---
+title: Contract Addresses
+sidebar_label: Contract Addresses
+sidebar_position: 2
+---
+
+# Contract Addresses
+
+This page lists the deployed contract addresses for the current Trustless Bitcoin Vault (TBV) Testnet release on **Sepolia** (chain ID `11155111`). Depositors using the Aave v4 Lending Dashboard do not need to interact with contracts directly.
+
+Addresses can change between Testnet releases. Always check this page before sending a transaction or interacting with a contract directly.
+
+## Protocol contracts
+
+Core contracts that manage vault accounting, protocol parameters, and the application registry.
+
+| Contract | Purpose | Address |
+| --- | --- | --- |
+| `BTCVaultRegistry` | Vault lifecycle, state, hashlock and WOTS commitments | [`0xE976a4f2B90E64A9A9374453bC526e67625cC750`](https://sepolia.etherscan.io/address/0xE976a4f2B90E64A9A9374453bC526e67625cC750) |
+| `BTCVaultsMetadataRegistry` | Publishes Vault Provider RPC endpoints | [`0x8F23a8C6Dd0Bd8E55295c60906737fE453626a41`](https://sepolia.etherscan.io/address/0x8F23a8C6Dd0Bd8E55295c60906737fE453626a41) |
+| `ProtocolParams` | Versioned protocol parameters (timelocks, confirmation depth, Security Council keys, off-chain parameters) | [`0x64ccB1F028Ceb186A1f9630C9D58c59E4845CCcB`](https://sepolia.etherscan.io/address/0x64ccB1F028Ceb186A1f9630C9D58c59E4845CCcB) |
+| `ApplicationRegistry` | Lists DeFi applications approved to receive vaults | [`0xC1D604C2221536Ea5811a88f0B8B0367375ef65E`](https://sepolia.etherscan.io/address/0xC1D604C2221536Ea5811a88f0B8B0367375ef65E) |
+| `CapPolicy` | Per-application and per-address BTC exposure caps | [`0x75688dbFe97010bb87B2f764EDf8e65e7924bDBb`](https://sepolia.etherscan.io/address/0x75688dbFe97010bb87B2f764EDf8e65e7924bDBb) |
+| `FeeEscrow` | Collects the peg-in fee and distributes it to participants | [`0xC432348b1e2de21B47977832fc3960f2B58186e1`](https://sepolia.etherscan.io/address/0xC432348b1e2de21B47977832fc3960f2B58186e1) |
+
+## Aave v4 integration contracts
+
+Contracts deployed for the Aave v4 integration.
+
+| Contract | Purpose | Address |
+| --- | --- | --- |
+| `vaultBTC` | ERC-20 internal accounting token, 8 decimals, transfer-restricted to protocol contracts | [`0x5BD51C84244fA23a567970cdaC6f655866E58b07`](https://sepolia.etherscan.io/address/0x5BD51C84244fA23a567970cdaC6f655866E58b07) |
+| `BabylonCoreSpoke` | Dedicated Aave v4 market accepting vaultBTC as collateral | [`0x4B7E02c29367d9f8C1825eD38b3BB6386513A725`](https://sepolia.etherscan.io/address/0x4B7E02c29367d9f8C1825eD38b3BB6386513A725) |
+| `AaveAdapter` | User-facing entry point for TBV-on-Aave operations | [`0xb08dfb1D04373a30A33CA64Ae85061e452E5CeF7`](https://sepolia.etherscan.io/address/0xb08dfb1D04373a30A33CA64Ae85061e452E5CeF7) |
+| `AaveAdapterConfig` | LLP registration, position-size parameters, resolver registration | [`0xC89A41e473951cCB9A114B8f7908E2906E2950fd`](https://sepolia.etherscan.io/address/0xC89A41e473951cCB9A114B8f7908E2906E2950fd) |
+| `AaveAdapterLens` | Read-only state queries (positions, vaults, reserves) | [`0xF76c3E3A7c94E73497fdA00CbcDE56dbdcdDD8da`](https://sepolia.etherscan.io/address/0xF76c3E3A7c94E73497fdA00CbcDE56dbdcdDD8da) |
+| `AaveHub` | Aave v4 Hub central liquidity contract | [`0x6ca0d39f8bD5Cf226878DA80BC073227d6E52C34`](https://sepolia.etherscan.io/address/0x6ca0d39f8bD5Cf226878DA80BC073227d6E52C34) |
+
+## Liquidation Liquidity Provider
+
+The default LLP for vaultBTC liquidations. Other LLPs may be registered over time; the address below is the launch default.
+
+| Contract | Purpose | Address |
+| --- | --- | --- |
+| `BTCVaultSwap` | Default LLP. Escrows seized vaults; pays liquidators WBTC immediately; arbitrageurs later acquire escrowed vaults. | [`0xCaf3DE0ec631e2DEB3b4A33679037488B545f5a2`](https://sepolia.etherscan.io/address/0xCaf3DE0ec631e2DEB3b4A33679037488B545f5a2) |
+
+## Application Vault Keepers (Aave v4 integration)
+
+Registered per application via `BTCVaultRegistry`.
+
+| Operator | ETH address | BTC public key |
+| --- | --- | --- |
+| RockX | [`0x05A4116e57593B1cbcef3C808a447D0F231a9E1e`](https://sepolia.etherscan.io/address/0x05A4116e57593B1cbcef3C808a447D0F231a9E1e) | `0x3f008810e2a03edb7c80005af4324b1eec9adada7846c91885c17ad0e97b1058` |
+| Babylon 0 | [`0xfCfdA934e78c23Aec49adf05996e38E32FDEEAb3`](https://sepolia.etherscan.io/address/0xfCfdA934e78c23Aec49adf05996e38E32FDEEAb3) | `0xa18ab8662c6b11da1efe4af2f42910fe22160c0da8de489ffd4a07ab5035312c` |
+| Babylon 1 | [`0x232A414219d0E6F0B6600dce2b3328f226844d41`](https://sepolia.etherscan.io/address/0x232A414219d0E6F0B6600dce2b3328f226844d41) | `0x346ca66bfaa04da3b0df4ec64b4c6e27fe23017ef404c61e9284ca8e57486d41` |
+
+## Security Council keys
+
+3-of-5 multisig. BTC public keys committed in versioned off-chain parameters.
+
+| # | BTC public key (x-only) |
+| --- | --- |
+| 1 | `0xe436052c6bae804e930ac87f9e71906f598851efb485bc8ddb5beeb4d43379ea` |
+| 2 | `0x7b5ea27fc2e570e50c0b9c83f58370791e6949a2ce4bba7d286c9f4c3e6feb04` |
+| 3 | `0x85269613458b14596641b986325dfd82369e59e885d6888629fc0be987390476` |
+| 4 | `0xf50cce6148cd50b35c9a3e2bf677cf47312bc2b3465485988e55ddc2f7650eef` |
+| 5 | `0xa58d4ff911faa4cd03248e9953d4a401380c4684bbce73ba8d794c7c60f61c3b` |
+
+## Test borrowable assets
+
+Test versions of the borrowable assets supported on Testnet.
+
+| Asset | Decimals | Address |
+| --- | --- | --- |
+| `USDC` (test) | 6 | [`0xB588C1bd8A6cd3F114A52a0AD916778B419ECf48`](https://sepolia.etherscan.io/address/0xB588C1bd8A6cd3F114A52a0AD916778B419ECf48) |
+| `USDT` (test) | 6 | [`0xCFf21358114814258635524588f74521762A6c04`](https://sepolia.etherscan.io/address/0xCFf21358114814258635524588f74521762A6c04) |
+| `WBTC` (test) | 8 | [`0x504579d0424B7B7cB4b17e16626f6A2f67bCa054`](https://sepolia.etherscan.io/address/0x504579d0424B7B7cB4b17e16626f6A2f67bCa054) |
+
+## Read-only query helpers
+
+Functions developers can call to read protocol state without sending a transaction:
+
+* `BTCVaultRegistry.getPegInFee(vaultProvider)` — current peg-in fee for a chosen VP
+* `BTCVaultRegistry.getVaultProviderCommission(vpAddress)` — VP's commission in BPS
+* `BTCVaultRegistry.getBtcVaultBasicInfo(vaultId)` — vault status and basic info
+* `AaveAdapter.getPosition(depositorEOA)` — position summary
+* `AaveAdapterPositionProxy.getUserAccountData()` — health factor and values
+* `AaveAdapterPositionProxy.getReserveTotalDebt(reserveId)` — current debt per reserve
+* `CapPolicy.getAvailableAppCapacity(appEntryPoint)` — remaining application cap
+* `CapPolicy.getAvailableUserAppCapacity(appEntryPoint, user)` — remaining user cap
+
+## Related
+
+* [Setup](./setup.mdx) — wallets, networks, faucets
+* [Protocol parameters](./protocol-parameters.mdx) — current parameter values

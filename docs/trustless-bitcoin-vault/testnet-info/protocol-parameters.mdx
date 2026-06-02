@@ -1,0 +1,118 @@
+---
+title: Protocol parameters
+sidebar_label: Protocol Parameters
+sidebar_position: 3
+---
+
+# Protocol parameters
+
+This page lists the live parameter values for the current Trustless Bitcoin Vault (TBV) public testnet release.
+
+## Participant cheat sheet
+
+Use these values while planning a public-testnet run:
+
+| What you are checking | Current value |
+| --- | --- |
+| Minimum vault size | 0.01 BTC |
+| Maximum vault size | 0.4 BTC |
+| Maximum BTC per position | 0.4 BTC |
+| Maximum vaults per position | 10 |
+| BTC confirmations before setup can complete | 12 signet blocks |
+| Peg-in ACK timeout | ~24 hours |
+| Activation timeout | ~48 hours |
+| Refund timelock | 3 days |
+| Redemption challenge window | ~3 days |
+| vaultBTC collateral factor | 78% |
+| Liquidation threshold | Health factor below 1.0 |
+
+## Vault and position size limits
+
+The public testnet enforces conservative limits on individual vaults, positions, and total application exposure. These limits apply on the current public testnet release and are expected to grow as the protocol matures.
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `minimumPegInAmount` | 0.01 BTC | Minimum BTC accepted for a single vault |
+| `maxPegInAmount` | 0.4 BTC | Maximum BTC accepted for a single vault |
+| `maxPositionBTC` | 0.4 BTC | Maximum total BTC across all vaults in one position |
+| `maxVaultsPerPosition` | 10 | Maximum number of vaults in one position |
+| `maxUserReservesLimit` | 4 | Maximum number of distinct reserves (collateral + borrowed) a position can use |
+| `maxHtlcOutputCount` | 10 | Maximum HTLC outputs in a batched Pre-PegIn transaction (enables multi-vault peg-in in one Bitcoin tx) |
+
+## Application caps (CapPolicy)
+
+Per-application and per-address BTC exposure limits enforced by the `CapPolicy` contract at vault activation. These Testnet limits will grow as the protocol matures.
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `totalCapBTC` (Aave app) | 10 BTC | Maximum total BTC across all users for the Aave v4 application |
+| `perAddressCapBTC` (Aave app) | 0.4 BTC | Maximum BTC per address for the Aave v4 application |
+
+## Peg-in timing
+
+Two distinct timeouts govern the peg-in flow. The activation timeout always exceeds the ACK timeout so the depositor has a window to reveal the activation secret after off-chain setup completes.
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `minPrepeginDepth` | 12 BTC blocks (signet) | Bitcoin confirmations required before ACK signers will sign the Pre-PegIn. |
+| `pegInAckTimeout` | 7200 Ethereum blocks (~24 hours) | Window for all required ACKs to be submitted (off-chain setup completion). If exceeded, the vault expires and the peg-in fee is refunded. |
+| `pegInActivationTimeout` | 14400 Ethereum blocks (~48 hours) | Window from vault creation for the depositor to call `activateVaultWithSecret`. Must exceed `pegInAckTimeout`. If exceeded, the depositor can refund via the Pre-PegIn refund leaf. |
+| `tRefund` | 3 days (BTC blocks) | Atomic-swap Pre-PegIn refund hash timelock. After this elapses, the depositor can sign the refund path on Bitcoin to reclaim the BTC if peg-in stalled. |
+
+## Redemption timelocks
+
+Timelock parameters governing the claim, assert, and challenge windows during peg-out. The total wait from a successful claim to BTC payout is approximately three days, dominated by the challenge window.
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `timelockAssert` | 432 BTC blocks (~3 days) | Challenge window: time for any Universal Challenger (or Application Vault Keeper) to broadcast a `ChallengeAssert` after the claim is posted. |
+| `timelockChallengeAssert` | 108 BTC blocks (~18 hours) | Claimer's disprove window: time for the claimer to broadcast a `WronglyChallenged` transaction after a challenge is raised. |
+
+## Liquidation parameters
+
+Thresholds used by the Aave v4 integration to determine when a position is liquidatable and how much collateral is seized to restore the health factor.
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `collateralFactor` (vaultBTC) | 7800 BPS (78%) | Fraction of vaultBTC collateral value counted toward borrowing capacity |
+| `liquidationThreshold` | 10000 BPS (1.0) | Health factor below which a position becomes liquidatable |
+| `targetHealthFactor` | 1.24e18 WAD (1.24) | Health factor the liquidation process aims to restore. With this target, partial-position liquidation seizes roughly 62% of total BTC value when a position becomes liquidatable. |
+| `maxLiquidationBonus` | 11000 BPS (10% bonus) | Maximum discount on collateral granted to the liquidator. On the current public-testnet configuration (`healthFactorForMaxBonus` ≈ 1.0), this max bonus applies immediately when a position becomes liquidatable; no Dutch-auction scaling. |
+| `healthFactorForMaxBonus` | ~1.0 WAD | Health factor at or below which the max bonus applies |
+| `liquidationBonusFactor` | 10000 BPS | Factor for minimum bonus calculation (max bonus applies immediately on liquidation) |
+| `liquidationFee` | 0 BPS | Structurally zero for vaultBTC collateral. UTXOs cannot be partially extracted, so an Aave-style liquidation fee cannot be applied. |
+
+## Off-chain coordination parameters
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `babeTotalInstances` | 307 | Total garbled circuit instances generated in the BABE cut-and-choose protocol at peg-in |
+| `babeInstancesToFinalize` | 6 | GC instances retained after the cut-and-choose; used during dispute resolution. The remaining 301 are revealed to verify honest construction. |
+| `proverCircuitVersion` | 1 | SP1 prover program (ELF) version; monotonic. |
+| `feeRate` | 2 sat/vB | Bitcoin transaction fee rate used by the protocol on the public testnet. Mainnet values would be higher. |
+| `minPeginFeeRate` | 20 sat/vB | Minimum PegIn transaction fee rate enforced by ACK signers. |
+
+## Security Council
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `councilQuorum` | 3 of 5 (public testnet) | Required signatures for council action (such as `CouncilNoPayout` emergency intervention). |
+
+## Vault Provider commission
+
+Each Vault Provider sets its own commission per vault, taken in BTC from the redemption payout. The commission rate is fixed in the pre-signed Payout transactions at vault creation and cannot change for that vault.
+
+## vaultBTC token
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `name` | BTC Vault | On-chain token name |
+| `symbol` | vaultBTC | On-chain token symbol |
+| `decimals` | 8 | Matches Bitcoin's satoshi precision (1 vaultBTC = 1 BTC = 100,000,000 satoshis) |
+| Transfer restrictions | Restricted to the Aave v4 integration | vaultBTC is not freely transferable. It exists only as an internal accounting unit within the Aave Adapter. |
+
+## Related
+
+* [Setup](./setup.mdx): wallets, networks, faucets, and the Aave v4 Lending Dashboard URL.
+* [Create a vault](../use-for-lending/create-a-vault.mdx): how vault caps and timing apply during peg-in.
+* [Liquidation risk](../use-for-lending/liquidation-risk.mdx): how liquidation parameters affect a participant position.

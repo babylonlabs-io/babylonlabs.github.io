@@ -1,7 +1,11 @@
 {
-    "position": 4,
-    "label": "Wallet Integration",
-    "collapsible": true,
-    "collapsed": true,
-    "className": "wallet_integration_sidebar_header"
+  "position": 4,
+  "label": "Wallet Integration",
+  "collapsible": true,
+  "collapsed": true,
+  "className": "wallet_integration_sidebar_header",
+  "link": {
+    "type": "doc",
+    "id": "developers/bitcoin_staking/wallet_integration/wallet_integration"
+  }
 }

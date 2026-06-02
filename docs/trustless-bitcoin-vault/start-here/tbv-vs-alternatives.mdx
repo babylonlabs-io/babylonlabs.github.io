@@ -1,0 +1,75 @@
+---
+title: TBV vs alternatives
+sidebar_label: TBV Vs Alternatives
+sidebar_position: 3
+---
+
+# TBV vs alternatives
+
+Bringing Bitcoin into DeFi requires moving or representing value that lives on a chain without native smart contracts. The approaches that exist today fall into a few categories. Each category asks the depositor to accept a specific trust assumption when locking BTC. A [Trustless Bitcoin Vault (TBV)](./what-is-tbv.mdx) is a different approach that keeps the BTC on Bitcoin and uses cryptographic proofs to gate its release against Ethereum events.
+
+This page describes the categories that exist today, what each one asks the depositor to trust, and how TBV's design differs structurally.
+
+## Existing categories of approach
+
+### Wrapped Bitcoin tokens with centralized custody
+
+A centralized custodian holds the underlying BTC and issues a token on the destination chain that represents a claim against that custody. The token is what circulates in DeFi; the BTC sits in the custodian's wallet.
+
+The depositor accepts that the custodian remains solvent, retains control of its signing keys, operates a working mint and redeem process, and is willing to honor redemptions. The custodian can freeze the token, refuse a redemption, or be compelled to do either. A custodian compromise or insolvency severs the redemption path.
+
+### Cross-chain bridges
+
+BTC is held under multi-party control, typically a federation of signers using MPC (multi-party computation) or threshold signatures, and a representation token is minted on the destination chain. The depositor's interaction with the BTC is mediated by the bridge.
+
+The depositor accepts that the bridge operators behave honestly, that the bridge's smart-contract code on the destination chain is correct, and that the bridge's key management is sound. The bridge category has a documented history of multi-billion-dollar exploits driven by contract bugs, key compromises, and signer-set takeovers. Once a bridge is exploited, redemption against the original BTC is typically impossible.
+
+## How TBV differs structurally
+
+### The BTC stays in a Bitcoin output
+
+A TBV is a Bitcoin output behind a Taproot script. Each spending path is encoded as a separate Taproot leaf at vault creation. Every legitimate spend is constructed and signed in advance by the depositor and the protocol participants. After the vault is created, no party can fabricate a new spend; the only spends Bitcoin will accept are the ones already encoded in the script.
+
+### Ethereum events are verified inside Bitcoin script
+
+When a vault is redeemed, a zero-knowledge proof of the corresponding Ethereum redemption event is verified inside a Bitcoin Taproot script. Verification uses the BABE construction: garbled circuits and Winternitz One-Time Signature (WOTS) commitments fit inside Bitcoin's existing script capabilities and require no Bitcoin fork.
+
+Bitcoin's own consensus rules enforce that BTC is released only when the matching Ethereum state has occurred.
+
+### The depositor's keys participate in every depositor-controlled release path
+
+The depositor's signatures are required at vault creation, at activation, and on every depositor-controlled release path. A self-claim path using the depositor's WOTS key, plus claimer artifacts downloaded at peg-in, is committed at vault creation. This lets the depositor exit independently if the Vault Provider is offline or unresponsive. A refund hash timelock on the Pre-PegIn output recovers the BTC if activation never completes.
+
+For the participant-facing recovery paths, see [Create a vault](../use-for-lending/create-a-vault.mdx#if-activation-stalls) and [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx#the-self-claim-path-tbv-protocol).
+
+## Comparison of structural properties
+
+| Property | Wrapped Bitcoin tokens | Cross-chain bridges | Trustless Bitcoin Vault |
+| --- | --- | --- | --- |
+| Where the BTC sits | Custodian's wallet | MPC-controlled federation wallet | Bitcoin Taproot output |
+| What represents the BTC on the destination chain | Custodian-issued token | Bridge-minted token | Internal accounting token (Aave Adapter) |
+| Custody model | Centralized | Federated MPC / threshold signatures | Self-custodial |
+| Settlement guarantee | Custodian solvency and willingness to redeem | Bridge contract correctness and operator honesty | Bitcoin script enforcement plus ZK verification of Ethereum events |
+| Exit path if operators disappear | Dependent on custodian process | Dependent on bridge governance | Pre-signed refund and depositor self-claim |
+| Failure mode | Custodian compromise or insolvency | Contract exploit or key compromise | Bitcoin script invariants must hold |
+
+## Why this is possible now
+
+The TBV design depends on three Bitcoin-and-cryptography developments that have only recently matured. The category-defining shift is that trust moves from custody to computation: a Bitcoin holder no longer needs to give BTC to a third party; they need a way to compute and verify proofs.
+
+* **Bitcoin's Taproot upgrade (activated 2021)** introduced multi-leaf script trees and Schnorr signatures. The vault's many legitimate spending paths each live as a separate Taproot leaf; before Taproot, encoding this many paths in a single Bitcoin output was impractical.
+* **BitVM-style constructions (2023+)** showed how to verify arbitrary off-chain computation using only existing Bitcoin script primitives: hashes, signatures, and timelocks.
+* **Practical ZK proof systems (SP1, 2024+)** made it operationally feasible to prove an Ethereum state change quickly and compress the proof to a few hundred bytes for Bitcoin verification.
+* **Babylon's BABE construction (2025+)** is what makes TBV practical. It combines Taproot's pre-signed spending paths, BitVM-style verification, and a succinct SP1 proof of the Ethereum event into a single challenge procedure that Bitcoin can verify using only existing script primitives.
+
+The Bitcoin features TBV depends on, including Taproot, Schnorr signatures, and hash time-locked outputs, have been part of standard Bitcoin consensus for years.
+
+## What this means for the depositor
+
+With a wrapped token or a bridge, the underlying BTC is controlled by a non-Bitcoin entity. The token in the depositor's wallet is a claim against that entity's continued operation.
+
+With TBV, the BTC stays in a Bitcoin output whose every legitimate spend is encoded in script and signed at creation. Release of BTC on Bitcoin is gated by a cryptographic proof of the matching Ethereum event. The depositor's own keys are required on every depositor-controlled path that returns the BTC.
+
+## Cost and latency
+
+TBV's design trades latency for the elimination of custodian trust. Peg-in takes around 2 hours on signet, dominated by Bitcoin confirmations. Peg-out takes around 3 days, dominated by the challenge window during which invalid claims can be disputed. These are longer than centralized wrap and unwrap services, but the depositor never gives custody to an off-Bitcoin entity. Fees are comparable in magnitude to bridge fees and lower than typical centralized wrap services.

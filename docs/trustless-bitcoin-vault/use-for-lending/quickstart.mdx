@@ -1,0 +1,162 @@
+---
+title: Quickstart
+sidebar_label: Quickstart
+sidebar_position: 1
+---
+
+# Quickstart
+
+This walkthrough goes through the **Aave v4 integration** — the first supported DeFi use case for TBV on the public testnet.
+
+This page is the full happy path end to end: connect a wallet, deposit signet BTC, borrow stablecoins, repay, redeem. About 5 minutes of clicking, plus a ~2-hour wait for Bitcoin confirmations during peg-in and a ~3-day challenge window during redemption. Each step links to the matching deep page for full detail.
+
+A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin Network and makes it usable as collateral on Ethereum without bridges or wrapping. The Aave v4 Lending Dashboard drives a full peg-in, borrow, repay, and peg-out cycle end to end.
+
+The public testnet runs on signet, a Bitcoin test network. The BTC and stablecoins involved have no monetary value. Some flows are still under active development; report issues to the team via the channels listed in [Community & support](../reference/community-and-support.mdx).
+
+:::info Public testnet limits
+Each address and each position is capped on the Aave application. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the live numeric limits.
+:::
+
+## Before you start
+
+You need:
+
+* A UniSat Bitcoin wallet that supports signet.
+* An Ethereum wallet on Sepolia.
+* Signet BTC to deposit. Get it from the faucet listed in [Setup](../testnet-info/setup.mdx).
+* A small amount of Sepolia ETH for gas. The same page lists the faucet.
+
+For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup.mdx).
+
+## Step 1: Open the Aave v4 Lending Dashboard
+
+Navigate to the Aave v4 Lending Dashboard URL listed in [Setup](../testnet-info/setup.mdx).
+
+![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-084545.png)
+
+## Step 2: Connect wallets
+
+Click the **Connect** button at the top of the app or on any card.
+
+Important: the Bitcoin wallet must be set to **Taproot (P2TR)** address type before connecting. If a different address type was set initially, switch in the wallet and re-fund from the signet faucet, because different address types do not share balance.
+
+The wallet picker then opens. Select a Bitcoin wallet using a Taproot address type and an Ethereum wallet to sign the on-chain calls.
+
+![Wallet picker](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-084735.png)
+
+## Step 3: Create a vault (peg-in)
+
+A peg-in moves BTC into a vault on Bitcoin and registers it on Ethereum. The BTC stays on Bitcoin throughout, locked in a Taproot output. Nothing is bridged or wrapped.
+
+From the **Collateral** section, click **Deposit**. Then:
+
+**1. Enter the amount in BTC** within the public-testnet caps. See [Protocol parameters](../testnet-info/protocol-parameters.mdx).
+
+![Peg-in deposit amount entry](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-091245.png)
+
+**2. Select a Vault Provider from the dropdown.**
+
+**3. Confirm the Bitcoin and Ethereum transactions.**
+
+![Confirm Bitcoin + Ethereum transactions](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-091308.png)
+
+The app then runs the off-chain setup automatically: authentication, signature collection, acknowledgments. The full walkthrough is on [Create a vault](./create-a-vault.mdx).
+
+The app recommends splitting your deposit into two vaults: a sacrificial vault sized to cover the protocol's expected seizure amount (placed first in liquidation order), and a protected vault holding the rest (placed second). At current public-testnet parameters, the sacrificial vault is the larger of the two. For the order-change UI, see [Reorder BTC vaults](./create-a-vault.mdx#reorder-vaults-later).
+
+When the vault reaches **Verified** status, the app prompts you to **Activate**. Click it. The vault transitions to **Active**, and the protocol automatically supplies it to the lending position.
+
+![Active vault in the Collateral section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-06-activate-prompt.png)
+
+## Step 4: Borrow stablecoins (Aave v4 application layer)
+
+Your vault is already supplied as collateral on the integrated Aave v4 market — minted and supplied automatically when you activated. From this step on, you are interacting with the Aave v4 application layer; the underlying vault on Bitcoin sits unchanged.
+
+Open the **Loans** section and click **Borrow**:
+
+**1. Select an asset: USDC, USDT, or WBTC.**
+
+![Borrow modal — select asset](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-092-20260601-043442.png)
+
+**2. Enter the amount and sign the borrow transaction.**
+
+![Borrow modal — enter amount](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-093-20260601-043515.png)
+
+**3. Confirm the Ethereum transaction.**
+
+![Borrow MetaMask transaction request](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-097-20260601-043549.png)
+
+**4. Wait for the portal to refresh the position preview and health factor.**
+
+![Borrow confirmed](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-100-20260601-043705.png)
+
+![Loan visible in the Loans section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-11-borrow-confirm.png)
+
+The borrowed asset arrives in your Ethereum wallet. The app now shows your **health factor**, a single number summarizing how close the position is to liquidation. A higher number is safer.
+
+## Step 5: Repay the debt (Aave v4 application layer)
+
+To close the position, repay what you borrowed.
+
+From the **Loans** section, click **Repay**:
+
+* **Repay full** closes the entire borrow and unlocks redemption.
+* **Repay partial** pays down a portion; the position stays open with reduced debt.
+
+![Repay form](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-101-20260601-043734.png)
+
+:::info Two MetaMask prompts
+Repaying usually shows an ERC-20 spending cap approval first, then the repayment transaction. Approve a small buffer because interest can accrue while the transaction is pending; any excess stays in your wallet.
+:::
+
+![Repay MetaMask transaction request](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-102-20260601-043800.png)
+
+![Repay confirmed](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/screenshot-105-20260601-043835.png)
+
+Interest accrues continuously until repayment, so the exact amount due is slightly higher than the principal borrowed. After full repayment, the vault is eligible for redemption.
+
+## Step 6: Withdraw and redeem the BTC (peg-out — TBV protocol layer)
+
+Redeeming releases the underlying BTC from the vault back to your Bitcoin wallet. This step crosses back from the Aave v4 application layer into the TBV protocol layer.
+
+From the **Collateral** section, select an **in use** vault and click **Withdraw**.
+
+![Withdraw form — selected vault](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/30-withdraw-selected-vault.jpg)
+
+Review the withdrawal amount, network fee rate, VP commission, and the nominated Bitcoin address.
+
+![Withdraw review screen](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/31-withdraw-review.jpg)
+
+Confirm the Ethereum transaction.
+
+![Withdraw MetaMask transaction request](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/32-withdraw-metamask-transaction-request.jpg)
+
+The redemption then runs in three protocol-side phases:
+
+1. **Claim.** The Vault Provider generates a zero-knowledge proof in the background showing the debt is repaid, then submits a redemption claim on Bitcoin. The app shows progress.
+2. **Challenge period.** A window of about **3 days** opens during which an Application Vault Keeper or Universal Challenger may dispute the claim. If no valid challenge appears, the claim finalizes.
+3. **Payout.** Your BTC arrives at the address recorded in the vault.
+
+![Withdraw processing](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/33-withdraw-processing.jpg)
+
+![Withdraw initiated](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/34-withdraw-initiated.jpg)
+
+![Withdraw pending on dashboard](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/35-withdraw-pending-dashboard.jpg)
+
+The 3-day window is inherent to the proof-verification mechanism.
+
+## If something stalls
+
+Common scenarios and where to look:
+
+* **Pre-PegIn still pending after a few hours:** check the Bitcoin block explorer (see [Setup](../testnet-info/setup.mdx)). If the transaction is propagated but not confirmed, wait — signet block times can be irregular.
+* **Vault stuck in Pending past ~24 hours:** the off-chain setup likely failed. The vault will transition to Expired and your peg-in fee will be refunded. See the refund path on [Create a vault](./create-a-vault.mdx) for BTC recovery.
+* **Wallet won't connect or transaction rejected:** verify the wallet is on the correct network (see [Setup](../testnet-info/setup.mdx) for chain IDs).
+* **Vault Provider not responding during redemption:** the depositor self-claim path applies. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
+
+For anything else, ask in the public-testnet support channel listed on [Community & support](../reference/community-and-support.mdx).
+
+## You've completed a full cycle
+
+Wallets connected, signet BTC locked, internal accounting supplied, stablecoins borrowed, repaid, and BTC recovered.

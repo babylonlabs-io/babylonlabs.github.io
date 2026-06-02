@@ -1,0 +1,68 @@
+---
+title: What is TBV?
+sidebar_label: What Is TBV?
+sidebar_position: 1
+---
+
+# What is TBV?
+
+The Trustless Bitcoin Vaults (TBV) protocol enables Bitcoin holders to use their BTC as collateral in DeFi applications on Ethereum without bridging or wrapping their assets.
+
+TBV is currently running on Bitcoin signet and Ethereum testnet. Funds involved are test-only and have no monetary value. For current Testnet announcements and support channels, see [Community & support](../reference/community-and-support.mdx).
+
+## The problem
+
+**Only ~1% of Bitcoin is used in DeFi.** Bitcoin, the largest asset in crypto, sits mostly idle in DeFi. Existing approaches force the holder to give up custody, accept a bridging step, wrap the asset, or trust intermediaries. These are precisely the trade-offs many Bitcoin holders reject.
+
+**Trustless Bitcoin Vault (TBV)** is Babylon's protocol that lets Bitcoin holders use BTC as collateral in decentralized finance without giving up custody, bridging, wrapping, or trusting an intermediary. Bringing Bitcoin into DeFi through a custodian or cross-chain bridge requires the Bitcoin holder to trust that entity. With TBV, the depositor trusts the protocol's cryptography, the Bitcoin and Ethereum networks, and the application where they deposit collateral instead of a third party that holds the BTC.
+
+The depositor's BTC stays on the Bitcoin Network, held in a Taproot script that the depositor co-signs at creation. An Ethereum-side protocol contract tracks each BTC vault, which is a single Bitcoin output (one UTXO) holding the depositor's locked BTC, and lets an integrated DeFi application use it as collateral.
+
+Cross-chain state transitions are enforced through cryptography, not by a trusted intermediary:
+
+* **Collateral activation** atomically binds the Ethereum-side activation of Bitcoin collateral to the lockup of BTC in the co-signed Taproot script that holds the vault's BTC.
+* **Collateral redemption** uses a BABE-based challenge procedure that lets Bitcoin verify proofs of Ethereum redemption events using only existing Bitcoin Script primitives. No Bitcoin fork is required.
+
+The trust assumption is the protocol's cryptography, not an intermediary's solvency.
+
+![TBV flow: BTC locked on Bitcoin, ZK proof verification, vaultBTC accounting on Ethereum, Aave v4 borrowing, and repayment back to Bitcoin](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV1-flow.png)
+
+## What a vault is — and what it is not
+
+In DeFi the word "vault" usually means a capital pool: many users deposit into one shared contract and share returns or risks. A Trustless Bitcoin Vault returns to the original meaning of "vault" — closer to the secure compartment in a bank than to a DeFi capital pool. Each vault is a **segregated**, depositor-owned Bitcoin output. Three properties define it:
+
+* **The BTC is locked in a Bitcoin script that the depositor co-signed.** Every legitimate spending path is signed at vault creation by the depositor and the protocol participants. After that, no party can fabricate a new spend.
+* **BTC in different vaults is segregated.** A vault is one UTXO and one set of pre-signed exit paths. Vaults are not pooled.
+* **No one can rehypothecate the BTC.** The protocol contracts cannot move the BTC out of the script, lend it elsewhere, or repurpose it. The collateral does only what the script allows.
+
+## The trust model, before and after
+
+Bringing Bitcoin into DeFi using a custodian or a bridge requires the depositor to trust at least one party beyond the chains themselves: the custodian who holds the BTC, or the operators of the bridge. A custodian compromise or a bridge exploit severs the depositor's claim on the original BTC.
+
+TBV's structure is different. Trust moves from custody to computation. The depositor's BTC stays in a Bitcoin output whose every legitimate spend is encoded in script and pre-signed at vault creation. Release of BTC on Bitcoin is gated by a cryptographic proof of the matching Ethereum event, verified inside Bitcoin Script.
+
+With TBV, the trust set is shorter:
+
+* Trust in the **Bitcoin Network** and in the Bitcoin script the depositor co-signed at vault creation.
+* Trust in the **Ethereum network** and in the target DeFi smart contract.
+
+Beyond the chains themselves, residual trust sits with the protocol's governance and emergency-response multi-sigs — transitional safety nets that the protocol can retire over time. There is no custodian, no bridge contract holding the BTC, and no federation of signers required to release funds. The depositor's own keys participate at every depositor-controlled release path, so the depositor can redeem BTC trustlessly without requiring another party to cooperate.
+
+## Two layers
+
+**The TBV protocol and the DeFi applications on top.**
+
+![TBV two-layer model: TBV protocol layer under Aave v4 lending and future DeFi applications](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV2-LAYERS.png)
+
+* **The TBV protocol.** The core collateral protocol. It owns vault creation (peg-in), vault redemption (peg-out), the BABE-based proof-verification flow, and vault state.
+* **DeFi applications on top.** Each integrated application defines its own product — lending, stablecoins, options, insurance — and is responsible for its own borrowing, liquidation, and reward logic. The first application is **Aave v4 lending**.
+
+Each BTC vault is created for one specific application at vault creation. The protocol is designed for multiple applications, but a vault is bound to its application from creation and cannot be moved between applications. Future application integrations would each integrate through their own adapter and receive their own vaults.
+
+On Testnet today, only the Aave v4 lending application is live. Most user-facing pages in these docs ([Borrow & repay](../use-for-lending/borrow-and-repay.mdx), [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx), [Liquidation risk](../use-for-lending/liquidation-risk.mdx)) describe how things work specifically within that integration. [How it works](./how-it-works.mdx) describes the TBV protocol flow at a higher level.
+
+## What you can test today
+
+On the open public testnet, a depositor with an active vault can test borrowing stablecoins (USDC, USDT) or WBTC against it. The collateral is signet BTC, the borrowed assets are mock tokens on Sepolia, and both carry no monetary value. This is a testing environment for trustless Bitcoin DeFi end to end. After repayment, the vault is withdrawn and the signet BTC is released back to the depositor's Bitcoin address.
+
+Multiple vaults can combine into a single borrowing position. The protocol seizes a prefix of the ordered vault list, sized to cover the target seizure. The mechanism is explained on [Liquidation risk](../use-for-lending/liquidation-risk.mdx).

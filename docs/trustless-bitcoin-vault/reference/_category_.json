@@ -1,0 +1,10 @@
+{
+  "label": "Reference",
+  "position": 6,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Glossary and support information for the TBV public testnet."
+  }
+}
