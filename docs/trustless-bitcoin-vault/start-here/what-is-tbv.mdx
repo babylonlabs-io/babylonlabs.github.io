@@ -52,14 +52,14 @@ Beyond the chains themselves, residual trust sits with the protocol's governance
 
 **The TBV protocol and the DeFi applications on top.**
 
-![TBV two-layer model: TBV protocol layer under Aave v4 lending and future DeFi applications](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV2-LAYERS.png)
+![TBV two-layer model: TBV protocol layer under Aave v4 borrowing and future DeFi applications](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV2-LAYERS.png)
 
 * **The TBV protocol.** The core collateral protocol. It owns vault creation (peg-in), vault redemption (peg-out), the BABE-based proof-verification flow, and vault state.
-* **DeFi applications on top.** Each integrated application defines its own product — lending, stablecoins, options, insurance — and is responsible for its own borrowing, liquidation, and reward logic. The first application is **Aave v4 lending**.
+* **DeFi applications on top.** Each integrated application defines its own product — lending, stablecoins, options, insurance — and is responsible for its own borrowing, liquidation, and reward logic. The first application is the **Aave v4 borrowing integration**.
 
 Each BTC vault is created for one specific application at vault creation. The protocol is designed for multiple applications, but a vault is bound to its application from creation and cannot be moved between applications. Future application integrations would each integrate through their own adapter and receive their own vaults.
 
-On Testnet today, only the Aave v4 lending application is live. Most user-facing pages in these docs ([Borrow & repay](../use-for-lending/borrow-and-repay.mdx), [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx), [Liquidation risk](../use-for-lending/liquidation-risk.mdx)) describe how things work specifically within that integration. [How it works](./how-it-works.mdx) describes the TBV protocol flow at a higher level.
+On Testnet today, only the Aave v4 borrowing integration is live. Most user-facing pages in these docs ([Borrow & repay](../use-for-lending/borrow-and-repay.mdx), [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx), [Liquidation risk](../use-for-lending/liquidation-risk.mdx)) describe how things work specifically within that integration. [How it works](./how-it-works.mdx) describes the TBV protocol flow at a higher level.
 
 ## What you can test today
 

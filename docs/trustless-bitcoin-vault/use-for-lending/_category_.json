@@ -1,10 +1,10 @@
 {
-  "label": "Use TBV Testnet For Lending",
+  "label": "Use TBV Testnet For Borrowing",
   "position": 4,
   "collapsible": true,
   "collapsed": true,
   "link": {
     "type": "generated-index",
-    "description": "Depositor critical path for the Aave v4 integration on TBV: step-by-step walkthroughs from the first peg-in to redeeming BTC."
+    "description": "Borrower critical path for the Aave v4 integration on TBV: step-by-step walkthroughs from the first peg-in to redeeming BTC."
   }
 }
