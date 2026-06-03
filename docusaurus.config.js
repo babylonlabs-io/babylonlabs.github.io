@@ -119,26 +119,10 @@ const plugins = [
           from: '/guides/overview/bitcoin-vault/',
           to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
         },
-        // Phase-2 TBV docs are kept off the public-testnet release path
+        // Legacy TBV aliases
         {
           from: '/trustless-bitcoin-vault/tbv-vs-alternatives/',
           to: '/trustless-bitcoin-vault/start-here/tbv-vs-alternatives/',
-        },
-        {
-          from: '/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/',
-          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
-        },
-        {
-          from: '/trustless-bitcoin-vault/technical-details/protocol-architecture/',
-          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
-        },
-        {
-          from: '/trustless-bitcoin-vault/technical-details/protocol-actors/',
-          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
-        },
-        {
-          from: '/trustless-bitcoin-vault/technical-details/aave-v4-integration/',
-          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
         },
         // Staking research/security moved under Bitcoin Staking
         {
