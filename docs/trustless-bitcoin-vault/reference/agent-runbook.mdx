@@ -44,7 +44,7 @@ Before wallet-affecting actions, confirm:
 * borrow amount and asset
 * full or partial repay intent
 * fresh run or resume
-* whether recovery artifacts should be downloaded before activation
+* whether recovery artifacts must be downloaded before activation
 
 Do not invent default amounts for wallet actions. If funded test assets are missing, pause and ask the user to fund through the public Testnet faucet process.
 
@@ -58,12 +58,13 @@ Do not invent default amounts for wallet actions. If funded test assets are miss
 6. Complete UniSat and Ethereum wallet signing steps.
 7. Wait for Bitcoin confirmations and provider-side verification.
 8. Complete payout and recovery signing checkpoints when prompted.
-9. Download recovery artifacts if requested.
-10. Activate the vault.
+9. Download and back up recovery artifacts before activation, or explicitly confirm that skipping them removes the depositor self-claim fallback.
+10. Activate the vault only after the artifact checkpoint is complete.
 11. Borrow the confirmed asset and amount.
 12. Repay the intended amount, using max/full only when requested.
-13. Select the relevant vault row if withdraw controls are disabled.
-14. Initiate withdraw and record the final app-side state.
+13. If repayment was partial, stop and record the updated position unless the user separately confirms a partial collateral withdrawal, target vault subset, and acceptable post-withdrawal health factor.
+14. If debt is fully repaid, select the relevant vault row if withdraw controls are disabled.
+15. Initiate withdraw and record the final app-side state.
 
 Report app-side withdraw initiation separately from BTC-side settlement. `Withdraw Initiated`, `Pending Withdraw`, and final Bitcoin payout are different states.
 
