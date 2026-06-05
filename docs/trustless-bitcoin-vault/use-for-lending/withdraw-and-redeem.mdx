@@ -14,7 +14,7 @@ Redemption (peg-out) is the reverse of vault creation. It unlocks the bitcoin si
 
 You have two routes to recover your BTC:
 
-* **Normal exit.** Repay any outstanding debt, withdraw the vault from your lending position, and let the Vault Provider drive the Bitcoin claim. This is the common path.
+* **Normal exit.** Repay any outstanding debt, withdraw the vault from your borrowing position, and let the Vault Provider drive the Bitcoin claim. This is the common path.
 * **Depositor self-claim.** Broadcast the Bitcoin claim yourself using the Winternitz One-Time Signature (WOTS) key and claimer artifacts committed at vault creation, via the protocol's `watchtower` CLI tool. Use this if the Vault Provider is offline, slow, or refuses to act.
 
 A third path exists but is not under your control: **liquidation redemption**. If your position is liquidated, the seized vault is redeemed by the liquidator, not by you. See [Liquidation risk](./liquidation-risk.mdx).
@@ -73,7 +73,7 @@ From the portal:
 2. Each withdrawn vault transitions from `InUse` to `Available`, then on to `Redeemed`. `withdrawCollaterals` always starts redemption — vaults cannot be withdrawn into Available status and held there for later re-supply.
 3. The contract emits two `VaultClaimableBy` events per vault: one naming the Vault Provider's BTC public key as claimer, and one naming your BTC public key. The second event is what enables self-claim.
 
-From the depositor's point of view, `withdrawCollaterals` is a single transaction that removes vaults from the lending position and starts the Bitcoin claim.
+From the depositor's point of view, `withdrawCollaterals` is a single transaction that removes vaults from the borrowing position and starts the Bitcoin claim.
 
 ## Step 3: Wait for the challenge period
 
@@ -129,7 +129,7 @@ If you lose *both* the WOTS file and the artifacts, and the Vault Provider is al
 
 ## What happens to vaultBTC
 
-vaultBTC is an accounting token. It exists only while your BTC is supplying a lending position.
+vaultBTC is an accounting token. It exists only while your BTC is backing a borrowing position.
 
 * When you withdraw a vault, the corresponding vaultBTC is burned in the same transaction.
 * Total vaultBTC supply always equals BTC currently held as active collateral across all positions in the integration.
@@ -157,7 +157,7 @@ The Ethereum-side actions complete in minutes. The Bitcoin-side challenge window
 
 **A challenge is raised against your claim.** If the claim is legitimate, the claimer (Vault Provider or you, in self-claim) broadcasts `WronglyChallenged` to disprove the challenge. The challenger forfeits a bond. The payout proceeds.
 
-**You cannot find the vault ID or position details.** Look up the position on the Aave v4 Lending Dashboard Collateral or Loans section. Programmatically, query `getPosition()` on the AaveAdapter with your address, or look up the vault registry by your depositor address.
+**You cannot find the vault ID or position details.** Look up the position in the TBV Testnet app's Collateral or Loans section. Programmatically, query `getPosition()` on the AaveAdapter with your address, or look up the vault registry by your depositor address.
 
 ## Related pages
 

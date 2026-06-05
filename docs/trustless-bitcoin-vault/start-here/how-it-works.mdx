@@ -36,7 +36,7 @@ Two safety properties are built into the peg-in flow:
 
 ## Activating a vault as collateral in Aave v4
 
-An active vault is automatically supplied as collateral on the application chosen at peg-in. On activation, the BTC Vault Manager notifies the Aave v4 Adapter. The adapter mints an internal accounting token (**vaultBTC**) for the vault's BTC amount and supplies it to the **Babylon Core Spoke**, the dedicated Aave v4 market that accepts vaultBTC as collateral. The vault is appended to the depositor's lending position; subsequent activations add to the same position.
+An active vault is automatically supplied as collateral on the application chosen at peg-in. On activation, the BTC Vault Manager notifies the Aave v4 Adapter. The adapter mints an internal accounting token (**vaultBTC**) for the vault's BTC amount and supplies it to the **Babylon Core Spoke**, the dedicated Aave v4 market that accepts vaultBTC as collateral. The vault is appended to the depositor's borrowing position; subsequent activations add to the same position.
 
 A BTC vault is created for one specific application at peg-in and cannot be moved between applications later. The protocol is designed to support multiple applications, but each requires its own adapter and its own vaults; integration is not "out of the box".
 
@@ -56,7 +56,7 @@ With a single-vault position, any liquidation seizes the whole collateral backin
 
 When a depositor is done with a vault, or when liquidation triggers, the vault enters the redemption flow on Bitcoin. The Bitcoin side knows only "redeem": the application layer translates withdrawal after repayment or liquidation into the redeem call. There are two main paths and one safety fallback.
 
-**Path 1: withdrawal after repayment.** After repaying the loan, the depositor withdraws the vault from the lending position. This burns the corresponding vaultBTC and triggers vault redemption on the Bitcoin side. The protocol contracts emit a redemption event for the depositor to withdraw the vault on Ethereum, the Vault Provider submits a claim transaction on Bitcoin, and after the challenge period ends, the BTC is released to the depositor's Bitcoin address (minus the Vault Provider's commission).
+**Path 1: withdrawal after repayment.** After repaying the debt, the depositor withdraws the vault from the borrowing position. This burns the corresponding vaultBTC and triggers vault redemption on the Bitcoin side. The protocol contracts emit a redemption event for the depositor to withdraw the vault on Ethereum, the Vault Provider submits a claim transaction on Bitcoin, and after the challenge period ends, the BTC is released to the depositor's Bitcoin address (minus the Vault Provider's commission).
 
 **Path 2: liquidation.** If the position's health factor drops below 1.0, anyone can call the liquidation function on Ethereum. The liquidator repays part of the debt and the protocol seizes the necessary vaults. The seized vaults then enter the same redemption flow, with the claimer being a registered Application Vault Keeper (an arbitrageur in the Aave integration) who may or may not also be the liquidator that triggered the seizure. The over-seized value is returned to the depositor either as additional debt repayment on their behalf (the common case during partial-position liquidation) or, on full-position liquidation when all debt is covered, paid in WBTC. See [Liquidation risk](../use-for-lending/liquidation-risk.mdx).
 

@@ -10,7 +10,7 @@ This walkthrough goes through the **Aave v4 integration** — the first supporte
 
 This page is the full happy path end to end: connect a wallet, deposit signet BTC, borrow stablecoins, repay, redeem. About 5 minutes of clicking, plus a ~2-hour wait for Bitcoin confirmations during peg-in and a ~3-day challenge window during redemption. Each step links to the matching deep page for full detail.
 
-A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin Network and makes it usable as collateral on Ethereum without bridges or wrapping. The Aave v4 Lending Dashboard drives a full peg-in, borrow, repay, and peg-out cycle end to end.
+A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin Network and makes it usable as collateral on Ethereum without bridges or wrapping. The TBV Testnet app drives a full peg-in, borrow, repay, and peg-out cycle end to end.
 
 The public testnet runs on signet, a Bitcoin test network. The BTC and stablecoins involved have no monetary value. Some flows are still under active development; report issues to the team via the channels listed in [Community & support](../reference/community-and-support.mdx).
 
@@ -29,9 +29,9 @@ You need:
 
 For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup.mdx).
 
-## Step 1: Open the Aave v4 Lending
+## Step 1: Open the TBV Testnet app
 
-Navigate to the Aave v4 Lending Dashboard URL listed in [Setup](../testnet-info/setup.mdx).
+Navigate to the TBV Testnet app URL listed in [Setup](../testnet-info/setup.mdx).
 
 ![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-084545.png)
 
@@ -65,7 +65,7 @@ The app then runs the off-chain setup automatically: authentication, signature c
 
 The app recommends splitting your deposit into two vaults: a sacrificial vault sized to cover the protocol's expected seizure amount (placed first in liquidation order), and a protected vault holding the rest (placed second). At current public-testnet parameters, the sacrificial vault is the larger of the two. For the order-change UI, see [Reorder BTC vaults](./create-a-vault.mdx#reorder-vaults-later).
 
-When the vault reaches **Verified** status, the app prompts you to **Activate**. Click it. The vault transitions to **Active**, and the protocol automatically supplies it to the lending position.
+When the vault reaches **Verified** status, the app prompts you to **Activate**. Click it. The vault transitions to **Active**, and the protocol automatically supplies it as collateral to your borrowing position.
 
 ![Active vault in the Collateral section](/img/trustless-bitcoin-vault/use-for-lending/quickstart-06-activate-prompt.png)
 
@@ -159,4 +159,4 @@ For anything else, ask in the public-testnet support channel listed on [Communit
 
 ## You've completed a full cycle
 
-Wallets connected, signet BTC locked, internal accounting supplied, stablecoins borrowed, repaid, and BTC recovered.
+Wallets connected, signet BTC locked, collateral activated, stablecoins borrowed, repaid, and BTC recovered.

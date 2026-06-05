@@ -10,7 +10,7 @@ This page describes borrow and repay flows on the **Aave v4 integration** — th
 
 This page covers borrowing USDC, USDT, or WBTC against an active vault, how interest accrues, and how to repay. The vault creation step that comes before is on [Create a vault](./create-a-vault.mdx). The redemption step that comes after is on [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
-An activated vault becomes usable collateral automatically: the activation transaction moves the vault to `InUse` and the contracts mint and supply the corresponding vaultBTC to the lending market. From there, the day-to-day life of a position is the standard DeFi borrow-and-repay loop, with vault-specific behaviour around collateral structure and liquidation. This page is the operating guide for that loop.
+An activated vault becomes usable collateral automatically: the activation transaction moves the vault to `InUse` and the contracts mint and supply the corresponding vaultBTC to the Aave v4 market. From there, the day-to-day life of a position is the standard DeFi borrow-and-repay loop, with vault-specific behaviour around collateral structure and liquidation. This page is the operating guide for that loop.
 
 :::info Public-testnet caps
 Public-testnet caps on per-address total collateral and per-position vault count apply. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the live numeric limits.
@@ -136,11 +136,11 @@ After all debt is repaid across all asset reserves, the position is eligible to 
 
 To grow a position over time, add more vaults.
 
-Create and activate another vault. Once the activation transaction succeeds, the contract mints the additional vaultBTC and supplies it to the same lending position automatically.
+Create and activate another vault. Once the activation transaction succeeds, the contract mints the additional vaultBTC and supplies it to the same borrowing position automatically.
 
 Activating another vault:
 
-* Mints additional vaultBTC and supplies it to the lending market.
+* Mints additional vaultBTC and supplies it to the Aave v4 market.
 * Increases the position's collateral value.
 * Raises the health factor.
 
