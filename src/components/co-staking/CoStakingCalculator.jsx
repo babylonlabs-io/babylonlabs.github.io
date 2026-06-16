@@ -8,7 +8,9 @@ const SATOSHIS_PER_BTC = 100000000; // 1 BTC = 100,000,000 satoshis
 const UBBN_PER_BABY = 1000000; // 1 BABY = 1,000,000 ubbn (micro BBN)
 
 // API endpoints
-const COSTAKING_API_BASE = 'https://babylon-archive-api.polkachu.com';
+// Use the public (non-archive) Polkachu LCD: it sends `Access-Control-Allow-Origin: *`,
+// which the archive endpoint does not, so browser fetches from the docs site aren't blocked by CORS.
+const COSTAKING_API_BASE = 'https://babylon-api.polkachu.com';
 const COSTAKING_REWARDS_API = `${COSTAKING_API_BASE}/babylon/costaking/v1/current_rewards`;
 
 const getAPIBaseURL = () => COSTAKING_API_BASE;
