@@ -41,17 +41,6 @@ jobs:
           node-version: '22.3'
           cache: 'npm'
 
-      - name: Extract branch name
-        id: extract_branch
-        run: |
-          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
-            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          elif [[ "${GITHUB_REF}" == "refs/pull/"* ]]; then
-            echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
-          else
-            echo "BRANCH_NAME=unknown" >> $GITHUB_ENV
-          fi
-
       # Navigate to the correct working directory and install dependencies
       - name: Install dependencies
         working-directory: ./
@@ -63,7 +52,11 @@ jobs:
         env:
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_API_KEY_READONLY: ${{ secrets.ALGOLIA_API_KEY_READONLY }}
-          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+          # Select the Algolia index from the target environment (matrix.branch),
+          # not the triggering git ref. Each matrix job builds the artifact for a
+          # specific environment/bucket, so the index must match that environment:
+          # main -> production index, dev -> dev index.
+          BRANCH_NAME: ${{ matrix.branch }}
           TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
         run: |
