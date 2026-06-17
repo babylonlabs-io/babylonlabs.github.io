@@ -5,23 +5,13 @@ sidebar_position: 3
 
 # Agent runbook
 
-This page is for AI and automation agents working with the Babylon Trustless Bitcoin Vault (TBV) public Testnet. It summarizes the public workflow, safety boundaries, and evidence expectations for agents that operate either through a browser with wallets or through BabyTester CLI UATs.
+This page is for browser and computer-use agents helping a user operate the Babylon Trustless Bitcoin Vault (TBV) public Testnet app.
 
-Use this only for public Testnet flows on Bitcoin signet and Ethereum Sepolia. Do not use it for mainnet funds, wallet creation, seed handling, faucet account management, or private deployment operations.
+Use it only for the public Testnet flow on Bitcoin signet and Ethereum Sepolia. Do not use it for mainnet funds, wallet creation, seed handling, faucet account management, or anything outside the public app flow.
 
-## Safety boundaries
+## Target
 
-Agents must:
-
-* Use only `https://btc-vaults.testnet.babylonlabs.io/` for browser testing.
-* Treat wallet prompts as real user-profile actions, even when assets are testnet-only.
-* Stop before confirming if the wallet domain, network, contract, amount, or action differs from the expected TBV Testnet flow.
-* Never request, store, repeat, screenshot intentionally, or commit seed phrases, private keys, passwords, wallet unlock material, cookies, or recovery artifact contents.
-* Record recovery artifact file paths only. Do not copy artifact contents into notes, chat logs, repos, or tickets.
-
-## Public Testnet target
-
-Use the values from [Setup](../testnet-info/setup.mdx) as canonical. At a high level:
+Use the values from [Setup](../testnet-info/setup.mdx) as canonical.
 
 | Item | Value |
 | --- | --- |
@@ -32,104 +22,116 @@ Use the values from [Setup](../testnet-info/setup.mdx) as canonical. At a high l
 | Bitcoin explorer | `https://mempool.space/signet` |
 | Ethereum explorer | `https://sepolia.etherscan.io/` |
 
-The Bitcoin wallet must use Taproot (P2TR) before connecting. UniSat on signet is the documented browser-wallet path. Ethereum wallet actions occur on Sepolia.
+## Wallet setup
 
-## Browser and computer-use agents
+The user must bring already-created wallets. Agents must not create wallets, request seed phrases, request private keys, or ask for wallet passwords.
 
-Browser agents should use the user's real Chrome profile when wallet extensions are required. Clean automation profiles generally cannot operate installed UniSat or MetaMask sessions, and extension popups often require desktop-control tooling.
+Before starting, confirm:
 
-Before wallet-affecting actions, confirm:
+* the Bitcoin wallet is on signet
+* the Bitcoin wallet is using Taproot (P2TR)
+* the Ethereum wallet is on Sepolia
+* both wallets are funded with the required Testnet assets
+* the browser is using the user's intended wallet-extension profile
 
-* deposit amount
-* borrow amount and asset
-* full or partial repay intent
-* fresh run or resume
-* whether recovery artifacts must be downloaded before activation
+UniSat on signet is the documented Bitcoin browser-wallet path. Ethereum wallet actions occur on Sepolia.
 
-Do not invent default amounts for wallet actions. If funded test assets are missing, pause and ask the user to fund through the public Testnet faucet process.
+## Allowed actions
 
-### Expected browser lifecycle
+Agents may help the user perform only user-confirmed public Testnet actions:
+
+* connect the Bitcoin wallet
+* connect the Ethereum wallet
+* create a vault with a user-confirmed BTC amount
+* complete visible wallet signing prompts after checking the domain, network, and action
+* download recovery artifacts when the app offers them
+* activate a verified vault
+* borrow a user-confirmed asset and amount
+* repay a user-confirmed amount, using max or full repay only when requested
+* initiate withdraw only after the debt state and selected vault are clear
+
+Do not invent default amounts. Before any wallet-affecting action, confirm the exact deposit, borrow, repay, or withdraw intent with the user.
+
+## Stop conditions
+
+Stop and ask the user before proceeding if:
+
+* the app URL is not `https://btc-vaults.testnet.babylonlabs.io/`
+* a wallet prompt shows a different domain, network, contract, amount, or action than expected
+* the Bitcoin wallet is not on signet or not using Taproot
+* the Ethereum wallet is not on Sepolia
+* the requested action would use mainnet funds
+* the user has not confirmed the amount or asset
+* the app state differs from the expected public Testnet flow
+* the agent cannot inspect a wallet prompt clearly
+* funded Testnet assets are missing
+
+If repayment is partial, stop after the repayment and report the updated position unless the user separately confirms a partial collateral withdrawal, target vault subset, and acceptable post-withdrawal health factor.
+
+## Recovery artifacts
+
+Recovery artifacts are sensitive user-controlled files.
+
+Agents must:
+
+* download and back up recovery artifacts before activation when the user wants depositor self-claim fallback
+* explicitly confirm with the user before skipping artifact download
+* explain that skipping artifacts can remove the depositor self-claim fallback if the Vault Provider is later unavailable
+* record artifact file paths only
+* never copy artifact contents into chat, notes, tickets, screenshots, logs, or repositories
+
+Activate the vault only after the artifact checkpoint is complete or the user explicitly confirms they want to continue without that fallback.
+
+## Browser flow
 
 1. Open the TBV Testnet app.
-2. Inspect current app state before starting or resuming.
+2. Inspect the current app state before starting or resuming.
 3. Connect the Bitcoin wallet on signet using Taproot.
 4. Connect the Ethereum wallet on Sepolia.
-5. Create a vault with the confirmed deposit amount.
-6. Complete UniSat and Ethereum wallet signing steps.
+5. Create a vault with the confirmed BTC amount.
+6. Complete wallet signing prompts only after checking the visible details.
 7. Wait for Bitcoin confirmations and provider-side verification.
-8. Complete payout and recovery signing checkpoints when prompted.
-9. Download and back up recovery artifacts before activation, or explicitly confirm that skipping them removes the depositor self-claim fallback.
-10. Activate the vault only after the artifact checkpoint is complete.
+8. Complete any visible payout or recovery signing checkpoints.
+9. Download recovery artifacts, or get explicit confirmation to continue without them.
+10. Activate the vault.
 11. Borrow the confirmed asset and amount.
-12. Repay the intended amount, using max/full only when requested.
-13. If repayment was partial, stop and record the updated position unless the user separately confirms a partial collateral withdrawal, target vault subset, and acceptable post-withdrawal health factor.
-14. If debt is fully repaid, select the relevant vault row if withdraw controls are disabled.
-15. Initiate withdraw and record the final app-side state.
+12. Repay the confirmed amount.
+13. If the debt is fully repaid, select the relevant vault row if withdraw controls are disabled.
+14. Initiate withdraw only when the selected vault and debt state are clear.
+15. Record the final app-side state.
 
-Report app-side withdraw initiation separately from BTC-side settlement. `Withdraw Initiated`, `Pending Withdraw`, and final Bitcoin payout are different states.
+Report app-side withdraw initiation separately from Bitcoin-side settlement. `Withdraw Initiated`, `Pending Withdraw`, and final Bitcoin payout are different states.
 
-### Resume guidance
+## Resume guidance
 
 Inspect before acting. A resumed peg-in can be safer than starting over.
 
-* If a pending deposit shows a signing-required state, continue with payout or recovery signing.
+* If a pending deposit shows a signing-required state, continue only after confirming the visible prompt details.
 * If the app shows provider verification or ACK collection, wait and refresh before retrying actions.
 * Ready to activate is not active collateral; activation still requires an Ethereum transaction.
 * If debt is repaid but withdraw is unavailable, check whether the target vault row must be selected.
 
-## BabyTester CLI agents
+## Evidence
 
-BabyTester is the UAT executor for TBV lifecycle validation. Use only public-facing commands and behavior from BabyTester when preparing agent instructions. It supports ad-hoc CLI runs, scheduled server mode, SQLite persistence, read-only HTTP APIs, and a dashboard showing UAT status, runs, step timelines, evidence, and logs.
+For browser runs, create a dated evidence folder and capture screenshots:
 
-Public CLI commands:
+* before critical wallet approvals, without exposing secrets
+* after success modals
+* before activation
+* after activation
+* after repay
+* on the final dashboard state
 
-```bash
-pnpm dev -- list
-pnpm dev -- test pegin --verbose
-pnpm dev -- test --all
-pnpm dev -- test --all --parallel --concurrency 2
-pnpm dev -- serve --config environments/devnet.toml --verbose
-pnpm dev -- serve --no-scheduler --verbose
-```
+Final reports should include:
 
-Use environment files only by named reference. Do not publish or paste private key variables, RPC credentials, deployment secrets, or private `.env` content.
-
-BabyTester stores run results and logs locally and writes JSON/Markdown reports under `results/`. Its API listens on `http://127.0.0.1:3100` by default and exposes public run-inspection surfaces such as health, UAT list, run list, run detail, and logs.
-
-### Public UAT surfaces
-
-BabyTester exposes UAT modules for:
-
-* `pegin`: end-to-end vault creation, WOTS generation, Ethereum registration, Bitcoin transaction submission, presigning, verification, and activation.
-* `batch-pegin`: multi-vault peg-in flow.
-* `lending-flow`: active collateral, borrow, interest accrual, repay, max repay, and over-repay refund behavior.
-* `pegout-happy-path`: repay debt, withdraw collateral, redeem vaults, and monitor peg-out.
-* peg-out challenge paths: wrongly challenged and challenger-wins scenarios.
-* liquidation paths: Vault Swap liquidation, fairness checks, direct redemption, and BTC payout monitoring.
-* `vault-reordering`: position vault-order updates and on-chain ordering verification.
-* `cap-policy`: cap read paths, cap lowering, activation effects, and auto-redeem behavior.
-* pause/freeze state machines for protocol-level and application-level controls.
-* AML early-reject behavior.
-
-## Evidence expectations
-
-For browser runs, create a dated evidence folder and capture screenshots before critical wallet approvals, after success modals, before activation, after activation, after repay, and on the final dashboard state.
-
-For CLI runs, preserve the BabyTester run ID, command, selected UAT name, environment name, report path, and relevant transaction hashes.
-
-Final reports should state whether these passed:
-
-* deposit activation
-* borrow
-* repay, including full or partial
-* withdraw initiation, if attempted
-
-Also include:
-
-* evidence folder or report path
+* whether deposit activation passed
+* whether borrow passed
+* whether repay passed, including full or partial
+* whether withdraw initiation was attempted
+* evidence folder path
 * recovery artifact path, if downloaded
 * any wallet/app divergence from the expected path
-* whether BTC-side settlement is still pending
+* whether Bitcoin-side settlement is still pending
 
 ## Related pages
 
