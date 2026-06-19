@@ -265,6 +265,7 @@ const sidebars = {
         'trustless-bitcoin-vault/start-here/what-is-tbv',
         'trustless-bitcoin-vault/start-here/how-it-works',
         'trustless-bitcoin-vault/start-here/tbv-vs-alternatives',
+        'trustless-bitcoin-vault/start-here/safety-and-trust-assumptions',
       ],
     },
     {
@@ -281,7 +282,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Use TBV Testnet For Lending',
+      label: 'Use TBV Testnet For Borrowing',
       collapsible: true,
       collapsed: true,
       className: 'btc_stakers_sidebar_header',

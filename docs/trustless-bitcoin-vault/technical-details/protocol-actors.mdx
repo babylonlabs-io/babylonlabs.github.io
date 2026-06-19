@@ -120,7 +120,7 @@ Council keys and quorum thresholds are set through `ProtocolParams` as versioned
 
 The protocol mixes permissioned and permissionless surfaces:
 
-* **Fraud monitoring.** Anyone can monitor for fraudulent claims by running a watcher and checking Ethereum-side events. Broadcasting an on-chain challenge requires being a registered Universal Challenger in the current `ProtocolParams` set; the registry is governed at the protocol level and is not planned to become permissionless.
+* **Fraud monitoring.** Anyone can monitor for fraudulent claims by running a watcher and checking Ethereum-side events. Acting on a fraudulent claim splits into two cases. *Protocol-wide* challenging — disputing a claim on any vault across all applications — requires being a registered Universal Challenger in the current `ProtocolParams` set; that registry is governed at the protocol level and is not planned to become permissionless. *Own-vault* challenging needs no registration: a depositor (or any party they delegate, including their Vault Provider) can always broadcast a `ChallengeAssert` for their own vault using the BABE artifacts and the keys committed in that vault's Taproot tree at peg-in. This is why "a fraudulent claim can always be blocked" holds without depending on any Universal Challenger being honest or online.
 * **Liquidation triggering.** Calling `liquidateWithLLP` on the Ethereum side is permissionless: any address can call the function once a position's health factor drops below 1.0. The direct-redemption variant `liquidate` requires being a registered AVK (with a Bitcoin redeem key). Permissionless liquidation ensures positions are liquidated promptly regardless of which dedicated parties are running.
 
 ## Related

@@ -15,9 +15,9 @@ The Trustless Bitcoin Vault (TBV) protocol spans three layers: Bitcoin-side scri
 
 ### On Bitcoin
 
-Each vault's BTC sits in a Taproot output with multiple spending leaves covering the legitimate outcomes: redemption (post-repayment withdrawal or liquidation), fraud-challenge response, and Pre-PegIn refund. The Bitcoin side knows only "redeem"; the application layer translates user actions (withdrawal, liquidation) into the redeem call.
+Each vault's BTC sits in a Taproot output with multiple spending leaves covering the legitimate outcomes: redemption (post-repayment withdrawal or liquidation) and fraud-challenge response. The Bitcoin side knows only "redeem"; the application layer translates user actions (withdrawal, liquidation) into the redeem call.
 
-Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output** that gates activation on the depositor revealing a hashlock secret on Ethereum. The Pre-PegIn output also has a timelock leaf for unilateral refund if activation never completes.
+Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output** that gates activation on the depositor revealing a hashlock secret on Ethereum. The Pre-PegIn output also has a timelock leaf for unilateral refund if activation never completes. The refund path lives on this Pre-PegIn output, not on the vault output, and is used only when peg-in never completes.
 
 Around the vault output, the protocol maintains a pre-signed transaction graph: every legitimate spend path is constructed and signed by all required participants at vault creation. After creation, no party can fabricate a new spend; only the pre-signed transactions can move BTC.
 
@@ -121,7 +121,7 @@ Generation runs on an SP1 prover (locally or via an external prover service), ty
 
 With the proof generated, the claimer follows the Bitcoin-side flow:
 
-* **Claim transaction.** Spends from the vault's Taproot output via the redemption or refund leaf.
+* **Claim transaction.** Spends from the vault's Taproot output via the appropriate redemption leaf (repayment or liquidation). The Pre-PegIn refund is a separate output and lifecycle path, not part of peg-out.
 * **Assert transaction.** Includes WOTS signature commitments to the proof. Broadcast within the assert window (`timelockAssert` = 432 BTC blocks, approximately 3 days on the public testnet).
 * **Challenge window.** During `timelockAssert`, any Universal Challenger or Application Vault Keeper can broadcast a `ChallengeAssert` transaction to dispute the proof.
 * **Payout.** If no challenge arrives within the window, the claimer broadcasts the Payout transaction. The BTC is released to the claimer's Bitcoin address, minus the Vault Provider's commission deducted on the depositor's payout path.
