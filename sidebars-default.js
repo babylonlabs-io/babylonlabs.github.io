@@ -296,6 +296,18 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Technical Details',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault/technical-details/protocol-architecture',
+        'trustless-bitcoin-vault/technical-details/protocol-actors',
+        'trustless-bitcoin-vault/technical-details/aave-v4-integration',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Research',
       collapsible: true,
       collapsed: true,
