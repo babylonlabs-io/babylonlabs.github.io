@@ -1,0 +1,130 @@
+---
+title: Protocol actors
+sidebar_position: 2
+---
+
+# Protocol actors
+
+The actors described below are conveniences. Every safety-critical action they perform can also be performed by the depositor independently, using artifacts and keys held since vault creation. Trust is optional and removable — see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx) for the full framing.
+
+The [Trustless Bitcoin Vault (TBV)](../start-here/what-is-tbv.mdx) protocol involves an umbrella of **Vault Keepers** (covering three distinct roles: Vault Providers, Application Vault Keepers, and Universal Challengers) plus a transitional **Security Council**. None of them has custody of BTC, and none is a required intermediary; the depositor can step in for any of them at any time. This page describes what each actor does at the protocol level.
+
+## What is a Vault Keeper?
+
+"Vault Keeper" is the umbrella term for the three off-chain participants that co-sign a vault's transaction graph and operate the protocol's redemption and challenge mechanics:
+
+* **Vault Provider (VP):** coordinates each vault's lifecycle for the depositor. One VP is chosen per vault at peg-in and is fixed for that vault's life.
+* **Application Vault Keeper (AVK):** application-scoped operator. In the Aave v4 integration, AVKs act as arbitrageurs during liquidation settlement.
+* **Universal Challenger (UC):** protocol-wide fraud monitor. UCs watch every claim transaction across applications and broadcast challenges if a fraudulent proof is detected.
+
+The umbrella distinction matters because all three share co-signing duties during peg-in and participate in the protocol's challenge mechanism. The detailed sections below describe each role's specific responsibilities.
+
+## Who runs these actors today
+
+On the current public testnet release, the actors are operated by Babylon and a small set of partner organizations. Specific operator BTC public keys are on [Contract addresses](../testnet-info/contract-addresses.mdx).
+
+* **Vault Provider:** 1 provider at launch (Babylon team). Additional providers can register over time.
+* **Application Vault Keepers** (Aave application): 3 operators.
+* **Universal Challengers:** 3 operators protocol-wide. The UC set is a static registry; it is not planned to become permissionless.
+* **Security Council:** 5 BTC keys with a 3-of-5 quorum, held by Babylon at the public testnet.
+
+The public testnet configuration is intentionally conservative. Mainnet will widen each set, with multiple independent Vault Providers, expanded Application Vault Keeper rosters, and an independent-signer Security Council. The Security Council multi-sig is a transitional safety net; it can be retired entirely as the protocol matures.
+
+## Vault Provider
+
+The Vault Provider coordinates the lifecycle of a vault. It is the party that drives the peg-in setup forward, posts the data the protocol needs on-chain, and generates the zero-knowledge proofs that gate redemption on Bitcoin.
+
+### What the Vault Provider does
+
+* **Peg-in coordination.** When a depositor submits a vault creation request, the Vault Provider detects the on-chain event and constructs the pre-signed transaction graph in concert with the Application Vault Keepers and Universal Challengers committed to that vault.
+* **PegIn input signature collection and posting.** The Vault Provider collects the PegIn input signatures from every party and posts them on-chain in batched form. This provides data availability: even if the Vault Provider later goes offline, the signatures needed to construct and broadcast the PegIn transaction are recoverable from Ethereum.
+* **ACK submission.** The Vault Provider collects acknowledgments from every participant and submits them on-chain. The vault transitions from Pending to Verified once the contract has accepted the required ACKs. ACK submission requires verification that the Pre-PegIn transaction is confirmed to at least the configured depth on Bitcoin.
+* **PegIn transaction broadcast.** After the depositor reveals the activation secret on Ethereum, the Vault Provider constructs the full PegIn witness using the collected signatures and the revealed secret, and broadcasts the PegIn transaction on Bitcoin. The vault becomes Active.
+* **ZK proof generation.** When a vault is redeemed, the Vault Provider generates an aggregated SP1 proof of the corresponding Ethereum burn event. The proof is compressed to a Groth16 form that fits inside a Bitcoin Taproot script and is verified through the BABE construction.
+* **Bitcoin claim management.** The Vault Provider broadcasts the Claim and Payout transactions on Bitcoin during the redemption process and monitors for any challenge.
+
+### What the depositor can do instead
+
+If the Vault Provider becomes unresponsive, the depositor can drive the Bitcoin claim themselves using the WOTS keypair and claimer artifacts held since peg-in, via a command-line tool the protocol ships. The Vault Provider is a convenience, not a required intermediary. See [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx) for the self-claim path.
+
+### Commission
+
+Each Vault Provider sets its own commission, taken in BTC at peg-out from the redemption payout. The commission rate is **embedded in the pre-signed Payout transactions at vault creation**; the depositor signs off on the exact amount before any BTC moves, and the rate cannot change for that vault.
+
+### Registration
+
+Vault Providers register on-chain by submitting an Ethereum address, a Bitcoin x-only public key, and a Bitcoin Proof of Possession (a BIP-322 signature proving control of the Bitcoin key). A VP registers for one specific application; the same VP cannot serve vaults across multiple applications without separate registrations.
+
+## Application Vault Keeper (AVK)
+
+Application Vault Keepers are application-scoped participants who serve as the operational backstop for vault-related events on a per-application basis. In the context of the [Aave v4 integration](./aave-v4-integration.mdx), the AVKs act as **arbitrageurs**: this is specific to the Aave application's design and is not a general property of AVKs across all applications.
+
+### What the AVK does
+
+* **Transaction graph participation.** During vault creation, each AVK constructs its own transaction graph and cross-signs with the Vault Provider. This ensures multiple independent parties hold the pre-signed transactions needed for every vault outcome.
+* **PegIn input signing.** Each AVK signs the Pre-PegIn HTLC spend as part of the off-chain protocol.
+* **ACK submission.** Each AVK submits an on-chain acknowledgment confirming graph setup, signature collection, and verification of the Pre-PegIn confirmation depth.
+* **Aave-specific: arbitrage in liquidation settlement.** The Aave integration routes liquidation settlement through a Liquidation Liquidity Provider (LLP); BTCVaultSwap is the default LLP. Liquidators on the permissionless path swap seized vaults for instant WBTC liquidity via BTCVaultSwap; the seized vault enters escrow until an arbitrageur acquires it and finalizes the BTC redemption on Bitcoin. Only registered AVKs can acquire escrowed vaults, because they must have pre-signed the vault's transaction graph at creation.
+* **Challenge participation.** As holders of pre-signed transaction graphs, AVKs can participate in the challenge mechanism if they detect a fraudulent claim against a vault they co-signed.
+
+### Registration
+
+AVKs are registered per application through the vault registry. Each application maintains a versioned set of AVK key pairs (Ethereum + Bitcoin). A set version is immutable once active: rotation produces a new version that applies only to vaults created after the rotation. Vaults already in flight retain the set version live at their creation.
+
+## Universal Challenger
+
+Universal Challengers are protocol-level fraud monitors. Their role is to detect and challenge fraudulent proof submissions during the vault redemption process, regardless of which application a vault belongs to.
+
+### What the Universal Challenger does
+
+* **Fraud monitoring.** The Universal Challenger watches every Claim transaction posted on Bitcoin and verifies the associated proof against Ethereum state. A claim that lacks a matching `VaultRedeemable` event on Ethereum cannot be backed by a valid proof.
+* **Challenge execution.** When fraud is detected, the Universal Challenger broadcasts a challenge transaction within the assert timelock. The challenge transactions verify the claimer's WOTS signatures against the garbled-circuit instances established at peg-in. If the claim cannot be defended, the challenger broadcasts the no-payout transaction after the disprove timelock expires; the claimer's bond is forfeited.
+* **PegIn input signing.** Universal Challengers sign the Pre-PegIn HTLC spend during peg-in. Each signature is bound to that vault's specific Pre-PegIn HTLC output, which prevents cross-vault signature replay.
+* **Taproot commitment via registration.** Universal Challenger Bitcoin public keys are committed into every vault's Taproot script tree at registration. This commitment is what gives the challenger the cryptographic standing to dispute a claim on Bitcoin.
+
+### What the depositor can do instead
+
+If a fraudulent claim is posted and no Universal Challenger picks it up, the depositor (or any party they delegate, including their Vault Provider) can compose and broadcast a challenge themselves using the BABE artifacts received at peg-in. The property "a fraudulent claim can always be blocked" does not depend on any Universal Challenger being honest or online; it is the depositor's own ability to challenge that makes the protocol trustless.
+
+### Set composition and registration
+
+Universal Challengers are registered at the protocol level rather than per application, through `ProtocolParams`. They are stored as a versioned array of Ethereum and Bitcoin key pairs. Each vault records the Universal Challenger set version active at its creation; that set is fixed for the vault's lifetime.
+
+The Universal Challenger set is a closed registry. It is not planned to open up to permissionless participation; expansion happens through governance adding additional vetted operators.
+
+## Security Council
+
+The Security Council is a quorum of off-chain signers whose Bitcoin public keys are committed in the protocol's versioned off-chain parameters. The council serves as the emergency backstop for scenarios the standard mechanism cannot resolve. On the current public testnet, the council has 5 keys with a 3-of-5 quorum. It is a transitional safety net intended to be retired as the protocol matures.
+
+### What the Security Council does
+
+* **Emergency intervention.** If the standard challenge mechanism fails to prevent a fraudulent payout, or if a critical protocol issue requires immediate action, the council can act.
+* **`CouncilNoPayout` transactions.** The council's on-chain power is to produce a `CouncilNoPayout` transaction by quorum, blocking payout on a specific vault. The council cannot direct BTC to any address; it can only prevent release.
+* **Operational pause states.** The council can place the protocol into a soft pause (blocking new peg-ins and new borrows) or a full pause (blocking all state-changing actions except depositor recovery paths). The depositor's refund path and WOTS self-claim are never affected by a protocol pause, because they execute on Bitcoin using pre-signed transactions and the depositor's own keys.
+* **Off-chain depositor-recovery support.** If a depositor loses both their WOTS keypair file and their claimer artifacts (the two inputs to self-claim) and the Vault Provider is also unresponsive, an off-chain recovery procedure can be initiated. The Security Council's role is to use its `CouncilNoPayout` power to block any unauthorized payout while that off-chain procedure runs.
+
+### Configuration
+
+Council keys and quorum thresholds are set through `ProtocolParams` as versioned off-chain parameters. Changes create a new parameter version and apply only to newly created vaults. The Security Council is not involved in normal protocol operation.
+
+## Summary of responsibilities
+
+| Actor | Registered | Versioned | Main responsibility | Public-testnet count |
+| --- | --- | --- | --- | --- |
+| Vault Provider | Per application | Per-vault immutable (each vault picks one VP for life) | Peg-in coordination, ZK proof generation, claim and payout broadcast, commission | 1 at launch |
+| Application Vault Keeper | Per application | Yes (versioned set) | Transaction graph co-signing, PegIn input signatures; in the Aave integration, liquidation arbitrage | 3 for the Aave application |
+| Universal Challenger | Protocol-level | Yes (versioned set) | Fraud monitoring across all applications, challenge execution | 3 protocol-wide |
+| Security Council | Protocol-level (off-chain params) | Yes (versioned set) | Emergency intervention and operational pauses; retirable as protocol matures | 5 keys, 3-of-5 quorum |
+
+## Permissioned and permissionless participation
+
+The protocol mixes permissioned and permissionless surfaces:
+
+* **Fraud monitoring.** Anyone can monitor for fraudulent claims by running a watcher and checking Ethereum-side events. Acting on a fraudulent claim splits into two cases. *Protocol-wide* challenging — disputing a claim on any vault across all applications — requires being a registered Universal Challenger in the current `ProtocolParams` set; that registry is governed at the protocol level and is not planned to become permissionless. *Own-vault* challenging needs no registration: a depositor (or any party they delegate, including their Vault Provider) can always broadcast a `ChallengeAssert` for their own vault using the BABE artifacts and the keys committed in that vault's Taproot tree at peg-in. This is why "a fraudulent claim can always be blocked" holds without depending on any Universal Challenger being honest or online.
+* **Liquidation triggering.** Calling `liquidateWithLLP` on the Ethereum side is permissionless: any address can call the function once a position's health factor drops below 1.0. The direct-redemption variant `liquidate` requires being a registered AVK (with a Bitcoin redeem key). Permissionless liquidation ensures positions are liquidated promptly regardless of which dedicated parties are running.
+
+## Related
+
+* [Protocol architecture](./protocol-architecture.mdx): the protocol mechanics that connect these actors.
+* [Aave v4 integration](./aave-v4-integration.mdx): how the AVK arbitrage role works in the lending application.
+* [Glossary](../reference/glossary.mdx): definitions of the protocol-specific terms used here.
