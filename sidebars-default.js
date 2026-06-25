@@ -314,6 +314,7 @@ const sidebars = {
       items: [
         'trustless-bitcoin-vault/reference/glossary',
         'trustless-bitcoin-vault/reference/community-and-support',
+        'trustless-bitcoin-vault/reference/agent-runbook',
       ],
     },
     ...trustlessBitcoinVaultSecuritySection,

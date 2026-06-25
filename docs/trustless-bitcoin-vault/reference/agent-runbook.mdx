@@ -1,0 +1,143 @@
+---
+title: Agent runbook
+sidebar_position: 3
+---
+
+# Agent runbook
+
+This page is for browser and computer-use agents helping a user operate the Babylon Trustless Bitcoin Vault (TBV) public Testnet app.
+
+Use it only for the public Testnet flow on Bitcoin signet and Ethereum Sepolia. Do not use it for mainnet funds, wallet creation, seed handling, faucet account management, or anything outside the public app flow.
+
+## Target
+
+Use the values from [Setup](../testnet-info/setup.mdx) as canonical.
+
+| Item | Value |
+| --- | --- |
+| Test app | `https://btc-vaults.testnet.babylonlabs.io/` |
+| Bitcoin network | signet |
+| Ethereum network | Sepolia, chain ID `11155111` |
+| Primary faucet | `https://tbv-faucet.testnet.babylonlabs.io/` |
+| Bitcoin explorer | `https://mempool.space/signet` |
+| Ethereum explorer | `https://sepolia.etherscan.io/` |
+
+## Wallet setup
+
+The user must bring already-created wallets. Agents must not create wallets, request seed phrases, request private keys, or ask for wallet passwords.
+
+Before starting, confirm:
+
+* the Bitcoin wallet is on signet
+* the Bitcoin wallet is using Taproot (P2TR)
+* the Ethereum wallet is on Sepolia
+* both wallets are funded with the required Testnet assets
+* the browser is using the user's intended wallet-extension profile
+
+UniSat on signet is the documented Bitcoin browser-wallet path. Ethereum wallet actions occur on Sepolia.
+
+## Allowed actions
+
+Agents may help the user perform only user-confirmed public Testnet actions:
+
+* connect the Bitcoin wallet
+* connect the Ethereum wallet
+* create a vault with a user-confirmed BTC amount
+* complete visible wallet signing prompts after checking the domain, network, and action
+* download recovery artifacts when the app offers them
+* activate a verified vault
+* borrow a user-confirmed asset and amount
+* repay a user-confirmed amount, using max or full repay only when requested
+* initiate withdraw only after the debt state and selected vault are clear
+
+Do not invent default amounts. Before any wallet-affecting action, confirm the exact deposit, borrow, repay, or withdraw intent with the user.
+
+## Stop conditions
+
+Stop and ask the user before proceeding if:
+
+* the app URL is not `https://btc-vaults.testnet.babylonlabs.io/`
+* a wallet prompt shows a different domain, network, contract, amount, or action than expected
+* the Bitcoin wallet is not on signet or not using Taproot
+* the Ethereum wallet is not on Sepolia
+* the requested action would use mainnet funds
+* the user has not confirmed the amount or asset
+* the app state differs from the expected public Testnet flow
+* the agent cannot inspect a wallet prompt clearly
+* funded Testnet assets are missing
+
+If repayment is partial, stop after the repayment and report the updated position unless the user separately confirms a partial collateral withdrawal, target vault subset, and acceptable post-withdrawal health factor.
+
+## Recovery artifacts
+
+Recovery artifacts are sensitive user-controlled files.
+
+Agents must:
+
+* download and back up recovery artifacts before activation when the user wants depositor self-claim fallback
+* explicitly confirm with the user before skipping artifact download
+* explain that skipping artifacts can remove the depositor self-claim fallback if the Vault Provider is later unavailable
+* record artifact file paths only
+* never copy artifact contents into chat, notes, tickets, screenshots, logs, or repositories
+
+Activate the vault only after the artifact checkpoint is complete or the user explicitly confirms they want to continue without that fallback.
+
+## Browser flow
+
+1. Open the TBV Testnet app.
+2. Inspect the current app state before starting or resuming.
+3. Connect the Bitcoin wallet on signet using Taproot.
+4. Connect the Ethereum wallet on Sepolia.
+5. Create a vault with the confirmed BTC amount.
+6. Complete wallet signing prompts only after checking the visible details.
+7. Wait for Bitcoin confirmations and provider-side verification.
+8. Complete any visible payout or recovery signing checkpoints.
+9. Download recovery artifacts, or get explicit confirmation to continue without them.
+10. Activate the vault.
+11. Borrow the confirmed asset and amount.
+12. Repay the confirmed amount.
+13. If the debt is fully repaid, select the relevant vault row if withdraw controls are disabled.
+14. Initiate withdraw only when the selected vault and debt state are clear.
+15. Record the final app-side state.
+
+Report app-side withdraw initiation separately from Bitcoin-side settlement. `Withdraw Initiated`, `Pending Withdraw`, and final Bitcoin payout are different states.
+
+## Resume guidance
+
+Inspect before acting. A resumed peg-in can be safer than starting over.
+
+* If a pending deposit shows a signing-required state, continue only after confirming the visible prompt details.
+* If the app shows provider verification or ACK collection, wait and refresh before retrying actions.
+* Ready to activate is not active collateral; activation still requires an Ethereum transaction.
+* If debt is repaid but withdraw is unavailable, check whether the target vault row must be selected.
+
+## Evidence
+
+For browser runs, create a dated evidence folder and capture screenshots:
+
+* before critical wallet approvals, without exposing secrets
+* after success modals
+* before activation
+* after activation
+* after repay
+* on the final dashboard state
+
+Final reports should include:
+
+* whether deposit activation passed
+* whether borrow passed
+* whether repay passed, including full or partial
+* whether withdraw initiation was attempted
+* evidence folder path
+* recovery artifact path, if downloaded
+* any wallet/app divergence from the expected path
+* whether Bitcoin-side settlement is still pending
+
+## Related pages
+
+* [Setup](../testnet-info/setup.mdx)
+* [Quickstart](../use-for-lending/quickstart.mdx)
+* [Create a vault](../use-for-lending/create-a-vault.mdx)
+* [Borrow & repay](../use-for-lending/borrow-and-repay.mdx)
+* [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx)
+* [Liquidation risk](../use-for-lending/liquidation-risk.mdx)
