@@ -265,7 +265,6 @@ const sidebars = {
         'trustless-bitcoin-vault/start-here/what-is-tbv',
         'trustless-bitcoin-vault/start-here/how-it-works',
         'trustless-bitcoin-vault/start-here/tbv-vs-alternatives',
-        'trustless-bitcoin-vault/start-here/safety-and-trust-assumptions',
       ],
     },
     {
@@ -293,18 +292,6 @@ const sidebars = {
         'trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem',
         'trustless-bitcoin-vault/use-for-lending/liquidation-risk',
         'trustless-bitcoin-vault/use-for-lending/faq',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Technical Details',
-      collapsible: true,
-      collapsed: true,
-      className: 'specs_sidebar_header',
-      items: [
-        'trustless-bitcoin-vault/technical-details/protocol-architecture',
-        'trustless-bitcoin-vault/technical-details/protocol-actors',
-        'trustless-bitcoin-vault/technical-details/aave-v4-integration',
       ],
     },
     {
