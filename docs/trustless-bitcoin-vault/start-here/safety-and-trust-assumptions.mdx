@@ -22,7 +22,7 @@ The depositor has four practical paths that do not depend on a specific operator
 
 * **Self-claim during redemption.** Using the WOTS keypair and claimer artifacts held since peg-in, the depositor can broadcast the Claim, Assert, and Payout transactions themselves via a command-line tool the protocol ships. No cooperation from any other participant is required.
 * **Block an invalid claim.** Using the BABE artifacts received at peg-in, the depositor, or any party they delegate, can compose and broadcast the Bitcoin-side challenge path if an invalid claim is posted.
-* **Self-refund a stalled peg-in.** Via the refund path on the Pre-PegIn output, the short-lived Bitcoin output that holds the depositor's BTC during peg-in before activation, the depositor can recover BTC unilaterally if activation never completes.
+* **Self-refund a stalled peg-in.** Through the refund path on the Pre-PegIn output (the short-lived Bitcoin output that holds the depositor's BTC during peg-in before activation), the depositor can recover BTC unilaterally if activation never completes.
 * **Choose or run a Vault Provider.** In the public testnet app, depositors choose from the providers surfaced by the portal. Where provider registration is available, an advanced operator can run a Vault Provider node and use it for vaults they create.
 
 There is no third party that the BTC holder has to trust with custody. That is what makes the protocol trustless.
@@ -83,7 +83,7 @@ The protocol involves four operator types around the depositor. None has custody
 
 ### Security Council
 
-* **What it does:** signs emergency council no payout transactions by quorum when the protocol cannot resolve a situation algorithmically, for example a catastrophic failure in the zero-knowledge proof system. The council also acts as the on-chain blocker while an off-chain depositor-recovery procedure runs in the rare case the depositor has lost both the WOTS file and the claimer artifacts and the Vault Provider is also unresponsive.
+* **What it does:** signs emergency council no payout transactions by quorum when the protocol cannot resolve a situation algorithmically, for example, a catastrophic failure in the zero-knowledge proof system. The council also acts as the on-chain blocker while an off-chain depositor-recovery procedure runs in the rare case the depositor has lost both the WOTS file and the claimer artifacts and the Vault Provider is also unresponsive.
 * **What removability means:** the Security Council is an early-life safety net. As the protocol matures, the council's powers are intended to be retired.
 * **No custody:** the council has no custody role. Its only on-chain power is to prevent a payout in cases that the standard mechanism cannot resolve. The council cannot direct BTC to any address.
 

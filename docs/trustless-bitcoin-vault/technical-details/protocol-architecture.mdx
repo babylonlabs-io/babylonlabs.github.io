@@ -57,7 +57,7 @@ The depositor:
 2. submits the peg-in request to the vault registry, including the depositor's Ethereum address, Bitcoin public key, BIP-322 proof of Bitcoin key possession, the chosen Vault Provider, and the WOTS public key hash commitment;
 3. broadcasts the Pre-PegIn Bitcoin transaction, which locks the BTC into the HTLC Taproot address committed to the hashlock.
 
-The app may broadcast a batched Pre-PegIn with multiple outputs, one per vault, for multi-vault peg-ins. This saves on Bitcoin fees and gives those vaults the same Bitcoin confirmation history.
+The app may broadcast a batched Pre-PegIn transaction with multiple outputs, one per vault, for multi-vault peg-ins. This saves on Bitcoin fees and gives those vaults the same Bitcoin confirmation history.
 
 ### Phase 2: cryptographic setup
 
@@ -122,9 +122,9 @@ Bitcoin's native scripts cannot directly verify ZK proofs. Verification happens 
 
 ### Block an invalid claim
 
-* The claimer broadcasts the Claim and Assert transactions. The Assert commits WOTS signatures of an invalid proof.
+* The claimer broadcasts the Claim and Assert transactions. The Assert transaction commits WOTS signatures of an invalid proof.
 * A Universal Challenger, relevant Vault Keeper, or the depositor detects the invalid proof and replays it under the BABE input labels established during peg-in. They broadcast a challenge transaction on Bitcoin.
-* The claimer cannot reveal a refuting secret because no valid proof exists. They cannot post a wrongly challenged response.
+* The claimer cannot reveal a refuting secret because no valid proof exists. They cannot post a wrongly challenged transaction.
 * After the disprove timelock (108 BTC blocks, approximately 18 hours on the public testnet) expires, the challenger broadcasts a no-payout transaction, finalizing the dispute. The claimer's bond is forfeited and the invalid claim is blocked.
 
 ### Block an invalid challenge

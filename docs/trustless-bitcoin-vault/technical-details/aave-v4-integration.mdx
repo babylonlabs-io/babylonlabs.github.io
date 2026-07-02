@@ -29,11 +29,11 @@ Two supporting contracts handle registration and read access:
 
 `vaultBTC` is an **ERC-20-compatible internal accounting token of the Aave Adapter**. It uses an ERC-20 interface inside authorized contracts, but it is not a freely transferable ERC-20 asset and it is not a wrapped BTC token. It is not a cross-application primitive; other applications would design their own equivalent. Key properties:
 
-* **ERC-20-compatible, 8 decimals.** Matches Bitcoin's satoshi precision. 1 `vaultBTC` = 1 BTC.
+* **ERC-20-compatible, 8 decimals.** Matches Bitcoin's satoshi precision: 1 `vaultBTC` = 1 BTC, and its smallest unit (10⁻⁸ `vaultBTC`) equals one satoshi.
 * **Mint and burn only.** `vaultBTC` is minted only when a vault is added as collateral and burned only when the vault is withdrawn or liquidated. No other minting paths exist.
 * **Supply follows collateral.** Total `vaultBTC` in circulation equals the BTC actively backing lending positions through the adapter.
 * **Transfer-restricted.** `vaultBTC` moves only between authorized contracts within the Aave integration. Any transfer to an arbitrary address reverts. No secondary market exists.
-* **Pricing.** The Babylon Core Spoke uses a Chainlink BTC/USD oracle to determine the USD value of `vaultBTC` for health factor calculations. Each unit corresponds to one satoshi of BTC locked in a vault. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle.
+* **Pricing.** The Babylon Core Spoke uses a Chainlink BTC/USD oracle to determine the USD value of `vaultBTC` for health factor calculations. Each `vaultBTC` represents one BTC locked in a vault, so the feed tracks BTC directly. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle.
 
 The accounting role means `vaultBTC` never exists in user-controlled wallets. Its mint, burn, and transfer paths are all initiated through the AaveAdapter, ensuring that total `vaultBTC` equals total locked BTC in active positions.
 
@@ -80,12 +80,12 @@ UTXOs are indivisible: a Bitcoin output cannot be partially spent. The protocol 
 
 ### Partial-position support
 
-A position holds one or more vaults. When liquidation is triggered, the protocol walks the ordered vault list and seizes the minimum prefix needed to restore the health factor to the target health factor. Vaults at the front of the list are seized first.
+A position holds one or more vaults. When liquidation is triggered, the protocol walks the ordered vault list and seizes the minimum prefix needed to restore the health factor to the target level. Vaults at the front of the list are seized first.
 
 * If the prefix is smaller than the full position, the remaining vaults stay in the depositor's position. This is partial-position liquidation.
 * If the position is severely underwater or contains only one vault, all of it is seized (full-position liquidation). The position closes.
 
-The depositor controls the vault order. The recommended pattern is two vaults: a sacrificial vault at the front, sized to cover the expected seizure target, and a protected vault later, kept if possible. At current public-testnet parameters the sacrificial vault is the larger of the two. The app computes the optimal split dynamically.
+The depositor controls the vault order. The recommended pattern is two vaults: a sacrificial vault at the front, sized to cover the expected seizure target, and a protected vault later, kept if possible. At current public-testnet parameters, the sacrificial vault is the larger of the two. The app computes the optimal split dynamically.
 
 ### Fairness mechanism
 
