@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Protocol architecture
 
-The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. The Bitcoin and Ethereum layers are shared across applications. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
+The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
 
 ![Protocol architecture: Bitcoin Taproot vaults, Ethereum coordination and integration contracts, and off-chain participants](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
 
@@ -15,7 +15,7 @@ The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and
 
 A vault's BTC sits in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
 
-The vault output is surrounded by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
+The vault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
 
 ### On Ethereum: protocol contracts
 
@@ -42,7 +42,7 @@ A new application needs its own contracts and governance registration. A vault i
 Off-chain refers to participant software and protocols, not custody.
 
 * **Protocols.** The BABE cut-and-choose protocol establishes garbled circuit instances between claimer-challenger pairs at vault creation. Signature exchange assembles the transaction graph. The SP1 proof pipeline generates the proofs needed for peg-out claims.
-* **Participants.** The depositor, Vault Provider, Application Vault Keepers, and Universal Challengers each run vault management software. The Security Council holds emergency multisig keys (3 of 5 quorum on the public testnet). Per-actor responsibilities are on [Protocol actors](./protocol-actors.mdx).
+* **Participants.** The Vault Provider, Application Vault Keepers, and Universal Challengers each run vault management software. Per-actor responsibilities are on [Protocol actors](./protocol-actors.mdx).
 * **Storage.** Participants store the artifacts needed for proof verification and challenge flows. The depositor receives their own claimer artifacts plus a WOTS keypair file; both are required for the self-claim fallback.
 
 ## Peg-in mechanism
@@ -72,12 +72,12 @@ While confirmations accumulate on Bitcoin:
 * **Transaction graph creation.** Participants construct and pre-sign every spend path. Each also signs the PegIn input, which spends the Pre-PegIn HTLC.
 * **PegIn signature availability.** The Vault Provider posts collected PegIn input signatures on-chain. This keeps the signatures available even if the Vault Provider later goes offline.
 * **Depositor payout signatures.** The depositor signs the payout transactions, which fix the Bitcoin destinations available to the vault's release paths.
-* **Acknowledgment collection.** Each participant signs an on-chain acknowledgment. Once all are collected, the vault is ready for activation. If this does not happen before timeout (about 24 hours), the vault expires and the peg-in fee is refunded.
+* **Acknowledgment collection.** Each participant signs an on-chain acknowledgment. Once all are collected, the vault is ready for activation. If this does not happen before timeout, the vault expires and the peg-in fee is refunded.
 * **Artifact distribution.** Garbled circuit artifacts are exchanged out-of-band. The depositor receives their own copy of the claimer artifacts plus their WOTS keypair file, required for the self-claim fallback.
 
 ### Phase 4: activation
 
-The contract verifies the hashlock and the activation timeout window (about 48 hours from creation), then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, mints internal `vaultBTC` accounting for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
+The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, mints internal `vaultBTC` accounting for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
 
 Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its vault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
 

@@ -10,6 +10,8 @@ This page describes liquidation in the context of the **Aave v4 integration** â€
 
 Liquidation is what happens when your debt outgrows the value of your collateral. This page is written from the depositor's side: when it triggers, what gets seized, what you keep, and how to avoid it.
 
+![Liquidation comparison: a traditional single 10 BTC vault is fully seized (over-liquidation), while TBV splits BTC into ordered vaults so only the sacrificial vault (3.5 BTC) is liquidated and the protected vault (6.5 BTC) is kept untouched (minimized loss)](/img/trustless-bitcoin-vault/confluence/use-for-lending/liquidation-risk/TBV3-LIQUIDATION.png)
+
 ## When liquidation can happen
 
 A position becomes liquidatable when the health factor drops below 1.0. The health factor compares the risk-adjusted value of your collateral to the value of your debt:
