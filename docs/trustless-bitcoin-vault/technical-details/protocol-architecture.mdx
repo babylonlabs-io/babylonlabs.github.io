@@ -1,14 +1,11 @@
 ---
 title: Protocol architecture
 sidebar_position: 1
-draft: true
 ---
 
 # Protocol architecture
 
-The components and participants below are conveniences. Every safety-critical action they perform can also be performed by the depositor independently, using artifacts and keys held since vault creation. Trust is optional and removable — see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx) for the full framing.
-
-The Trustless Bitcoin Vault (TBV) protocol spans three layers: Bitcoin-side scripts and transactions, Ethereum-side contracts, and off-chain participant software. The Bitcoin and Ethereum protocol layers are shared design across applications. Specific DeFi integrations such as Aave v4 add their own integration contracts on the Ethereum side and plug into the protocol via the application registry.
+The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
 
 ![Protocol architecture: Bitcoin Taproot vaults, Ethereum coordination and integration contracts, and off-chain participants](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
 
@@ -16,54 +13,37 @@ The Trustless Bitcoin Vault (TBV) protocol spans three layers: Bitcoin-side scri
 
 ### On Bitcoin
 
-Each vault's BTC sits in a Taproot output with multiple spending leaves covering the legitimate outcomes: redemption (post-repayment withdrawal or liquidation) and fraud-challenge response. The Bitcoin side knows only "redeem"; the application layer translates user actions (withdrawal, liquidation) into the redeem call.
+A vault's BTC sits in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
 
-Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output** that gates activation on the depositor revealing a hashlock secret on Ethereum. The Pre-PegIn output also has a timelock leaf for unilateral refund if activation never completes. The refund path lives on this Pre-PegIn output, not on the vault output, and is used only when peg-in never completes.
-
-Around the vault output, the protocol maintains a pre-signed transaction graph: every legitimate spend path is constructed and signed by all required participants at vault creation. After creation, no party can fabricate a new spend; only the pre-signed transactions can move BTC.
+The vault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
 
 ### On Ethereum: protocol contracts
 
 The core protocol contracts manage vault accounting and shared infrastructure:
 
-* **Vault registry (`BTCVaultRegistry`):** per-vault state (Pending / Verified / Active / Redeemed / Expired), the depositor's hashlock, and the depositor's WOTS commitment. Emits events that off-chain participants watch.
-* **Metadata registry (`BTCVaultsMetadataRegistry`):** publishes Vault Provider RPC endpoints for peer discovery.
-* **Protocol parameters (`ProtocolParams`):** versioned protocol parameters (timelocks, confirmation depth, actor sets, Security Council keys).
-* **Application registry (`ApplicationRegistry`):** lists DeFi applications approved to receive vaults. Currently only the Aave v4 adapter is registered.
-* **Cap policy (`CapPolicy`):** per-application and per-address BTC exposure caps, enforced at vault activation.
-* **Fee escrow (`FeeEscrow`):** collects the peg-in fee and distributes it to the Vault Provider, Universal Challengers, and Application Vault Keepers.
+* **Vault registry**: tracks each vault's lifecycle, depositor hashlock, and WOTS commitment. Emits protocol notifications that off-chain participants watch.
+* **Metadata registry**: publishes Vault Provider RPC endpoints for peer discovery.
+* **Protocol parameters**: stores versioned protocol parameters: timelocks, confirmation depth, actor sets, Security Council keys, and off-chain parameters.
+* **Application registry**: lists DeFi applications approved to receive vaults. Currently only the Aave v4 adapter is registered.
+* **Cap policy**: enforces per-application and per-address BTC exposure caps at vault activation.
+* **Fee escrow**: collects the peg-in fee and distributes it to the Vault Provider, Universal Challengers, and Application Vault Keepers.
 
 ### On Ethereum: application integration contracts
 
 Each registered application adds its own integration layer. For the Aave v4 integration:
 
-* **Aave adapter (`AaveAdapter`):** user-facing entry point for the integration. Translates user actions (borrow, repay, withdraw) into vault operations.
-* **Vault swap (`BTCVaultSwap`):** default Liquidation Liquidity Provider (LLP) for the Aave integration. Registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Spoke for vault collateral.
+* **Aave adapter**: user-facing entry point for the integration. Translates user actions such as borrow, repay, and withdraw into vault operations.
+* **Vault swap**: default Liquidation Liquidity Provider (LLP) for the Aave integration. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Spoke for vault collateral.
 
-Integrating a new application is not "out of the box": it requires building application-specific contracts and registering through governance. Additional applications can register subject to governance approval. For the full lending stack, see [Aave v4 integration](./aave-v4-integration.mdx).
+A new application needs its own contracts and governance registration. A vault is created for one application and cannot be moved to another application later. For the full lending stack, see [Aave v4 integration](./aave-v4-integration.mdx).
 
 ### Off-chain
 
-Off-chain refers to participant software and protocols, not centralized infrastructure. Three categories:
+Off-chain refers to participant software and protocols, not custody.
 
-* **Protocols:** the BABE cut-and-choose protocol establishes garbled circuit instances between claimer-challenger pairs at vault creation. Signature exchange among participants assembles the transaction graph. The SP1 zero-knowledge proof pipeline generates the proofs needed for peg-out claims.
-* **Participants:** the Depositor, the Vault Provider, Application Vault Keepers, and Universal Challengers each run vault management software. The Security Council holds emergency multi-sig keys (3 of 5 quorum on the public testnet). Per-actor responsibilities are on [Protocol actors](./protocol-actors.mdx).
-* **Storage:** Application Vault Keepers store garbled circuit artifacts needed for proof verification. The depositor also receives a copy of their own claimer artifacts plus a WOTS keypair file, both required for the self-claim fallback.
-
-## Vault lifecycle and states
-
-A vault occupies one of five states stored in the vault registry: Pending, Verified, Active, Redeemed, or Expired.
-
-State transitions:
-
-* **Pending to Verified.** All required acknowledgments collected via on-chain calls. The Pre-PegIn transaction is confirmed to the required depth on Bitcoin.
-* **Pending or Verified to Expired.** One of two distinct timeouts expires: `pegInAckTimeout` (~24 hours) if off-chain setup doesn't complete and acknowledgments aren't collected; or `pegInActivationTimeout` (~48 hours from creation) if the depositor never reveals the activation secret for an already-Verified vault.
-* **Verified to Active.** The depositor calls `activateVaultWithSecret(vaultId, s, activationMetadata)` on the vault registry. The contract verifies `SHA256(s) == hashlock`. On success, the vault transitions to Active and the protocol uses the secret to assemble the final PegIn witness.
-* **Active to Redeemed.** Triggered by depositor exit (`withdrawCollaterals`), application liquidation (`liquidate` or `liquidateWithLLP`), or a direct activate-and-redeem shortcut at peg-in. The vault transfers ownership to the claimer, the corresponding application-side accounting is cleared (if the vault was in use), and a `VaultClaimableBy` event is emitted for both the Vault Provider and the depositor.
-
-Once a vault is Redeemed, the BTC enters the redemption flow on Bitcoin. The on-Ethereum state is terminal.
-
-When a vault expires, the Pre-PegIn HTLC output remains spendable via the refund leaf after the `T_refund` Bitcoin-side timelock (3 days on the public testnet). The depositor recovers the BTC unilaterally by signing the refund spend. `T_refund` is set such that it cannot fire during the normal activation window.
+* **Protocols.** The BABE cut-and-choose protocol establishes garbled circuit instances between claimer-challenger pairs at vault creation. Signature exchange assembles the transaction graph. The SP1 proof pipeline generates the proofs needed for peg-out claims.
+* **Participants.** The Vault Provider, Application Vault Keepers, and Universal Challengers each run vault management software. Per-actor responsibilities are on [Protocol actors](./protocol-actors.mdx).
+* **Storage.** Participants store the artifacts needed for proof verification and challenge flows. The depositor receives their own claimer artifacts plus a WOTS keypair file; both are required for the self-claim fallback.
 
 ## Peg-in mechanism
 
@@ -71,93 +51,96 @@ Peg-in registers a vault on Ethereum and locks BTC on Bitcoin. The flow runs thr
 
 ### Phase 1: initiation
 
-The depositor: (a) generates a 32-byte secret `s` and the hashlock `h = SHA256(s)`; (b) submits the peg-in request to the vault registry, including the depositor's Ethereum address, Bitcoin public key, BIP-322 proof of Bitcoin key possession, the chosen Vault Provider, and the WOTS public key hash commitment; (c) broadcasts the Pre-PegIn Bitcoin transaction, which locks the BTC into the HTLC Taproot address committed to the hashlock.
+The depositor:
 
-The app may broadcast a batched Pre-PegIn with up to 10 HTLC outputs (one per vault) for multi-vault peg-ins; this saves on Bitcoin fees and ensures atomic creation.
+1. generates a 32-byte secret and the hashlock;
+2. submits the peg-in request to the vault registry, including the depositor's Ethereum address, Bitcoin public key, BIP-322 proof of Bitcoin key possession, the chosen Vault Provider, and the WOTS public key hash commitment;
+3. broadcasts the Pre-PegIn Bitcoin transaction, which locks the BTC into the HTLC Taproot address committed to the hashlock.
+
+The app may broadcast a batched Pre-PegIn transaction with multiple outputs, one per vault, for multi-vault peg-ins. This saves on Bitcoin fees and gives those vaults the same Bitcoin confirmation history.
 
 ### Phase 2: cryptographic setup
 
 While confirmations accumulate on Bitcoin:
 
-* **Depositor authentication:** the depositor authenticates to the Vault Provider using a challenge-response anchor.
-* **WOTS keypair setup:** the depositor generates a Winternitz One-Time Signature (WOTS) keypair. The public key hash is committed in the vault's on-chain record.
-* **BABE setup:** the Vault Provider and Application Vault Keepers run the BABE cut-and-choose protocol to establish garbled-circuit instances per claimer-challenger pair.
+* **Depositor authentication.** The depositor authenticates to the Vault Provider using a challenge-response anchor.
+* **WOTS keypair setup.** The depositor generates a Winternitz One-Time Signature (WOTS) keypair. The public key hash is committed in the vault's on-chain record.
+* **BABE setup.** The Vault Provider, Application Vault Keepers, and Universal Challengers run the BABE cut-and-choose protocol to establish garbled-circuit instances for the claim and challenge paths.
 
 ### Phase 3: signatures and acknowledgments
 
-* **Transaction graph creation:** participants construct and pre-sign every spend path. Each also signs the PegIn input (the spend of the Pre-PegIn HTLC).
-* **PegIn signatures data availability:** the Vault Provider posts collected PegIn input signatures on-chain. This ensures signatures remain available even if the Vault Provider goes offline.
-* **Depositor payout signatures:** the depositor signs the payout transactions (Schnorr signatures over Taproot script-path spending) and returns them to the Vault Provider.
-* **Acknowledgment collection:** each participant signs an on-chain acknowledgment. Once all are collected, the vault transitions to Verified. If this doesn't happen before `pegInAckTimeout` (~24 hours), the vault expires and the peg-in fee is refunded.
-* **Artifact distribution:** garbled circuit artifacts are exchanged out-of-band. The depositor receives their own copy of the artifacts plus their WOTS keypair file, required for the self-claim fallback.
+* **Transaction graph creation.** Participants construct and pre-sign every spend path. Each also signs the PegIn input, which spends the Pre-PegIn HTLC.
+* **PegIn signature availability.** The Vault Provider posts collected PegIn input signatures on-chain. This keeps the signatures available even if the Vault Provider later goes offline.
+* **Depositor payout signatures.** The depositor signs the payout transactions, which fix the Bitcoin destinations available to the vault's release paths.
+* **Acknowledgment collection.** Each participant signs an on-chain acknowledgment. Once all are collected, the vault is ready for activation. If this does not happen before timeout, the vault expires and the peg-in fee is refunded.
+* **Artifact distribution.** Garbled circuit artifacts are exchanged out-of-band. The depositor receives their own copy of the claimer artifacts plus their WOTS keypair file, required for the self-claim fallback.
 
 ### Phase 4: activation
 
-The depositor calls `activateVaultWithSecret(vaultId, s, activationMetadata)` on the vault registry. The contract verifies the hashlock and the activation timeout window (`pegInActivationTimeout`, ~48 hours from creation), transitions the vault to Active, and notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy (if first vault), mints internal `vaultBTC` accounting for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
+The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, mints internal `vaultBTC` accounting for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
 
-Any party (typically the Vault Provider) observing the activation event then constructs the final PegIn witness using the revealed secret and the collected on-chain signatures, and broadcasts the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its vault output. The PegIn transaction produces both the main vault output and a small depositor claim output (controlled solely by the depositor's key) that anchors the self-claim path.
+Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its vault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
 
 ## Peg-out mechanism
 
-Peg-out releases the BTC on Bitcoin after a vault is redeemed on Ethereum. The Bitcoin side knows only "redeem"; the application layer translates user actions into the redeem call. Three on-Ethereum triggers transition a vault from Active to Redeemed:
+Peg-out releases the BTC on Bitcoin after a vault is redeemed on Ethereum. The Bitcoin side knows only "redeem"; the application layer translates user actions into the redeem call. Two common Ethereum-side triggers start redemption:
 
-* The depositor calls the application's withdrawal function (e.g. `withdrawCollaterals` on the Aave adapter) after repaying outstanding debt.
-* An application-specific liquidation transfers ownership to the liquidator. For the Aave v4 integration, two function variants exist on the adapter: `liquidate(...)` for direct BTC redemption by registered arbitrageurs, and `liquidateWithLLP(...)` for permissionless liquidation that escrows the seized vault in an LLP (BTCVaultSwap by default).
-* The depositor triggers a redemption directly via an activate-and-redeem shortcut at peg-in (handled through the portal).
+* The depositor calls the application's withdrawal function, on the Aave adapter, after repaying outstanding debt.
+* An application-specific liquidation seizes one or more vaults. For the Aave v4 integration, this is either the direct BTC redemption path for registered arbitrageurs or the permissionless LLP-routed path that escrows the seized vault in BTCVaultSwap to receive WBTC.
 
-In all cases, the vault registry emits two `VaultClaimableBy` events: one for the Vault Provider's BTC public key and one for the depositor's BTC public key, identifying the authorized claimers. The Vault Provider drives the standard path; the depositor's event enables the WOTS self-claim fallback.
+The protocol identifies the authorized claimers for the Bitcoin-side redemption path. The Vault Provider drives the standard path. The depositor has a parallel self-claim path using the WOTS keypair and claimer artifacts saved at peg-in.
 
-### The 4-stage burn event proof
+### Redemption proof
 
-To claim BTC on Bitcoin, the claimer (typically the Vault Provider) generates a zero-knowledge proof that the corresponding burn event happened on the finalized Ethereum chain. The proof is built in four stages:
+To claim BTC on Bitcoin, the claimer, typically the Vault Provider, generates a zero-knowledge proof that the corresponding Ethereum redemption event occurred on the finalized Ethereum chain. The proof is built in four stages:
 
-* **Beacon finality:** proves a specific Ethereum beacon chain block has been finalized by the consensus layer.
-* **Execution finality:** links the beacon block to the execution block containing the burn transaction.
-* **Receipt inclusion:** proves the `BurnExecuted` event log exists in the receipt of that block.
-* **Groth16 compression:** aggregates the previous three stages into a compact Groth16 proof.
+* **Beacon finality.** Proves a specific Ethereum beacon chain block has been finalized by the consensus layer.
+* **Execution finality.** Links the beacon block to the execution block containing the redemption transaction.
+* **Receipt inclusion.** Proves the relevant redemption log exists in the receipt of that block.
+* **Groth16 compression.** Aggregates the previous three stages into a compact Groth16 proof.
 
-Generation runs on an SP1 prover (locally or via an external prover service), typically on GPU hardware.
+Generation runs on an SP1 prover, locally or via an external prover service, typically on GPU hardware.
 
 ### Bitcoin-side claim flow
 
 With the proof generated, the claimer follows the Bitcoin-side flow:
 
-* **Claim transaction.** Spends from the vault's Taproot output via the appropriate redemption leaf (repayment or liquidation). The Pre-PegIn refund is a separate output and lifecycle path, not part of peg-out.
-* **Assert transaction.** Includes WOTS signature commitments to the proof. Broadcast within the assert window (`timelockAssert` = 432 BTC blocks, approximately 3 days on the public testnet).
-* **Challenge window.** During `timelockAssert`, any Universal Challenger or Application Vault Keeper can broadcast a `ChallengeAssert` transaction to dispute the proof.
-* **Payout.** If no challenge arrives within the window, the claimer broadcasts the Payout transaction. The BTC is released to the claimer's Bitcoin address, minus the Vault Provider's commission deducted on the depositor's payout path.
+* **Claim transaction.** Spends from the vault's Taproot output through the redemption claim path.
+* **Assert transaction.** Commits to the proof using WOTS signatures. It is broadcast within the assert window (432 BTC blocks, approximately 3 days on the public testnet).
+* **Challenge window.** During the challenge window, a Universal Challenger, relevant Vault Keeper, or the depositor using their artifacts can dispute an invalid proof.
+* **Payout.** If no valid challenge succeeds within the window, the pre-signed payout path releases BTC to the destination fixed at vault creation. For normal withdrawal this is the depositor's Bitcoin address, minus the Vault Provider's commission. For liquidation this is the authorized liquidation claimant's Bitcoin address.
 
-If a `ChallengeAssert` is raised, the flow moves to dispute resolution.
+If a challenge is raised, the flow moves to dispute resolution.
 
 ### If the Vault Provider goes offline
 
-The depositor's parallel `VaultClaimableBy` event authorizes the depositor as a claimer using the depositor's WOTS key plus the locally-stored claimer artifacts. The same Claim, Assert, and Payout transactions are followed, but signed by the depositor instead of the Vault Provider.
+The depositor can act as the claimer using the WOTS key plus the locally stored claimer artifacts. The same Claim, Assert, and Payout sequence is followed, but the depositor drives the Bitcoin transactions instead of the Vault Provider.
 
 ## Challenge and dispute resolution
 
-Bitcoin's native scripts cannot directly verify ZK proofs. Verification happens through the BABE construction: a Bitcoin-script-only technique that uses pre-committed garbled circuits (from BABE setup) and WOTS commitments to enforce the proof's correctness using only Bitcoin's existing primitives. Two challenge paths cover the two adversarial scenarios.
+Bitcoin's native scripts cannot directly verify ZK proofs. Verification happens through the BABE construction, which uses pre-committed garbled circuits and WOTS commitments to enforce proof correctness using only Bitcoin's existing script primitives. Two cases matter: an invalid claim and an invalid challenge.
 
-### Block a malicious claim
+### Block an invalid claim
 
-* The claimer broadcasts the Claim and Assert transactions as usual. The Assert commits WOTS signatures of an invalid proof.
-* A Universal Challenger or Application Vault Keeper detects the invalid proof and replays it under the BABE input labels established during peg-in. They broadcast `ChallengeAssertX/Y` on Bitcoin. The depositor can also broadcast this challenge directly using their own BABE artifacts if no other challenger acts.
-* The claimer cannot reveal a refuting secret because no valid proof exists. They cannot post a `WronglyChallenged` response.
-* After the disprove timelock (`timelockChallengeAssert` = 108 BTC blocks, approximately 18 hours on the public testnet) expires, the challenger broadcasts `NoPayout`, finalizing the dispute. The claimer's bond is forfeited; the malicious claim is permanently blocked.
+* The claimer broadcasts the Claim and Assert transactions. The Assert transaction commits WOTS signatures of an invalid proof.
+* A Universal Challenger, relevant Vault Keeper, or the depositor detects the invalid proof and replays it under the BABE input labels established during peg-in. They broadcast a challenge transaction on Bitcoin.
+* The claimer cannot reveal a refuting secret because no valid proof exists. They cannot post a wrongly challenged transaction.
+* After the disprove timelock (108 BTC blocks, approximately 18 hours on the public testnet) expires, the challenger broadcasts a no-payout transaction, finalizing the dispute. The claimer's bond is forfeited and the invalid claim is blocked.
 
-### Block a malicious challenge
+### Block an invalid challenge
 
-* The claimer extracts the witness from the `ChallengeAssert` transaction and decrypts the output label.
-* The claimer broadcasts a `WronglyChallenged` transaction revealing the recovered label. This is only possible if the claim was truly valid; the garbled circuit construction makes it computationally infeasible otherwise.
-* After the assert timelock (`timelockAssert`) expires, the claimer broadcasts the Payout transaction. The BTC is released as expected. The challenger's bond is forfeited.
+* The claimer extracts the witness from the challenge transaction and decrypts the output label.
+* The claimer broadcasts a wrongly challenged transaction revealing the recovered label. This is only possible if the claim was valid; the garbled circuit construction makes it computationally infeasible otherwise.
+* After the assert timelock expires, the claimer broadcasts the Payout transaction. The BTC is released as expected. The challenger's bond is forfeited.
 
 ### Timelock parameters
 
 Two timelocks govern the dispute window. The total claim-to-payout wait is approximately three days.
 
-* `timelockAssert` (challenge window): 432 BTC blocks (~3 days). Window for any Universal Challenger or Application Vault Keeper to submit a `ChallengeAssert`.
-* `timelockChallengeAssert` (claimer disprove time): 108 BTC blocks (~18 hours). Window for the claimer to disprove a challenge via `WronglyChallenged`.
+* Challenge window: 432 BTC blocks (about 3 days). Window for a challenge to be submitted.
+* Claimer disprove time: 108 BTC blocks (about 18 hours). Window for the claimer to disprove a challenge via a wrongly challenged transaction.
 
-Both are versioned off-chain parameters. Existing vaults retain the values from when they were created. For current values, see [Protocol parameters](../testnet-info/protocol-parameters.mdx).
+Both are versioned off-chain parameters. Existing vaults retain the values from when they were created.
 
 ## Related
 
