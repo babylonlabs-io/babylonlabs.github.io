@@ -1,0 +1,40 @@
+---
+title: Trustless Bitcoin Vault — Mainnet
+---
+
+**Trustless Bitcoin Vault (TBV)** lets Bitcoin holders use native BTC as collateral in DeFi — **without bridges, wrapping, or trusting a custodian.** The BTC stays on the Bitcoin Network in a Taproot script the depositor co-signs; an Ethereum-side protocol tracks each vault and lets an integrated application use it as collateral. **Aave v4 borrowing is the first application built on TBV.**
+
+> **Beta Mainnet.** TBV is launching on mainnet in a **capped, allowlisted beta** — real BTC and real value, conservative limits, rolled out in phases. If you'd like to rehearse the flow first with no real value, use the **Testnet** section.
+> → **Beta Mainnet: what to expect**
+
+## Where to go
+
+| I want to… | Go to |
+|---|---|
+| **Understand what TBV is and whether to trust it** | **What is TBV?** · **How it works** · **Safety & trust assumptions** |
+| **Borrow against my BTC on Aave v4** | **Borrowing** → **Quickstart** |
+| **Build on TBV** (integrate a new app, extend Aave, or use the SDK) | **Building on TBV** |
+| **See the values that apply at launch** | **Network Info** — addresses, parameters, caps |
+| **Assess the security** | **Security** — audits, disclosure, known limitations |
+
+## What you can do with TBV
+
+TBV is a **primitive**, not a single product: it turns native BTC into programmable collateral that many DeFi applications can consume. Aave v4 lending is live; other applications (Morpho Blue, stablecoins, perpetual DEXs, cross-chain markets) are on the roadmap. See **Use cases**.
+
+- **Borrowers** — lock BTC, borrow assets on Aave v4, keep custody of your Bitcoin.
+- **Builders** — integrate a new application on the vault layer, build on top of the Aave app, or automate with the SDK. See **Building on TBV**.
+- **Operators** — Vault Provider, Vault Keeper, and Universal Challenger roles are permissioned and **invite-only during Beta**. See **Operators**.
+
+## Sections
+
+- **Start Here** — **What is TBV?** · **How it works** · **TBV vs alternatives** · **Safety & trust assumptions** · **Use cases** · **Beta Mainnet: what to expect**
+- **Borrowing** — the Aave v4 borrower path, step by step.
+- **Building on TBV** — Application Integration (coming soon), Resolver / app extensions, SDK & tooling, Agents.
+- **Operators** — roles overview (invite-only at Beta).
+- **Technical Details** — Protocol architecture, Protocol actors, Aave v4 integration.
+- **Network Info** — Mainnet (Bitcoin Mainnet + Ethereum Mainnet) and Testnet.
+- **Security** — audits, responsible disclosure, bug bounty, known limitations.
+- **Research** — the TBV and BABE papers.
+- **Reference** — glossary, community & support, changelog.
+
+*The real Bitcoin never leaves Bitcoin's security model. `vaultBTC` is an internal accounting token on Ethereum — not a wrapped BTC and not transferable outside the integration.*

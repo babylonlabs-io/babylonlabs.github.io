@@ -1,0 +1,44 @@
+---
+title: What is TBV?
+---
+
+A **Trustless Bitcoin Vault (TBV)** is a Bitcoin position that stays locked on the Bitcoin Network and is made usable as collateral in DeFi on Ethereum — with no bridge, no wrapped token, and no custodian. Your BTC sits in a Taproot script address whose spending paths are agreed and pre-signed at vault creation. Withdrawal of the BTC is only unlocked when a zero-knowledge proof of the corresponding Ethereum state is verified **on Bitcoin itself**. No soft fork is required.
+
+![TBV flow: BTC locked on Bitcoin, ZK proof verification, vaultBTC accounting on Ethereum, Aave v4 borrowing, and repayment back to Bitcoin](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV1-flow.png)
+
+## The core idea
+
+Instead of moving BTC to another chain, TBV creates **programmable spending conditions on Bitcoin** and links them to Ethereum state through cryptographic proofs.
+
+- **Self-custodial.** Your Bitcoin key is required at vault creation and on every release path. No third party — including the Vault Provider — can move your BTC outside the pre-signed paths.
+- **Trustless verification.** BTC is released only when a zero-knowledge proof of the correct Ethereum event is verified on Bitcoin, using BitVM3-style garbled circuits with Winternitz One-Time Signature (WOTS) commitments.
+- **An accounting token, not a wrapper.** While a vault is active, the protocol mints `vaultBTC` on Ethereum to represent it as collateral. `vaultBTC` is an internal accounting unit inside the integrated application — it is **not** a wrapped BTC and is **not** freely transferable. The real BTC never leaves Bitcoin.
+- **A primitive for many applications.** The vault layer is application-agnostic. **Aave v4 borrowing is the first application**; others (Morpho Blue, stablecoins, perpetual DEXs, cross-chain markets) can integrate without changing the vault layer. See **Use cases**.
+
+![TBV two-layer model: TBV protocol layer under Aave v4 borrowing and future DeFi applications](/img/trustless-bitcoin-vault/confluence/start-here/what-is-tbv/TBV2-LAYERS.png)
+
+## Why not a bridge or wrapped BTC?
+
+Existing ways to use BTC in DeFi reintroduce a trusted party:
+
+| Approach | Trust model | Custody | Where the BTC is |
+|---|---|---|---|
+| WBTC | Centralized custodian | Third-party | Ethereum (wrapped) |
+| cbBTC | Centralized custodian | Third-party | Ethereum (wrapped) |
+| BitVM bridges | Signer committee + operators | Multi-party | Bridge |
+| **Trustless Bitcoin Vault** | **Cryptographic proofs** | **Self-custodial** | **Bitcoin (native)** |
+
+With TBV there is no custodian to trust and no wrapped derivative whose backing can break — the BTC stays in your own Bitcoin script, and the protocol's guarantees come from Bitcoin consensus plus the proof system.
+
+## The building blocks
+
+- **A Bitcoin Taproot output.** Your BTC sits behind a Taproot script whose leaves encode each legitimate outcome — redemption after repayment, redemption after liquidation, and challenge responses.
+- **A pre-signed transaction graph.** Every legitimate spend is constructed and signed at vault creation by you and the required participants. Afterwards, no party can invent a new spend.
+- **An Ethereum coordination contract.** `BTCVaultRegistry` holds each vault's lifecycle state, the depositor's hashlock, and the WOTS commitment, and emits the events off-chain participants watch. Applications (currently the Aave v4 `AaveAdapter`) hook in for collateral accounting.
+- **Two cryptographic primitives.** An **HTLC atomic swap** activates the vault (you reveal a secret on Ethereum, which lets participants broadcast the peg-in on Bitcoin), and a **ZK-proven redemption** releases the BTC (a proof of the Ethereum redemption event is verified on Bitcoin through the BABE construction).
+
+## Next
+
+- **How it works** — the peg-in → borrow → peg-out flow.
+- **Safety & trust assumptions** — what you rely on and what you don't.
+- **Use cases** — lending today; stablecoins, perps, and more on the roadmap.

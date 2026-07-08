@@ -1,0 +1,22 @@
+---
+title: Research papers
+---
+
+The formal papers behind TBV. They document the protocol design and the cryptographic construction that lets Bitcoin enforce the vault.
+
+## A Bitcoin-Charged Crypto Economy with Trustless Vaults
+
+The TBV protocol paper. It introduces the Trustless Vault: a way to lock native BTC and use it as collateral in on-chain applications without handing custody to a bridge or a custodian. It covers the vault lifecycle (peg-in, activation, redemption), the pre-signed Bitcoin transaction graph and self-recovery paths that make the vault enforceable on Bitcoin itself, and how vaults plug into applications such as the Aave v4 integration.
+
+## BABE: Verifying Proofs on Bitcoin Made 1000x Cheaper
+
+The BABE paper. BABE is the cryptographic construction that makes verifying succinct proofs on Bitcoin dramatically cheaper — on the order of 1000x — combining witness encryption with garbled Groth16 verification, integrated with Winternitz one-time signatures (WOTS) and a cut-and-choose setup that tolerates a malicious setup. It underpins the challenge and verification flow that keeps the protocol trustless.
+
+## Work in progress
+
+Two further research outputs are in progress and will be added here once public:
+
+- An end-to-end **security-properties** paper formalizing the protocol's guarantees.
+- A **fungible-vaultBTC hybrid** design.
+
+Both are still internal R&D; this page is updated when they are published.

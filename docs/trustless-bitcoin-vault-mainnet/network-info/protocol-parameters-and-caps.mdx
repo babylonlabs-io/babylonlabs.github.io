@@ -1,0 +1,82 @@
+---
+title: Protocol parameters & caps
+---
+
+This page lists the protocol parameters and launch caps that govern TBV on mainnet. Exact launch values are **to be announced at launch**; the parameter names below are stable and match the on-chain contracts. For what the phased, allowlisted rollout means in practice, see **Beta Mainnet: what to expect**.
+
+## Phased, allowlisted launch
+
+Mainnet opens as a **capped, allowlisted Beta** and widens in phases:
+
+- **Allowlist.** Peg-ins are gated to allow-listed depositor addresses, enforced on-chain by `AllowListPolicy`. The gate is removed once launch confidence is reached.
+- **Monthly credit caps.** Each phase carries a monthly credit cap — a launch/operational limit on new borrowing credit opened per month. This is managed operationally and is **not** a smart-contract parameter.
+
+| Phase | Access | Monthly credit cap |
+|---|---|---|
+| **Phase 1** | Allowlist / invite | To be announced at launch |
+| **Phase 2** | Broader access (eligibility widens) | To be announced at launch |
+
+## Versioning — each vault keeps its creation-time parameters
+
+Protocol parameters, timelocks, and operator-set rosters are **versioned** in `ProtocolParams` (and, per application, in `ApplicationRegistry`). **Each vault records the parameter versions live at its creation and keeps them for its lifetime** — a later parameter change does not retroactively alter an existing vault. Core contracts use the **UUPS upgradeable-proxy** pattern, so parameter and logic upgrades happen without migrating vault data.
+
+## On-chain caps
+
+| Cap | Contract parameter | Scope | Launch value |
+|---|---|---|---|
+| Per-application total cap | `CapPolicy.totalCapBTC` | Total BTC collateral across an application | To be announced at launch |
+| Per-address cap | `CapPolicy.perAddressCapBTC` | BTC collateral per depositor address | To be announced at launch |
+| Per-vault maximum | `ProtocolParams` — `maxPegInAmount` | Maximum BTC locked in a single vault | To be announced at launch |
+
+## Peg-in parameters
+
+| Parameter | Meaning | Launch value |
+|---|---|---|
+| `minimumPegInAmount` | Minimum BTC that a depositor must lock into a vault (anti-spam floor, in satoshis) | To be announced at launch |
+| `maxPegInAmount` | Maximum BTC a depositor can lock into a single vault (in satoshis) | To be announced at launch |
+| `pegInFee` | Protocol peg-in fee (on-chain fee rate `protocolPegInFeeRate`, escrowed in `FeeEscrow`) | To be announced at launch |
+| `pegInActivationTimeout` | Window (in ETH blocks) from vault creation within which the vault must be activated | To be announced at launch |
+| `pegInAckTimeout` | Window (in ETH blocks) within which all required ACKs must be submitted, else the vault can expire | To be announced at launch |
+| `pegInConfirmationDepth` | Minimum Bitcoin confirmations on the Pre-PegIn before off-chain actors sign ACKs (on-chain `minPrepeginDepth`) | To be announced at launch |
+
+## Redemption & dispute timelocks
+
+| Parameter | Meaning | Launch value |
+|---|---|---|
+| `timelockAssert` | Timelock for the assert period (in BTC blocks) | To be announced at launch |
+| `timelockChallengeAssert` | Timelock for the challenge-assert period (in BTC blocks) | To be announced at launch |
+| `tRefund` | Refund timelock (in BTC blocks) after which a depositor can reclaim the atomic-swap Pre-PegIn output if the swap did not complete | To be announced at launch |
+
+## Liquidation parameters
+
+Liquidation is **partial** — the protocol seizes the minimum whole-vault prefix needed to restore the Aave spoke's target health factor, and any over-seizure surplus is returned via the fairness mechanism.
+
+| Parameter | Meaning | Launch value |
+|---|---|---|
+| `sellDiscountBps` | Liquidator discount taken by the default LLP (`BTCVaultSwap`) on the instant WBTC settlement, in basis points | To be announced at launch |
+| `discountCommissionBps` | Protocol commission on the arbitrageur's profit when acquiring an escrowed vault (`BTCVaultSwap`), in basis points | To be announced at launch |
+| `liquidationRedemptionFeeBps` | Fee, in WBTC, on the direct-redemption liquidation path (`AaveAdapter`), in basis points | To be announced at launch |
+
+The Aave Core Spoke's own liquidation fee is **structurally zero** for `vaultBTC` collateral: the adapter reverts (`NonZeroLiquidationFee`) if the spoke's `liquidationFee` is not 0, because indivisible UTXO collateral cannot support an Aave-style liquidation fee.
+
+## Off-chain coordination parameters
+
+| Parameter | Meaning | Launch value |
+|---|---|---|
+| `feeRate` | Bitcoin transaction-graph fee rate, in sat/vB | To be announced at launch |
+| `babeTotalInstances` | Total garbled-circuit instances created in the BaBe cut-and-choose protocol | To be announced at launch |
+| `babeInstancesToFinalize` | Number of instances finalized (used for evaluation) in cut-and-choose | To be announced at launch |
+
+## Registration & governance
+
+| Parameter | Meaning | Launch value |
+|---|---|---|
+| `vpRegistrationFee` | Fee a Vault Provider posts to register (held in `FeeEscrow`) | To be announced at launch |
+| `councilQuorum` | Number of Security Council signatures required for a council action (n-of-m) | To be announced at launch |
+
+## Fixed protocol constants
+
+- **Bitcoin dust threshold: 546 satoshis.** Outputs below this standard-dust minimum are not created.
+- **SetupChallenge coverage: up to 500 vaults** per Vault Provider–liquidator relationship. A single SetupChallenge bond covers up to this many vaults.
+
+For the token used to account for vault collateral inside the Aave v4 application, see `VaultBTC` / `vaultBTC` on **Ethereum smart contract addresses (Mainnet)** — an 8-decimal, non-transferable, non-wrapped internal accounting token.

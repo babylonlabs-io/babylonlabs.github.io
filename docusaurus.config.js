@@ -462,6 +462,13 @@ const config = {
             className: 'trustless-bitcoin-vault-top-header',
           },
           {
+            // Beta Mainnet docs (parallel collection). Nav placement is
+            // provisional — may be folded under the single TBV home later.
+            label: 'TBV Mainnet',
+            to: '/trustless-bitcoin-vault-mainnet/',
+            className: 'trustless-bitcoin-vault-top-header',
+          },
+          {
             label: 'Bitcoin Staking',
             to: '/guides/overview/bitcoin_staking/',
             className: 'guides-top-header',

@@ -1,0 +1,46 @@
+---
+title: Known limitations
+---
+
+TBV mainnet is a **capped, allowlisted beta**: real value, conservative limits, and software that is still hardening. This page is an honest list of what can surface during the beta and how each case is handled, so you can assess the risk before committing real funds.
+
+## Contracts can change or be redeployed
+
+Core contracts use the **UUPS upgradeable proxy** pattern, so implementations can be upgraded — and occasionally contracts may be redeployed — during the beta. Upgrades keep your vault data in place, but the code behind an address can change.
+
+- **What protects you:** upgrades and privileged actions are role-gated. Protocol-level actions require `TBV_PROTOCOL_ADMIN` and application-level actions require `APPLICATION_ADMIN`, with a Timelock (`PROPOSER_ROLE` / `EXECUTOR_ROLE` / `CANCELLER_ROLE`) in front of governance actions. UUPS upgrades are authorized only by the respective contract admin. Parameters are versioned, and each vault keeps the parameter versions that were live at its creation.
+- **What you should do:** always re-check the current contract addresses on the mainnet network-info page before transacting. Do not hard-code an address that may have been superseded.
+
+## Operator dependencies and the two peg-in timeouts
+
+Peg-in setup involves off-chain operators (the Vault Provider roster) coordinating with you before a vault becomes active. Two on-chain timeouts bound this, both measured in Ethereum blocks from the vault's creation:
+
+- **`pegInAckTimeout` (~24h): off-chain setup acknowledgement.** The window for the required participants to submit their ACKs for the peg-in during setup. This is the shorter window.
+- **`pegInActivationTimeout` (~48h): secret reveal / activation.** The window for the depositor to reveal the activation secret and bring the vault to Active. This is the longer window; by construction the activation timeout is strictly greater than the ACK timeout.
+
+If operators do not complete setup within the ACK window, or if activation does not happen within the activation window, the vault does not go live. **You are not stuck:** the peg-in is backed by a Pre-PegIn HTLC output that you can self-refund on Bitcoin, so an unresponsive or stalled setup does not trap your BTC. See **Safety & trust assumptions** for the recovery paths.
+
+## Exposure caps
+
+Conservative caps are enforced on-chain from day one and grow as the rollout matures:
+
+- **`CapPolicy.totalCapBTC`** — total BTC that can be locked across an application (the Aave v4 application).
+- **`CapPolicy.perAddressCapBTC`** — maximum BTC a single address can hold in that application.
+- **`ProtocolParams.maxPegInAmount`** — maximum size of any single peg-in (per vault).
+
+A peg-in that would breach any of these caps is rejected. Exact launch values are **to be announced at launch** and are listed on the mainnet parameters & caps page. (A `0` value means that particular cap is unlimited.) The operational "monthly credit cap" and phased rollout are separate launch limits, not contract parameters.
+
+## Pause states
+
+In response to an incident the protocol can enter one of two pause states, mirrored at both the protocol and application level and backed by dedicated guardian roles:
+
+- **Soft pause (Frozen).** Triggered by a freeze guardian (`TBV_PROTOCOL_FREEZE_GUARDIAN` / `APPLICATION_FREEZE_GUARDIAN`). Blocks the more sensitive state-changing operations while leaving other functions available.
+- **Full pause (Paused).** Triggered by a pause guardian (`TBV_PROTOCOL_PAUSE_GUARDIAN` / `APPLICATION_PAUSE_GUARDIAN`). The most restrictive state; it halts the guarded operations broadly.
+
+During the beta the transitional **Security Council** can act by quorum (`councilQuorum`) to invoke an emergency pause. A pause is a safety brake, not a seizure: Bitcoin-side depositor recovery paths that are already available to you are not blocked by a pause.
+
+## Related
+
+- **Audits** — independent reviews of contracts and the cryptographic protocol.
+- **Responsible disclosure** — how to report a vulnerability.
+- **Safety & trust assumptions** — the self-recovery paths that back the guarantees above.

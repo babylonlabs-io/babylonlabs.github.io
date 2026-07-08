@@ -1,0 +1,43 @@
+---
+title: Resolvers — pausability
+---
+
+A Resolver sits between depositors and the Aave application, so it must be pausable in its own right and its pause behaviour must be coordinated with the pause and freeze states of the layers around it. This page covers resolver-level pause authority and scope, and how it interacts with protocol and Aave pauses.
+
+## Why a resolver needs its own pause
+
+Being able to pause the protocol or the Aave adapter does not give you a way to stop **your** product. If your resolver has a bug, a compromised delegatee-verification flow, or a mispriced integration, you need to be able to halt new activity through the resolver without waiting on protocol-level governance. A production resolver therefore ships with its own pause control.
+
+## Pause authority
+
+Pause authority should be held by a guardian role that is:
+
+- **Separate from upgrade authority.** The party that can pause in an emergency should be able to act fast (ideally without a timelock), which is exactly why it must not also hold the slower, timelocked upgrade authority. Keep the two roles distinct.
+- **Fast to act, narrow in power.** A pause guardian should only be able to pause (and, where appropriate, a separate authority to unpause). Pausing is a safety brake, not an admin backdoor.
+
+The TBV governance template that the Aave application and resolvers extend models this split directly: it distinguishes a freeze/pause guardian from the contract admin, and separates the authority that can freeze from the authority that can unfreeze. The Aave application's own guardian roles are `APPLICATION_PAUSE_GUARDIAN` and `APPLICATION_FREEZE_GUARDIAN`, alongside the `APPLICATION_ADMIN`. Model your resolver's pause authority on the same separation.
+
+## Pause scope
+
+Be deliberate about *what* a pause stops. A pause should reliably block the operations that could cause harm — new activations routed through the resolver, and new borrows against resolver-managed positions — while **never blocking a user's ability to get out**. In particular:
+
+- **Repay and withdraw paths must remain available.** On the Aave adapter, repaying and liquidating a position are permissionless by design. A resolver must not build a pause that traps a user's collateral or prevents them from repaying debt and withdrawing. Pausing borrowing is acceptable; pausing exit is not.
+- **Redemption of the underlying BTC is a protocol guarantee.** Nothing at the resolver level can or should interfere with the pre-signed redemption paths that return BTC to the depositor.
+
+Document your pause scope explicitly so partners and users know exactly which operations stop when you pause.
+
+## Coordination with TBV and Aave pause states
+
+Your resolver operates underneath two pause/freeze regimes it does not control:
+
+- **Protocol level.** The TBV protocol contracts (for example `BTCVaultRegistry`) can be paused, and the protocol has a freeze guardian and a transitional Security Council with pause powers. When the protocol is paused, activation and other gated operations stop regardless of your resolver's state.
+- **Aave application level.** The Aave adapter is itself pausable (its state-changing entry points are gated `whenNotPaused`) and frozen via the application freeze guardian. When the adapter is paused, calls your resolver makes into it will revert.
+
+Design for the case where a layer below you is paused while your resolver is not: your resolver must **fail safe**, surfacing the halt cleanly rather than leaving positions in an inconsistent state. Conversely, your resolver being paused must not prevent users from using the still-live protocol and Aave exit paths.
+
+Because a pause can cascade across layers, incident response must be coordinated. Agree in advance who you notify, and how, if you pause — and be ready to be included when the protocol or application coordinates a pause. Incident and pause coordination with the TBV team and the Security Council is a launch requirement, not an afterthought.
+
+## Next
+
+- **Resolver partner checklist** — the ownership, pause, and review gates to clear before going live.
+- **Upgradability & ownership** — how pause authority fits alongside upgrade authority.

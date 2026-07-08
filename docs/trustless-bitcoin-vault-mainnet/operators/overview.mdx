@@ -1,0 +1,26 @@
+---
+title: Operators
+---
+
+TBV runs on a small set of permissioned operators in addition to depositors (users). At Beta these operator roles are **closed and invite-only** — this page explains what the roles are and how a partner can express interest.
+
+## The operator roles at a glance
+
+- **Vault Provider (VP)** — coordinates peg-in, generates the proofs behind a vault, and broadcasts claims; earns commission for the service.
+- **Application Vault Keeper (AVK)** — an application-scoped keeper that co-signs the transaction graph, signs PegIn, submits ACKs, and (in the Aave v4 application) acts as the arbitrageur that settles liquidations.
+- **Universal Challenger (UC)** — a protocol-level fraud monitor that watches claims, verifies them against Ethereum state, and broadcasts a challenge when a claim is invalid.
+- **Security Council** — a transitional guardian set that can trigger an emergency pause by quorum during Beta.
+
+"Vault Keeper" refers to the VP together with the application-scoped AVK; the Universal Challenger is a separate, protocol-level role.
+
+## Permissioned, versioned, and closed on mainnet
+
+Operator sets are **not permissionless** on mainnet. Each set is curated by governance, **versioned** in the protocol contracts, and **bound per vault**: every vault records the operator-set versions live at its creation and keeps them for its lifetime. Universal Challengers are registered as a governed roster in `ProtocolParams`; application keepers are registered per application through `ApplicationRegistry`. Changing a set publishes a new version rather than mutating existing vaults.
+
+During Beta, **operating TBV is invite-only.** Onboarding is handled directly with each partner rather than through public self-service registration.
+
+## Express interest
+
+If your team wants to run a Vault Provider, an Application Vault Keeper, or a Universal Challenger, reach out through the channels on **Community & support** for partner intake. We onboard operators in controlled batches as the rollout matures.
+
+For the full description of each role, its responsibilities, and how the sets provide checks-and-balances, see **Protocol actors**.

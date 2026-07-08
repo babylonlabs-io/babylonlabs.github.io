@@ -1,0 +1,31 @@
+---
+title: Audits
+---
+
+Security is the core promise of TBV: the design is *trustless*, and this page is where that claim is meant to be independently checked. Because mainnet holds real BTC, TBV is reviewed as a whole system — the on-chain contracts **and** the cryptographic protocol that lets Bitcoin enforce the vault.
+
+## Scope of review
+
+Audits cover the full trust surface, not just the Solidity:
+
+- **On-chain contracts.** The core protocol (`BTCVaultRegistry`, `ProtocolParams`, `ApplicationRegistry`, `CapPolicy`, `FeeEscrow`, `AllowListPolicy`) and the Aave v4 application (`AaveAdapter`, `AaveAdapterPositionProxy`, `BTCVaultSwap`, `VaultBTC`), including the UUPS upgrade paths and role/guardian gating.
+- **Pre-signed Bitcoin transaction graph.** The Pre-PegIn HTLC and the graph of pre-signed Bitcoin transactions that back peg-in, activation, redemption, and self-recovery — the mechanism that makes the vault enforceable on Bitcoin itself.
+- **WOTS commitments.** The Winternitz one-time signature commitments the depositor and operators bind to, and their role in self-claim and challenge paths.
+- **BABE construction.** The witness-encryption / garbled-Groth16 construction (with WOTS integration and the cut-and-choose setup) that lets Bitcoin verify proofs cheaply.
+- **SP1 + Groth16 proof pipeline.** The zk proving pipeline (SP1 zkVM proofs wrapped to Groth16) consumed on-chain and by the challenge/verification flow.
+
+## Audit pack
+
+Reviews are in flight ahead of mainnet. Reports are linked here as they are published.
+
+| Firm | Scope | Date | Report |
+|---|---|---|---|
+| To be announced at launch | Contracts + cryptographic protocol (pre-signed Bitcoin tx graph, WOTS commitments, BABE, SP1 + Groth16 pipeline) | To be announced at launch | To be announced at launch |
+
+The table is filled in as each review completes and its report is cleared for publication. In addition to independent third-party audits, the protocol is subject to recurring internal review passes throughout the beta.
+
+## Related
+
+- For how to report an issue you find, see **Responsible disclosure**.
+- For the production rewards program, see **Bug bounty**.
+- For known behaviors and how they are handled, see **Known limitations**.
