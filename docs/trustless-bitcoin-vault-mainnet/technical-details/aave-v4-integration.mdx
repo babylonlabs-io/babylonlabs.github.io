@@ -61,7 +61,7 @@ Operations on the AaveAdapter, in lifecycle order:
 * `borrowFromCorePosition(uint256 debtReserveId, uint256 amount, address receiver)`. Borrows the specified amount of the chosen asset against the position. Validates that the resulting health factor stays above 1.0.
 * `repayToCorePosition(address borrower, uint256 debtReserveId, uint256 amount)`. Repays debt. Anyone may repay another depositor's debt.
 * `withdrawCollaterals(bytes32[] vaultsToWithdraw)`. Removes the listed vaults from the position and initiates their redemption. Validates that the resulting health factor stays above 1.0 if any debt remains.
-* `reorderVaults(uint256[] newOrder)`. Reorders the vaults in the position. The new order determines liquidation seizure order.
+* `reorderVaults(bytes32[] permuted)`. Reorders the vaults in the position. The argument is a permutation of the position's vault IDs (`bytes32`), not indices; the order determines liquidation seizure order.
 * `liquidate(...)`. Direct-redemption liquidation path. Restricted: requires the liquidator to be a registered Application Vault Keeper (arbitrageur) with a Bitcoin redeem key.
 * `liquidateWithLLP(borrower, llp, amounts, priorityOrder, requestedTokens)`. Permissionless LLP-routed liquidation path. Triggered when the position's health factor drops below 1.0. The seized vault is escrowed in the LLP (BTCVaultSwap by default) and the liquidator receives a fungible settlement asset (WBTC at launch).
 
