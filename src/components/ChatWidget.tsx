@@ -193,31 +193,68 @@ export default function ChatWidget() {
       }
     };
 
-    const checkHealth = async () => {
+    // Health check with retry: dense at the start, backing off over ~2 minutes,
+    // then a slow steady poll so a recovered API un-hides the widget without a reload.
+    // Attempt at t=0, then +2s, +5s, +13s, +30s, +60s → 5 retries within ~110s (< 2 min).
+    const RETRY_SCHEDULE = [2000, 5000, 13000, 30000, 60000];
+    const STEADY_POLL_MS = 60000;
+
+    let cancelled = false;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastHealthy = false;
+    // Generation guard: each (re)start bumps `generation`; an attempt whose gen is
+    // stale bails out after its fetch resolves so a focus-triggered restart can't
+    // leave an orphaned polling chain running in parallel with the current one.
+    let generation = 0;
+
+    const attempt = async (n: number, gen: number) => {
+      if (cancelled || gen !== generation) return;
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      let healthy = false;
       try {
         const response = await fetch(`${apiBaseUrl}/health`, {
           signal: controller.signal
         });
-        clearTimeout(timeoutId);
-        
-        const healthy = response.ok;
-        setIsApiHealthy(healthy);
-        setButtonVisible(healthy);
+        healthy = response.ok;
       } catch (error) {
+        console.error(`Health check failed (attempt ${n}):`, error);
+      } finally {
         clearTimeout(timeoutId);
-        console.error('Health check failed:', error);
-        setIsApiHealthy(false);
-        setButtonVisible(false);
       }
+      if (cancelled || gen !== generation) return;
+
+      lastHealthy = healthy;
+      setIsApiHealthy(healthy);
+      setButtonVisible(healthy);
+      if (healthy) return; // stop retrying once the API responds
+
+      const delay = n < RETRY_SCHEDULE.length ? RETRY_SCHEDULE[n] : STEADY_POLL_MS;
+      retryTimer = setTimeout(() => attempt(n + 1, gen), delay);
     };
 
-    checkHealth();
+    attempt(0, generation);
 
-    // Cleanup: remove style tag when component unmounts (optional, keeps it clean)
-    // Note: We don't remove it because we want the button to stay visible across navigations
+    // Re-check when the tab regains focus, so a pod that recovered while the tab
+    // was backgrounded shows the widget without requiring a page reload.
+    const onVisible = () => {
+      if (!document.hidden && !lastHealthy) {
+        generation++;                 // invalidate any in-flight / scheduled chain
+        if (retryTimer) clearTimeout(retryTimer);
+        attempt(0, generation);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+
+    // Cleanup: cancel pending retries + listener on unmount.
+    // Note: we deliberately keep the injected style tag so the button stays
+    // visible across client-side navigations.
+    return () => {
+      cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, [apiBaseUrl]);
 
   // Fetch token limits on mount (only if API is healthy)
