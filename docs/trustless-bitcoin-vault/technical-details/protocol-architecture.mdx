@@ -77,7 +77,7 @@ While confirmations accumulate on Bitcoin:
 
 ### Phase 4: activation
 
-The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, mints internal `vaultBTC` accounting for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
+The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, creates the internal collateral record for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
 
 Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its vault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
 

@@ -127,20 +127,20 @@ If you lose the WOTS file *or* the artifacts (but not both), self-claim is no lo
 
 If you lose *both* the WOTS file and the artifacts, and the Vault Provider is also unresponsive, recovery requires Security Council intervention. Contact the team via the channels listed on [Community & support](../reference/community-and-support.mdx) for the escalation procedure.
 
-## What happens to vaultBTC
+## What happens to the collateral record
 
-vaultBTC is an accounting token. It exists only while your BTC is backing a borrowing position.
+The collateral record exists only while your BTC is backing a borrowing position.
 
-* When you withdraw a vault, the corresponding vaultBTC is burned in the same transaction.
-* Total vaultBTC supply always equals BTC currently held as active collateral across all positions in the integration.
-* vaultBTC cannot be transferred to an arbitrary address. It moves only between authorized protocol contracts. It does not exist on any secondary market.
+* When you withdraw a vault, the corresponding collateral record is closed in the same transaction.
+* The total collateral recorded always equals the BTC currently held as active collateral across all positions in the integration.
+* A collateral record cannot be transferred to an arbitrary address. It moves only between authorized protocol contracts. It does not exist on any secondary market.
 
 ## Timeline summary
 
 | Stage | Layer | Where | Duration |
 | --- | --- | --- | --- |
 | Repay debt on each borrowed reserve | Aave v4 application | Ethereum | Minutes |
-| Withdraw collateral; burn vaultBTC; start redemption | App → protocol handoff | Ethereum | One transaction |
+| Withdraw collateral; close the collateral record; start redemption | App → protocol handoff | Ethereum | One transaction |
 | Bitcoin claim and assert broadcasts | TBV protocol | Bitcoin | Minutes to hours |
 | Challenge window | TBV protocol | Bitcoin | ~3 days |
 | Payout to your BTC address (minus VP commission) | TBV protocol | Bitcoin | Confirms once mined |

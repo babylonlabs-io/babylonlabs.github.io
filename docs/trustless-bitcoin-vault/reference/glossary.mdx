@@ -34,7 +34,7 @@ garbled-circuit instances for dispute resolution. See
 [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
 
 **Babylon Core Spoke.** A dedicated, isolated Aave v4 market that accepts
-`vaultBTC` as collateral. It has its own risk parameters and draws borrowable
+collateral records for locked BTC vaults. It has its own risk parameters and draws borrowable
 assets from the Aave v4 Hub.
 
 **BitVM3.** Bitcoin-side construction family that lets a zero-knowledge proof
@@ -63,10 +63,11 @@ a sacrificial vault and a protected vault at peg-in mitigates this. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Collateral factor.** The fraction of a collateral asset's value counted
-toward borrowing capacity. With a collateral factor of 78%, the current
-public-testnet value for vaultBTC, $60,000 of BTC supports up to $46,800 of
-borrows. See
+toward borrowing capacity. At the current public-testnet collateral factor of
+78%, $60,000 of BTC collateral supports up to $46,800 of borrows. See
 [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
+
+**Collateral record.** The Ethereum-side record of a locked BTC vault that a DeFi application uses as collateral. For the Aave v4 integration it is created as a non-fungible, transfer-restricted ERC-20 record internal to the Aave Adapter so the market can recognize the vault as collateral — not a wrapped token, not transferable, and never held in user wallets.
 
 **Depositor.** The Bitcoin holder who creates a vault to use BTC as collateral.
 The depositor's keys are required at vault creation and at every
