@@ -27,7 +27,7 @@ Two supporting contracts handle registration and read access:
 
 ## The collateral record
 
-Aave v4 markets recognize collateral as an ERC-20 balance, but a BTC vault is an indivisible Bitcoin UTXO. To express that UTXO as an Aave-readable balance, the adapter creates a **collateral record** of the locked BTC for the Aave market to read. The record is a **non-fungible, transfer-restricted ERC-20 record** internal to the Aave Adapter — a technical requirement for expressing the vault as Aave-readable collateral, not a token users hold, trade, or bridge, and not a wrapped BTC. It is specific to this integration; another application would define its own equivalent. Key properties:
+Aave v4 markets recognize collateral as an ERC-20 balance, but a BTC vault is an indivisible Bitcoin UTXO. To express that UTXO as an Aave-readable balance, the adapter creates a **collateral record** of the locked BTC for the Aave market to read. The record is a **transfer-restricted ERC-20** internal to the Aave Adapter — a technical requirement for expressing the vault as Aave-readable collateral, not a token users hold, trade, or bridge, and not a wrapped BTC. It is specific to this integration; another application would define its own equivalent. Key properties:
 
 * **1:1 with BTC, 8-decimal precision.** The record tracks the vault's BTC amount exactly, matching Bitcoin's satoshi precision: one unit equals 1 BTC, and its smallest unit (10⁻⁸) equals one satoshi.
 * **Created and closed only.** A collateral record is created only when a vault is added as collateral and closed only when the vault is withdrawn or liquidated. There is no other way to create one.
