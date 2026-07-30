@@ -23,7 +23,7 @@ Use these values while planning a public-testnet run:
 | Activation timeout | ~48 hours |
 | Refund timelock | 3 days |
 | Redemption challenge window | ~3 days |
-| vaultBTC collateral factor | 78% |
+| BTC collateral factor | 78% |
 | Liquidation threshold | Health factor below 1.0 |
 
 ## Vault and position size limits
@@ -74,13 +74,13 @@ Thresholds used by the Aave v4 integration to determine when a position is liqui
 
 | Parameter | Value | Description |
 | --- | --- | --- |
-| `collateralFactor` (vaultBTC) | 7800 BPS (78%) | Fraction of vaultBTC collateral value counted toward borrowing capacity |
+| `collateralFactor` | 7800 BPS (78%) | Fraction of BTC collateral value counted toward borrowing capacity |
 | `liquidationThreshold` | 10000 BPS (1.0) | Health factor below which a position becomes liquidatable |
 | `targetHealthFactor` | 1.24e18 WAD (1.24) | Health factor the liquidation process aims to restore. With this target, partial-position liquidation seizes roughly 62% of total BTC value when a position becomes liquidatable. |
 | `maxLiquidationBonus` | 11000 BPS (10% bonus) | Maximum discount on collateral granted to the liquidator. On the current public-testnet configuration (`healthFactorForMaxBonus` ≈ 1.0), this max bonus applies immediately when a position becomes liquidatable; no Dutch-auction scaling. |
 | `healthFactorForMaxBonus` | ~1.0 WAD | Health factor at or below which the max bonus applies |
 | `liquidationBonusFactor` | 10000 BPS | Factor for minimum bonus calculation (max bonus applies immediately on liquidation) |
-| `liquidationFee` | 0 BPS | Structurally zero for vaultBTC collateral. UTXOs cannot be partially extracted, so an Aave-style liquidation fee cannot be applied. |
+| `liquidationFee` | 0 BPS | Structurally zero for BTC collateral. UTXOs cannot be partially extracted, so an Aave-style liquidation fee cannot be applied. |
 
 ## Off-chain coordination parameters
 
@@ -102,14 +102,14 @@ Thresholds used by the Aave v4 integration to determine when a position is liqui
 
 Each Vault Provider sets its own commission per vault, taken in BTC from the redemption payout. The commission rate is fixed in the pre-signed Payout transactions at vault creation and cannot change for that vault.
 
-## vaultBTC token
+## Collateral record
 
 | Parameter | Value | Description |
 | --- | --- | --- |
-| `name` | BTC Vault | On-chain token name |
-| `symbol` | vaultBTC | On-chain token symbol |
-| `decimals` | 8 | Matches Bitcoin's satoshi precision (1 vaultBTC = 1 BTC = 100,000,000 satoshis) |
-| Transfer restrictions | Restricted to the Aave v4 integration | vaultBTC is not freely transferable. It exists only as an internal accounting unit within the Aave Adapter. |
+| `name` | BTC Vault | On-chain name of the collateral-record contract |
+| `symbol` | `vaultBTC` | On-chain symbol of the collateral record (internal accounting) |
+| `decimals` | 8 | Matches Bitcoin's satoshi precision (1 unit = 1 BTC = 100,000,000 satoshis) |
+| Transfer restrictions | Restricted to the Aave v4 integration | The collateral record is not freely transferable. It exists only as an internal accounting unit within the Aave Adapter. |
 
 ## Related
 

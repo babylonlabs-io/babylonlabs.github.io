@@ -20,9 +20,9 @@ A position becomes liquidatable when the health factor drops below 1.0. The heal
 Health Factor = (Total Collateral Value × Collateral Factor) / Total Debt Value
 ```
 
-On the current Testnet, the collateral factor for vaultBTC is 78%. Two things move the health factor:
+On the current Testnet, the collateral factor for BTC collateral is 78%. Two things move the health factor:
 
-* **BTC price drops.** Your vaultBTC collateral loses value in USD terms while debt stays denominated in the borrowed token.
+* **BTC price drops.** Your BTC collateral loses value in USD terms while debt stays denominated in the borrowed token.
 * **Interest accrues.** Your debt grows continuously under the Aave v4 interest rate model.
 
 Once the health factor crosses below 1.0, liquidation becomes available. In practice, professional liquidator bots compete for these events; once a position falls below 1.0, a liquidation typically clears within the next block or two.

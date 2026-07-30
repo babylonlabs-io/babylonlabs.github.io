@@ -24,7 +24,7 @@ const PRODUCTS = [
     icon: RocketRegular,
     lightImage: 'img/landing-page/hero/infra_providers.png',
     darkImage: 'img/landing-page/hero/infra_providers_dark.png',
-    text: 'Lock signet BTC on Bitcoin, activate the vault, and have vaultBTC supplied automatically as collateral.',
+    text: 'Lock signet BTC on Bitcoin, activate the vault, and have it supplied automatically as collateral.',
   },
   {
     title: 'Borrow and redeem',

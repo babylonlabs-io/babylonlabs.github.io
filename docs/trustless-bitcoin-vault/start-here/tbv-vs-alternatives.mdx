@@ -47,7 +47,7 @@ For the participant-facing recovery paths, see [Create a vault](../use-for-lendi
 | Property | Wrapped Bitcoin tokens | Cross-chain bridges | Trustless Bitcoin Vault |
 | --- | --- | --- | --- |
 | Where the BTC sits | Custodian's wallet | MPC-controlled federation wallet | Bitcoin Taproot output |
-| What represents the BTC on the destination chain | Custodian-issued token | Bridge-minted token | Internal accounting token (Aave Adapter) |
+| What represents the BTC on the destination chain | Custodian-issued token | Bridge-minted token | Collateral record (non-transferable, internal to the Aave Adapter) |
 | Custody model | Centralized | Federated MPC / threshold signatures | Self-custodial |
 | Settlement guarantee | Custodian solvency and willingness to redeem | Bridge contract correctness and operator honesty | Bitcoin script enforcement plus ZK verification of Ethereum events |
 | Exit path if operators disappear | Dependent on custodian process | Dependent on bridge governance | Pre-signed refund and depositor self-claim |

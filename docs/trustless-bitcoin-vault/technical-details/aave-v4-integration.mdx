@@ -25,17 +25,17 @@ Two supporting contracts handle registration and read access:
 * **AaveAdapterConfig.** Manages LLP registration, position-size parameters, and borrow-delegation resolver registration. Gated by the protocol's TimelockController.
 * **AaveAdapterLens.** Read-only contract for aggregated state queries (positions, vaults, reserves).
 
-## `vaultBTC`
+## The collateral record
 
-`vaultBTC` is an **ERC-20-compatible internal accounting token of the Aave Adapter**. It uses an ERC-20 interface inside authorized contracts, but it is not a freely transferable ERC-20 asset and it is not a wrapped BTC token. It is not a cross-application primitive; other applications would design their own equivalent. Key properties:
+Aave v4 markets recognize collateral as an ERC-20 balance, but a BTC vault is an indivisible Bitcoin UTXO. To express that UTXO as an Aave-readable balance, the adapter creates a **collateral record** of the locked BTC for the Aave market to read. The record is a **transfer-restricted ERC-20** internal to the Aave Adapter — a technical requirement for expressing the vault as Aave-readable collateral, not a token users hold, trade, or bridge, and not a wrapped BTC. It is specific to this integration; another application would define its own equivalent. Key properties:
 
-* **ERC-20-compatible, 8 decimals.** Matches Bitcoin's satoshi precision: 1 `vaultBTC` = 1 BTC, and its smallest unit (10⁻⁸ `vaultBTC`) equals one satoshi.
-* **Mint and burn only.** `vaultBTC` is minted only when a vault is added as collateral and burned only when the vault is withdrawn or liquidated. No other minting paths exist.
-* **Supply follows collateral.** Total `vaultBTC` in circulation equals the BTC actively backing lending positions through the adapter.
-* **Transfer-restricted.** `vaultBTC` moves only between authorized contracts within the Aave integration. Any transfer to an arbitrary address reverts. No secondary market exists.
-* **Pricing.** The Babylon Core Spoke uses a Chainlink BTC/USD oracle to determine the USD value of `vaultBTC` for health factor calculations. Each `vaultBTC` represents one BTC locked in a vault, so the feed tracks BTC directly. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle.
+* **1:1 with BTC, 8-decimal precision.** The record tracks the vault's BTC amount exactly, matching Bitcoin's satoshi precision: one unit equals 1 BTC, and its smallest unit (10⁻⁸) equals one satoshi.
+* **Created and closed only.** A collateral record is created only when a vault is added as collateral and closed only when the vault is withdrawn or liquidated. There is no other way to create one.
+* **Amount follows collateral.** The total recorded across the integration always equals the BTC actively backing lending positions through the adapter.
+* **Transfer-restricted.** A collateral record moves only between authorized contracts within the Aave integration. Any transfer to an arbitrary address reverts. There is no secondary market.
+* **Pricing.** The Babylon Core Spoke uses a Chainlink BTC/USD oracle to value the recorded collateral for health-factor calculations. Because recorded amounts are 1:1 with locked BTC (8-decimal satoshi precision), the feed tracks BTC directly. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle.
 
-The accounting role means `vaultBTC` never exists in user-controlled wallets. Its mint, burn, and transfer paths are all initiated through the AaveAdapter, ensuring that total `vaultBTC` equals total locked BTC in active positions.
+The collateral record never exists in user-controlled wallets. It is created, read, and closed only through the AaveAdapter, so the total recorded always equals the BTC held in active positions.
 
 ## Borrowable assets
 
@@ -57,7 +57,7 @@ The depositor's debt for a given asset is tracked using two share components on 
 
 Operations on the AaveAdapter, in lifecycle order:
 
-* `activateVault(vaultId, ...)`. Called by the protocol when a vault activates: deploys per-depositor position proxy if this is the first vault, mints `vaultBTC`, and supplies it as collateral. The vault is automatically added to the depositor's position on activation; no separate "add as collateral" step exists.
+* `activateVault(vaultId, ...)`. Called by the protocol when a vault activates: deploys per-depositor position proxy if this is the first vault, creates the collateral record, and supplies it as collateral. The vault is automatically added to the depositor's position on activation; no separate "add as collateral" step exists.
 * `borrowFromCorePosition(uint256 debtReserveId, uint256 amount, address receiver)`. Borrows the specified amount of the chosen asset against the position. Validates that the resulting health factor stays above 1.0.
 * `repayToCorePosition(address borrower, uint256 debtReserveId, uint256 amount)`. Repays debt. Anyone may repay another depositor's debt.
 * `withdrawCollaterals(bytes32[] vaultsToWithdraw)`. Removes the listed vaults from the position and initiates their redemption. Validates that the resulting health factor stays above 1.0 if any debt remains.
