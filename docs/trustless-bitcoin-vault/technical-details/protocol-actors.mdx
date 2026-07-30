@@ -11,10 +11,10 @@ The [Trustless Bitcoin Vault (TBV)](../start-here/what-is-tbv.mdx) protocol has 
 
 "Vault Keeper" refers to the application-scoped participants that co-sign vault transaction graphs and operate the redemption mechanics for vaults they helped create:
 
-* **Vault Provider (VP).** Coordinates each vault's lifecycle for the depositor. One VP is chosen per vault at peg-in and is fixed for that vault's life.
-* **Application Vault Keeper (AVK).** Application-scoped operator. In the Aave v4 integration, AVKs act as arbitrageurs during liquidation settlement.
+* **Vault Provider (VP).** A claimer and challenger: it drives the standard redemption claim and can also challenge an invalid claim. One VP is chosen per vault at peg-in and is fixed for that vault's life.
+* **Application Vault Keeper (AVK).** An application-scoped claimer and challenger. In the Aave v4 integration, AVKs act as arbitrageurs during liquidation settlement, claiming a seized vault through direct redemption, and they can also challenge an invalid claim.
 
-Universal Challengers are separate protocol-level fraud monitors. They participate in the challenge mechanism across applications, but they are not application-scoped Vault Keepers.
+Universal Challengers are separate protocol-level fraud monitors. They challenge only and never claim a vault. All three operator roles — Vault Provider, Application Vault Keeper, and Universal Challenger — take part in vault creation through the pre-signing (BABE) ceremony; they are distinguished by their claim and challenge roles during redemption, not by who sets up the vault. Universal Challengers participate in the challenge mechanism across applications, but they are not application-scoped Vault Keepers.
 
 ## Depositor
 
@@ -29,7 +29,7 @@ The depositor is the BTC holder who creates a vault and uses it in an applicatio
 
 ## Vault Provider
 
-The Vault Provider coordinates the lifecycle of a vault. It drives peg-in setup, posts required data on-chain, and generates the zero-knowledge proofs used during redemption on Bitcoin.
+The Vault Provider is a **claimer and challenger**: it drives the standard redemption claim on Bitcoin and can also challenge an invalid claim. It takes part in vault creation alongside the other operator roles, drives peg-in setup, posts required data on-chain, and generates the zero-knowledge proofs used during redemption on Bitcoin.
 
 ### What the Vault Provider does
 
@@ -56,14 +56,14 @@ Vault Providers register on-chain by submitting an Ethereum address, a Bitcoin x
 
 ## Application Vault Keeper (AVK)
 
-Application Vault Keepers are application-scoped participants. In the [Aave v4 integration](./aave-v4-integration.mdx), AVKs act as **arbitrageurs** during liquidation settlement. That role is specific to the Aave application's design and may differ in future integrations.
+Application Vault Keepers are **claimers and challengers**: in liquidation they claim a seized vault through direct redemption, and they can also challenge an invalid claim. They are application-scoped participants that take part in vault creation. In the [Aave v4 integration](./aave-v4-integration.mdx), AVKs act as **arbitrageurs** during liquidation settlement. That role is specific to the Aave application's design and may differ in future integrations.
 
 ### What the AVK does
 
 * **Transaction graph participation.** During vault creation, each AVK constructs its own transaction graph and cross-signs with the Vault Provider. This gives multiple independent parties the pre-signed transactions needed for vault outcomes.
 * **PegIn input signing.** Each AVK signs the Pre-PegIn HTLC spend as part of the off-chain protocol.
 * **ACK submission.** Each AVK submits an on-chain acknowledgment confirming graph setup, signature collection, and verification of the Pre-PegIn confirmation depth.
-* **Aave-specific liquidation settlement.** The Aave integration routes permissionless liquidation through a Liquidation Liquidity Provider (LLP); BTCVaultSwap is the default LLP. Liquidators receive instant WBTC liquidity from the LLP, while the seized vault enters escrow until a registered arbitrageur acquires it and finalizes BTC redemption on Bitcoin. Only registered AVKs can acquire escrowed vaults, because they must have pre-signed the vault's transaction graph at creation.
+* **Aave-specific liquidation settlement.** The Aave integration routes permissionless liquidation through a Liquidation Liquidity Provider (LLP); the BTC Vault Swap Spoke is the default LLP. Liquidators receive instant WBTC liquidity from the LLP, while the seized vault enters escrow until a registered arbitrageur acquires it and finalizes BTC redemption on Bitcoin. Only registered AVKs can acquire escrowed vaults, because they must have pre-signed the vault's transaction graph at creation.
 * **Challenge participation.** As holders of pre-signed transaction graphs and relevant artifacts, AVKs can participate in the challenge mechanism if they detect an invalid claim against a vault they co-signed.
 
 ### Registration
@@ -72,7 +72,7 @@ AVKs are registered per application through the vault registry. Each application
 
 ## Universal Challenger
 
-Universal Challengers are protocol-level fraud monitors. Their role is to detect and challenge invalid proof submissions during vault redemption, regardless of which application a vault belongs to.
+Universal Challengers are **challengers only**: they challenge invalid claims but never claim a vault themselves. Like the other operator roles, they take part in vault creation. They are protocol-level fraud monitors whose role is to detect and challenge invalid proof submissions during vault redemption, regardless of which application a vault belongs to.
 
 ### What the Universal Challenger does
 
