@@ -14,7 +14,7 @@ coordinates adding vaults as collateral, borrowing, repaying, withdrawing, and
 triggering redemption.
 
 **Aave v4 Hub.** The central liquidity contract in Aave v4 from which spokes
-draw borrowable assets. The Babylon Core Spoke draws from the Hub when a
+draw borrowable assets. The Babylon Core Lending Spoke draws from the Hub when a
 depositor borrows; repays and liquidations restore liquidity.
 
 **Application Registry.** Ethereum contract listing the DeFi applications
@@ -33,19 +33,23 @@ vault creation. It uses a cut-and-choose protocol with many candidate
 garbled-circuit instances for dispute resolution. See
 [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
 
-**Babylon Core Spoke.** A dedicated, isolated Aave v4 market that accepts
-collateral records for locked BTC vaults. It has its own risk parameters and draws borrowable
-assets from the Aave v4 Hub.
+**Babylon Core Lending Spoke.** A dedicated, isolated Aave v4 market that accepts
+collateral records for locked BTC vaults. It has its own risk parameters and
+draws borrowable assets from the Aave v4 Hub.
 
 **BitVM3.** Bitcoin-side construction family that lets a zero-knowledge proof
 generated off-chain be verified by Bitcoin's existing script capabilities,
 without requiring a Bitcoin soft fork.
 
-**BTCVaultSwap.** The first Liquidation Liquidity Provider registered for the
-Aave v4 integration. It lets a seized vault be swapped for a fungible asset so
-that liquidators on the permissionless path can be paid instantly. A registered
-Application Vault Keeper later acquires the escrowed vault and finalizes the BTC
-redemption on the Bitcoin Network.
+**BTCVault.** The Bitcoin-side vault — the depositor's BTC locked in a Taproot
+script with pre-signed spend paths. Its Ethereum-side representation used as
+collateral is the **collateral record**.
+
+**BTC Vault Swap Spoke.** The first Liquidation Liquidity Provider registered for
+the Aave v4 integration, deployed as the `BTCVaultSwap` contract. It lets a seized
+vault be swapped for a fungible asset so that liquidators on the permissionless
+path can be paid instantly. A registered Application Vault Keeper later acquires
+the escrowed vault and finalizes the BTC redemption on the Bitcoin Network.
 
 **CapPolicy.** Ethereum contract enforcing per-application and per-address BTC
 exposure caps. At vault activation, the contract checks that the activation
@@ -67,7 +71,11 @@ toward borrowing capacity. At the current public-testnet collateral factor of
 78%, $60,000 of BTC collateral supports up to $46,800 of borrows. See
 [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
 
-**Collateral record.** The Ethereum-side record of a locked BTC vault that a DeFi application uses as collateral. For the Aave v4 integration it is created as a transfer-restricted ERC-20 record internal to the Aave Adapter so the market can recognize the vault as collateral — not a wrapped token, not transferable, and never held in user wallets.
+**Collateral record.** The Ethereum-side record of a locked BTC vault that a
+DeFi application uses as collateral. For the Aave v4 integration it is created
+as a transfer-restricted ERC-20 record internal to the Aave Adapter so the
+market can recognize the vault as collateral — not a wrapped token, not
+transferable, and never held in user wallets.
 
 **Depositor.** The Bitcoin holder who creates a vault to use BTC as collateral.
 The depositor's keys are required at vault creation and at every
@@ -155,6 +163,11 @@ corresponds to exactly one UTXO.
 **Vault Provider commission.** The percentage of BTC a Vault Provider takes from
 a vault's redemption payout. The rate is embedded in the pre-signed payout
 transactions at vault creation.
+
+**vaultBTC.** The on-chain contract name and ERC-20 symbol of the collateral
+record (internal accounting). Developers browsing the deployed contracts on
+Etherscan will see this name; it is not a user-facing asset. See **Collateral
+record**.
 
 **WOTS (Winternitz One-Time Signature).** Each vault commits a WOTS public key
 hash at peg-in. The corresponding private key can only be used once and is the

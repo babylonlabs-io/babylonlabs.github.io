@@ -14,18 +14,18 @@ The Trustless Bitcoin Vault (TBV) protocol is designed for multiple DeFi applica
 Aave v4 organizes lending into a hub-and-spoke architecture:
 
 * **Aave v4 Hub.** Central liquidity contract. Lenders supply borrowable assets (USDC, USDT, WBTC) to the Hub and earn interest. The Hub holds the aggregate liquidity for each asset.
-* **Babylon Core Spoke.** Dedicated lending market for BTC vault collateral. It has its own risk parameters, draws borrowable assets from the Aave v4 Hub when a depositor borrows, and restores them to the Hub on repay.
+* **Babylon Core Lending Spoke.** Dedicated lending market for BTC vault collateral. It has its own risk parameters, draws borrowable assets from the Aave v4 Hub when a depositor borrows, and restores them to the Hub on repay.
 * **AaveAdapter.** User-facing entry point for the integration. It coordinates adding vaults as collateral, borrowing, repaying, withdrawing, and triggering redemption.
 * **AaveAdapterPositionProxy.** Per-depositor proxy contract that holds the depositor's lending position. One proxy is deployed for each depositor address on first deposit. Multiple vaults can back the same position. The proxy isolates per-depositor accounting, while shared adapter, spoke, oracle, and governance risks still apply to the integration as a whole.
 
-A borrow flows through the layers: depositor, AaveAdapter, position proxy, Babylon Core Spoke, Aave v4 Hub. The Hub releases the borrowed tokens; they travel back the same path to the depositor. Repays follow the inverse direction.
+A borrow flows through the layers: depositor, AaveAdapter, position proxy, Babylon Core Lending Spoke, Aave v4 Hub. The Hub releases the borrowed tokens; they travel back the same path to the depositor. Repays follow the inverse direction.
 
 Two supporting contracts handle registration and read access:
 
 * **AaveAdapterConfig.** Manages LLP registration, position-size parameters, and borrow-delegation resolver registration. Gated by the protocol's TimelockController.
 * **AaveAdapterLens.** Read-only contract for aggregated state queries (positions, vaults, reserves).
 
-## The collateral record
+## Collateral record
 
 Aave v4 markets recognize collateral as an ERC-20 balance, but a BTC vault is an indivisible Bitcoin UTXO. To express that UTXO as an Aave-readable balance, the adapter creates a **collateral record** of the locked BTC for the Aave market to read. The record is a **transfer-restricted ERC-20** internal to the Aave Adapter — a technical requirement for expressing the vault as Aave-readable collateral, not a token users hold, trade, or bridge, and not a wrapped BTC. It is specific to this integration; another application would define its own equivalent. Key properties:
 
@@ -33,13 +33,13 @@ Aave v4 markets recognize collateral as an ERC-20 balance, but a BTC vault is an
 * **Created and closed only.** A collateral record is created only when a vault is added as collateral and closed only when the vault is withdrawn or liquidated. There is no other way to create one.
 * **Amount follows collateral.** The total recorded across the integration always equals the BTC actively backing lending positions through the adapter.
 * **Transfer-restricted.** A collateral record moves only between authorized contracts within the Aave integration. Any transfer to an arbitrary address reverts. There is no secondary market.
-* **Pricing.** The Babylon Core Spoke uses a Chainlink BTC/USD oracle to value the recorded collateral for health-factor calculations. Because recorded amounts are 1:1 with locked BTC (8-decimal satoshi precision), the feed tracks BTC directly. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle.
+* **Pricing.** The Babylon Core Lending Spoke uses a Chainlink BTC/USD oracle to value the recorded collateral for health-factor calculations. Because recorded amounts are 1:1 with locked BTC (8-decimal satoshi precision), the feed tracks BTC directly. Liquidation settlement and fairness payment additionally use a Chainlink WBTC/USD oracle.
 
 The collateral record never exists in user-controlled wallets. It is created, read, and closed only through the AaveAdapter, so the total recorded always equals the BTC held in active positions.
 
 ## Borrowable assets
 
-Reserves available on the Babylon Core Spoke at the public testnet:
+Reserves available on the Babylon Core Lending Spoke at the public testnet:
 
 * USDC
 * USDT
@@ -63,7 +63,7 @@ Operations on the AaveAdapter, in lifecycle order:
 * `withdrawCollaterals(bytes32[] vaultsToWithdraw)`. Removes the listed vaults from the position and initiates their redemption. Validates that the resulting health factor stays above 1.0 if any debt remains.
 * `reorderVaults(uint256[] newOrder)`. Reorders the vaults in the position. The new order determines liquidation seizure order.
 * `liquidate(...)`. Direct-redemption liquidation path. Restricted: requires the liquidator to be a registered Application Vault Keeper (arbitrageur) with a Bitcoin redeem key.
-* `liquidateWithLLP(borrower, llp, amounts, priorityOrder, requestedTokens)`. Permissionless LLP-routed liquidation path. Triggered when the position's health factor drops below 1.0. The seized vault is escrowed in the LLP (BTCVaultSwap by default) and the liquidator receives a fungible settlement asset (WBTC at launch).
+* `liquidateWithLLP(borrower, llp, amounts, priorityOrder, requestedTokens)`. Permissionless LLP-routed liquidation path. Triggered when the position's health factor drops below 1.0. The seized vault is escrowed in the LLP (the BTC Vault Swap Spoke by default) and the liquidator receives a fungible settlement asset (WBTC at launch).
 
 The `AaveAdapterLens` contract exposes corresponding read-only queries: position state, vault state per vault, reserve state per asset.
 
@@ -71,7 +71,7 @@ The `AaveAdapterLens` contract exposes corresponding read-only queries: position
 
 A position becomes liquidatable when its health factor drops below 1.0. The protocol supports **partial-position liquidation**: a position can be partially seized in whole-vault units, rather than wiping out the entire collateral. Two liquidation paths exist on the AaveAdapter:
 
-* **LLP-routed liquidation.** `liquidateWithLLP` is permissionless. Any Ethereum address can trigger it. The liquidator repays the debt and receives instant settlement (WBTC at launch) from the LLP; the seized vault enters LLP escrow for later acquisition by an arbitrageur. BTCVaultSwap is the default LLP, but it is one implementation of the LLP framework; other liquidity venues can be added.
+* **LLP-routed liquidation.** `liquidateWithLLP` is permissionless. Any Ethereum address can trigger it. The liquidator repays the debt and receives instant settlement (WBTC at launch) from the LLP; the seized vault enters LLP escrow for later acquisition by an arbitrageur. The BTC Vault Swap Spoke is the default LLP, but it is one implementation of the LLP framework; other liquidity venues can be added.
 * **Direct-redemption liquidation.** `liquidate` is permissioned. The liquidator is a registered Application Vault Keeper (arbitrageur). They repay the necessary debt and redeem the seized vault directly to a Bitcoin redeem key.
 
 ### Full-vault constraint
@@ -104,13 +104,13 @@ Permissionless liquidation on Ethereum, combined with multi-day BTC settlement o
 * The LLP escrows the seized vault.
 * A registered arbitrageur (Application Vault Keeper) later acquires the escrowed vault and finalizes the BTC redemption on Bitcoin.
 
-Multiple LLPs can register through `AaveAdapterConfig.registerLLP(address llp)`, gated by the TimelockController. The current launch implementation uses BTCVaultSwap as the default; other liquidity venues can be added as the integration matures.
+Multiple LLPs can register through `AaveAdapterConfig.registerLLP(address llp)`, gated by the TimelockController. The current launch implementation uses the BTC Vault Swap Spoke as the default; other liquidity venues can be added as the integration matures.
 
-### BTCVaultSwap (default LLP)
+### BTC Vault Swap Spoke (default LLP)
 
-The first registered LLP is **BTCVaultSwap**. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Spoke. Its flow:
+The first registered LLP is the **BTC Vault Swap Spoke** (the `BTCVaultSwap` contract). It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Lending Spoke. Its flow:
 
-1. Liquidator calls `AaveAdapter.liquidateWithLLP(borrower, llp, amounts, priorityOrder, requestedTokens)`. The adapter routes the seized vault into BTCVaultSwap escrow and pays the liquidator WBTC immediately, drawn from the Aave v4 Hub's WBTC reserve.
+1. Liquidator calls `AaveAdapter.liquidateWithLLP(borrower, llp, amounts, priorityOrder, requestedTokens)`. The adapter routes the seized vault into BTC Vault Swap Spoke escrow and pays the liquidator WBTC immediately, drawn from the Aave v4 Hub's WBTC reserve.
 2. A registered arbitrageur monitors escrowed vaults. They acquire one by calling `swapWbtcForVault(vaultId, maxWbtcIn)`, paying the Hub debt (principal + accrued interest). Acquisition is first-come-first-served on Ethereum.
 3. The arbitrageur acquires vault ownership. They then initiate the standard peg-out flow on Bitcoin: a redemption proof, the claim transaction, the challenge period, and the payout.
 
