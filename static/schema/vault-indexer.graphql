@@ -1,0 +1,2016 @@
+type aaveConfig {
+  id: Int!
+  adapterAddress: String!
+  vaultBtcAddress: String!
+  btcVaultRegistryAddress: String!
+  btcVaultCoreSpokeAddress: String!
+  vaultBtcReserveId: BigInt!
+}
+
+input aaveConfigFilter {
+  AND: [aaveConfigFilter]
+  OR: [aaveConfigFilter]
+  id: Int
+  id_not: Int
+  id_in: [Int]
+  id_not_in: [Int]
+  id_gt: Int
+  id_lt: Int
+  id_gte: Int
+  id_lte: Int
+  adapterAddress: String
+  adapterAddress_not: String
+  adapterAddress_in: [String]
+  adapterAddress_not_in: [String]
+  adapterAddress_contains: String
+  adapterAddress_not_contains: String
+  adapterAddress_starts_with: String
+  adapterAddress_ends_with: String
+  adapterAddress_not_starts_with: String
+  adapterAddress_not_ends_with: String
+  vaultBtcAddress: String
+  vaultBtcAddress_not: String
+  vaultBtcAddress_in: [String]
+  vaultBtcAddress_not_in: [String]
+  vaultBtcAddress_contains: String
+  vaultBtcAddress_not_contains: String
+  vaultBtcAddress_starts_with: String
+  vaultBtcAddress_ends_with: String
+  vaultBtcAddress_not_starts_with: String
+  vaultBtcAddress_not_ends_with: String
+  btcVaultRegistryAddress: String
+  btcVaultRegistryAddress_not: String
+  btcVaultRegistryAddress_in: [String]
+  btcVaultRegistryAddress_not_in: [String]
+  btcVaultRegistryAddress_contains: String
+  btcVaultRegistryAddress_not_contains: String
+  btcVaultRegistryAddress_starts_with: String
+  btcVaultRegistryAddress_ends_with: String
+  btcVaultRegistryAddress_not_starts_with: String
+  btcVaultRegistryAddress_not_ends_with: String
+  btcVaultCoreSpokeAddress: String
+  btcVaultCoreSpokeAddress_not: String
+  btcVaultCoreSpokeAddress_in: [String]
+  btcVaultCoreSpokeAddress_not_in: [String]
+  btcVaultCoreSpokeAddress_contains: String
+  btcVaultCoreSpokeAddress_not_contains: String
+  btcVaultCoreSpokeAddress_starts_with: String
+  btcVaultCoreSpokeAddress_ends_with: String
+  btcVaultCoreSpokeAddress_not_starts_with: String
+  btcVaultCoreSpokeAddress_not_ends_with: String
+  vaultBtcReserveId: BigInt
+  vaultBtcReserveId_not: BigInt
+  vaultBtcReserveId_in: [BigInt]
+  vaultBtcReserveId_not_in: [BigInt]
+  vaultBtcReserveId_gt: BigInt
+  vaultBtcReserveId_lt: BigInt
+  vaultBtcReserveId_gte: BigInt
+  vaultBtcReserveId_lte: BigInt
+}
+
+type aaveConfigPage {
+  items: [aaveConfig!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type aavePosition {
+  depositorAddress: String!
+  proxyContract: String!
+  totalCollateral: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
+  transactionHash: String!
+  collaterals(where: aavePositionCollateralFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aavePositionCollateralPage
+}
+
+type aavePositionCollateral {
+  depositorAddress: String!
+  vaultId: String!
+  amount: BigInt!
+  addedAt: BigInt!
+  removedAt: BigInt
+  liquidationIndex: Int!
+  blockNumber: BigInt!
+  transactionHash: String!
+  position: aavePosition
+  vault: vault
+}
+
+input aavePositionCollateralFilter {
+  AND: [aavePositionCollateralFilter]
+  OR: [aavePositionCollateralFilter]
+  depositorAddress: String
+  depositorAddress_not: String
+  depositorAddress_in: [String]
+  depositorAddress_not_in: [String]
+  depositorAddress_contains: String
+  depositorAddress_not_contains: String
+  depositorAddress_starts_with: String
+  depositorAddress_ends_with: String
+  depositorAddress_not_starts_with: String
+  depositorAddress_not_ends_with: String
+  vaultId: String
+  vaultId_not: String
+  vaultId_in: [String]
+  vaultId_not_in: [String]
+  vaultId_contains: String
+  vaultId_not_contains: String
+  vaultId_starts_with: String
+  vaultId_ends_with: String
+  vaultId_not_starts_with: String
+  vaultId_not_ends_with: String
+  amount: BigInt
+  amount_not: BigInt
+  amount_in: [BigInt]
+  amount_not_in: [BigInt]
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  addedAt: BigInt
+  addedAt_not: BigInt
+  addedAt_in: [BigInt]
+  addedAt_not_in: [BigInt]
+  addedAt_gt: BigInt
+  addedAt_lt: BigInt
+  addedAt_gte: BigInt
+  addedAt_lte: BigInt
+  removedAt: BigInt
+  removedAt_not: BigInt
+  removedAt_in: [BigInt]
+  removedAt_not_in: [BigInt]
+  removedAt_gt: BigInt
+  removedAt_lt: BigInt
+  removedAt_gte: BigInt
+  removedAt_lte: BigInt
+  liquidationIndex: Int
+  liquidationIndex_not: Int
+  liquidationIndex_in: [Int]
+  liquidationIndex_not_in: [Int]
+  liquidationIndex_gt: Int
+  liquidationIndex_lt: Int
+  liquidationIndex_gte: Int
+  liquidationIndex_lte: Int
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type aavePositionCollateralPage {
+  items: [aavePositionCollateral!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+input aavePositionFilter {
+  AND: [aavePositionFilter]
+  OR: [aavePositionFilter]
+  depositorAddress: String
+  depositorAddress_not: String
+  depositorAddress_in: [String]
+  depositorAddress_not_in: [String]
+  depositorAddress_contains: String
+  depositorAddress_not_contains: String
+  depositorAddress_starts_with: String
+  depositorAddress_ends_with: String
+  depositorAddress_not_starts_with: String
+  depositorAddress_not_ends_with: String
+  proxyContract: String
+  proxyContract_not: String
+  proxyContract_in: [String]
+  proxyContract_not_in: [String]
+  proxyContract_contains: String
+  proxyContract_not_contains: String
+  proxyContract_starts_with: String
+  proxyContract_ends_with: String
+  proxyContract_not_starts_with: String
+  proxyContract_not_ends_with: String
+  totalCollateral: BigInt
+  totalCollateral_not: BigInt
+  totalCollateral_in: [BigInt]
+  totalCollateral_not_in: [BigInt]
+  totalCollateral_gt: BigInt
+  totalCollateral_lt: BigInt
+  totalCollateral_gte: BigInt
+  totalCollateral_lte: BigInt
+  createdAt: BigInt
+  createdAt_not: BigInt
+  createdAt_in: [BigInt]
+  createdAt_not_in: [BigInt]
+  createdAt_gt: BigInt
+  createdAt_lt: BigInt
+  createdAt_gte: BigInt
+  createdAt_lte: BigInt
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type aavePositionPage {
+  items: [aavePosition!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type aaveReserve {
+  id: BigInt!
+  underlying: String!
+  hub: String!
+  assetId: Int!
+  decimals: Int!
+  dynamicConfigKey: BigInt!
+  paused: Boolean!
+  frozen: Boolean!
+  borrowable: Boolean!
+  collateralRisk: Int!
+  collateralFactor: Int!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
+  underlyingToken: token
+}
+
+input aaveReserveFilter {
+  AND: [aaveReserveFilter]
+  OR: [aaveReserveFilter]
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  underlying: String
+  underlying_not: String
+  underlying_in: [String]
+  underlying_not_in: [String]
+  underlying_contains: String
+  underlying_not_contains: String
+  underlying_starts_with: String
+  underlying_ends_with: String
+  underlying_not_starts_with: String
+  underlying_not_ends_with: String
+  hub: String
+  hub_not: String
+  hub_in: [String]
+  hub_not_in: [String]
+  hub_contains: String
+  hub_not_contains: String
+  hub_starts_with: String
+  hub_ends_with: String
+  hub_not_starts_with: String
+  hub_not_ends_with: String
+  assetId: Int
+  assetId_not: Int
+  assetId_in: [Int]
+  assetId_not_in: [Int]
+  assetId_gt: Int
+  assetId_lt: Int
+  assetId_gte: Int
+  assetId_lte: Int
+  decimals: Int
+  decimals_not: Int
+  decimals_in: [Int]
+  decimals_not_in: [Int]
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+  dynamicConfigKey: BigInt
+  dynamicConfigKey_not: BigInt
+  dynamicConfigKey_in: [BigInt]
+  dynamicConfigKey_not_in: [BigInt]
+  dynamicConfigKey_gt: BigInt
+  dynamicConfigKey_lt: BigInt
+  dynamicConfigKey_gte: BigInt
+  dynamicConfigKey_lte: BigInt
+  paused: Boolean
+  paused_not: Boolean
+  paused_in: [Boolean]
+  paused_not_in: [Boolean]
+  frozen: Boolean
+  frozen_not: Boolean
+  frozen_in: [Boolean]
+  frozen_not_in: [Boolean]
+  borrowable: Boolean
+  borrowable_not: Boolean
+  borrowable_in: [Boolean]
+  borrowable_not_in: [Boolean]
+  collateralRisk: Int
+  collateralRisk_not: Int
+  collateralRisk_in: [Int]
+  collateralRisk_not_in: [Int]
+  collateralRisk_gt: Int
+  collateralRisk_lt: Int
+  collateralRisk_gte: Int
+  collateralRisk_lte: Int
+  collateralFactor: Int
+  collateralFactor_not: Int
+  collateralFactor_in: [Int]
+  collateralFactor_not_in: [Int]
+  collateralFactor_gt: Int
+  collateralFactor_lt: Int
+  collateralFactor_gte: Int
+  collateralFactor_lte: Int
+  createdAt: BigInt
+  createdAt_not: BigInt
+  createdAt_in: [BigInt]
+  createdAt_not_in: [BigInt]
+  createdAt_gt: BigInt
+  createdAt_lt: BigInt
+  createdAt_gte: BigInt
+  createdAt_lte: BigInt
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+}
+
+type aaveReservePage {
+  items: [aaveReserve!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type aaveUserProxy {
+  user: String!
+  proxy: String!
+  createdAt: BigInt!
+  blockNumber: BigInt!
+  transactionHash: String!
+}
+
+input aaveUserProxyFilter {
+  AND: [aaveUserProxyFilter]
+  OR: [aaveUserProxyFilter]
+  user: String
+  user_not: String
+  user_in: [String]
+  user_not_in: [String]
+  user_contains: String
+  user_not_contains: String
+  user_starts_with: String
+  user_ends_with: String
+  user_not_starts_with: String
+  user_not_ends_with: String
+  proxy: String
+  proxy_not: String
+  proxy_in: [String]
+  proxy_not_in: [String]
+  proxy_contains: String
+  proxy_not_contains: String
+  proxy_starts_with: String
+  proxy_ends_with: String
+  proxy_not_starts_with: String
+  proxy_not_ends_with: String
+  createdAt: BigInt
+  createdAt_not: BigInt
+  createdAt_in: [BigInt]
+  createdAt_not_in: [BigInt]
+  createdAt_gt: BigInt
+  createdAt_lt: BigInt
+  createdAt_gte: BigInt
+  createdAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type aaveUserProxyPage {
+  items: [aaveUserProxy!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type aaveVaultStatus {
+  vaultId: String!
+  applicationEntryPoint: String!
+  status: aaveVaultUsageStatus!
+  metadata: JSON
+  updatedAt: BigInt!
+  vault: vault
+}
+
+input aaveVaultStatusFilter {
+  AND: [aaveVaultStatusFilter]
+  OR: [aaveVaultStatusFilter]
+  vaultId: String
+  vaultId_not: String
+  vaultId_in: [String]
+  vaultId_not_in: [String]
+  vaultId_contains: String
+  vaultId_not_contains: String
+  vaultId_starts_with: String
+  vaultId_ends_with: String
+  vaultId_not_starts_with: String
+  vaultId_not_ends_with: String
+  applicationEntryPoint: String
+  applicationEntryPoint_not: String
+  applicationEntryPoint_in: [String]
+  applicationEntryPoint_not_in: [String]
+  applicationEntryPoint_contains: String
+  applicationEntryPoint_not_contains: String
+  applicationEntryPoint_starts_with: String
+  applicationEntryPoint_ends_with: String
+  applicationEntryPoint_not_starts_with: String
+  applicationEntryPoint_not_ends_with: String
+  status: aaveVaultUsageStatus
+  status_not: aaveVaultUsageStatus
+  status_in: [aaveVaultUsageStatus]
+  status_not_in: [aaveVaultUsageStatus]
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+}
+
+type aaveVaultStatusPage {
+  items: [aaveVaultStatus!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+enum aaveVaultUsageStatus {
+  collateralized
+  llp_owned
+  redeemed
+}
+
+type application {
+  id: String!
+  name: String
+  latestVKVersion: Int
+  totalCapBTC: BigInt
+  perAddressCapBTC: BigInt
+  status: applicationStatus!
+  registeredAt: BigInt!
+  blockNumber: BigInt!
+  transactionHash: String!
+}
+
+input applicationFilter {
+  AND: [applicationFilter]
+  OR: [applicationFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String]
+  name_not_in: [String]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_ends_with: String
+  name_not_starts_with: String
+  name_not_ends_with: String
+  latestVKVersion: Int
+  latestVKVersion_not: Int
+  latestVKVersion_in: [Int]
+  latestVKVersion_not_in: [Int]
+  latestVKVersion_gt: Int
+  latestVKVersion_lt: Int
+  latestVKVersion_gte: Int
+  latestVKVersion_lte: Int
+  totalCapBTC: BigInt
+  totalCapBTC_not: BigInt
+  totalCapBTC_in: [BigInt]
+  totalCapBTC_not_in: [BigInt]
+  totalCapBTC_gt: BigInt
+  totalCapBTC_lt: BigInt
+  totalCapBTC_gte: BigInt
+  totalCapBTC_lte: BigInt
+  perAddressCapBTC: BigInt
+  perAddressCapBTC_not: BigInt
+  perAddressCapBTC_in: [BigInt]
+  perAddressCapBTC_not_in: [BigInt]
+  perAddressCapBTC_gt: BigInt
+  perAddressCapBTC_lt: BigInt
+  perAddressCapBTC_gte: BigInt
+  perAddressCapBTC_lte: BigInt
+  status: applicationStatus
+  status_not: applicationStatus
+  status_in: [applicationStatus]
+  status_not_in: [applicationStatus]
+  registeredAt: BigInt
+  registeredAt_not: BigInt
+  registeredAt_in: [BigInt]
+  registeredAt_not_in: [BigInt]
+  registeredAt_gt: BigInt
+  registeredAt_lt: BigInt
+  registeredAt_gte: BigInt
+  registeredAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type applicationPage {
+  items: [application!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+enum applicationStatus {
+  none
+  active
+  paused
+}
+
+scalar BigInt
+
+""" The `Boolean` scalar type represents `true` or `false`. """
+scalar Boolean
+
+type feeConfig {
+  id: String!
+  vpFeeRate: BigInt!
+  ucFeeRate: BigInt!
+  avkFeeRate: BigInt!
+  protocolPegInFeeRate: BigInt!
+  vpRegistrationFee: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
+}
+
+input feeConfigFilter {
+  AND: [feeConfigFilter]
+  OR: [feeConfigFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  vpFeeRate: BigInt
+  vpFeeRate_not: BigInt
+  vpFeeRate_in: [BigInt]
+  vpFeeRate_not_in: [BigInt]
+  vpFeeRate_gt: BigInt
+  vpFeeRate_lt: BigInt
+  vpFeeRate_gte: BigInt
+  vpFeeRate_lte: BigInt
+  ucFeeRate: BigInt
+  ucFeeRate_not: BigInt
+  ucFeeRate_in: [BigInt]
+  ucFeeRate_not_in: [BigInt]
+  ucFeeRate_gt: BigInt
+  ucFeeRate_lt: BigInt
+  ucFeeRate_gte: BigInt
+  ucFeeRate_lte: BigInt
+  avkFeeRate: BigInt
+  avkFeeRate_not: BigInt
+  avkFeeRate_in: [BigInt]
+  avkFeeRate_not_in: [BigInt]
+  avkFeeRate_gt: BigInt
+  avkFeeRate_lt: BigInt
+  avkFeeRate_gte: BigInt
+  avkFeeRate_lte: BigInt
+  protocolPegInFeeRate: BigInt
+  protocolPegInFeeRate_not: BigInt
+  protocolPegInFeeRate_in: [BigInt]
+  protocolPegInFeeRate_not_in: [BigInt]
+  protocolPegInFeeRate_gt: BigInt
+  protocolPegInFeeRate_lt: BigInt
+  protocolPegInFeeRate_gte: BigInt
+  protocolPegInFeeRate_lte: BigInt
+  vpRegistrationFee: BigInt
+  vpRegistrationFee_not: BigInt
+  vpRegistrationFee_in: [BigInt]
+  vpRegistrationFee_not_in: [BigInt]
+  vpRegistrationFee_gt: BigInt
+  vpRegistrationFee_lt: BigInt
+  vpRegistrationFee_gte: BigInt
+  vpRegistrationFee_lte: BigInt
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+}
+
+type feeConfigPage {
+  items: [feeConfig!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+enum feeEscrowStatus {
+  escrowed
+  distributed
+  refunded
+  forfeited
+}
+
+""" The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. """
+scalar Int
+
+""" The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). """
+scalar JSON
+
+type Meta {
+  status: JSON
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type protocolState {
+  id: String!
+  activeVaultCoreVersion: Int!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
+  transactionHash: String!
+}
+
+input protocolStateFilter {
+  AND: [protocolStateFilter]
+  OR: [protocolStateFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  activeVaultCoreVersion: Int
+  activeVaultCoreVersion_not: Int
+  activeVaultCoreVersion_in: [Int]
+  activeVaultCoreVersion_not_in: [Int]
+  activeVaultCoreVersion_gt: Int
+  activeVaultCoreVersion_lt: Int
+  activeVaultCoreVersion_gte: Int
+  activeVaultCoreVersion_lte: Int
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type protocolStatePage {
+  items: [protocolState!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type Query {
+  token(address: String!): token
+  tokens(where: tokenFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): tokenPage!
+  application(id: String!): application
+  applications(where: applicationFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): applicationPage!
+  vaultKeeper(id: String!): vaultKeeper
+  vaultKeepers(where: vaultKeeperFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultKeeperPage!
+  vaultKeeperApplication(id: String!): vaultKeeperApplication
+  vaultKeeperApplications(where: vaultKeeperApplicationFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultKeeperApplicationPage!
+  universalChallenger(id: String!): universalChallenger
+  universalChallengers(where: universalChallengerFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): universalChallengerPage!
+  universalChallengerVersion(id: String!): universalChallengerVersion
+  universalChallengerVersions(where: universalChallengerVersionFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): universalChallengerVersionPage!
+  vaultProvider(id: String!): vaultProvider
+  vaultProviders(where: vaultProviderFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultProviderPage!
+  vaultProviderStats(id: String!): vaultProviderStats
+  vaultProviderStatss(where: vaultProviderStatsFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultProviderStatsPage!
+  vault(id: String!): vault
+  vaults(where: vaultFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultPage!
+  stats(id: String!): stats
+  statss(where: statsFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): statsPage!
+  protocolState(id: String!): protocolState
+  protocolStates(where: protocolStateFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): protocolStatePage!
+  vaultActivity(id: String!): vaultActivity
+  vaultActivitys(where: vaultActivityFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultActivityPage!
+  feeConfig(id: String!): feeConfig
+  feeConfigs(where: feeConfigFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): feeConfigPage!
+  vaultFeeEscrow(vaultId: String!): vaultFeeEscrow
+  vaultFeeEscrows(where: vaultFeeEscrowFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): vaultFeeEscrowPage!
+  aaveConfig(id: Int!): aaveConfig
+  aaveConfigs(where: aaveConfigFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aaveConfigPage!
+  aaveReserve(id: BigInt!): aaveReserve
+  aaveReserves(where: aaveReserveFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aaveReservePage!
+  aavePosition(depositorAddress: String!): aavePosition
+  aavePositions(where: aavePositionFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aavePositionPage!
+  aavePositionCollateral(depositorAddress: String!, vaultId: String!): aavePositionCollateral
+  aavePositionCollaterals(where: aavePositionCollateralFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aavePositionCollateralPage!
+  aaveVaultStatus(vaultId: String!): aaveVaultStatus
+  aaveVaultStatuss(where: aaveVaultStatusFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aaveVaultStatusPage!
+  aaveUserProxy(user: String!): aaveUserProxy
+  aaveUserProxys(where: aaveUserProxyFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int, offset: Int): aaveUserProxyPage!
+  _meta: Meta
+}
+
+type stats {
+  id: String!
+  totalAvailableSats: BigInt!
+  availableVaultCount: Int!
+  updatedAt: BigInt!
+}
+
+input statsFilter {
+  AND: [statsFilter]
+  OR: [statsFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  totalAvailableSats: BigInt
+  totalAvailableSats_not: BigInt
+  totalAvailableSats_in: [BigInt]
+  totalAvailableSats_not_in: [BigInt]
+  totalAvailableSats_gt: BigInt
+  totalAvailableSats_lt: BigInt
+  totalAvailableSats_gte: BigInt
+  totalAvailableSats_lte: BigInt
+  availableVaultCount: Int
+  availableVaultCount_not: Int
+  availableVaultCount_in: [Int]
+  availableVaultCount_not_in: [Int]
+  availableVaultCount_gt: Int
+  availableVaultCount_lt: Int
+  availableVaultCount_gte: Int
+  availableVaultCount_lte: Int
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+}
+
+type statsPage {
+  items: [stats!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+""" The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text. """
+scalar String
+
+type token {
+  address: String!
+  symbol: String!
+  name: String!
+  decimals: Int!
+}
+
+input tokenFilter {
+  AND: [tokenFilter]
+  OR: [tokenFilter]
+  address: String
+  address_not: String
+  address_in: [String]
+  address_not_in: [String]
+  address_contains: String
+  address_not_contains: String
+  address_starts_with: String
+  address_ends_with: String
+  address_not_starts_with: String
+  address_not_ends_with: String
+  symbol: String
+  symbol_not: String
+  symbol_in: [String]
+  symbol_not_in: [String]
+  symbol_contains: String
+  symbol_not_contains: String
+  symbol_starts_with: String
+  symbol_ends_with: String
+  symbol_not_starts_with: String
+  symbol_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String]
+  name_not_in: [String]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_ends_with: String
+  name_not_starts_with: String
+  name_not_ends_with: String
+  decimals: Int
+  decimals_not: Int
+  decimals_in: [Int]
+  decimals_not_in: [Int]
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+}
+
+type tokenPage {
+  items: [token!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type universalChallenger {
+  id: String!
+  btcPubKey: String!
+  firstSeenAt: BigInt!
+  blockNumber: BigInt!
+}
+
+input universalChallengerFilter {
+  AND: [universalChallengerFilter]
+  OR: [universalChallengerFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  btcPubKey: String
+  btcPubKey_not: String
+  btcPubKey_in: [String]
+  btcPubKey_not_in: [String]
+  btcPubKey_contains: String
+  btcPubKey_not_contains: String
+  btcPubKey_starts_with: String
+  btcPubKey_ends_with: String
+  btcPubKey_not_starts_with: String
+  btcPubKey_not_ends_with: String
+  firstSeenAt: BigInt
+  firstSeenAt_not: BigInt
+  firstSeenAt_in: [BigInt]
+  firstSeenAt_not_in: [BigInt]
+  firstSeenAt_gt: BigInt
+  firstSeenAt_lt: BigInt
+  firstSeenAt_gte: BigInt
+  firstSeenAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+}
+
+type universalChallengerPage {
+  items: [universalChallenger!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type universalChallengerVersion {
+  id: String!
+  challengerId: String!
+  version: Int!
+  blockNumber: BigInt!
+  challengerInfo: universalChallenger
+}
+
+input universalChallengerVersionFilter {
+  AND: [universalChallengerVersionFilter]
+  OR: [universalChallengerVersionFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  challengerId: String
+  challengerId_not: String
+  challengerId_in: [String]
+  challengerId_not_in: [String]
+  challengerId_contains: String
+  challengerId_not_contains: String
+  challengerId_starts_with: String
+  challengerId_ends_with: String
+  challengerId_not_starts_with: String
+  challengerId_not_ends_with: String
+  version: Int
+  version_not: Int
+  version_in: [Int]
+  version_not_in: [Int]
+  version_gt: Int
+  version_lt: Int
+  version_gte: Int
+  version_lte: Int
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+}
+
+type universalChallengerVersionPage {
+  items: [universalChallengerVersion!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type vault {
+  id: String!
+  peginTxHash: String!
+  depositor: String!
+  depositorBtcPubKey: String!
+  vaultProvider: String!
+  vaultProviderCommissionBps: Int!
+  amount: BigInt!
+  applicationEntryPoint: String!
+  status: vaultStatus
+  inUse: Boolean!
+  ackCount: Int!
+  depositorSignedPeginTx: String!
+  unsignedPrePeginTx: String!
+  appVaultKeepersVersion: Int!
+  universalChallengersVersion: Int!
+  offchainParamsVersion: Int!
+  proverCircuitVersion: Int!
+  vaultCoreVersion: Int!
+  referralCode: Int!
+  depositorPayoutBtcAddress: String!
+  btcPopSignature: String
+  depositorWotsPkHash: String
+  peginSigsPostedAt: BigInt
+  prePeginTxHash: String
+  htlcVout: Int!
+  hashlock: String!
+  secret: String
+  currentOwner: String
+  pendingAt: BigInt!
+  verifiedAt: BigInt
+  activatedAt: BigInt
+  expiredAt: BigInt
+  expirationReason: String
+  claimExpiredUntil: BigInt
+  expiredClaimedAt: BigInt
+  blockNumber: BigInt!
+  transactionHash: String!
+  application: application
+}
+
+type vaultActivity {
+  id: String!
+  vaultId: String
+  depositor: String!
+  type: vaultActivityType!
+  amount: BigInt!
+  debtReserveId: BigInt
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: String!
+}
+
+input vaultActivityFilter {
+  AND: [vaultActivityFilter]
+  OR: [vaultActivityFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  vaultId: String
+  vaultId_not: String
+  vaultId_in: [String]
+  vaultId_not_in: [String]
+  vaultId_contains: String
+  vaultId_not_contains: String
+  vaultId_starts_with: String
+  vaultId_ends_with: String
+  vaultId_not_starts_with: String
+  vaultId_not_ends_with: String
+  depositor: String
+  depositor_not: String
+  depositor_in: [String]
+  depositor_not_in: [String]
+  depositor_contains: String
+  depositor_not_contains: String
+  depositor_starts_with: String
+  depositor_ends_with: String
+  depositor_not_starts_with: String
+  depositor_not_ends_with: String
+  type: vaultActivityType
+  type_not: vaultActivityType
+  type_in: [vaultActivityType]
+  type_not_in: [vaultActivityType]
+  amount: BigInt
+  amount_not: BigInt
+  amount_in: [BigInt]
+  amount_not_in: [BigInt]
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  debtReserveId: BigInt
+  debtReserveId_not: BigInt
+  debtReserveId_in: [BigInt]
+  debtReserveId_not_in: [BigInt]
+  debtReserveId_gt: BigInt
+  debtReserveId_lt: BigInt
+  debtReserveId_gte: BigInt
+  debtReserveId_lte: BigInt
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_in: [BigInt]
+  timestamp_not_in: [BigInt]
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type vaultActivityPage {
+  items: [vaultActivity!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+enum vaultActivityType {
+  deposit
+  withdrawal
+  add_collateral
+  remove_collateral
+  liquidation
+  borrow
+  repay
+  redeem
+  claim_expired
+}
+
+type vaultFeeEscrow {
+  vaultId: String!
+  totalAmount: BigInt!
+  vaultProvider: String!
+  numUniversalChallengers: Int!
+  numAppVaultKeepers: Int!
+  status: feeEscrowStatus!
+  escrowedAt: BigInt!
+  distributedAt: BigInt
+  refundedAt: BigInt
+  forfeitedAt: BigInt
+  blockNumber: BigInt!
+  transactionHash: String!
+  vault: vault
+}
+
+input vaultFeeEscrowFilter {
+  AND: [vaultFeeEscrowFilter]
+  OR: [vaultFeeEscrowFilter]
+  vaultId: String
+  vaultId_not: String
+  vaultId_in: [String]
+  vaultId_not_in: [String]
+  vaultId_contains: String
+  vaultId_not_contains: String
+  vaultId_starts_with: String
+  vaultId_ends_with: String
+  vaultId_not_starts_with: String
+  vaultId_not_ends_with: String
+  totalAmount: BigInt
+  totalAmount_not: BigInt
+  totalAmount_in: [BigInt]
+  totalAmount_not_in: [BigInt]
+  totalAmount_gt: BigInt
+  totalAmount_lt: BigInt
+  totalAmount_gte: BigInt
+  totalAmount_lte: BigInt
+  vaultProvider: String
+  vaultProvider_not: String
+  vaultProvider_in: [String]
+  vaultProvider_not_in: [String]
+  vaultProvider_contains: String
+  vaultProvider_not_contains: String
+  vaultProvider_starts_with: String
+  vaultProvider_ends_with: String
+  vaultProvider_not_starts_with: String
+  vaultProvider_not_ends_with: String
+  numUniversalChallengers: Int
+  numUniversalChallengers_not: Int
+  numUniversalChallengers_in: [Int]
+  numUniversalChallengers_not_in: [Int]
+  numUniversalChallengers_gt: Int
+  numUniversalChallengers_lt: Int
+  numUniversalChallengers_gte: Int
+  numUniversalChallengers_lte: Int
+  numAppVaultKeepers: Int
+  numAppVaultKeepers_not: Int
+  numAppVaultKeepers_in: [Int]
+  numAppVaultKeepers_not_in: [Int]
+  numAppVaultKeepers_gt: Int
+  numAppVaultKeepers_lt: Int
+  numAppVaultKeepers_gte: Int
+  numAppVaultKeepers_lte: Int
+  status: feeEscrowStatus
+  status_not: feeEscrowStatus
+  status_in: [feeEscrowStatus]
+  status_not_in: [feeEscrowStatus]
+  escrowedAt: BigInt
+  escrowedAt_not: BigInt
+  escrowedAt_in: [BigInt]
+  escrowedAt_not_in: [BigInt]
+  escrowedAt_gt: BigInt
+  escrowedAt_lt: BigInt
+  escrowedAt_gte: BigInt
+  escrowedAt_lte: BigInt
+  distributedAt: BigInt
+  distributedAt_not: BigInt
+  distributedAt_in: [BigInt]
+  distributedAt_not_in: [BigInt]
+  distributedAt_gt: BigInt
+  distributedAt_lt: BigInt
+  distributedAt_gte: BigInt
+  distributedAt_lte: BigInt
+  refundedAt: BigInt
+  refundedAt_not: BigInt
+  refundedAt_in: [BigInt]
+  refundedAt_not_in: [BigInt]
+  refundedAt_gt: BigInt
+  refundedAt_lt: BigInt
+  refundedAt_gte: BigInt
+  refundedAt_lte: BigInt
+  forfeitedAt: BigInt
+  forfeitedAt_not: BigInt
+  forfeitedAt_in: [BigInt]
+  forfeitedAt_not_in: [BigInt]
+  forfeitedAt_gt: BigInt
+  forfeitedAt_lt: BigInt
+  forfeitedAt_gte: BigInt
+  forfeitedAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type vaultFeeEscrowPage {
+  items: [vaultFeeEscrow!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+input vaultFilter {
+  AND: [vaultFilter]
+  OR: [vaultFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  peginTxHash: String
+  peginTxHash_not: String
+  peginTxHash_in: [String]
+  peginTxHash_not_in: [String]
+  peginTxHash_contains: String
+  peginTxHash_not_contains: String
+  peginTxHash_starts_with: String
+  peginTxHash_ends_with: String
+  peginTxHash_not_starts_with: String
+  peginTxHash_not_ends_with: String
+  depositor: String
+  depositor_not: String
+  depositor_in: [String]
+  depositor_not_in: [String]
+  depositor_contains: String
+  depositor_not_contains: String
+  depositor_starts_with: String
+  depositor_ends_with: String
+  depositor_not_starts_with: String
+  depositor_not_ends_with: String
+  depositorBtcPubKey: String
+  depositorBtcPubKey_not: String
+  depositorBtcPubKey_in: [String]
+  depositorBtcPubKey_not_in: [String]
+  depositorBtcPubKey_contains: String
+  depositorBtcPubKey_not_contains: String
+  depositorBtcPubKey_starts_with: String
+  depositorBtcPubKey_ends_with: String
+  depositorBtcPubKey_not_starts_with: String
+  depositorBtcPubKey_not_ends_with: String
+  vaultProvider: String
+  vaultProvider_not: String
+  vaultProvider_in: [String]
+  vaultProvider_not_in: [String]
+  vaultProvider_contains: String
+  vaultProvider_not_contains: String
+  vaultProvider_starts_with: String
+  vaultProvider_ends_with: String
+  vaultProvider_not_starts_with: String
+  vaultProvider_not_ends_with: String
+  vaultProviderCommissionBps: Int
+  vaultProviderCommissionBps_not: Int
+  vaultProviderCommissionBps_in: [Int]
+  vaultProviderCommissionBps_not_in: [Int]
+  vaultProviderCommissionBps_gt: Int
+  vaultProviderCommissionBps_lt: Int
+  vaultProviderCommissionBps_gte: Int
+  vaultProviderCommissionBps_lte: Int
+  amount: BigInt
+  amount_not: BigInt
+  amount_in: [BigInt]
+  amount_not_in: [BigInt]
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  applicationEntryPoint: String
+  applicationEntryPoint_not: String
+  applicationEntryPoint_in: [String]
+  applicationEntryPoint_not_in: [String]
+  applicationEntryPoint_contains: String
+  applicationEntryPoint_not_contains: String
+  applicationEntryPoint_starts_with: String
+  applicationEntryPoint_ends_with: String
+  applicationEntryPoint_not_starts_with: String
+  applicationEntryPoint_not_ends_with: String
+  status: vaultStatus
+  status_not: vaultStatus
+  status_in: [vaultStatus]
+  status_not_in: [vaultStatus]
+  inUse: Boolean
+  inUse_not: Boolean
+  inUse_in: [Boolean]
+  inUse_not_in: [Boolean]
+  ackCount: Int
+  ackCount_not: Int
+  ackCount_in: [Int]
+  ackCount_not_in: [Int]
+  ackCount_gt: Int
+  ackCount_lt: Int
+  ackCount_gte: Int
+  ackCount_lte: Int
+  depositorSignedPeginTx: String
+  depositorSignedPeginTx_not: String
+  depositorSignedPeginTx_in: [String]
+  depositorSignedPeginTx_not_in: [String]
+  depositorSignedPeginTx_contains: String
+  depositorSignedPeginTx_not_contains: String
+  depositorSignedPeginTx_starts_with: String
+  depositorSignedPeginTx_ends_with: String
+  depositorSignedPeginTx_not_starts_with: String
+  depositorSignedPeginTx_not_ends_with: String
+  unsignedPrePeginTx: String
+  unsignedPrePeginTx_not: String
+  unsignedPrePeginTx_in: [String]
+  unsignedPrePeginTx_not_in: [String]
+  unsignedPrePeginTx_contains: String
+  unsignedPrePeginTx_not_contains: String
+  unsignedPrePeginTx_starts_with: String
+  unsignedPrePeginTx_ends_with: String
+  unsignedPrePeginTx_not_starts_with: String
+  unsignedPrePeginTx_not_ends_with: String
+  appVaultKeepersVersion: Int
+  appVaultKeepersVersion_not: Int
+  appVaultKeepersVersion_in: [Int]
+  appVaultKeepersVersion_not_in: [Int]
+  appVaultKeepersVersion_gt: Int
+  appVaultKeepersVersion_lt: Int
+  appVaultKeepersVersion_gte: Int
+  appVaultKeepersVersion_lte: Int
+  universalChallengersVersion: Int
+  universalChallengersVersion_not: Int
+  universalChallengersVersion_in: [Int]
+  universalChallengersVersion_not_in: [Int]
+  universalChallengersVersion_gt: Int
+  universalChallengersVersion_lt: Int
+  universalChallengersVersion_gte: Int
+  universalChallengersVersion_lte: Int
+  offchainParamsVersion: Int
+  offchainParamsVersion_not: Int
+  offchainParamsVersion_in: [Int]
+  offchainParamsVersion_not_in: [Int]
+  offchainParamsVersion_gt: Int
+  offchainParamsVersion_lt: Int
+  offchainParamsVersion_gte: Int
+  offchainParamsVersion_lte: Int
+  proverCircuitVersion: Int
+  proverCircuitVersion_not: Int
+  proverCircuitVersion_in: [Int]
+  proverCircuitVersion_not_in: [Int]
+  proverCircuitVersion_gt: Int
+  proverCircuitVersion_lt: Int
+  proverCircuitVersion_gte: Int
+  proverCircuitVersion_lte: Int
+  vaultCoreVersion: Int
+  vaultCoreVersion_not: Int
+  vaultCoreVersion_in: [Int]
+  vaultCoreVersion_not_in: [Int]
+  vaultCoreVersion_gt: Int
+  vaultCoreVersion_lt: Int
+  vaultCoreVersion_gte: Int
+  vaultCoreVersion_lte: Int
+  referralCode: Int
+  referralCode_not: Int
+  referralCode_in: [Int]
+  referralCode_not_in: [Int]
+  referralCode_gt: Int
+  referralCode_lt: Int
+  referralCode_gte: Int
+  referralCode_lte: Int
+  depositorPayoutBtcAddress: String
+  depositorPayoutBtcAddress_not: String
+  depositorPayoutBtcAddress_in: [String]
+  depositorPayoutBtcAddress_not_in: [String]
+  depositorPayoutBtcAddress_contains: String
+  depositorPayoutBtcAddress_not_contains: String
+  depositorPayoutBtcAddress_starts_with: String
+  depositorPayoutBtcAddress_ends_with: String
+  depositorPayoutBtcAddress_not_starts_with: String
+  depositorPayoutBtcAddress_not_ends_with: String
+  btcPopSignature: String
+  btcPopSignature_not: String
+  btcPopSignature_in: [String]
+  btcPopSignature_not_in: [String]
+  btcPopSignature_contains: String
+  btcPopSignature_not_contains: String
+  btcPopSignature_starts_with: String
+  btcPopSignature_ends_with: String
+  btcPopSignature_not_starts_with: String
+  btcPopSignature_not_ends_with: String
+  depositorWotsPkHash: String
+  depositorWotsPkHash_not: String
+  depositorWotsPkHash_in: [String]
+  depositorWotsPkHash_not_in: [String]
+  depositorWotsPkHash_contains: String
+  depositorWotsPkHash_not_contains: String
+  depositorWotsPkHash_starts_with: String
+  depositorWotsPkHash_ends_with: String
+  depositorWotsPkHash_not_starts_with: String
+  depositorWotsPkHash_not_ends_with: String
+  peginSigsPostedAt: BigInt
+  peginSigsPostedAt_not: BigInt
+  peginSigsPostedAt_in: [BigInt]
+  peginSigsPostedAt_not_in: [BigInt]
+  peginSigsPostedAt_gt: BigInt
+  peginSigsPostedAt_lt: BigInt
+  peginSigsPostedAt_gte: BigInt
+  peginSigsPostedAt_lte: BigInt
+  prePeginTxHash: String
+  prePeginTxHash_not: String
+  prePeginTxHash_in: [String]
+  prePeginTxHash_not_in: [String]
+  prePeginTxHash_contains: String
+  prePeginTxHash_not_contains: String
+  prePeginTxHash_starts_with: String
+  prePeginTxHash_ends_with: String
+  prePeginTxHash_not_starts_with: String
+  prePeginTxHash_not_ends_with: String
+  htlcVout: Int
+  htlcVout_not: Int
+  htlcVout_in: [Int]
+  htlcVout_not_in: [Int]
+  htlcVout_gt: Int
+  htlcVout_lt: Int
+  htlcVout_gte: Int
+  htlcVout_lte: Int
+  hashlock: String
+  hashlock_not: String
+  hashlock_in: [String]
+  hashlock_not_in: [String]
+  hashlock_contains: String
+  hashlock_not_contains: String
+  hashlock_starts_with: String
+  hashlock_ends_with: String
+  hashlock_not_starts_with: String
+  hashlock_not_ends_with: String
+  secret: String
+  secret_not: String
+  secret_in: [String]
+  secret_not_in: [String]
+  secret_contains: String
+  secret_not_contains: String
+  secret_starts_with: String
+  secret_ends_with: String
+  secret_not_starts_with: String
+  secret_not_ends_with: String
+  currentOwner: String
+  currentOwner_not: String
+  currentOwner_in: [String]
+  currentOwner_not_in: [String]
+  currentOwner_contains: String
+  currentOwner_not_contains: String
+  currentOwner_starts_with: String
+  currentOwner_ends_with: String
+  currentOwner_not_starts_with: String
+  currentOwner_not_ends_with: String
+  pendingAt: BigInt
+  pendingAt_not: BigInt
+  pendingAt_in: [BigInt]
+  pendingAt_not_in: [BigInt]
+  pendingAt_gt: BigInt
+  pendingAt_lt: BigInt
+  pendingAt_gte: BigInt
+  pendingAt_lte: BigInt
+  verifiedAt: BigInt
+  verifiedAt_not: BigInt
+  verifiedAt_in: [BigInt]
+  verifiedAt_not_in: [BigInt]
+  verifiedAt_gt: BigInt
+  verifiedAt_lt: BigInt
+  verifiedAt_gte: BigInt
+  verifiedAt_lte: BigInt
+  activatedAt: BigInt
+  activatedAt_not: BigInt
+  activatedAt_in: [BigInt]
+  activatedAt_not_in: [BigInt]
+  activatedAt_gt: BigInt
+  activatedAt_lt: BigInt
+  activatedAt_gte: BigInt
+  activatedAt_lte: BigInt
+  expiredAt: BigInt
+  expiredAt_not: BigInt
+  expiredAt_in: [BigInt]
+  expiredAt_not_in: [BigInt]
+  expiredAt_gt: BigInt
+  expiredAt_lt: BigInt
+  expiredAt_gte: BigInt
+  expiredAt_lte: BigInt
+  expirationReason: String
+  expirationReason_not: String
+  expirationReason_in: [String]
+  expirationReason_not_in: [String]
+  expirationReason_contains: String
+  expirationReason_not_contains: String
+  expirationReason_starts_with: String
+  expirationReason_ends_with: String
+  expirationReason_not_starts_with: String
+  expirationReason_not_ends_with: String
+  claimExpiredUntil: BigInt
+  claimExpiredUntil_not: BigInt
+  claimExpiredUntil_in: [BigInt]
+  claimExpiredUntil_not_in: [BigInt]
+  claimExpiredUntil_gt: BigInt
+  claimExpiredUntil_lt: BigInt
+  claimExpiredUntil_gte: BigInt
+  claimExpiredUntil_lte: BigInt
+  expiredClaimedAt: BigInt
+  expiredClaimedAt_not: BigInt
+  expiredClaimedAt_in: [BigInt]
+  expiredClaimedAt_not_in: [BigInt]
+  expiredClaimedAt_gt: BigInt
+  expiredClaimedAt_lt: BigInt
+  expiredClaimedAt_gte: BigInt
+  expiredClaimedAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type vaultKeeper {
+  id: String!
+  btcPubKey: String!
+  firstSeenAt: BigInt!
+  blockNumber: BigInt!
+}
+
+type vaultKeeperApplication {
+  id: String!
+  vaultKeeper: String!
+  applicationEntryPoint: String!
+  version: Int!
+  registeredAt: BigInt!
+  blockNumber: BigInt!
+  vaultKeeperInfo: vaultKeeper
+}
+
+input vaultKeeperApplicationFilter {
+  AND: [vaultKeeperApplicationFilter]
+  OR: [vaultKeeperApplicationFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  vaultKeeper: String
+  vaultKeeper_not: String
+  vaultKeeper_in: [String]
+  vaultKeeper_not_in: [String]
+  vaultKeeper_contains: String
+  vaultKeeper_not_contains: String
+  vaultKeeper_starts_with: String
+  vaultKeeper_ends_with: String
+  vaultKeeper_not_starts_with: String
+  vaultKeeper_not_ends_with: String
+  applicationEntryPoint: String
+  applicationEntryPoint_not: String
+  applicationEntryPoint_in: [String]
+  applicationEntryPoint_not_in: [String]
+  applicationEntryPoint_contains: String
+  applicationEntryPoint_not_contains: String
+  applicationEntryPoint_starts_with: String
+  applicationEntryPoint_ends_with: String
+  applicationEntryPoint_not_starts_with: String
+  applicationEntryPoint_not_ends_with: String
+  version: Int
+  version_not: Int
+  version_in: [Int]
+  version_not_in: [Int]
+  version_gt: Int
+  version_lt: Int
+  version_gte: Int
+  version_lte: Int
+  registeredAt: BigInt
+  registeredAt_not: BigInt
+  registeredAt_in: [BigInt]
+  registeredAt_not_in: [BigInt]
+  registeredAt_gt: BigInt
+  registeredAt_lt: BigInt
+  registeredAt_gte: BigInt
+  registeredAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+}
+
+type vaultKeeperApplicationPage {
+  items: [vaultKeeperApplication!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+input vaultKeeperFilter {
+  AND: [vaultKeeperFilter]
+  OR: [vaultKeeperFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  btcPubKey: String
+  btcPubKey_not: String
+  btcPubKey_in: [String]
+  btcPubKey_not_in: [String]
+  btcPubKey_contains: String
+  btcPubKey_not_contains: String
+  btcPubKey_starts_with: String
+  btcPubKey_ends_with: String
+  btcPubKey_not_starts_with: String
+  btcPubKey_not_ends_with: String
+  firstSeenAt: BigInt
+  firstSeenAt_not: BigInt
+  firstSeenAt_in: [BigInt]
+  firstSeenAt_not_in: [BigInt]
+  firstSeenAt_gt: BigInt
+  firstSeenAt_lt: BigInt
+  firstSeenAt_gte: BigInt
+  firstSeenAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+}
+
+type vaultKeeperPage {
+  items: [vaultKeeper!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type vaultPage {
+  items: [vault!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type vaultProvider {
+  id: String!
+  btcPubKey: String!
+  applicationEntryPoint: String!
+  commissionBps: Int!
+  name: String
+  rpcUrl: String
+  grpcUrl: String
+  daemonGrpcUrl: String
+  metadataStatus: String
+  metadataRejectionReason: String
+  registeredAt: BigInt!
+  blockNumber: BigInt!
+  transactionHash: String!
+}
+
+input vaultProviderFilter {
+  AND: [vaultProviderFilter]
+  OR: [vaultProviderFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  btcPubKey: String
+  btcPubKey_not: String
+  btcPubKey_in: [String]
+  btcPubKey_not_in: [String]
+  btcPubKey_contains: String
+  btcPubKey_not_contains: String
+  btcPubKey_starts_with: String
+  btcPubKey_ends_with: String
+  btcPubKey_not_starts_with: String
+  btcPubKey_not_ends_with: String
+  applicationEntryPoint: String
+  applicationEntryPoint_not: String
+  applicationEntryPoint_in: [String]
+  applicationEntryPoint_not_in: [String]
+  applicationEntryPoint_contains: String
+  applicationEntryPoint_not_contains: String
+  applicationEntryPoint_starts_with: String
+  applicationEntryPoint_ends_with: String
+  applicationEntryPoint_not_starts_with: String
+  applicationEntryPoint_not_ends_with: String
+  commissionBps: Int
+  commissionBps_not: Int
+  commissionBps_in: [Int]
+  commissionBps_not_in: [Int]
+  commissionBps_gt: Int
+  commissionBps_lt: Int
+  commissionBps_gte: Int
+  commissionBps_lte: Int
+  name: String
+  name_not: String
+  name_in: [String]
+  name_not_in: [String]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_ends_with: String
+  name_not_starts_with: String
+  name_not_ends_with: String
+  rpcUrl: String
+  rpcUrl_not: String
+  rpcUrl_in: [String]
+  rpcUrl_not_in: [String]
+  rpcUrl_contains: String
+  rpcUrl_not_contains: String
+  rpcUrl_starts_with: String
+  rpcUrl_ends_with: String
+  rpcUrl_not_starts_with: String
+  rpcUrl_not_ends_with: String
+  grpcUrl: String
+  grpcUrl_not: String
+  grpcUrl_in: [String]
+  grpcUrl_not_in: [String]
+  grpcUrl_contains: String
+  grpcUrl_not_contains: String
+  grpcUrl_starts_with: String
+  grpcUrl_ends_with: String
+  grpcUrl_not_starts_with: String
+  grpcUrl_not_ends_with: String
+  daemonGrpcUrl: String
+  daemonGrpcUrl_not: String
+  daemonGrpcUrl_in: [String]
+  daemonGrpcUrl_not_in: [String]
+  daemonGrpcUrl_contains: String
+  daemonGrpcUrl_not_contains: String
+  daemonGrpcUrl_starts_with: String
+  daemonGrpcUrl_ends_with: String
+  daemonGrpcUrl_not_starts_with: String
+  daemonGrpcUrl_not_ends_with: String
+  metadataStatus: String
+  metadataStatus_not: String
+  metadataStatus_in: [String]
+  metadataStatus_not_in: [String]
+  metadataStatus_contains: String
+  metadataStatus_not_contains: String
+  metadataStatus_starts_with: String
+  metadataStatus_ends_with: String
+  metadataStatus_not_starts_with: String
+  metadataStatus_not_ends_with: String
+  metadataRejectionReason: String
+  metadataRejectionReason_not: String
+  metadataRejectionReason_in: [String]
+  metadataRejectionReason_not_in: [String]
+  metadataRejectionReason_contains: String
+  metadataRejectionReason_not_contains: String
+  metadataRejectionReason_starts_with: String
+  metadataRejectionReason_ends_with: String
+  metadataRejectionReason_not_starts_with: String
+  metadataRejectionReason_not_ends_with: String
+  registeredAt: BigInt
+  registeredAt_not: BigInt
+  registeredAt_in: [BigInt]
+  registeredAt_not_in: [BigInt]
+  registeredAt_gt: BigInt
+  registeredAt_lt: BigInt
+  registeredAt_gte: BigInt
+  registeredAt_lte: BigInt
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_in: [BigInt]
+  blockNumber_not_in: [BigInt]
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  transactionHash: String
+  transactionHash_not: String
+  transactionHash_in: [String]
+  transactionHash_not_in: [String]
+  transactionHash_contains: String
+  transactionHash_not_contains: String
+  transactionHash_starts_with: String
+  transactionHash_ends_with: String
+  transactionHash_not_starts_with: String
+  transactionHash_not_ends_with: String
+}
+
+type vaultProviderPage {
+  items: [vaultProvider!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type vaultProviderStats {
+  id: String!
+  activeVaultCount: Int!
+  totalActiveSats: BigInt!
+  updatedAt: BigInt!
+  provider: vaultProvider
+}
+
+input vaultProviderStatsFilter {
+  AND: [vaultProviderStatsFilter]
+  OR: [vaultProviderStatsFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  activeVaultCount: Int
+  activeVaultCount_not: Int
+  activeVaultCount_in: [Int]
+  activeVaultCount_not_in: [Int]
+  activeVaultCount_gt: Int
+  activeVaultCount_lt: Int
+  activeVaultCount_gte: Int
+  activeVaultCount_lte: Int
+  totalActiveSats: BigInt
+  totalActiveSats_not: BigInt
+  totalActiveSats_in: [BigInt]
+  totalActiveSats_not_in: [BigInt]
+  totalActiveSats_gt: BigInt
+  totalActiveSats_lt: BigInt
+  totalActiveSats_gte: BigInt
+  totalActiveSats_lte: BigInt
+  updatedAt: BigInt
+  updatedAt_not: BigInt
+  updatedAt_in: [BigInt]
+  updatedAt_not_in: [BigInt]
+  updatedAt_gt: BigInt
+  updatedAt_lt: BigInt
+  updatedAt_gte: BigInt
+  updatedAt_lte: BigInt
+}
+
+type vaultProviderStatsPage {
+  items: [vaultProviderStats!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+enum vaultStatus {
+  pending
+  signatures_collected
+  verified
+  available
+  redeemed
+  liquidated
+  expired
+  invalid
+  depositor_withdrawn
+}
+
+type ViewPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}

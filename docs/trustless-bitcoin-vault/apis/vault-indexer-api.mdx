@@ -1,0 +1,132 @@
+---
+title: Vault Indexer API
+sidebar_label: Vault Indexer API
+sidebar_position: 1
+description: The public GraphQL API for Babylon Trustless Bitcoin Vault testnet — endpoint, explorer, schema and limits.
+---
+
+# Vault Indexer API
+
+The vault indexer is a public, read-only GraphQL API over Babylon Trustless
+Bitcoin Vault state. It indexes events from the vault contracts and serves vault
+lifecycle, provider, security-participant and Aave position data.
+
+No API key. No authentication. Cross-origin requests are permitted.
+
+## Endpoint
+
+| | |
+| --- | --- |
+| **URL** | `https://babylon-vault-indexer-api.testnet.babylonlabs.io/` |
+| **Method** | `POST` with `Content-Type: application/json` |
+| **Alternate path** | `/graphql` — identical behaviour |
+| **Explorer** | Open the URL in a browser |
+| **Network** | Ethereum Sepolia (chain ID `11155111`) |
+| **Auth** | None |
+| **CORS** | Open |
+
+Testnet only. There is no mainnet endpoint yet.
+
+```bash
+curl -s https://babylon-vault-indexer-api.testnet.babylonlabs.io/ \
+  -H 'Content-Type: application/json' \
+  -H 'User-Agent: my-app/1.0' \
+  -d '{"query":"{ statss(limit:1){ items{ totalAvailableSats availableVaultCount } } }"}'
+```
+
+:::warning Three things that will catch you out
+1. Set a **`User-Agent`**. The default one from `requests`, `urllib` or many HTTP
+   clients gets a bare **403** from the edge.
+2. Query depth is capped at **10**, so standard GraphQL tooling **cannot
+   introspect** this endpoint.
+3. `limit` is capped at **1000**. Page with `offset`.
+
+All three are explained in [Limits and gotchas](./limits-and-gotchas.mdx). Read that
+page before you write a client.
+:::
+
+## What the API covers
+
+The schema splits into two domains.
+
+### Core vault
+
+The vault lifecycle and the actors that secure it, independent of any
+application: `vault`, `vaultActivity`, `vaultProvider`, `vaultProviderStats`,
+`vaultKeeper`, `universalChallenger`, `vaultFeeEscrow`, `feeConfig`,
+`application`, `token`, `stats` and `protocolState`.
+
+A vault progresses through:
+
+```
+pending → signatures_collected → verified → available
+                                              ├→ redeemed
+                                              ├→ liquidated
+                                              ├→ expired
+                                              ├→ depositor_withdrawn
+                                              └→ invalid
+```
+
+Each transition has its own timestamp field on the `vault` record, so you can
+reconstruct a full history from a single query.
+
+### Aave application
+
+State for the Aave v4 integration, the first application built on TBV:
+`aavePosition`, `aavePositionCollateral`, `aaveVaultStatus`, `aaveUserProxy`,
+`aaveReserve` and `aaveConfig`.
+
+A vault used as Aave collateral appears in both domains — as a `vault` and as an
+`aavePositionCollateral`.
+
+## Query shape
+
+Every entity has two resolvers.
+
+| Form | Example | Returns |
+| --- | --- | --- |
+| Singular | `vault(id: "0x…")` | One record, or `null` |
+| Plural | `vaults(where:, orderBy:, orderDirection:, limit:, offset:)` | A page |
+
+A page always carries `items`, `totalCount` and `pageInfo`. `totalCount` is the
+number of records matching the filter, not the number returned.
+
+Numeric values typed `BigInt` — amounts, block numbers, timestamps — are returned
+as **strings**, and comparison filters on them take strings too.
+
+## Explorer
+
+Opening the endpoint in a browser serves a GraphiQL playground. You can write and
+run queries there.
+
+:::caution The explorer cannot load the schema
+Because of the depth cap, the explorer's **Docs** panel shows
+`Error fetching schema`, and there is no autocomplete or in-editor validation.
+Queries still execute normally.
+
+Use the [Schema Reference](./schema-reference.mdx) on this site for field names, or
+the committed [SDL](/schema/vault-indexer.graphql).
+:::
+
+## Checking indexer freshness
+
+The indexer trails the chain. `_meta` reports the last processed block.
+
+```graphql
+{
+  _meta {
+    status
+  }
+}
+```
+
+Compare that block number against a Sepolia chain head before treating any
+result as current.
+
+## Where to go next
+
+- **[Schema Reference](./schema-reference.mdx)** — every entity, field and type
+- **[Query Cookbook](./query-cookbook.mdx)** — worked queries for depositors,
+  operators and builders, all executed in CI
+- **[Limits and gotchas](./limits-and-gotchas.mdx)** — depth, pagination, the 403
+  trap, and known data gaps

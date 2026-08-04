@@ -240,6 +240,33 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'APIs',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      // Plain links, not doc IDs: these pages own the stakingApi / babylonRpc /
+      // cometBFT sidebars, so referencing them by ID would place one doc in two
+      // sidebars. Their URLs are unchanged by this move.
+      items: [
+        {
+          type: 'link',
+          label: 'Babylon Staking API',
+          href: '/api/staking-api/babylon-staking-api',
+        },
+        {
+          type: 'link',
+          label: 'Babylon gRPC',
+          href: '/api/babylon-gRPC/babylon-grpc-api-docs',
+        },
+        {
+          type: 'link',
+          label: 'CometBFT',
+          href: '/api/comet-bft/babylon-grpc-api-docs',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Support',
       collapsible: true,
       collapsed: true,
@@ -293,6 +320,23 @@ const sidebars = {
         'trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem',
         'trustless-bitcoin-vault/use-for-lending/liquidation-risk',
         'trustless-bitcoin-vault/use-for-lending/faq',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'APIs',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      link: {
+        type: 'doc',
+        id: 'trustless-bitcoin-vault/apis/vault-indexer-api',
+      },
+      items: [
+        'trustless-bitcoin-vault/apis/vault-indexer-api',
+        'trustless-bitcoin-vault/apis/schema-reference',
+        'trustless-bitcoin-vault/apis/query-cookbook',
+        'trustless-bitcoin-vault/apis/limits-and-gotchas',
       ],
     },
     {

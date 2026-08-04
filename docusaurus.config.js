@@ -466,23 +466,11 @@ const config = {
             to: '/guides/overview/bitcoin_staking/',
             className: 'guides-top-header',
           },
-          {
-            label: 'API',
-            items: [
-              {
-                label: 'Staking API',
-                to: '/api/staking-api/babylon-staking-api',
-              },
-              {
-                label: 'Babylon gRPC',
-                to: '/api/babylon-gRPC/babylon-grpc-api-docs',
-              },
-              {
-                label: 'CometBFT',
-                to: '/api/comet-bft/babylon-grpc-api-docs',
-              },
-            ],
-          },
+          // The top-level "API" dropdown was removed: each product section now owns
+          // its own APIs. The Trustless Bitcoin Vault sidebar carries the Vault
+          // Indexer API, and the Bitcoin Staking sidebar carries the Staking API,
+          // Babylon gRPC and CometBFT. No page URLs changed, so no redirects are
+          // needed — only the navigation moved.
           {
             label: 'Support',
             to: 'https://discord.com/invite/babylonglobal',

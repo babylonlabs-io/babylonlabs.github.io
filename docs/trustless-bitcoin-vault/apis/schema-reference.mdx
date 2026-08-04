@@ -1,0 +1,440 @@
+---
+title: Schema Reference
+sidebar_label: Schema Reference
+sidebar_position: 2
+description: Every entity, field and type exposed by the Babylon vault indexer GraphQL API.
+---
+
+{/*
+  GENERATED FILE — DO NOT EDIT BY HAND.
+  Regenerate with: node scripts/gen-vault-indexer-docs.mjs
+  Source of truth: static/schema/vault-indexer.graphql
+*/}
+
+# Schema Reference
+
+Every entity exposed by the vault indexer, generated from the deployed schema.
+
+Each entity has two resolvers:
+
+- **Singular** — `vault(id: "0x…")` returns one record or `null`
+- **Plural** — `vaults(where:, orderBy:, orderDirection:, limit:, offset:)` returns a page
+
+A page always carries `items`, `totalCount` and `pageInfo`. `limit` caps at
+1000; see [Limits and gotchas](./limits-and-gotchas.mdx) before writing a client.
+
+:::note Types are lower-case
+Ponder generates this API from the indexer's table definitions, so type names
+match the table names and are lower-case (`vault`, not `Vault`). The plural of
+`stats` is `statss` for the same reason — the generator appends an `s`.
+:::
+
+
+## Core vault
+
+The vault lifecycle and the actors that secure it. These entities exist regardless of which DeFi application a vault is used with.
+
+
+### `vault`
+
+A single vault instance and its full lifecycle state.
+
+Query with `vault(…)` or `vaults(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `peginTxHash` | `String!` | yes |
+| `depositor` | `String!` | yes |
+| `depositorBtcPubKey` | `String!` | yes |
+| `vaultProvider` | `String!` | yes |
+| `vaultProviderCommissionBps` | `Int!` | yes |
+| `amount` | `BigInt!` | yes |
+| `applicationEntryPoint` | `String!` | yes |
+| `status` | `vaultStatus` | no |
+| `inUse` | `Boolean!` | yes |
+| `ackCount` | `Int!` | yes |
+| `depositorSignedPeginTx` | `String!` | yes |
+| `unsignedPrePeginTx` | `String!` | yes |
+| `appVaultKeepersVersion` | `Int!` | yes |
+| `universalChallengersVersion` | `Int!` | yes |
+| `offchainParamsVersion` | `Int!` | yes |
+| `proverCircuitVersion` | `Int!` | yes |
+| `vaultCoreVersion` | `Int!` | yes |
+| `referralCode` | `Int!` | yes |
+| `depositorPayoutBtcAddress` | `String!` | yes |
+| `btcPopSignature` | `String` | no |
+| `depositorWotsPkHash` | `String` | no |
+| `peginSigsPostedAt` | `BigInt` | no |
+| `prePeginTxHash` | `String` | no |
+| `htlcVout` | `Int!` | yes |
+| `hashlock` | `String!` | yes |
+| `secret` | `String` | no |
+| `currentOwner` | `String` | no |
+| `pendingAt` | `BigInt!` | yes |
+| `verifiedAt` | `BigInt` | no |
+| `activatedAt` | `BigInt` | no |
+| `expiredAt` | `BigInt` | no |
+| `expirationReason` | `String` | no |
+| `claimExpiredUntil` | `BigInt` | no |
+| `expiredClaimedAt` | `BigInt` | no |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+| `application` | `application` | no |
+
+
+`vaultStatus` values: `pending` · `signatures_collected` · `verified` · `available` · `redeemed` · `liquidated` · `expired` · `invalid` · `depositor_withdrawn`
+
+
+### `vaultActivity`
+
+Append-only event log of every action taken against a vault.
+
+Query with `vaultActivity(…)` or `vaultActivitys(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `vaultId` | `String` | no |
+| `depositor` | `String!` | yes |
+| `type` | `vaultActivityType!` | yes |
+| `amount` | `BigInt!` | yes |
+| `debtReserveId` | `BigInt` | no |
+| `timestamp` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+
+
+`vaultActivityType` values: `deposit` · `withdrawal` · `add_collateral` · `remove_collateral` · `liquidation` · `borrow` · `repay` · `redeem` · `claim_expired`
+
+
+### `vaultProvider`
+
+A registered entity that provides vault services.
+
+Query with `vaultProvider(…)` or `vaultProviders(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `btcPubKey` | `String!` | yes |
+| `applicationEntryPoint` | `String!` | yes |
+| `commissionBps` | `Int!` | yes |
+| `name` | `String` | no |
+| `rpcUrl` | `String` | no |
+| `grpcUrl` | `String` | no |
+| `daemonGrpcUrl` | `String` | no |
+| `metadataStatus` | `String` | no |
+| `metadataRejectionReason` | `String` | no |
+| `registeredAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+
+
+### `vaultProviderStats`
+
+Aggregated counters per vault provider.
+
+Query with `vaultProviderStats(…)` or `vaultProviderStatss(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `activeVaultCount` | `Int!` | yes |
+| `totalActiveSats` | `BigInt!` | yes |
+| `updatedAt` | `BigInt!` | yes |
+| `provider` | `vaultProvider` | no |
+
+
+### `vaultKeeper`
+
+A per-application participant in the vault security model.
+
+Query with `vaultKeeper(…)` or `vaultKeepers(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `btcPubKey` | `String!` | yes |
+| `firstSeenAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+
+
+### `vaultKeeperApplication`
+
+Join between a vault keeper and an application.
+
+Query with `vaultKeeperApplication(…)` or `vaultKeeperApplications(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `vaultKeeper` | `String!` | yes |
+| `applicationEntryPoint` | `String!` | yes |
+| `version` | `Int!` | yes |
+| `registeredAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `vaultKeeperInfo` | `vaultKeeper` | no |
+
+
+### `universalChallenger`
+
+A system-wide participant able to challenge invalid claims.
+
+Query with `universalChallenger(…)` or `universalChallengers(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `btcPubKey` | `String!` | yes |
+| `firstSeenAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+
+
+### `universalChallengerVersion`
+
+Versioned challenger set.
+
+Query with `universalChallengerVersion(…)` or `universalChallengerVersions(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `challengerId` | `String!` | yes |
+| `version` | `Int!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `challengerInfo` | `universalChallenger` | no |
+
+
+### `feeConfig`
+
+Fee configuration. Currently empty on testnet — see Limits and gotchas.
+
+Query with `feeConfig(…)` or `feeConfigs(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `vpFeeRate` | `BigInt!` | yes |
+| `ucFeeRate` | `BigInt!` | yes |
+| `avkFeeRate` | `BigInt!` | yes |
+| `protocolPegInFeeRate` | `BigInt!` | yes |
+| `vpRegistrationFee` | `BigInt!` | yes |
+| `updatedAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+
+
+### `vaultFeeEscrow`
+
+Escrowed fees for one vault. One row per vault.
+
+Query with `vaultFeeEscrow(…)` or `vaultFeeEscrows(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `vaultId` | `String!` | yes |
+| `totalAmount` | `BigInt!` | yes |
+| `vaultProvider` | `String!` | yes |
+| `numUniversalChallengers` | `Int!` | yes |
+| `numAppVaultKeepers` | `Int!` | yes |
+| `status` | `feeEscrowStatus!` | yes |
+| `escrowedAt` | `BigInt!` | yes |
+| `distributedAt` | `BigInt` | no |
+| `refundedAt` | `BigInt` | no |
+| `forfeitedAt` | `BigInt` | no |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+| `vault` | `vault` | no |
+
+
+`feeEscrowStatus` values: `escrowed` · `distributed` · `refunded` · `forfeited`
+
+
+### `application`
+
+A DeFi protocol integrated with the vault system.
+
+Query with `application(…)` or `applications(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `name` | `String` | no |
+| `latestVKVersion` | `Int` | no |
+| `totalCapBTC` | `BigInt` | no |
+| `perAddressCapBTC` | `BigInt` | no |
+| `status` | `applicationStatus!` | yes |
+| `registeredAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+
+
+`applicationStatus` values: `none` · `active` · `paused`
+
+
+### `token`
+
+A token known to the indexer.
+
+Query with `token(…)` or `tokens(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `address` | `String!` | yes |
+| `symbol` | `String!` | yes |
+| `name` | `String!` | yes |
+| `decimals` | `Int!` | yes |
+
+
+### `stats`
+
+Protocol-wide totals. Singleton.
+
+Query with `stats(…)` or `statss(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `totalAvailableSats` | `BigInt!` | yes |
+| `availableVaultCount` | `Int!` | yes |
+| `updatedAt` | `BigInt!` | yes |
+
+
+### `protocolState`
+
+Protocol-level singleton state, such as the active vault-core version.
+
+Query with `protocolState(…)` or `protocolStates(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `String!` | yes |
+| `activeVaultCoreVersion` | `Int!` | yes |
+| `updatedAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+
+
+## Aave application
+
+State for the Aave v4 integration — the first application built on TBV. A vault used as Aave collateral appears in both domains.
+
+
+### `aavePosition`
+
+A depositor position, keyed by depositor address.
+
+Query with `aavePosition(…)` or `aavePositions(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `depositorAddress` | `String!` | yes |
+| `proxyContract` | `String!` | yes |
+| `totalCollateral` | `BigInt!` | yes |
+| `createdAt` | `BigInt!` | yes |
+| `updatedAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+| `collaterals(…)` | `aavePositionCollateralPage` | no |
+
+
+### `aavePositionCollateral`
+
+One vault pledged as collateral against a position.
+
+Query with `aavePositionCollateral(…)` or `aavePositionCollaterals(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `depositorAddress` | `String!` | yes |
+| `vaultId` | `String!` | yes |
+| `amount` | `BigInt!` | yes |
+| `addedAt` | `BigInt!` | yes |
+| `removedAt` | `BigInt` | no |
+| `liquidationIndex` | `Int!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+| `position` | `aavePosition` | no |
+| `vault` | `vault` | no |
+
+
+### `aaveVaultStatus`
+
+Per-vault usage status within Aave.
+
+Query with `aaveVaultStatus(…)` or `aaveVaultStatuss(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `vaultId` | `String!` | yes |
+| `applicationEntryPoint` | `String!` | yes |
+| `status` | `aaveVaultUsageStatus!` | yes |
+| `metadata` | `JSON` | no |
+| `updatedAt` | `BigInt!` | yes |
+| `vault` | `vault` | no |
+
+
+`aaveVaultUsageStatus` values: `collateralized` · `llp_owned` · `redeemed`
+
+
+### `aaveUserProxy`
+
+The proxy contract deployed for a user.
+
+Query with `aaveUserProxy(…)` or `aaveUserProxys(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `user` | `String!` | yes |
+| `proxy` | `String!` | yes |
+| `createdAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `transactionHash` | `String!` | yes |
+
+
+### `aaveReserve`
+
+An Aave reserve and its parameters.
+
+Query with `aaveReserve(…)` or `aaveReserves(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `BigInt!` | yes |
+| `underlying` | `String!` | yes |
+| `hub` | `String!` | yes |
+| `assetId` | `Int!` | yes |
+| `decimals` | `Int!` | yes |
+| `dynamicConfigKey` | `BigInt!` | yes |
+| `paused` | `Boolean!` | yes |
+| `frozen` | `Boolean!` | yes |
+| `borrowable` | `Boolean!` | yes |
+| `collateralRisk` | `Int!` | yes |
+| `collateralFactor` | `Int!` | yes |
+| `createdAt` | `BigInt!` | yes |
+| `updatedAt` | `BigInt!` | yes |
+| `blockNumber` | `BigInt!` | yes |
+| `underlyingToken` | `token` | no |
+
+
+### `aaveConfig`
+
+Aave integration configuration. Singleton.
+
+Query with `aaveConfig(…)` or `aaveConfigs(…)`.
+
+| Field | Type | Required |
+| --- | --- | --- |
+| `id` | `Int!` | yes |
+| `adapterAddress` | `String!` | yes |
+| `vaultBtcAddress` | `String!` | yes |
+| `btcVaultRegistryAddress` | `String!` | yes |
+| `btcVaultCoreSpokeAddress` | `String!` | yes |
+| `vaultBtcReserveId` | `BigInt!` | yes |
+
+
+## Full SDL
+
+The complete schema is committed at [`/schema/vault-indexer.graphql`](/schema/vault-indexer.graphql).
+
+Introspection is available but depth-capped — see [Limits and gotchas](./limits-and-gotchas.mdx) for the four short queries that reconstruct it.

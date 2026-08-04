@@ -1,0 +1,10 @@
+{
+  "label": "APIs",
+  "position": 4,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Public APIs for Trustless Bitcoin Vault testnet: the vault indexer GraphQL endpoint, its schema, worked queries, and request limits."
+  }
+}
