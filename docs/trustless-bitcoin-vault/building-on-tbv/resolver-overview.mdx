@@ -5,7 +5,7 @@ title: Resolvers — overview
 A **Resolver** is how you extend the existing Aave application without building a whole new application on the vault layer. It is the right track for products that route through Aave borrowing — yield, credit-delegation, and aggregation products in the Bedrock / Cradle / ether.fi / 84 Labs pattern.
 
 :::info Open-source requirement (read first)
-A Resolver is on-chain code that extends the protocol and sits in the collateral path, so it must be **open source**. All on-chain resolver code must be published in a public repository under an **OSI-approved license compatible with the protocol's license**, and the **audited code, deployed bytecode, and published source must all correspond to a single commit** (the deployed contracts are reproducible from — and identical to — what was audited). Plan for this from day one: it is a registration gate, not an afterthought. See the **Resolver partner checklist**.
+A Resolver is on-chain code that extends the protocol and sits in the collateral path, so it must be **open source**. All on-chain resolver code must be published in a public repository under an **OSI-approved license compatible with the protocol's license** — the TBV Aave v4 contracts are `GPL-2.0-or-later` — and the **audited code, deployed bytecode, and published source must all correspond to a single commit** (the deployed contracts are reproducible from — and identical to — what was audited). Plan for this from day one: it is a registration gate, not an afterthought. See the [Resolver partner checklist](./resolver-partner-checklist.mdx).
 :::
 
 ## What a Resolver is
@@ -61,14 +61,35 @@ The choice is fundamental to your product's risk model: pooled mode shares a hea
 
 Repaying and liquidating a resolver-managed position remain permissionless on the adapter, exactly as for self-borrow. When liquidation over-seizes, the WBTC fairness surplus is paid to the position-account contract, which distributes it under its own rules.
 
-`BorrowDelegationPositionAccount` is deployed as an immutable contract (no proxy). A resolver that instead needs its position accounts to be upgradeable can deploy them behind a Beacon proxy so one implementation upgrade applies to every account at once — see **Upgradability & ownership**.
+`BorrowDelegationPositionAccount` is deployed as an immutable contract (no proxy). A resolver that instead needs its position accounts to be upgradeable can deploy them behind a Beacon proxy so one implementation upgrade applies to every account at once — see [Upgradability & ownership](./resolver-upgradability-and-ownership.mdx).
+
+## Who can call what
+
+The adapter authorizes privileged operations on `msg.sender`. For self-borrow the depositor *is* the position account and calls the adapter directly; for a resolver-managed position the position account is a contract, and that contract's own internal authorization decides who can trigger each operation.
+
+| Operation | Required `msg.sender` |
+|---|---|
+| `borrowFromCorePosition` | position account |
+| `withdrawCollaterals` | position account |
+| `reorderVaults` | position account |
+| `repayToCorePosition` | anyone |
+| `liquidateCorePosition` | anyone |
+
+Repay and liquidate being permissionless is what makes the exit guarantee in [Pausability](./resolver-pausability.mdx) enforceable: a resolver can pause borrowing, but it cannot trap collateral or block debt repayment.
 
 ## Position size limits
 
-The adapter enforces two governance-configurable caps per position, read at activation time: a maximum vault count per position (`maxVaultsPerPosition`) and a maximum total BTC per position (`maxPositionBTC`), both set via `setPositionSizeParams()`. Adding a vault that would breach either limit reverts. Exact values are governance-set per deployment.
+The adapter enforces two governance-configurable caps per position, read at activation time, both set via `setPositionSizeParams()` on `AaveAdapterConfig`. Adding a vault that would breach either limit reverts.
+
+| Parameter | Default | Meaning |
+|---|---|---|
+| `maxVaultsPerPosition` | 10 | Maximum vault count in one position |
+| `maxPositionBTC` | 10,000,000,000 sat (100 BTC) | Maximum total BTC in one position |
+
+These are the values set at contract initialization. Governance can change either per deployment, so treat them as defaults rather than guarantees and read the live values before sizing a product around them.
 
 ## Next
 
-- **Upgradability & ownership** — proxy patterns, timelock/multisig, and change control.
-- **Pausability** — resolver-level pause authority and coordination with protocol and Aave pause states.
-- **Resolver partner checklist** — the gates to clear before going live.
+- [Upgradability & ownership](./resolver-upgradability-and-ownership.mdx) — proxy patterns, timelock/multisig, and change control.
+- [Pausability](./resolver-pausability.mdx) — resolver-level pause authority and coordination with protocol and Aave pause states.
+- [Resolver partner checklist](./resolver-partner-checklist.mdx) — the gates to clear before going live.

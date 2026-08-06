@@ -124,6 +124,20 @@ const plugins = [
           from: '/trustless-bitcoin-vault/tbv-vs-alternatives/',
           to: '/trustless-bitcoin-vault/start-here/tbv-vs-alternatives/',
         },
+        // TBV testnet-info/* moved under network-info/testnet/* when the
+        // mainnet and testnet collections were folded into one.
+        {
+          from: '/trustless-bitcoin-vault/testnet-info/setup/',
+          to: '/trustless-bitcoin-vault/network-info/testnet/setup/',
+        },
+        {
+          from: '/trustless-bitcoin-vault/testnet-info/contract-addresses/',
+          to: '/trustless-bitcoin-vault/network-info/testnet/contract-addresses/',
+        },
+        {
+          from: '/trustless-bitcoin-vault/testnet-info/protocol-parameters/',
+          to: '/trustless-bitcoin-vault/network-info/testnet/protocol-parameters/',
+        },
         // Staking research/security moved under Bitcoin Staking
         {
           from: '/guides/research/',
@@ -458,14 +472,8 @@ const config = {
         items: [
           {
             label: 'Trustless Bitcoin Vault',
-            to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
-            className: 'trustless-bitcoin-vault-top-header',
-          },
-          {
-            // Beta Mainnet docs (parallel collection). Nav placement is
-            // provisional — may be folded under the single TBV home later.
-            label: 'TBV Mainnet',
-            to: '/trustless-bitcoin-vault-mainnet/',
+            // Single TBV collection covering both mainnet and testnet.
+            to: '/trustless-bitcoin-vault/',
             className: 'trustless-bitcoin-vault-top-header',
           },
           {

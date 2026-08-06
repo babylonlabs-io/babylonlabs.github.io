@@ -9,7 +9,7 @@ Before a Resolver goes live on Mainnet it must be reviewed and registered by TBV
 - [ ] **Admin, upgrade, and pause authorities are held by multisigs, not EOAs.** No single key controls a contract in the collateral path.
 - [ ] **Upgrade authority is timelocked** (or the contracts are deliberately immutable). Pending upgrades are observable before they take effect.
 - [ ] **Roles follow least privilege and are separated** — the pause authority is distinct from the upgrade authority; day-to-day operational roles do not carry upgrade power.
-- [ ] **The upgrade posture is documented and justified** — Transparent, UUPS, Beacon, or immutable — per the guidance in **Upgradability & ownership**.
+- [ ] **The upgrade posture is documented and justified** — Transparent, UUPS, Beacon, or immutable — per the guidance in [Upgradability & ownership](./resolver-upgradability-and-ownership.mdx).
 - [ ] **Position-account ownership and authorization rules are clearly specified** — for each mode (pooled or position-account), who owns the position, who can borrow, who can withdraw, and how any liquidation surplus is distributed.
 
 ## Pause requirements

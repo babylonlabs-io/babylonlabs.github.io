@@ -9,14 +9,14 @@ TBV is a **primitive**: it makes native BTC usable as collateral without wrappin
 The flagship use case: borrow assets against your BTC while keeping custody of your Bitcoin.
 
 1. **Deposit BTC** into a Taproot vault tied to the lending application.
-2. **`vaultBTC` is minted** on Ethereum to represent the locked BTC.
-3. **Supply as collateral** on the Babylon Core Spoke of Aave v4.
+2. **A collateral record is created** on Ethereum to represent the locked BTC.
+3. **Supply as collateral** on the Babylon Core Lending Spoke of Aave v4.
 4. **Borrow** available assets (e.g. USDC, USDT, WBTC) against it.
-5. **Repay & redeem** — repay debt, withdraw the vault, burn `vaultBTC`, and reclaim your BTC on Bitcoin after the challenge window.
+5. **Repay & redeem** — repay debt, withdraw the vault, close the collateral record, and reclaim your BTC on Bitcoin after the challenge window.
 
 **How Aave v4 is wired in:** each borrower gets a dedicated `AaveAdapterPositionProxy` (isolated position); the health factor is monitored by Aave's risk engine; and when a position becomes liquidatable the protocol performs **partial-position liquidation** — it seizes only the minimum prefix of whole vaults needed to restore the target health factor, and returns any over-seizure surplus to the depositor through the fairness mechanism. (This is a change from earlier designs that seized the entire position.)
 
-For the borrower walkthrough, see **Borrowing**. For the mechanics, see **Aave v4 integration**.
+For the borrower walkthrough, see [Quickstart](../use-for-lending/quickstart.mdx). For the mechanics, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
 
 ## On the roadmap
 
@@ -43,7 +43,7 @@ interface IApplicationEntryPoint {
 }
 ```
 
-When a vault activates, `BTCVaultRegistry` calls `activateVault(...)` on the registered application, which is where the application mints its accounting token, records ownership, and enables its DeFi functionality for the depositor. Building a new application is the **Application Integration** track — see **Building on TBV**. *(Application Integration docs are coming soon; contact us if you're building one.)*
+When a vault activates, `BTCVaultRegistry` calls `activateVault(...)` on the registered application, which is where the application mints its accounting token, records ownership, and enables its DeFi functionality for the depositor. Building a new application is the [Application Integration](../building-on-tbv/application-integration.mdx) track — see [Building on TBV](../building-on-tbv/overview.mdx). *(Application Integration docs are coming soon; contact us if you're building one.)*
 
 ## Next
 

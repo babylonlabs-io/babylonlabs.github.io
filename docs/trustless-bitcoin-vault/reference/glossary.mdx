@@ -6,8 +6,9 @@ sidebar_position: 1
 
 # TBV Glossary
 
-Terms used throughout the Trustless Bitcoin Vault (TBV) public testnet
-documentation.
+Terms used throughout the Trustless Bitcoin Vault (TBV) documentation. Except
+where a definition names a network, terms apply to both mainnet and the public
+testnet.
 
 **Aave Adapter.** An Ethereum smart contract for TBV-on-Aave operations. It
 coordinates adding vaults as collateral, borrowing, repaying, withdrawing, and
@@ -17,9 +18,24 @@ triggering redemption.
 draw borrowable assets. The Babylon Core Lending Spoke draws from the Hub when a
 depositor borrows; repays and liquidations restore liquidity.
 
+**AaveAdapterPositionProxy.** A per-depositor proxy contract that holds one
+isolated lending position for that depositor on the Aave spoke, keeping each
+depositor's collateral and debt separated.
+
+**AllowListPolicy.** Ethereum contract that gates peg-in submissions to
+allow-listed depositor addresses per application. It holds no usage state; only
+the admin writes the list. It is what enforces the allowlisted mainnet Beta.
+
+**Application.** A full integration registered in the Application Registry that
+implements `IApplicationEntryPoint` (its `activateVault(...)` callback) and
+receives vaults as they activate. The Aave v4 integration is the first live
+application. Contrast with a **Resolver**, which extends an existing application
+rather than being a standalone one.
+
 **Application Registry.** Ethereum contract listing the DeFi applications
 approved to receive vaults as collateral. Currently the only registered
-application is the Aave v4 integration.
+application is the Aave v4 integration. It also manages each application's
+immutable vault keepers.
 
 **Application Vault Keeper (AVK).** An application-scoped Vault Keeper that
 holds redemption rights over a vault. Under defined conditions it can claim the
@@ -45,6 +61,11 @@ without requiring a Bitcoin soft fork.
 script with pre-signed spend paths. Its Ethereum-side representation used as
 collateral is the **collateral record**.
 
+**BTCVaultRegistry.** The core vault lifecycle manager. It handles Vault
+Provider registration, peg-in submission, ACK collection, Bitcoin
+inclusion-proof verification, activation, and redemption. Depositors activate
+via `activateVaultWithSecret(...)` (or `activateVaultWithSecretAndRedeem(...)`).
+
 **BTC Vault Swap Spoke.** The first Liquidation Liquidity Provider registered for
 the Aave v4 integration, deployed as the `BTCVaultSwap` contract and registered as
 its own WBTC spoke on the Aave v4 Hub, distinct from the Babylon Core Lending
@@ -56,7 +77,7 @@ Bitcoin Network.
 **CapPolicy.** Ethereum contract enforcing per-application and per-address BTC
 exposure caps. At vault activation, the contract checks that the activation
 would not exceed either cap. See
-[Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/).
+[Protocol parameters](/trustless-bitcoin-vault/network-info/testnet/protocol-parameters/).
 
 **Challenge period.** A window during which Vault Keepers or Universal
 Challengers can dispute a claim on the Bitcoin Network. If no challenge arrives
@@ -69,8 +90,10 @@ a sacrificial vault and a protected vault at peg-in mitigates this. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Collateral factor.** The fraction of a collateral asset's value counted
-toward borrowing capacity. At the current public-testnet collateral factor of
-78%, $60,000 of BTC collateral supports up to $46,800 of borrows. See
+toward borrowing capacity. At a collateral factor of 78% — the current
+public-testnet value — $60,000 of BTC collateral supports up to $46,800 of
+borrows. Per-network values are on
+[Networks](/trustless-bitcoin-vault/network-info/networks/). See
 [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
 
 **Collateral record.** The Ethereum-side record of a locked BTC vault that a
@@ -101,8 +124,15 @@ to collateral liquidated, not valued at raw BTC price. The complementary
 mechanism for partial-position liquidation is fairness debt repay. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
+**FeeEscrow.** The protocol contract that manages protocol-level fees with
+escrow and pull-based claiming.
+
 **Garbled circuit (GC).** A cryptographic construction used in the BABE
 construction to evaluate complex predicates on the Bitcoin Network.
+
+**Groth16.** The succinct proof system that TBV's proofs are wrapped to for
+on-chain verification; the SP1 zkVM proof is wrapped to Groth16. See **SP1
+proof**.
 
 **Hashlock.** The SHA-256 hash of a 32-byte secret generated at peg-in. The hash
 is committed on Ethereum; the secret is revealed at activation to unlock the
@@ -113,8 +143,9 @@ A position is liquidatable when the health factor drops below 1.0. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Liquidation bonus.** A discount on seized collateral granted to the liquidator
-as an incentive to keep the protocol solvent. On the current public testnet,
-the maximum bonus is 10%.
+as an incentive to keep the protocol solvent. The maximum bonus is 10% on the
+current public testnet; per-network values are on
+[Networks](/trustless-bitcoin-vault/network-info/networks/).
 
 **Liquidation Liquidity Provider (LLP).** A contract that provides instant
 fungible-asset liquidity, such as a wrapped-BTC token, to liquidators while the
@@ -130,15 +161,44 @@ Bitcoin and registering the vault on Ethereum. Peg-out is the reverse: a vault
 is redeemed and the BTC is released back to a Bitcoin address. See
 [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
 
+**PositionAccount.** An Ethereum address that identifies one Aave lending
+position, with its own collateral, debt, and health factor. By default it is the
+depositor's own address (self-borrow); a Resolver can instead route a vault to a
+contract it deploys. In the borrow-delegation resolver,
+`BorrowDelegationPositionAccount` holds one position for a specific owner, who
+can grant verified delegatees per-reserve borrow allowances.
+
+**Pre-PegIn HTLC.** The hash-time-locked Bitcoin output that funds a peg-in. It
+is what lets a depositor self-refund on Bitcoin if setup or activation does not
+complete.
+
 **Protected vault.** In a two-vault position, the vault placed second in the
 liquidation order. It is designed to remain untouched during partial-position
 liquidation while the sacrificial vault is seized. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
+**ProtocolParams.** The contract holding protocol-wide parameters, including
+`maxPegInAmount` (per-vault peg-in maximum), `minimumPegInAmount`,
+`pegInAckTimeout`, `pegInActivationTimeout`, fee rates, Bitcoin timing
+parameters, Universal Challenger keys, Security Council keys, and
+`councilQuorum`. Parameters are versioned.
+
+**Resolver.** A primitive that extends an existing application rather than
+registering as a new one. A resolver decides which position account a vault is
+assigned to at activation, and defines who is authorized to act on that
+position. The `BorrowDelegationResolver` extends the Aave Adapter, resolving
+each depositor to exactly one deterministic PositionAccount. Contrast with an
+**Application**. See
+[Resolvers — overview](/trustless-bitcoin-vault/building-on-tbv/resolver-overview/).
+
 **Sacrificial vault.** In a two-vault position, the vault placed first in the
 liquidation order. It is sized to cover the protocol's expected seizure amount
 so that only this vault is seized if the position becomes liquidatable. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+**Security Council.** A transitional, quorum-based body (`councilQuorum`) that
+can invoke an emergency pause during the Beta. It cannot pay itself out; its
+role is a safety brake, not custody.
 
 **SP1 proof.** A zero-knowledge proof generated off-chain to prove that an
 Ethereum event occurred. The proof is then aggregated and verified on Bitcoin

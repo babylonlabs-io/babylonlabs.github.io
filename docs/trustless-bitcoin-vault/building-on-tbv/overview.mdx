@@ -21,13 +21,13 @@ Everything you build attaches to one of these two layers.
 |---|---|---|---|
 | Bring BTC collateral into a **new** product (a new lending market, a stablecoin, perps, options) | **New application** on the vault layer — your own adapter, your own accounting semantics, registered with `ApplicationRegistry` | Protocol contracts (`ApplicationRegistry`, `BTCVaultRegistry`) | **Application Integration** |
 | Extend the **existing Aave app** — a yield, credit-delegation, or aggregation product that rides on Aave borrowing | **Resolver** — a factory of per-user position accounts on the Aave adapter | `AaveAdapter` and its position accounts | **Resolver / extensions** |
-| Automate vault operations — bots, dashboards, agents, backend services | **Script or service** against the protocol and the Aave app | The Babylon TypeScript SDK | **SDK & tooling** |
+| Automate vault operations — bots, dashboards, agents, backend services | **Script or service** against the protocol and the Aave app | The Babylon TypeScript SDK | [SDK & tooling](./sdk-and-tooling.mdx) |
 
 ## Decision guide
 
-- **Do you want a new product on BTC collateral, with your own risk and accounting model?** Build an **application**. You register with the protocol, own your collateral semantics, and define your own liquidation and pause posture. This is the deepest integration and carries the most governance and audit responsibility. See **Application Integration**.
-- **Do you want to extend Aave borrowing — for example, let a third party borrow against a depositor's collateral, or pool depositors into a shared position?** Build a **Resolver**. You ride on the existing, audited Aave application and only add the routing and authorization logic your product needs. See **Resolver overview**.
-- **Do you just need programmatic vault operations** — creating vaults, activating them, borrowing, repaying, reading position health? You do not need a contract at all. Use the **SDK & tooling** track.
+- **Do you want a new product on BTC collateral, with your own risk and accounting model?** Build an **application**. You register with the protocol, own your collateral semantics, and define your own liquidation and pause posture. This is the deepest integration and carries the most governance and audit responsibility. See [Application Integration](./application-integration.mdx).
+- **Do you want to extend Aave borrowing — for example, let a third party borrow against a depositor's collateral, or pool depositors into a shared position?** Build a **Resolver**. You ride on the existing, audited Aave application and only add the routing and authorization logic your product needs. See [Resolver overview](./resolver-overview.mdx).
+- **Do you just need programmatic vault operations** — creating vaults, activating them, borrowing, repaying, reading position health? You do not need a contract at all. Use the [SDK & tooling](./sdk-and-tooling.mdx) track.
 
 If you are unsure between an application and a resolver, start from the question *"do I need my own accounting token and collateral semantics?"* If yes, it is an application. If you are content to express your product as authorization rules on top of Aave positions, it is a resolver.
 
@@ -44,15 +44,15 @@ No matter which track you choose, the vault layer gives you the same foundations
 What the protocol does **not** do for you is application-specific: oracle pricing, health-factor policy, liquidation economics, your accounting token's invariants, and your own upgrade and pause controls remain your responsibility. Each track below draws that line explicitly.
 
 :::note On-chain code must be open source
-Any code you deploy on-chain that extends the protocol — a new application or a resolver — must be **open source**: published in a public repository under an **OSI-approved license compatible with the protocol's license**, with its **audited code, deployed bytecode, and published source all corresponding to a single commit**. This is a registration requirement, covered in detail in the **Resolver partner checklist**.
+Any code you deploy on-chain that extends the protocol — a new application or a resolver — must be **open source**: published in a public repository under an **OSI-approved license compatible with the protocol's license**, with its **audited code, deployed bytecode, and published source all corresponding to a single commit**. This is a registration requirement, covered in detail in the [Resolver partner checklist](./resolver-partner-checklist.mdx).
 :::
 
 ## Where to go next
 
-- **Application Integration** — building a new application on the vault layer (currently a preview; Beta launch is Aave-only).
-- **Resolver overview** — extending the Aave application with per-user position accounts.
-- **SDK & tooling** — the Babylon TypeScript SDK for programmatic vault operations.
-- **Agents** — making vaults consumable by software agents without custody.
+- [Application Integration](./application-integration.mdx) — building a new application on the vault layer (currently a preview; Beta launch is Aave-only).
+- [Resolver overview](./resolver-overview.mdx) — extending the Aave application with per-user position accounts.
+- [SDK & tooling](./sdk-and-tooling.mdx) — the Babylon TypeScript SDK for programmatic vault operations.
+- [Agents](./agents.mdx) — making vaults consumable by software agents without custody.
 
 ## Status
 

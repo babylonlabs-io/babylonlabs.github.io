@@ -72,4 +72,8 @@ With TBV, the BTC stays in a Bitcoin output whose every legitimate spend is enco
 
 ## Cost and latency
 
-TBV's design trades latency for the elimination of custodian trust. Peg-in takes around 2 hours on signet, dominated by Bitcoin confirmations. Peg-out takes around 3 days, dominated by the challenge window during which invalid claims can be disputed. These are longer than centralized wrap and unwrap services, but the depositor never gives custody to an off-Bitcoin entity. Fees are comparable in magnitude to bridge fees and lower than typical centralized wrap services.
+TBV's design trades latency for the elimination of custodian trust. Peg-in takes around 2 hours on signet, dominated by Bitcoin confirmations. Peg-out takes around 3 days, dominated by the challenge window during which invalid claims can be disputed. These are longer than centralized wrap and unwrap services, but the depositor never gives custody to an off-Bitcoin entity. Fees are comparable in magnitude to bridge fees and lower than typical centralized wrap services. Mainnet timings are configured separately and are **to be announced at launch** — see [Networks](../network-info/networks.mdx).
+
+## Maturity
+
+The trust properties above are **structural** — they follow from the protocol's design and hold on both networks. Operational maturity is still growing: on mainnet TBV runs as a capped, allowlisted Beta, and the operator sets are still permissioned. See [Beta Mainnet: what to expect](./beta-mainnet.mdx) and, for the full risk surface, [Safety & trust assumptions](./safety-and-trust-assumptions.mdx).

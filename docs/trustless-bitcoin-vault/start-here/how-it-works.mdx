@@ -10,6 +10,10 @@ sidebar_position: 2
 
 A **Trustless Bitcoin Vault (TBV)** spans two networks. BTC stays on the Bitcoin Network for the vault's entire lifetime. On Ethereum, a protocol contract tracks each vault's state and registers DeFi applications such as Aave v4. The trust assumption is cryptographic evidence: no bridge, no off-chain oracle, no wrapping custodian.
 
+:::note This flow is the same on both networks
+The mechanics below apply to mainnet and to the public testnet alike. On mainnet it is a **real-value** flow: peg-ins lock real BTC and pay real Bitcoin fees, and borrowing and liquidation are economically live. Exposure is also capped from day one — `CapPolicy` enforces a per-application total (`totalCapBTC`) and a per-address cap (`perAddressCapBTC`), and `ProtocolParams` enforces a per-vault maximum (`maxPegInAmount`). Timing figures below are testnet values; mainnet challenge windows, confirmation depths, and cap values are **to be announced at launch**. See [Networks](../network-info/networks.mdx) and [Beta Mainnet: what to expect](./beta-mainnet.mdx).
+:::
+
 Cross-chain state transitions are enforced through cryptography, not by a trusted intermediary:
 
 * **Collateral activation** atomically binds the Ethereum-side activation of Bitcoin collateral to the lockup of BTC in the co-signed Taproot script that holds the vault's BTC. A hash time-locked output on Bitcoin pairs with a hashlock commitment on Ethereum; revealing the preimage on Ethereum unlocks the matching Bitcoin transaction.

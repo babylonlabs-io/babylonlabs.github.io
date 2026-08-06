@@ -127,6 +127,18 @@ The protocol supports two pause states for operational safety, both governed by 
 * **BTC Vault Swap Spoke liquidity dependency.** Permissionless liquidations draw WBTC from the Aave Hub. If Hub WBTC liquidity or the BTC Vault Swap Spoke allowance is insufficient, permissionless liquidations revert. Liquidations can still proceed via direct redemption by registered arbitrageurs, but the pool of available liquidators narrows. The protocol mitigates this with an amount-based cap on total BTC onboarded to the Aave application.
 * **Governance risk.** Typical governance risks exist, as the protocol contracts may be upgraded to fix security issues and follow Ethereum upgrades for compatibility.
 
+## Beta Mainnet caveats
+
+On mainnet, TBV is a **capped, allowlisted Beta** with real value at stake. These caveats are load-bearing, not boilerplate:
+
+* **Real value.** Peg-ins lock real BTC and pay real Bitcoin fees; borrowing and liquidation are economically live. There is no faucet — rehearse on the public testnet if you want a no-value dry run.
+* **Contracts may be redeployed or upgraded.** Core contracts use UUPS upgradeable proxies, so upgrades generally happen without migrating vault data — but a component can be redeployed during Beta. Always re-verify current addresses before transacting.
+* **Positions and parameters are versioned per vault.** Timelocks, actor sets, and off-chain parameters are versioned in `ProtocolParams` (and per application in the Application Registry). Each vault records the parameter versions live at its creation and keeps them for its lifetime, so a later change does not retroactively alter an existing vault.
+* **Allowlisted access.** Early-phase peg-ins are gated to allow-listed depositor addresses, enforced by `AllowListPolicy`. The gate is removed as launch confidence grows.
+* **Conservative, growing caps.** Per-vault (`maxPegInAmount`), per-address (`perAddressCapBTC`), and per-application (`totalCapBTC`) caps start low and increase over time. Launch values are **to be announced at launch**.
+
+For the full phased-rollout picture, see [Beta Mainnet: what to expect](./beta-mainnet.mdx). For the values in force on each network, see [Networks](../network-info/networks.mdx).
+
 ## Trust set evolution: public testnet to mainnet
 
 Mainnet will expand each set and gradually retire multisig safety nets as system stability allows:
@@ -140,4 +152,5 @@ Mainnet will expand each set and gradually retire multisig safety nets as system
 
 * [Protocol actors](../technical-details/protocol-actors.mdx): full responsibilities of each operator role.
 * [How it works](./how-it-works.mdx): the conceptual peg-in and peg-out walkthrough.
-* [Community & support](../reference/community-and-support.mdx): where to report bugs and ask questions during the public testnet.
+* [Beta Mainnet: what to expect](./beta-mainnet.mdx): phases, allowlisting, and caps on mainnet.
+* [Community & support](../reference/community-and-support.mdx): where to report bugs and ask questions.

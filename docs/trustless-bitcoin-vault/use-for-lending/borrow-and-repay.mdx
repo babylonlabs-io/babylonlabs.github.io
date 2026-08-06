@@ -13,7 +13,7 @@ This page covers borrowing USDC, USDT, or WBTC against an active vault, how inte
 An activated vault becomes usable collateral automatically: the activation transaction moves the vault to `InUse` and the contracts create and supply the corresponding collateral record to the Aave v4 market. From there, the day-to-day life of a position is the standard DeFi borrow-and-repay loop, with vault-specific behaviour around collateral structure and liquidation. This page is the operating guide for that loop.
 
 :::info Public-testnet caps
-Public-testnet caps on per-address total collateral and per-position vault count apply. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the live numeric limits.
+Public-testnet caps on per-address total collateral and per-position vault count apply. See [Protocol parameters](../network-info/testnet/protocol-parameters.mdx) for the live numeric limits.
 :::
 
 ## Before you start
@@ -84,7 +84,7 @@ The health factor is a single number summarizing how safe the position is. The f
 Health Factor = (Total Collateral Value × Collateral Factor) / Total Debt Value
 ```
 
-The collateral factor for BTC collateral on the public testnet is listed in [Protocol parameters](../testnet-info/protocol-parameters.mdx). Since the collateral record is the only collateral on the Babylon Core Lending Spoke, the position's collateral factor is constant (positions on other spokes with heterogeneous collateral would use a weighted average).
+The collateral factor for BTC collateral on the public testnet is listed in [Protocol parameters](../network-info/testnet/protocol-parameters.mdx). Since the collateral record is the only collateral on the Babylon Core Lending Spoke, the position's collateral factor is constant (positions on other spokes with heterogeneous collateral would use a weighted average).
 
 A higher number is safer. A position becomes liquidatable when the health factor drops below 1.0.
 
@@ -146,7 +146,7 @@ Activating another vault:
 
 Adding collateral is one of three actions that raise the health factor: activate another vault, repay debt, or wait for BTC price to rise.
 
-Position cap reminder: public-testnet per-position and per-address caps apply. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the current values.
+Position cap reminder: public-testnet per-position and per-address caps apply. See [Protocol parameters](../network-info/testnet/protocol-parameters.mdx) for the current values.
 
 If the position now contains multiple vaults, the order of the list determines which vault is seized first during a liquidation. The vault at the front of the list goes first. See [Create a vault](./create-a-vault.mdx) for the two-vault distribution recommendation and [Liquidation risk](./liquidation-risk.mdx) for why ordering matters.
 

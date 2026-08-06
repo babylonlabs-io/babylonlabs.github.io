@@ -18,7 +18,7 @@ Peg-in setup involves off-chain operators (the Vault Provider roster) coordinati
 - **`pegInAckTimeout` (~24h): off-chain setup acknowledgement.** The window for the required participants to submit their ACKs for the peg-in during setup. This is the shorter window.
 - **`pegInActivationTimeout` (~48h): secret reveal / activation.** The window for the depositor to reveal the activation secret and bring the vault to Active. This is the longer window; by construction the activation timeout is strictly greater than the ACK timeout.
 
-If operators do not complete setup within the ACK window, or if activation does not happen within the activation window, the vault does not go live. **You are not stuck:** the peg-in is backed by a Pre-PegIn HTLC output that you can self-refund on Bitcoin, so an unresponsive or stalled setup does not trap your BTC. See **Safety & trust assumptions** for the recovery paths.
+If operators do not complete setup within the ACK window, or if activation does not happen within the activation window, the vault does not go live. **You are not stuck:** the peg-in is backed by a Pre-PegIn HTLC output that you can self-refund on Bitcoin, so an unresponsive or stalled setup does not trap your BTC. See [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx) for the recovery paths.
 
 ## Exposure caps
 
