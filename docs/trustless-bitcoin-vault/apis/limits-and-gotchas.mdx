@@ -153,17 +153,38 @@ At most **15** aliases per operation. Status breakdowns are the usual place to
 hit this — split into several requests rather than aliasing every enum value at
 once.
 
-## Two ways the API says "no"
+## Sustained bursts get a 429
+
+**Symptom:** HTTP **429** after a run of rapid back-to-back requests. There is no
+GraphQL body, so it looks like the endpoint has gone down.
+
+**Cause:** the edge throttles sustained bursts. A handful of requests is fine —
+we saw this only after several dozen queries fired with no gap. It clears within
+seconds.
+
+**Fix:** treat 429 and 5xx as retryable, with exponential backoff, and honour
+`Retry-After` when it is present. Never retry a **GraphQL** error: that means
+your query is wrong, and retrying only hides it.
+
+This distinction matters most in automation. A verification job that sends every
+example on a page one after another will meet this, and a job that cannot tell a
+throttle from a bad field will report a perfectly good query as broken.
+
+## Three ways the API says "no"
 
 They fail differently, and the difference tells you where to look.
 
 | Failure | Shape | Meaning |
 | --- | --- | --- |
 | Depth, token or alias limit | `Syntax Error: …` — the whole operation is rejected before execution | Your query's **shape** is too large |
-| `limit` over 1000 | Per-path error with `data: null` | One **resolver argument** is invalid |
+| `limit` over 1000 | Per-path error with `data: null`, HTTP 200 | One **resolver argument** is invalid |
+| Burst throttling | HTTP 429, no GraphQL body | Your **rate** is too high — back off and retry |
 
 The first is a query-shape guard applied before execution. The second is a
-per-resolver pagination guard.
+per-resolver pagination guard. The third is at the edge, before the API sees the
+request at all — which is why it carries no GraphQL error.
+
+Only the third is worth retrying.
 
 ## Known data gaps
 
