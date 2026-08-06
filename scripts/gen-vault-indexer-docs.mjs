@@ -174,8 +174,51 @@ out.push(
   `Introspection is available but depth-capped — see [Limits and gotchas](./limits-and-gotchas.mdx) for the four short queries that reconstruct it.\n`,
 );
 
+// The SDL is parsed with regexes, not a GraphQL parser. That is fine for
+// Ponder's mechanical output, but a regex that stops matching does not throw —
+// it silently yields fewer fields, and a schema reference that quietly loses a
+// field is indistinguishable from a correct one to a reader. Count the field
+// lines in the raw SDL and compare. This turns a silent loss into a loud stop.
+const parsedFields = [...types.values()].reduce((n, f) => n + f.length, 0);
+
+/**
+ * Count field lines inside `type` blocks with a line scanner rather than the
+ * parser's own regex.
+ *
+ * Using the same pattern for both sides would make the check self-consistent and
+ * therefore useless: a type the parser skips would be skipped by the counter
+ * too, and the totals would agree while a whole type was missing. This scanner
+ * only needs a line to START with `type `, so `type Vault implements Node {`
+ * still contributes — which is precisely the case that must be caught.
+ */
+function countTypeFieldLines(text) {
+  let inType = false;
+  let n = 0;
+  for (const raw of text.split('\n')) {
+    if (!inType) {
+      if (/^type\s/.test(raw) && raw.includes('{')) inType = true;
+      continue;
+    }
+    if (raw.startsWith('}')) inType = false;
+    else if (/^\s{2}\w+(\([^)]*\))?:\s*\S/.test(raw)) n++;
+  }
+  return n;
+}
+
+const typeBlockFieldLines = countTypeFieldLines(sdl);
+
+if (parsedFields !== typeBlockFieldLines) {
+  console.error(
+    `error: parsed ${parsedFields} fields but the SDL's type blocks contain ` +
+      `${typeBlockFieldLines} field lines. The parser dropped ${typeBlockFieldLines - parsedFields}. ` +
+      `Do not publish this — the schema reference would be silently incomplete.`,
+  );
+  process.exit(1);
+}
+
 writeFileSync(OUT_PATH, out.join('\n'));
 console.log(
   `Wrote ${OUT_PATH}\n  entities: ${DOMAINS.reduce((n, d) => n + d.entities.length, 0)}` +
-    `\n  types parsed: ${types.size}\n  enums parsed: ${enums.size}`,
+    `\n  types parsed: ${types.size}\n  enums parsed: ${enums.size}` +
+    `\n  fields parsed: ${parsedFields}/${typeBlockFieldLines} (must match)`,
 );

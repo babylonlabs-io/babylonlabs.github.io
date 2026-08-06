@@ -64,16 +64,69 @@ function queryDepth(q) {
   return max;
 }
 
-async function run(query) {
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'User-Agent': USER_AGENT },
-    body: JSON.stringify({ query }),
-  });
-  if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
-  const body = await res.json();
-  if (body.errors) return { ok: false, reason: body.errors.map((e) => e.message).join('; ') };
-  return { ok: true, body };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const backoff = (attempt) => 500 * 2 ** (attempt - 1);
+
+/**
+ * Execute one query, retrying only on transport-level failures.
+ *
+ * The distinction matters, because this script is a gate. A GraphQL error means
+ * the documentation is wrong and must never be retried away. A 429, a 5xx or a
+ * dropped connection says nothing about the documentation, and failing on one
+ * would block a legitimate regeneration — the endpoint does throttle a burst,
+ * and this script sends every example on the page back to back.
+ */
+async function run(query, attempts = 4) {
+  let last = 'unknown error';
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    let res;
+    try {
+      res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'User-Agent': USER_AGENT },
+        body: JSON.stringify({ query }),
+      });
+    } catch (err) {
+      last = `network error: ${err.message}`;
+      if (attempt < attempts) await sleep(backoff(attempt));
+      continue;
+    }
+
+    if (res.status === 429 || res.status >= 500) {
+      last = `HTTP ${res.status}`;
+      if (attempt < attempts) {
+        const retryAfter = Number(res.headers.get('retry-after'));
+        await sleep(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : backoff(attempt));
+      }
+      continue;
+    }
+
+    // 403 is the blocked-user-agent trap. Retrying will never help, and the
+    // generic "HTTP 403" reads as an outage, so name the real cause here.
+    if (res.status === 403) {
+      return { ok: false, reason: 'HTTP 403 — the edge blocked this User-Agent. Not an outage or an auth wall.' };
+    }
+    if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
+
+    let body;
+    try {
+      body = await res.json();
+    } catch {
+      return { ok: false, reason: 'response was not JSON' };
+    }
+    // A GraphQL error is a documentation bug. Return it, never retry it.
+    if (body.errors) return { ok: false, reason: body.errors.map((e) => e.message).join('; ') };
+    // Absence of `errors` is not success. A body of `{}` — or `{"data": null}`
+    // from a proxy or a partial failure — would otherwise be recorded as a pass,
+    // which is the one outcome this gate must never produce.
+    if (body.data === undefined || body.data === null) {
+      return { ok: false, reason: 'response carried neither `data` nor `errors`' };
+    }
+    return { ok: true, body };
+  }
+
+  return { ok: false, reason: `${last} after ${attempts} attempts` };
 }
 
 let pass = 0;
@@ -99,6 +152,9 @@ for (const file of files) {
       fail++;
       continue;
     }
+    // A small gap between examples. This is a shared public testnet endpoint,
+    // and the whole page is sent back to back.
+    await sleep(100);
     const r = await run(b.query);
     if (r.ok) {
       console.log(`${label}  PASS  depth ${d}`);

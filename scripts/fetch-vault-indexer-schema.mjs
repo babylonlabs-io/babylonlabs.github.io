@@ -107,16 +107,45 @@ function buildSdl({ enums, fields, args, inputs }) {
  * Hash the schema's shape, ignoring cosmetic churn. Ponder does not guarantee a
  * stable field order, so hashing the raw SDL would open an empty PR whenever the
  * generator reordered output.
+ *
+ * Sort WITHIN each block, never across the whole file. A global sort discards
+ * which type each field belongs to, so moving a field from one type to another
+ * produces the identical sorted line multiset and the identical hash. That is a
+ * real schema change the drift check would report as "unchanged" — and this hash
+ * is the workflow's only trigger, so the regeneration would simply never run.
  */
 export function shapeHash(sdl) {
-  const normalised = sdl
-    .split('\n')
-    .filter((l) => !l.trim().startsWith('"""'))
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .sort()
-    .join('\n');
-  return createHash('sha256').update(normalised).digest('hex');
+  const blocks = [];
+  let current = null;
+
+  for (const raw of sdl.split('\n')) {
+    const line = raw.trim();
+    if (!line || line.startsWith('"""')) continue;
+
+    if (current) {
+      if (line === '}') {
+        current.members.sort();
+        blocks.push(`${current.header}\n${current.members.join('\n')}\n}`);
+        current = null;
+      } else {
+        current.members.push(line);
+      }
+      continue;
+    }
+
+    if (line.endsWith('{')) current = { header: line, members: [] };
+    // A block-less declaration, e.g. `scalar BigInt`.
+    else blocks.push(line);
+  }
+
+  // An unterminated block still has to contribute, or truncated output would
+  // silently hash the same as the valid schema it was truncated from.
+  if (current) {
+    current.members.sort();
+    blocks.push(`${current.header}\n${current.members.join('\n')}`);
+  }
+
+  return createHash('sha256').update(blocks.sort().join('\n')).digest('hex');
 }
 
 const [enumsT, fieldsT, argsT, inputsT] = await Promise.all([
