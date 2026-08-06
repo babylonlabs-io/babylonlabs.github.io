@@ -13,7 +13,24 @@ permissions:
   contents: read
 
 jobs:
+  verify-vault-indexer:
+    name: Verify Vault Indexer GraphQL examples
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 https://github.com/actions/checkout/releases/tag/v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0 https://github.com/actions/setup-node/releases/tag/v4.4.0
+        with:
+          node-version: '22.3'
+
+      - name: Execute every GraphQL example against testnet
+        run: npm run verify:vault-indexer-queries
+
   build:
+    needs: verify-vault-indexer
     runs-on: ubuntu-latest
     strategy:
       matrix:

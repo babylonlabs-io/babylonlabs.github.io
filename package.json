@@ -20,6 +20,7 @@
     "format:docs": "prettier -w docs",
     "typecheck": "tsc",
     "spell-check": "npx cspell docs/**/*.mdx",
+    "verify:vault-indexer-queries": "node scripts/verify-vault-indexer-queries.mjs",
     "genmd": "docusaurus gen-api-docs all"
   },
   "dependencies": {
