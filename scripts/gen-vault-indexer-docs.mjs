@@ -92,7 +92,15 @@ const sdl = readFileSync(SDL_PATH, 'utf8');
 const types = parseTypes(sdl);
 const enums = parseEnums(sdl);
 
-const esc = (s) => s.replace(/\|/g, '\\|').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Escape for an MDX table cell. The backslash must go first: it is the escape
+// character, so escaping `|` before `\` turns the input `a\|b` into `a\\|b`,
+// which Markdown reads as a literal backslash followed by a live cell divider.
+const esc = (s) =>
+  s
+    .replace(/\\/g, '\\\\')
+    .replace(/\|/g, '\\|')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 const required = (t) => (t.endsWith('!') ? 'yes' : 'no');
 const bare = (t) => t.replace(/[![\]]/g, '');
 
