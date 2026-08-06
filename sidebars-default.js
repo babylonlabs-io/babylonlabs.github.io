@@ -331,6 +331,123 @@ const sidebars = {
     },
     ...trustlessBitcoinVaultSecuritySection,
   ],
+  // Trustless Bitcoin Vault — MAINNET sidebar (Beta). Parallel to the Testnet
+  // collection above; Technical Details mirror the published Testnet pages.
+  // NOTE: the Fees page (fees/fees.mdx) is intentionally draft/skipped and is
+  // NOT listed here until the fee model is finalized before mainnet launch.
+  trustlessBitcoinVaultMainnet: [
+    {
+      type: 'category',
+      label: 'Start Here',
+      collapsible: true,
+      collapsed: true,
+      className: 'overview_sidebar_header',
+      link: {
+        type: 'doc',
+        id: 'trustless-bitcoin-vault-mainnet/index',
+      },
+      items: [
+        'trustless-bitcoin-vault-mainnet/start-here/what-is-tbv',
+        'trustless-bitcoin-vault-mainnet/start-here/how-it-works',
+        'trustless-bitcoin-vault-mainnet/start-here/tbv-vs-alternatives',
+        'trustless-bitcoin-vault-mainnet/start-here/safety-and-trust-assumptions',
+        'trustless-bitcoin-vault-mainnet/start-here/use-cases',
+        'trustless-bitcoin-vault-mainnet/start-here/beta-mainnet',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Network Info',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault-mainnet/network-info/mainnet-info',
+        'trustless-bitcoin-vault-mainnet/network-info/setup',
+        'trustless-bitcoin-vault-mainnet/network-info/contract-addresses',
+        'trustless-bitcoin-vault-mainnet/network-info/protocol-parameters-and-caps',
+        'trustless-bitcoin-vault-mainnet/network-info/testnet-info',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Building on TBV',
+      collapsible: true,
+      collapsed: true,
+      className: 'btc_stakers_sidebar_header',
+      link: {
+        type: 'doc',
+        id: 'trustless-bitcoin-vault-mainnet/building-on-tbv/overview',
+      },
+      items: [
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/overview',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/application-integration',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/resolver-overview',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/resolver-upgradability-and-ownership',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/resolver-pausability',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/resolver-partner-checklist',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/sdk-and-tooling',
+        'trustless-bitcoin-vault-mainnet/building-on-tbv/agents',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Operators',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault-mainnet/operators/overview',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Technical Details',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault-mainnet/technical-details/protocol-architecture',
+        'trustless-bitcoin-vault-mainnet/technical-details/protocol-actors',
+        'trustless-bitcoin-vault-mainnet/technical-details/aave-v4-integration',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Security',
+      collapsible: true,
+      collapsed: true,
+      className: 'support_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault-mainnet/security/audits',
+        'trustless-bitcoin-vault-mainnet/security/responsible-disclosure',
+        'trustless-bitcoin-vault-mainnet/security/bug-bounty',
+        'trustless-bitcoin-vault-mainnet/security/known-limitations',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Research',
+      collapsible: true,
+      collapsed: true,
+      className: 'research_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault-mainnet/research/research-papers',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Reference',
+      collapsible: true,
+      collapsed: true,
+      className: 'support_sidebar_header',
+      items: [
+        'trustless-bitcoin-vault-mainnet/reference/glossary',
+        'trustless-bitcoin-vault-mainnet/reference/community-and-support',
+        'trustless-bitcoin-vault-mainnet/reference/changelog',
+      ],
+    },
+  ],
   stakingApi: [
     {
       type: 'category',

@@ -1,0 +1,110 @@
+---
+title: SDK & tooling
+---
+
+The **Babylon TypeScript SDK** (`@babylonlabs-io/ts-sdk`) is the toolkit for programmatic vault operations: creating and activating vaults, using vaulted BTC as Aave collateral, and reading authoritative on-chain state — all without giving up custody of the BTC. Use it for bots, dashboards, backend services, and agents. It is framework-agnostic and runs on both Node.js and the browser; the only platform-specific pieces are the Bitcoin wallet and Ethereum wallet you supply.
+
+## Getting started
+
+### Install
+
+```bash
+npm install @babylonlabs-io/ts-sdk viem bitcoinjs-lib @bitcoin-js/tiny-secp256k1-asmjs
+```
+
+`viem`, `bitcoinjs-lib`, and `@bitcoin-js/tiny-secp256k1-asmjs` are peer dependencies. Requires **Node.js ≥ 20.3.0**. The WASM package ships inside the SDK and initializes itself lazily — do not install it directly.
+
+### One-time setup
+
+Initialize the ECC library once at application startup (Node entry file, or before `createRoot()` in React), or the first PSBT call throws `"No ECC Library provided"`:
+
+```typescript
+import * as ecc from "@bitcoin-js/tiny-secp256k1-asmjs";
+import { initEccLib } from "bitcoinjs-lib";
+
+initEccLib(ecc);
+```
+
+### Import from subpaths
+
+Import from specific subpaths for the best tree-shaking:
+
+| Subpath | Contents |
+|---|---|
+| `@babylonlabs-io/ts-sdk/shared` | `BitcoinWallet` interface, signing options |
+| `@babylonlabs-io/ts-sdk/tbv/core` | `PeginManager`, `PayoutManager`, core re-exports |
+| `@babylonlabs-io/ts-sdk/tbv/core/primitives` | Pure PSBT builders |
+| `@babylonlabs-io/ts-sdk/tbv/core/services` | Stateless flow helpers (activation, refund, presign, protocol state) |
+| `@babylonlabs-io/ts-sdk/tbv/core/clients` | On-chain reader classes |
+| `@babylonlabs-io/ts-sdk/tbv/integrations/aave` | Aave v4 integration |
+| `@babylonlabs-io/ts-sdk/testing` | Mock wallets for tests |
+
+### Supply your wallets
+
+The SDK defines a `BitcoinWallet` interface (compatible with common wallets such as Unisat, OKX, OneKey, Ledger, Keystone) and uses viem's `WalletClient` for Ethereum. You adapt whatever wallet you already have. Vault state that influences what a user signs — script derivation, amounts, hashlocks, signer sets, protocol-param versions — must come from the on-chain contracts, never from the indexer; the indexer is for display and discovery only.
+
+## Managers, services, and primitives
+
+The SDK is a set of composable layers, not a strict staircase. Reach for the highest layer that does what you need.
+
+- **managers** — stateful classes that own a wallet and run a full flow. `PeginManager` orchestrates vault creation; `PayoutManager` handles payout-transaction signing. Start here for peg-in orchestration.
+- **services** — stateless flow helpers that compose primitives with **injected** I/O callbacks (sign, broadcast, contract write), so you control the transport (viem, wagmi, custom). Examples: `activateVault`, `buildAndBroadcastRefund`, `runDepositorPresignFlow`, `getPeginProtocolState`.
+- **primitives** — pure, WASM-backed PSBT builders and script helpers, with no wallet and no network. Examples: `buildPrePeginPsbt`, `buildPayoutPsbt`, `buildRefundPsbt`. Drop to this layer only for custom signing (KMS/HSM, hardware).
+- **utils** — pure helpers for UTXO selection, fees, funding, and Taproot signing options.
+- **clients** — optional on-chain reader classes for authoritative contract data pinned at the vault's versions: `ViemVaultRegistryReader`, `ViemProtocolParamsReader`, `ViemVaultKeeperReader`, `ViemUniversalChallengerReader`, plus the `resolveProtocolAddresses` helper.
+
+### The vault lifecycle with managers
+
+A vault goes from off-chain to `ACTIVE` through six phases. The critical transition is `VERIFIED → ACTIVE`: until the depositor reveals the HTLC secret on Ethereum, the vault is not live — miss the activation window and the only exit is refund after the CSV timelock.
+
+| # | Phase | SDK entry point | Status after |
+|---|---|---|---|
+| 1 | Prepare Pre-PegIn + PegIn txs | `PeginManager.preparePegin()` | off-chain |
+| 2 | Sign BTC proof-of-possession | `PeginManager.signProofOfPossession()` | off-chain (once per session) |
+| 3 | Register on Ethereum | `PeginManager.registerPeginOnChain()` | `PENDING` |
+| 4 | Broadcast Pre-PegIn on Bitcoin | `PeginManager.signAndBroadcast()` | `PENDING` (until the VP observes it) |
+| 5 | Sign payout authorizations | `runDepositorPresignFlow()` (delegates to `PayoutManager`) | `PENDING` → `VERIFIED` |
+| 6 | Activate by revealing the HTLC secret | `activateVault()` (services) | `VERIFIED` → `ACTIVE` |
+
+Optional exit after the refund CSV timelock expires: `buildAndBroadcastRefund()`.
+
+> Persist the 32-byte HTLC secret between registration and activation. Losing it strands the vault until refund. (WOTS key material already derives deterministically from the wallet's `deriveContextHash`; HTLC-secret derivation is moving to the same path — see the SDK reference.)
+
+## Aave integration
+
+The Aave module (`@babylonlabs-io/ts-sdk/tbv/integrations/aave`) uses activated BTC vaults as collateral in Aave v4 to borrow other assets. When a vault is activated it is deposited as collateral automatically; withdrawing collateral triggers redemption. The module provides pure functions in three groups:
+
+- **Transaction builders** return an unsigned `{ to, data }` for you to execute with your wallet: `buildBorrowTx()`, `buildRepayTx()`, `buildWithdrawCollateralsTx()` (withdrawal requires zero debt).
+- **Query functions** read live on-chain state: `getPosition()`, `getUserAccountData()` (health factor, collateral value, debt value), `getUserTotalDebt()`, `hasDebt()`, `hasCollateral()`.
+- **Utilities** are pure calculations: `selectVaultsForAmount()`, `calculateHealthFactor()`, `getHealthFactorStatus()`, `isHealthFactorHealthy()`, `aaveValueToUsd()`.
+
+```typescript
+import {
+  buildBorrowTx,
+  getUserAccountData,
+} from "@babylonlabs-io/ts-sdk/tbv/integrations/aave";
+import { parseUnits } from "viem";
+
+// Check position health before borrowing
+const accountData = await getUserAccountData(publicClient, spokeAddress, proxyAddress);
+const healthFactor = Number(accountData.healthFactor) / 1e18;
+
+// Borrow 100 USDC against BTC vault collateral
+const tx = buildBorrowTx(adapterAddress, reserveId, parseUnits("100", 6), receiver);
+await walletClient.sendTransaction({ to: tx.to, data: tx.data });
+```
+
+Contract addresses (Aave adapter, spoke, reserve IDs) come from your own deployment config, not the SDK.
+
+## Troubleshooting
+
+Common first-run issues:
+
+- **`Cannot find module` on a subpath import** — your TypeScript or bundler does not support subpath exports. Upgrade TypeScript (4.7+) and set `"moduleResolution": "bundler"`.
+- **`Buffer is not defined` (browser)** — add a `buffer` polyfill and assign `globalThis.Buffer`. For Vite, alias `buffer` and set `global: "globalThis"`.
+- **WASM initialization errors** — ensure your bundler handles `.wasm` assets (Vite, webpack, Next.js, Rollup all work with standard config).
+- **`No ECC Library provided`** — you skipped the one-time `initEccLib(ecc)` setup above.
+
+## API reference
+
+The complete, auto-generated API reference (every exported function, class, and type signature) ships with the SDK under its `docs/api` — organized by module: managers, services, primitives, utils, clients, wallets, and integrations/aave. Exact function and type signatures beyond those named here are in that reference. For end-to-end walkthroughs, see the SDK's Managers quickstart, Primitives quickstart (custom signing), and Aave integration quickstart.

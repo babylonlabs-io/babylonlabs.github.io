@@ -1,0 +1,97 @@
+---
+title: Safety & trust assumptions
+---
+
+This page is the honest trust model for institutional and technical due diligence: what TBV guarantees cryptographically, what you rely on operators for, how you recover if they misbehave, and the full risk surface. TBV is on **Beta Mainnet** — real value, but capped, allowlisted, and still hardening — so the Beta caveats below are load-bearing, not boilerplate.
+
+## The trust model: trust is optional and removable
+
+TBV is designed so that trust in any operator is **optional and removable**, not structural. Your Bitcoin key is required at vault creation and on every release path, and every legitimate spend is fixed into the vault's **pre-signed transaction graph** at creation. Afterward, no party — including the Vault Provider — can invent a new way to move your BTC. Where operators normally act for convenience (completing peg-in, posting peg-out claims), you retain a self-service path that does not depend on them.
+
+![TBV trust model: depositor, Vault Provider, Application Vault Keepers, Universal Challengers, and Security Council around the Bitcoin vault](/img/trustless-bitcoin-vault/confluence/start-here/safety-and-trust-assumptions/7.png)
+
+## Non-custodial guarantees
+
+- **Pre-signed exit paths.** Redemption, liquidation redemption, and refund are all constructed and signed at vault creation. There is no discretionary spend path an operator can exercise against you.
+- **Pre-PegIn refund (hash timelock).** The Pre-PegIn Bitcoin output carries a refund path back to you governed by a hash timelock (`tRefund`). If activation never completes, you reclaim your BTC yourself.
+- **Proof-gated release.** BTC is released only when a zero-knowledge proof of the correct Ethereum redemption state is verified **on Bitcoin itself**, via the BABE construction (BitVM3-style garbled circuits with Winternitz one-time-signature commitments).
+- **Protocol-level fraud detection.** A false peg-out assertion can be challenged during the challenge window and slashed. The Universal Challenger monitors for this at the protocol level, and you can also challenge yourself.
+- **`vaultBTC` is not your BTC leaving Bitcoin.** While a vault is active the application mints `vaultBTC` — an 8-decimal, **non-transferable, non-wrapped internal accounting unit** — purely to measure your collateral. It cannot be transferred, sold, or de-pegged, and it is burned on redemption. The real BTC never leaves your Bitcoin script.
+
+## Where your BTC can go
+
+Your BTC can only ever move along the **small, pre-agreed set of destinations** encoded in the vault's Taproot leaves and pre-signed graph:
+
+- back to **you** (refund at peg-in, or redemption payout at peg-out),
+- to the **liquidation redemption path** (only when your position is genuinely liquidatable, and only the seized whole-vault prefix), or
+- to a **challenge-response outcome** if a party posts a fraudulent claim.
+
+There is no path that sends your BTC to an arbitrary address, a pooled bridge wallet, or a custodian.
+
+## No rehypothecation
+
+Your locked BTC is **not lent out, re-pledged, or reused** by the protocol or any operator. It sits inert in your Taproot vault backing exactly one position. There is no pooled reserve whose backing can diverge from deposits, because there is no pool — each vault is a distinct, self-custodied Bitcoin output.
+
+## Actor roles — and what you can do instead
+
+| Actor | What they do | What you can do instead |
+|---|---|---|
+| **Depositor (you)** | Co-sign the vault, activate via secret, borrow/repay, redeem, reclaim BTC. Custody the WOTS keypair and claimer artifacts. | — (you are the trust root) |
+| **Vault Provider (VP)** | Co-signs the graph, completes peg-in, normally posts the peg-out claim. **Invite-only during Beta.** | **Self-refund** at peg-in; **self-claim** at peg-out; **choose or run a VP** as the role opens up. |
+| **Application Vault Keeper (AVK)** | Per-application keeper; acts as arbitrageur inside Aave, handling seized-vault redemption/rebalancing. | Liquidation fairness returns your over-seizure surplus regardless of AVK behavior. |
+| **Universal Challenger (UC)** | Protocol-level fraud monitor; challenges false peg-out assertions. | **Self-challenge** a false assertion within the window. |
+| **Security Council** | Transitional emergency body; can pause the protocol by quorum. Holds no BTC. | — |
+
+## Depositor recovery paths
+
+- **Peg-in didn't complete → self-refund.** If the vault never activates, reclaim the Pre-PegIn output via its `tRefund` refund path. Timing: activation is a two-window process — an **acknowledgement window of ~24 hours** (`pegInAckTimeout`) for the VP to acknowledge, and an **activation window of ~48 hours** (`pegInActivationTimeout`) overall; if these lapse without activation, the refund path becomes spendable by you. (Exact mainnet values are **to be announced at launch**.)
+- **VP unresponsive at peg-out → self-claim.** With your **WOTS keypair and claimer artifacts** you can post the claim and drive the payout yourself, without the VP. Back these up — they cannot be regenerated by the protocol.
+- **False assertion → self-challenge.** You can challenge a fraudulent peg-out claim during the challenge window (`timelockAssert` / `timelockChallengeAssert`) rather than relying solely on the Universal Challenger.
+- **Choose or run a Vault Provider.** The VP set is **invite-only during Beta** and opens over time; the design goal is that you can select among VPs or run your own, so no single provider is a chokepoint.
+
+## Operational pause states
+
+The protocol can be paused in an incident without giving anyone custody of your BTC:
+
+- **Soft pause** — halts new risk-taking (e.g. new peg-ins / new borrowing) while allowing wind-down and repayment.
+- **Full pause** — halts broader protocol activity.
+- **Freeze / pause guardians.** Dedicated guardian roles (`TBV_PROTOCOL_FREEZE_GUARDIAN`, `APPLICATION_FREEZE_GUARDIAN`, `APPLICATION_PAUSE_GUARDIAN`) can trigger emergency freeze/pause quickly; a **Security Council quorum** (`councilQuorum`) governs entering and lifting protocol-wide pause states.
+- **Recovery survives pause.** Bitcoin-side depositor recovery paths that are already available (refund timelocks, self-claim) are enforced by Bitcoin, not by the Ethereum contracts, so a pause cannot strand BTC you are already entitled to reclaim.
+
+## Risk surface
+
+No system is risk-free. The material risks to weigh:
+
+- **Smart-contract risk.** Bugs in the Ethereum contracts (`BTCVaultRegistry`, `AaveAdapter`, `CapPolicy`, `ProtocolParams`, and related). Mitigated by audits, conservative caps, and phased rollout — see **Security**.
+- **Upgradability & governance risk.** Core contracts are **UUPS upgradeable**; a malicious or mistaken upgrade is a risk. Mitigated by role-gating (`TBV_PROTOCOL_ADMIN` for protocol actions, `APPLICATION_ADMIN` for application actions) with a **Timelock** (`PROPOSER_ROLE` / `EXECUTOR_ROLE` / `CANCELLER_ROLE`) in front of governance actions.
+- **Oracle risk.** Borrowing and liquidation depend on price feeds; a faulty or manipulated feed can mis-value collateral or mistime liquidations.
+- **Bitcoin reorg risk.** A deep Bitcoin reorganization could unwind a peg-in that appeared confirmed; the required confirmation depth is set conservatively for mainnet to bound this.
+- **ZK soundness risk.** The security of proof-gated release rests on the soundness of the zero-knowledge proof system; a soundness break could allow an invalid redemption to be asserted.
+- **BABE / BitVM3 risk.** The on-Bitcoin verification construction (garbled circuits + WOTS commitments) is advanced cryptography; implementation or protocol flaws in BABE/BitVM3 are a risk surface.
+- **Cross-chain proof-pipeline risk.** The end-to-end path that carries Ethereum state into a Bitcoin-verifiable proof has liveness and correctness dependencies; delays or faults can stall peg-outs.
+- **Vault Provider unavailability.** A VP going offline degrades convenience; mitigated by self-refund and self-claim, but you must hold your artifacts to exercise them.
+- **Universal Challenger collusion or downtime.** If challengers are absent or collude, fraud detection weakens; mitigated by permitting **self-challenge** and by challenger incentives/slashing.
+- **Security Council compromise.** The transitional Council could pause improperly or be compromised; it holds no custody, and its powers shrink as the trust set decentralizes.
+- **Vault Swap / liquidity risk.** Liquidation and arbitrage route through the default liquidity spoke (`BTCVaultSwap`); thin liquidity can worsen liquidation outcomes.
+- **Governance risk.** Parameter changes (caps, timeouts, fees) are privileged actions; a bad parameter set is a risk, bounded by timelocks and by per-vault parameter versioning (below).
+
+## Beta Mainnet caveats
+
+TBV is a **capped, allowlisted Beta** with real value at stake. Concretely:
+
+- **Real value.** Peg-ins lock real BTC and pay real Bitcoin fees; borrowing and liquidation are economically live. There is no faucet — rehearse on **Testnet** if you want a no-value dry run.
+- **Contracts may be redeployed or upgraded.** Core contracts use **UUPS upgradeable proxies**, so upgrades generally happen without migrating vault data — but a component can be redeployed during Beta. Always re-verify current **addresses** before transacting.
+- **Positions and parameters are versioned per vault.** Timelocks, actor sets, and off-chain params are versioned in `ProtocolParams` (and per application in `ApplicationRegistry`); **each vault records the parameter versions live at its creation and keeps them for its lifetime**, so a later change does not retroactively alter an existing vault.
+- **Allowlisted access.** Phase 1 peg-ins are gated to allow-listed depositor addresses (enforced by `AllowListPolicy`); the gate is removed as launch confidence grows.
+- **Conservative, growing caps.** Per-vault (`maxPegInAmount`), per-address (`perAddressCapBTC`), and per-application (`totalCapBTC`) caps start low and increase over time; launch values are **to be announced at launch**.
+
+## Trust-set evolution: testnet → mainnet
+
+The set of parties you rely on **shrinks and decentralizes over time**. On testnet, operator roles (Vault Provider, Application Vault Keeper, Universal Challenger) and the Security Council are concentrated for iteration speed. On Beta Mainnet they are permissioned and **invite-only**, with a transitional Security Council that can pause in emergencies. The roadmap is to progressively widen operator participation, let depositors choose or run their own Vault Provider, and reduce the Council's transitional powers — moving the system from "few trusted operators" toward "many interchangeable operators, none of them a chokepoint," while the cryptographic guarantees stay constant throughout.
+
+## Next
+
+- **How it works** — the peg-in → borrow → peg-out flow the guarantees above protect.
+- **TBV vs alternatives** — how the trust model compares to WBTC, cbBTC, and BitVM bridges.
+- **Beta Mainnet: what to expect** — access, caps, and phased rollout.
+- **Security** — audits, responsible disclosure, and known limitations.

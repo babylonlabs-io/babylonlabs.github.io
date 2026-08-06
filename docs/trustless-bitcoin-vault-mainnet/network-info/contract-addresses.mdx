@@ -1,0 +1,32 @@
+---
+title: Ethereum smart contract addresses
+---
+
+This page lists the **canonical** TBV contract and token addresses on Ethereum Mainnet. **Always check here before transacting** — verify any address you are about to approve or interact with against this list, and be aware that core contracts use the UUPS upgradeable-proxy pattern, so the address stays stable across upgrades.
+
+Mainnet addresses are **to be announced at launch** and will be filled in here when deployment completes.
+
+## Core protocol contracts
+
+| Contract | Role | Address |
+|---|---|---|
+| `BTCVaultRegistry` | Core vault registry — vault lifecycle, peg-in, activation, redemption | To be announced at launch |
+| `BTCVaultsMetadataRegistry` | Metadata registry for vaults | To be announced at launch |
+| `ProtocolParams` | Versioned protocol parameters and operator-set rosters | To be announced at launch |
+| `ApplicationRegistry` | Registry of approved applications and their versioned keeper sets | To be announced at launch |
+| `CapPolicy` | On-chain exposure caps (per-application total and per-address) | To be announced at launch |
+| `FeeEscrow` | Escrow for peg-in and VP registration fees | To be announced at launch |
+| `AllowListPolicy` | Depositor allowlist gate for the phased launch | To be announced at launch |
+
+## Aave v4 application
+
+| Contract / token | Role | Address |
+|---|---|---|
+| `AaveAdapter` | User entry point for the Aave v4 application | To be announced at launch |
+| `AaveAdapterPositionProxy` | Per-depositor isolated position | To be announced at launch |
+| `BTCVaultSwap` | Default liquidity/LLP (WBTC spoke) | To be announced at launch |
+| `VaultBTC` / `vaultBTC` | Internal accounting token (8-decimal, non-transferable, non-wrapped) | To be announced at launch |
+
+Aave v4 is the first live application. Additional applications will be listed here as they are deployed.
+
+> **Always check this page before transacting.** Confirm every contract and token address against this list. If an address you are shown does not match what is published here, do not proceed.

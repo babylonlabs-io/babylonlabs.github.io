@@ -1,0 +1,36 @@
+---
+title: Mainnet info
+---
+
+This is the network home for TBV on **mainnet**: the canonical contract addresses, the live protocol parameters, the launch caps, and how to connect your wallets. Always confirm the current values here before you transact.
+
+## Mainnet vs Testnet
+
+TBV runs on two networks. Mainnet involves **real value** and is deliberately conservative; Testnet is a free rehearsal environment with no real value.
+
+| | Mainnet | Testnet |
+|---|---|---|
+| **Bitcoin network** | Bitcoin Mainnet | Signet |
+| **Ethereum network** | Ethereum Mainnet | Sepolia |
+| **Value at risk** | Real BTC and real value | None (test coins from a faucet) |
+| **Access** | Allowlisted / invite (phased) | Open |
+
+If you want to practise the full flow before committing real funds, start on Testnet — see **Testnet info** below.
+
+## Caps and phased/allowlist launch are first-class
+
+Mainnet is a **capped, allowlisted Beta**, and those limits are a first-class part of this network — not a footnote:
+
+- **Phased, allowlisted rollout.** Access begins gated by an allowlist / invite, enforced on-chain by `AllowListPolicy`, and opens up in phases as launch confidence grows. Each phase also carries an **operational monthly credit cap** (a launch limit, managed operationally — not a smart-contract parameter).
+- **On-chain exposure caps from day one.** `CapPolicy` enforces a per-application total (`totalCapBTC`) and a per-address cap (`perAddressCapBTC`); `ProtocolParams` enforces a per-vault maximum (`maxPegInAmount`) at peg-in.
+
+For the full framing of phases, allowlisting, and what to expect, see **Beta Mainnet: what to expect**.
+
+## In this section
+
+- **Setup (Mainnet)** — supported BTC + ETH wallets, the mainnet networks, dual-wallet connect, and mainnet confirmation depth.
+- **Ethereum smart contract addresses (Mainnet)** — the canonical contract and token addresses. Always check here before transacting.
+- **Protocol parameters & caps (Mainnet)** — the full parameter and cap tables, plus how versioning and the phased/allowlist launch work.
+- **Testnet info** — a pointer to the public testnet so you can rehearse first.
+
+All mainnet-specific numeric values (addresses, parameters, and caps) are **to be announced at launch**.

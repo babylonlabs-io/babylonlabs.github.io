@@ -1,0 +1,32 @@
+---
+title: Resolvers — upgradability & ownership
+---
+
+A Resolver and the position accounts it deploys hold user collateral relationships, so how they are owned and upgraded is a first-class security decision. This page describes the upgrade patterns available, the ownership controls expected of a partner, and the rule that governs any change touching TBV contracts.
+
+## Upgrade patterns
+
+You choose an upgrade posture per contract. The three standard proxy patterns each have a place in a resolver design.
+
+- **Transparent proxy.** Upgrade logic lives in a `ProxyAdmin` separate from the implementation, so admin calls and user calls never collide. Simple and well understood; the admin is a single, clearly separated authority.
+- **UUPS (Universal Upgradeable Proxy Standard).** The upgrade authorization lives in the implementation itself, gated by an access-controlled `_authorizeUpgrade`. This is the pattern the TBV protocol and Aave contracts use — the resolver and position-account templates authorize upgrades through the contract admin role, not a separate `UPGRADER_ROLE`. UUPS keeps upgrade control in-contract and is a natural fit if your resolver already extends the TBV governance template.
+- **Beacon proxy.** Many proxies point at a single beacon that names one implementation. Upgrading the beacon upgrades every proxy at once. This is the right choice for **Position-Account mode** resolvers that deploy one position account per depositor and need to upgrade them uniformly — you change one beacon rather than migrating thousands of accounts.
+
+A resolver may mix patterns: for example, a UUPS-upgradeable resolver that deploys position accounts behind a beacon. Note that the shipped `BorrowDelegationPositionAccount` is deliberately **immutable** (deployed via `CREATE2`, no proxy) — immutability is itself a valid, and often preferable, posture where upgradeability is not required, because it removes an entire class of upgrade risk.
+
+## Ownership controls
+
+Whatever pattern you pick, upgrade authority and privileged admin functions must sit behind controls proportionate to the value at risk:
+
+- **Multisig.** Admin, upgrade, and pause authorities should be held by a multisig, not an EOA. A single key controlling upgrades of a contract that holds user collateral is not acceptable for a production resolver.
+- **Timelock.** Upgrades and sensitive parameter changes should route through a timelock so users and monitors can observe a pending change before it takes effect. The TBV protocol itself separates proposal, execution, and cancellation authorities (`PROPOSER_ROLE`, `EXECUTOR_ROLE`, `CANCELLER_ROLE`) behind a timelock; a resolver is expected to adopt an equivalent discipline for its own upgrades.
+- **Least privilege and role separation.** Keep the upgrade authority distinct from day-to-day operational roles. The party that can pause should not need to be the same party that can upgrade.
+
+## Consult TBV devs for any change touching TBV contracts
+
+The most important rule: **any change that touches TBV protocol or Aave-application contracts — how your resolver calls the adapter, how your position accounts hold or move collateral, how activation metadata is encoded — must be reviewed with the TBV developers before it ships.** Resolvers are accepted onto the adapter only after review and registration, and that trust does not automatically extend to a materially changed implementation. Treat an upgrade to any contract in the collateral path as a change that requires re-review, not a routine deploy.
+
+## Next
+
+- **Pausability** — pause authority and scope, and coordination with protocol and Aave pause states.
+- **Resolver partner checklist** — the ownership, pause, and review gates to clear before going live.
