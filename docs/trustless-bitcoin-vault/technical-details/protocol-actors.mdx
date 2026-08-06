@@ -14,7 +14,7 @@ The [Trustless Bitcoin Vault (TBV)](../start-here/what-is-tbv.mdx) protocol has 
 * **Vault Provider (VP).** A claimer and challenger: it drives the standard redemption claim and can also challenge an invalid claim. One VP is chosen per vault at peg-in and is fixed for that vault's life.
 * **Application Vault Keeper (AVK).** An application-scoped claimer and challenger. In the Aave v4 integration, AVKs act as arbitrageurs during liquidation settlement, claiming a seized vault through direct redemption, and they can also challenge an invalid claim.
 
-Universal Challengers are separate protocol-level fraud monitors. They challenge only and never claim a vault. All three operator roles — Vault Provider, Application Vault Keeper, and Universal Challenger — take part in vault creation through the pre-signing (BABE) ceremony; they are distinguished by their claim and challenge roles during redemption, not by who sets up the vault. Universal Challengers participate in the challenge mechanism across applications, but they are not application-scoped Vault Keepers.
+Universal Challengers are separate protocol-level fraud monitors. They challenge only and never claim a vault. All three operator roles — Vault Provider, Application Vault Keeper, and Universal Challenger — take part in vault creation through the pre-signing (BABE) ceremony; they are distinguished by their claim and challenge roles during redemption, not by who sets up the vault. Universal Challengers act across applications, so they are not application-scoped Vault Keepers.
 
 ## Depositor
 
@@ -78,7 +78,7 @@ Universal Challengers are **challengers only**: they challenge invalid claims bu
 
 * **Fraud monitoring.** The Universal Challenger watches claim transactions posted on Bitcoin and verifies the associated proof against Ethereum state. A claim that does not correspond to the required Ethereum redemption state cannot be backed by a valid proof.
 * **Challenge execution.** When fraud is detected, the Universal Challenger broadcasts a challenge transaction within the assert timelock. The challenge transactions verify the claimer's WOTS signatures against the garbled-circuit instances established at peg-in. If the claim cannot be defended, the challenger broadcasts the no-payout transaction after the disprove timelock expires; the claimer's bond is forfeited.
-* **Peg-in setup.** Where required by the protocol setup, Universal Challengers participate in the vault-specific commitments that make later challenge transactions valid on Bitcoin. The commitment is bound to the vault's specific Pre-PegIn HTLC output, which prevents cross-vault replay.
+* **Peg-in setup.** Universal Challengers take part in vault creation, contributing the vault-specific commitments that make later challenge transactions valid on Bitcoin. The commitment is bound to the vault's specific Pre-PegIn HTLC output, which prevents cross-vault replay.
 * **Vault-specific commitment.** The Universal Challenger set active at vault creation is committed into that vault's Bitcoin-side transaction graph and challenge paths. This is what allows their challenge transactions to be valid on Bitcoin.
 
 ### What the depositor can do instead

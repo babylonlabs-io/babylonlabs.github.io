@@ -46,10 +46,12 @@ script with pre-signed spend paths. Its Ethereum-side representation used as
 collateral is the **collateral record**.
 
 **BTC Vault Swap Spoke.** The first Liquidation Liquidity Provider registered for
-the Aave v4 integration, deployed as the `BTCVaultSwap` contract. It lets a seized
-vault be swapped for a fungible asset so that liquidators on the permissionless
-path can be paid instantly. A registered Application Vault Keeper later acquires
-the escrowed vault and finalizes the BTC redemption on the Bitcoin Network.
+the Aave v4 integration, deployed as the `BTCVaultSwap` contract and registered as
+its own WBTC spoke on the Aave v4 Hub, distinct from the Babylon Core Lending
+Spoke. It lets a seized vault be swapped for a fungible asset so that liquidators
+on the permissionless path can be paid instantly. A registered Application Vault
+Keeper later acquires the escrowed vault and finalizes the BTC redemption on the
+Bitcoin Network.
 
 **CapPolicy.** Ethereum contract enforcing per-application and per-address BTC
 exposure caps. At vault activation, the contract checks that the activation
@@ -160,14 +162,14 @@ fabricate a new spend.
 bitcoin in circulation is a UTXO that gets fully consumed when spent. Each vault
 corresponds to exactly one UTXO.
 
-**Vault Provider commission.** The percentage of BTC a Vault Provider takes from
-a vault's redemption payout. The rate is embedded in the pre-signed payout
-transactions at vault creation.
-
 **vaultBTC.** The on-chain contract name and ERC-20 symbol of the collateral
 record (internal accounting). Developers browsing the deployed contracts on
 Etherscan will see this name; it is not a user-facing asset. See **Collateral
 record**.
+
+**Vault Provider commission.** The percentage of BTC a Vault Provider takes from
+a vault's redemption payout. The rate is embedded in the pre-signed payout
+transactions at vault creation.
 
 **WOTS (Winternitz One-Time Signature).** Each vault commits a WOTS public key
 hash at peg-in. The corresponding private key can only be used once and is the

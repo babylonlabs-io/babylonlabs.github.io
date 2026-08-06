@@ -109,7 +109,7 @@ In the public testnet app, the normal user path is to choose a Vault Provider fr
 
 The protocol supports two pause states for operational safety, both governed by the Security Council quorum:
 
-* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and BTC Vault Swap Spoke operations remain available.
+* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and operations on the BTC Vault Swap Spoke remain available.
 * **Full pause.** Blocks all on-chain state-changing actions on the Aave application surface. A pause can block starting new Ethereum-side actions, but it cannot block Bitcoin-side depositor recovery paths that are already available, because those paths execute on Bitcoin using pre-signed transactions and the depositor's own keys.
 
 ## Risk surface

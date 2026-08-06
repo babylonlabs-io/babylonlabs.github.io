@@ -7,15 +7,15 @@ sidebar_position: 1
 
 The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
 
-![Protocol architecture: Bitcoin Taproot vaults, Ethereum coordination and integration contracts, and off-chain participants](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
+![TBV architecture: BTCVaults on Bitcoin, protocol and Aave v4 contracts on Ethereum, and off-chain protocol actors](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
 
 ## System components
 
 ### On Bitcoin
 
-A vault's BTC sits in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
+The Bitcoin-side vault is the **BTCVault**: the depositor's BTC in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the BTCVault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
 
-The vault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
+The BTCVault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
 
 ### On Ethereum: protocol contracts
 
@@ -79,7 +79,7 @@ While confirmations accumulate on Bitcoin:
 
 The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, creates the internal collateral record for the vault's BTC amount, and supplies it as collateral to the Babylon Core Lending Spoke.
 
-Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its vault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
+Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its BTCVault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
 
 ## Peg-out mechanism
 
