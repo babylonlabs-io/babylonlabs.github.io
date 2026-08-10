@@ -36,7 +36,7 @@ Two safety properties are built into the peg-in flow:
 
 ## Activating a vault as collateral in Aave v4
 
-An active vault is automatically supplied as collateral on the application chosen at peg-in. On activation, the BTC Vault Manager notifies the Aave v4 Adapter. The adapter creates an internal **collateral record** of the vault's BTC amount and supplies it to the **Babylon Core Spoke**, the dedicated Aave v4 market that accepts it as collateral. The vault is appended to the depositor's borrowing position; subsequent activations add to the same position.
+An active vault is automatically supplied as collateral on the application chosen at peg-in. On activation, the BTC Vault Manager notifies the Aave v4 Adapter. The adapter creates an internal **collateral record** of the vault's BTC amount and supplies it to the **Babylon Core Lending Spoke**, the dedicated Aave v4 market that accepts it as collateral. The vault is appended to the depositor's borrowing position; subsequent activations add to the same position.
 
 A BTC vault is created for one specific application at peg-in and cannot be moved between applications later. The protocol is designed to support multiple applications, but each requires its own adapter and its own vaults; integration is not "out of the box".
 

@@ -109,7 +109,7 @@ In the public testnet app, the normal user path is to choose a Vault Provider fr
 
 The protocol supports two pause states for operational safety, both governed by the Security Council quorum:
 
-* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and Vault Swap operations remain available.
+* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and operations on the BTC Vault Swap Spoke remain available.
 * **Full pause.** Blocks all on-chain state-changing actions on the Aave application surface. A pause can block starting new Ethereum-side actions, but it cannot block Bitcoin-side depositor recovery paths that are already available, because those paths execute on Bitcoin using pre-signed transactions and the depositor's own keys.
 
 ## Risk surface
@@ -124,7 +124,7 @@ The protocol supports two pause states for operational safety, both governed by 
 * **Vault Provider unavailability.** Covered by the WOTS self-claim path, plus the option to run a Vault Provider where registration is available. A depositor never depends on a third-party Vault Provider to recover BTC during redemption, provided they have backed up their WOTS file and claimer artifacts.
 * **Universal Challenger collusion or downtime.** Even if every Universal Challenger fails to challenge an invalid claim within the assert timelock, the depositor can self-challenge using the BABE artifacts. If the depositor is also unable to act, the Security Council can broadcast a council no payout transaction.
 * **Security Council compromise.** The council can sign a council no payout but cannot move funds. Compromise of the council reduces emergency-recovery capacity; it does not enable theft of BTC from any vault.
-* **Vault Swap liquidity dependency.** Permissionless liquidations draw WBTC from the Aave Hub. If Hub WBTC liquidity or the Vault Swap allowance is insufficient, permissionless liquidations revert. Liquidations can still proceed via direct redemption by registered arbitrageurs, but the pool of available liquidators narrows. The protocol mitigates this with an amount-based cap on total BTC onboarded to the Aave application.
+* **BTC Vault Swap Spoke liquidity dependency.** Permissionless liquidations draw WBTC from the Aave Hub. If Hub WBTC liquidity or the BTC Vault Swap Spoke allowance is insufficient, permissionless liquidations revert. Liquidations can still proceed via direct redemption by registered arbitrageurs, but the pool of available liquidators narrows. The protocol mitigates this with an amount-based cap on total BTC onboarded to the Aave application.
 * **Governance risk.** Typical governance risks exist, as the protocol contracts may be upgraded to fix security issues and follow Ethereum upgrades for compatibility.
 
 ## Trust set evolution: public testnet to mainnet

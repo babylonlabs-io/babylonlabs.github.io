@@ -7,15 +7,15 @@ sidebar_position: 1
 
 The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
 
-![Protocol architecture: Bitcoin Taproot vaults, Ethereum coordination and integration contracts, and off-chain participants](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
+![TBV architecture: BTCVaults on Bitcoin, protocol and Aave v4 contracts on Ethereum, and off-chain protocol actors](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
 
 ## System components
 
 ### On Bitcoin
 
-A vault's BTC sits in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the vault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
+The Bitcoin-side vault is the **BTCVault**: the depositor's BTC in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the BTCVault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
 
-The vault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
+The BTCVault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
 
 ### On Ethereum: protocol contracts
 
@@ -33,7 +33,7 @@ The core protocol contracts manage vault accounting and shared infrastructure:
 Each registered application adds its own integration layer. For the Aave v4 integration:
 
 * **Aave adapter**: user-facing entry point for the integration. Translates user actions such as borrow, repay, and withdraw into vault operations.
-* **Vault swap**: default Liquidation Liquidity Provider (LLP) for the Aave integration. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Spoke for vault collateral.
+* **BTC Vault Swap Spoke**: default Liquidation Liquidity Provider (LLP) for the Aave integration. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Lending Spoke for vault collateral.
 
 A new application needs its own contracts and governance registration. A vault is created for one application and cannot be moved to another application later. For the full lending stack, see [Aave v4 integration](./aave-v4-integration.mdx).
 
@@ -77,16 +77,16 @@ While confirmations accumulate on Bitcoin:
 
 ### Phase 4: activation
 
-The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, creates the internal collateral record for the vault's BTC amount, and supplies it as collateral to the Babylon Core Spoke.
+The contract verifies the hashlock, then notifies the registered application. For the Aave v4 integration, this deploys the depositor's position proxy if this is the first vault, creates the internal collateral record for the vault's BTC amount, and supplies it as collateral to the Babylon Core Lending Spoke.
 
-Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its vault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
+Any party, typically the Vault Provider, observing the activation notification can construct the final PegIn witness using the revealed secret and the collected on-chain signatures, then broadcast the PegIn transaction on Bitcoin. Once confirmed, the BTC is in its BTCVault output. The PegIn transaction also produces a small depositor claim output, controlled solely by the depositor's key, that anchors the self-claim path.
 
 ## Peg-out mechanism
 
 Peg-out releases the BTC on Bitcoin after a vault is redeemed on Ethereum. The Bitcoin side knows only "redeem"; the application layer translates user actions into the redeem call. Two common Ethereum-side triggers start redemption:
 
 * The depositor calls the application's withdrawal function, on the Aave adapter, after repaying outstanding debt.
-* An application-specific liquidation seizes one or more vaults. For the Aave v4 integration, this is either the direct BTC redemption path for registered arbitrageurs or the permissionless LLP-routed path that escrows the seized vault in BTCVaultSwap to receive WBTC.
+* An application-specific liquidation seizes one or more vaults. For the Aave v4 integration, this is either the direct BTC redemption path for registered arbitrageurs or the permissionless LLP-routed path that escrows the seized vault in the BTC Vault Swap Spoke to receive WBTC.
 
 The protocol identifies the authorized claimers for the Bitcoin-side redemption path. The Vault Provider drives the standard path. The depositor has a parallel self-claim path using the WOTS keypair and claimer artifacts saved at peg-in.
 
