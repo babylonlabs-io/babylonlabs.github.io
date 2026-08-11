@@ -130,6 +130,7 @@ A `removedAt` of `null` means the collateral is still pledged.
       type
       amount
       vaultId
+      debtReserveId
       timestamp
       transactionHash
     }
@@ -137,8 +138,18 @@ A `removedAt` of `null` means the collateral is still pledged.
 }
 ```
 
-`type` is one of `deposit`, `withdrawal`, `add_collateral`, `remove_collateral`,
-`liquidation`, `borrow`, `repay`, `redeem`, `claim_expired`.
+In practice `type` is one of `deposit`, `borrow`, `repay`, `redeem`,
+`liquidation` or `claim_expired`. The enum also declares `withdrawal`,
+`add_collateral` and `remove_collateral`, but nothing writes those, so they
+never appear. See [Known data gaps](./limits-and-gotchas.mdx).
+
+Two things to handle when you render these rows:
+
+- `vaultId` is `null` on `borrow` and `repay`. Those events belong to an Aave
+  position, not to one vault.
+- `amount` is in satoshis **except** on `borrow` and `repay`, where it is in the
+  debt asset. Resolve `debtReserveId` against `aaveReserve` for the symbol and
+  decimals before formatting.
 
 ---
 

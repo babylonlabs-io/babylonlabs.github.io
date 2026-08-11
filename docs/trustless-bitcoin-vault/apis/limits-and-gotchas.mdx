@@ -203,6 +203,30 @@ Accurate as of the last schema sync.
 - **`feeConfig` is empty.** It returns `totalCount: 0`, while `vaultFeeEscrow`
   holds one row per vault. Escrow records exist without a corresponding fee
   configuration row. Do not treat an empty `feeConfig` as an error.
+- **Three `vaultActivityType` values are never written.** `withdrawal`,
+  `add_collateral` and `remove_collateral` are declared in the enum, but no
+  indexer code path emits them, so filtering on any of the three returns
+  `totalCount: 0` permanently. That is not a sync delay, and it will not fill in
+  later without an indexer change. In particular, a vault reaching
+  `depositor_withdrawn` produces **no** `withdrawal` row, and collateral moving
+  in or out of an Aave position produces **no** `add_collateral` or
+  `remove_collateral` row. Read `aavePositionCollateral` for collateral state
+  instead — a row with `removedAt: null` is still pledged.
+- **`vaultActivity.vaultId` is null on `borrow` and `repay` rows.** This is by
+  design, not missing data: those events belong to an Aave position rather than
+  to a single vault. They carry a non-null `debtReserveId` instead. Do not
+  filter activity by `vaultId` and expect loan history to appear.
+- **`amount` on `vaultActivity` is not always satoshis.** On `borrow` and
+  `repay` it is denominated in the debt asset. Resolve `debtReserveId` against
+  `aaveReserve` for the decimals before formatting, or a USDT repayment will
+  render as an implausible quantity of BTC.
+- **A `deposit` row appears only once a vault becomes available.** The count
+  tracks vaults that reached `available` at some point, so it is much lower than
+  the total vault count. Vaults that expired before activation never produce
+  one.
+- **`claimExpiredUntil` is a block number, not a timestamp**, despite sitting
+  among timestamp fields. The contract sets it to the expiry block plus a grace
+  period. Compare it against `_meta`'s block number, never against a clock.
 - **The deployed schema can trail the indexer source.** Entities present in the
   indexer repository are not necessarily deployed. The
   [Schema Reference](./schema-reference.mdx) and the committed SDL are generated from

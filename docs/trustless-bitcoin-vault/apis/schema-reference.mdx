@@ -88,7 +88,16 @@ Query with `vault(…)` or `vaults(…)`.
 
 ### `vaultActivity`
 
-Append-only event log of every action taken against a vault.
+Append-only event log. It records six of the nine `vaultActivityType` values —
+`deposit`, `borrow`, `repay`, `redeem`, `liquidation` and `claim_expired`. It is
+not a complete history of everything that happens to a vault. See
+[Known data gaps](./limits-and-gotchas.mdx).
+
+`vaultId` is `null` on `borrow` and `repay` rows. Those events are scoped to an
+Aave position rather than to one vault, and they instead carry a non-null
+`debtReserveId`. Resolve that against `aaveReserve` to get the debt asset's
+symbol and decimals — `amount` on those rows is denominated in the debt asset,
+not in satoshis.
 
 Query with `vaultActivity(…)` or `vaultActivitys(…)`.
 
