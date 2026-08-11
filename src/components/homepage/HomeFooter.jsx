@@ -27,14 +27,14 @@ export default function Footer() {
           <div className="flex flex-wrap gap-2 text-sm text-gray-500">
             <Link
               href="https://babylonlabs.io/privacy-policy"
-              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#BEDCC9]"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#ffa338]"
             >
               Privacy Policy
             </Link>
             &bull;
             <Link
               href="https://babylonlabs.io/terms"
-              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#BEDCC9]"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#ffa338]"
             >
               Terms of Service
             </Link>

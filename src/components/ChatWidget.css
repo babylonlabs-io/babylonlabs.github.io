@@ -210,7 +210,7 @@
 [data-theme='dark'] .chat-trigger-btn:hover {
   transform: scale(1.05);
   border-color: rgb(var(--docs-color-primary-200));
-  color: #33C5CE;
+  color: #f7931a;
   background: transparent;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }

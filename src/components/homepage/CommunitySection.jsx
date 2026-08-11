@@ -17,21 +17,21 @@ export default function CommunitySection() {
         <div className="flex w-full flex-col items-center justify-center gap-2 text-sm font-semibold lg:flex-row lg:gap-8">
           <Link
             className="flex w-full items-center justify-center gap-2  border border-solid border-primary-100 px-8 py-2
-            hover:border-primary-100  hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
+            hover:border-primary-100  hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#f7931a] lg:w-auto"
             href="https://discord.com/invite/babylonglobal"
           >
             Discord
           </Link>
           <Link
             className="flex w-full items-center justify-center gap-2  border border-solid border-primary-100 px-8 py-2
-            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
+            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#f7931a] lg:w-auto"
             href="https://x.com/babylonlabs_io"
           >
            Twitter
           </Link>
           <Link
             className="flex w-full items-center justify-center gap-2 border border-solid border-primary-100 px-8 py-2
-            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#33C5CE] lg:w-auto"
+            hover:border-primary-100 hover:text-primary-200 dark:hover:border-primary-200 dark:hover:text-[#f7931a] lg:w-auto"
             href="https://www.linkedin.com/company/babylon-labs-official/"
           >
            LinkedIn

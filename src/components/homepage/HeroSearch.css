@@ -35,7 +35,7 @@
   border: 1px solid rgba(52, 143, 148, 0.15);
   padding: 5px 14px;
   border-radius: 100px;
-  color: #348f94;
+  color: #c2700c;
   font-size: 0.78rem;
   font-weight: 500;
   margin-bottom: 20px;
@@ -44,7 +44,7 @@
 [data-theme='dark'] .hero-search-badge {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #BEDCC9;
+  color: #ffa338;
 }
 
 .hero-search-badge-icon {
@@ -120,7 +120,7 @@
 }
 
 .hero-search-submit {
-  background: linear-gradient(135deg, #348f94, #33C5CE);
+  background: linear-gradient(135deg, #c2700c, #f7931a);
   color: white;
   border: none;
   padding: 14px 28px;
@@ -133,7 +133,7 @@
 }
 
 [data-theme='dark'] .hero-search-submit {
-  background: linear-gradient(135deg, #33C5CE, #348f94);
+  background: linear-gradient(135deg, #f7931a, #c2700c);
 }
 
 .hero-search-submit:hover:not(:disabled) {
@@ -179,7 +179,7 @@
 .hero-search-chip:hover {
   background: rgba(52, 143, 148, 0.08);
   border-color: rgba(52, 143, 148, 0.25);
-  color: #348f94;
+  color: #c2700c;
 }
 
 [data-theme='dark'] .hero-search-chip:hover {

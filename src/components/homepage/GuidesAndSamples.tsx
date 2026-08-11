@@ -16,7 +16,7 @@ interface Guide {
   link: string;
 }
 
-const guides: Guide[] = [
+export const guides: Guide[] = [
   {
     title: 'Trustless Bitcoin Vault',
     icon: ShieldCheckmarkRegular,
@@ -38,7 +38,7 @@ interface Sample {
   demo?: string;
 }
 
-const samples: Sample[] = [
+export const samples: Sample[] = [
   {
     title: 'Babylon Genesis',
     platform: 'Chain basics, governance, developers, and operators',
