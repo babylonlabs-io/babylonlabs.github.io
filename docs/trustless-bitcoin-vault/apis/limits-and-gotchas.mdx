@@ -68,7 +68,7 @@ Introspection itself works. Only the standard query is too deep.
 **Fix — three options, easiest first.**
 
 **1. Use the committed schema.** This site ships the full SDL at
-[`/schema/vault-indexer.graphql`](/schema/vault-indexer.graphql). Point codegen
+[`/schema/vault-indexer.graphql`](pathname:///schema/vault-indexer.graphql). Point codegen
 at that file instead of the endpoint. This is what most builders should do.
 
 **2. Browse the [Schema Reference](./schema-reference.mdx)** for field names.
@@ -119,6 +119,11 @@ above work today.
 
 ## Pagination
 
+**Omit `limit` and you get 50 rows, not all of them.** The response still
+reports the full `totalCount`, so a client that ignores `limit` looks like it
+succeeded while holding 50 of several thousand records. Always set `limit`
+explicitly, and always compare what you collected against `totalCount`.
+
 `limit` above 1000 is rejected per resolver, not per operation:
 
 ```json
@@ -146,6 +151,11 @@ repeat or disappear between pages.
 ```
 
 Stop when the rows you have collected reach `totalCount`.
+
+Every plural resolver also accepts cursors. Read `pageInfo { hasNextPage
+endCursor }` and pass `endCursor` back as `after` for the next page. Pick one
+style and keep to it: when you pass `offset`, `startCursor` and `endCursor`
+both come back `null`, so the two cannot be mixed within a single sweep.
 
 ## Aliases
 

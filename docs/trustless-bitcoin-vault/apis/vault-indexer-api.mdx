@@ -53,8 +53,9 @@ The schema splits into two domains.
 
 The vault lifecycle and the actors that secure it, independent of any
 application: `vault`, `vaultActivity`, `vaultProvider`, `vaultProviderStats`,
-`vaultKeeper`, `universalChallenger`, `vaultFeeEscrow`, `feeConfig`,
-`application`, `token`, `stats` and `protocolState`.
+`vaultKeeper`, `vaultKeeperApplication`, `universalChallenger`,
+`universalChallengerVersion`, `vaultFeeEscrow`, `feeConfig`, `application`,
+`token`, `stats` and `protocolState`.
 
 A vault progresses through:
 
@@ -67,8 +68,18 @@ pending → signatures_collected → verified → available
                                               └→ invalid
 ```
 
-Each transition has its own timestamp field on the `vault` record, so you can
-reconstruct a full history from a single query.
+`status` is the authority on where a vault sits. Timestamps cover only part of
+the path, so do not expect one field per state:
+
+| State | Field that dates it |
+| --- | --- |
+| `pending` | `pendingAt` |
+| `signatures_collected` | `peginSigsPostedAt` |
+| `verified` | `verifiedAt` |
+| `available` | `activatedAt` |
+| `expired` | `expiredAt`, with `expirationReason` |
+| `redeemed`, `liquidated` | none on the vault — read `vaultActivity` |
+| `depositor_withdrawn`, `invalid` | none — `status` is the only signal |
 
 ### Aave application
 
@@ -105,7 +116,7 @@ Because of the depth cap, the explorer's **Docs** panel shows
 Queries still execute normally.
 
 Use the [Schema Reference](./schema-reference.mdx) on this site for field names, or
-the committed [SDL](/schema/vault-indexer.graphql).
+the committed [SDL](pathname:///schema/vault-indexer.graphql).
 :::
 
 ## Checking indexer freshness

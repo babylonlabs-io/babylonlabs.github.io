@@ -81,8 +81,14 @@ page size.
 
 A vault moves through `pending` → `signatures_collected` → `verified` →
 `available`, then to one of `redeemed`, `liquidated`, `expired`,
-`depositor_withdrawn` or `invalid`. The matching timestamp field tells you when
-each step happened.
+`depositor_withdrawn` or `invalid`.
+
+The timestamps above date the first four states and `expired`
+(`signatures_collected` is dated by `peginSigsPostedAt`, `available` by
+`activatedAt`). The vault record carries no timestamp for `redeemed`,
+`liquidated`, `depositor_withdrawn` or `invalid`. Date a redemption or a
+liquidation from `vaultActivity` instead, and treat `status` as the authority
+in every case.
 
 ### Check my Aave position and its collateral
 
@@ -288,9 +294,17 @@ pages.
 
 ### Filter operators
 
-Every scalar field gets a family of suffixed filters — `_not`, `_in`,
-`_not_in`, `_gt`, `_gte`, `_lt`, `_lte`, and for strings `_contains`,
-`_starts_with`, `_ends_with`. Combine them with `AND` and `OR`.
+Which suffixed filters a field accepts depends on its type. Every field takes
+the exact value, `_not`, `_in` and `_not_in`. Beyond that:
+
+| Field type | Extra operators |
+| --- | --- |
+| `BigInt`, `Int` | `_gt`, `_gte`, `_lt`, `_lte` |
+| `String` | `_contains`, `_starts_with`, `_ends_with`, each with a `_not_` form |
+| `Boolean`, enums | none |
+
+Strings get no ordering operators — `depositor_gt` is not a field, and asking
+for it fails validation. Combine filters with `AND` and `OR`.
 
 ```graphql
 {
@@ -299,7 +313,7 @@ Every scalar field gets a family of suffixed filters — `_not`, `_in`,
       AND: [
         { status: available }
         { amount_gte: "1000000" }
-        { inUse: false }
+        { inUse: true }
       ]
     }
     orderBy: "amount"
@@ -384,5 +398,5 @@ To read one type's fields without tripping the cap:
 
 Four such queries reconstruct the entire schema. The docs site ships the result
 already assembled at
-[`/schema/vault-indexer.graphql`](/schema/vault-indexer.graphql), so most builders
+[`/schema/vault-indexer.graphql`](pathname:///schema/vault-indexer.graphql), so most builders
 never need to introspect at all.
