@@ -374,12 +374,26 @@ const PixelBlast = ({
         threeRef.current = null;
       }
       const canvas = document.createElement('canvas');
-      const renderer = new THREE.WebGLRenderer({
-        canvas,
-        antialias,
-        alpha: true,
-        powerPreference: 'high-performance'
-      });
+      // This background is decorative, so it must never be able to take the
+      // page down with it. WebGL can be disabled in settings, blocked by an
+      // extension, refused by a GPU blocklist, or simply fail to allocate a
+      // context; three.js throws "Error creating WebGL context" in every one
+      // of those cases. Thrown from inside this effect it reaches the
+      // Docusaurus error boundary, which replaces the whole landing page —
+      // headline, composer and call to action included — with a crash screen.
+      // Degrade to no background instead.
+      let renderer;
+      try {
+        renderer = new THREE.WebGLRenderer({
+          canvas,
+          antialias,
+          alpha: true,
+          powerPreference: 'high-performance'
+        });
+      } catch (error) {
+        console.warn('PixelBlast: WebGL unavailable, rendering without the background.', error);
+        return;
+      }
       renderer.domElement.style.width = '100%';
       renderer.domElement.style.height = '100%';
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
