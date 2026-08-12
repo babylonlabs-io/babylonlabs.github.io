@@ -5,16 +5,16 @@ sidebar_position: 2
 
 # Protocol actors
 
-The [Trustless Bitcoin Vault (TBV)](../start-here/what-is-tbv.mdx) protocol has one user role, the **depositor**, and four operator groups: Vault Providers, Application Vault Keepers, Universal Challengers, and a transitional Security Council. None of the operator groups has custody of a depositor's BTC. They coordinate setup, generate proofs, monitor claims, settle liquidations, or provide an emergency backstop. The depositor's recovery paths do not depend on trusting any single operator. This page describes what each actor does at the protocol level.
+The [Babylon Trustless Bitcoin Vaults (TBV)](../start-here/what-is-tbv.mdx) protocol has one user role, the **depositor**, and four operator groups: Vault Providers, App Keepers, Universal Challengers, and a transitional Security Council. None of the operator groups has custody of a depositor's BTC. They coordinate setup, generate proofs, monitor claims, settle liquidations, or provide an emergency backstop. The depositor's recovery paths do not depend on trusting any single operator. This page describes what each actor does at the protocol level.
 
 ## What is a Vault Keeper?
 
 "Vault Keeper" refers to the application-scoped participants that co-sign vault transaction graphs and operate the redemption mechanics for vaults they helped create:
 
 * **Vault Provider (VP).** A claimer and challenger: it drives the standard redemption claim and can also challenge an invalid claim. One VP is chosen per vault at peg-in and is fixed for that vault's life.
-* **Application Vault Keeper (AVK).** An application-scoped claimer and challenger. In the Aave v4 integration, AVKs act as arbitrageurs during liquidation settlement, claiming a seized vault through direct redemption, and they can also challenge an invalid claim.
+* **App Keeper.** An application-scoped claimer and challenger. In the Aave v4 integration, App Keepers act as arbitrageurs during liquidation settlement, claiming a seized vault through direct redemption, and they can also challenge an invalid claim.
 
-Universal Challengers are separate protocol-level fraud monitors. They challenge only and never claim a vault. All three operator roles — Vault Provider, Application Vault Keeper, and Universal Challenger — take part in vault creation through the pre-signing (BABE) ceremony; they are distinguished by their claim and challenge roles during redemption, not by who sets up the vault. Universal Challengers act across applications, so they are not application-scoped Vault Keepers.
+Universal Challengers are separate protocol-level fraud monitors. They challenge only and never claim a vault. All three operator roles — Vault Provider, App Keeper, and Universal Challenger — take part in vault creation through the pre-signing (BABE) ceremony; they are distinguished by their claim and challenge roles during redemption, not by who sets up the vault. Universal Challengers act across applications, so they are not application-scoped Vault Keepers.
 
 ## Depositor
 
@@ -33,7 +33,7 @@ The Vault Provider is a **claimer and challenger**: it drives the standard redem
 
 ### What the Vault Provider does
 
-* **Peg-in coordination.** When a depositor submits a vault creation request, the Vault Provider detects the on-chain event and constructs the pre-signed transaction graph with the Application Vault Keepers and Universal Challengers committed to that vault.
+* **Peg-in coordination.** When a depositor submits a vault creation request, the Vault Provider detects the on-chain event and constructs the pre-signed transaction graph with the App Keepers and Universal Challengers committed to that vault.
 * **PegIn input signature collection and posting.** The Vault Provider collects the PegIn input signatures from every party and posts them on-chain in batched form. This keeps the signatures recoverable from Ethereum even if the Vault Provider later goes offline.
 * **ACK submission.** The Vault Provider collects acknowledgments from every participant and submits them on-chain. ACK submission requires verification that the Pre-PegIn transaction is confirmed to at least the configured depth on Bitcoin.
 * **PegIn transaction broadcast.** After the depositor reveals the activation secret on Ethereum, the Vault Provider constructs the full PegIn witness using the collected signatures and the revealed secret, then broadcasts the PegIn transaction on Bitcoin.
@@ -54,21 +54,21 @@ The portal surfaces VP commission rates to depositors before they create a vault
 
 Vault Providers register on-chain by submitting an Ethereum address, a Bitcoin x-only public key, and a Bitcoin proof of possession, usually a BIP-322 signature proving control of the Bitcoin key. A VP registers for one specific application; the same VP needs separate registrations to serve multiple applications.
 
-## Application Vault Keeper (AVK)
+## App Keeper
 
-Application Vault Keepers are **claimers and challengers**: in liquidation they claim a seized vault through direct redemption, and they can also challenge an invalid claim. They are application-scoped participants that take part in vault creation. In the [Aave v4 integration](./aave-v4-integration.mdx), AVKs act as **arbitrageurs** during liquidation settlement. That role is specific to the Aave application's design and may differ in future integrations.
+App Keepers are **claimers and challengers**: in liquidation they claim a seized vault through direct redemption, and they can also challenge an invalid claim. They are application-scoped participants that take part in vault creation. In the [Aave v4 integration](./aave-v4-integration.mdx), App Keepers act as **arbitrageurs** during liquidation settlement. That role is specific to the Aave application's design and may differ in future integrations.
 
-### What the AVK does
+### What the App Keeper does
 
-* **Transaction graph participation.** During vault creation, each AVK constructs its own transaction graph and cross-signs with the Vault Provider. This gives multiple independent parties the pre-signed transactions needed for vault outcomes.
-* **PegIn input signing.** Each AVK signs the Pre-PegIn HTLC spend as part of the off-chain protocol.
-* **ACK submission.** Each AVK submits an on-chain acknowledgment confirming graph setup, signature collection, and verification of the Pre-PegIn confirmation depth.
-* **Aave-specific liquidation settlement.** The Aave integration routes permissionless liquidation through a Liquidation Liquidity Provider (LLP); the BTC Vault Swap Spoke is the default LLP. Liquidators receive instant WBTC liquidity from the LLP, while the seized vault enters escrow until a registered arbitrageur acquires it and finalizes BTC redemption on Bitcoin. Only registered AVKs can acquire escrowed vaults, because they must have pre-signed the vault's transaction graph at creation.
-* **Challenge participation.** As holders of pre-signed transaction graphs and relevant artifacts, AVKs can participate in the challenge mechanism if they detect an invalid claim against a vault they co-signed.
+* **Transaction graph participation.** During vault creation, each App Keeper constructs its own transaction graph and cross-signs with the Vault Provider. This gives multiple independent parties the pre-signed transactions needed for vault outcomes.
+* **PegIn input signing.** Each App Keeper signs the Pre-PegIn HTLC spend as part of the off-chain protocol.
+* **ACK submission.** Each App Keeper submits an on-chain acknowledgment confirming graph setup, signature collection, and verification of the Pre-PegIn confirmation depth.
+* **Aave-specific liquidation settlement.** The Aave integration routes permissionless liquidation through a Liquidation Liquidity Provider (LLP); the BTCVault Swap Spoke is the default LLP. Liquidators receive instant WBTC liquidity from the LLP, while the seized vault enters escrow until a registered arbitrageur acquires it and finalizes BTC redemption on Bitcoin. Only registered App Keepers can acquire escrowed vaults, because they must have pre-signed the vault's transaction graph at creation.
+* **Challenge participation.** As holders of pre-signed transaction graphs and relevant artifacts, App Keepers can participate in the challenge mechanism if they detect an invalid claim against a vault they co-signed.
 
 ### Registration
 
-AVKs are registered per application through the vault registry. Each application maintains a versioned set of AVK key pairs (Ethereum + Bitcoin). A set version is immutable once active: rotation produces a new version that applies only to vaults created after the rotation. Vaults already in flight retain the set version live at their creation.
+App Keepers are registered per application through the vault registry. Each application maintains a versioned set of App Keeper key pairs (Ethereum + Bitcoin). A set version is immutable once active: rotation produces a new version that applies only to vaults created after the rotation. Vaults already in flight retain the set version live at their creation.
 
 ## Universal Challenger
 
@@ -107,10 +107,10 @@ The Security Council is a quorum of off-chain signers whose Bitcoin public keys 
 The protocol mixes permissioned and permissionless entry points:
 
 * **Fraud monitoring.** Anyone can monitor for invalid claims by running a watcher and checking Ethereum-side state. Broadcasting a Bitcoin-side challenge is not a generic public call; it requires the vault-specific challenge path and artifacts available to the relevant Universal Challengers, Vault Keepers, and the depositor. The Universal Challenger registry is governed at the protocol level.
-* **Liquidation triggering.** Calling `liquidateWithLLP` on the Ethereum side is permissionless: any address can call the function once a position's health factor drops below 1.0. The direct-redemption variant `liquidate` requires being a registered AVK with a Bitcoin redeem key. Permissionless liquidation helps positions get liquidated promptly regardless of which dedicated operators are online.
+* **Liquidation triggering.** Calling `liquidateWithLLP` on the Ethereum side is permissionless: any address can call the function once a position's health factor drops below 1.0. The direct-redemption variant `liquidate` requires being a registered App Keeper with a Bitcoin redeem key. Permissionless liquidation helps positions get liquidated promptly regardless of which dedicated operators are online.
 
 ## Related
 
 * [Protocol architecture](./protocol-architecture.mdx): the protocol mechanics that connect these actors.
-* [Aave v4 integration](./aave-v4-integration.mdx): how the AVK arbitrage role works in the lending application.
+* [Aave v4 integration](./aave-v4-integration.mdx): how the App Keeper arbitrage role works in the lending application.
 * [Glossary](../reference/glossary.mdx): definitions of the protocol-specific terms used here.

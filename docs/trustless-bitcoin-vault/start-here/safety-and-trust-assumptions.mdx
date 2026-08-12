@@ -5,17 +5,17 @@ sidebar_position: 4
 
 # Safety & trust assumptions
 
-A [Trustless Bitcoin Vault (TBV)](./what-is-tbv.mdx) is designed so that the depositor does not have to trust a third party to keep the deposited BTC safe. The BTC stays on Bitcoin, locked in a script whose spending paths are agreed at vault creation. The depositor relies on the protocol's cryptography, the Bitcoin and Ethereum networks, and the application where the collateral is used, but does not rely on a custodian, bridge operator, wrapper issuer, Vault Provider, Application Vault Keeper, Universal Challenger, or Security Council to custody the BTC.
+[Babylon Trustless Bitcoin Vaults (TBV)](./what-is-tbv.mdx) are designed so that the depositor does not have to trust a third party to keep the deposited BTC safe. The BTC stays on Bitcoin, locked in a script whose spending paths are agreed at vault creation. The depositor relies on the protocol's cryptography, the Bitcoin and Ethereum networks, and the application where the collateral is used, but does not rely on a custodian, bridge operator, wrapper issuer, Vault Provider, App Keeper, Universal Challenger, or Security Council to custody the BTC.
 
 This page describes the protocol's safety guarantees, the roles other parties play, the depositor recovery paths, the operational pause states, the risk surface, and the caveats that apply specifically to the public testnet release.
 
-![TBV trust model: depositor, Vault Provider, Application Vault Keepers, Universal Challengers, and Security Council around the Bitcoin vault](/img/trustless-bitcoin-vault/confluence/start-here/safety-and-trust-assumptions/7.png)
+![TBV trust model: depositor, Vault Provider, App Keepers, Universal Challengers, and Security Council around the Bitcoin vault](/img/trustless-bitcoin-vault/confluence/start-here/safety-and-trust-assumptions/7.png)
 
 ## The core property: trust is optional and removable
 
 The protocol's trust model has two principles that distinguish it from custodial or bridge-based alternatives:
 
-* **Trust is optional.** For custody-critical outcomes, the depositor holds the keys and artifacts needed to recover BTC or block an invalid claim without trusting a specific participant. The main paths are self-claim at redemption, self-refund of a stalled peg-in, and depositor-side challenge using the artifacts saved at peg-in. The depositor cannot register as an Application Vault Keeper or Universal Challenger, but does not need to in order to protect their own vault.
+* **Trust is optional.** For custody-critical outcomes, the depositor holds the keys and artifacts needed to recover BTC or block an invalid claim without trusting a specific participant. The main paths are self-claim at redemption, self-refund of a stalled peg-in, and depositor-side challenge using the artifacts saved at peg-in. The depositor cannot register as an App Keeper or Universal Challenger, but does not need to in order to protect their own vault.
 * **Trust is removable.** Emergency multisigs and other transitional safety nets are intended to be reduced or retired as the protocol matures. Operator sets are expected to become broader and more independent over time.
 
 The depositor has four practical paths that do not depend on a specific operator:
@@ -48,7 +48,7 @@ No single party, including the Vault Provider, can unilaterally release a deposi
 The BTC held in a vault can only be released along the spending paths committed at vault creation. Those paths terminate at a small, pre-agreed set of destinations:
 
 * The depositor's own Bitcoin address, via the withdrawal-after-repayment path, depositor self-claim, or the Pre-PegIn refund.
-* The Bitcoin address of an arbitrageur (Application Vault Keeper), on liquidation paths.
+* The Bitcoin address of an arbitrageur (App Keeper), on liquidation paths.
 
 This set is fixed when the vault is created and is enforced by Bitcoin's consensus rules through the Taproot script. Even in a catastrophic bug elsewhere in the system, BTC in an existing vault cannot leave this set: doing so would require a Bitcoin spend that was never signed and is not encoded in any leaf of the script. Bitcoin will not accept such a spend.
 
@@ -68,11 +68,11 @@ The protocol involves four operator types around the depositor. None has custody
 * **What the depositor can do instead:** self-claim at redemption using the WOTS keypair and claimer artifacts. Advanced operators may also run their own Vault Provider where provider registration is available.
 * **No custody:** a Vault Provider cannot construct any spend that was not committed at vault creation, and cannot release BTC outside the pre-signed paths.
 
-### Application Vault Keeper (AVK)
+### App Keeper
 
 * **What it does:** participates in peg-in setup for the application and, in the Aave v4 integration, acts as an arbitrageur during liquidation settlement. The arbitrageur role is specific to Aave v4 and may differ in future applications.
-* **What the depositor can do instead:** the configured AVK set is required during vault creation. At redemption time, the depositor can use the self-claim path with their WOTS keypair, claimer artifacts, and the pre-signed transaction graph.
-* **No custody:** as with the Vault Provider, no AVK spend can be assembled that was not committed at vault creation.
+* **What the depositor can do instead:** the configured App Keeper set is required during vault creation. At redemption time, the depositor can use the self-claim path with their WOTS keypair, claimer artifacts, and the pre-signed transaction graph.
+* **No custody:** as with the Vault Provider, no App Keeper spend can be assembled that was not committed at vault creation.
 
 ### Universal Challenger
 
@@ -109,7 +109,7 @@ In the public testnet app, the normal user path is to choose a Vault Provider fr
 
 The protocol supports two pause states for operational safety, both governed by the Security Council quorum:
 
-* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and operations on the BTC Vault Swap Spoke remain available.
+* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and operations on the BTCVault Swap Spoke remain available.
 * **Full pause.** Blocks all on-chain state-changing actions on the Aave application surface. A pause can block starting new Ethereum-side actions, but it cannot block Bitcoin-side depositor recovery paths that are already available, because those paths execute on Bitcoin using pre-signed transactions and the depositor's own keys.
 
 ## Risk surface
@@ -124,7 +124,7 @@ The protocol supports two pause states for operational safety, both governed by 
 * **Vault Provider unavailability.** Covered by the WOTS self-claim path, plus the option to run a Vault Provider where registration is available. A depositor never depends on a third-party Vault Provider to recover BTC during redemption, provided they have backed up their WOTS file and claimer artifacts.
 * **Universal Challenger collusion or downtime.** Even if every Universal Challenger fails to challenge an invalid claim within the assert timelock, the depositor can self-challenge using the BABE artifacts. If the depositor is also unable to act, the Security Council can broadcast a council no payout transaction.
 * **Security Council compromise.** The council can sign a council no payout but cannot move funds. Compromise of the council reduces emergency-recovery capacity; it does not enable theft of BTC from any vault.
-* **BTC Vault Swap Spoke liquidity dependency.** Permissionless liquidations draw WBTC from the Aave Hub. If Hub WBTC liquidity or the BTC Vault Swap Spoke allowance is insufficient, permissionless liquidations revert. Liquidations can still proceed via direct redemption by registered arbitrageurs, but the pool of available liquidators narrows. The protocol mitigates this with an amount-based cap on total BTC onboarded to the Aave application.
+* **BTCVault Swap Spoke liquidity dependency.** Permissionless liquidations draw WBTC from the Aave Hub. If Hub WBTC liquidity or the BTCVault Swap Spoke allowance is insufficient, permissionless liquidations revert. Liquidations can still proceed via direct redemption by registered arbitrageurs, but the pool of available liquidators narrows. The protocol mitigates this with an amount-based cap on total BTC onboarded to the Aave application.
 * **Governance risk.** Typical governance risks exist, as the protocol contracts may be upgraded to fix security issues and follow Ethereum upgrades for compatibility.
 
 ## Beta Mainnet caveats
@@ -144,7 +144,7 @@ For the full phased-rollout picture, see [Beta Mainnet: what to expect](./beta-m
 Mainnet will expand each set and gradually retire multisig safety nets as system stability allows:
 
 * Multiple independent Vault Providers competing on commission and reliability.
-* Wider Application Vault Keeper set per application, including additional external operators.
+* Wider App Keeper set per application, including additional external operators.
 * Universal Challenger set may add additional external operators over time; it is not planned to become permissionless.
 * Security Council expanded with independent signers as a transitional measure; long-term path is to retire the council's powers entirely once the protocol matures.
 

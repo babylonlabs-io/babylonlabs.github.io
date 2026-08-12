@@ -7,11 +7,11 @@ TBV runs on a small set of permissioned operators in addition to depositors (use
 ## The operator roles at a glance
 
 - **Vault Provider (VP)** — coordinates peg-in, generates the proofs behind a vault, and broadcasts claims; earns commission for the service.
-- **Application Vault Keeper (AVK)** — an application-scoped keeper that co-signs the transaction graph, signs PegIn, submits ACKs, and (in the Aave v4 application) acts as the arbitrageur that settles liquidations.
+- **App Keeper** — an application-scoped keeper that co-signs the transaction graph, signs PegIn, submits ACKs, and (in the Aave v4 application) acts as the arbitrageur that settles liquidations.
 - **Universal Challenger (UC)** — a protocol-level fraud monitor that watches claims, verifies them against Ethereum state, and broadcasts a challenge when a claim is invalid.
 - **Security Council** — a transitional guardian set that can trigger an emergency pause by quorum during Beta.
 
-"Vault Keeper" refers to the VP together with the application-scoped AVK; the Universal Challenger is a separate, protocol-level role.
+"Vault Keeper" refers to the VP together with the application-scoped App Keeper; the Universal Challenger is a separate, protocol-level role.
 
 ## Permissioned, versioned, and closed on mainnet
 
@@ -21,6 +21,6 @@ During Beta, **operating TBV is invite-only.** Onboarding is handled directly wi
 
 ## Express interest
 
-If your team wants to run a Vault Provider, an Application Vault Keeper, or a Universal Challenger, reach out through the channels on **Community & support** for partner intake. We onboard operators in controlled batches as the rollout matures.
+If your team wants to run a Vault Provider, an App Keeper, or a Universal Challenger, reach out through the channels on **Community & support** for partner intake. We onboard operators in controlled batches as the rollout matures.
 
 For the full description of each role, its responsibilities, and how the sets provide checks-and-balances, see [Protocol actors](../technical-details/protocol-actors.mdx).
