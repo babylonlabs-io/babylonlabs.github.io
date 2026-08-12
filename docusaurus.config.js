@@ -438,7 +438,12 @@ const config = {
     ({
       image: '/logo/babylon.svg',
       colorMode: {
+        // The site is dark only. disableSwitch removes the navbar toggle, and
+        // respectPrefersColorScheme: false stops the OS preference from
+        // putting a reader into a light theme that no longer exists.
         defaultMode: 'dark',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
       },
       docs: {
         sidebar: {
@@ -449,7 +454,9 @@ const config = {
       navbar: {
         logo: {
           href: '/',
-          src: '/logo/light.svg',
+          // Dark-only site: both slots use the white mark, so no render
+          // path can put the black logo on the dark ground.
+          src: '/logo/dark.svg',
           srcDark: '/logo/dark.svg',
           alt: 'Babylon Documentation | Babylon Docs',
           height: '40px',
@@ -496,7 +503,9 @@ const config = {
       footer: {
         logo: {
           href: '/',
-          src: '/logo/light.svg',
+          // Dark-only site: both slots use the white mark, so no render
+          // path can put the black logo on the dark ground.
+          src: '/logo/dark.svg',
           srcDark: '/logo/dark.svg',
           alt: 'Babylon Documentation | Babylon Docs',
           height: '36px',
@@ -516,6 +525,22 @@ const config = {
               {
                 label: 'Project Showcase',
                 href: 'https://dorahacks.io/projects/babylon-labs',
+              },
+            ],
+          },
+          {
+            title: 'For AI agents',
+            items: [
+              {
+                // Machine-readable index of the documentation, served from
+                // static/. Use `to` with the pathname: prefix so Docusaurus
+                // treats it as a static file rather than a route.
+                label: 'llms.txt',
+                to: 'pathname:///llms.txt',
+              },
+              {
+                label: 'llms-full.txt',
+                to: 'pathname:///llms-full.txt',
               },
             ],
           },

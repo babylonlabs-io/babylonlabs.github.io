@@ -48,32 +48,89 @@
     U+FEFF, U+FFFD;
 }
 
+/* Brand type system: Px Grotesk and Px Grotesk Mono, the faces specified by
+   the marketing design. Self-hosted, matching how the other faces here are
+   served, so no request goes to a third party.
+
+   These are licensed fonts supplied by Babylon. Static instances rather than
+   variable, so each weight and style is its own file. */
+
+@font-face {
+  font-family: 'Px Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/assets/fonts/px-grotesk-regular.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Px Grotesk';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/assets/fonts/px-grotesk-italic.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Px Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/assets/fonts/px-grotesk-bold.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Px Grotesk';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/assets/fonts/px-grotesk-bold-italic.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Px Grotesk Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/assets/fonts/px-grotesk-mono-regular.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Px Grotesk Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/assets/fonts/px-grotesk-mono-bold.woff2) format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Primary Colors aligned with #ce6533 */
-    --docs-color-primary-100: 51 197 206; /* Lighter shade of #BEDCC9 */
-    --docs-color-primary-200: 51 197 206; /* #BEDCC9 */
+    /* Accent is Bitcoin orange #ce6533. Surfaces are neutral so the accent
+       is the only colour carrying meaning. */
+    --docs-color-primary-100: 221 125 79; /* Lighter */
+    --docs-color-primary-200: 206 101 51; /* #ce6533 */
 
-    --docs-color-secondary-700: 212 230 219;
-    --docs-color-secondary-800: 243 246 244;
-    --docs-color-secondary-900: 247 250 248;
+    --docs-color-secondary-700: 229 229 229;
+    --docs-color-secondary-800: 245 245 245;
+    --docs-color-secondary-900: 250 250 250;
     --docs-color-secondary-1000: 255 255 255;
 
     --docs-color-text-400: 60 60 60; /* Darker text tone */
   }
 
   html[data-theme='dark'] {
-    /* Dark Mode Adjustments */
-    --docs-color-primary-100: 222 236 226;
-    --docs-color-primary-200: 190 220 201;
+    /* Dark Mode Adjustments. The accent lightens slightly so it keeps
+       contrast against a near-black ground. */
+    --docs-color-primary-100: 232 145 106;
+    --docs-color-primary-200: 206 101 51;
 
     --docs-color-text-400: 160 160 160; /* Softer muted dark text */
 
-    --docs-color-secondary-700: 16 42 54;
+    --docs-color-secondary-700: 38 38 38;
     --docs-color-secondary-800: 38 38 38;
     --docs-color-secondary-900: 32 32 32;
     --docs-color-secondary-1000: 0 0 0;
@@ -95,18 +152,259 @@
     @apply cursor-pointer;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
-    @apply font-jakarta;
+  /* Headings follow the Infima heading token so documentation and the landing
+     page share one type system. Wrapped in :where() so it carries zero
+     specificity and any explicit font utility on a heading still wins. */
+  :where(h1, h2, h3, h4, h5) {
+    font-family: var(--ifm-heading-font-family);
+    letter-spacing: -0.01em;
   }
 
   .homepage section,
   .homepage section * {
     @apply box-border;
   }
+}
+
+/* ─── TBV reskin tokens ─────────────────────────────────────────────────
+   One palette for the launch look. Values are RGB channels, not hex, so
+   Tailwind's `<alpha-value>` placeholder resolves and opacity modifiers
+   such as `border-border/60` keep working.
+   ───────────────────────────────────────────────────────────────────── */
+:root {
+  /* The site is dark only, so there is one palette and it lives here rather
+     than in a [data-theme] branch. Declaring it on :root also means the
+     first paint is already dark, with no flash before the theme attribute
+     is applied.
+
+     The ground is a neutral near-black rather than the design's navy: navy
+     at full-page scale reads as a colour cast, and the brief is a simple
+     ground carrying mostly orange with only a little blue. Text keeps the
+     design's warm off-white, so the brand warmth survives.
+
+     Accent #ce6533 is taken from the marketing design, Figma file
+     mqO4c21QpPPz6iJf9SqTQT. On this ground it measures 5.12:1, which is AA
+     for body text, so the true brand colour is used directly for links as
+     well as fills. On the design's own warm ground it managed only 3.35:1
+     and needed a darkened substitute. */
+  --tbv-background: 10 10 10; /* #0a0a0a, near-black ground */
+  --tbv-foreground: 244 240 237; /* #f4f0ed, warm off-white from the design */
+  --tbv-muted: 23 23 23; /* #171717 raised surface */
+  --tbv-muted-foreground: 138 138 138; /* #8a8a8a, 5.73:1 */
+  --tbv-border: 38 38 38; /* #262626 hairline */
+
+  /* Dominant accent. 5.22:1 on the ground, so it carries body-sized text as
+     well as fills. */
+  --tbv-accent: 206 101 51; /* #ce6533 */
+  --tbv-accent-foreground: 255 255 255;
+
+  /* Secondary accent, used sparingly for structure: rules, indices, the
+     second state on a control. The design's navy #042f40 cannot serve here,
+     because on this ground it measures 1.40:1 and disappears; it is a
+     surface colour, not an accent. This steel blue reads at 6.41:1. */
+  --tbv-blue: 74 155 199; /* #4a9bc7 */
+  --tbv-surface-blue: 4 47 64; /* #042f40, the design's navy, as a surface */
+
+  /* The marketing design uses no serif at all: display, body and UI are all
+     Px Grotesk, with Px Grotesk Mono for labels and code. --tbv-font-serif
+     keeps its name so no component class has to change, but now resolves to
+     the same grotesque, which is what the design specifies. */
+  --tbv-font-sans: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  --tbv-font-mono: 'Px Grotesk Mono', 'Fira Code', ui-monospace, monospace;
+  --tbv-font-serif: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Kept so any component still keyed to the attribute resolves to the same
+   single palette. Values are identical to :root by design. */
+html[data-theme='dark'] {
+  --tbv-background: 10 10 10;
+  --tbv-foreground: 244 240 237;
+  --tbv-muted: 23 23 23;
+  --tbv-muted-foreground: 138 138 138;
+  --tbv-border: 38 38 38;
+
+  --tbv-accent: 206 101 51;
+  --tbv-accent-foreground: 255 255 255;
+  --tbv-blue: 74 155 199;
+  --tbv-surface-blue: 4 47 64;
+}
+
+/* ─── Scoped reset for React Bits surfaces ──────────────────────────────
+   The site sets corePlugins.preflight: false, because Infima styles base
+   elements and preflight would reset them. React Bits blocks assume
+   preflight ran. This restores only what those blocks depend on, and only
+   inside a .tbv-surface wrapper, so no doc page can regress from it.
+
+   Every selector is wrapped in :where() so the whole reset has zero
+   specificity, which is how Tailwind's own preflight behaves. Without it a
+   selector like `.tbv-surface h1` scores (0,1,1) and outranks single-class
+   utilities such as `.font-display` and `.mt-4`, so headings would silently
+   ignore the font and spacing classes set on them. `@layer base` only
+   controls source order in Tailwind v3, not specificity, so it cannot solve
+   this on its own.
+   ───────────────────────────────────────────────────────────────────── */
+@layer base {
+  :where(.tbv-surface) :where(*, *::before, *::after) {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: rgb(var(--tbv-border));
+  }
+
+  :where(.tbv-surface) :where(button) {
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  :where(.tbv-surface) :where(ul, ol) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  :where(.tbv-surface) :where(p, h1, h2, h3, h4) {
+    margin: 0;
+    font-family: inherit;
+  }
+
+  :where(.tbv-surface) :where(a:hover) {
+    text-decoration: none;
+  }
+}
+
+.tbv-surface .focus-ring:focus-visible {
+  outline: 2px solid rgb(var(--tbv-accent));
+  outline-offset: 2px;
+}
+
+/* Motion safety. Every animated section must degrade to its static
+   composition, because docs readers scroll fast and some cannot tolerate
+   movement at all. */
+@media (prefers-reduced-motion: reduce) {
+  .tbv-surface *,
+  .tbv-surface *::before,
+  .tbv-surface *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── TBV theme elements, documentation surfaces ────────────────────────
+   Square corners and 1px neutral borders, with the accent reserved for
+   active state. Structure and layout are untouched; only shape, border and
+   colour move.
+
+   The marketing design uses square corners with no radius on its controls,
+   so --ifm-global-radius is zeroed and nothing needs a corner treatment of
+   its own.
+   ───────────────────────────────────────────────────────────────────── */
+:root {
+  --ifm-global-radius: 0px;
+}
+
+/* Code blocks read as framed objects rather than tinted panels. */
+.theme-code-block,
+div[class^='codeBlockContainer'] {
+  border: 1px solid rgb(var(--tbv-border));
+  background: rgb(var(--tbv-muted));
+}
+
+/* Admonitions: neutral surface, semantic colour carried by the left edge
+   only, so the page keeps one accent. */
+.theme-admonition,
+.alert {
+  border: 1px solid rgb(var(--tbv-border));
+  border-left-width: 3px;
+  background: rgb(var(--tbv-muted));
+  box-shadow: none;
+}
+
+/* Tabs: an accent underline on the active item instead of a filled pill. */
+.tabs__item {
+  border-bottom: 2px solid transparent;
+  font-family: var(--tbv-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+.tabs__item--active {
+  border-bottom-color: rgb(var(--tbv-foreground) / 0.6);
+  background: rgb(var(--tbv-foreground) / 0.05);
+  color: rgb(var(--tbv-foreground));
+}
+
+/* Sidebar: an accent bar marks the active page, matching the crosshair and
+   cut-corner language rather than a rounded highlight. */
+.menu__link--active:not(.menu__link--sublist) {
+  box-shadow: inset 2px 0 0 rgb(var(--tbv-foreground) / 0.55);
+  font-weight: 600;
+}
+
+/* Pagination cards pick up the framed treatment. */
+.pagination-nav__link {
+  border: 1px solid rgb(var(--tbv-border));
+  transition: border-color 0.2s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: rgb(var(--tbv-muted-foreground));
+}
+
+/* Breadcrumbs read as a mono trail, matching the section kickers. */
+.breadcrumbs__item .breadcrumbs__link {
+  font-family: var(--tbv-font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+}
+
+/* Search control and the two floating triggers.
+   Scoped under .navbar to outrank the swizzled SearchBar stylesheet, which
+   sets its own radius and would otherwise win. */
+.navbar .DocSearch-Button,
+.navbar__search-input {
+  border: 1px solid rgb(var(--tbv-border));
+  border-radius: 0;
+}
+
+.navbar .DocSearch-Button:hover {
+  border-color: rgb(var(--tbv-muted-foreground));
+  box-shadow: none;
+}
+
+.navbar .DocSearch-Button-Key {
+  border-radius: 0;
+  font-family: var(--tbv-font-mono);
+  box-shadow: none;
+  border: 1px solid rgb(var(--tbv-border));
+}
+
+.page-actions-trigger,
+.chat-trigger-btn {
+  border-radius: 0;
+}
+
+/* Tables get the same 1px neutral frame as code and admonitions. */
+.markdown table {
+  border: 1px solid rgb(var(--tbv-border));
+  border-collapse: collapse;
+}
+
+.markdown table thead tr {
+  background: rgb(var(--tbv-muted));
+  border-bottom: 1px solid rgb(var(--tbv-border));
+}
+
+.markdown table th {
+  font-family: var(--tbv-font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgb(var(--tbv-muted-foreground));
 }
 
 .accordion-content *:last-child {
@@ -135,10 +433,9 @@ body {
 
 /* Babylon Docs Tokens */
 :root {
-  --docs-color-primary: #33C5CE;
-  /* --docs-color-primary-100: #1a90ff; */
-  --docs-color-primary-tint: rgba(33, 96, 253, 0.16);
-  --docs-color-primary-tint-light: rgba(33 96 253/0.24);
+  --docs-color-primary: #ce6533;
+  --docs-color-primary-tint: rgba(247, 147, 26, 0.16);
+  --docs-color-primary-tint-light: rgba(206 101 51 / 0.24);
 
   --docs-color-border: #dadde1;
 
@@ -179,32 +476,55 @@ body {
   --ifm-spacing-horizontal: 1.5rem;
   --ifm-navbar-padding-horizontal: 0.75rem;
 
-  --ifm-font-family-base: 'Inter', system-ui, -apple-system, Segoe UI, Roboto,
-    Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI',
-    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol';
+  /* Documentation type system, matching the landing page. Body and UI in
+     Geist, headings in Source Serif 4, code in Geist Mono. These resolve
+     through the same --tbv-font-* variables the landing page uses, so the
+     two surfaces cannot drift apart. */
+  --ifm-font-family-base: var(--tbv-font-sans);
+  --ifm-heading-font-family: var(--tbv-font-serif);
+  --ifm-font-family-monospace: var(--tbv-font-mono);
 
-  --ifm-font-family-monospace: 'Fira Code', SFMono-Regular, Menlo, Monaco,
-    Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-heading-font-weight: 400;
+  --ifm-h1-font-size: 2.75rem;
+  --ifm-heading-line-height: 1.15;
 
-/* Theme colors */
-  --ifm-color-primary: #348f94;          /* Primary */
-  --ifm-color-primary-dark: #bcd1c4;     /* Darker */
-  --ifm-color-primary-darker: #BEDCC9;   /* Even Darker */
-  --ifm-color-primary-darkest: #BEDCC9;  /* Darkest */
-  --ifm-color-primary-light: #33C5CE;    /* Lighter */
-  --ifm-color-primary-lighter: #33C5CE;  /* Even Lighter */
-  --ifm-color-primary-lightest: #33C5CE; /* Lightest */
-  --ifm-background-color: #ECF8F1;        /* Background */
+/* Single dark palette. #ce6533 reaches 5.12:1 on #0d0d0d, so the brand
+   accent is used directly for link text; no darkened substitute is needed. */
+  --ifm-color-primary: #ce6533;          /* Brand accent, AA on #0d0d0d */
+  --ifm-color-primary-dark: #b85526;     /* Darker */
+  --ifm-color-primary-darker: #a34d24;   /* Even Darker */
+  --ifm-color-primary-darkest: #8f4420;  /* Darkest */
+  --ifm-color-primary-light: #dd7d4f;    /* Lighter */
+  --ifm-color-primary-lighter: #e8916a;  /* Even Lighter */
+  --ifm-color-primary-lightest: #f0a582; /* Lightest */
+  --ifm-background-color: #0a0a0a;       /* Neutral dark ground */
 
 
   --ifm-navbar-shadow: none;
-  --ifm-toc-border-color: #dedede;
+  --ifm-toc-border-color: #262626;
 
   --ifm-table-border-color: var(--docs-color-border);
-  --ifm-background-surface-color: #ECF8F1;
+  --ifm-background-surface-color: #0a0a0a;
   --code-border-color: var(--docs-color-border);
-  --ifm-code-background: #D4E6DB;
+  --ifm-code-background: #171717;
+  --ifm-color-content: #f4f0ed;
+
+  /* Chrome. Neutral surfaces so the accent is the only colour in the frame. */
+  --ifm-navbar-background-color: rgb(var(--tbv-background));
+  --ifm-navbar-link-color: rgb(var(--tbv-foreground));
+  --ifm-navbar-link-hover-color: rgb(var(--tbv-foreground));
+  --ifm-footer-background-color: rgb(var(--tbv-muted));
+  --ifm-footer-color: rgb(var(--tbv-muted-foreground));
+  --ifm-footer-link-color: rgb(var(--tbv-muted-foreground));
+  --ifm-footer-link-hover-color: rgb(var(--tbv-foreground));
+  --ifm-footer-title-color: rgb(var(--tbv-foreground));
+
+  /* Sidebar and table of contents */
+  --ifm-menu-color: rgb(var(--tbv-muted-foreground));
+  --ifm-menu-color-active: rgb(var(--tbv-foreground));
+  --ifm-menu-color-background-active: rgb(var(--tbv-foreground) / 0.06);
+  --ifm-menu-color-background-hover: rgb(var(--tbv-foreground) / 0.05);
+  --ifm-breadcrumb-color-active: rgb(var(--tbv-foreground));
 
   --ifm-code-font-size: 92%;
   --docusaurus-highlighted-code-line-bg: rgba(147, 178, 244, 0.38);
@@ -212,22 +532,27 @@ body {
   --ifm-breadcrumb-item-background-active: transparent;
   --ifm-breadcrumb-padding-horizontal: 0;
 
-  --docusaurus-details-decoration-color: #33C5CE;
+  --docusaurus-details-decoration-color: #ce6533;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 html[data-theme='dark'] {
-  --ifm-link-color: #BEDCC9;
-  --ifm-tabs-color-active-border: #BEDCC9;
-  --ifm-tabs-color-active: #BEDCC9;
+  --ifm-link-color: #ce6533;
+  --ifm-tabs-color-active-border: #ce6533;
+  --ifm-tabs-color-active: #ce6533;
 
-  --ifm-color-primary: #BEDCC9;
+  --ifm-color-primary: #ce6533;
 
-  --ifm-footer-background-color: #1c1c1c;
-  --ifm-background-surface-color: #031B24;
-  --ifm-background-color: #031B24;
-  --ifm-toc-border-color: #2e2e2e;
-  --ifm-code-background: #102A36;
+  --ifm-background-surface-color: #0a0a0a;
+  --ifm-background-color: #0a0a0a;
+  --ifm-toc-border-color: #262626;
+  --ifm-code-background: #171717;
+
+  /* Chrome tokens resolve from the same --tbv-* channels, so dark mode needs
+     no separate values beyond what those tokens already flip. */
+  --ifm-navbar-background-color: rgb(var(--tbv-background));
+  --ifm-navbar-link-color: rgb(var(--tbv-foreground));
+  --ifm-footer-background-color: rgb(var(--tbv-muted));
 
   --ifm-color-content: #e7e7e7;
 
@@ -438,9 +763,18 @@ aside.theme-doc-sidebar-container {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.707 4.293a1 1 0 0 1 0 1.414L9.414 12l6.293 6.293a1 1 0 0 1-1.414 1.414l-7-7a1 1 0 0 1 0-1.414l7-7a1 1 0 0 1 1.414 0Z' fill='%23181818'/%3E%3C/svg%3E");
 }
 
+/* The expand button keeps `position: absolute` from the rule above. It must
+   not be `sticky`: sticky returns it to normal flow, where its static
+   position is the bottom edge of .sidebarViewport, and a sticky `top` can
+   only push an element down from its static position — never lift it back
+   up. The button therefore sat just below the fold and the sidebar could be
+   collapsed but never reopened. Absolute resolves against .sidebarViewport,
+   which is itself sticky, so `top: 75vh` pins the button on screen and keeps
+   it there while the page scrolls. */
 .theme-doc-sidebar-container div[title='Expand sidebar'] {
-  position: sticky;
-  margin-left: 16px;
+  right: auto;
+  left: 16px;
+  cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.293 4.293a1 1 0 0 0 0 1.414L14.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414l7-7a1 1 0 0 0 0-1.414l-7-7a1 1 0 0 0-1.414 0Z' fill='%23181818'/%3E%3C/svg%3E");
 }
 
@@ -721,7 +1055,7 @@ html[data-theme='dark'] .page-actions-trigger:hover,
 html[data-theme='dark'] .page-actions-trigger[aria-expanded='true'] {
   filter: none;
   border-color: rgb(var(--docs-color-primary-200));
-  color: #33c5ce;
+  color: #ce6533;
 }
 
 .page-actions-menu {
@@ -1355,13 +1689,11 @@ details p {
   display: none;
 }
 
-.DocSearch-Button {
-  @apply lg:!rounded-md;
-  background-color: #ECF8F1 !important;
-}
-
+/* Dark only, so one rule. Resolves from the token rather than a literal, and
+   drops the rounded corner in favour of the site's cut treatment. */
+.DocSearch-Button,
 [data-theme='dark'] .DocSearch-Button {
-  background-color: #031B24 !important;
+  background-color: rgb(var(--tbv-muted)) !important;
 }
 
 .DocSearch-Button-Key {
@@ -1749,9 +2081,21 @@ h2.anchor > code {
   @apply pl-4;
 }
 
+/* `nowrap` keeps a heading and its `#` anchor on one line, which only works
+   while the heading fits. Any longer title used to push past the viewport and
+   drag the whole page into horizontal scroll on a phone — the FAQ measured
+   618px of scroll width at 375px wide. Hold the behaviour where there is room
+   and let headings wrap below the sidebar breakpoint. */
 h2.anchor,
 h3.anchor {
   text-wrap: nowrap;
+}
+
+@media (max-width: 996px) {
+  h2.anchor,
+  h3.anchor {
+    text-wrap: wrap;
+  }
 }
 
 h2.anchor > code,
@@ -2072,7 +2416,7 @@ html[data-theme='dark'] .header-ai-chat-link {
 html[data-theme='dark'] .header-ai-chat-link:hover {
   filter: none !important;
   border-color: rgb(var(--docs-color-primary-200)) !important;
-  color: #33C5CE !important;
+  color: #ce6533 !important;
   background-color: transparent !important;
   box-shadow: none !important;
   transform: none;
@@ -2385,4 +2729,123 @@ html[data-theme='dark'] .markdown img {
 [data-rmiz-modal-overlay='visible'],
 [data-rmiz-modal-content] {
   z-index: 9999 !important;
+}
+
+
+/* ─── Neutral chrome ────────────────────────────────────────────────────
+   Top nav, sidebar and the small controls carry no colour: white and grey
+   text on black, matching the marketing site's restraint. The accent is
+   reserved for the landing page and for body links, where it is the only
+   signal that a run of text is interactive.
+   ───────────────────────────────────────────────────────────────────── */
+.page-actions-trigger,
+.chat-trigger-btn,
+[data-theme='dark'] .chat-trigger-btn {
+  background: transparent !important;
+  border: 1px solid rgb(var(--tbv-border)) !important;
+  color: rgb(var(--tbv-foreground)) !important;
+}
+
+.page-actions-trigger:hover,
+.chat-trigger-btn:hover,
+[data-theme='dark'] .chat-trigger-btn:hover {
+  border-color: rgb(var(--tbv-muted-foreground)) !important;
+  color: rgb(var(--tbv-foreground)) !important;
+  background: rgb(var(--tbv-foreground) / 0.04) !important;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: rgb(var(--tbv-foreground));
+}
+
+/* The header Ask AI button is chrome, so it loses its fill too. */
+.header-ai-chat-link {
+  background: transparent !important;
+  border: 1px solid rgb(var(--tbv-border)) !important;
+  color: rgb(var(--tbv-foreground)) !important;
+}
+
+/* Prev/next is navigation, not prose, so it takes the neutral treatment too.
+   Its affordance is the bordered card, which does not depend on hue. */
+.pagination-nav__link,
+.pagination-nav__label {
+  color: rgb(var(--tbv-foreground));
+}
+
+.pagination-nav__sublabel {
+  color: rgb(var(--tbv-muted-foreground));
+}
+
+/* The table of contents is nav, so its active entry is marked by weight and
+   brightness rather than by colour. Infima paints it with --ifm-color-primary,
+   which is the brand orange. */
+.table-of-contents__link--active,
+.table-of-contents__link--active code {
+  color: rgb(var(--tbv-foreground));
+  font-weight: 500;
+}
+
+.table-of-contents__link:hover,
+.table-of-contents__link:hover code {
+  color: rgb(var(--tbv-foreground));
+}
+
+/* This token is re-declared on .menu__link further up the file, which outranks
+   the :root value, so the sidebar needs its own neutral declaration. */
+.menu__link {
+  --ifm-menu-color-background-active: rgb(var(--tbv-foreground) / 0.06);
+  --ifm-menu-color-background-hover: rgb(var(--tbv-foreground) / 0.04);
+}
+
+/* Algolia ships its own palette, including a blue-grey #7f8497 for muted text
+   and a blue highlight. Repoint its variables at the site tokens so the search
+   control matches the rest of the chrome.
+
+   @docsearch/css declares these on `html[data-theme=dark]`, which is the same
+   specificity as ours and wins on stylesheet order. `html:root[...]` adds one
+   class-level unit, so this holds whichever sheet loads last. */
+:root,
+html:root[data-theme='dark'] {
+  --docsearch-muted-color: rgb(var(--tbv-muted-foreground));
+  --docsearch-secondary-text-color: rgb(var(--tbv-muted-foreground));
+  --docsearch-text-color: rgb(var(--tbv-foreground));
+  --docsearch-icon-color: rgb(var(--tbv-muted-foreground));
+  --docsearch-subtle-color: rgb(var(--tbv-border));
+
+  --docsearch-searchbox-background: rgb(var(--tbv-muted));
+  --docsearch-searchbox-focus-background: rgb(var(--tbv-muted));
+  --docsearch-background-color: rgb(var(--tbv-muted));
+  --docsearch-modal-background: rgb(var(--tbv-background));
+  --docsearch-footer-background: rgb(var(--tbv-background));
+  --docsearch-container-background: rgb(0 0 0 / 0.7);
+
+  --docsearch-hit-background: rgb(var(--tbv-muted));
+  --docsearch-hit-color: rgb(var(--tbv-foreground));
+  --docsearch-hit-highlight-color: rgb(var(--tbv-foreground) / 0.1);
+
+  /* Algolia's blue #003dff / #457aff drives the highlight, the magnifier and
+     every focus ring. Neutral throughout. */
+  --docsearch-highlight-color: rgb(var(--tbv-foreground));
+  --docsearch-primary-color: rgb(var(--tbv-foreground));
+  --docsearch-soft-primary-color: rgb(var(--tbv-foreground) / 0.1);
+  --docsearch-focus-color: rgb(var(--tbv-muted-foreground));
+  --docsearch-logo-color: rgb(var(--tbv-muted-foreground));
+
+  --docsearch-key-background: rgb(var(--tbv-muted));
+  --docsearch-key-color: rgb(var(--tbv-muted-foreground));
+  --docsearch-key-gradient: none;
+  --docsearch-key-shadow: none;
+}
+
+/* The collapsed-sidebar puck follows the same neutral treatment. */
+.theme-doc-sidebar-container button[title='Collapse sidebar'],
+.theme-doc-sidebar-container div[title='Expand sidebar'] {
+  background-color: rgb(var(--tbv-muted));
+  border: 1px solid rgb(var(--tbv-border));
+}
+
+.theme-doc-sidebar-container button[title='Collapse sidebar']:hover,
+.theme-doc-sidebar-container div[title='Expand sidebar']:hover {
+  background-color: rgb(var(--tbv-border));
 }

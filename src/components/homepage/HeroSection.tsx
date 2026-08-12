@@ -9,7 +9,9 @@ import clsx from 'clsx';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import HeroSearch from './HeroSearch';
 
-const PRODUCTS = [
+// Exported so the landing page renders the same products from a single
+// source of truth, rather than duplicating the copy and links.
+export const PRODUCTS = [
   {
     title: 'TBV Testnet docs',
     link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',

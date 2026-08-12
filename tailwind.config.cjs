@@ -11,15 +11,31 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Inter"', ...fontFamily.sans],
+        // `font-sans` and `font-mono` resolve to the same CSS variables as the
+        // Infima --ifm-font-family-* tokens. `body { @apply font-sans }` in
+        // custom.css outranks the Infima token, so if these two disagreed the
+        // documentation body would silently keep the old face.
+        sans: ['var(--tbv-font-sans)'],
         jakarta: ['"Plus Jakarta Sans"', ...fontFamily.sans],
-        mono: ['"Fira Code"', ...fontFamily.mono],
+        mono: ['var(--tbv-font-mono)'],
+        // Launch type system.
+        display: ['var(--tbv-font-serif)'],
+        ui: ['var(--tbv-font-sans)'],
+        code: ['var(--tbv-font-mono)'],
       },
       borderRadius: {
         sm: '4px',
       },
       screens: {
-        sm: '0px',
+        // `sm` was pinned to 0px, which made every `sm:` class match at all
+        // widths. That left only md (768) and lg (997) as real breakpoints, so
+        // layouts jumped straight from phone to full desktop with nothing in
+        // between, and it silently defeated the two places that relied on the
+        // standard behaviour: `hidden sm:inline` in ChatWidget never hid
+        // anything, and `w-[90vw] sm:w-[440px]` in HeroSection never used the
+        // 90vw. Restored to the Tailwind default.
+        sm: '640px',
+        // Kept. 997px matches the Docusaurus sidebar breakpoint.
         lg: '997px',
       },
       colors: {
@@ -42,6 +58,26 @@ module.exports = {
         text: {
           400: 'rgb(var(--docs-color-text-400, 153 77 38) / <alpha-value>)', // Darker Text Shade
         },
+
+        // TBV reskin tokens. Stored as RGB channels, not hex, so that opacity
+        // modifiers such as `border-border/60` keep working. A hex value here
+        // would make Tailwind drop the `<alpha-value>` placeholder silently.
+        background: 'rgb(var(--tbv-background) / <alpha-value>)',
+        foreground: 'rgb(var(--tbv-foreground) / <alpha-value>)',
+        muted: {
+          DEFAULT: 'rgb(var(--tbv-muted) / <alpha-value>)',
+          foreground: 'rgb(var(--tbv-muted-foreground) / <alpha-value>)',
+        },
+        border: 'rgb(var(--tbv-border) / <alpha-value>)',
+        accent: {
+          DEFAULT: 'rgb(var(--tbv-accent) / <alpha-value>)',
+          foreground: 'rgb(var(--tbv-accent-foreground) / <alpha-value>)',
+        },
+        // Secondary accent, used sparingly for structure. Named `steel`
+        // rather than `blue` so it does not shadow Tailwind's built-in blue
+        // palette, which custom.css still uses (e.g. bg-blue-100).
+        steel: 'rgb(var(--tbv-blue) / <alpha-value>)',
+        'surface-navy': 'rgb(var(--tbv-surface-blue) / <alpha-value>)',
       },
     },
   },

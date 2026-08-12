@@ -27,16 +27,33 @@ export default function Footer() {
           <div className="flex flex-wrap gap-2 text-sm text-gray-500">
             <Link
               href="https://babylonlabs.io/privacy-policy"
-              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#BEDCC9]"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-white"
             >
               Privacy Policy
             </Link>
             &bull;
             <Link
               href="https://babylonlabs.io/terms"
-              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-[#BEDCC9]"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-white"
             >
               Terms of Service
+            </Link>
+            &bull;
+            {/* This component replaces the Docusaurus footer wholesale (see
+                src/theme/Footer/index.jsx), so themeConfig.footer.links never
+                renders. Agent-facing entry points belong here to ship. */}
+            <Link
+              href="pathname:///llms.txt"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-white"
+            >
+              llms.txt
+            </Link>
+            &bull;
+            <Link
+              href="pathname:///llms-full.txt"
+              className="text-inherit hover:text-black hover:underline dark:text-[#999] dark:hover:text-white"
+            >
+              llms-full.txt
             </Link>
             &bull;
             <span className="text-inherit dark:text-[#999]">
@@ -50,22 +67,22 @@ export default function Footer() {
               href="https://github.com/babylonlabs-io"
               aria-label="Babylon LabsGitHub Organization"
             >
-              <Github className="h-7 w-7 text-zinc-400 hover:text-primary"/>
+              <Github className="h-7 w-7 text-zinc-400 hover:text-white"/>
             </Link>
             <Link
               href="https://www.linkedin.com/company/babylon-labs-official/"
               aria-label="LinkedIn"
             >
-              <Linkedin className="h-7 w-7 text-zinc-400 hover:text-primary"/>
+              <Linkedin className="h-7 w-7 text-zinc-400 hover:text-white"/>
             </Link>
             <Link href="https://x.com/babylonlabs_io" aria-label="Twitter">
-              <XIcon className="h-7 w-7 text-zinc-400 hover:text-primary"/>
+              <XIcon className="h-7 w-7 text-zinc-400 hover:text-white"/>
             </Link>
             {/*<Link*/}
             {/*  href="https://www.youtube.com/@babylonlabs"*/}
             {/*  aria-label="Babylon Labs YouTube Channel"*/}
             {/*>*/}
-            {/*  <Youtube className="h-7 w-7 text-zinc-400 hover:text-primary"/>*/}
+            {/*  <Youtube className="h-7 w-7 text-zinc-400 hover:text-white"/>*/}
             {/*</Link>*/}
           </div>
         </div>
