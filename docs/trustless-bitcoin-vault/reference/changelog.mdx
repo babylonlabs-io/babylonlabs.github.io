@@ -1,0 +1,37 @@
+---
+title: Changelog
+---
+
+This page tracks protocol, parameter, and contract version changes across the mainnet beta. Because TBV is a capped beta that hardens over time, contracts may be upgraded and parameters retuned — this is where those changes are recorded.
+
+## Why versions matter to you
+
+Protocol parameters are **versioned**, and **each vault keeps the parameter versions that were live at its creation for its entire lifetime.** A later parameter change does **not** retroactively alter an existing vault. The same applies to the versioned actor sets (Vault Keepers and Universal Challengers) and the prover circuit version (`proverCircuitVersion`).
+
+Practically, this means:
+
+- To reason about an existing vault, use the parameter, actor-set, and circuit versions recorded at its creation — not the current values.
+- New vaults are created against the current versions.
+- The current live values are on the mainnet parameters & caps page; the history of how they changed is below.
+
+## What is versioned
+
+- **Off-chain / protocol parameters** in `ProtocolParams` (timeouts, fees, Bitcoin timing, caps references, `councilQuorum`, and related values).
+- **Application parameters** in `ApplicationRegistry` (per application, including its immutable vault keepers).
+- **Actor sets** — Universal Challenger key sets and Vault Keeper sets, versioned so a vault binds to the set live at its creation.
+- **Prover circuit** — `proverCircuitVersion`, the version of the proving circuit a vault is bound to.
+- **Contract implementations** — UUPS upgrades and any redeployments, gated by the respective contract admin and Timelock.
+
+## Version history
+
+Entries are added as parameter sets, actor sets, prover circuits, or contract implementations change during the beta.
+
+| Version / date | Component | Change | Notes |
+|---|---|---|---|
+| To be announced at launch | — | — | To be announced at launch |
+
+## Related
+
+- **Known limitations** — how contract changes, caps, and pauses are handled.
+- **Glossary** — definitions of the versioned components above.
+- Current live values are on the mainnet parameters & caps page.

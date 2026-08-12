@@ -1,0 +1,52 @@
+---
+title: Use cases
+---
+
+TBV is a **primitive**: it makes native BTC usable as collateral without wrapping, bridging, or custodial trust. Any DeFi application can consume that collateral. This page describes what TBV enables — what's live and what's on the roadmap.
+
+## BTC-backed lending — **live (Aave v4)**
+
+The flagship use case: borrow assets against your BTC while keeping custody of your Bitcoin.
+
+1. **Deposit BTC** into a Taproot vault tied to the lending application.
+2. **A collateral record is created** on Ethereum to represent the locked BTC.
+3. **Supply as collateral** on the Babylon Core Lending Spoke of Aave v4.
+4. **Borrow** available assets (e.g. USDC, USDT, WBTC) against it.
+5. **Repay & redeem** — repay debt, withdraw the vault, close the collateral record, and reclaim your BTC on Bitcoin after the challenge window.
+
+**How Aave v4 is wired in:** each borrower gets a dedicated `AaveAdapterPositionProxy` (isolated position); the health factor is monitored by Aave's risk engine; and when a position becomes liquidatable the protocol performs **partial-position liquidation** — it seizes only the minimum prefix of whole vaults needed to restore the target health factor, and returns any over-seizure surplus to the depositor through the fairness mechanism. (This is a change from earlier designs that seized the entire position.)
+
+For the borrower walkthrough, see [Quickstart](../use-for-lending/quickstart.mdx). For the mechanics, see [Aave v4 integration](../technical-details/aave-v4-integration.mdx).
+
+## On the roadmap
+
+The same vault layer supports other applications without modification. Each new application ships its own adapter contracts and its own accounting semantics.
+
+- **BTC-backed lending on Morpho Blue** — isolated lending markets with alternative risk parameters; the next planned application after Aave v4.
+- **BTC-backed stablecoins** — mint a USD-pegged stablecoin against native BTC collateral, without a wrapped derivative or a custodian in the backing.
+- **BTC-backed perpetual DEXs** — use native BTC as margin for leveraged positions, settled against the BTC collateral.
+- **Cross-chain deployments** — deploy the Ethereum-side verification contracts on additional chains (L2 rollups, alt-L1s) while the Bitcoin vault layer — Taproot scripts, proofs, and the BABE challenge mechanism — stays identical.
+- **Dual utility with Babylon staking** — because Babylon staking already uses Bitcoin vaults, the same BTC deposit can, over time, both secure PoS chains and back DeFi positions.
+
+## How a new application plugs in
+
+The vault layer exposes an application interface so builders don't touch the Bitcoin-side machinery. An application registers with `ApplicationRegistry` and implements the entry-point callback:
+
+```solidity
+interface IApplicationEntryPoint {
+    /// Called by BTCVaultRegistry when a vault transitions to Active.
+    function activateVault(
+        bytes32 vaultId,
+        BTCVaultTypes.BTCVaultBasicInfo memory vault,
+        bytes memory activationMetadata
+    ) external;
+}
+```
+
+When a vault activates, `BTCVaultRegistry` calls `activateVault(...)` on the registered application, which is where the application mints its accounting token, records ownership, and enables its DeFi functionality for the depositor. Building a new application is the [Application Integration](../building-on-tbv/application-integration.mdx) track — see [Building on TBV](../building-on-tbv/overview.mdx). *(Application Integration docs are coming soon; contact us if you're building one.)*
+
+## Next
+
+- **Borrowing** — use BTC as collateral on Aave v4 today.
+- **Building on TBV** — integrate a new application or extend the Aave app.
+- **Architecture** — how the vault layer works.

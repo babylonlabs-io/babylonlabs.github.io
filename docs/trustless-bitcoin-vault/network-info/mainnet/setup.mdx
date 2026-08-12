@@ -1,0 +1,39 @@
+---
+title: Setup
+---
+
+To use TBV on mainnet you connect **two wallets** — a Bitcoin wallet and an Ethereum wallet. Bitcoin holds and moves the collateral; Ethereum tracks the vault, the application position, and any borrowing. This page covers the networks, supported wallets, and mainnet-specific settings.
+
+## Networks
+
+| Layer | Mainnet network |
+|---|---|
+| **Bitcoin** | Bitcoin Mainnet |
+| **Ethereum** | Ethereum Mainnet |
+
+Make sure both wallets are pointed at **mainnet** (not Signet / Sepolia) before you begin. Transacting on the wrong network is the most common setup mistake.
+
+## Supported wallets
+
+- **Bitcoin wallet** — used to fund the peg-in and to sign Bitcoin-side transactions, and to hold the keys behind your self-recovery paths. The specific list of supported Bitcoin wallets for mainnet is **to be announced at launch**.
+- **Ethereum wallet** — used to submit vault activation, manage your application position, borrow / repay, and pay Ethereum gas. Any standard Ethereum Mainnet wallet is expected to be supported; the confirmed list is **to be announced at launch**.
+
+## Dual-wallet connect
+
+The app asks you to connect both wallets and keeps them associated for the session:
+
+1. **Connect your Ethereum wallet** and confirm it is on Ethereum Mainnet.
+2. **Connect your Bitcoin wallet** and confirm it is on Bitcoin Mainnet.
+3. The app pairs the two so that peg-in, activation, and redemption steps line up across chains.
+
+Keep both wallets connected and unlocked while you complete a flow — several steps need signatures on both chains.
+
+## Mainnet confirmation depth
+
+On mainnet, Bitcoin transactions are treated as settled only after a **conservative confirmation depth** (the standard mainnet target is **6 confirmations**). Off-chain actors also wait for a minimum Pre-PegIn confirmation depth (`minPrepeginDepth`) before signing ACKs, so expect a wait between broadcasting a Bitcoin transaction and the next step becoming available. The exact confirmation values enforced at launch are **to be announced at launch**.
+
+## Access
+
+Mainnet is an allowlisted Beta. Confirm your address is **allow-listed** before you start — see [Beta Mainnet: what to expect](../../start-here/beta-mainnet.mdx). If you are not yet allow-listed, request access through [Community & support](../../reference/community-and-support.mdx).
+
+Before transacting, always re-check the current **Ethereum smart contract addresses (Mainnet)**.

@@ -10,12 +10,12 @@ This walkthrough goes through the **Aave v4 integration** — the first supporte
 
 This page is the full happy path end to end: connect a wallet, deposit signet BTC, borrow stablecoins, repay, redeem. About 5 minutes of clicking, plus a ~2-hour wait for Bitcoin confirmations during peg-in and a ~3-day challenge window during redemption. Each step links to the matching deep page for full detail.
 
-A Trustless Bitcoin Vault (TBV) locks BTC on the Bitcoin Network and makes it usable as collateral on Ethereum without bridges or wrapping. The TBV Testnet app drives a full peg-in, borrow, repay, and peg-out cycle end to end.
+A BTCVault locks BTC on the Bitcoin Network and makes it usable as collateral on Ethereum without bridges or wrapping. The TBV Testnet app drives a full peg-in, borrow, repay, and peg-out cycle end to end.
 
 The public testnet runs on signet, a Bitcoin test network. The BTC and stablecoins involved have no monetary value. Some flows are still under active development; report issues to the team via the channels listed in [Community & support](../reference/community-and-support.mdx).
 
 :::info Public testnet limits
-Each address and each position is capped on the Aave application. See [Protocol parameters](../testnet-info/protocol-parameters.mdx) for the live numeric limits.
+Each address and each position is capped on the Aave application. See [Protocol parameters](../network-info/testnet/protocol-parameters.mdx) for the live numeric limits.
 :::
 
 ## Before you start
@@ -24,14 +24,14 @@ You need:
 
 * A UniSat Bitcoin wallet that supports signet.
 * An Ethereum wallet on Sepolia.
-* Signet BTC to deposit. Get it from the faucet listed in [Setup](../testnet-info/setup.mdx).
+* Signet BTC to deposit. Get it from the faucet listed in [Setup](../network-info/testnet/setup.mdx).
 * A small amount of Sepolia ETH for gas. The same page lists the faucet.
 
-For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../testnet-info/setup.mdx).
+For the full list of supported wallets, network and RPC details, and faucet URLs, see [Setup](../network-info/testnet/setup.mdx).
 
 ## Step 1: Open the TBV Testnet app
 
-Navigate to the TBV Testnet app URL listed in [Setup](../testnet-info/setup.mdx).
+Navigate to the TBV Testnet app URL listed in [Setup](../network-info/testnet/setup.mdx).
 
 ![App landing page in the pre-wallet state](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-084545.png)
 
@@ -51,7 +51,7 @@ A peg-in moves BTC into a vault on Bitcoin and registers it on Ethereum. The BTC
 
 From the **Collateral** section, click **Deposit**. Then:
 
-**1. Enter the amount in BTC** within the public-testnet caps. See [Protocol parameters](../testnet-info/protocol-parameters.mdx).
+**1. Enter the amount in BTC** within the public-testnet caps. See [Protocol parameters](../network-info/testnet/protocol-parameters.mdx).
 
 ![Peg-in deposit amount entry](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/image-20260527-091245.png)
 
@@ -135,7 +135,7 @@ Confirm the Ethereum transaction.
 The redemption then runs in three protocol-side phases:
 
 1. **Claim.** The Vault Provider generates a zero-knowledge proof in the background showing the debt is repaid, then submits a redemption claim on Bitcoin. The app shows progress.
-2. **Challenge period.** A window of about **3 days** opens during which an Application Vault Keeper or Universal Challenger may dispute the claim. If no valid challenge appears, the claim finalizes.
+2. **Challenge period.** A window of about **3 days** opens during which an App Keeper or Universal Challenger may dispute the claim. If no valid challenge appears, the claim finalizes.
 3. **Payout.** Your BTC arrives at the address recorded in the vault.
 
 ![Withdraw processing](/img/trustless-bitcoin-vault/confluence/use-for-lending/quickstart/33-withdraw-processing.jpg)
@@ -150,9 +150,9 @@ The 3-day window is inherent to the proof-verification mechanism.
 
 Common scenarios and where to look:
 
-* **Pre-PegIn still pending after a few hours:** check the Bitcoin block explorer (see [Setup](../testnet-info/setup.mdx)). If the transaction is propagated but not confirmed, wait — signet block times can be irregular.
+* **Pre-PegIn still pending after a few hours:** check the Bitcoin block explorer (see [Setup](../network-info/testnet/setup.mdx)). If the transaction is propagated but not confirmed, wait — signet block times can be irregular.
 * **Vault stuck in Pending past ~24 hours:** the off-chain setup likely failed. The vault will transition to Expired and your peg-in fee will be refunded. See the refund path on [Create a vault](./create-a-vault.mdx) for BTC recovery.
-* **Wallet won't connect or transaction rejected:** verify the wallet is on the correct network (see [Setup](../testnet-info/setup.mdx) for chain IDs).
+* **Wallet won't connect or transaction rejected:** verify the wallet is on the correct network (see [Setup](../network-info/testnet/setup.mdx) for chain IDs).
 * **Vault Provider not responding during redemption:** the depositor self-claim path applies. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
 
 For anything else, ask in the public-testnet support channel listed on [Community & support](../reference/community-and-support.mdx).

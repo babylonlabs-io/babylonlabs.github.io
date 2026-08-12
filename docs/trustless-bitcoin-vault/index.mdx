@@ -1,10 +1,42 @@
 ---
-title: Trustless Bitcoin Vault
+title: Trustless Bitcoin Vaults
 hide_table_of_contents: true
-pagination_next: null
-pagination_prev: null
 ---
 
-import { Redirect } from '@docusaurus/router';
+**Babylon Trustless Bitcoin Vaults (TBV)** lets Bitcoin holders use native BTC as collateral in DeFi — **without bridges, wrapping, or trusting a custodian.** The BTC stays on the Bitcoin Network in a Taproot script the depositor co-signs; an Ethereum-side protocol tracks each BTC vault and lets an integrated application use it as collateral. **Aave v4 borrowing is the first application built on TBV.**
 
-<Redirect to="/trustless-bitcoin-vault/start-here/what-is-tbv/" />
+:::info Two networks
+TBV runs a **capped, allowlisted Beta on mainnet** (real BTC and real value, rolled out in phases) and an **open public testnet** with no real value. To rehearse the flow before committing real funds, start on testnet. See [Networks](./network-info/networks.mdx) and [Beta Mainnet: what to expect](./start-here/beta-mainnet.mdx).
+:::
+
+## Where to go
+
+| I want to… | Go to |
+|---|---|
+| **Understand what TBV is and whether to trust it** | [What is TBV?](./start-here/what-is-tbv.mdx) · [How it works](./start-here/how-it-works.mdx) · [Safety & trust assumptions](./start-here/safety-and-trust-assumptions.mdx) |
+| **Borrow against my BTC on Aave v4** | [Quickstart](./use-for-lending/quickstart.mdx) |
+| **Build on TBV** (integrate a new app, extend Aave, or use the SDK) | [Building on TBV](./building-on-tbv/overview.mdx) |
+| **See the values that apply on each network** | [Networks](./network-info/networks.mdx) — addresses, parameters, caps |
+| **Assess the security** | [Audits](./security/audits.mdx) · [Known limitations](./security/known-limitations.mdx) |
+
+## What you can do with TBV
+
+TBV is a **primitive**, not a single product: it turns native BTC into programmable collateral that many DeFi applications can consume. Aave v4 lending is live; other applications (Morpho Blue, stablecoins, perpetual DEXs, cross-chain markets) are on the roadmap. See [Use cases](./start-here/use-cases.mdx).
+
+- **Borrowers** — lock BTC, borrow assets on Aave v4, keep custody of your Bitcoin.
+- **Builders** — integrate a new application on the vault layer, extend the Aave application with a resolver, or automate with the SDK. See [Building on TBV](./building-on-tbv/overview.mdx).
+- **Operators** — Vault Provider, App Keeper, and Universal Challenger roles are permissioned and **invite-only during Beta**. See [Operators](./operators/overview.mdx).
+
+## Sections
+
+- **Start Here** — [What is TBV?](./start-here/what-is-tbv.mdx) · [How it works](./start-here/how-it-works.mdx) · [TBV vs alternatives](./start-here/tbv-vs-alternatives.mdx) · [Safety & trust assumptions](./start-here/safety-and-trust-assumptions.mdx) · [Use cases](./start-here/use-cases.mdx) · [Beta Mainnet: what to expect](./start-here/beta-mainnet.mdx)
+- **Borrowing** — the Aave v4 borrower path, step by step.
+- **Network Info** — [Networks](./network-info/networks.mdx): mainnet and testnet addresses, parameters, and caps.
+- **Building on TBV** — application integration, resolvers, SDK & tooling, agents.
+- **Operators** — roles overview (invite-only at Beta).
+- **Technical Details** — protocol architecture, protocol actors, Aave v4 integration.
+- **Security** — audits, responsible disclosure, bug bounty, known limitations.
+- **Research** — the TBV and BABE papers.
+- **Reference** — glossary, community & support, changelog.
+
+*The real Bitcoin never leaves Bitcoin's security model. On the Ethereum side the protocol keeps a **collateral record** — a transfer-restricted ERC-20 used for accounting inside the integration, not a wrapped BTC and not tradable outside it.*
