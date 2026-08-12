@@ -334,6 +334,7 @@ const sidebars = {
       },
       items: [
         'trustless-bitcoin-vault/apis/vault-indexer-api',
+        'trustless-bitcoin-vault/apis/use-cases',
         'trustless-bitcoin-vault/apis/schema-reference',
         'trustless-bitcoin-vault/apis/query-cookbook',
         'trustless-bitcoin-vault/apis/limits-and-gotchas',
