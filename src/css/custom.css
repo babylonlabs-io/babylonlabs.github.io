@@ -584,8 +584,12 @@ pre.prism-code {
   background: none;
 }
 
+/* The sidebar's active marker. It was the brand orange, which the neutral
+   chrome pass missed because that pass scanned the top and left borders only
+   and this rule sets the right one. The active item is already carried by
+   weight, brightness and the inset rule above. */
 ul.menu__list > li > a.menu__link--active {
-  border-right: 1px solid var(--ifm-color-primary);
+  border-right: 1px solid rgb(var(--tbv-foreground) / 0.55);
 }
 
 nav.menu {
@@ -2848,4 +2852,280 @@ html:root[data-theme='dark'] {
 .theme-doc-sidebar-container button[title='Collapse sidebar']:hover,
 .theme-doc-sidebar-container div[title='Expand sidebar']:hover {
   background-color: rgb(var(--tbv-border));
+}
+
+/* ─── Documentation motion ──────────────────────────────────────────────
+   Reveal-on-scroll and pointer reactions for MDX content and API reference
+   pages. Everything here is additive: it changes only opacity, transform and
+   filter, so no layout, colour or spacing decision from the theme above is
+   affected.
+
+   The whole block sits inside `prefers-reduced-motion: no-preference`. A
+   reader who has asked their system for less motion gets the finished state
+   with no transitions at all, and RevealOnView independently skips arming, so
+   nothing depends on this media query alone.
+   ───────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hidden only once JavaScript has armed the element, so content stays
+     visible if hydration is slow or fails. */
+  .docs-reveal[data-armed='true'] {
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+
+  .docs-reveal[data-armed='true'][data-reveal='slide'] {
+    transform: translateY(14px);
+  }
+  .docs-reveal[data-armed='true'][data-reveal='zoom'] {
+    transform: scale(0.98);
+  }
+  .docs-reveal[data-armed='true'][data-reveal='blur'] {
+    filter: blur(6px);
+  }
+
+  .docs-reveal[data-revealed='true'] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition:
+      opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* A span wrapper cannot be transformed while it is inline. */
+  span.docs-reveal {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* ── Tables: stagger the rows ──
+     Driven by nth-child rather than per-row React wrappers, which would have
+     to sit between <table> and <tr> and get reparented by the browser. */
+  .docs-table-wrap[data-armed='true'] tbody tr {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .docs-table-wrap[data-revealed='true'] tbody tr {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.34s ease-out,
+      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(1) { transition-delay: 0ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(2) { transition-delay: 40ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(3) { transition-delay: 80ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(4) { transition-delay: 120ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(5) { transition-delay: 160ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(6) { transition-delay: 200ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(7) { transition-delay: 240ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(8) { transition-delay: 280ms; }
+  /* Past the eighth row the reader is scrolling, not watching an entrance,
+     and a queue of delays would make the tail feel unresponsive. */
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(n + 9) {
+    transition-delay: 320ms;
+  }
+
+  /* ── Code blocks: shine sweep on hover ── */
+  .docs-code-wrap {
+    position: relative;
+  }
+
+  .docs-code-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgb(var(--tbv-foreground) / 0.07) 50%,
+      transparent 60%
+    );
+    background-size: 220% 100%;
+    background-position: 120% 0;
+    transition: opacity 0.2s ease-out;
+  }
+
+  .docs-code-wrap:hover::after {
+    opacity: 1;
+    animation: docs-shine 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1;
+  }
+
+  @keyframes docs-shine {
+    from { background-position: 120% 0; }
+    to { background-position: -20% 0; }
+  }
+
+  /* ── Admonitions slide in from the margin ── */
+  .theme-admonition {
+    animation: docs-admonition-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes docs-admonition-in {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ── Sidebar stagger on route change ── */
+  .theme-doc-sidebar-menu > .menu__list-item {
+    animation: docs-sidebar-in 0.32s ease-out both;
+  }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(1) { animation-delay: 0ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(2) { animation-delay: 30ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(3) { animation-delay: 60ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(4) { animation-delay: 90ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(5) { animation-delay: 120ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(n + 6) { animation-delay: 150ms; }
+
+  @keyframes docs-sidebar-in {
+    from { opacity: 0; transform: translateX(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* ─── Pointer reactions ─────────────────────────────────────────────────
+   Outside the reduced-motion guard on purpose: these are hover affordances
+   that tell the reader a thing is interactive. Suppressing them entirely
+   would remove information rather than decoration, so they stay — the
+   distances are a few pixels and none of them loop.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Table rows light up under the pointer, which is what makes a wide
+   reference table readable across its columns. */
+.docs-table-wrap tbody tr {
+  transition: background-color 0.15s ease-out;
+}
+
+.docs-table-wrap tbody tr:hover {
+  background-color: rgb(var(--tbv-foreground) / 0.04);
+}
+
+/* Images invite the click that opens them full screen. */
+.docs-media img {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease-out;
+}
+
+.docs-media:hover img {
+  transform: scale(1.012);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.35);
+}
+
+/* Cards lift toward the reader. */
+.card:hover,
+.docs-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .docs-card:hover,
+  .docs-media:hover img {
+    transform: none;
+  }
+}
+
+/* ─── API reference motion ──────────────────────────────────────────────
+   API pages are rendered by docusaurus-theme-openapi-docs, not through MDX,
+   so they never pass the MDXComponents wrappers above. They are driven from
+   their own class names instead, which keeps the plugin's React untouched —
+   nothing here can break endpoint rendering.
+
+   These are dense reference tables. The entrance animations are short and
+   run once; the persistent effects are hover states, which help a reader
+   track a row across many columns rather than decorate it.
+   ───────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Endpoint header: method badge and path arrive together. */
+  .openapi__method-endpoint {
+    animation: docs-api-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .openapi__method-endpoint .badge {
+    animation: docs-badge-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: 0.1s;
+  }
+
+  .openapi__method-endpoint-path {
+    animation: docs-api-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.16s;
+  }
+
+  @keyframes docs-api-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* The badge is the one element that earns a scale: it is how a reader
+     tells GET from DELETE at a glance. */
+  @keyframes docs-badge-in {
+    from { opacity: 0; transform: scale(0.82); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Parameters and schema properties stagger in. */
+  .openapi-params__list-item,
+  .openapi-schema__property {
+    animation: docs-api-row-in 0.36s ease-out both;
+  }
+
+  .openapi-params__list-item:nth-child(1) { animation-delay: 40ms; }
+  .openapi-params__list-item:nth-child(2) { animation-delay: 80ms; }
+  .openapi-params__list-item:nth-child(3) { animation-delay: 120ms; }
+  .openapi-params__list-item:nth-child(4) { animation-delay: 160ms; }
+  .openapi-params__list-item:nth-child(5) { animation-delay: 200ms; }
+  .openapi-params__list-item:nth-child(n + 6) { animation-delay: 240ms; }
+
+  @keyframes docs-api-row-in {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Collapsible parameter and response sections open smoothly. `details`
+     height cannot be transitioned directly, so the contents animate. */
+  .openapi-markdown__details[open] > *:not(summary) {
+    animation: docs-details-open 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes docs-details-open {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* Hover affordances, kept outside the reduced-motion guard: they signal
+   which row the pointer is on, which is information rather than decoration. */
+.openapi-params__list-item,
+.openapi-schema__property,
+.openapi-tabs__response-code-item {
+  transition:
+    background-color 0.15s ease-out,
+    border-color 0.15s ease-out;
+}
+
+.openapi-params__list-item:hover,
+.openapi-schema__property:hover {
+  background-color: rgb(var(--tbv-foreground) / 0.04);
+}
+
+.openapi-tabs__response-code-item:hover {
+  background-color: rgb(var(--tbv-foreground) / 0.06);
+}
+
+.openapi-markdown__details summary {
+  transition: color 0.15s ease-out;
+  cursor: pointer;
+}
+
+.openapi-markdown__details summary:hover {
+  color: rgb(var(--tbv-foreground));
 }
