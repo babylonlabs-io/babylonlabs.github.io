@@ -243,7 +243,7 @@ const sidebars = {
       label: 'APIs',
       collapsible: true,
       collapsed: true,
-      className: 'specs_sidebar_header',
+      className: 'developers_sidebar_header',
       // Plain links, not doc IDs: these pages own the stakingApi / babylonRpc /
       // cometBFT sidebars, so referencing them by ID would place one doc in two
       // sidebars. Their URLs are unchanged by this move.
@@ -327,7 +327,7 @@ const sidebars = {
       label: 'APIs',
       collapsible: true,
       collapsed: true,
-      className: 'specs_sidebar_header',
+      className: 'developers_sidebar_header',
       link: {
         type: 'doc',
         id: 'trustless-bitcoin-vault/apis/vault-indexer-api',
@@ -345,7 +345,7 @@ const sidebars = {
       label: 'Technical Details',
       collapsible: true,
       collapsed: true,
-      className: 'specs_sidebar_header',
+      className: 'architecture_sidebar_header',
       items: [
         'trustless-bitcoin-vault/technical-details/protocol-architecture',
         'trustless-bitcoin-vault/technical-details/protocol-actors',
