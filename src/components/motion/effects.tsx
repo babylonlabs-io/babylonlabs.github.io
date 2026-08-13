@@ -81,7 +81,7 @@ export function Reveal({
   children,
   variant = 'slide',
   delay = 0,
-  duration = 0.45,
+  duration = 0.9,
   once = true,
   margin = '-60px',
   className,
@@ -126,7 +126,7 @@ export function Reveal({
  */
 export function RevealGroup({
   children,
-  stagger = 0.04,
+  stagger = 0.08,
   variant = 'slide',
   className,
   once = true,
@@ -164,7 +164,7 @@ export function RevealGroup({
         <motion.div
           key={i}
           variants={VARIANTS[variant]}
-          transition={{ duration: 0.4, ease: EASE }}
+          transition={{ duration: 0.8, ease: EASE }}
         >
           {child}
         </motion.div>
@@ -185,7 +185,7 @@ export function RevealGroup({
 export function ImageZoom({
   children,
   zoomScale = 2.2,
-  transition = { type: 'spring', stiffness: 200, damping: 28 },
+  transition = { type: 'spring', stiffness: 100, damping: 26 },
   className,
 }: {
   children: React.ReactNode;
@@ -280,7 +280,7 @@ export const Tilt = forwardRef<
   {
     maxTilt = 6,
     perspective = 900,
-    transition = { stiffness: 300, damping: 25, mass: 0.5 },
+    transition = { stiffness: 150, damping: 22, mass: 0.6 },
     style,
     onMouseMove,
     onMouseLeave,
@@ -350,8 +350,8 @@ export const Magnetic = forwardRef<
   const reduced = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 260, damping: 20, mass: 0.4 });
-  const sy = useSpring(y, { stiffness: 260, damping: 20, mass: 0.4 });
+  const sx = useSpring(x, { stiffness: 130, damping: 18, mass: 0.5 });
+  const sy = useSpring(y, { stiffness: 130, damping: 18, mass: 0.5 });
 
   if (reduced) {
     return (

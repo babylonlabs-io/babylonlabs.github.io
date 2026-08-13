@@ -2889,9 +2889,9 @@ html:root[data-theme='dark'] {
     transform: none;
     filter: none;
     transition:
-      opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   /* A span wrapper cannot be transformed while it is inline. */
@@ -2912,22 +2912,22 @@ html:root[data-theme='dark'] {
     opacity: 1;
     transform: none;
     transition:
-      opacity 0.34s ease-out,
-      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 0.68s ease-out,
+      transform 0.68s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(1) { transition-delay: 0ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(2) { transition-delay: 40ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(3) { transition-delay: 80ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(4) { transition-delay: 120ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(5) { transition-delay: 160ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(6) { transition-delay: 200ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(7) { transition-delay: 240ms; }
-  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(8) { transition-delay: 280ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(2) { transition-delay: 80ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(3) { transition-delay: 160ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(4) { transition-delay: 240ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(5) { transition-delay: 320ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(6) { transition-delay: 400ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(7) { transition-delay: 480ms; }
+  .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(8) { transition-delay: 560ms; }
   /* Past the eighth row the reader is scrolling, not watching an entrance,
      and a queue of delays would make the tail feel unresponsive. */
   .docs-table-wrap[data-revealed='true'] tbody tr:nth-child(n + 9) {
-    transition-delay: 320ms;
+    transition-delay: 640ms;
   }
 
   /* ── Code blocks: shine sweep on hover ── */
@@ -2949,12 +2949,12 @@ html:root[data-theme='dark'] {
     );
     background-size: 220% 100%;
     background-position: 120% 0;
-    transition: opacity 0.2s ease-out;
+    transition: opacity 0.4s ease-out;
   }
 
   .docs-code-wrap:hover::after {
     opacity: 1;
-    animation: docs-shine 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1;
+    animation: docs-shine 1.8s cubic-bezier(0.22, 1, 0.36, 1) 1;
   }
 
   @keyframes docs-shine {
@@ -2964,7 +2964,7 @@ html:root[data-theme='dark'] {
 
   /* ── Admonitions slide in from the margin ── */
   .theme-admonition {
-    animation: docs-admonition-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: docs-admonition-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   @keyframes docs-admonition-in {
@@ -2974,14 +2974,14 @@ html:root[data-theme='dark'] {
 
   /* ── Sidebar stagger on route change ── */
   .theme-doc-sidebar-menu > .menu__list-item {
-    animation: docs-sidebar-in 0.32s ease-out both;
+    animation: docs-sidebar-in 0.64s ease-out both;
   }
   .theme-doc-sidebar-menu > .menu__list-item:nth-child(1) { animation-delay: 0ms; }
-  .theme-doc-sidebar-menu > .menu__list-item:nth-child(2) { animation-delay: 30ms; }
-  .theme-doc-sidebar-menu > .menu__list-item:nth-child(3) { animation-delay: 60ms; }
-  .theme-doc-sidebar-menu > .menu__list-item:nth-child(4) { animation-delay: 90ms; }
-  .theme-doc-sidebar-menu > .menu__list-item:nth-child(5) { animation-delay: 120ms; }
-  .theme-doc-sidebar-menu > .menu__list-item:nth-child(n + 6) { animation-delay: 150ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(2) { animation-delay: 60ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(3) { animation-delay: 120ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(4) { animation-delay: 180ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(5) { animation-delay: 240ms; }
+  .theme-doc-sidebar-menu > .menu__list-item:nth-child(n + 6) { animation-delay: 300ms; }
 
   @keyframes docs-sidebar-in {
     from { opacity: 0; transform: translateX(-6px); }
@@ -2999,7 +2999,7 @@ html:root[data-theme='dark'] {
 /* Table rows light up under the pointer, which is what makes a wide
    reference table readable across its columns. */
 .docs-table-wrap tbody tr {
-  transition: background-color 0.15s ease-out;
+  transition: background-color 0.3s ease-out;
 }
 
 .docs-table-wrap tbody tr:hover {
@@ -3009,8 +3009,8 @@ html:root[data-theme='dark'] {
 /* Images invite the click that opens them full screen. */
 .docs-media img {
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.35s ease-out;
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.7s ease-out;
 }
 
 .docs-media:hover img {
@@ -3022,7 +3022,7 @@ html:root[data-theme='dark'] {
 .card:hover,
 .docs-card:hover {
   transform: translateY(-2px);
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3047,17 +3047,17 @@ html:root[data-theme='dark'] {
 @media (prefers-reduced-motion: no-preference) {
   /* Endpoint header: method badge and path arrive together. */
   .openapi__method-endpoint {
-    animation: docs-api-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: docs-api-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .openapi__method-endpoint .badge {
-    animation: docs-badge-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    animation-delay: 0.1s;
+    animation: docs-badge-in 1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: 0.2s;
   }
 
   .openapi__method-endpoint-path {
-    animation: docs-api-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: 0.16s;
+    animation: docs-api-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.32s;
   }
 
   @keyframes docs-api-in {
@@ -3075,15 +3075,15 @@ html:root[data-theme='dark'] {
   /* Parameters and schema properties stagger in. */
   .openapi-params__list-item,
   .openapi-schema__property {
-    animation: docs-api-row-in 0.36s ease-out both;
+    animation: docs-api-row-in 0.72s ease-out both;
   }
 
-  .openapi-params__list-item:nth-child(1) { animation-delay: 40ms; }
-  .openapi-params__list-item:nth-child(2) { animation-delay: 80ms; }
-  .openapi-params__list-item:nth-child(3) { animation-delay: 120ms; }
-  .openapi-params__list-item:nth-child(4) { animation-delay: 160ms; }
-  .openapi-params__list-item:nth-child(5) { animation-delay: 200ms; }
-  .openapi-params__list-item:nth-child(n + 6) { animation-delay: 240ms; }
+  .openapi-params__list-item:nth-child(1) { animation-delay: 80ms; }
+  .openapi-params__list-item:nth-child(2) { animation-delay: 160ms; }
+  .openapi-params__list-item:nth-child(3) { animation-delay: 240ms; }
+  .openapi-params__list-item:nth-child(4) { animation-delay: 320ms; }
+  .openapi-params__list-item:nth-child(5) { animation-delay: 400ms; }
+  .openapi-params__list-item:nth-child(n + 6) { animation-delay: 480ms; }
 
   @keyframes docs-api-row-in {
     from { opacity: 0; transform: translateY(5px); }
@@ -3093,7 +3093,7 @@ html:root[data-theme='dark'] {
   /* Collapsible parameter and response sections open smoothly. `details`
      height cannot be transitioned directly, so the contents animate. */
   .openapi-markdown__details[open] > *:not(summary) {
-    animation: docs-details-open 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: docs-details-open 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   @keyframes docs-details-open {
@@ -3108,8 +3108,8 @@ html:root[data-theme='dark'] {
 .openapi-schema__property,
 .openapi-tabs__response-code-item {
   transition:
-    background-color 0.15s ease-out,
-    border-color 0.15s ease-out;
+    background-color 0.3s ease-out,
+    border-color 0.3s ease-out;
 }
 
 .openapi-params__list-item:hover,
@@ -3122,10 +3122,145 @@ html:root[data-theme='dark'] {
 }
 
 .openapi-markdown__details summary {
-  transition: color 0.15s ease-out;
+  transition: color 0.3s ease-out;
   cursor: pointer;
 }
 
 .openapi-markdown__details summary:hover {
   color: rgb(var(--tbv-foreground));
+}
+
+/* ─── Prose reveal ──────────────────────────────────────────────────────
+   Headings, paragraphs, lists and admonitions, picked up by ContentMotion.
+   The MDX wrappers only reach tables, code blocks and images, which on the
+   TBV FAQ is 2 blocks out of 84 — the rest of the page was static, so the
+   effect read as broken rather than restrained.
+
+   The class is added by JavaScript, so nothing is hidden unless something is
+   there to reveal it again.
+   ───────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .docs-prose-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    will-change: opacity, transform;
+  }
+
+  .docs-prose-reveal.docs-prose-revealed {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* ─── Code typing ───────────────────────────────────────────────────────
+   Uncovers each already-highlighted line left to right, with a caret riding
+   the edge, so a code block reads as being typed.
+
+   Clip rather than retyping the text: Docusaurus has already tokenised the
+   source into highlighted spans, and replacing their content would lose the
+   highlighting and let the reader select — or the copy button copy — a
+   half-written snippet. Clipping leaves the full code in the DOM the whole
+   time, so highlighting, selection, copy and in-page search keep working.
+
+   `clip-path` is composited, so a long block does not cost layout work per
+   frame the way animating width would.
+   ───────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .docs-code-typing.docs-code-typed .token-line {
+    animation: docs-type-line 0.42s steps(24, end) both;
+  }
+
+  /* Per-line delay lives in CSS, not inline styles. Docusaurus sets
+     `style={{color}}` on every token line through React, and React's
+     reconciliation rewrites that attribute — it silently dropped a custom
+     property set from JavaScript, so every line typed at once. */
+  .docs-code-typing.docs-code-typed .token-line:nth-child(1) { animation-delay: 0ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(2) { animation-delay: 90ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(3) { animation-delay: 180ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(4) { animation-delay: 270ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(5) { animation-delay: 360ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(6) { animation-delay: 450ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(7) { animation-delay: 540ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(8) { animation-delay: 630ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(9) { animation-delay: 720ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(10) { animation-delay: 810ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(11) { animation-delay: 900ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(12) { animation-delay: 990ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(13) { animation-delay: 1080ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(14) { animation-delay: 1170ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(15) { animation-delay: 1260ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(16) { animation-delay: 1350ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(17) { animation-delay: 1440ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(18) { animation-delay: 1530ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(19) { animation-delay: 1620ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(20) { animation-delay: 1710ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(21) { animation-delay: 1800ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(22) { animation-delay: 1890ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(23) { animation-delay: 1980ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(24) { animation-delay: 2070ms; }
+
+  /* Held closed until the block is in view, so the lines are not already
+     typed by the time the reader arrives. */
+  .docs-code-typing:not(.docs-code-typed) .token-line {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  /* Gives the caret a containing block so it lands at the end of its own
+     line rather than resolving against some ancestor further up. */
+  .docs-code-typing .token-line {
+    position: relative;
+  }
+
+  @keyframes docs-type-line {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
+  }
+
+  /* The caret sits on the line being typed and leaves with it. */
+  .docs-code-typing.docs-code-typed .token-line::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 1.05em;
+    margin-left: 1px;
+    background: rgb(var(--tbv-accent));
+    vertical-align: text-bottom;
+    animation: docs-caret-out 0.42s steps(1, end) both;
+  }
+
+  .docs-code-typing.docs-code-typed .token-line:nth-child(1)::after { animation-delay: 0ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(2)::after { animation-delay: 90ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(3)::after { animation-delay: 180ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(4)::after { animation-delay: 270ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(5)::after { animation-delay: 360ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(6)::after { animation-delay: 450ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(7)::after { animation-delay: 540ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(8)::after { animation-delay: 630ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(9)::after { animation-delay: 720ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(10)::after { animation-delay: 810ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(11)::after { animation-delay: 900ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(12)::after { animation-delay: 990ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(13)::after { animation-delay: 1080ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(14)::after { animation-delay: 1170ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(15)::after { animation-delay: 1260ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(16)::after { animation-delay: 1350ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(17)::after { animation-delay: 1440ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(18)::after { animation-delay: 1530ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(19)::after { animation-delay: 1620ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(20)::after { animation-delay: 1710ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(21)::after { animation-delay: 1800ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(22)::after { animation-delay: 1890ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(23)::after { animation-delay: 1980ms; }
+  .docs-code-typing.docs-code-typed .token-line:nth-child(24)::after { animation-delay: 2070ms; }
+
+  @keyframes docs-caret-out {
+    from { opacity: 1; }
+    99% { opacity: 1; }
+    to { opacity: 0; }
+  }
 }

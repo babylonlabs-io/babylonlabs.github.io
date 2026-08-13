@@ -11,6 +11,7 @@ import { CardSection, Card } from '../components/CardComponents';
 // import ThemedIcon from '../scripts/ThemedIcon';
 import * as icons from '../icons';
 import RevealOnView from '../components/motion/RevealOnView';
+import TypingCode from '../components/motion/TypingCode';
 
 // Wrap markdown <img> with Zoom so that `![alt](path)` images become
 // click-to-fullscreen (mirroring the behaviour already swizzled into
@@ -51,14 +52,17 @@ function AnimatedTable(props) {
 }
 
 /**
- * Code blocks reveal, then carry a shine sweep on hover. `pre` is the element
- * Docusaurus hands to MDX; the CodeBlock component renders inside it.
+ * Code blocks reveal, type themselves out line by line, then carry a shine
+ * sweep on hover. `pre` is the element Docusaurus hands to MDX; the CodeBlock
+ * component renders inside it.
  */
 function AnimatedPre(props) {
   const Pre = MDXComponents.pre ?? 'pre';
   return (
     <RevealOnView className="docs-code-wrap">
-      <Pre {...props} />
+      <TypingCode>
+        <Pre {...props} />
+      </TypingCode>
     </RevealOnView>
   );
 }

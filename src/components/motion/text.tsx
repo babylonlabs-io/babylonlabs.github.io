@@ -16,7 +16,7 @@ import { animate, useInView, useReducedMotion } from 'framer-motion';
  */
 export function CountingNumber({
   value,
-  duration = 1.2,
+  duration = 2.4,
   decimals = 0,
   prefix = '',
   suffix = '',
@@ -68,7 +68,7 @@ export function CountingNumber({
  */
 export function Typing({
   text,
-  speed = 28,
+  speed = 56,
   className,
 }: {
   text: string;
