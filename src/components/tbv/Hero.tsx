@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import AskHero from './AskHero';
-import VaultWalkthrough from '../homepage/VaultWalkthrough';
+import VaultFlow from '../VaultFlow';
 import { ROUTES } from './routes';
 
 /**
@@ -132,7 +132,7 @@ export default function Hero(): JSX.Element {
             </span>
           </a>
 
-          <VaultWalkthrough />
+          <VaultFlow />
         </div>
       </div>
     </section>

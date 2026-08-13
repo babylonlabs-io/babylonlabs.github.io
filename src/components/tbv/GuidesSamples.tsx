@@ -2,7 +2,7 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Github } from 'lucide-react';
-import { guides, samples } from '../homepage/GuidesAndSamples';
+import { guides, samples } from './content';
 import { staggerContainer, useEntrance } from './motion';
 import { ROUTES } from './routes';
 import { SectionRule } from './Rule';
@@ -10,7 +10,7 @@ import { SectionRule } from './Rule';
 /**
  * Guides and samples, restyled into the launch theme.
  *
- * The guide and sample entries are imported from homepage/GuidesAndSamples so
+ * The guide and sample entries are imported from tbv/content so
  * the copy and destinations stay in one place. Only presentation changes here.
  */
 

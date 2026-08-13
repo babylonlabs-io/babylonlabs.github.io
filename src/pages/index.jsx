@@ -1,6 +1,5 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import Head from '@docusaurus/Head';
 
 import Hero from '../components/tbv/Hero';
 import Stats from '../components/tbv/Stats';
@@ -16,10 +15,6 @@ export default function Homepage() {
       description="Borrow against native Bitcoin without selling, wrapping, bridging or intermediaries."
       wrapperClassName="homepage tbv-surface flex flex-col"
     >
-      <Head>
-        <link rel="prefetch" href="/assets/css/elements.min.css" />
-      </Head>
-
       {/* .tbv-surface scopes the base reset. Sections are numbered in order,
           which is the page's organising device: 01 figures, 02 entry points,
           03 documentation, 04 questions. */}

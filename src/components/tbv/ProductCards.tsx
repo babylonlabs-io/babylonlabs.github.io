@@ -4,13 +4,13 @@ import Link from '@docusaurus/Link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
-import { PRODUCTS } from '../homepage/HeroSection';
+import { PRODUCTS } from './content';
 import { staggerContainer, useEntrance } from './motion';
 
 /**
  * The four existing product entry points, restyled into the launch theme.
  *
- * Content, links and icons come from PRODUCTS in homepage/HeroSection so the
+ * Content, links and icons come from PRODUCTS in tbv/content so the
  * copy stays in one place. Only the presentation changes here.
  */
 

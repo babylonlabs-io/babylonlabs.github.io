@@ -145,3 +145,7 @@ static/llms-ctx.txt
 # ignore temporary files
 tmp/
 tests/
+# Editor and agent tooling, not part of the site
+.cursor/
+.claude/
+*.patch
