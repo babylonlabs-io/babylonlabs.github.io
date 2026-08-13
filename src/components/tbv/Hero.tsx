@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import AskHero from './AskHero';
+import VaultWalkthrough from '../homepage/VaultWalkthrough';
 import { ROUTES } from './routes';
 
 /**
@@ -24,10 +24,6 @@ import { ROUTES } from './routes';
 const APP_URL = 'https://btc-vaults.testnet.babylonlabs.io/';
 
 export default function Hero(): JSX.Element {
-  const shot = useBaseUrl(
-    'img/landing-page/dashboard/borrow-repay-placeholder.png',
-  );
-
   return (
     <section className="relative isolate overflow-hidden border-b border-border bg-background">
       {/* Client-only: WebGL is unavailable during Docusaurus prerender. */}
@@ -116,31 +112,28 @@ export default function Hero(): JSX.Element {
           <AskHero />
         </div>
 
-        {/* Screenshot, linking through to the live application. The caption bar
-            carries the destination so the link is legible without hovering. */}
-        <a
-          href={APP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group mt-12 block w-full max-w-4xl border border-border bg-muted text-left transition-colors hover:border-accent hover:no-underline"
-        >
-          <span className="flex items-center justify-between border-b border-border px-4 py-2.5">
+        {/* The walkthrough, with the caption bar linking through to the live
+            application. The link is scoped to that bar rather than wrapping the
+            whole box: the walkthrough has its own step buttons, and buttons
+            inside an anchor are neither valid nor clickable. */}
+        <div className="mt-12 w-full max-w-4xl border border-border bg-muted text-left">
+          <a
+            href={APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between border-b border-border px-4 py-2.5 hover:no-underline"
+          >
             <span className="font-code text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              Borrow and repay
+              Deposit, sign, borrow
             </span>
             <span className="inline-flex items-center gap-1.5 font-code text-[11px] text-muted-foreground transition-colors group-hover:text-accent">
               Open the testnet app
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </span>
-          </span>
-          <img
-            src={shot}
-            alt="Borrowing against a Bitcoin vault, showing repayment amount, borrow rate and health factor"
-            loading="lazy"
-            decoding="async"
-            className="block w-full"
-          />
-        </a>
+          </a>
+
+          <VaultWalkthrough />
+        </div>
       </div>
     </section>
   );
