@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Mic, Paperclip, Slash, Square, X } from 'lucide-react';
+import { ArrowUp, Slash } from 'lucide-react';
 
 /**
  * Hero composer.
  *
- * Feature set follows the prompt-input pattern — autosizing textarea, slash
- * commands, attachment tray, send/stop control — written for this site in its
- * own design language. No third-party component source is involved.
+ * Deliberately minimal: an autosizing textarea, slash commands and a send
+ * control. Dictation, attachments and the row of pre-set question buttons were
+ * removed — each was another thing between the reader and the product
+ * screenshot, which is what the hero is actually for.
  *
  * It never calls the chat API. Submitting dispatches `babylon-ai-query`, which
  * ChatWidget listens for; the widget opens full screen and runs its privacy
@@ -56,25 +57,11 @@ function dispatchAIQuery(question: string): void {
   );
 }
 
-type SpeechRecognitionLike = {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  start: () => void;
-  stop: () => void;
-  onresult: ((e: any) => void) | null;
-  onerror: (() => void) | null;
-  onend: (() => void) | null;
-};
-
 export default function AskHero(): JSX.Element {
   const [value, setValue] = useState('');
-  const [listening, setListening] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeCmd, setActiveCmd] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   // The menu opens when the field starts with a slash, and filters as you type.
   const query = value.startsWith('/') ? value.slice(1).toLowerCase() : null;
@@ -88,41 +75,6 @@ export default function AskHero(): JSX.Element {
     setMenuOpen(value.startsWith('/'));
     setActiveCmd(0);
   }, [value]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const Ctor =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-    if (!Ctor) return;
-
-    const recognition: SpeechRecognitionLike = new Ctor();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = document.documentElement.lang || 'en-US';
-    recognition.onresult = (e: any) => {
-      setValue(
-        Array.from(e.results)
-          .map((r: any) => r[0].transcript)
-          .join(''),
-      );
-    };
-    recognition.onerror = () => setListening(false);
-    recognition.onend = () => setListening(false);
-    recognitionRef.current = recognition;
-    setSpeechSupported(true);
-
-    return () => {
-      recognition.onresult = null;
-      recognition.onerror = null;
-      recognition.onend = null;
-      try {
-        recognition.stop();
-      } catch {
-        /* already stopped */
-      }
-    };
-  }, []);
 
   const autosize = (): void => {
     const el = textareaRef.current;
@@ -144,22 +96,6 @@ export default function AskHero(): JSX.Element {
   const runCommand = (cmd: Command): void => {
     setMenuOpen(false);
     send(cmd.question);
-  };
-
-  const toggleDictation = (): void => {
-    const recognition = recognitionRef.current;
-    if (!recognition) return;
-    if (listening) {
-      recognition.stop();
-      setListening(false);
-      return;
-    }
-    try {
-      recognition.start();
-      setListening(true);
-    } catch {
-      setListening(false);
-    }
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
@@ -261,39 +197,6 @@ export default function AskHero(): JSX.Element {
               <Slash className="h-4 w-4" aria-hidden="true" />
             </button>
 
-            {/* Disabled rather than hidden: the layout matches the pattern,
-                but the assistant API accepts text only, and a control that
-                silently discards a file is worse than one that says so. */}
-            <button
-              type="button"
-              disabled
-              title="Attachments are not supported yet"
-              aria-label="Attach a file, not supported yet"
-              className={`${btn} text-muted-foreground disabled:cursor-not-allowed disabled:opacity-40`}
-            >
-              <Paperclip className="h-4 w-4" aria-hidden="true" />
-            </button>
-
-            {speechSupported && (
-              <button
-                type="button"
-                onClick={toggleDictation}
-                aria-label={listening ? 'Stop dictation' : 'Dictate a question'}
-                aria-pressed={listening}
-                className={`${btn} ${
-                  listening
-                    ? 'bg-accent text-accent-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {listening ? (
-                  <Square className="h-3.5 w-3.5" aria-hidden="true" />
-                ) : (
-                  <Mic className="h-4 w-4" aria-hidden="true" />
-                )}
-              </button>
-            )}
-
             <button
               type="submit"
               disabled={!value.trim() || value.startsWith('/')}
@@ -304,19 +207,6 @@ export default function AskHero(): JSX.Element {
             </button>
           </div>
         </form>
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-        {COMMANDS.slice(0, 4).map((cmd) => (
-          <button
-            key={cmd.name}
-            type="button"
-            onClick={() => send(cmd.question)}
-            className="focus-ring border border-border bg-background/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-200 hover:border-accent hover:text-foreground"
-          >
-            {cmd.question}
-          </button>
-        ))}
       </div>
     </div>
   );

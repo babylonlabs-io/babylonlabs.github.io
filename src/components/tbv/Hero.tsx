@@ -9,8 +9,12 @@ import { ROUTES } from './routes';
 /**
  * Hero.
  *
- * Centred column: mono status line, display headline, lead, controls, the
- * composer, and the product screenshot as the centrepiece beneath it.
+ * Centred column: mono status line, display headline, controls, the composer,
+ * and the product screenshot as the centrepiece beneath it.
+ *
+ * The lead paragraph, the pre-set question buttons, the attachment control and
+ * dictation were all removed. Each sat between the reader and the screenshot,
+ * which is the thing the hero exists to show.
  *
  * The background is PixelBlast from the free React Bits library, configured
  * to the values Babylon selected and tinted with the accent token.
@@ -74,8 +78,8 @@ export default function Hero(): JSX.Element {
         className="pointer-events-none absolute inset-x-0 top-[58%] z-0 h-px bg-gradient-to-r from-transparent via-steel/40 to-transparent"
       />
 
-      <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col items-center px-5 pb-20 pt-24 text-center sm:px-8 lg:pb-28 lg:pt-32">
-        <p className="mb-8 flex items-center gap-2.5 font-code text-[11px] uppercase tracking-[0.22em] text-accent">
+      <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col items-center px-5 pb-20 pt-16 text-center sm:px-8 lg:pb-24 lg:pt-20">
+        <p className="mb-6 flex items-center gap-2.5 font-code text-[11px] uppercase tracking-[0.22em] text-accent">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/60 motion-reduce:hidden" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
@@ -89,12 +93,7 @@ export default function Hero(): JSX.Element {
           as collateral
         </h1>
 
-        <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Borrow against native Bitcoin without selling, wrapping, bridging or
-          intermediaries. The BTC never leaves Bitcoin.
-        </p>
-
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a
             href={APP_URL}
             target="_blank"
@@ -113,7 +112,7 @@ export default function Hero(): JSX.Element {
           </Link>
         </div>
 
-        <div className="mt-14 w-full max-w-2xl">
+        <div className="mt-10 w-full max-w-2xl">
           <AskHero />
         </div>
 
@@ -123,7 +122,7 @@ export default function Hero(): JSX.Element {
           href={APP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="group mt-16 block w-full max-w-4xl border border-border bg-muted text-left transition-colors hover:border-accent hover:no-underline"
+          className="group mt-12 block w-full max-w-4xl border border-border bg-muted text-left transition-colors hover:border-accent hover:no-underline"
         >
           <span className="flex items-center justify-between border-b border-border px-4 py-2.5">
             <span className="font-code text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
