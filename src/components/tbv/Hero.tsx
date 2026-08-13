@@ -84,7 +84,7 @@ export default function Hero(): JSX.Element {
         </p>
 
         <h1 className="max-w-4xl font-display text-4xl font-normal leading-[1.04] tracking-[-0.02em] text-foreground sm:text-6xl lg:text-7xl">
-          Trustlessly use Bitcoin
+          Use native Bitcoin
           <br />
           as collateral
         </h1>
