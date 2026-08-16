@@ -6,12 +6,12 @@ import { ROUTES } from '@site/src/components/tbv/routes';
 /**
  * Site footer.
  *
- * Layout follows the large-format pattern: a statement in display type, then
- * the navigation in columns, then an oversized wordmark over the legal line.
+ * Layout follows the large-format pattern: the navigation in columns, then
+ * an oversized wordmark over the legal line.
  * Written from scratch — the arrangement is the only thing borrowed, and no
  * third-party component source is involved.
  *
- * The reference pairs the statement with a newsletter capture. There is no
+ * The reference pairs the columns with a newsletter capture. There is no
  * mailing list behind this site, and a field that silently discards an
  * address is worse than no field, so that half carries the two things a
  * reader actually arrives to do instead: open the testnet, or read the docs.
@@ -94,15 +94,10 @@ export default function Footer() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto w-full max-w-[1200px] px-6 pb-10 pt-16 lg:pt-20">
-        {/* The statement. The hero now leads on native Bitcoin as collateral,
-            so the launch line is restated here, where it closes the page. */}
-        <h2 className="max-w-3xl font-display text-3xl font-normal leading-[1.08] tracking-[-0.02em] text-foreground sm:text-4xl lg:text-5xl">
-          Trustlessly use Bitcoin
-          <br />
-          as <span className="text-accent">collateral</span>.
-        </h2>
-
-        <div className="mt-12 grid gap-10 border-t border-border pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
+        {/* No statement here. The footer's own top border already separates
+            it from the page, so the rule and the top margin that used to sit
+            under the headline go with it rather than leaving a gap. */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
           <div>
             <p className="mb-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
               Lock native BTC on Bitcoin and borrow against it on Ethereum. The
