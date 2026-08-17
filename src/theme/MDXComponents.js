@@ -12,6 +12,7 @@ import { CardSection, Card } from '../components/CardComponents';
 import * as icons from '../icons';
 import RevealOnView from '../components/motion/RevealOnView';
 import TypingCode from '../components/motion/TypingCode';
+import PaperCard from '../components/tbv/PaperCard';
 
 // Wrap markdown <img> with Zoom so that `![alt](path)` images become
 // click-to-fullscreen (mirroring the behaviour already swizzled into
@@ -85,6 +86,7 @@ export default {
   ComponentsGrid,
   Card,
   CardSection,
+  PaperCard,
   // ThemedIcon,
   img: ZoomableImg,
   table: AnimatedTable,
