@@ -152,7 +152,7 @@ function Row({
           </span>
           <Plus
             aria-hidden="true"
-            className={`mt-1 h-5 w-5 shrink-0 text-accent transition-transform duration-300 ${
+            className={`mt-1 h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
               open ? 'rotate-45' : ''
             }`}
           />
@@ -185,8 +185,9 @@ export default function Faq(): JSX.Element {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-      <SectionRule index="04" label="Questions" className="mb-12" />
+    <section className="bg-background">
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
+      <SectionRule index="03" label="Questions" className="mb-12" />
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16">
         <div>
@@ -214,6 +215,7 @@ export default function Faq(): JSX.Element {
             />
           ))}
         </ul>
+      </div>
       </div>
     </section>
   );

@@ -137,7 +137,7 @@ export default function AskHero(): JSX.Element {
           <ul
             role="listbox"
             aria-label="Commands"
-            className="absolute bottom-full z-20 mb-2 w-full border border-border bg-background py-1 shadow-2xl shadow-black/60"
+            className="absolute bottom-full z-20 mb-2 w-full border border-border bg-background py-1"
           >
             {matches.map((cmd, i) => (
               <li key={cmd.name}>
@@ -148,10 +148,10 @@ export default function AskHero(): JSX.Element {
                   onMouseEnter={() => setActiveCmd(i)}
                   onClick={() => runCommand(cmd)}
                   className={`flex w-full items-baseline gap-3 px-3 py-2 text-left transition-colors ${
-                    i === activeCmd ? 'bg-accent/10' : ''
+                    i === activeCmd ? 'bg-muted' : ''
                   }`}
                 >
-                  <span className="font-code text-xs text-accent">
+                  <span className="font-label text-xs text-muted-foreground">
                     {cmd.name}
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -182,7 +182,7 @@ export default function AskHero(): JSX.Element {
               onKeyDown={onKeyDown}
               placeholder="Ask anything, or type / for commands"
               aria-label="Ask Babylon AI a question"
-              className="block max-h-40 min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-left text-[15px] leading-6 text-foreground outline-none placeholder:text-muted-foreground"
+              className="block max-h-40 min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-left font-ui text-[15px] leading-6 text-foreground outline-none placeholder:text-muted-foreground"
             />
 
             <button

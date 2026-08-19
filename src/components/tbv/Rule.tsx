@@ -2,13 +2,13 @@ import React from 'react';
 import type { ReactNode } from 'react';
 
 /**
- * The ledger motif — this page's differentiation anchor.
+ * Section heading.
  *
- * Every section is introduced by a hairline rule carrying a monospace index
- * and label, the way a ledger or a spec sheet numbers its entries. The index
- * is the accent; the rule is the structure. It is the one device repeated
- * across the page, and it is what makes a screenshot of this page
- * recognisable without the logo.
+ * The design review asks for one consistent heading style carrying the
+ * section number and the section name, so every section is introduced the
+ * same way. It is a chip rather than a rule across the column: the review
+ * also rules out orange for decoration, and a full-width hairline with a
+ * coloured index was doing decorative work the chip does structurally.
  *
  * Written for this site. No third-party component source is involved.
  */
@@ -22,42 +22,40 @@ export function SectionRule({
   className?: string;
 }): JSX.Element {
   return (
-    <div className={`flex items-baseline gap-4 ${className}`}>
-      <span className="font-code text-xs tabular-nums text-accent">
+    <div className={`inline-flex items-center gap-3 bg-muted px-4 py-2 ${className}`}>
+      <span className="font-label text-[11px] tabular-nums text-tertiary">
         {index}
       </span>
-      <span className="font-code text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-        {label}
-      </span>
-      {/* The rule runs to the edge of the container, not the text. Stopping it
-          short is what makes a divider look decorative rather than structural. */}
-      <span
-        aria-hidden="true"
-        className="h-px flex-1 bg-border"
-      />
+      <span className="font-label text-sm text-foreground">{label}</span>
     </div>
   );
 }
 
 /**
  * Section wrapper. One rhythm for the whole page, so nothing has to decide
- * its own spacing.
+ * its own spacing. `tone` picks the ground: the review asks for background
+ * colours that separate neighbouring sections rather than one flat page.
  */
 export function Section({
   index,
   label,
   children,
   className = '',
+  tone = 'base',
 }: {
   index: string;
   label: string;
   children: ReactNode;
   className?: string;
+  tone?: 'base' | 'raised';
 }): JSX.Element {
+  const ground = tone === 'raised' ? 'bg-contrast' : 'bg-background';
   return (
-    <section className={`mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28 ${className}`}>
-      <SectionRule index={index} label={label} className="mb-12" />
-      {children}
+    <section className={`${ground} ${className}`}>
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
+        <SectionRule index={index} label={label} className="mb-12" />
+        {children}
+      </div>
     </section>
   );
 }

@@ -18,10 +18,12 @@ module.exports = {
         sans: ['var(--tbv-font-sans)'],
         jakarta: ['"Plus Jakarta Sans"', ...fontFamily.sans],
         mono: ['var(--tbv-font-mono)'],
-        // Launch type system.
+        // One family across the site, per the design review. `code` is the
+        // only true monospace left and is reserved for code samples.
         display: ['var(--tbv-font-serif)'],
         ui: ['var(--tbv-font-sans)'],
-        code: ['var(--tbv-font-mono)'],
+        code: ['var(--tbv-font-code)'],
+        label: ['var(--tbv-font-sans)'],
       },
       borderRadius: {
         sm: '4px',
@@ -69,6 +71,10 @@ module.exports = {
           foreground: 'rgb(var(--tbv-muted-foreground) / <alpha-value>)',
         },
         border: 'rgb(var(--tbv-border) / <alpha-value>)',
+        'border-strong': 'rgb(var(--tbv-border-strong) / <alpha-value>)',
+        contrast: 'rgb(var(--tbv-contrast) / <alpha-value>)',
+        tertiary: 'rgb(var(--tbv-tertiary-foreground) / <alpha-value>)',
+        status: 'rgb(var(--tbv-status) / <alpha-value>)',
         accent: {
           DEFAULT: 'rgb(var(--tbv-accent) / <alpha-value>)',
           foreground: 'rgb(var(--tbv-accent-foreground) / <alpha-value>)',

@@ -187,44 +187,55 @@
      for body text, so the true brand colour is used directly for links as
      well as fills. On the design's own warm ground it managed only 3.35:1
      and needed a darkened substitute. */
-  --tbv-background: 10 10 10; /* #0a0a0a, near-black ground */
-  --tbv-foreground: 244 240 237; /* #f4f0ed, warm off-white from the design */
-  --tbv-muted: 23 23 23; /* #171717 raised surface */
-  --tbv-muted-foreground: 138 138 138; /* #8a8a8a, 5.73:1 */
-  --tbv-border: 38 38 38; /* #262626 hairline */
+  /* Palette comes from the TBV app's own library, which the design review
+     names as the single colour reference (Premium Design, node 8469-28288).
+     These are the app's values, not approximations of them. */
+  --tbv-background: 17 17 17; /* #111111 background/primary */
+  --tbv-foreground: 255 255 255; /* #ffffff text/primary */
+  --tbv-muted: 32 32 32; /* #202020 background/secondary */
+  --tbv-contrast: 25 25 25; /* #191919 background/contrast */
+  --tbv-muted-foreground: 176 176 176; /* #b0b0b0 text/secondary */
+  --tbv-tertiary-foreground: 124 124 124; /* #7c7c7c text/tertiary */
+  --tbv-border: 47 47 47; /* #2f2f2f stroke/secondary */
+  --tbv-border-strong: 90 90 90; /* #5a5a5a stroke/primary */
 
-  /* Dominant accent. 5.22:1 on the ground, so it carries body-sized text as
-     well as fills. */
-  --tbv-accent: 206 101 51; /* #ce6533 */
+  /* Primary calls to action and link hover, and nothing else. The review is
+     explicit that orange is not for decoration or for body text. */
+  --tbv-accent: 206 101 51; /* #ce6533 accent/primary */
   --tbv-accent-foreground: 255 255 255;
 
-  /* Secondary accent, used sparingly for structure: rules, indices, the
-     second state on a control. The design's navy #042f40 cannot serve here,
-     because on this ground it measures 1.40:1 and disappears; it is a
-     surface colour, not an accent. This steel blue reads at 6.41:1. */
-  --tbv-blue: 74 155 199; /* #4a9bc7 */
-  --tbv-surface-blue: 4 47 64; /* #042f40, the design's navy, as a surface */
+  /* The testnet status label only, in yellow so it cannot be mistaken for
+     the brand orange. */
+  --tbv-status: 255 179 0; /* #ffb300 foundation/amber/600 */
 
-  /* The marketing design uses no serif at all: display, body and UI are all
-     Px Grotesk, with Px Grotesk Mono for labels and code. --tbv-font-serif
-     keeps its name so no component class has to change, but now resolves to
-     the same grotesque, which is what the design specifies. */
+  --tbv-blue: 74 155 199;
+  --tbv-surface-blue: 4 47 64; /* #042f40 accent/secondary */
+
+  /* One family everywhere. The review rules out mono and every other face,
+     so the mono token resolves to Px Grotesk; a true monospace survives only
+     as --tbv-font-code, for code samples, where a proportional face would
+     misalign the columns. */
   --tbv-font-sans: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-  --tbv-font-mono: 'Px Grotesk Mono', 'Fira Code', ui-monospace, monospace;
+  --tbv-font-mono: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  --tbv-font-code: 'Px Grotesk Mono', 'Fira Code', ui-monospace, monospace;
   --tbv-font-serif: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* Kept so any component still keyed to the attribute resolves to the same
    single palette. Values are identical to :root by design. */
 html[data-theme='dark'] {
-  --tbv-background: 10 10 10;
-  --tbv-foreground: 244 240 237;
-  --tbv-muted: 23 23 23;
-  --tbv-muted-foreground: 138 138 138;
-  --tbv-border: 38 38 38;
+  --tbv-background: 17 17 17;
+  --tbv-foreground: 255 255 255;
+  --tbv-muted: 32 32 32;
+  --tbv-contrast: 25 25 25;
+  --tbv-muted-foreground: 176 176 176;
+  --tbv-tertiary-foreground: 124 124 124;
+  --tbv-border: 47 47 47;
+  --tbv-border-strong: 90 90 90;
 
   --tbv-accent: 206 101 51;
   --tbv-accent-foreground: 255 255 255;
+  --tbv-status: 255 179 0;
   --tbv-blue: 74 155 199;
   --tbv-surface-blue: 4 47 64;
 }
@@ -482,7 +493,7 @@ body {
      two surfaces cannot drift apart. */
   --ifm-font-family-base: var(--tbv-font-sans);
   --ifm-heading-font-family: var(--tbv-font-serif);
-  --ifm-font-family-monospace: var(--tbv-font-mono);
+  --ifm-font-family-monospace: var(--tbv-font-code);
 
   --ifm-heading-font-weight: 400;
   --ifm-h1-font-size: 2.75rem;
@@ -537,7 +548,8 @@ body {
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 html[data-theme='dark'] {
-  --ifm-link-color: #ce6533;
+  --ifm-link-color: rgb(var(--tbv-foreground));
+  --ifm-link-hover-color: #ce6533;
   --ifm-tabs-color-active-border: #ce6533;
   --ifm-tabs-color-active: #ce6533;
 
@@ -2949,7 +2961,6 @@ html:root[data-theme='dark'] {
 
 .docs-media:hover img {
   transform: scale(1.012);
-  box-shadow: 0 8px 30px rgb(0 0 0 / 0.35);
 }
 
 /* Cards lift toward the reader. */
@@ -3196,5 +3207,71 @@ html:root[data-theme='dark'] {
     from { opacity: 1; }
     99% { opacity: 1; }
     to { opacity: 0; }
+  }
+}
+
+
+/* ─── Buttons ───────────────────────────────────────────────────────────
+   Measured from babylonlabs.io so the docs and the marketing site share one
+   control: 12px, weight 700, square corners, and generous horizontal
+   padding. The small bold label in a wide hard-edged block is the main
+   site's most recognisable component, and it survives the move to a dark
+   ground unchanged.
+
+   Filled only, per the design review. Primary is the brand orange and is
+   reserved for the one action a page most wants; secondary is grey.
+   ───────────────────────────────────────────────────────────────────── */
+
+.tbv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  height: 2.75rem;
+  padding-inline: 2.25rem;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--tbv-font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease-out,
+    opacity 0.2s ease-out;
+}
+
+.tbv-btn:hover,
+.tbv-btn:focus-visible {
+  text-decoration: none;
+}
+
+.tbv-btn-primary {
+  background-color: rgb(var(--tbv-accent));
+  color: rgb(var(--tbv-accent-foreground));
+}
+
+.tbv-btn-primary:hover {
+  opacity: 0.9;
+  color: rgb(var(--tbv-accent-foreground));
+}
+
+.tbv-btn-secondary {
+  background-color: rgb(var(--tbv-muted));
+  color: rgb(var(--tbv-foreground));
+}
+
+.tbv-btn-secondary:hover {
+  background-color: rgb(var(--tbv-contrast));
+  color: rgb(var(--tbv-foreground));
+}
+
+/* Full width on a phone, where a 36px inset would leave a stub of a
+   target. */
+@media (max-width: 640px) {
+  .tbv-btn {
+    width: 100%;
+    padding-inline: 1.5rem;
   }
 }

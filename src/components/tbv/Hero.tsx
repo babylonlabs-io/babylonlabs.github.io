@@ -68,22 +68,17 @@ export default function Hero(): JSX.Element {
         />
       </div>
 
-      {/* One appearance of the secondary accent. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-[58%] z-0 h-px bg-gradient-to-r from-transparent via-steel/40 to-transparent"
-      />
 
       <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col items-center px-5 pb-20 pt-16 text-center sm:px-8 lg:pb-24 lg:pt-20">
-        <p className="mb-6 flex items-center gap-2.5 font-code text-[11px] uppercase tracking-[0.22em] text-accent">
+        <p className="mb-6 flex items-center gap-2.5 font-label text-[11px] uppercase tracking-[0.22em] text-status">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/60 motion-reduce:hidden" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-status/60 motion-reduce:hidden" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-status" />
           </span>
           Public testnet live
         </p>
 
-        <h1 className="max-w-4xl font-display text-4xl font-normal leading-[1.04] tracking-[-0.02em] text-foreground sm:text-6xl lg:text-7xl">
+        <h1 className="max-w-4xl font-display text-4xl font-normal leading-[0.97] tracking-[-0.02em] text-foreground sm:text-6xl lg:text-7xl">
           Use native Bitcoin
           <br />
           as collateral
@@ -94,14 +89,14 @@ export default function Hero(): JSX.Element {
             href={APP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-ring inline-flex h-11 items-center gap-2 bg-accent px-6 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 hover:no-underline"
+            className="focus-ring tbv-btn tbv-btn-primary"
           >
             Launch testnet
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </a>
           <Link
             to={ROUTES.whatIsTbv}
-            className="focus-ring inline-flex h-11 items-center gap-2 border border-border px-6 text-sm font-medium text-foreground transition-colors hover:border-steel hover:no-underline"
+            className="focus-ring tbv-btn tbv-btn-secondary"
           >
             Documentation
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -123,10 +118,10 @@ export default function Hero(): JSX.Element {
             rel="noopener noreferrer"
             className="group flex items-center justify-between border-b border-border px-4 py-2.5 hover:no-underline"
           >
-            <span className="font-code text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="font-label text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               Deposit, sign, borrow
             </span>
-            <span className="inline-flex items-center gap-1.5 font-code text-[11px] text-muted-foreground transition-colors group-hover:text-accent">
+            <span className="inline-flex items-center gap-1.5 font-label text-[11px] text-muted-foreground transition-colors group-hover:text-foreground">
               Open the testnet app
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </span>

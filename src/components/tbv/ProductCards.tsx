@@ -26,9 +26,9 @@ function ProductCard({
     <motion.li variants={variants} transition={transition}>
       <Link
         to={product.link}
-        className={`group flex h-full flex-col gap-4 border border-border bg-background p-6 text-foreground transition-colors duration-300 hover:border-accent hover:no-underline`}
+        className={`group flex h-full flex-col gap-4 border border-border bg-background p-6 text-foreground transition-colors duration-300 hover:border-border-strong hover:no-underline`}
       >
-        <Icon className="h-6 w-6 text-accent" aria-hidden="true" />
+        <Icon className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
 
         <h3 className="font-display text-2xl font-normal tracking-tight text-foreground">
           {product.title}
@@ -55,8 +55,9 @@ export default function ProductCards(): JSX.Element {
   const products = PRODUCTS.map((p) => ({ ...p, link: withBaseUrl(p.link) }));
 
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-      <SectionRule index="02" label="Start here" className="mb-12" />
+    <section className="bg-background">
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
+      <SectionRule index="01" label="Start here" className="mb-12" />
 
       <div className="mb-12 max-w-2xl">
         <h2 className="mt-4 font-display text-3xl font-normal leading-[1.1] tracking-tight text-foreground sm:text-4xl md:text-5xl">
@@ -81,6 +82,7 @@ export default function ProductCards(): JSX.Element {
           <ProductCard key={p.title} product={p} />
         ))}
       </motion.ul>
+      </div>
     </section>
   );
 }

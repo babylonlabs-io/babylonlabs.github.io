@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import { ArrowUpRight } from 'lucide-react';
 import { ROUTES } from '@site/src/components/tbv/routes';
 
@@ -108,14 +109,14 @@ export default function Footer() {
                 href={APP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-ring inline-flex h-10 items-center gap-2 bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 hover:no-underline"
+                className="focus-ring tbv-btn tbv-btn-primary"
               >
                 Launch testnet
                 <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
               </a>
               <Link
                 to={ROUTES.quickstart}
-                className="focus-ring inline-flex h-10 items-center gap-2 border border-border px-5 text-sm font-medium text-foreground transition-colors hover:border-muted-foreground hover:no-underline"
+                className="focus-ring tbv-btn tbv-btn-secondary"
               >
                 Read the quickstart
               </Link>
@@ -128,7 +129,7 @@ export default function Footer() {
           >
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <h3 className="mb-4 font-code text-[11px] uppercase tracking-[0.18em] text-foreground">
+                <h3 className="mb-4 font-label text-[11px] uppercase tracking-[0.18em] text-foreground">
                   {col.title}
                 </h3>
                 <ul className="flex list-none flex-col gap-2.5 p-0">
@@ -141,17 +142,17 @@ export default function Footer() {
           </nav>
         </div>
 
-        {/* The wordmark is set in type rather than placed as artwork. The
-            SVG had to be sized large to read as a sign-off and then dominated
-            the page; as text it scales with the layout, stays crisp at any
-            DPR, and is selectable and searchable. */}
+        {/* The same mark the header carries, at the header's size. The design
+            review asked for one logo across the site, and an oversized
+            sign-off — whether artwork or set in type — competed with it. */}
         <div className="mt-16 border-t border-border pt-10">
-          <p
-            className="mb-8 font-display text-5xl font-bold leading-none tracking-[-0.04em] text-foreground sm:text-6xl lg:text-7xl"
-            aria-label="Babylon Docs"
-          >
-            babylon<span className="text-muted-foreground"> docs</span>
-          </p>
+          <img
+            src={useBaseUrl('/logo/dark.svg')}
+            alt="Babylon Docs"
+            className="mb-8 h-10 w-auto"
+            loading="lazy"
+            decoding="async"
+          />
 
           {/* One dot-separated line: copyright, company, legal, then the
               accounts. All text, so every target carries its own name. */}

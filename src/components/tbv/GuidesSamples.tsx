@@ -22,9 +22,9 @@ function GuideCard({ guide }: { guide: (typeof guides)[number] }): JSX.Element {
     <motion.li variants={variants} transition={transition}>
       <Link
         to={guide.link}
-        className={`group flex h-full flex-col gap-3 border border-border bg-background p-6 text-foreground transition-colors duration-300 hover:border-accent hover:no-underline`}
+        className={`group flex h-full flex-col gap-3 border border-border bg-background p-6 text-foreground transition-colors duration-300 hover:border-border-strong hover:no-underline`}
       >
-        <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+        <Icon className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
         <h3 className="font-display text-xl font-normal tracking-tight text-foreground">
           {guide.title}
         </h3>
@@ -97,8 +97,9 @@ function SampleRow({
 
 export default function GuidesSamples(): JSX.Element {
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-      <SectionRule index="03" label="Documentation" className="mb-12" />
+    <section className="bg-contrast">
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
+      <SectionRule index="02" label="Documentation" className="mb-12" />
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
@@ -146,6 +147,7 @@ export default function GuidesSamples(): JSX.Element {
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
+      </div>
       </div>
     </section>
   );

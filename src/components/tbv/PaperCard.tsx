@@ -39,7 +39,7 @@ function CardBody({
 }: Omit<PaperCardProps, 'href'>): JSX.Element {
   return (
     <div className="paper-card-content">
-      <p className="mb-0 font-code text-[11px] uppercase tracking-[0.18em] text-accent">
+      <p className="mb-0 font-label text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
         Read the paper
       </p>
       <h3 className="mb-0 font-display text-xl font-normal leading-snug tracking-tight text-foreground sm:text-2xl">
@@ -49,7 +49,7 @@ function CardBody({
         {authors}
       </p>
       {meta && (
-        <p className="mb-0 font-code text-xs text-muted-foreground">{meta}</p>
+        <p className="mb-0 font-label text-xs text-muted-foreground">{meta}</p>
       )}
       <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-foreground">
         {cta}
