@@ -210,7 +210,7 @@
 [data-theme='dark'] .chat-trigger-btn:hover {
   transform: scale(1.05);
   border-color: rgb(var(--docs-color-primary-200));
-  color: #33C5CE;
+  color: #ce6533;
   background: transparent;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -307,19 +307,19 @@
 
 /* Right: I Agree — use fixed dark teal so white text always has ≥4.5:1 contrast (light & dark theme) */
 .consent-btn-agree {
-  background: #247077;
+  background: #ce6533;
   color: #fff;
   border: none;
 }
 
 html[data-theme='dark'] .consent-btn-agree,
 [data-theme='dark'] .consent-btn-agree {
-  background: #247077;
+  background: #ce6533;
   color: #fff;
 }
 
 .consent-btn-agree:hover {
-  background: #1e5c62;
+  background: #a34d24;
   opacity: 1;
   box-shadow: 0 2px 12px rgba(36, 112, 119, 0.4);
 }
@@ -476,4 +476,77 @@ html[data-theme='dark'] .consent-btn-agree,
   .chat-consent-actions.safe-area-bottom {
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
+}
+
+/* ─── TBV theme elements ────────────────────────────────────────────────
+   The assistant follows the AI Chat 3 composition rather than the site's
+   chamfered language: a docked composer in a bordered box, small radii, and
+   the accent reserved for the primary action. Radii are 6px rather than the
+   source block's 12-16px, which reads closer to the rest of the site.
+
+   Appended last so these win over the rounded values above without editing
+   each rule in place.
+   ───────────────────────────────────────────────────────────────────── */
+
+.chat-window {
+  border: 1px solid rgb(var(--tbv-border));
+  border-radius: 6px;
+  clip-path: none;
+}
+
+.chat-window.expanded {
+  border-radius: 0;
+}
+
+.header-control-btn,
+.consent-btn {
+  border-radius: 6px;
+  clip-path: none;
+}
+
+/* Composer, after AI Chat 3: one bordered box holding the textarea and the
+   send control, which lifts its border on focus. */
+.chat-composer {
+  border: 1px solid rgb(var(--tbv-border));
+  border-radius: 6px;
+  background: rgb(var(--tbv-background));
+  transition: border-color 0.15s ease;
+}
+
+.chat-composer:focus-within {
+  border-color: rgb(var(--tbv-muted-foreground));
+}
+
+.chat-composer-input {
+  color: rgb(var(--tbv-foreground));
+  font-family: var(--tbv-font-sans);
+  /* The legacy widget styles give form fields their own 1px border. Inside
+     the composer that reads as a second box nested in the first, with the
+     send control stranded outside it. */
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.chat-composer-input::placeholder {
+  color: rgb(var(--tbv-muted-foreground));
+}
+
+.chat-composer-send {
+  border-radius: 4px;
+  background: rgb(var(--tbv-accent));
+  color: rgb(var(--tbv-accent-foreground));
+  border: none;
+}
+
+.chat-composer-send:disabled {
+  background: rgb(var(--tbv-muted));
+  color: rgb(var(--tbv-muted-foreground));
+}
+
+.chat-messages .markdown-body pre {
+  border-radius: 6px;
+  border: 1px solid rgb(var(--tbv-border));
+  background: rgb(var(--tbv-muted));
+  font-family: var(--tbv-font-mono);
 }

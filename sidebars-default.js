@@ -350,7 +350,7 @@ const sidebars = {
       label: 'Technical Details',
       collapsible: true,
       collapsed: true,
-      className: 'architecture_sidebar_header',
+      className: 'technical_sidebar_header',
       items: [
         'trustless-bitcoin-vault/technical-details/protocol-architecture',
         'trustless-bitcoin-vault/technical-details/protocol-actors',
