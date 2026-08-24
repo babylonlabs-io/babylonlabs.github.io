@@ -400,8 +400,15 @@ div[class^='codeBlockContainer'] {
 
 /* Tables get the same 1px neutral frame as code and admonitions. */
 .markdown table {
+  display: table;
+  width: 100%;
   border: 1px solid rgb(var(--tbv-border));
   border-collapse: collapse;
+}
+
+.docs-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .markdown table thead tr {
