@@ -179,7 +179,9 @@ Vaults in Available status (not added to a position) are not part of any seizure
 
 If the off-chain setup fails to complete, or you change your mind before activating, you can recover your BTC via the **refund path** on the Pre-PegIn transaction.
 
-The refund path is a Taproot leaf locked behind a Bitcoin timelock (`tRefund` = 2016 BTC blocks, ~14 days, on the current Testnet). The timelock is set such that the refund window opens only after the protocol's normal activation window has closed. Once the timelock elapses, sign with your Bitcoin key and broadcast a refund transaction that returns the Pre-PegIn output to your wallet.
+The refund path is a Taproot leaf locked behind a Bitcoin timelock (`tRefund` = 2016 BTC blocks, ~14 days, on the current Testnet parameter version). The timelock is set such that the refund window opens only after the protocol's normal activation window has closed. Once the timelock elapses, sign with your Bitcoin key and broadcast a refund transaction that returns the Pre-PegIn output to your wallet.
+
+Each vault keeps the parameter version active at creation. Earlier vaults can use 432 BTC blocks (~3 days).
 
 The refund is unilateral. It does not require cooperation from the Vault Provider, the Application Vault Keepers, or any other participant. As long as you control the original Bitcoin signing key, the BTC is recoverable.
 

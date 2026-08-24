@@ -13,7 +13,7 @@ The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and
 
 ### On Bitcoin
 
-The Bitcoin-side vault is the **BTCVault**: the depositor's BTC in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the BTCVault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a timelocked refund path, so the depositor can recover BTC unilaterally if activation never completes.
+The Bitcoin-side vault is the **BTCVault**: the depositor's BTC in a Bitcoin Taproot output. Its spending paths cover the outcomes agreed at vault creation: redemption after withdrawal, redemption after liquidation, and challenge responses. Before BTC reaches the BTCVault output, it sits briefly in a **Pre-PegIn HTLC output**. That output gates activation on the depositor revealing a hashlock secret on Ethereum. It also includes a relative CSV refund path with a timelock of 2016 BTC blocks (~14 days) for the current public-testnet parameter version, so the depositor can recover BTC unilaterally if activation never completes.
 
 The BTCVault output is locked by a pre-signed transaction graph. Every legitimate spend path is constructed and signed by the required participants at vault creation. After creation, no party can invent a new spend; Bitcoin will accept only the paths already encoded and signed.
 
@@ -141,6 +141,8 @@ Two timelocks govern the dispute window. The total claim-to-payout wait is appro
 * Claimer disprove time: 108 BTC blocks (about 18 hours). Window for the claimer to disprove a challenge via a wrongly challenged transaction.
 
 Both are versioned off-chain parameters. Existing vaults retain the values from when they were created.
+
+The same versioning applies to `tRefund`. The current value is 2016 BTC blocks (~14 days). Earlier vaults can use 432 BTC blocks (~3 days).
 
 ## Related
 
