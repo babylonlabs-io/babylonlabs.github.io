@@ -17,6 +17,15 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SDL_PATH = resolve(root, 'static/schema/vault-indexer.graphql');
+const DESCRIPTIONS_PATH = resolve(root, 'scripts/vault-indexer-descriptions.json');
+
+/**
+ * Prose shared with the site's GraphQL explorer, so the Schema Reference and
+ * the explorer's Docs panel can never disagree. See that file's _comment.
+ */
+const DESCRIPTIONS = JSON.parse(readFileSync(DESCRIPTIONS_PATH, 'utf8'));
+const TYPE_DESCRIPTIONS = DESCRIPTIONS.types ?? {};
+const FIELD_DESCRIPTIONS = DESCRIPTIONS.fields ?? {};
 const OUT_PATH = resolve(root, 'docs/trustless-bitcoin-vault/apis/schema-reference.mdx');
 
 // Entity roots grouped by domain. Ponder derives the plural resolver by appending
@@ -27,20 +36,20 @@ const DOMAINS = [
     blurb:
       'The vault lifecycle and the actors that secure it. These entities exist regardless of which DeFi application a vault is used with.',
     entities: [
-      ['vault', 'vaults', 'A single vault instance and its full lifecycle state.'],
-      ['vaultActivity', 'vaultActivitys', 'Append-only event log of every action taken against a vault.'],
-      ['vaultProvider', 'vaultProviders', 'A registered entity that provides vault services.'],
-      ['vaultProviderStats', 'vaultProviderStatss', 'Aggregated counters per vault provider.'],
-      ['vaultKeeper', 'vaultKeepers', 'A per-application participant in the vault security model.'],
-      ['vaultKeeperApplication', 'vaultKeeperApplications', 'Join between a vault keeper and an application.'],
-      ['universalChallenger', 'universalChallengers', 'A system-wide participant able to challenge invalid claims.'],
-      ['universalChallengerVersion', 'universalChallengerVersions', 'Versioned challenger set.'],
-      ['feeConfig', 'feeConfigs', 'Fee configuration. Currently empty on testnet — see Limits and gotchas.'],
-      ['vaultFeeEscrow', 'vaultFeeEscrows', 'Escrowed fees for one vault. One row per vault.'],
-      ['application', 'applications', 'A DeFi protocol integrated with the vault system.'],
-      ['token', 'tokens', 'A token known to the indexer.'],
-      ['stats', 'statss', 'Protocol-wide totals. Singleton.'],
-      ['protocolState', 'protocolStates', 'Protocol-level singleton state, such as the active vault-core version.'],
+      ['vault', 'vaults'],
+      ['vaultActivity', 'vaultActivitys'],
+      ['vaultProvider', 'vaultProviders'],
+      ['vaultProviderStats', 'vaultProviderStatss'],
+      ['vaultKeeper', 'vaultKeepers'],
+      ['vaultKeeperApplication', 'vaultKeeperApplications'],
+      ['universalChallenger', 'universalChallengers'],
+      ['universalChallengerVersion', 'universalChallengerVersions'],
+      ['feeConfig', 'feeConfigs'],
+      ['vaultFeeEscrow', 'vaultFeeEscrows'],
+      ['application', 'applications'],
+      ['token', 'tokens'],
+      ['stats', 'statss'],
+      ['protocolState', 'protocolStates'],
     ],
   },
   {
@@ -48,12 +57,12 @@ const DOMAINS = [
     blurb:
       'State for the Aave v4 integration — the first application built on TBV. A vault used as Aave collateral appears in both domains.',
     entities: [
-      ['aavePosition', 'aavePositions', 'A depositor position, keyed by depositor address.'],
-      ['aavePositionCollateral', 'aavePositionCollaterals', 'One vault pledged as collateral against a position.'],
-      ['aaveVaultStatus', 'aaveVaultStatuss', 'Per-vault usage status within Aave.'],
-      ['aaveUserProxy', 'aaveUserProxys', 'The proxy contract deployed for a user.'],
-      ['aaveReserve', 'aaveReserves', 'An Aave reserve and its parameters.'],
-      ['aaveConfig', 'aaveConfigs', 'Aave integration configuration. Singleton.'],
+      ['aavePosition', 'aavePositions'],
+      ['aavePositionCollateral', 'aavePositionCollaterals'],
+      ['aaveVaultStatus', 'aaveVaultStatuss'],
+      ['aaveUserProxy', 'aaveUserProxys'],
+      ['aaveReserve', 'aaveReserves'],
+      ['aaveConfig', 'aaveConfigs'],
     ],
   },
 ];
@@ -108,7 +117,7 @@ const out = [];
 out.push(`---
 title: Schema Reference
 sidebar_label: Schema Reference
-sidebar_position: 2
+sidebar_position: 3
 description: Every entity, field and type exposed by the Babylon vault indexer GraphQL API.
 ---
 
@@ -139,7 +148,7 @@ match the table names and are lower-case (\`vault\`, not \`Vault\`). The plural 
 
 for (const domain of DOMAINS) {
   out.push(`\n## ${domain.title}\n\n${domain.blurb}\n`);
-  for (const [name, plural, blurb] of domain.entities) {
+  for (const [name, plural] of domain.entities) {
     const fields = types.get(name);
     if (!fields) {
       throw new Error(
@@ -148,13 +157,18 @@ for (const domain of DOMAINS) {
       );
     }
     out.push(`\n### \`${name}\`\n`);
-    out.push(`${blurb}\n`);
+    const blurb = TYPE_DESCRIPTIONS[name];
+    if (blurb) out.push(`${blurb}\n`);
     out.push(`Query with \`${name}(…)\` or \`${plural}(…)\`.\n`);
-    out.push(`| Field | Type | Required |`);
-    out.push(`| --- | --- | --- |`);
+    // Only widen the table where there is something to say. An empty Notes
+    // column across 280-odd fields reads as unfinished rather than as complete.
+    const annotated = fields.some((f) => FIELD_DESCRIPTIONS[`${name}.${f.name}`]);
+    out.push(annotated ? `| Field | Type | Required | Notes |` : `| Field | Type | Required |`);
+    out.push(annotated ? `| --- | --- | --- | --- |` : `| --- | --- | --- |`);
     for (const f of fields) {
       const label = f.args ? `${f.name}(…)` : f.name;
-      out.push(`| \`${label}\` | \`${esc(f.type)}\` | ${required(f.type)} |`);
+      const row = `| \`${label}\` | \`${esc(f.type)}\` | ${required(f.type)} |`;
+      out.push(annotated ? `${row} ${esc(FIELD_DESCRIPTIONS[`${name}.${f.name}`] ?? '')} |` : row);
     }
     out.push('');
     // Surface enum values inline — a reader filtering on `status` needs them here,
@@ -168,7 +182,7 @@ for (const domain of DOMAINS) {
 
 out.push(`\n## Full SDL\n`);
 out.push(
-  `The complete schema is committed at [\`/schema/vault-indexer.graphql\`](/schema/vault-indexer.graphql).\n`,
+  `The complete schema is committed at [\`/schema/vault-indexer.graphql\`](pathname:///schema/vault-indexer.graphql).\n`,
 );
 out.push(
   `Introspection is available but depth-capped — see [Limits and gotchas](./limits-and-gotchas.mdx) for the four short queries that reconstruct it.\n`,

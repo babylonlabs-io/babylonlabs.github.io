@@ -5,6 +5,6 @@
   "collapsed": true,
   "link": {
     "type": "generated-index",
-    "description": "Public APIs for Trustless Bitcoin Vault testnet: the vault indexer GraphQL endpoint, its schema, worked queries, and request limits."
+    "description": "Public APIs for Babylon Trustless Bitcoin Vaults (TBV) testnet: the vault indexer GraphQL endpoint, its schema, worked queries, and request limits."
   }
 }

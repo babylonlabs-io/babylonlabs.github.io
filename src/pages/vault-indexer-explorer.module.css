@@ -1,0 +1,12 @@
+/* The explorer owns the viewport below the navbar. */
+.main {
+  height: calc(100vh - var(--ifm-navbar-height));
+  overflow: hidden;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--ifm-color-content-secondary);
+}

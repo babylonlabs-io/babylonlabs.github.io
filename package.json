@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=development docusaurus start",
     "dev": "cross-env NODE_ENV=development docusaurus start",
     "fetch": "node plugins/fetch-remote-docs.cjs",
-    "build": "npm run fetch && cross-env NODE_ENV=production docusaurus build",
+    "build": "npm run fetch && npm run gen:vault-indexer-presets && cross-env NODE_ENV=production docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -21,7 +21,8 @@
     "typecheck": "tsc",
     "spell-check": "npx cspell docs/**/*.mdx",
     "verify:vault-indexer-queries": "node scripts/verify-vault-indexer-queries.mjs",
-    "genmd": "docusaurus gen-api-docs all"
+    "genmd": "docusaurus gen-api-docs all",
+    "gen:vault-indexer-presets": "node scripts/gen-vault-indexer-presets.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.7.0",
@@ -42,6 +43,8 @@
     "docusaurus-theme-openapi-docs": "^4.3.1",
     "dotenv": "^16.4.7",
     "framer-motion": "^12.4.1",
+    "graphiql": "^3.9.0",
+    "graphql": "^16.14.2",
     "lucide-react": "^0.554.0",
     "prism-react-renderer": "^2.3.0",
     "raw-loader": "^4.0.2",

@@ -2,14 +2,15 @@
 title: Vault Indexer API
 sidebar_label: Vault Indexer API
 sidebar_position: 1
-description: The public GraphQL API for Babylon Trustless Bitcoin Vault testnet — endpoint, explorer, schema and limits.
+description: The public GraphQL API for Babylon Trustless Bitcoin Vaults (TBV) testnet — endpoint, explorer, schema and limits.
 ---
 
 # Vault Indexer API
 
 The vault indexer is a public, read-only GraphQL API over Babylon Trustless
-Bitcoin Vault state. It indexes events from the vault contracts and serves vault
-lifecycle, provider, security-participant and Aave position data.
+Bitcoin Vaults (TBV) state. TBV lets native Bitcoin be used as collateral, and
+the indexer serves the resulting on-chain state: BTCVault lifecycle, operator
+sets and Aave position data, read from the vault contracts.
 
 No API key. No authentication. Cross-origin requests are permitted.
 
@@ -20,7 +21,7 @@ No API key. No authentication. Cross-origin requests are permitted.
 | **URL** | `https://babylon-vault-indexer-api.testnet.babylonlabs.io/` |
 | **Method** | `POST` with `Content-Type: application/json` |
 | **Alternate path** | `/graphql` — identical behaviour |
-| **Explorer** | Open the URL in a browser |
+| **Explorer** | [Open the GraphiQL playground](https://babylon-vault-indexer-api.testnet.babylonlabs.io/) |
 | **Network** | Ethereum Sepolia (chain ID `11155111`) |
 | **Auth** | None |
 | **CORS** | Open |
@@ -51,13 +52,14 @@ The schema splits into two domains.
 
 ### Core vault
 
-The vault lifecycle and the actors that secure it, independent of any
-application: `vault`, `vaultActivity`, `vaultProvider`, `vaultProviderStats`,
+The BTCVault lifecycle and the operators that secure it — Vault Providers,
+Universal Challengers and App Keepers — independent of any application:
+`vault`, `vaultActivity`, `vaultProvider`, `vaultProviderStats`,
 `vaultKeeper`, `vaultKeeperApplication`, `universalChallenger`,
 `universalChallengerVersion`, `vaultFeeEscrow`, `feeConfig`, `application`,
 `token`, `stats` and `protocolState`.
 
-A vault progresses through:
+A BTCVault progresses through:
 
 ```
 pending → signatures_collected → verified → available
@@ -68,7 +70,7 @@ pending → signatures_collected → verified → available
                                               └→ invalid
 ```
 
-`status` is the authority on where a vault sits. Timestamps cover only part of
+`status` is the authority on where a BTCVault sits. Timestamps cover only part of
 the path, so do not expect one field per state:
 
 | State | Field that dates it |
@@ -87,7 +89,7 @@ State for the Aave v4 integration, the first application built on TBV:
 `aavePosition`, `aavePositionCollateral`, `aaveVaultStatus`, `aaveUserProxy`,
 `aaveReserve` and `aaveConfig`.
 
-A vault used as Aave collateral appears in both domains — as a `vault` and as an
+A BTCVault used as Aave collateral appears in both domains — as a `vault` and as an
 `aavePositionCollateral`.
 
 ## Query shape
@@ -107,16 +109,22 @@ as **strings**, and comparison filters on them take strings too.
 
 ## Explorer
 
-Opening the endpoint in a browser serves a GraphiQL playground. You can write and
-run queries there.
+Use the [Explorer on this site](pathname:///vault-indexer-explorer). It runs
+against the same endpoint and carries every documented example as a preset, so
+you can start from a working query rather than a blank editor.
 
-:::caution The explorer cannot load the schema
-Because of the depth cap, the explorer's **Docs** panel shows
+You can also press **Run** on any query in these pages to open it directly.
+
+:::caution The endpoint's own playground cannot load the schema
+Opening the endpoint in a browser serves a GraphiQL playground, and queries
+execute there normally. Its **Docs** panel, however, shows
 `Error fetching schema`, and there is no autocomplete or in-editor validation.
-Queries still execute normally.
+The depth cap is the reason: GraphiQL's introspection query is depth 21, and
+this deployment allows 10.
 
-Use the [Schema Reference](./schema-reference.mdx) on this site for field names, or
-the committed [SDL](pathname:///schema/vault-indexer.graphql).
+The Explorer on this site avoids that by reading the committed
+[SDL](pathname:///schema/vault-indexer.graphql) instead of introspecting, so
+autocomplete, validation and the Docs panel all work.
 :::
 
 ## Checking indexer freshness

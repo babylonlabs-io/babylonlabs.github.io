@@ -1,0 +1,188 @@
+[
+  {
+    "group": "Use cases",
+    "section": "1. Depositor portfolio",
+    "title": "Step 1 — their vaults",
+    "query": "{\n  vaults(\n    where: { depositor: \"0xd51d8dda9f8975fbecacd77a93f37a57053642e1\" }\n    orderBy: \"pendingAt\"\n    orderDirection: \"desc\"\n    limit: 3\n  ) {\n    totalCount\n    items {\n      id\n      status\n      amount\n      inUse\n      activatedAt\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "1. Depositor portfolio",
+    "title": "Step 2 — what is currently pledged",
+    "query": "{\n  aavePosition(depositorAddress: \"0xd51d8dda9f8975fbecacd77a93f37a57053642e1\") {\n    totalCollateral\n    proxyContract\n    collaterals(where: { removedAt: null }, limit: 3) {\n      totalCount\n      items {\n        vaultId\n        amount\n        addedAt\n      }\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "1. Depositor portfolio",
+    "title": "Step 3 — their ledger",
+    "query": "{\n  vaultActivitys(\n    where: { depositor: \"0xd51d8dda9f8975fbecacd77a93f37a57053642e1\" }\n    orderBy: \"timestamp\"\n    orderDirection: \"desc\"\n    limit: 3\n  ) {\n    items {\n      type\n      amount\n      vaultId\n      debtReserveId\n      timestamp\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "1. Depositor portfolio",
+    "title": "Step 4 — make the numbers mean something",
+    "query": "{\n  aaveReserves {\n    items {\n      id\n      borrowable\n      underlyingToken {\n        symbol\n        decimals\n      }\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "2. Track a peg-in to completion",
+    "title": "Step 1 — read the vault",
+    "query": "{\n  vault(id: \"0x822ecce7d8dac56426935b3c344778cb214eec1a368100a190ea2b31d3c56d3f\") {\n    status\n    amount\n    pendingAt\n    peginSigsPostedAt\n    verifiedAt\n    activatedAt\n    expiredAt\n    expirationReason\n    ackCount\n    inUse\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "2. Track a peg-in to completion",
+    "title": "Step 2 — find everything still in flight",
+    "query": "{\n  vaults(\n    where: { status_in: [pending, signatures_collected, verified] }\n    orderBy: \"pendingAt\"\n    orderDirection: \"desc\"\n    limit: 3\n  ) {\n    totalCount\n    items {\n      id\n      status\n      ackCount\n      pendingAt\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "3. Protocol health dashboard",
+    "title": "Step 1 — headline totals",
+    "query": "{\n  statss(limit: 1) {\n    items {\n      totalAvailableSats\n      availableVaultCount\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "3. Protocol health dashboard",
+    "title": "Step 2 — the funnel",
+    "query": "{\n  pending: vaults(where: { status: pending }) { totalCount }\n  available: vaults(where: { status: available }) { totalCount }\n  expired: vaults(where: { status: expired }) { totalCount }\n  liquidated: vaults(where: { status: liquidated }) { totalCount }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "3. Protocol health dashboard",
+    "title": "Step 3 — provider distribution",
+    "query": "{\n  vaultProviderStatss(\n    orderBy: \"totalActiveSats\"\n    orderDirection: \"desc\"\n    limit: 4\n  ) {\n    items {\n      activeVaultCount\n      totalActiveSats\n      provider {\n        name\n        commissionBps\n      }\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "3. Protocol health dashboard",
+    "title": "Step 4 — stamp it with freshness",
+    "query": "{\n  _meta {\n    status\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "4. Expiry and liquidation watcher",
+    "title": "Step 1 — collateral in use",
+    "query": "{\n  vaults(\n    where: { AND: [{ status: available }, { inUse: true }] }\n    orderBy: \"amount\"\n    orderDirection: \"desc\"\n    limit: 3\n  ) {\n    totalCount\n    items {\n      id\n      amount\n      depositor\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "4. Expiry and liquidation watcher",
+    "title": "Step 2 — confirm how a vault is being used",
+    "query": "{\n  aaveVaultStatus(\n    vaultId: \"0x822ecce7d8dac56426935b3c344778cb214eec1a368100a190ea2b31d3c56d3f\"\n  ) {\n    status\n    vaultId\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "4. Expiry and liquidation watcher",
+    "title": "Step 3 — the claim window on expired vaults",
+    "query": "{\n  vaults(\n    where: { status: expired }\n    orderBy: \"expiredAt\"\n    orderDirection: \"desc\"\n    limit: 3\n  ) {\n    items {\n      id\n      expiredAt\n      expirationReason\n      claimExpiredUntil\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "4. Expiry and liquidation watcher",
+    "title": "Step 4 — the liquidation feed",
+    "query": "{\n  vaultActivitys(\n    where: { type: liquidation }\n    orderBy: \"timestamp\"\n    orderDirection: \"desc\"\n    limit: 3\n  ) {\n    totalCount\n    items {\n      vaultId\n      amount\n      timestamp\n      transactionHash\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "5. Mirror the dataset",
+    "title": "Step 2 — sweep each table",
+    "query": "{\n  vaults(orderBy: \"pendingAt\", orderDirection: \"asc\", limit: 2, offset: 0) {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    items {\n      id\n      status\n    }\n  }\n}"
+  },
+  {
+    "group": "Use cases",
+    "section": "5. Mirror the dataset",
+    "title": "Step 3 — stay current",
+    "query": "{\n  vaultActivitys(\n    where: { timestamp_gt: \"1786000000\" }\n    orderBy: \"timestamp\"\n    orderDirection: \"asc\"\n    limit: 3\n  ) {\n    totalCount\n    items {\n      id\n      type\n      timestamp\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For depositors and borrowers",
+    "title": "Find all my vaults",
+    "query": "{\n  vaults(\n    where: { depositor: \"0x106d71c740aeebf6e72f06dad4129651dc65d810\" }\n    orderBy: \"pendingAt\"\n    orderDirection: \"desc\"\n    limit: 10\n  ) {\n    totalCount\n    items {\n      id\n      status\n      amount\n      activatedAt\n      inUse\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For depositors and borrowers",
+    "title": "Inspect one vault",
+    "query": "{\n  vault(id: \"0x002f198c46664c28f0685ba86303256e9833344a54c7b4e34483e7805f5b8d4a\") {\n    status\n    amount\n    depositor\n    vaultProvider\n    vaultProviderCommissionBps\n    peginTxHash\n    depositorPayoutBtcAddress\n    pendingAt\n    verifiedAt\n    activatedAt\n    expiredAt\n    expirationReason\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For depositors and borrowers",
+    "title": "Check my Aave position and its collateral",
+    "query": "{\n  aavePosition(depositorAddress: \"0xd51d8dda9f8975fbecacd77a93f37a57053642e1\") {\n    totalCollateral\n    proxyContract\n    createdAt\n    updatedAt\n    collaterals(limit: 10) {\n      totalCount\n      items {\n        vaultId\n        amount\n        addedAt\n        removedAt\n        liquidationIndex\n      }\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For depositors and borrowers",
+    "title": "Read my activity history",
+    "query": "{\n  vaultActivitys(\n    where: { depositor: \"0x106d71c740aeebf6e72f06dad4129651dc65d810\" }\n    orderBy: \"timestamp\"\n    orderDirection: \"desc\"\n    limit: 20\n  ) {\n    totalCount\n    items {\n      type\n      amount\n      vaultId\n      debtReserveId\n      timestamp\n      transactionHash\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For operators",
+    "title": "Protocol totals",
+    "query": "{\n  statss(limit: 1) {\n    items {\n      totalAvailableSats\n      availableVaultCount\n      updatedAt\n    }\n  }\n  protocolStates(limit: 1) {\n    items {\n      activeVaultCoreVersion\n      updatedAt\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For operators",
+    "title": "Registered vault providers",
+    "query": "{\n  vaultProviders(orderBy: \"registeredAt\", orderDirection: \"asc\", limit: 50) {\n    totalCount\n    items {\n      id\n      name\n      commissionBps\n      metadataStatus\n      metadataRejectionReason\n      registeredAt\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For operators",
+    "title": "The security participant set",
+    "query": "{\n  vaultKeepers(limit: 50) {\n    totalCount\n    items {\n      id\n    }\n  }\n  universalChallengers(limit: 50) {\n    totalCount\n    items {\n      id\n    }\n  }\n  universalChallengerVersions(orderBy: \"id\", orderDirection: \"desc\", limit: 5) {\n    items {\n      id\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For operators",
+    "title": "Vault count by status",
+    "query": "{\n  pending: vaults(where: { status: pending }, limit: 1) {\n    totalCount\n  }\n  verified: vaults(where: { status: verified }, limit: 1) {\n    totalCount\n  }\n  available: vaults(where: { status: available }, limit: 1) {\n    totalCount\n  }\n  redeemed: vaults(where: { status: redeemed }, limit: 1) {\n    totalCount\n  }\n  expired: vaults(where: { status: expired }, limit: 1) {\n    totalCount\n  }\n  liquidated: vaults(where: { status: liquidated }, limit: 1) {\n    totalCount\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For operators",
+    "title": "Fee escrow state",
+    "query": "{\n  escrowed: vaultFeeEscrows(where: { status: escrowed }, limit: 1) {\n    totalCount\n  }\n  distributed: vaultFeeEscrows(where: { status: distributed }, limit: 1) {\n    totalCount\n  }\n  refunded: vaultFeeEscrows(where: { status: refunded }, limit: 1) {\n    totalCount\n  }\n  forfeited: vaultFeeEscrows(where: { status: forfeited }, limit: 1) {\n    totalCount\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For builders",
+    "title": "Paginate past the 1000-row cap",
+    "query": "{\n  vaults(orderBy: \"pendingAt\", orderDirection: \"asc\", limit: 1000, offset: 0) {\n    totalCount\n    items {\n      id\n      status\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For builders",
+    "title": "Filter operators",
+    "query": "{\n  vaults(\n    where: {\n      AND: [\n        { status: available }\n        { amount_gte: \"1000000\" }\n        { inUse: true }\n      ]\n    }\n    orderBy: \"amount\"\n    orderDirection: \"desc\"\n    limit: 5\n  ) {\n    totalCount\n    items {\n      id\n      amount\n      inUse\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For builders",
+    "title": "Follow a relation",
+    "query": "{\n  vaultFeeEscrows(limit: 3, orderBy: \"escrowedAt\", orderDirection: \"desc\") {\n    items {\n      vaultId\n      totalAmount\n      status\n      numUniversalChallengers\n      numAppVaultKeepers\n      vault {\n        status\n        depositor\n      }\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For builders",
+    "title": "Introspect within the depth cap",
+    "query": "{\n  __schema {\n    types {\n      kind\n      name\n    }\n  }\n}"
+  },
+  {
+    "group": "Cookbook",
+    "section": "For builders",
+    "title": "Introspect within the depth cap",
+    "query": "{\n  __type(name: \"vault\") {\n    name\n    fields {\n      name\n      type {\n        kind\n        name\n        ofType {\n          kind\n          name\n        }\n      }\n    }\n  }\n}"
+  },
+  {
+    "group": "Limits",
+    "section": null,
+    "title": "Pagination",
+    "query": "{\n  vaults(orderBy: \"pendingAt\", orderDirection: \"asc\", limit: 1000, offset: 0) {\n    totalCount\n    items {\n      id\n    }\n  }\n}"
+  }
+]

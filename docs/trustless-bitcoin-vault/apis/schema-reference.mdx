@@ -37,50 +37,50 @@ The vault lifecycle and the actors that secure it. These entities exist regardle
 
 ### `vault`
 
-A single vault instance and its full lifecycle state.
+One BTCVault and its full lifecycle state — a depositor’s native Bitcoin locked in a UTXO on the Bitcoin network. `status` is the authority on where it sits; the timestamp fields cover only part of the path.
 
 Query with `vault(…)` or `vaults(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `String!` | yes |
-| `peginTxHash` | `String!` | yes |
-| `depositor` | `String!` | yes |
-| `depositorBtcPubKey` | `String!` | yes |
-| `vaultProvider` | `String!` | yes |
-| `vaultProviderCommissionBps` | `Int!` | yes |
-| `amount` | `BigInt!` | yes |
-| `applicationEntryPoint` | `String!` | yes |
-| `status` | `vaultStatus` | no |
-| `inUse` | `Boolean!` | yes |
-| `ackCount` | `Int!` | yes |
-| `depositorSignedPeginTx` | `String!` | yes |
-| `unsignedPrePeginTx` | `String!` | yes |
-| `appVaultKeepersVersion` | `Int!` | yes |
-| `universalChallengersVersion` | `Int!` | yes |
-| `offchainParamsVersion` | `Int!` | yes |
-| `proverCircuitVersion` | `Int!` | yes |
-| `vaultCoreVersion` | `Int!` | yes |
-| `referralCode` | `Int!` | yes |
-| `depositorPayoutBtcAddress` | `String!` | yes |
-| `btcPopSignature` | `String` | no |
-| `depositorWotsPkHash` | `String` | no |
-| `peginSigsPostedAt` | `BigInt` | no |
-| `prePeginTxHash` | `String` | no |
-| `htlcVout` | `Int!` | yes |
-| `hashlock` | `String!` | yes |
-| `secret` | `String` | no |
-| `currentOwner` | `String` | no |
-| `pendingAt` | `BigInt!` | yes |
-| `verifiedAt` | `BigInt` | no |
-| `activatedAt` | `BigInt` | no |
-| `expiredAt` | `BigInt` | no |
-| `expirationReason` | `String` | no |
-| `claimExpiredUntil` | `BigInt` | no |
-| `expiredClaimedAt` | `BigInt` | no |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
-| `application` | `application` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `String!` | yes |  |
+| `peginTxHash` | `String!` | yes |  |
+| `depositor` | `String!` | yes | Depositor address, lowercase hex. Filters are case-sensitive. |
+| `depositorBtcPubKey` | `String!` | yes |  |
+| `vaultProvider` | `String!` | yes |  |
+| `vaultProviderCommissionBps` | `Int!` | yes |  |
+| `amount` | `BigInt!` | yes | Vault size in **satoshis**. |
+| `applicationEntryPoint` | `String!` | yes |  |
+| `status` | `vaultStatus` | no | Where the vault is in its lifecycle. Treat this as authoritative; not every state has a timestamp. |
+| `inUse` | `Boolean!` | yes | Whether the vault is currently pledged to an application. |
+| `ackCount` | `Int!` | yes | How many of the security set have acknowledged. Reaches 6 when complete. A vault sitting at 0 is stalling, and usually expires with `ack_timeout`. |
+| `depositorSignedPeginTx` | `String!` | yes |  |
+| `unsignedPrePeginTx` | `String!` | yes |  |
+| `appVaultKeepersVersion` | `Int!` | yes |  |
+| `universalChallengersVersion` | `Int!` | yes |  |
+| `offchainParamsVersion` | `Int!` | yes |  |
+| `proverCircuitVersion` | `Int!` | yes |  |
+| `vaultCoreVersion` | `Int!` | yes |  |
+| `referralCode` | `Int!` | yes |  |
+| `depositorPayoutBtcAddress` | `String!` | yes |  |
+| `btcPopSignature` | `String` | no |  |
+| `depositorWotsPkHash` | `String` | no |  |
+| `peginSigsPostedAt` | `BigInt` | no | Unix seconds. Dates the `signatures_collected` state. |
+| `prePeginTxHash` | `String` | no |  |
+| `htlcVout` | `Int!` | yes |  |
+| `hashlock` | `String!` | yes |  |
+| `secret` | `String` | no |  |
+| `currentOwner` | `String` | no |  |
+| `pendingAt` | `BigInt!` | yes | Unix seconds. Dates the `pending` state. |
+| `verifiedAt` | `BigInt` | no | Unix seconds. Dates the `verified` state. |
+| `activatedAt` | `BigInt` | no | Unix seconds. Dates the `available` state. |
+| `expiredAt` | `BigInt` | no | Unix seconds. Dates the `expired` state. |
+| `expirationReason` | `String` | no | Why the peg-in expired, for example `ack_timeout`. |
+| `claimExpiredUntil` | `BigInt` | no | **A block number, not a timestamp**, despite sitting among the timestamp fields. The contract sets it to the expiry block plus a grace period. Compare it against the block in `_meta`, never against a clock. |
+| `expiredClaimedAt` | `BigInt` | no |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
+| `application` | `application` | no |  |
 
 
 `vaultStatus` values: `pending` · `signatures_collected` · `verified` · `available` · `redeemed` · `liquidated` · `expired` · `invalid` · `depositor_withdrawn`
@@ -88,30 +88,21 @@ Query with `vault(…)` or `vaults(…)`.
 
 ### `vaultActivity`
 
-Append-only event log. It records six of the nine `vaultActivityType` values —
-`deposit`, `borrow`, `repay`, `redeem`, `liquidation` and `claim_expired`. It is
-not a complete history of everything that happens to a vault. See
-[Known data gaps](./limits-and-gotchas.mdx).
-
-`vaultId` is `null` on `borrow` and `repay` rows. Those events are scoped to an
-Aave position rather than to one vault, and they instead carry a non-null
-`debtReserveId`. Resolve that against `aaveReserve` to get the debt asset's
-symbol and decimals — `amount` on those rows is denominated in the debt asset,
-not in satoshis.
+Append-only event log. It records six of the nine `vaultActivityType` values — `deposit`, `borrow`, `repay`, `redeem`, `liquidation` and `claim_expired`. It is not a complete history of everything that happens to a vault. See [Known data gaps](/trustless-bitcoin-vault/apis/limits-and-gotchas).
 
 Query with `vaultActivity(…)` or `vaultActivitys(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `String!` | yes |
-| `vaultId` | `String` | no |
-| `depositor` | `String!` | yes |
-| `type` | `vaultActivityType!` | yes |
-| `amount` | `BigInt!` | yes |
-| `debtReserveId` | `BigInt` | no |
-| `timestamp` | `BigInt!` | yes |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `String!` | yes |  |
+| `vaultId` | `String` | no | **Null on `borrow` and `repay`.** Those events are scoped to an Aave position rather than to one vault. This is by design, not missing data. |
+| `depositor` | `String!` | yes |  |
+| `type` | `vaultActivityType!` | yes | In practice one of `deposit`, `borrow`, `repay`, `redeem`, `liquidation`, `claim_expired`. The enum also declares `withdrawal`, `add_collateral` and `remove_collateral`, but nothing writes them. |
+| `amount` | `BigInt!` | yes | Satoshis **except** on `borrow` and `repay`, where it is denominated in the debt asset. Resolve `debtReserveId` against `aaveReserve` before formatting. |
+| `debtReserveId` | `BigInt` | no | Set on `borrow` and `repay`. Join to `aaveReserve` for the debt asset symbol and decimals. |
+| `timestamp` | `BigInt!` | yes | Unix seconds. Use with `timestamp_gt` as a sync watermark. |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
 
 
 `vaultActivityType` values: `deposit` · `withdrawal` · `add_collateral` · `remove_collateral` · `liquidation` · `borrow` · `repay` · `redeem` · `claim_expired`
@@ -119,25 +110,25 @@ Query with `vaultActivity(…)` or `vaultActivitys(…)`.
 
 ### `vaultProvider`
 
-A registered entity that provides vault services.
+The depositor's Vault Provider: the operator that sets up, redeems and defends the BTCVault. A depositor can run their own.
 
 Query with `vaultProvider(…)` or `vaultProviders(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `String!` | yes |
-| `btcPubKey` | `String!` | yes |
-| `applicationEntryPoint` | `String!` | yes |
-| `commissionBps` | `Int!` | yes |
-| `name` | `String` | no |
-| `rpcUrl` | `String` | no |
-| `grpcUrl` | `String` | no |
-| `daemonGrpcUrl` | `String` | no |
-| `metadataStatus` | `String` | no |
-| `metadataRejectionReason` | `String` | no |
-| `registeredAt` | `BigInt!` | yes |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `String!` | yes |  |
+| `btcPubKey` | `String!` | yes |  |
+| `applicationEntryPoint` | `String!` | yes |  |
+| `commissionBps` | `Int!` | yes | Basis points. 100 is 1%. |
+| `name` | `String` | no |  |
+| `rpcUrl` | `String` | no |  |
+| `grpcUrl` | `String` | no |  |
+| `daemonGrpcUrl` | `String` | no |  |
+| `metadataStatus` | `String` | no |  |
+| `metadataRejectionReason` | `String` | no |  |
+| `registeredAt` | `BigInt!` | yes |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
 
 
 ### `vaultProviderStats`
@@ -146,18 +137,18 @@ Aggregated counters per vault provider.
 
 Query with `vaultProviderStats(…)` or `vaultProviderStatss(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `String!` | yes |
-| `activeVaultCount` | `Int!` | yes |
-| `totalActiveSats` | `BigInt!` | yes |
-| `updatedAt` | `BigInt!` | yes |
-| `provider` | `vaultProvider` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `String!` | yes |  |
+| `activeVaultCount` | `Int!` | yes | Number of active vaults for this provider. |
+| `totalActiveSats` | `BigInt!` | yes | Satoshis across the provider's active vaults. |
+| `updatedAt` | `BigInt!` | yes |  |
+| `provider` | `vaultProvider` | no |  |
 
 
 ### `vaultKeeper`
 
-A per-application participant in the vault security model.
+An App Keeper: the operator appointed by an integrated application, holding claim and challenge rights under that application's rules.
 
 Query with `vaultKeeper(…)` or `vaultKeepers(…)`.
 
@@ -171,7 +162,7 @@ Query with `vaultKeeper(…)` or `vaultKeepers(…)`.
 
 ### `vaultKeeperApplication`
 
-Join between a vault keeper and an application.
+Join between an App Keeper and an application.
 
 Query with `vaultKeeperApplication(…)` or `vaultKeeperApplications(…)`.
 
@@ -188,7 +179,7 @@ Query with `vaultKeeperApplication(…)` or `vaultKeeperApplications(…)`.
 
 ### `universalChallenger`
 
-A system-wide participant able to challenge invalid claims.
+A Universal Challenger: one of a global set of operators with challenge-only rights, which challenges invalid claims across every BTCVault.
 
 Query with `universalChallenger(…)` or `universalChallengers(…)`.
 
@@ -217,7 +208,7 @@ Query with `universalChallengerVersion(…)` or `universalChallengerVersions(…
 
 ### `feeConfig`
 
-Fee configuration. Currently empty on testnet — see Limits and gotchas.
+Fee configuration. Empty on testnet — fee escrows exist without a matching config row.
 
 Query with `feeConfig(…)` or `feeConfigs(…)`.
 
@@ -235,25 +226,25 @@ Query with `feeConfig(…)` or `feeConfigs(…)`.
 
 ### `vaultFeeEscrow`
 
-Escrowed fees for one vault. One row per vault.
+Escrowed fees for one vault. One row per vault, keyed by `vaultId`.
 
 Query with `vaultFeeEscrow(…)` or `vaultFeeEscrows(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `vaultId` | `String!` | yes |
-| `totalAmount` | `BigInt!` | yes |
-| `vaultProvider` | `String!` | yes |
-| `numUniversalChallengers` | `Int!` | yes |
-| `numAppVaultKeepers` | `Int!` | yes |
-| `status` | `feeEscrowStatus!` | yes |
-| `escrowedAt` | `BigInt!` | yes |
-| `distributedAt` | `BigInt` | no |
-| `refundedAt` | `BigInt` | no |
-| `forfeitedAt` | `BigInt` | no |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
-| `vault` | `vault` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `vaultId` | `String!` | yes |  |
+| `totalAmount` | `BigInt!` | yes | Escrowed amount in **wei**, not satoshis. |
+| `vaultProvider` | `String!` | yes |  |
+| `numUniversalChallengers` | `Int!` | yes |  |
+| `numAppVaultKeepers` | `Int!` | yes |  |
+| `status` | `feeEscrowStatus!` | yes |  |
+| `escrowedAt` | `BigInt!` | yes |  |
+| `distributedAt` | `BigInt` | no |  |
+| `refundedAt` | `BigInt` | no |  |
+| `forfeitedAt` | `BigInt` | no |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
+| `vault` | `vault` | no |  |
 
 
 `feeEscrowStatus` values: `escrowed` · `distributed` · `refunded` · `forfeited`
@@ -261,21 +252,21 @@ Query with `vaultFeeEscrow(…)` or `vaultFeeEscrows(…)`.
 
 ### `application`
 
-A DeFi protocol integrated with the vault system.
+A DeFi protocol integrated with the vault system. Aave v4 is the first.
 
 Query with `application(…)` or `applications(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `String!` | yes |
-| `name` | `String` | no |
-| `latestVKVersion` | `Int` | no |
-| `totalCapBTC` | `BigInt` | no |
-| `perAddressCapBTC` | `BigInt` | no |
-| `status` | `applicationStatus!` | yes |
-| `registeredAt` | `BigInt!` | yes |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `String!` | yes |  |
+| `name` | `String` | no |  |
+| `latestVKVersion` | `Int` | no |  |
+| `totalCapBTC` | `BigInt` | no | Satoshis, despite the `BTC` suffix. |
+| `perAddressCapBTC` | `BigInt` | no | Satoshis, despite the `BTC` suffix. |
+| `status` | `applicationStatus!` | yes |  |
+| `registeredAt` | `BigInt!` | yes |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
 
 
 `applicationStatus` values: `none` · `active` · `paused`
@@ -283,30 +274,30 @@ Query with `application(…)` or `applications(…)`.
 
 ### `token`
 
-A token known to the indexer.
+A token known to the indexer, keyed by contract address.
 
 Query with `token(…)` or `tokens(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `address` | `String!` | yes |
-| `symbol` | `String!` | yes |
-| `name` | `String!` | yes |
-| `decimals` | `Int!` | yes |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `address` | `String!` | yes |  |
+| `symbol` | `String!` | yes |  |
+| `name` | `String!` | yes |  |
+| `decimals` | `Int!` | yes | Decimal places for this token. Needed to format any amount denominated in it. |
 
 
 ### `stats`
 
-Protocol-wide totals. Singleton.
+Protocol-wide totals. Singleton, id `global`.
 
 Query with `stats(…)` or `statss(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `String!` | yes |
-| `totalAvailableSats` | `BigInt!` | yes |
-| `availableVaultCount` | `Int!` | yes |
-| `updatedAt` | `BigInt!` | yes |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `String!` | yes |  |
+| `totalAvailableSats` | `BigInt!` | yes | Satoshis across all available vaults. |
+| `availableVaultCount` | `Int!` | yes | Number of vaults currently `available`. |
+| `updatedAt` | `BigInt!` | yes |  |
 
 
 ### `protocolState`
@@ -331,56 +322,56 @@ State for the Aave v4 integration — the first application built on TBV. A vaul
 
 ### `aavePosition`
 
-A depositor position, keyed by depositor address.
+A depositor position in Aave, keyed by depositor address rather than by `id`.
 
 Query with `aavePosition(…)` or `aavePositions(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `depositorAddress` | `String!` | yes |
-| `proxyContract` | `String!` | yes |
-| `totalCollateral` | `BigInt!` | yes |
-| `createdAt` | `BigInt!` | yes |
-| `updatedAt` | `BigInt!` | yes |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
-| `collaterals(…)` | `aavePositionCollateralPage` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `depositorAddress` | `String!` | yes | The key for this entity. Query with `aavePosition(depositorAddress: "0x…")`. |
+| `proxyContract` | `String!` | yes |  |
+| `totalCollateral` | `BigInt!` | yes | Satoshis. Equals the sum of `amount` across collateral rows where `removedAt` is null. |
+| `createdAt` | `BigInt!` | yes |  |
+| `updatedAt` | `BigInt!` | yes |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
+| `collaterals(…)` | `aavePositionCollateralPage` | no |  |
 
 
 ### `aavePositionCollateral`
 
-One vault pledged as collateral against a position.
+One vault pledged as collateral against a position. Released rows are kept for history.
 
 Query with `aavePositionCollateral(…)` or `aavePositionCollaterals(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `depositorAddress` | `String!` | yes |
-| `vaultId` | `String!` | yes |
-| `amount` | `BigInt!` | yes |
-| `addedAt` | `BigInt!` | yes |
-| `removedAt` | `BigInt` | no |
-| `liquidationIndex` | `Int!` | yes |
-| `blockNumber` | `BigInt!` | yes |
-| `transactionHash` | `String!` | yes |
-| `position` | `aavePosition` | no |
-| `vault` | `vault` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `depositorAddress` | `String!` | yes |  |
+| `vaultId` | `String!` | yes |  |
+| `amount` | `BigInt!` | yes |  |
+| `addedAt` | `BigInt!` | yes |  |
+| `removedAt` | `BigInt` | no | Null while the vault is still pledged. Filter on `removedAt: null` for live collateral. |
+| `liquidationIndex` | `Int!` | yes |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `transactionHash` | `String!` | yes |  |
+| `position` | `aavePosition` | no |  |
+| `vault` | `vault` | no |  |
 
 
 ### `aaveVaultStatus`
 
-Per-vault usage status within Aave.
+Per-vault usage status within Aave, keyed by `vaultId`.
 
 Query with `aaveVaultStatus(…)` or `aaveVaultStatuss(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `vaultId` | `String!` | yes |
-| `applicationEntryPoint` | `String!` | yes |
-| `status` | `aaveVaultUsageStatus!` | yes |
-| `metadata` | `JSON` | no |
-| `updatedAt` | `BigInt!` | yes |
-| `vault` | `vault` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `vaultId` | `String!` | yes |  |
+| `applicationEntryPoint` | `String!` | yes |  |
+| `status` | `aaveVaultUsageStatus!` | yes | One of `collateralized`, `llp_owned` or `redeemed`. |
+| `metadata` | `JSON` | no |  |
+| `updatedAt` | `BigInt!` | yes |  |
+| `vault` | `vault` | no |  |
 
 
 `aaveVaultUsageStatus` values: `collateralized` · `llp_owned` · `redeemed`
@@ -388,7 +379,7 @@ Query with `aaveVaultStatus(…)` or `aaveVaultStatuss(…)`.
 
 ### `aaveUserProxy`
 
-The proxy contract deployed for a user.
+The proxy contract deployed for a user, keyed by `user`.
 
 Query with `aaveUserProxy(…)` or `aaveUserProxys(…)`.
 
@@ -403,32 +394,32 @@ Query with `aaveUserProxy(…)` or `aaveUserProxys(…)`.
 
 ### `aaveReserve`
 
-An Aave reserve and its parameters.
+An Aave reserve and its parameters. Join here to resolve debt amounts.
 
 Query with `aaveReserve(…)` or `aaveReserves(…)`.
 
-| Field | Type | Required |
-| --- | --- | --- |
-| `id` | `BigInt!` | yes |
-| `underlying` | `String!` | yes |
-| `hub` | `String!` | yes |
-| `assetId` | `Int!` | yes |
-| `decimals` | `Int!` | yes |
-| `dynamicConfigKey` | `BigInt!` | yes |
-| `paused` | `Boolean!` | yes |
-| `frozen` | `Boolean!` | yes |
-| `borrowable` | `Boolean!` | yes |
-| `collateralRisk` | `Int!` | yes |
-| `collateralFactor` | `Int!` | yes |
-| `createdAt` | `BigInt!` | yes |
-| `updatedAt` | `BigInt!` | yes |
-| `blockNumber` | `BigInt!` | yes |
-| `underlyingToken` | `token` | no |
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | `BigInt!` | yes |  |
+| `underlying` | `String!` | yes |  |
+| `hub` | `String!` | yes |  |
+| `assetId` | `Int!` | yes |  |
+| `decimals` | `Int!` | yes |  |
+| `dynamicConfigKey` | `BigInt!` | yes |  |
+| `paused` | `Boolean!` | yes |  |
+| `frozen` | `Boolean!` | yes |  |
+| `borrowable` | `Boolean!` | yes | Whether the reserve can be borrowed. The `vaultBTC` reserve, which represents BTCVault collateral, is collateral only. |
+| `collateralRisk` | `Int!` | yes |  |
+| `collateralFactor` | `Int!` | yes | Basis points. 7800 is 78%. |
+| `createdAt` | `BigInt!` | yes |  |
+| `updatedAt` | `BigInt!` | yes |  |
+| `blockNumber` | `BigInt!` | yes |  |
+| `underlyingToken` | `token` | no | The reserve asset. Read `symbol` and `decimals` to format borrow and repay amounts. |
 
 
 ### `aaveConfig`
 
-Aave integration configuration. Singleton.
+Aave integration configuration. Singleton with an `Int` id — pass `1`, not `"1"`.
 
 Query with `aaveConfig(…)` or `aaveConfigs(…)`.
 

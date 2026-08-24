@@ -338,6 +338,11 @@ const sidebars = {
         'trustless-bitcoin-vault/apis/schema-reference',
         'trustless-bitcoin-vault/apis/query-cookbook',
         'trustless-bitcoin-vault/apis/limits-and-gotchas',
+        {
+          type: 'link',
+          label: 'Explorer',
+          href: '/vault-indexer-explorer',
+        },
       ],
     },
     {

@@ -104,6 +104,7 @@ function create_doc_plugin({
 
 const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
 const webpackReactProvider = require('./plugins/webpack-react-provider.cjs');
+const graphiqlOptionalDeps = require('./plugins/graphiql-optional-deps.cjs');
 const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
 const plugins = [
   [
@@ -377,6 +378,7 @@ const plugins = [
   ],
   tailwindPlugin,
   webpackReactProvider,
+  graphiqlOptionalDeps,
   ...docs_plugins,
   ...openapiPlugins,
 ];
