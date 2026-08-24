@@ -91,7 +91,7 @@ The protocol involves four operator types around the depositor. None has custody
 
 ### Refund if peg-in does not complete
 
-The Pre-PegIn output has a refund leaf with a relative timelock of 2016 BTC blocks (~14 days) for the current public-testnet parameter version. If activation does not occur within the activation window (approximately 48 hours), the vault enters the Expired state. The depositor can then sign the refund path with the depositor key and broadcast a refund transaction on Bitcoin to recover the BTC. Existing vaults retain the parameter version active at creation. If the vault expired because off-chain setup failed, meaning the activation window was exceeded before setup completed, the peg-in fee is also refunded.
+The Pre-PegIn output has a refund leaf with a relative timelock of 2016 BTC blocks (~14 days) for the current public-testnet parameter version. If off-chain setup does not complete before `pegInAckTimeout` (approximately 24 hours), the vault expires and the peg-in fee is refunded. If setup completes but activation does not occur before `pegInActivationTimeout` (approximately 48 hours), the vault expires and the peg-in fee is non-refundable. In both cases, the depositor can sign the refund path with the depositor key and broadcast a refund transaction on Bitcoin after `tRefund` elapses. Existing vaults retain the parameter version active at creation.
 
 ### Self-claim if the Vault Provider does not initiate the claim
 
