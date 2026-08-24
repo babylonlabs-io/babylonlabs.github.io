@@ -70,7 +70,10 @@ export default function Hero(): JSX.Element {
 
 
       <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col items-center px-5 pb-20 pt-16 text-center sm:px-8 lg:pb-24 lg:pt-20">
-        <p className="mb-6 flex items-center gap-2.5 font-label text-[11px] uppercase tracking-[0.22em] text-status">
+        {/* The dot carries the status colour, the words do not. warning/main is
+            a fill in the UI kit, and no shade of orange reaches 4.5:1 for 11px
+            text on the light ground — see .tbv-status-label in custom.css. */}
+        <p className="tbv-status-label mb-6 flex items-center gap-2.5 font-label text-[11px] uppercase tracking-[0.22em]">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-status/60 motion-reduce:hidden" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-status" />

@@ -438,12 +438,12 @@ const config = {
     ({
       image: '/logo/babylon.svg',
       colorMode: {
-        // The site is dark only. disableSwitch removes the navbar toggle, and
-        // respectPrefersColorScheme: false stops the OS preference from
-        // putting a reader into a light theme that no longer exists.
+        // Both themes ship, as on the rest of Babylon's sites. Dark is the
+        // default because it is what the TBV app and this reskin were built
+        // against; the OS preference is honoured, and
         defaultMode: 'dark',
-        disableSwitch: true,
-        respectPrefersColorScheme: false,
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
       },
       docs: {
         sidebar: {
@@ -452,15 +452,22 @@ const config = {
         },
       },
       navbar: {
+        // The symbol alone, with the word set in type beside it. The full
+        // lockup already reads "babylon docs" as artwork, which left the
+        // navbar saying the same thing twice at a size that could not shrink.
+        // `title` renders as .navbar__title, styled in custom.css to match the
+        // rest of the chrome rather than Infima's bold default.
+        title: 'Docs',
         logo: {
           href: '/',
-          // Dark-only site: both slots use the white mark, so no render
-          // path can put the black logo on the dark ground.
-          src: '/logo/dark.svg',
-          srcDark: '/logo/dark.svg',
-          alt: 'Babylon Documentation | Babylon Docs',
-          height: '40px',
-          width: '101px',
+          // Both themes ship, so each slot takes its own mark: the black
+          // symbol on the light ground, the white one on the dark.
+          src: '/logo/babylon_symbol.svg',
+          srcDark: '/logo/babylon_symbol_dark.svg',
+          alt: 'Babylon',
+          // The source art is 19x18, so the box keeps that ratio.
+          height: '28px',
+          width: '30px',
         },
         items: [
           {
@@ -503,9 +510,9 @@ const config = {
       footer: {
         logo: {
           href: '/',
-          // Dark-only site: both slots use the white mark, so no render
-          // path can put the black logo on the dark ground.
-          src: '/logo/dark.svg',
+          // Both themes ship, so each slot takes its own mark: the dark
+          // wordmark on the light ground, the white one on the dark.
+          src: '/logo/light.svg',
           srcDark: '/logo/dark.svg',
           alt: 'Babylon Documentation | Babylon Docs',
           height: '36px',

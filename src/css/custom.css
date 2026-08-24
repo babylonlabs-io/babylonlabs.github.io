@@ -187,28 +187,27 @@
      for body text, so the true brand colour is used directly for links as
      well as fills. On the design's own warm ground it managed only 3.35:1
      and needed a darkened substitute. */
-  /* Palette comes from the TBV app's own library, which the design review
-     names as the single colour reference (Premium Design, node 8469-28288).
-     These are the app's values, not approximations of them. */
-  --tbv-background: 17 17 17; /* #111111 background/primary */
-  --tbv-foreground: 255 255 255; /* #ffffff text/primary */
-  --tbv-muted: 32 32 32; /* #202020 background/secondary */
-  --tbv-contrast: 25 25 25; /* #191919 background/contrast */
-  --tbv-muted-foreground: 176 176 176; /* #b0b0b0 text/secondary */
+  /* Two themes, both from Babylon's own values.
+
+     Light is the palette the marketing site runs on, measured from
+     babylonlabs.io, with the kit's own basic/black/high for text. Dark is the
+     TBV app library (Premium Design, node 8469-28288). Neither is invented:
+     the toggle moves between two surfaces the company already ships. */
+  --tbv-background: 255 255 255; /* #ffffff basic/white/high */
+  --tbv-foreground: 17 17 17; /* #111111 basic/black/high */
+  --tbv-muted: 245 247 242; /* #f5f7f2, the marketing site's off-white */
+  --tbv-contrast: 237 240 233; /* one step down from muted, for banding */
+  --tbv-muted-foreground: 90 90 90; /* #5a5a5a stroke/primary, as text */
   --tbv-tertiary-foreground: 124 124 124; /* #7c7c7c text/tertiary */
-  --tbv-border: 47 47 47; /* #2f2f2f stroke/secondary */
-  --tbv-border-strong: 90 90 90; /* #5a5a5a stroke/primary */
+  --tbv-border: 224 224 220; /* hairline on the light ground */
+  --tbv-border-strong: 176 176 176; /* #b0b0b0 */
 
-  /* Primary calls to action and link hover, and nothing else. The review is
-     explicit that orange is not for decoration or for body text. */
-  --tbv-accent: 206 101 51; /* #ce6533 accent/primary */
+  --tbv-accent: 206 101 51; /* #ce6533 accent/primary, unchanged in both */
   --tbv-accent-foreground: 255 255 255;
+  --tbv-status: 239 108 0; /* #ef6c00 warning/main — the amber needs to
+                              darken on white to stay legible */
 
-  /* The testnet status label only, in yellow so it cannot be mistaken for
-     the brand orange. */
-  --tbv-status: 255 179 0; /* #ffb300 foundation/amber/600 */
-
-  --tbv-blue: 74 155 199;
+  --tbv-blue: 18 73 94; /* #12495e, the marketing site's deep teal */
   --tbv-surface-blue: 4 47 64; /* #042f40 accent/secondary */
 
   /* One family everywhere. The review rules out mono and every other face,
@@ -223,6 +222,7 @@
 
 /* Kept so any component still keyed to the attribute resolves to the same
    single palette. Values are identical to :root by design. */
+/* Dark: the TBV app's library values. */
 html[data-theme='dark'] {
   --tbv-background: 17 17 17;
   --tbv-foreground: 255 255 255;
@@ -235,7 +235,7 @@ html[data-theme='dark'] {
 
   --tbv-accent: 206 101 51;
   --tbv-accent-foreground: 255 255 255;
-  --tbv-status: 255 179 0;
+  --tbv-status: 255 179 0; /* #ffb300 reads on the dark ground */
   --tbv-blue: 74 155 199;
   --tbv-surface-blue: 4 47 64;
 }
@@ -508,17 +508,21 @@ body {
   --ifm-color-primary-light: #dd7d4f;    /* Lighter */
   --ifm-color-primary-lighter: #e8916a;  /* Even Lighter */
   --ifm-color-primary-lightest: #f0a582; /* Lightest */
-  --ifm-background-color: #0a0a0a;       /* Neutral dark ground */
+  --ifm-background-color: rgb(var(--tbv-background));
+
+  /* Links: foreground by default, accent on hover, in both themes. */
+  --ifm-link-color: rgb(var(--tbv-foreground));
+  --ifm-link-hover-color: rgb(var(--tbv-accent));
 
 
   --ifm-navbar-shadow: none;
-  --ifm-toc-border-color: #262626;
+  --ifm-toc-border-color: rgb(var(--tbv-border));
 
   --ifm-table-border-color: var(--docs-color-border);
-  --ifm-background-surface-color: #0a0a0a;
+  --ifm-background-surface-color: rgb(var(--tbv-background));
   --code-border-color: var(--docs-color-border);
-  --ifm-code-background: #171717;
-  --ifm-color-content: #f4f0ed;
+  --ifm-code-background: rgb(var(--tbv-muted));
+  --ifm-color-content: rgb(var(--tbv-foreground));
 
   /* Chrome. Neutral surfaces so the accent is the only colour in the frame. */
   --ifm-navbar-background-color: rgb(var(--tbv-background));
@@ -549,16 +553,16 @@ body {
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 html[data-theme='dark'] {
   --ifm-link-color: rgb(var(--tbv-foreground));
-  --ifm-link-hover-color: #ce6533;
+  --ifm-link-hover-color: rgb(var(--tbv-accent));
   --ifm-tabs-color-active-border: #ce6533;
   --ifm-tabs-color-active: #ce6533;
 
   --ifm-color-primary: #ce6533;
 
-  --ifm-background-surface-color: #0a0a0a;
-  --ifm-background-color: #0a0a0a;
-  --ifm-toc-border-color: #262626;
-  --ifm-code-background: #171717;
+  --ifm-background-surface-color: rgb(var(--tbv-background));
+  --ifm-background-color: rgb(var(--tbv-background));
+  --ifm-toc-border-color: rgb(var(--tbv-border));
+  --ifm-code-background: rgb(var(--tbv-muted));
 
   /* Chrome tokens resolve from the same --tbv-* channels, so dark mode needs
      no separate values beyond what those tokens already flip. */
@@ -2755,7 +2759,7 @@ html[data-theme='dark'] .markdown img {
    @docsearch/css declares these on `html[data-theme=dark]`, which is the same
    specificity as ours and wins on stylesheet order. `html:root[...]` adds one
    class-level unit, so this holds whichever sheet loads last. */
-:root,
+html:root,
 html:root[data-theme='dark'] {
   --docsearch-muted-color: rgb(var(--tbv-muted-foreground));
   --docsearch-secondary-text-color: rgb(var(--tbv-muted-foreground));
@@ -3212,34 +3216,40 @@ html:root[data-theme='dark'] {
 
 
 /* ─── Buttons ───────────────────────────────────────────────────────────
-   Measured from babylonlabs.io so the docs and the marketing site share one
-   control: 12px, weight 700, square corners, and generous horizontal
-   padding. The small bold label in a wide hard-edged block is the main
-   site's most recognisable component, and it survives the move to a dark
-   ground unchanged.
+   Taken from the Babylon UI Kit's own Buttons page, not from the marketing
+   site. The kit specifies h40 normal and h36 small, a 16px Px Grotesk
+   Regular label, white on accent/primary, rounded corners, and three states
+   documented on that page:
 
-   Filled only, per the design review. Primary is the brand orange and is
-   reserved for the one action a page most wants; secondary is grey.
+     Hover     background transitions to the hover state over 200ms
+     Loading   label fades out, replaced by a centred spinner
+     Disabled  opacity reduced, hover and click disabled
+
+   An earlier pass built these square at 12px/700 from babylonlabs.io. The
+   kit is the authority, so the kit's metrics win.
    ───────────────────────────────────────────────────────────────────── */
 
 .tbv-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.625rem;
-  height: 2.75rem;
-  padding-inline: 2.25rem;
+  gap: 0.5rem;
+  height: 40px;
+  padding-inline: 1.5rem;
   border: 0;
-  border-radius: 0;
+  border-radius: 8px;
   font-family: var(--tbv-font-sans);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.15px;
+  line-height: 1.5;
   text-decoration: none;
-  transition:
-    background-color 0.2s ease-out,
-    opacity 0.2s ease-out;
+  transition: background-color 200ms ease-out;
+}
+
+.tbv-btn-sm {
+  height: 36px;
+  font-size: 14px;
 }
 
 .tbv-btn:hover,
@@ -3252,8 +3262,9 @@ html:root[data-theme='dark'] {
   color: rgb(var(--tbv-accent-foreground));
 }
 
+/* The kit darkens the fill on hover rather than fading the whole control. */
 .tbv-btn-primary:hover {
-  opacity: 0.9;
+  background-color: rgb(180 84 40);
   color: rgb(var(--tbv-accent-foreground));
 }
 
@@ -3267,11 +3278,48 @@ html:root[data-theme='dark'] {
   color: rgb(var(--tbv-foreground));
 }
 
-/* Full width on a phone, where a 36px inset would leave a stub of a
-   target. */
+.tbv-btn[aria-disabled='true'],
+.tbv-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 @media (max-width: 640px) {
   .tbv-btn {
     width: 100%;
-    padding-inline: 1.5rem;
   }
+}
+
+/* Status label — see the note in Hero.tsx. The dot carries the status colour;
+   on the light ground the words do not, because orange cannot clear 4.5:1 at
+   11px on white at any shade. */
+.tbv-status-label {
+  color: rgb(var(--tbv-muted-foreground));
+}
+
+html[data-theme='dark'] .tbv-status-label {
+  color: rgb(var(--tbv-status));
+}
+
+/* Navbar wordmark. The navbar carries the Babylon symbol and then the word
+   "Docs" as text, so the word has to sit in the site's own type rather than
+   Infima's bold default, and align optically with the mark beside it. */
+.navbar__title {
+  font-family: var(--tbv-font-sans);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: rgb(var(--tbv-foreground));
+}
+
+.navbar__logo {
+  margin-right: 0.5rem;
+}
+
+/* Infima forces .navbar__logo to a 2rem height and the img to fill it, so the
+   width attribute on the tag stretched the 19x18 symbol into a 30x32 box.
+   Letting the width follow the art keeps the mark in proportion. */
+.navbar__logo img {
+  width: auto;
 }
