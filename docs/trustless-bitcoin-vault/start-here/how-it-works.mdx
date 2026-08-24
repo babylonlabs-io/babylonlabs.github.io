@@ -30,7 +30,7 @@ First, all required participants collect and submit their signatures. Once the s
 Two safety properties are built into the peg-in flow:
 
 * **Pre-signed transactions.** Every spend path is signed at vault creation by all required participants. After creation, no party can fabricate a new spend. Each path the BTC could ever take is committed up front.
-* **Refund hash timelock.** If the peg-in stalls (the depositor never reveals the secret, or participants fail to complete setup), the depositor recovers the BTC unilaterally via a Bitcoin-side hash timelock on the Pre-PegIn output.
+* **Refund relative timelock.** If the peg-in stalls (the depositor never reveals the secret, or participants fail to complete setup), the depositor recovers the BTC unilaterally via a Bitcoin-side relative CSV timelock on the Pre-PegIn output.
 
 ![TBV peg-in flow: lock BTC, prepare vault, and activate vault through Ethereum coordination](/img/trustless-bitcoin-vault/confluence/start-here/how-it-works/TBV5-Peg-in%20Flow.png)
 

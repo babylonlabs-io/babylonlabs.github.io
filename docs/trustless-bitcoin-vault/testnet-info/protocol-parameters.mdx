@@ -21,8 +21,8 @@ Use these values while planning a public-testnet run:
 | BTC confirmations before setup can complete | 12 signet blocks |
 | Peg-in ACK timeout | ~24 hours |
 | Activation timeout | ~48 hours |
-| Refund timelock | 3 days |
-| Redemption challenge window | ~3 days |
+| Refund timelock | ~14 days (2016 BTC blocks) |
+| Redemption challenge window | ~3 days (432 BTC blocks) |
 | BTC collateral factor | 78% |
 | Liquidation threshold | Health factor below 1.0 |
 
@@ -57,7 +57,7 @@ Two distinct timeouts govern the peg-in flow. The activation timeout always exce
 | `minPrepeginDepth` | 12 BTC blocks (signet) | Bitcoin confirmations required before ACK signers will sign the Pre-PegIn. |
 | `pegInAckTimeout` | 7200 Ethereum blocks (~24 hours) | Window for all required ACKs to be submitted (off-chain setup completion). If exceeded, the vault expires and the peg-in fee is refunded. |
 | `pegInActivationTimeout` | 14400 Ethereum blocks (~48 hours) | Window from vault creation for the depositor to call `activateVaultWithSecret`. Must exceed `pegInAckTimeout`. If exceeded, the depositor can refund via the Pre-PegIn refund leaf. |
-| `tRefund` | 3 days (BTC blocks) | Atomic-swap Pre-PegIn refund hash timelock. After this elapses, the depositor can sign the refund path on Bitcoin to reclaim the BTC if peg-in stalled. |
+| `tRefund` | 2016 BTC blocks (~14 days) | Pre-PegIn refund timelock (relative, `OP_CHECKSEQUENCEVERIFY` from Pre-PegIn confirmation). After this elapses, the depositor can sign the refund path on Bitcoin to reclaim the BTC if peg-in stalled. |
 
 ## Redemption timelocks
 

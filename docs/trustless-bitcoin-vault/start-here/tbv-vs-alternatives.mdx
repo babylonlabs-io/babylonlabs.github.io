@@ -38,7 +38,7 @@ Bitcoin's own consensus rules enforce that BTC is released only when the matchin
 
 ### The depositor's keys participate in every depositor-controlled release path
 
-The depositor's signatures are required at vault creation, at activation, and on every depositor-controlled release path. A self-claim path using the depositor's WOTS key, plus claimer artifacts downloaded at peg-in, is committed at vault creation. This lets the depositor exit independently if the Vault Provider is offline or unresponsive. A refund hash timelock on the Pre-PegIn output recovers the BTC if activation never completes.
+The depositor's signatures are required at vault creation, at activation, and on every depositor-controlled release path. A self-claim path using the depositor's WOTS key, plus claimer artifacts downloaded at peg-in, is committed at vault creation. This lets the depositor exit independently if the Vault Provider is offline or unresponsive. A relative CSV timelock on the Pre-PegIn output recovers the BTC if activation never completes.
 
 For the participant-facing recovery paths, see [Create a vault](../use-for-lending/create-a-vault.mdx#if-activation-stalls) and [Withdraw & redeem](../use-for-lending/withdraw-and-redeem.mdx#the-self-claim-path-tbv-protocol).
 

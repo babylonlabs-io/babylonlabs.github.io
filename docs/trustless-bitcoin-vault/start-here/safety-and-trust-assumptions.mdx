@@ -38,7 +38,7 @@ While the vault is used as collateral, the depositor still relies on the chosen 
 Three mechanisms keep BTC custody with the depositor at all times.
 
 * **Pre-signed exit paths.** Every release path is constructed and signed at vault creation, before any BTC moves into the final vault output. The depositor's signatures are required on depositor-controlled release paths, along with the required participant signatures for the agreed transaction graph. After creation, no participant can fabricate a new spend.
-* **On-chain refund hash timelock.** The Pre-PegIn output includes a refund leaf with a timelock of 3 days on the public testnet. If activation does not complete within the configured window, the depositor can sign the refund path with the depositor key and recover BTC unilaterally.
+* **On-chain refund timelock.** The Pre-PegIn output includes a refund leaf with a relative timelock of 2016 BTC blocks (~14 days) on the public testnet. If activation does not complete within the configured window, the depositor can sign the refund path with the depositor key and recover BTC unilaterally.
 * **Protocol-level fraud detection.** The depositor, Universal Challengers, and relevant protocol participants can verify claims against Ethereum state. A claim made without the required Ethereum redemption state cannot defend itself against a valid challenge; the claimer's bond is forfeited and the BTC stays in the vault.
 
 No single party, including the Vault Provider, can unilaterally release a depositor's BTC. Every canonical spend requires either the depositor's signatures or the depositor's pre-committed authorization established at vault creation.
@@ -91,7 +91,7 @@ The protocol involves four operator types around the depositor. None has custody
 
 ### Refund if peg-in does not complete
 
-The Pre-PegIn HTLC output has a refund leaf with a timelock of 3 days on the public testnet. If activation does not occur within the activation window (approximately 48 hours), the vault enters the Expired state. The depositor can then sign the refund path with the depositor key and broadcast a refund transaction on Bitcoin to recover the BTC. The refund timelock is set so it falls after the normal activation window plus a safety margin. If the vault expired because off-chain setup failed, meaning the activation window was exceeded before setup completed, the peg-in fee is also refunded.
+The Pre-PegIn HTLC output has a refund leaf with a relative timelock of 2016 BTC blocks (~14 days) on the public testnet. If activation does not occur within the activation window (approximately 48 hours), the vault enters the Expired state. The depositor can then sign the refund path with the depositor key and broadcast a refund transaction on Bitcoin to recover the BTC. The refund timelock is set so it falls after the normal activation window plus a safety margin. If the vault expired because off-chain setup failed, meaning the activation window was exceeded before setup completed, the peg-in fee is also refunded.
 
 ### Self-claim if the Vault Provider does not initiate the claim
 
