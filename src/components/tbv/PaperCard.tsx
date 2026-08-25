@@ -1,6 +1,7 @@
 import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { ArrowUpRight } from 'lucide-react';
+import PixelCard from './PixelCard';
 
 /**
  * The call to action at the foot of a research page.
@@ -59,6 +60,14 @@ function CardBody({
   );
 }
 
+function isArxivUrl(href: string): boolean {
+  try {
+    return new URL(href, 'https://babylonlabs.io').hostname === 'arxiv.org';
+  } catch {
+    return false;
+  }
+}
+
 export default function PaperCard({
   href,
   title,
@@ -67,8 +76,10 @@ export default function PaperCard({
   cta,
 }: PaperCardProps): JSX.Element {
   const external = /^https?:\/\//.test(href);
-  const label = cta ?? (href.includes('arxiv.org') ? 'View on arXiv' : 'Open the PDF');
-  const body = <CardBody title={title} authors={authors} meta={meta} cta={label} />;
+  const label = cta ?? (isArxivUrl(href) ? 'View on arXiv' : 'Open the PDF');
+  const body = (
+    <CardBody title={title} authors={authors} meta={meta} cta={label} />
+  );
 
   return (
     <a
@@ -79,10 +90,7 @@ export default function PaperCard({
         : { target: '_blank', rel: 'noopener' })}
     >
       <BrowserOnly fallback={<div className="pixel-card">{body}</div>}>
-        {() => {
-          const PixelCard = require('./PixelCard').default;
-          return <PixelCard variant="paper">{body}</PixelCard>;
-        }}
+        {() => <PixelCard variant="paper">{body}</PixelCard>}
       </BrowserOnly>
     </a>
   );
