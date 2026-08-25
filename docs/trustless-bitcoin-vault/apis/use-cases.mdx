@@ -1,0 +1,469 @@
+---
+title: Use Cases
+sidebar_label: Use Cases
+sidebar_position: 2
+description: End-to-end workflows you can build on the Babylon vault indexer — portfolio views, peg-in tracking, operator dashboards, risk watchers and data sync.
+---
+
+# Use Cases
+
+The [Query Cookbook](./query-cookbook.mdx) answers single questions. This page
+chains those answers into complete workflows, so you can see what a finished
+integration looks like before you write one.
+
+Every query below runs against live testnet data and returns rows.
+
+Hover any query and press **Run** to open it in an explorer, ready to edit and
+execute. To stay in one place and work through several, open the
+[full Explorer](pathname:///vault-indexer-explorer) — it carries every example
+on this site as a preset, with the whole schema documented alongside.
+
+:::warning Set a User-Agent
+The endpoint rejects default library user-agents with a bare **403**. Set your
+own on every request. See [Limits and gotchas](./limits-and-gotchas.mdx).
+:::
+
+## Pick your workflow
+
+| You are building | Workflow | Core entities |
+| --- | --- | --- |
+| A wallet or portfolio screen | [Depositor portfolio](#1-depositor-portfolio) | `vault`, `aavePosition`, `vaultActivity` |
+| Peg-in status or onboarding UX | [Track a peg-in](#2-track-a-peg-in-to-completion) | `vault` |
+| An operator or protocol dashboard | [Protocol health](#3-protocol-health-dashboard) | `stats`, `vaultProviderStats`, `_meta` |
+| Monitoring or alerting | [Risk watcher](#4-expiry-and-liquidation-watcher) | `vault`, `aaveVaultStatus` |
+| Analytics, a data warehouse, a bot | [Mirror the dataset](#5-mirror-the-dataset) | everything |
+
+---
+
+## 1. Depositor portfolio
+
+**Goal:** given one address, show what they hold, what is pledged, what they
+owe, and what they have done.
+
+### Step 1 — their vaults
+
+`status` tells you where each vault is. `inUse` tells you whether it is pledged
+to an application.
+
+```graphql
+{
+  vaults(
+    where: { depositor: "0xd51d8dda9f8975fbecacd77a93f37a57053642e1" }
+    orderBy: "pendingAt"
+    orderDirection: "desc"
+    limit: 3
+  ) {
+    totalCount
+    items {
+      id
+      status
+      amount
+      inUse
+      activatedAt
+    }
+  }
+}
+```
+
+### Step 2 — what is currently pledged
+
+`aavePosition` is keyed by `depositorAddress`, not by `id`. Filter the nested
+collaterals on `removedAt: null` to get only what is still pledged — the table
+keeps released rows for history.
+
+```graphql
+{
+  aavePosition(depositorAddress: "0xd51d8dda9f8975fbecacd77a93f37a57053642e1") {
+    totalCollateral
+    proxyContract
+    collaterals(where: { removedAt: null }, limit: 3) {
+      totalCount
+      items {
+        vaultId
+        amount
+        addedAt
+      }
+    }
+  }
+}
+```
+
+`totalCollateral` equals the sum of `amount` across those live rows, in
+satoshis. Use it as a checksum.
+
+### Step 3 — their ledger
+
+```graphql
+{
+  vaultActivitys(
+    where: { depositor: "0xd51d8dda9f8975fbecacd77a93f37a57053642e1" }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+    limit: 3
+  ) {
+    items {
+      type
+      amount
+      vaultId
+      debtReserveId
+      timestamp
+    }
+  }
+}
+```
+
+### Step 4 — make the numbers mean something
+
+Fetch the reserve table once and cache it. Without it you cannot format a loan
+amount correctly.
+
+```graphql
+{
+  aaveReserves {
+    items {
+      id
+      borrowable
+      underlyingToken {
+        symbol
+        decimals
+      }
+    }
+  }
+}
+```
+
+:::danger Amounts are not all satoshis
+On `borrow` and `repay` rows, `amount` is denominated in the **debt asset**, and
+`vaultId` is `null` because the event belongs to the position rather than to one
+vault. Join `debtReserveId` to the table above for the symbol and decimals.
+
+A repayment of `294141396` with `debtReserveId: "1"` is **294.14 USDT**, not
+2.94 BTC. Format it as satoshis and you are wrong by orders of magnitude.
+:::
+
+---
+
+## 2. Track a peg-in to completion
+
+**Goal:** tell a depositor where their peg-in is, and whether it is stuck.
+
+### Step 1 — read the vault
+
+Poll a single vault by `id`. Read `status` first; the timestamps only tell you
+*when* each completed step happened.
+
+```graphql
+{
+  vault(id: "0x822ecce7d8dac56426935b3c344778cb214eec1a368100a190ea2b31d3c56d3f") {
+    status
+    amount
+    pendingAt
+    peginSigsPostedAt
+    verifiedAt
+    activatedAt
+    expiredAt
+    expirationReason
+    ackCount
+    inUse
+  }
+}
+```
+
+A healthy completed peg-in shows all four timestamps filled, `ackCount: 6` and
+`status: available`. Map the state to the field that dates it:
+
+| Status | Timestamp to show |
+| --- | --- |
+| `pending` | `pendingAt` |
+| `signatures_collected` | `peginSigsPostedAt` |
+| `verified` | `verifiedAt` |
+| `available` | `activatedAt` |
+| `expired` | `expiredAt`, plus `expirationReason` |
+
+### Step 2 — find everything still in flight
+
+```graphql
+{
+  vaults(
+    where: { status_in: [pending, signatures_collected, verified] }
+    orderBy: "pendingAt"
+    orderDirection: "desc"
+    limit: 3
+  ) {
+    totalCount
+    items {
+      id
+      status
+      ackCount
+      pendingAt
+    }
+  }
+}
+```
+
+**`ackCount` is your health signal.** It climbs to 6 once the full security set
+has acknowledged. A vault sitting at `signatures_collected` with `ackCount: 0`
+is stalling, and the usual outcome is expiry with
+`expirationReason: "ack_timeout"`. Surface that before the user asks.
+
+:::info Expect expiry to be common
+On testnet the majority of peg-ins expire rather than activate. Design the
+screen around that reality instead of treating expiry as an edge case.
+:::
+
+---
+
+## 3. Protocol health dashboard
+
+**Goal:** one screen showing size, throughput, who is carrying the load, and
+whether the data is fresh.
+
+### Step 1 — headline totals
+
+```graphql
+{
+  statss(limit: 1) {
+    items {
+      totalAvailableSats
+      availableVaultCount
+    }
+  }
+}
+```
+
+### Step 2 — the funnel
+
+Aliases let you count several statuses in one request. You have a budget of 15
+per operation, which is enough for all nine statuses at once.
+
+```graphql
+{
+  pending: vaults(where: { status: pending }) { totalCount }
+  available: vaults(where: { status: available }) { totalCount }
+  expired: vaults(where: { status: expired }) { totalCount }
+  liquidated: vaults(where: { status: liquidated }) { totalCount }
+}
+```
+
+The ratio of `expired` to `available` is the number worth watching. It is the
+real measure of peg-in completion, and it is not visible from headline TVL.
+
+### Step 3 — provider distribution
+
+```graphql
+{
+  vaultProviderStatss(
+    orderBy: "totalActiveSats"
+    orderDirection: "desc"
+    limit: 4
+  ) {
+    items {
+      activeVaultCount
+      totalActiveSats
+      provider {
+        name
+        commissionBps
+      }
+    }
+  }
+}
+```
+
+`commissionBps` is in basis points, so `100` is 1%.
+
+### Step 4 — stamp it with freshness
+
+```graphql
+{
+  _meta {
+    status
+  }
+}
+```
+
+This returns a JSON scalar keyed by chain name, carrying the last indexed block
+and its timestamp. Compare that block against a Sepolia node before you present
+any figure as current. A lag of roughly a minute is normal.
+
+---
+
+## 4. Expiry and liquidation watcher
+
+**Goal:** alerting. Catch collateral at risk and record what actually happened.
+
+### Step 1 — collateral in use
+
+```graphql
+{
+  vaults(
+    where: { AND: [{ status: available }, { inUse: true }] }
+    orderBy: "amount"
+    orderDirection: "desc"
+    limit: 3
+  ) {
+    totalCount
+    items {
+      id
+      amount
+      depositor
+    }
+  }
+}
+```
+
+### Step 2 — confirm how a vault is being used
+
+```graphql
+{
+  aaveVaultStatus(
+    vaultId: "0x822ecce7d8dac56426935b3c344778cb214eec1a368100a190ea2b31d3c56d3f"
+  ) {
+    status
+    vaultId
+  }
+}
+```
+
+`status` is `collateralized`, `llp_owned` or `redeemed`.
+
+### Step 3 — the claim window on expired vaults
+
+```graphql
+{
+  vaults(
+    where: { status: expired }
+    orderBy: "expiredAt"
+    orderDirection: "desc"
+    limit: 3
+  ) {
+    items {
+      id
+      expiredAt
+      expirationReason
+      claimExpiredUntil
+    }
+  }
+}
+```
+
+:::danger claimExpiredUntil is a block number
+Despite the name and its position among timestamp fields, `claimExpiredUntil` is
+a **block height** — the expiry block plus a grace period. Compare it against
+the block number in `_meta`, never against a clock. Read as seconds it resolves
+to 1970.
+:::
+
+### Step 4 — the liquidation feed
+
+```graphql
+{
+  vaultActivitys(
+    where: { type: liquidation }
+    orderBy: "timestamp"
+    orderDirection: "desc"
+    limit: 3
+  ) {
+    totalCount
+    items {
+      vaultId
+      amount
+      timestamp
+      transactionHash
+    }
+  }
+}
+```
+
+Liquidations do carry a `vaultId`, so this feed joins straight back to `vault`.
+
+---
+
+## 5. Mirror the dataset
+
+**Goal:** pull everything into your own store, then keep it current.
+
+### Step 1 — generate a typed client
+
+Introspection is capped at depth 10, so the standard introspection query fails.
+Point your codegen at the committed SDL instead —
+[`/schema/vault-indexer.graphql`](pathname:///schema/vault-indexer.graphql):
+
+```bash
+curl -sO https://docs.babylonlabs.io/schema/vault-indexer.graphql
+```
+
+The SDL is regenerated from the deployed endpoint, so it describes what is
+actually in production rather than what is on the indexer's main branch.
+
+### Step 2 — sweep each table
+
+Always pass an explicit `limit` and a stable `orderBy`. Stop when the rows you
+have collected reach `totalCount`.
+
+```graphql
+{
+  vaults(orderBy: "pendingAt", orderDirection: "asc", limit: 2, offset: 0) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    items {
+      id
+      status
+    }
+  }
+}
+```
+
+Raise `limit` to 1000 for a real sweep and advance `offset` by the same amount.
+You can page by cursor instead — feed `endCursor` back as `after`. Pick one
+style, because `pageInfo` cursors come back `null` as soon as you pass `offset`.
+
+:::danger Omitting limit silently truncates
+With no `limit` you get **50 rows** while `totalCount` still reports the true
+total. A sync that ignores `limit` looks like it succeeded and quietly holds a
+fraction of the data. Always compare what you collected against `totalCount`.
+:::
+
+### Step 3 — stay current
+
+For append-only tables, keep a timestamp watermark and ask only for what is new.
+
+```graphql
+{
+  vaultActivitys(
+    where: { timestamp_gt: "1786000000" }
+    orderBy: "timestamp"
+    orderDirection: "asc"
+    limit: 3
+  ) {
+    totalCount
+    items {
+      id
+      type
+      timestamp
+    }
+  }
+}
+```
+
+Mutable rows such as `vault` change in place, so a timestamp watermark will miss
+edits. Re-read those by `id`, or re-sweep them on a schedule.
+
+Record the block number from `_meta` alongside each sync. It gives you a
+reproducible point to resume from, and it lets you prove how stale a downstream
+figure is.
+
+---
+
+## Before you ship
+
+- Set a `User-Agent`, or every request gets a bare 403.
+- Set `limit` explicitly on every list query.
+- Resolve `debtReserveId` before formatting any loan amount.
+- Treat `claimExpiredUntil` as a block height.
+- Three `vaultActivityType` values are never written. Read
+  [Known data gaps](./limits-and-gotchas.mdx) before you build on
+  `withdrawal`, `add_collateral` or `remove_collateral`.
+- This is testnet. There is no mainnet endpoint yet.

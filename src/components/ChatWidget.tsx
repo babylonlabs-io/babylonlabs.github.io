@@ -523,32 +523,39 @@ export default function ChatWidget() {
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
 
+          // Parse and dispatch are kept apart on purpose. While the `error`
+          // branch lived inside this try, its throw was caught by the very
+          // catch meant to skip malformed JSON, so a server-reported failure
+          // never reached the outer handler: every backend error surfaced as
+          // the empty-answer fallback, and the INPUT_TOO_LONG branch below
+          // was unreachable from the stream.
+          let data: any;
           try {
-            const data = JSON.parse(line.slice(6));
-
-            if (data.type === 'content') {
-              accumulatedContent += data.content;
-
-              updateCurrentSessionMessages(prev =>
-                prev.map(msg =>
-                  msg.id === aiMessageId
-                    ? { ...msg, content: accumulatedContent }
-                    : msg
-                )
-              );
-
-            } else if (data.type === 'metadata') {
-              // Update thread_uuid if backend provides a new one or confirms it
-              if (data.thread_uuid) {
-                setSessions(prev => prev.map(s =>
-                  s.id === currentSessionId ? { ...s, thread_uuid: data.thread_uuid } : s
-                ));
-              }
-            } else if (data.type === 'error') {
-              throw new Error(data.error);
-            }
+            data = JSON.parse(line.slice(6));
           } catch (parseError) {
-            // Skip invalid JSON
+            continue; // Skip invalid JSON
+          }
+
+          if (data.type === 'content') {
+            accumulatedContent += data.content;
+
+            updateCurrentSessionMessages(prev =>
+              prev.map(msg =>
+                msg.id === aiMessageId
+                  ? { ...msg, content: accumulatedContent }
+                  : msg
+              )
+            );
+
+          } else if (data.type === 'metadata') {
+            // Update thread_uuid if backend provides a new one or confirms it
+            if (data.thread_uuid) {
+              setSessions(prev => prev.map(s =>
+                s.id === currentSessionId ? { ...s, thread_uuid: data.thread_uuid } : s
+              ));
+            }
+          } else if (data.type === 'error') {
+            throw new Error(data.error);
           }
         }
       }
@@ -569,24 +576,26 @@ export default function ChatWidget() {
       console.error(error);
 
       let errorMessage = "Sorry, something went wrong. Please try again later.";
-      let isErrorMessage = false;
+      let isErrorMessage = true;
 
       if (error instanceof Error && error.message.startsWith('INPUT_TOO_LONG:')) {
         errorMessage = `⚠️ **Your message is too long.**\n\n${error.message.replace('INPUT_TOO_LONG:', '')}\n\n*Input limits help ensure faster responses and protect against abuse. Please try breaking your question into smaller, focused parts.*`;
         isErrorMessage = true;
       }
 
-      updateCurrentSessionMessages(prev => {
-        const lastMsg = prev[prev.length - 1];
-        if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
-          return prev.map(msg =>
-            msg.id === lastMsg.id
-              ? { ...msg, content: errorMessage, isError: isErrorMessage }
-              : msg
-          );
-        }
-        return prev;
-      });
+      updateCurrentSessionMessages(prev =>
+        prev.map(msg =>
+          msg.id === aiMessageId
+            ? {
+                ...msg,
+                content: msg.content
+                  ? `${msg.content}\n\n${errorMessage}`
+                  : errorMessage,
+                isError: isErrorMessage,
+              }
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
       abortControllerRef.current = null;
@@ -602,6 +611,11 @@ export default function ChatWidget() {
 
   const handleDeclineConsent = () => {
     openedFromHeaderRef.current = false;
+    // Drop any question handed over from the landing page. Without this the
+    // question outlives the refusal: it stays in the ref, and the next time
+    // the widget is opened and consent is granted the auto-submit effect
+    // sends it, even though the visitor declined and never asked again.
+    pendingQueryRef.current = null;
     setIsOpen(false);
     setIsExpanded(false);
     setHasUserToggledExpand(false);
@@ -609,6 +623,8 @@ export default function ChatWidget() {
 
   const handleClose = () => {
     openedFromHeaderRef.current = false;
+    // Same reasoning as declining: closing abandons the question.
+    pendingQueryRef.current = null;
     abortControllerRef.current?.abort();
     setIsOpen(false);
     setIsExpanded(false);
@@ -864,32 +880,50 @@ export default function ChatWidget() {
                       <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Input */}
-                    <form onSubmit={handleSubmit} className="chat-input p-4 flex gap-2">
-                      <div className="flex-1 flex flex-col gap-1">
-                        <input
-                          type="text"
+                    {/* Composer. Docked box with an autosizing textarea and the
+                        send control inside it, after the AI Chat 3 block.
+                        Enter sends, Shift+Enter inserts a newline, which the
+                        previous single-line input could not do. */}
+                    <form onSubmit={handleSubmit} className="chat-input p-3">
+                      <div className="chat-composer flex items-end gap-1.5 p-1.5">
+                        <textarea
+                          rows={1}
                           value={input}
-                          onChange={handleInputChange}
-                          placeholder="Ask a question..."
-                          className="flex-1 px-4 py-2 rounded-full"
+                          onChange={(e) => {
+                            handleInputChange(e as any);
+                            const el = e.currentTarget;
+                            el.style.height = 'auto';
+                            el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault();
+                              if (!isLoading && input.trim() && !isInputTooLong) {
+                                handleSubmit();
+                              }
+                            }
+                          }}
+                          placeholder="Ask anything"
+                          aria-label="Ask a question"
                           disabled={isLoading}
+                          className="chat-composer-input block max-h-[140px] min-w-0 flex-1 resize-none bg-transparent px-2 py-1.5 text-sm leading-5 outline-none"
                         />
-                        {inputError && (
-                          <p className={`text-xs px-4 ${
-                            isInputTooLong ? 'text-red-500' : 'text-yellow-600'
-                          }`}>
-                            {inputError}
-                          </p>
-                        )}
+                        <button
+                          type="submit"
+                          disabled={isLoading || !input.trim() || isInputTooLong}
+                          aria-label="Send"
+                          className="chat-composer-send inline-flex h-8 w-8 shrink-0 items-center justify-center transition-opacity hover:opacity-90 disabled:opacity-40"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
                       </div>
-                      <button
-                        type="submit"
-                        disabled={isLoading || !input.trim() || isInputTooLong}
-                        className="w-10 h-10 min-w-[40px] min-h-[40px] bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center shrink-0"
-                      >
-                        <Send className="w-5 h-5" />
-                      </button>
+                      {inputError && (
+                        <p className={`mt-1.5 px-1 text-xs ${
+                          isInputTooLong ? 'text-red-500' : 'text-yellow-600'
+                        }`}>
+                          {inputError}
+                        </p>
+                      )}
                     </form>
                   </>
                 )}

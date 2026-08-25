@@ -1,0 +1,220 @@
+.shell {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------------- collapsed */
+
+.rail {
+  display: flex;
+  flex: 0 0 2.25rem;
+  justify-content: center;
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-surface-color);
+}
+
+.railButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.7rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+}
+
+.railButton:hover {
+  color: var(--ifm-color-primary);
+}
+
+.railLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+/* ----------------------------------------------------------------- expanded */
+
+.presets {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 19rem;
+  min-height: 0;
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-surface-color);
+}
+
+.presetsHeader {
+  padding: 0.85rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.heading {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.collapse {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: 0 0 auto;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+}
+
+.collapse:hover {
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+}
+
+.blurb {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ifm-color-content-secondary);
+}
+
+.endpoint {
+  display: block;
+  overflow-x: auto;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
+.presetList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.6rem 0.5rem 1rem;
+}
+
+/* Page level: Use cases / Cookbook / Limits. */
+.groupTitle {
+  margin: 0 0.5rem 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ifm-color-content-secondary);
+}
+
+.group + .group {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Workflow level: the use case a set of steps belongs to. */
+.section + .section {
+  margin-top: 0.5rem;
+}
+
+.sectionTitle {
+  margin: 0.35rem 0.5rem 0.2rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ifm-color-content);
+}
+
+/* Step level. The rule ties the steps visually to their workflow. */
+.steps {
+  margin: 0;
+  padding: 0 0 0 0.5rem;
+  list-style: none;
+  border-left: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.preset {
+  display: block;
+  width: 100%;
+  padding: 0.28rem 0.5rem;
+  border: 0;
+  border-radius: var(--ifm-global-radius);
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.preset:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.presetActive {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+  box-shadow: inset 2px 0 0 var(--ifm-color-primary);
+}
+
+.presetsFooter {
+  display: flex;
+  gap: 0.9rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  font-size: 0.78rem;
+}
+
+.editor {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--ifm-color-content-secondary);
+}
+
+@media (max-width: 996px) {
+  .shell {
+    flex-direction: column;
+  }
+
+  .presets {
+    flex: 0 0 auto;
+    max-height: 45vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  }
+
+  .rail {
+    flex: 0 0 auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  }
+
+  .railButton {
+    flex-direction: row;
+    padding: 0.5rem;
+  }
+
+  .railLabel {
+    writing-mode: horizontal-tb;
+  }
+}
