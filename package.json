@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=development docusaurus start",
     "dev": "cross-env NODE_ENV=development docusaurus start",
     "fetch": "node plugins/fetch-remote-docs.cjs",
-    "build": "npm run fetch && npm run gen:vault-indexer-presets && cross-env NODE_ENV=production docusaurus build",
+    "build": "npm run validate:vault-indexer-queries && npm run fetch && npm run gen:vault-indexer-presets && cross-env NODE_ENV=production docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -21,6 +21,7 @@
     "typecheck": "tsc",
     "spell-check": "npx cspell docs/**/*.mdx",
     "verify:vault-indexer-queries": "node scripts/verify-vault-indexer-queries.mjs",
+    "validate:vault-indexer-queries": "node scripts/validate-vault-indexer-queries.mjs",
     "genmd": "docusaurus gen-api-docs all",
     "gen:vault-indexer-presets": "node scripts/gen-vault-indexer-presets.mjs"
   },

@@ -59,6 +59,14 @@ function CardBody({
   );
 }
 
+function isArxivUrl(href: string): boolean {
+  try {
+    return new URL(href, 'https://babylonlabs.io').hostname === 'arxiv.org';
+  } catch {
+    return false;
+  }
+}
+
 export default function PaperCard({
   href,
   title,
@@ -67,8 +75,10 @@ export default function PaperCard({
   cta,
 }: PaperCardProps): JSX.Element {
   const external = /^https?:\/\//.test(href);
-  const label = cta ?? (href.includes('arxiv.org') ? 'View on arXiv' : 'Open the PDF');
-  const body = <CardBody title={title} authors={authors} meta={meta} cta={label} />;
+  const label = cta ?? (isArxivUrl(href) ? 'View on arXiv' : 'Open the PDF');
+  const body = (
+    <CardBody title={title} authors={authors} meta={meta} cta={label} />
+  );
 
   return (
     <a

@@ -4,9 +4,8 @@
  *
  * Presets are not hand-maintained. Every ```graphql block on the API pages is
  * extracted with the heading above it, so the explorer offers exactly the
- * queries the docs teach. `verify-vault-indexer-queries.mjs` already executes
- * each of those blocks against testnet in CI, which means a preset cannot be
- * broken without the build going red first.
+ * queries the docs teach. The static build validates each block against the
+ * committed SDL. The deployment workflow also checks the live testnet endpoint.
  *
  * Output: static/vault-indexer-presets.json
  */
