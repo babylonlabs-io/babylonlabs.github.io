@@ -1165,14 +1165,14 @@ html[data-theme='dark'] .page-actions-menu {
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 10px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  animation: textSelectionToolbarIn 0.12s ease;
+  animation: text-selection-toolbar-in 0.12s ease;
 }
 
 html[data-theme='dark'] .text-selection-toolbar {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes textSelectionToolbarIn {
+@keyframes text-selection-toolbar-in {
   from {
     opacity: 0;
     transform: translateY(4px);
@@ -3221,7 +3221,6 @@ html:root[data-theme='dark'] {
   }
 }
 
-
 /* ─── Buttons ───────────────────────────────────────────────────────────
    Taken from the Babylon UI Kit's own Buttons page, not from the marketing
    site. The kit specifies h40 normal and h36 small, a 16px Px Grotesk
@@ -3265,7 +3264,7 @@ html:root[data-theme='dark'] {
 }
 
 .tbv-btn-primary {
-  background-color: rgb(var(--tbv-accent));
+  background-color: rgb(180 84 40);
   color: rgb(var(--tbv-accent-foreground));
 }
 

@@ -576,24 +576,26 @@ export default function ChatWidget() {
       console.error(error);
 
       let errorMessage = "Sorry, something went wrong. Please try again later.";
-      let isErrorMessage = false;
+      let isErrorMessage = true;
 
       if (error instanceof Error && error.message.startsWith('INPUT_TOO_LONG:')) {
         errorMessage = `⚠️ **Your message is too long.**\n\n${error.message.replace('INPUT_TOO_LONG:', '')}\n\n*Input limits help ensure faster responses and protect against abuse. Please try breaking your question into smaller, focused parts.*`;
         isErrorMessage = true;
       }
 
-      updateCurrentSessionMessages(prev => {
-        const lastMsg = prev[prev.length - 1];
-        if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
-          return prev.map(msg =>
-            msg.id === lastMsg.id
-              ? { ...msg, content: errorMessage, isError: isErrorMessage }
-              : msg
-          );
-        }
-        return prev;
-      });
+      updateCurrentSessionMessages(prev =>
+        prev.map(msg =>
+          msg.id === aiMessageId
+            ? {
+                ...msg,
+                content: msg.content
+                  ? `${msg.content}\n\n${errorMessage}`
+                  : errorMessage,
+                isError: isErrorMessage,
+              }
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
       abortControllerRef.current = null;

@@ -30,6 +30,7 @@ const USER_AGENT =
 // Checked locally so a doc example that would be rejected is caught as a doc bug
 // rather than surfacing as a confusing runtime error for a reader.
 const MAX_DEPTH = 10;
+const ATTEMPT_TIMEOUT_MS = 30_000;
 
 const files = process.argv.slice(2).length
   ? process.argv.slice(2)
@@ -83,6 +84,10 @@ async function run(query, attempts = 4) {
 
   for (let attempt = 1; attempt <= attempts; attempt++) {
     let res;
+    let body;
+    const controller = new AbortController();
+    const deadline = setTimeout(() => controller.abort(), ATTEMPT_TIMEOUT_MS);
+
     try {
       res = await fetch(ENDPOINT, {
         method: 'POST',
@@ -91,11 +96,26 @@ async function run(query, attempts = 4) {
           'User-Agent': USER_AGENT,
         },
         body: JSON.stringify({ query }),
+        signal: controller.signal,
       });
+
+      if (res.ok) {
+        try {
+          body = await res.json();
+        } catch (err) {
+          if (err?.name === 'AbortError') throw err;
+          return { ok: false, kind: 'endpoint', reason: 'response was not JSON' };
+        }
+      }
     } catch (err) {
-      last = `network error: ${err.message}`;
+      last =
+        err?.name === 'AbortError'
+          ? `request timed out after ${ATTEMPT_TIMEOUT_MS} ms`
+          : `network error: ${err?.message ?? String(err)}`;
       if (attempt < attempts) await sleep(backoff(attempt));
       continue;
+    } finally {
+      clearTimeout(deadline);
     }
 
     if (res.status === 429 || res.status >= 500) {
@@ -124,28 +144,44 @@ async function run(query, attempts = 4) {
     if (!res.ok)
       return { ok: false, kind: 'endpoint', reason: `HTTP ${res.status}` };
 
-    let body;
-    try {
-      body = await res.json();
-    } catch {
-      return { ok: false, kind: 'endpoint', reason: 'response was not JSON' };
+    if (body === null || typeof body !== 'object' || Array.isArray(body)) {
+      return {
+        ok: false,
+        kind: 'endpoint',
+        reason: 'response was not a JSON object',
+      };
+    }
+    if (body.errors !== undefined && !Array.isArray(body.errors)) {
+      return {
+        ok: false,
+        kind: 'endpoint',
+        reason: 'response `errors` was not an array',
+      };
     }
     // A GraphQL error is a documentation bug. Return it, never retry it.
-    if (body.errors) {
+    if (body.errors?.length) {
       return {
         ok: false,
         kind: 'query',
-        reason: body.errors.map((e) => e.message).join('; '),
+        reason: body.errors
+          .map((e) => e?.message ?? 'GraphQL error')
+          .join('; '),
       };
     }
     // Absence of `errors` is not success. A body of `{}` — or `{"data": null}`
     // from a proxy or a partial failure — would otherwise be recorded as a pass,
     // which is the one outcome this gate must never produce.
-    if (body.data === undefined || body.data === null) {
+    if (
+      body.data === undefined ||
+      body.data === null ||
+      typeof body.data !== 'object' ||
+      Array.isArray(body.data) ||
+      Object.keys(body.data).length === 0
+    ) {
       return {
         ok: false,
         kind: 'endpoint',
-        reason: 'response carried neither `data` nor `errors`',
+        reason: 'response carried no non-empty `data` object',
       };
     }
     return { ok: true, body };

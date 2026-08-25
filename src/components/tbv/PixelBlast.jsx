@@ -579,7 +579,7 @@ const PixelBlast = ({
       if (transparent) t.renderer.setClearAlpha(0);
       else t.renderer.setClearColor(0x000000, 1);
       if (t.liquidEffect) {
-        const uStrength = t.liquidEffect;
+        const uStrength = t.liquidEffect.uniforms.get('uStrength');
         if (uStrength) uStrength.value = liquidStrength;
         const uFreq = t.liquidEffect.uniforms.get('uFreq');
         if (uFreq) uFreq.value = liquidWobbleSpeed;
@@ -588,7 +588,6 @@ const PixelBlast = ({
     }
     prevConfigRef.current = cfg;
     return () => {
-      if (threeRef.current && mustReinit) return;
       if (!threeRef.current) return;
       const t = threeRef.current;
       t.resizeObserver?.disconnect();

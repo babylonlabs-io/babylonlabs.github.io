@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { GraphiQL } from 'graphiql';
 import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -21,18 +21,52 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
   const { schema, settled } = useVaultIndexerSchema();
   const fetcher = useMemo(() => createFetcher(), []);
   const fullPage = useBaseUrl('/vault-indexer-explorer');
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const previousFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    const panel = panelRef.current;
+    const focusableSelector =
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key !== 'Tab' || !panel) return;
+
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(focusableSelector)
+      );
+      if (!focusable.length) {
+        e.preventDefault();
+        panel.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!panel.contains(document.activeElement)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', onKey);
+    panel?.focus();
     // Stop the page behind the lightbox from scrolling.
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = previous;
+      if (previousFocus?.isConnected) previousFocus.focus();
     };
   }, [onClose]);
 
@@ -46,7 +80,7 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className={styles.panel}>
+      <div ref={panelRef} className={styles.panel} tabIndex={-1}>
         <header className={styles.header}>
           <span className={styles.title}>Vault Indexer explorer</span>
           <code className={styles.endpoint}>{ENDPOINT}</code>

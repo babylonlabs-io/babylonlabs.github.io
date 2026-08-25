@@ -1,6 +1,7 @@
 import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { ArrowUpRight } from 'lucide-react';
+import PixelCard from './PixelCard';
 
 /**
  * The call to action at the foot of a research page.
@@ -89,10 +90,7 @@ export default function PaperCard({
         : { target: '_blank', rel: 'noopener' })}
     >
       <BrowserOnly fallback={<div className="pixel-card">{body}</div>}>
-        {() => {
-          const PixelCard = require('./PixelCard').default;
-          return <PixelCard variant="paper">{body}</PixelCard>;
-        }}
+        {() => <PixelCard variant="paper">{body}</PixelCard>}
       </BrowserOnly>
     </a>
   );

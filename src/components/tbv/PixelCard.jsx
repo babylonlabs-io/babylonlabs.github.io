@@ -129,9 +129,9 @@ const VARIANTS = {
 
 export default function PixelCard({
   variant = 'default',
-  gap,
-  speed,
-  colors,
+  gap = undefined,
+  speed = undefined,
+  colors = undefined,
   className = '',
   children,
 }) {

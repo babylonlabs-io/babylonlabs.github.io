@@ -35,18 +35,18 @@
 }
 
 .animFadeUp {
-  animation-name: fadeUp;
+  animation-name: fade-up;
   animation-duration: 0.55s;
 }
 
 .animSlideIn {
-  animation-name: slideIn;
+  animation-name: slide-in;
   animation-duration: 0.65s;
 }
 
 /* Popups leave as well as arrive, so this pairs with a later delay. */
 .animSlideOut {
-  animation-name: slideOut;
+  animation-name: slide-out;
   animation-duration: 0.45s;
   animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.35);
 }
@@ -76,7 +76,7 @@
 
 /* Pairs with .animReveal to cross-fade a value that changes mid-scene. */
 .animFadeOut {
-  animation-name: fadeOut;
+  animation-name: fade-out;
   animation-duration: 0.3s;
 }
 
@@ -87,7 +87,7 @@
   animation-timing-function: ease-in-out;
 }
 
-@keyframes fadeUp {
+@keyframes fade-up {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -98,7 +98,7 @@
   }
 }
 
-@keyframes slideIn {
+@keyframes slide-in {
   from {
     opacity: 0;
     transform: translate3d(56px, 8px, 0) scale(0.97);
@@ -109,7 +109,7 @@
   }
 }
 
-@keyframes slideOut {
+@keyframes slide-out {
   from {
     opacity: 1;
     transform: none;
@@ -140,7 +140,7 @@
   }
 }
 
-@keyframes fadeOut {
+@keyframes fade-out {
   from {
     opacity: 1;
   }

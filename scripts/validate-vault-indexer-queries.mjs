@@ -39,15 +39,61 @@ function extractBlocks(text) {
   return blocks;
 }
 
-/** Brace-nesting depth, which is what the server's depth rule counts. */
-function queryDepth(query) {
-  let depth = 0;
-  let max = 0;
-  for (const ch of query.replace(/#[^\n]*/g, '')) {
-    if (ch === '{') max = Math.max(max, ++depth);
-    else if (ch === '}') depth -= 1;
+/** Count selection depth after parsing, including fields reached through fragments. */
+function queryDepth(document) {
+  const fragments = new Map(
+    document.definitions
+      .filter((definition) => definition.kind === 'FragmentDefinition')
+      .map((definition) => [definition.name.value, definition])
+  );
+
+  function selectionDepth(selections, depth, visiting) {
+    let max = depth;
+
+    for (const selection of selections) {
+      if (selection.kind === 'FragmentSpread') {
+        const name = selection.name.value;
+        if (visiting.has(name)) continue;
+        const fragment = fragments.get(name);
+        if (!fragment) continue;
+        const nextVisiting = new Set(visiting);
+        nextVisiting.add(name);
+        max = Math.max(
+          max,
+          selectionDepth(fragment.selectionSet.selections, depth, nextVisiting)
+        );
+        continue;
+      }
+
+      if (selection.kind === 'InlineFragment') {
+        max = Math.max(
+          max,
+          selectionDepth(selection.selectionSet.selections, depth, visiting)
+        );
+        continue;
+      }
+
+      if (selection.selectionSet) {
+        max = Math.max(
+          max,
+          selectionDepth(selection.selectionSet.selections, depth + 1, visiting)
+        );
+      }
+    }
+
+    return max;
   }
-  return max;
+
+  return document.definitions
+    .filter((definition) => definition.kind === 'OperationDefinition')
+    .reduce(
+      (max, operation) =>
+        Math.max(
+          max,
+          selectionDepth(operation.selectionSet.selections, 1, new Set())
+        ),
+      0
+    );
 }
 
 const schema = buildSchema(readFileSync(SDL_PATH, 'utf8'));
@@ -69,20 +115,6 @@ for (const file of files) {
       continue;
     }
 
-    const depth = queryDepth(block.query);
-    if (depth > 10) {
-      console.log(
-        `${label}  FAIL  depth ${depth} exceeds the endpoint cap of 10`
-      );
-      failures.push({
-        file: basename(file),
-        line: block.line,
-        reason: `depth ${depth} > 10`,
-      });
-      fail += 1;
-      continue;
-    }
-
     let document;
     try {
       document = parse(block.query);
@@ -92,6 +124,20 @@ for (const file of files) {
         file: basename(file),
         line: block.line,
         reason: error.message,
+      });
+      fail += 1;
+      continue;
+    }
+
+    const depth = queryDepth(document);
+    if (depth > 10) {
+      console.log(
+        `${label}  FAIL  depth ${depth} exceeds the endpoint cap of 10`
+      );
+      failures.push({
+        file: basename(file),
+        line: block.line,
+        reason: `depth ${depth} > 10`,
       });
       fail += 1;
       continue;

@@ -3,12 +3,11 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import { PRODUCTS } from './content';
 import { staggerContainer, useEntrance } from './motion';
 
 /**
- * The four existing product entry points, restyled into the launch theme.
+ * The three existing product entry points, restyled into the launch theme.
  *
  * Content, links and icons come from PRODUCTS in tbv/content so the
  * copy stays in one place. Only the presentation changes here.
@@ -51,8 +50,7 @@ function ProductCard({
 }
 
 export default function ProductCards(): JSX.Element {
-  const { withBaseUrl } = useBaseUrlUtils();
-  const products = PRODUCTS.map((p) => ({ ...p, link: withBaseUrl(p.link) }));
+  const products = PRODUCTS;
 
   return (
     <section className="bg-background">
