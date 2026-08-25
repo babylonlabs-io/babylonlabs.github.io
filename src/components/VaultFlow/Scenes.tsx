@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import AppShell, { LINE, ORANGE, TEAL } from './AppShell';
+import AppShell, { LINE, ORANGE, Swap, TEAL } from './AppShell';
 import { clickAt, CursorStep } from './cursor';
 import Overview from './Overview';
 import { BorrowPage, DepositPage, LoansPage, SelectAssetPage } from './Pages';
@@ -74,35 +74,6 @@ function Anim({
     >
       {children}
     </div>
-  );
-}
-
-/**
- * Cross-fades a value that changes partway through a scene. Both values share
- * one grid cell so the box sizes to the wider of the two — stacking them with
- * `absolute` would squeeze the incoming value into the outgoing one's width and
- * wrap it a character at a time.
- */
-function Swap({
-  from,
-  to,
-  at,
-}: {
-  from: React.ReactNode;
-  to: React.ReactNode;
-  at: number;
-}) {
-  const cell = { gridArea: '1 / 1' } as const;
-
-  return (
-    <span className="inline-grid whitespace-nowrap">
-      <span className={s.animFadeOut} style={{ ...cell, animationDelay: `${at}s` }}>
-        {from}
-      </span>
-      <span className={s.animReveal} style={{ ...cell, animationDelay: `${at}s` }}>
-        {to}
-      </span>
-    </span>
   );
 }
 

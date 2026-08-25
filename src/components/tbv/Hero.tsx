@@ -27,7 +27,7 @@ export default function Hero(): JSX.Element {
   return (
     <section className="relative isolate overflow-hidden border-b border-border bg-background">
       {/* Client-only: WebGL is unavailable during Docusaurus prerender. */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
         <BrowserOnly fallback={<div />}>
           {() => {
             const PixelBlast = require('./PixelBlast').default;
@@ -39,7 +39,7 @@ export default function Hero(): JSX.Element {
                 patternScale={2}
                 patternDensity={1}
                 pixelSizeJitter={0}
-                enableRipples
+                enableRipples={false}
                 rippleSpeed={0.3}
                 rippleThickness={0.1}
                 rippleIntensityScale={1}

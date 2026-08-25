@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { Gear, LINE, ORANGE, TEAL } from './AppShell';
+import { Gear, LINE, ORANGE, Swap, TEAL } from './AppShell';
 import s from './styles.module.css';
 
 /*
@@ -116,17 +116,6 @@ export function DepositPage({
   providerPressAt: number;
   submitPressAt: number;
 }) {
-  const swap = (from: string, to: string, at: number) => (
-    <span className="inline-grid whitespace-nowrap">
-      <span className={s.animFadeOut} style={{ gridArea: '1 / 1', animationDelay: `${at}s` }}>
-        {from}
-      </span>
-      <span className={s.animReveal} style={{ gridArea: '1 / 1', animationDelay: `${at}s` }}>
-        {to}
-      </span>
-    </span>
-  );
-
   return (
     <FullPage>
       <div className="absolute left-1/2 top-[92px] w-[560px] -translate-x-1/2">
@@ -147,7 +136,7 @@ export function DepositPage({
               className="ml-auto rounded px-4 py-2 text-right text-[20px] tabular-nums"
               style={{ background: '#f1f4f6', color: MUTED, minWidth: 96 }}
             >
-              {swap('0', '0.02', amountAt)}
+              <Swap from="0" to="0.02" at={amountAt} />
             </span>
           </div>
 
@@ -163,7 +152,7 @@ export function DepositPage({
           </div>
 
           <div className="flex items-center text-[15px]" style={{ color: MUTED }}>
-            <span>{swap('$0.00 USD', '$1,276.52 USD', amountAt)}</span>
+            <span><Swap from="$0.00 USD" to="$1,276.52 USD" at={amountAt} /></span>
             <span className="ml-auto flex items-center gap-2">
               Balance: 0.05196029 sBTC <Info />
               <span className="rounded px-2 py-0.5" style={{ background: '#eef2f4' }}>
@@ -175,7 +164,7 @@ export function DepositPage({
           <div className="mt-3 flex items-center text-[15px]" style={{ color: TEAL }}>
             <span>Max to Borrow:</span>
             <span className="ml-auto">
-              {swap('-- (CF=78%)', '$995.68 (CF=78%)', amountAt)}
+              <Swap from="-- (CF=78%)" to="$995.68 (CF=78%)" at={amountAt} />
             </span>
           </div>
         </div>
@@ -193,7 +182,9 @@ export function DepositPage({
           className={clsx(s.animPress, 'mt-4 flex items-center rounded-lg px-5 py-4 text-[17px]')}
           style={{ background: '#f7f9fa', animationDelay: `${providerPressAt}s` }}
         >
-          <span style={{ color: TEAL }}>{swap('Select vault provider', 'Babylon Labs', providerAt)}</span>
+          <span style={{ color: TEAL }}>
+            <Swap from="Select vault provider" to="Babylon Labs" at={providerAt} />
+          </span>
           <span className="ml-auto" style={{ color: TEAL }}>
             ⌄
           </span>
@@ -231,7 +222,7 @@ export function DepositPage({
             <div key={k} className="flex">
               <span style={{ color: TEAL }}>{k}</span>
               <span className="ml-auto" style={{ color: MUTED }}>
-                {swap('--', v, amountAt)}
+                <Swap from="--" to={v} at={amountAt} />
               </span>
             </div>
           ))}
@@ -320,17 +311,6 @@ export function BorrowPage({
   amountAt: number;
   submitPressAt: number;
 }) {
-  const swap = (from: React.ReactNode, to: React.ReactNode, at: number) => (
-    <span className="inline-grid whitespace-nowrap">
-      <span className={s.animFadeOut} style={{ gridArea: '1 / 1', animationDelay: `${at}s` }}>
-        {from}
-      </span>
-      <span className={s.animReveal} style={{ gridArea: '1 / 1', animationDelay: `${at}s` }}>
-        {to}
-      </span>
-    </span>
-  );
-
   return (
     <FullPage>
       <div className="absolute left-1/2 top-[128px] w-[560px] -translate-x-1/2">
@@ -358,7 +338,7 @@ export function BorrowPage({
               className="ml-auto rounded px-4 py-2.5 text-right text-[20px] tabular-nums"
               style={{ background: '#eef2f4', color: MUTED, minWidth: 200 }}
             >
-              {swap('0', '165.49688157', amountAt)}
+              <Swap from="0" to="165.49688157" at={amountAt} />
             </span>
           </div>
 
@@ -370,7 +350,7 @@ export function BorrowPage({
           </div>
 
           <div className="flex items-center text-[15px]" style={{ color: MUTED }}>
-            <span>{swap('$0.00 USD', '$165.50 USD', amountAt)}</span>
+            <span><Swap from="$0.00 USD" to="$165.50 USD" at={amountAt} /></span>
             <span className="ml-auto flex items-center gap-2">
               Available: 479.701106 USDC
               <span className="rounded px-2 py-0.5" style={{ background: '#eef2f4' }}>
@@ -410,15 +390,11 @@ export function BorrowPage({
               Health factor <Info />
             </span>
             <span className="ml-auto flex items-center gap-1.5" style={{ color: TEAL }}>
-              {swap(
-                <>
-                  <Heart /> 2.41
-                </>,
-                <>
-                  <Heart /> 2.41 → <Heart colour="#3ea76a" /> 1.94
-                </>,
-                amountAt,
-              )}
+              <Swap
+                from={<><Heart /> 2.41</>}
+                to={<><Heart /> 2.41 → <Heart colour="#3ea76a" /> 1.94</>}
+                at={amountAt}
+              />
             </span>
           </div>
         </div>

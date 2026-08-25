@@ -172,10 +172,9 @@
    such as `border-border/60` keep working.
    ───────────────────────────────────────────────────────────────────── */
 :root {
-  /* The site is dark only, so there is one palette and it lives here rather
-     than in a [data-theme] branch. Declaring it on :root also means the
-     first paint is already dark, with no flash before the theme attribute
-     is applied.
+  /* The light palette is the default and lives on :root. The dark palette
+     overrides these values in the [data-theme='dark'] branch below. This
+     keeps the first paint aligned with the default theme.
 
      The ground is a neutral near-black rather than the design's navy: navy
      at full-page scale reads as a colour cast, and the brief is a simple
@@ -187,12 +186,8 @@
      for body text, so the true brand colour is used directly for links as
      well as fills. On the design's own warm ground it managed only 3.35:1
      and needed a darkened substitute. */
-  /* Two themes, both from Babylon's own values.
-
-     Light is the palette the marketing site runs on, measured from
-     babylonlabs.io, with the kit's own basic/black/high for text. Dark is the
-     TBV app library (Premium Design, node 8469-28288). Neither is invented:
-     the toggle moves between two surfaces the company already ships. */
+  /* The light palette comes from the marketing site. The dark palette comes
+     from the TBV app library. Both palettes use values Babylon already ships. */
   --tbv-background: 255 255 255; /* #ffffff basic/white/high */
   --tbv-foreground: 17 17 17; /* #111111 basic/black/high */
   --tbv-muted: 245 247 242; /* #f5f7f2, the marketing site's off-white */
@@ -220,8 +215,6 @@
   --tbv-font-serif: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Kept so any component still keyed to the attribute resolves to the same
-   single palette. Values are identical to :root by design. */
 /* Dark: the TBV app's library values. */
 html[data-theme='dark'] {
   --tbv-background: 17 17 17;
@@ -452,7 +445,7 @@ body {
 /* Babylon Docs Tokens */
 :root {
   --docs-color-primary: #ce6533;
-  --docs-color-primary-tint: rgba(247, 147, 26, 0.16);
+  --docs-color-primary-tint: rgba(206 101 51 / 0.16);
   --docs-color-primary-tint-light: rgba(206 101 51 / 0.24);
 
   --docs-color-border: #dadde1;

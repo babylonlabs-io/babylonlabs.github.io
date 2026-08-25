@@ -535,22 +535,6 @@ const config = {
               },
             ],
           },
-          {
-            title: 'For AI agents',
-            items: [
-              {
-                // Machine-readable index of the documentation, served from
-                // static/. Use `to` with the pathname: prefix so Docusaurus
-                // treats it as a static file rather than a route.
-                label: 'llms.txt',
-                to: 'pathname:///llms.txt',
-              },
-              {
-                label: 'llms-full.txt',
-                to: 'pathname:///llms-full.txt',
-              },
-            ],
-          },
         ],
         copyright: 'Copyright © Babylon Labs since 2023. All rights reserved.',
       },

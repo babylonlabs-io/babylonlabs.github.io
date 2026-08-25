@@ -134,33 +134,34 @@ export default function AskHero(): JSX.Element {
     <div className="mx-auto w-full max-w-2xl">
       <div className="relative">
         {showMenu && (
-          <ul
+          <div
+            id="ask-hero-command-list"
             role="listbox"
             aria-label="Commands"
             className="absolute bottom-full z-20 mb-2 w-full border border-border bg-background py-1"
           >
             {matches.map((cmd, i) => (
-              <li key={cmd.name}>
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={i === activeCmd}
-                  onMouseEnter={() => setActiveCmd(i)}
-                  onClick={() => runCommand(cmd)}
-                  className={`flex w-full items-baseline gap-3 px-3 py-2 text-left transition-colors ${
-                    i === activeCmd ? 'bg-muted' : ''
-                  }`}
-                >
-                  <span className="font-label text-xs text-muted-foreground">
-                    {cmd.name}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {cmd.hint}
-                  </span>
-                </button>
-              </li>
+              <button
+                key={cmd.name}
+                id={`ask-hero-command-${cmd.name.slice(1)}`}
+                type="button"
+                role="option"
+                aria-selected={i === activeCmd}
+                onMouseEnter={() => setActiveCmd(i)}
+                onClick={() => runCommand(cmd)}
+                className={`flex w-full items-baseline gap-3 px-3 py-2 text-left transition-colors ${
+                  i === activeCmd ? 'bg-muted' : ''
+                }`}
+              >
+                <span className="font-label text-xs text-muted-foreground">
+                  {cmd.name}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {cmd.hint}
+                </span>
+              </button>
             ))}
-          </ul>
+          </div>
         )}
 
         <form
@@ -182,6 +183,10 @@ export default function AskHero(): JSX.Element {
               onKeyDown={onKeyDown}
               placeholder="Ask anything, or type / for commands"
               aria-label="Ask Babylon AI a question"
+              role="combobox"
+              aria-controls="ask-hero-command-list"
+              aria-expanded={showMenu}
+              aria-activedescendant={showMenu ? `ask-hero-command-${matches[activeCmd]?.name.slice(1)}` : undefined}
               className="block max-h-40 min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-left font-ui text-[15px] leading-6 text-foreground outline-none placeholder:text-muted-foreground"
             />
 

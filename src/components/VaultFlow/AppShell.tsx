@@ -17,6 +17,30 @@ export const TEAL = '#12495e';
 export const ORANGE = '#ce6533';
 export const LINE = '#d7e1e7';
 
+/** Cross-fades two values in one grid cell during a scene. */
+export function Swap({
+  from,
+  to,
+  at,
+}: {
+  from: React.ReactNode;
+  to: React.ReactNode;
+  at: number;
+}) {
+  const cell = { gridArea: '1 / 1' } as const;
+
+  return (
+    <span className="inline-grid whitespace-nowrap">
+      <span className={s.animFadeOut} style={{ ...cell, animationDelay: `${at}s` }}>
+        {from}
+      </span>
+      <span className={s.animReveal} style={{ ...cell, animationDelay: `${at}s` }}>
+        {to}
+      </span>
+    </span>
+  );
+}
+
 function NavItem({
   label,
   icon,

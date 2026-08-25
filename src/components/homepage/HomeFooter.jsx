@@ -41,6 +41,7 @@ const COLUMNS = [
       { label: 'Bitcoin Staking', to: ROUTES.bitcoinStaking },
       { label: 'Babylon Genesis', to: ROUTES.babylonGenesis },
       { label: 'API reference', to: ROUTES.apiReference },
+      { label: 'Research paper', to: ROUTES.research },
     ],
   },
   {
@@ -48,7 +49,6 @@ const COLUMNS = [
     links: [
       { label: 'llms.txt', href: 'pathname:///llms.txt' },
       { label: 'llms-full.txt', href: 'pathname:///llms-full.txt' },
-      { label: 'Research paper', to: ROUTES.research },
     ],
   },
   {
@@ -56,8 +56,6 @@ const COLUMNS = [
     links: [
       { label: 'Babylon Labs', href: 'https://babylonlabs.io' },
       { label: 'GitHub', href: 'https://github.com/babylonlabs-io' },
-      { label: 'Privacy Policy', href: 'https://babylonlabs.io/privacy-policy' },
-      { label: 'Terms of Service', href: 'https://babylonlabs.io/terms' },
     ],
   },
 ];
@@ -86,11 +84,12 @@ const SOCIAL = [
 const APP_URL = 'https://btc-vaults.testnet.babylonlabs.io/';
 
 function FooterLink({ label, to, href }) {
+  const navigation = href ? { href } : { to };
+
   return (
     <li>
       <Link
-        to={to}
-        href={href}
+        {...navigation}
         className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground hover:no-underline"
       >
         {label}

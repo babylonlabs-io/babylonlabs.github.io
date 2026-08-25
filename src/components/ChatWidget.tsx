@@ -127,6 +127,7 @@ export default function ChatWidget() {
   const [inputError, setInputError] = useState<string | null>(null);
   const pendingQueryRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const handleSubmitRef = useRef<(e?: React.FormEvent, directQuestion?: string) => Promise<void>>();
   
@@ -480,6 +481,7 @@ export default function ChatWidget() {
     }]);
 
     setInput('');
+    if (inputRef.current) inputRef.current.style.height = 'auto';
     setInputError(null);
     setIsLoading(true);
 
@@ -513,9 +515,13 @@ export default function ChatWidget() {
       const decoder = new TextDecoder();
       let accumulatedContent = '';
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      let done = false;
+      while (!done) {
+        const { done: readDone, value } = await reader.read();
+        if (readDone) {
+          done = true;
+          break;
+        }
 
         const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split('\n');
@@ -583,17 +589,13 @@ export default function ChatWidget() {
         isErrorMessage = true;
       }
 
-      updateCurrentSessionMessages(prev => {
-        const lastMsg = prev[prev.length - 1];
-        if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
-          return prev.map(msg =>
-            msg.id === lastMsg.id
-              ? { ...msg, content: errorMessage, isError: isErrorMessage }
-              : msg
-          );
-        }
-        return prev;
-      });
+      updateCurrentSessionMessages(prev => prev.map(msg => {
+        if (msg.id !== aiMessageId) return msg;
+        const content = msg.content
+          ? `${msg.content}\n\n${errorMessage}`
+          : errorMessage;
+        return { ...msg, content, isError: isErrorMessage };
+      }));
     } finally {
       setIsLoading(false);
       abortControllerRef.current = null;
@@ -885,6 +887,7 @@ export default function ChatWidget() {
                     <form onSubmit={handleSubmit} className="chat-input p-3">
                       <div className="chat-composer flex items-end gap-1.5 p-1.5">
                         <textarea
+                          ref={inputRef}
                           rows={1}
                           value={input}
                           onChange={(e) => {

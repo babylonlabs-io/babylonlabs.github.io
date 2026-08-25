@@ -5,6 +5,8 @@ import {
   ShieldCheckmarkRegular,
   WalletCreditCardRegular,
 } from '@fluentui/react-icons';
+import type { FluentIcon } from '@fluentui/react-icons';
+import { ROUTES } from './routes';
 
 /**
  * Landing page content.
@@ -22,7 +24,7 @@ import {
 export type Product = {
   title: string;
   link: string;
-  icon: any;
+  icon: FluentIcon;
   text: string;
 };
 
@@ -30,19 +32,19 @@ export type Product = {
 export const PRODUCTS: Product[] = [
   {
     title: 'TBV Testnet docs',
-    link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+    link: ROUTES.whatIsTbv,
     icon: DiversityRegular,
     text: 'Start with the open Testnet documentation for Babylon Trustless Bitcoin Vault and the Aave v4 lending integration.',
   },
   {
     title: 'Create a vault',
-    link: '/trustless-bitcoin-vault/use-for-lending/create-a-vault',
+    link: ROUTES.createVault,
     icon: RocketRegular,
     text: 'Lock signet BTC on Bitcoin, activate the vault, and have it supplied automatically as collateral.',
   },
   {
     title: 'Borrow and redeem',
-    link: '/trustless-bitcoin-vault/use-for-lending/quickstart',
+    link: ROUTES.quickstart,
     icon: DocumentChevronDoubleRegular,
     text: 'Walk through peg-in, borrow, repay, withdraw, and Bitcoin redemption end to end.',
   },
@@ -50,7 +52,7 @@ export const PRODUCTS: Product[] = [
 
 export type Guide = {
   title: string;
-  icon: any;
+  icon: FluentIcon;
   text: string;
   link: string;
 };
@@ -60,13 +62,13 @@ export const guides: Guide[] = [
     title: 'Trustless Bitcoin Vault',
     icon: ShieldCheckmarkRegular,
     text: 'Native Bitcoin collateral for Ethereum DeFi, with BTC remaining locked on Bitcoin.',
-    link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+    link: ROUTES.whatIsTbv,
   },
   {
     title: 'Bitcoin Staking',
     icon: WalletCreditCardRegular,
     text: 'Native BTC staking docs, research papers, and staking security reports.',
-    link: '/guides/overview/bitcoin_staking/',
+    link: ROUTES.bitcoinStaking,
   },
 ];
 
@@ -81,11 +83,11 @@ export const samples: Sample[] = [
   {
     title: 'Babylon Genesis',
     platform: 'Chain basics, governance, developers, and operators',
-    demo: '/guides/overview/babylon_genesis/',
+    demo: ROUTES.babylonGenesis,
   },
   {
     title: 'API reference',
     platform: 'Staking API, Babylon gRPC, and CometBFT',
-    demo: '/api/staking-api/babylon-staking-api/',
+    demo: ROUTES.apiReference,
   },
 ];

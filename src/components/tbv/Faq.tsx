@@ -143,7 +143,7 @@ function Row({
           type="button"
           onClick={onToggle}
           aria-expanded={open}
-          aria-controls={`${id}-panel`}
+          aria-controls={open ? `${id}-panel` : undefined}
           id={`${id}-button`}
           className="focus-ring flex w-full items-start justify-between gap-6 py-6 text-left"
         >

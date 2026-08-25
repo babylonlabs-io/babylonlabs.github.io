@@ -229,7 +229,6 @@ export default function PixelCard({
       observer.disconnect();
       cancelAnimationFrame(animationRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finalGap, finalSpeed, finalColors]);
 
   return (

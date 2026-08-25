@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { LINE, ORANGE, TEAL } from './AppShell';
+import { LINE, TEAL } from './AppShell';
 import s from './styles.module.css';
 
 /** The Overview page — Position, Risk, Liquidation Analysis — as the app has it. */
@@ -218,7 +218,6 @@ export default function Overview({
         </p>
       </div>
 
-      <span className="hidden" style={{ color: ORANGE }} />
     </div>
   );
 }

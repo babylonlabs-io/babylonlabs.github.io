@@ -25,9 +25,6 @@ module.exports = {
         code: ['var(--tbv-font-code)'],
         label: ['var(--tbv-font-sans)'],
       },
-      borderRadius: {
-        sm: '4px',
-      },
       screens: {
         // `sm` was pinned to 0px, which made every `sm:` class match at all
         // widths. That left only md (768) and lg (997) as real breakpoints, so

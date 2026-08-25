@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ReactNode } from 'react';
 
 /**
  * Section heading.
@@ -28,34 +27,5 @@ export function SectionRule({
       </span>
       <span className="font-label text-sm text-foreground">{label}</span>
     </div>
-  );
-}
-
-/**
- * Section wrapper. One rhythm for the whole page, so nothing has to decide
- * its own spacing. `tone` picks the ground: the review asks for background
- * colours that separate neighbouring sections rather than one flat page.
- */
-export function Section({
-  index,
-  label,
-  children,
-  className = '',
-  tone = 'base',
-}: {
-  index: string;
-  label: string;
-  children: ReactNode;
-  className?: string;
-  tone?: 'base' | 'raised';
-}): JSX.Element {
-  const ground = tone === 'raised' ? 'bg-contrast' : 'bg-background';
-  return (
-    <section className={`${ground} ${className}`}>
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-        <SectionRule index={index} label={label} className="mb-12" />
-        {children}
-      </div>
-    </section>
   );
 }
