@@ -47,7 +47,10 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
 
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (!panel.contains(document.activeElement)) {
+      if (document.activeElement === panel) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (!panel.contains(document.activeElement)) {
         e.preventDefault();
         (e.shiftKey ? last : first).focus();
       } else if (e.shiftKey && document.activeElement === first) {
@@ -91,7 +94,12 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
           >
             Full explorer
           </a>
-          <button type="button" className={styles.close} onClick={onClose} aria-label="Close explorer">
+          <button
+            type="button"
+            className={styles.close}
+            onClick={onClose}
+            aria-label="Close explorer"
+          >
             Close
           </button>
         </header>
