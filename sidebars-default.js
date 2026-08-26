@@ -276,7 +276,7 @@ const sidebars = {
       ],
     },
   ],
-  // Trustless Bitcoin Vault sidebar — top-nav home for the open Testnet docs
+  // Trustless Bitcoin Vaults sidebar — top-nav home for the open Testnet docs
   trustlessBitcoinVault: [
     {
       type: 'category',

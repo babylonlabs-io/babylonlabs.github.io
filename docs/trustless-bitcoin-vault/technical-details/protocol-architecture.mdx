@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Protocol architecture
 
-The Trustless Bitcoin Vault (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
+The Babylon Trustless Bitcoin Vaults (TBV) protocol has three layers: Bitcoin scripts and transactions, Ethereum contracts, and off-chain participant software. For the trust model, see [Safety & trust assumptions](../start-here/safety-and-trust-assumptions.mdx).
 
 ![TBV architecture: BTCVaults on Bitcoin, protocol and Aave v4 contracts on Ethereum, and off-chain protocol actors](/img/trustless-bitcoin-vault/confluence/technical-details/protocol-architecture/10.png)
 
@@ -26,14 +26,14 @@ The core protocol contracts manage vault accounting and shared infrastructure:
 * **Protocol parameters**: stores versioned protocol parameters: timelocks, confirmation depth, actor sets, Security Council keys, and off-chain parameters.
 * **Application registry**: lists DeFi applications approved to receive vaults. Currently only the Aave v4 adapter is registered.
 * **Cap policy**: enforces per-application and per-address BTC exposure caps at vault activation.
-* **Fee escrow**: collects the peg-in fee and distributes it to the Vault Provider, Universal Challengers, and Application Vault Keepers.
+* **Fee escrow**: collects the peg-in fee and distributes it to the Vault Provider, Universal Challengers, and App Keepers.
 
 ### On Ethereum: application integration contracts
 
 Each registered application adds its own integration layer. For the Aave v4 integration:
 
 * **Aave adapter**: user-facing entry point for the integration. Translates user actions such as borrow, repay, and withdraw into vault operations.
-* **BTC Vault Swap Spoke**: default Liquidation Liquidity Provider (LLP) for the Aave integration. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Lending Spoke for vault collateral.
+* **BTCVault Swap Spoke**: default Liquidation Liquidity Provider (LLP) for the Aave integration. It is registered as its own Aave Hub spoke for WBTC liquidity, distinct from the Babylon Core Lending Spoke for vault collateral.
 
 A new application needs its own contracts and governance registration. A vault is created for one application and cannot be moved to another application later. For the full lending stack, see [Aave v4 integration](./aave-v4-integration.mdx).
 
@@ -42,7 +42,7 @@ A new application needs its own contracts and governance registration. A vault i
 Off-chain refers to participant software and protocols, not custody.
 
 * **Protocols.** The BABE cut-and-choose protocol establishes garbled circuit instances between claimer-challenger pairs at vault creation. Signature exchange assembles the transaction graph. The SP1 proof pipeline generates the proofs needed for peg-out claims.
-* **Participants.** The Vault Provider, Application Vault Keepers, and Universal Challengers each run vault management software. Per-actor responsibilities are on [Protocol actors](./protocol-actors.mdx).
+* **Participants.** The Vault Provider, App Keepers, and Universal Challengers each run vault management software. Per-actor responsibilities are on [Protocol actors](./protocol-actors.mdx).
 * **Storage.** Participants store the artifacts needed for proof verification and challenge flows. The depositor receives their own claimer artifacts plus a WOTS keypair file; both are required for the self-claim fallback.
 
 ## Peg-in mechanism
@@ -65,7 +65,7 @@ While confirmations accumulate on Bitcoin:
 
 * **Depositor authentication.** The depositor authenticates to the Vault Provider using a challenge-response anchor.
 * **WOTS keypair setup.** The depositor generates a Winternitz One-Time Signature (WOTS) keypair. The public key hash is committed in the vault's on-chain record.
-* **BABE setup.** The Vault Provider, Application Vault Keepers, and Universal Challengers run the BABE cut-and-choose protocol to establish garbled-circuit instances for the claim and challenge paths.
+* **BABE setup.** The Vault Provider, App Keepers, and Universal Challengers run the BABE cut-and-choose protocol to establish garbled-circuit instances for the claim and challenge paths.
 
 ### Phase 3: signatures and acknowledgments
 
@@ -86,7 +86,7 @@ Any party, typically the Vault Provider, observing the activation notification c
 Peg-out releases the BTC on Bitcoin after a vault is redeemed on Ethereum. The Bitcoin side knows only "redeem"; the application layer translates user actions into the redeem call. Two common Ethereum-side triggers start redemption:
 
 * The depositor calls the application's withdrawal function, on the Aave adapter, after repaying outstanding debt.
-* An application-specific liquidation seizes one or more vaults. For the Aave v4 integration, this is either the direct BTC redemption path for registered arbitrageurs or the permissionless LLP-routed path that escrows the seized vault in the BTC Vault Swap Spoke to receive WBTC.
+* An application-specific liquidation seizes one or more vaults. For the Aave v4 integration, this is either the direct BTC redemption path for registered Arbitrageurs or the permissionless LLP-routed path that escrows the seized vault in the BTCVault Swap Spoke to receive WBTC.
 
 The protocol identifies the authorized claimers for the Bitcoin-side redemption path. The Vault Provider drives the standard path. The depositor has a parallel self-claim path using the WOTS keypair and claimer artifacts saved at peg-in.
 
@@ -107,7 +107,7 @@ With the proof generated, the claimer follows the Bitcoin-side flow:
 
 * **Claim transaction.** Spends from the vault's Taproot output through the redemption claim path.
 * **Assert transaction.** Commits to the proof using WOTS signatures. It is broadcast within the assert window (432 BTC blocks, approximately 3 days on the public testnet).
-* **Challenge window.** During the challenge window, a Universal Challenger, relevant Vault Keeper, or the depositor using their artifacts can dispute an invalid proof.
+* **Challenge window.** During the challenge window, any Vault Keeper committed to the vault, or the depositor using their artifacts, can dispute an invalid proof.
 * **Payout.** If no valid challenge succeeds within the window, the pre-signed payout path releases BTC to the destination fixed at vault creation. For normal withdrawal this is the depositor's Bitcoin address, minus the Vault Provider's commission. For liquidation this is the authorized liquidation claimant's Bitcoin address.
 
 If a challenge is raised, the flow moves to dispute resolution.
@@ -123,7 +123,7 @@ Bitcoin's native scripts cannot directly verify ZK proofs. Verification happens 
 ### Block an invalid claim
 
 * The claimer broadcasts the Claim and Assert transactions. The Assert transaction commits WOTS signatures of an invalid proof.
-* A Universal Challenger, relevant Vault Keeper, or the depositor detects the invalid proof and replays it under the BABE input labels established during peg-in. They broadcast a challenge transaction on Bitcoin.
+* A Vault Keeper committed to the vault, or the depositor, detects the invalid proof and replays it under the BABE input labels established during peg-in. They broadcast a challenge transaction on Bitcoin.
 * The claimer cannot reveal a refuting secret because no valid proof exists. They cannot post a wrongly challenged transaction.
 * After the disprove timelock (108 BTC blocks, approximately 18 hours on the public testnet) expires, the challenger broadcasts a no-payout transaction, finalizing the dispute. The claimer's bond is forfeited and the invalid claim is blocked.
 

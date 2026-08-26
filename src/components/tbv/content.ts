@@ -32,7 +32,7 @@ export const PRODUCTS: Product[] = [
     title: 'TBV Testnet docs',
     link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
     icon: DiversityRegular,
-    text: 'Start with the open Testnet documentation for Babylon Trustless Bitcoin Vault and the Aave v4 lending integration.',
+    text: 'Start with the open Testnet documentation for Babylon Trustless Bitcoin Vaults and the Aave v4 lending integration.',
   },
   {
     title: 'Create a vault',
@@ -57,7 +57,7 @@ export type Guide = {
 
 export const guides: Guide[] = [
   {
-    title: 'Trustless Bitcoin Vault',
+    title: 'Trustless Bitcoin Vaults',
     icon: ShieldCheckmarkRegular,
     text: 'Native Bitcoin collateral for Ethereum DeFi, with BTC remaining locked on Bitcoin.',
     link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',

@@ -5,7 +5,7 @@
  * so a wrong route fails the production build rather than shipping a 404.
  */
 export const ROUTES = {
-  // Trustless Bitcoin Vault
+  // Trustless Bitcoin Vaults
   whatIsTbv: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
   howItWorks: '/trustless-bitcoin-vault/start-here/how-it-works/',
   safety: '/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/',

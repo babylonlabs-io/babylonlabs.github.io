@@ -20,8 +20,8 @@ type Command = { name: string; hint: string; question: string };
 const COMMANDS: Command[] = [
   {
     name: '/vault',
-    hint: 'What a Trustless Bitcoin Vault is',
-    question: 'What is a Trustless Bitcoin Vault?',
+    hint: 'What Babylon Trustless Bitcoin Vaults are',
+    question: 'What are Babylon Trustless Bitcoin Vaults?',
   },
   {
     name: '/create',
