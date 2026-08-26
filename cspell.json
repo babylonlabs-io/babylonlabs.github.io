@@ -20,8 +20,8 @@
     { "name": "MdFencedCode", "pattern": "/^ {0,3}(```|~~~)[\\s\\S]*?^ {0,3}\\1/gm" },
     { "name": "MdInlineCode", "pattern": "/`[^`\\n]+`/g" },
     { "name": "MdxImportExport", "pattern": "/^(import|export) .*$/gm" },
-    { "name": "MdxJsxTag", "pattern": "/<[A-Za-z][^>]*>/g" },
-    { "name": "Bech32Addr", "pattern": "/\\b(bbn|bc1|tb1|bcrt1)[02-9ac-hj-np-z]{8,}\\b/g" },
+    { "name": "MdxJsxTag", "pattern": "/<\\/?[A-Za-z][^>]*>/g" },
+    { "name": "Bech32Addr", "pattern": "/\\b(bbn1|bc1|tb1|bcrt1)[02-9ac-hj-np-z]{8,}\\b/g" },
     { "name": "HexAddr", "pattern": "/\\b0x[0-9a-fA-F]{6,}\\b/g" }
   ],
   "ignoreRegExpList": [
