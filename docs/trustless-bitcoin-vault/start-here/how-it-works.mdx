@@ -23,7 +23,12 @@ Vault creation locks BTC into a Bitcoin transaction and registers the vault on E
 
 The depositor submits a peg-in request to the BTC Vault Manager contract on Ethereum. The request includes a hashlock — the SHA-256 hash of a secret only the depositor knows — and the chosen Vault Provider. The depositor then broadcasts the Pre-PegIn Bitcoin transaction that locks BTC into a Taproot address committed to that hashlock.
 
-While the Pre-PegIn transaction accumulates Bitcoin confirmations, the depositor and the App Keepers (off-chain participants that co-sign the vault's transaction graph; none of them have custody of the depositor's BTC) complete an off-chain setup. They construct the vault's transaction graph: the complete set of pre-signed transactions covering every legitimate spend path (each redemption path, challenge response, and the Pre-PegIn refund). Each participant signs their part.
+While the Pre-PegIn transaction accumulates Bitcoin confirmations, the
+depositor, Vault Provider, App Keepers, and Universal Challengers complete an
+off-chain setup. These participants co-sign the vault's transaction graph, the
+complete set of pre-signed transactions covering every legitimate spend path.
+None of them has custody of the depositor's BTC. Each participant signs their
+part.
 
 First, all required participants collect and submit their signatures. Once the signatures are in, the depositor reveals the hashlock secret on Ethereum, and the vault becomes active. The protocol uses the secret to construct the final witness for the Bitcoin transaction that locks the BTC inside the BTC Vault.
 

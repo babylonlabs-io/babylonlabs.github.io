@@ -49,6 +49,9 @@ without requiring a Bitcoin soft fork.
 on the Bitcoin Network, locked in a Taproot script with pre-signed spend paths,
 and linked to a collateral record on the integrated chain.
 
+Use **BTCVault** for the protocol product noun. Use "BTC vault" only when
+describing a generic Bitcoin vault.
+
 **BTCVault Swap Spoke.** The first Liquidation Liquidity Provider registered for
 the Aave v4 integration, deployed as the `BTCVaultSwap` contract and registered as
 its own WBTC spoke on the Aave v4 Hub, distinct from the Babylon Core Lending
@@ -63,9 +66,9 @@ would not exceed either cap. See
 [Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/).
 
 **Challenge period.** The fraud-proof window, roughly 72 hours, during which a
-Vault Keeper or the depositor can dispute a claim on the Bitcoin Network. If no
-challenge arrives before the window closes, the claim finalizes and the BTC is
-released to the authorized claimer. See
+Vault Keeper, Universal Challenger, or the depositor can dispute a claim on the
+Bitcoin Network. If no challenge arrives before the window closes, the claim
+finalizes and the BTC is released to the authorized claimer. See
 [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
 
 **Cliff effect.** The risk that a single-vault position is fully seized at
@@ -78,7 +81,7 @@ toward borrowing capacity. At the current public-testnet collateral factor of
 78%, $60,000 of BTC collateral supports up to $46,800 of borrows. See
 [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
 
-**Collateral record.** The on-chain record that recognises the Bitcoin held in a
+**Collateral record.** The on-chain record that recognizes the Bitcoin held in a
 BTCVault, used as collateral by a DeFi application. For the Aave v4 integration
 it is created as a transfer-restricted ERC-20 record internal to the Aave
 Adapter so the market can recognize the vault as collateral — not a wrapped
@@ -162,7 +165,8 @@ liquidation while the sacrificial vault is seized. See
 [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
 
 **Redeem.** Unlocking and returning native BTC from a BTCVault to the authorized
-claimer. Also called vault redemption.
+claimer after the redemption claim passes its challenge period. See
+[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
 
 **Sacrificial vault.** In a two-vault position, the vault placed first in the
 liquidation order. It is sized to cover the protocol's expected seizure amount
@@ -172,8 +176,8 @@ so that only this vault is seized if the position becomes liquidatable. See
 **Security Council.** The protocol's last-resort safeguard. Withdrawing
 collateral requires a valid cryptographic proof. If that proof system contained
 a bug, the Security Council can block the withdrawal. The council is a small,
-trusted group whose authority is strictly limited to blocking invalid claims. It
-can never move, seize, or redeem a depositor's Bitcoin.
+trusted group that can also place the protocol into a soft pause or full pause.
+It can never move, seize, or redeem a depositor's Bitcoin.
 
 **SP1 proof.** A zero-knowledge proof generated off-chain to prove that an
 Ethereum event occurred. The proof is then aggregated and verified on Bitcoin
@@ -227,8 +231,7 @@ invalid claims. A depositor can also act as their own Vault Provider.
 a vault's redemption payout. The rate is embedded in the pre-signed payout
 transactions at vault creation.
 
-**Vault redemption.** Releasing native BTC from a BTCVault to the authorized
-claimer.
+**Vault redemption.** See **Redeem**.
 
 **Withdraw.** Removing collateral, meaning BTCVaults, or borrowed assets from a
 position.

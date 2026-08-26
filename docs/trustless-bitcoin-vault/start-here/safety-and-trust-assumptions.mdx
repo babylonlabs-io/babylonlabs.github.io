@@ -15,7 +15,7 @@ This page describes the protocol's safety guarantees, the roles other parties pl
 
 The protocol's trust model has two principles that distinguish it from custodial or bridge-based alternatives:
 
-* **Trust is optional.** For custody-critical outcomes, the depositor holds the keys and artifacts needed to recover BTC or block an invalid claim without trusting a specific participant. The main paths are self-claim at redemption, self-refund of a stalled peg-in, and depositor-side challenge using the artifacts saved at peg-in. The depositor cannot register as an App Keeper or Universal Challenger, but does not need to in order to protect their own vault.
+* **Trust is optional.** For custody-critical outcomes, the depositor holds the keys and artifacts needed to recover BTC or block an invalid claim without trusting a specific participant. The main paths are self-claim at redemption, self-refund of a stalled peg-in, and depositor-side challenge using the artifacts saved at peg-in. The depositor cannot register as an App Keeper or Universal Challenger, but does not need to do so to protect their own vault.
 * **Trust is removable.** Emergency multisigs and other transitional safety nets are intended to be reduced or retired as the protocol matures. Operator sets are expected to become broader and more independent over time.
 
 The depositor has four practical paths that do not depend on a specific operator:
