@@ -125,6 +125,11 @@ const plugins = [
           from: '/trustless-bitcoin-vault/tbv-vs-alternatives/',
           to: '/trustless-bitcoin-vault/start-here/tbv-vs-alternatives/',
         },
+        // TBV FAQ promoted to a top-level page
+        {
+          from: '/trustless-bitcoin-vault/use-for-lending/faq/',
+          to: '/trustless-bitcoin-vault/faq/',
+        },
         // Staking research/security moved under Bitcoin Staking
         {
           from: '/guides/research/',

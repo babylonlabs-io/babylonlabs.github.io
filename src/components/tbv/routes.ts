@@ -14,7 +14,7 @@ export const ROUTES = {
   borrowRepay: '/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/',
   withdrawRedeem: '/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/',
   liquidation: '/trustless-bitcoin-vault/use-for-lending/liquidation-risk/',
-  faq: '/trustless-bitcoin-vault/use-for-lending/faq/',
+  faq: '/trustless-bitcoin-vault/faq/',
   setup: '/trustless-bitcoin-vault/testnet-info/setup/',
   research: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
 
