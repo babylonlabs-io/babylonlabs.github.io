@@ -108,7 +108,7 @@ const ITEMS: Item[] = [
           exists.
         </p>
         <p className="mb-3">
-          <strong>Trustless Bitcoin Vault</strong> puts BTC to work as
+          <strong>Trustless Bitcoin Vaults</strong> put BTC to work as
           collateral. A lending market on another chain treats it as backing for
           a loan, so you take on debt, a borrow rate and liquidation risk, and
           you earn no staking reward for it.

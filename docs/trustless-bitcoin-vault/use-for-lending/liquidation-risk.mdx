@@ -42,12 +42,12 @@ On a standard Ethereum market, liquidation is both atomic and permissionless:
 
 This cannot work directly when the collateral is BTC on the Bitcoin Network and the market is on Ethereum. Releasing a vault's BTC runs through the redemption flow on Bitcoin — claim, challenge window, payout — which takes days and cannot settle inside a single Ethereum transaction. The standard "repay now, take the collateral now" loop is impossible across the two chains.
 
-A **Liquidation Liquidity Provider (LLP)** closes this gap. The LLP supplies instant settlement liquidity on Ethereum, so liquidation stays atomic there while the slower BTC redemption happens in the background. At liquidation, the liquidator is paid immediately from the LLP in WBTC, the seized vault is escrowed in the LLP, and a registered arbitrageur later acquires that vault and finalizes the redemption on Bitcoin.
+A **Liquidation Liquidity Provider (LLP)** closes this gap. The LLP supplies instant settlement liquidity on Ethereum, so liquidation stays atomic there while the slower BTC redemption happens in the background. At liquidation, the liquidator is paid immediately from the LLP in WBTC, the seized vault is escrowed in the LLP, and a registered Arbitrageur later acquires that vault and finalizes the redemption on Bitcoin.
 
 Two liquidation paths exist once a position becomes liquidatable:
 
-* **Permissionless (LLP-routed).** The liquidator repays the debt and is settled instantly in a fungible wrapped-BTC asset, WBTC at launch, drawn from the LLP plus the liquidation bonus. The seized vault enters LLP escrow. The first LLP is the **BTC Vault Swap Spoke** (the `BTCVaultSwap` contract), registered as its own WBTC spoke on the Aave v4 Hub.
-* **Permissioned (direct redemption).** Restricted to registered arbitrageurs, also called Application Vault Keepers, that took part in the vault's creation and hold its Bitcoin redeem key. They repay the debt and take the seized vault directly into the BTC redemption flow themselves, without drawing on LLP liquidity.
+* **Permissionless (LLP-routed).** The liquidator repays the debt and is settled instantly in a fungible wrapped-BTC asset, WBTC at launch, drawn from the LLP plus the liquidation bonus. The seized vault enters LLP escrow. The first LLP is the **BTCVault Swap Spoke** (the `BTCVaultSwap` contract), registered as its own WBTC spoke on the Aave v4 Hub.
+* **Permissioned (direct redemption).** Restricted to registered Arbitrageurs, also called App Keepers, that took part in the vault's creation and hold its Bitcoin redeem key. They repay the debt and take the seized vault directly into the BTC redemption flow themselves, without drawing on LLP liquidity.
 
 ## What "liquidation" actually seizes
 
@@ -86,7 +86,7 @@ Because vaults are indivisible, the seized vault almost always carries slightly 
 
 The protocol computes the over-seizure surplus and applies one of two compensations, depending on whether you have remaining debt after the liquidation:
 
-* **Fairness debt repay** — if the surplus is smaller than your remaining debt, the surplus reduces your remaining debt. No WBTC is paid out; the debt position simply shrinks.
+* **Fairness debt repayment** — if the surplus is smaller than your remaining debt, the surplus reduces your remaining debt. No WBTC is paid out; the debt position simply shrinks.
 * **Fairness payment** — if the surplus exceeds your remaining debt (or your debt is fully repaid by the seizure), the leftover surplus is paid to you in WBTC.
 
 The fairness payment is denominated in WBTC rather than native BTC because the protocol cannot conjure new BTC mid-liquidation. WBTC is the closest BTC-pegged asset available on Ethereum and trades very close to BTC parity.

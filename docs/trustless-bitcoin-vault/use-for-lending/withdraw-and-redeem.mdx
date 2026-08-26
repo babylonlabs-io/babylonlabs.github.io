@@ -81,7 +81,7 @@ After redemption starts on Ethereum, the Vault Provider drives the Bitcoin side.
 
 1. **Claim.** The Vault Provider broadcasts a claim transaction that spends from the vault's Taproot output. (Automatic; you don't need to do anything.)
 2. **Assert.** The Vault Provider broadcasts an assert transaction containing the ZK proof. (Automatic; proof generation runs on the prover service.)
-3. **Challenge window.** An Application Vault Keeper or Universal Challenger may dispute the claim during this window, which runs approximately **3 days** (`timelockAssert` = 432 BTC blocks on the public testnet). In the happy path no challenge is raised. This is a passive wait — nothing for you to do.
+3. **Challenge window.** An App Keeper or Universal Challenger may dispute the claim during this window, which runs approximately **3 days** (`timelockAssert` = 432 BTC blocks on the public testnet). In the happy path no challenge is raised. This is a passive wait — nothing for you to do.
 4. **Payout.** Once the window closes, the Vault Provider broadcasts the payout, releasing BTC to your Bitcoin address. The Vault Provider's commission, set per VP and embedded in the pre-signed payout transactions, is deducted at this step.
 
 If a challenger objects to a legitimate claim, the Vault Provider posts a `WronglyChallenged` transaction to disprove the challenge. The challenger forfeits a bond and your payout proceeds.

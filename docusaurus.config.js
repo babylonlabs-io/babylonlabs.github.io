@@ -115,7 +115,7 @@ const plugins = [
           from: '/guides/baby_stakers/baby_staking_tools/',
           to: '/stakers/baby_stakers/',
         },
-        // Old Bitcoin Vault overview page → Trustless Bitcoin Vault Start Here
+        // Old Bitcoin Vault overview page → Trustless Bitcoin Vaults Start Here
         {
           from: '/guides/overview/bitcoin-vault/',
           to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
@@ -473,7 +473,7 @@ const config = {
         },
         items: [
           {
-            label: 'Trustless Bitcoin Vault',
+            label: 'Trustless Bitcoin Vaults',
             to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
             className: 'trustless-bitcoin-vault-top-header',
           },
@@ -483,7 +483,7 @@ const config = {
             className: 'guides-top-header',
           },
           // The top-level "API" dropdown was removed: each product section now owns
-          // its own APIs. The Trustless Bitcoin Vault sidebar carries the Vault
+          // its own APIs. The Trustless Bitcoin Vaults sidebar carries the Vault
           // Indexer API, and the Bitcoin Staking sidebar carries the Staking API,
           // Babylon gRPC and CometBFT. No page URLs changed, so no redirects are
           // needed — only the navigation moved.
