@@ -587,9 +587,10 @@ const PixelBlast = ({
       if (t.touch) t.touch.radiusScale = liquidRadius;
     }
     prevConfigRef.current = cfg;
+    const instance = threeRef.current;
     return () => {
-      if (!threeRef.current) return;
-      const t = threeRef.current;
+      const t = instance;
+      if (!t || threeRef.current !== t) return;
       t.resizeObserver?.disconnect();
       cancelAnimationFrame(t.raf);
       t.quad?.geometry.dispose();
