@@ -30,7 +30,7 @@ transaction graph, the complete set of pre-signed transactions covering every
 legitimate spend path. None of these participants has custody of the depositor's
 BTC. Each participant signs their part.
 
-First, the Vault Provider collects and submits the required signatures from all participants. Once the signatures are in, the depositor reveals the hashlock secret on Ethereum, and the vault becomes active. The protocol uses the secret to construct the final witness for the Bitcoin transaction that locks the BTC inside the BTC Vault.
+First, the Vault Provider collects and submits the required signatures from all participants. The Vault Provider then submits all required ACKs. After setup completes, the depositor reveals the hashlock secret on Ethereum, and the vault becomes active. The protocol uses the secret to construct the final witness for the Bitcoin transaction that locks the BTC inside the BTC Vault.
 
 Two safety properties are built into the peg-in flow:
 
