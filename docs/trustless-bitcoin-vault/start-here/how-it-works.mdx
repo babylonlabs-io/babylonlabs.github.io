@@ -8,7 +8,7 @@ sidebar_position: 2
 
 ## The big picture
 
-**Babylon Trustless Bitcoin Vaults (TBV)** span two networks. BTC stays on the Bitcoin Network for the vault's entire lifetime. On Ethereum, a protocol contract tracks each vault's state and registers DeFi applications such as Aave v4. The trust assumption is cryptographic evidence: no bridge, no off-chain oracle, no wrapping custodian.
+**Babylon Trustless Bitcoin Vaults (TBV)** span two networks. BTC stays on the Bitcoin Network for the vault's entire lifetime. On Ethereum, a protocol contract tracks each vault's state and registers DeFi applications such as Aave v4. TBV's cross-chain proof and BTC release path rely on cryptographic evidence: no bridge, off-chain oracle, or wrapping custodian controls that path. Integrated applications can still use price oracles for lending decisions.
 
 Cross-chain state transitions are enforced through cryptography, not by a trusted intermediary:
 
@@ -25,12 +25,12 @@ The depositor submits a peg-in request to the BTC Vault Manager contract on Ethe
 
 While the Pre-PegIn transaction accumulates Bitcoin confirmations, the
 depositor, Vault Provider, App Keepers, and Universal Challengers complete an
-off-chain setup. These participants co-sign the vault's transaction graph, the
-complete set of pre-signed transactions covering every legitimate spend path.
-None of them has custody of the depositor's BTC. Each participant signs their
-part.
+off-chain setup. The Vault Provider coordinates construction of the vault's
+transaction graph, the complete set of pre-signed transactions covering every
+legitimate spend path. None of these participants has custody of the depositor's
+BTC. Each participant signs their part.
 
-First, all required participants collect and submit their signatures. Once the signatures are in, the depositor reveals the hashlock secret on Ethereum, and the vault becomes active. The protocol uses the secret to construct the final witness for the Bitcoin transaction that locks the BTC inside the BTC Vault.
+First, the Vault Provider collects and submits the required signatures from all participants. The Vault Provider then submits all required ACKs. After setup completes, the depositor reveals the hashlock secret on Ethereum, and the vault becomes active. The protocol uses the secret to construct the final witness for the Bitcoin transaction that locks the BTC inside the BTC Vault.
 
 Two safety properties are built into the peg-in flow:
 

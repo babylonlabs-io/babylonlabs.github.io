@@ -1,0 +1,616 @@
+---
+title: FAQ
+sidebar_label: FAQ
+---
+
+# Trustless Bitcoin Vaults FAQ
+
+Common questions about the Trustless Bitcoin Vaults (TBV) protocol: what it is,
+the trust model, rates and fees, wallets, deposits, borrowing, liquidation,
+redemption, and recovery. Each entry stands alone and links to the deeper page
+where the topic is covered in full.
+
+If a question is missing here, ask in the support channel listed on
+[Community & support](/trustless-bitcoin-vault/reference/community-and-support/).
+
+## Overview
+
+### What are Trustless Bitcoin Vaults (TBV)?
+
+Babylon Trustless Bitcoin Vaults (TBV) let native Bitcoin be used as
+collateral on any chain and in any application, without wrapping, bridging, or
+intermediaries. TBV-integrated applications can use native Bitcoin collateral
+for lending, stablecoins, credit cards, derivatives, insurance, and other
+financial products.
+
+### How does TBV work?
+
+A depositor locks native Bitcoin into a BTC vault, a UTXO on Bitcoin. After
+the vault is verified, the protocol creates a 1:1 collateral record
+representing that vault on an integrated chain. Applications such as Aave v4
+recognize this collateral record and allow borrowing against the underlying
+native Bitcoin. See [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
+
+### What are the main benefits of using TBV?
+
+* **Native collateral.** You borrow against native Bitcoin on the Bitcoin
+  network. TBV does not require wrapping, bridging, or intermediaries, which
+  lets you retain title to your Bitcoin.
+* **Cryptographic verifiability.** The protocol relies on Bitcoin Script,
+  cryptographic proofs, and protocol rules rather than custodial
+  intermediaries to enforce collateral conditions.
+* **Capital efficiency.** The design supports different applications, such as
+  borrowing and lending, stablecoins, and other financial products. This
+  application-specific programmability improves the capital efficiency of
+  native Bitcoin collateral.
+
+### Why Babylon + Aave?
+
+Babylon provides the native Bitcoin collateral infrastructure. Aave provides
+one of the largest lending protocols in DeFi, with over \$10B liquidity in
+TVL. Together, the partnership allows Bitcoin holders to trustlessly borrow
+against their native Bitcoin.
+
+### How is TBV not a bridge?
+
+When you deposit, your native Bitcoin is locked into your own self-custodial
+vault, a UTXO script on the Bitcoin network that holds only your Bitcoin, with
+no pooling or commingling. Nothing is minted, moved, or held by a third party
+on another chain on your behalf.
+
+### Is TBV trustless?
+
+Yes. TBV replaces intermediary control with predefined cryptographic rules. No
+single intermediary can unilaterally move, seize, or redeem your Bitcoin.
+
+To be clear about what trustlessness does not cover: you are not exposed to
+counterparty risk, but you remain exposed to smart contract and protocol
+implementation risk, price oracle risk, and the risk profile of the
+integrated lending application you choose to use. See
+[Safety & trust assumptions](/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/).
+
+### Why are launch caps small?
+
+Mainnet is designed to roll out in phases. Initial vault and borrowing caps
+are intentionally conservative to ensure a secure experience, and may be
+adjusted over time as additional phases are introduced.
+
+### What is the roadmap beyond Aave?
+
+Native Bitcoin-backed borrowing on Aave v4 is the first use case of TBV. In
+the future, TBV-integrated applications can use native Bitcoin collateral for
+lending, BTC-backed stablecoins, credit cards, derivatives, insurance, and
+other financial products.
+
+### What is Babylon's track record?
+
+Babylon launched the Bitcoin Staking Protocol on mainnet in April 2025. It has
+been the largest Bitcoin-based project by TVL, with assets staked above \$7B
+at peak. TBV is the next protocol built on that same trustless infrastructure,
+to enable native BTC as collateral.
+
+### What do I have to build to use TBV?
+
+For end users: nothing. Connect compatible Bitcoin and Ethereum wallets and
+use a TBV-integrated application.
+
+For application developers: integrate TBV with your application so it can
+recognize TBV collateral records and define how that collateral is used within
+your product.
+
+## Rates and fees
+
+### What fees apply?
+
+Costs can apply when you create a BTC vault, redeem it through a third-party
+Vault Provider, or use an integrated application. The amount depends on the
+protocol, the Vault Provider you choose, and the integrated application.
+
+### How much can I borrow?
+
+Your borrowing capacity is set by the integrated lending market. For current
+public-testnet values, see [Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/).
+
+## Security, custody, and trust model
+
+### Has any of this been audited?
+
+Audit reports for TBV are not listed in this documentation set. Read [Safety & trust
+assumptions](/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/)
+to understand the protocol risks before you use it. If you identify a security
+issue affecting TBV, report it privately to
+[security@babylonlabs.io](mailto:security@babylonlabs.io).
+
+### Who holds my BTC?
+
+No third party. The BTC sits in your own self-custodial BTC vault: a Taproot
+output whose spend paths are committed by all participants at vault creation.
+After creation, no party can fabricate a new spend; the only spends Bitcoin
+will accept are the ones already encoded in the script. The vault makes sure
+that:
+
+1. You can unilaterally unlock and withdraw your Bitcoin at any time, as long
+   as doing so does not under-collateralize your loan.
+2. No one can move your Bitcoin unless your position is liquidated by the
+   lending market.
+
+The Vault Provider, App Keepers, Universal Challengers, and Security Council
+have operational roles, but they never custody the depositor's BTC. See
+[What is TBV?](/trustless-bitcoin-vault/start-here/what-is-tbv/) and
+[How it works](/trustless-bitcoin-vault/start-here/how-it-works/) for the trust model.
+
+### Is my collateral segregated or pooled?
+
+Your collateral is segregated. Each BTC vault belongs to a single depositor
+and holds only that depositor's Bitcoin. Funds are not pooled or commingled
+with those of other users.
+
+### Can my BTC be rehypothecated?
+
+No. Your Bitcoin remains locked inside your own BTC vault under predefined
+spending conditions. The protocol does not and cannot transfer custody of your
+BTC to a lending pool or intermediary.
+
+### Is wrapped or bridged BTC required?
+
+No. TBV uses native Bitcoin as collateral. It does not require wrapped BTC or
+bridges.
+
+### What enforces the rules?
+
+The protocol's spending conditions are enforced through Bitcoin Script,
+zero-knowledge proofs ([BABE](https://eprint.iacr.org/2026/065.pdf)), and a
+challenge mechanism that allows invalid redemption or liquidation claims to be
+disputed before Bitcoin is released. These mechanisms replace reliance on a
+trusted intermediary with cryptographic verification.
+
+### What happens if Babylon or my Vault Provider goes offline?
+
+TBV is designed so that redemption and verification do not depend on Babylon
+remaining online. Independent protocol participants, including Universal
+Challengers, can dispute invalid claims. If your Vault Provider becomes
+unresponsive during redemption, use the [self-claim path](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
+with your WOTS keypair and claimer artifacts. A Security Council exists only as
+an emergency backstop for exceptional protocol failures, such as a proof-system
+bug, and cannot seize user collateral.
+
+### Is there counterparty credit risk?
+
+TBV is designed so you do not rely on a custodian to hold your Bitcoin.
+However, users remain exposed to risks associated with smart contracts,
+protocol implementation, price oracles, and the integrated lending application
+they choose to use.
+
+### What can Babylon do to my funds? What if Babylon disappears?
+
+Babylon cannot unilaterally move, seize, or redeem your Bitcoin. Redemption
+and liquidation follow protocol-defined rules enforced through Bitcoin Script,
+cryptographic proofs, and the challenge process, not by any company. The
+Security Council can place the protocol into a soft pause or a full pause. A
+soft pause blocks new deposits, borrows, and withdrawals. A full pause blocks
+Ethereum-side state-changing actions. These pauses do not block available
+Bitcoin-side recovery paths, such as the Pre-PegIn refund or WOTS self-claim.
+
+### Do I have to trust my Vault Provider?
+
+No. A Vault Provider helps administer BTC vault creation and redemption, but
+it cannot spend your Bitcoin outside the protocol's predefined conditions.
+A depositor can also operate their own Vault Provider to remain fully trustless.
+Universal Challengers can dispute invalid claims. If the Vault Provider becomes
+unresponsive during redemption, use the [self-claim path](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
+with your WOTS keypair and claimer artifacts.
+
+### What enforces correctness across two chains?
+
+Cross-chain correctness is enforced through Bitcoin Script, BABE
+zero-knowledge proofs, and a challenge period. Before Bitcoin is released from
+a BTC vault, the required proof is verified and participants have an
+opportunity to challenge any invalid claim. Read more in the
+[BABE paper](https://eprint.iacr.org/2026/065.pdf).
+
+### Who are the operators and how are they separated?
+
+TBV separates responsibilities across different operator roles, each limited
+to specific functions:
+
+* **Vault Provider** — administers BTC vault creation and redemption for a
+  depositor.
+* **Universal Challenger** — monitors the protocol and can challenge invalid
+  claims across all BTC vaults.
+* **App Keeper** — performs application-specific actions
+  under the rules of an integrated application, such as the arbitrageur role in
+  the Aave v4 integration.
+* **Security Council** — can block payouts in exceptional cases and pause
+  Ethereum-side protocol actions. It cannot custody or redirect BTC.
+
+See [Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/).
+
+## Public testnet wallets and setup
+
+### Which wallets do I need?
+
+Two wallets: a UniSat Bitcoin wallet on signet and an Ethereum wallet on
+Sepolia.
+
+* The Bitcoin wallet must produce Taproot (P2TR) addresses and support PSBT
+  signing with message signing. BIP-322 and ECDSA are auto-detected by the app.
+* The Ethereum wallet must support WalletConnect or be an injected wallet
+  compatible with the test app.
+
+For the current supported list, networks, and faucet links, see
+[Setup](/trustless-bitcoin-vault/testnet-info/setup/).
+
+### Why do I need a Taproot address?
+
+TBV locks BTC in a Taproot output. The wallet has to produce Taproot (P2TR)
+addresses to participate. Addresses of different types do not share balance.
+
+### What signing capability do I need?
+
+Depositors need a Bitcoin wallet that supports Taproot (P2TR) addresses, PSBT
+signing, and message signing (BIP-322 or ECDSA), together with an Ethereum
+wallet.
+
+Operators such as Vault Providers and App Keepers require Bitcoin
+and Ethereum signing infrastructure capable of participating in the protocol's
+pre-signing process.
+
+### Can I use a hardware wallet?
+
+Yes, provided the hardware wallet supports Taproot (P2TR) addresses together
+with PSBT signing and the required message signing capabilities used by the
+protocol.
+
+### I cannot connect my wallets, what next?
+
+1. The UniSat Bitcoin wallet is set to signet, not mainnet.
+2. The Ethereum wallet is on Sepolia (chain ID `11155111`), not another network.
+3. Both wallets are unlocked before opening the test app.
+4. If several Bitcoin extensions are installed, disable the ones not in use so
+   the app detects the correct one.
+5. Refresh the page once and reconnect.
+
+If a multisig setup, for example Safe through WalletConnect, does not produce a
+signing prompt, try a direct extension wallet for the same flow.
+
+### Why is my balance not showing?
+
+Two common causes:
+
+* The connected wallet address differs from the one holding the funds. Reconnect
+  with the correct address.
+* The signet faucet transaction is not yet confirmed. Bitcoin confirmations are
+  required before the balance becomes spendable; this typically takes a few
+  minutes on signet.
+
+## Public testnet deposit (peg-in)
+
+### How does a vault work?
+
+When you deposit native BTC, it is locked into your own BTC vault, a
+Taproot-based vault on Bitcoin. A pre-signed transaction graph defines the
+valid ways the vault can be spent under the protocol rules. Once the vault is
+verified, TBV creates a 1:1 collateral record on the integrated chain,
+allowing applications such as Aave v4 to recognize the underlying Bitcoin as
+collateral. See [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/).
+
+### What is fixed when a vault is created?
+
+Several properties are fixed for the lifetime of a BTC vault at creation,
+including:
+
+* Who is authorized to redeem the BTC
+* The vault being redeemed as a whole
+* Which integrated application governs redemption rights
+* Who is authorized to challenge invalid redemption claims
+
+These properties cannot be changed after vault creation.
+
+### Does every spend get pre-signed before my BTC moves?
+
+Yes. During vault creation, the protocol establishes the complete pre-signed
+Bitcoin transaction graph before your Bitcoin is deposited into the vault.
+These pre-signed transactions define every valid spending path permitted by
+the protocol.
+
+### How long does peg-in take?
+
+About 2 hours on signet from Deposit click to Active vault, mostly waiting for
+12 Bitcoin confirmations. Off-chain setup runs concurrently and takes 6 to 10
+minutes once confirmations land. Activation itself is one Ethereum transaction.
+
+For the stage-by-stage breakdown, see
+[Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/).
+
+### How many wallet interactions does a deposit take?
+
+You actively interact with your wallets during three sessions:
+
+1. **Start the deposit** — sign the transactions to register the deposit and
+   link your Bitcoin and Ethereum wallets.
+2. **After Bitcoin confirmations** — return to sign the payout and recovery
+   transactions once the required Bitcoin confirmations have been reached.
+3. **Activate the vault** — retrieve the deposit secret, sign the activation
+   transaction, and complete the vault activation.
+
+Between these signing sessions, the protocol waits for Bitcoin confirmations
+and Vault Provider verification. You can safely close the application during
+these waiting periods and return later to continue the deposit.
+
+### Why splitting BTC into two vaults?
+
+Each vault is a single Bitcoin UTXO and cannot be partially seized. With one
+vault, liquidation seizes the whole vault. With two correctly-sized vaults, the
+protocol can do partial-position liquidation: only the first vault, the
+sacrificial vault, is seized, and the rest stays in the position as the
+protected vault.
+
+The app sizes the split dynamically from on-chain parameters. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/) for the worked example.
+
+### How do I change the vault order?
+
+From the Collateral section, open **Reorder BTC vaults** at any time while
+vaults are `InUse`. The vault at the front of the list is seized first during a
+liquidation. Reordering takes one Ethereum transaction. Vaults in `Available`
+status, meaning not part of a position, are not part of any seizure order.
+
+### What if peg-in stalls or expires?
+
+Two failure modes both lead to BTC recovery through the Pre-PegIn refund path on
+Bitcoin:
+
+* Off-chain setup does not complete within about 24 hours. The vault expires and
+  the peg-in fee is refunded automatically.
+* Activation does not happen within about 48 hours of vault creation, even for a
+  Verified vault. The peg-in fee is non-refundable, but BTC is still
+  recoverable.
+
+In both cases, sign the refund path with the original Bitcoin key after the
+refund timelock elapses (2016 BTC blocks, about 14 days, on the current
+public-testnet parameter version). Earlier vaults retain their parameter version
+and can use 432 BTC blocks (about 3 days). The refund is unilateral: no
+cooperation from the Vault Provider, App Keepers, or any other
+participant is required. See [Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/)
+and [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/) for the full flow.
+
+### Why am I asked to download claimer artifacts?
+
+The artifacts plus the Winternitz One-Time Signature (WOTS) keypair are the
+inputs to the depositor self-claim path: the fallback that lets the depositor
+broadcast the Bitcoin claim themselves if the Vault Provider becomes
+unresponsive at redemption.
+
+Back them up at peg-in alongside the wallet seed phrase. Without both inputs,
+and with a non-responsive Vault Provider, recovery requires Security Council
+escalation. See [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/) for the
+self-claim path.
+
+## Borrowing and repaying
+
+### What can I borrow, and where?
+
+Through the current TBV integration with Aave v4, you can use your native
+Bitcoin collateral to borrow ERC-20 assets supported by that Aave market. The
+assets available depend on the market configuration. See
+[Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
+
+### Where does the borrowing happen and who sets the terms?
+
+Borrowing takes place through the current Aave v4 integration. Lending
+parameters — including collateral factors, liquidation thresholds, and other
+market settings — are determined by the Aave market rather than by TBV itself.
+
+### How is the borrowing rate determined?
+
+Borrowing interest rates are determined by Aave v4, not by TBV. Aave adjusts
+rates based on asset utilization within the Aave v4 Hub. Below the
+optimal-utilization pivot, the rate climbs gently. Above it, the rate climbs
+faster. The displayed rate is annual (APR), while interest accrues continuously.
+
+See [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/) for the interest model.
+
+### Why does repayment ask for two wallet confirmations?
+
+Repaying an ERC-20 debt involves two transactions:
+
+* ERC-20 approval: authorizes the Aave Adapter to spend the repayment token up
+  to a cap.
+* Repayment: the actual debt-clearing transaction.
+
+Both prompts are standard ERC-20 behaviour, not specific to TBV.
+
+### Can someone else repay my debt?
+
+Yes. The Aave Adapter accepts repayments from any address; the debt simply
+decreases on the position regardless of who paid.
+
+### Why is my borrow rate different?
+
+A few common causes:
+
+* The displayed rate is annual (APR), not per block. The amount accrued over a
+  short period is much smaller.
+* After repayment, a small residual debt may remain because interest accrual and
+  rounding can increase the required repayment amount.
+
+### What happens to my position if Aave freezes or pauses the Spoke?
+
+Under the current integration design, an Aave freeze prevents new borrowing
+while allowing existing positions to be managed according to the protocol
+rules. A full pause has broader effects determined by Aave. TBV's redemption
+mechanisms are designed independently of lending market administration where
+supported by the integration.
+
+## Health factor and liquidation
+
+### What is the health factor and what number is safe?
+
+The health factor compares the risk-adjusted value of the collateral to the
+value of the debt:
+
+```text
+Health Factor = (Total Collateral Value * Collateral Factor) / Total Debt Value
+```
+
+A position becomes liquidatable when the health factor drops below 1.0.
+
+| Health factor | What it means |
+| --- | --- |
+| Above 1.5 | Comfortable margin |
+| 1.2 to 1.5 | Approaching risk |
+| 1.0 to 1.2 | High risk |
+| Below 1.0 | Liquidatable |
+
+The zones above 1.0 are guidance, not contract values. The only on-chain
+threshold is the 1.0 boundary. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+### What happens during liquidation?
+
+If your position falls below the liquidation threshold defined by the lending
+market, a liquidator repays part or all of your debt and the protocol
+transfers enough BTC vault collateral to cover it, following the configured
+vault order. Because each vault corresponds to a single Bitcoin UTXO,
+liquidation always transfers a whole vault rather than a fraction of one.
+
+If multiple vaults secure your position, only the vaults required for the
+liquidation are transferred. Any remaining vault continues securing your
+position if debt remains outstanding.
+
+### Who can liquidate my position, and is it discretionary?
+
+Liquidation is rule-based, not discretionary. If your position reaches the
+liquidation threshold defined by the lending market, permissionless
+liquidators repay the debt and receive the vault collateral in return. No
+Babylon or other party decides when a position is liquidated.
+
+### What is the fairness payment?
+
+Because vaults are indivisible UTXOs, a partial-position liquidation almost
+always overshoots what a perfectly divisible seizure would have taken. The
+fairness mechanism returns the over-seizure surplus:
+
+* If the surplus is smaller than remaining debt, the surplus reduces remaining
+  debt. No WBTC is paid out. This is the common case in partial-position
+  liquidation.
+* On full-position liquidation, when all debt is covered, the leftover is paid
+  in WBTC.
+
+WBTC is the denomination because the seized vault's BTC has already moved to
+the liquidator on Bitcoin. The over-seizure value is discounted using the ratio
+of debt liquidated to collateral liquidated, not at the raw BTC price. See
+[Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/).
+
+## Withdrawing and redeeming (peg-out)
+
+### How do I get my BTC back? How long does it take?
+
+You can redeem your Bitcoin after repaying enough debt to satisfy the
+protocol's collateral requirements. Once redemption begins, the protocol
+enters a challenge period of approximately three days. If no valid challenge
+is raised during that period, your BTC is released to the Bitcoin address
+associated with your vault. See
+[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+
+### Why does withdrawal take about 3 days? Can it be shortened?
+
+Bitcoin cannot natively verify Ethereum state. The protocol generates a
+zero-knowledge proof of the redemption event and verifies it on Bitcoin through the
+BABE construction, with a roughly 3-day challenge window during which an
+App Keeper or Universal Challenger can dispute an invalid claim.
+If no challenge appears, the payout finalizes. See [Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/)
+for the current challenge-window value.
+
+The window is a fixed security parameter tied to the fraud-proof design; it
+cannot be shortened per user.
+
+### Why is Withdraw disabled for one of my vaults?
+
+On the current public testnet, the portal disables vault selection if removing
+that vault would drop the health factor below 1.0 with the remaining debt. Repay
+enough debt first and the vault becomes selectable.
+
+For a full withdrawal, debt must be zero on every borrowed reserve: USDC, USDT,
+and WBTC. A single satoshi of remaining debt on any reserve blocks a full
+withdrawal.
+
+### Why does the dashboard still show Pending Withdraw?
+
+The Ethereum transaction only starts redemption. After it confirms, the protocol
+runs the Bitcoin-side claim, the assert, and the challenge-window wait before
+BTC is released. The dashboard displays **Pending Withdraw** for the full
+duration. Plan for about 3 days from the Withdraw click to BTC arrival on
+Bitcoin.
+
+### The Vault Provider is unresponsive during redemption. What now?
+
+Use the self-claim path. The protocol pre-signed the Bitcoin transactions for
+both Vault-Provider-as-claimer and depositor-as-claimer at peg-in.
+
+1. Locate the WOTS keypair file and claimer artifacts saved at peg-in.
+2. Run the `watchtower` CLI the protocol ships. It broadcasts the Claim, Assert,
+   and Payout transactions on Bitcoin on the depositor's behalf.
+3. Wait through the same roughly 3-day challenge window.
+4. The payout reaches the Bitcoin address recorded at vault creation.
+
+Self-claim requires no cooperation from any App Keeper, Universal
+Challenger, or Vault Provider. See [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/) for the
+full self-claim walkthrough.
+
+## Trust and recovery
+
+### What if I lose my WOTS keypair file and claimer artifacts?
+
+If the Vault Provider is still responsive, the standard redemption path works:
+the Vault Provider drives the claim and BTC reaches the address recorded at
+vault creation. The self-claim fallback is unavailable for that vault, but it is
+not needed.
+
+If both inputs are lost and the Vault Provider is unresponsive, the Security
+Council can authorize recovery through an off-chain procedure. To avoid this
+scenario, back up the WOTS keypair file and the claimer artifacts at peg-in
+alongside the wallet seed phrase.
+
+### What if I lose my Bitcoin key?
+
+Your BTC vault is secured by your Bitcoin private key. If you permanently lose
+that key, you lose access to the Bitcoin in the same way you would lose access
+to any self-custodial Bitcoin wallet.
+
+Back up your wallet seed phrase, along with your WOTS keypair file and claimer
+artifacts, at vault creation so you can recover independently.
+
+## Public testnet troubleshooting and support
+
+### My peg-in appears stuck. What should I do?
+
+1. Save the Pre-PegIn and PegIn transaction hashes.
+2. Confirm the Pre-PegIn transaction is propagated on a Bitcoin block explorer.
+   See [Setup](/trustless-bitcoin-vault/testnet-info/setup/).
+3. Refresh the page once and reconnect the same wallets.
+4. If the portal status still does not update, contact support with both
+   transaction hashes and the current stage name shown on the dashboard.
+
+Signet block times can be irregular. Slow confirmations are usually a property
+of the network, not of the protocol.
+
+### What if I refresh the page while signing?
+
+The flow is resumable. Reopen the portal with the same Bitcoin and Ethereum
+wallets used for the in-flight vault. Refresh once and look for any pending
+deposit or existing vault on the dashboard. Do not switch to a different Bitcoin
+address for a deposit already in progress.
+
+If the flow does not resume, contact support with screenshots, wallet
+addresses, and any transaction hashes.
+
+## Related guides
+
+* [Setup](/trustless-bitcoin-vault/testnet-info/setup/)
+* [Quickstart](/trustless-bitcoin-vault/use-for-lending/quickstart/)
+* [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/)
+* [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/)
+* [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
+* [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/)
+* [Glossary](/trustless-bitcoin-vault/reference/glossary/)

@@ -65,7 +65,7 @@ Timelock parameters governing the claim, assert, and challenge windows during pe
 
 | Parameter | Value | Description |
 | --- | --- | --- |
-| `timelockAssert` | 432 BTC blocks (~3 days) | Challenge window: time for any Universal Challenger (or App Keeper) to broadcast a `ChallengeAssert` after the claim is posted. |
+| `timelockAssert` | 432 BTC blocks (~3 days) | Challenge window: time for a committed Vault Keeper, including a Universal Challenger or App Keeper, or the depositor to broadcast a `ChallengeAssert` after the claim is posted. |
 | `timelockChallengeAssert` | 108 BTC blocks (~18 hours) | Claimer's disprove window: time for the claimer to broadcast a `WronglyChallenged` transaction after a challenge is raised. |
 
 ## Liquidation parameters

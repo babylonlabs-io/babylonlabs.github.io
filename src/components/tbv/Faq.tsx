@@ -10,7 +10,7 @@ import { SectionRule } from './Rule';
  * Landing page FAQ.
  *
  * Questions and answers are condensed from the real documentation FAQ at
- * docs/trustless-bitcoin-vault/use-for-lending/faq.mdx rather than written
+ * docs/trustless-bitcoin-vault/faq.mdx rather than written
  * fresh, so the landing page cannot contradict the docs. Each answer links
  * to the page that carries the full detail.
  */

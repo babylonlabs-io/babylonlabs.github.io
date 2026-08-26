@@ -1873,6 +1873,13 @@ article ul {
   content: url('data:image/svg+xml,<svg class="sidebar-icon-header ___12fm75w f1w7gpdv fez10in fg4l7m0" aria-hidden="true" width="1em" height="1em" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.85 1.15a.5.5 0 0 0-.7 0 .5.5 0 0 0 0 .71 6.57 6.57 0 0 1 1.86 5.57.5.5 0 0 0 .42.57.5.5 0 0 0 .56-.42 7.6 7.6 0 0 0-2.14-6.43Zm-10.4.35a.75.75 0 0 0-1.4.5l2.1 5.93a.53.53 0 1 1-1 .36L3.45 3.5a.75.75 0 0 0-1.41.5l2.55 7.18c-2.12-.57-2.85.58-3.07 1.1-.06.12.02.25.15.3.82.24 3.67 1.26 6.85 4.3.6.59 1.49.79 2.26.47l2.16-.9a2 2 0 0 0 1.21-1.58l.27-2.01a8 8 0 0 0-.34-3.63L13 6h-.01l-1.15-3.49a.75.75 0 0 0-1.42.49l.96 2.93a.63.63 0 0 1-1.2.42L8.68 2a.75.75 0 1 0-1.42.5l1.5 4.34a.66.66 0 1 1-1.24.45L5.45 1.5Zm8.79 1.57a.5.5 0 0 1 .69.18l.3.5c.49.83.76 1.78.77 2.75a.5.5 0 1 1-1 0c-.01-.79-.23-1.56-.64-2.25l-.3-.49a.5.5 0 0 1 .18-.69Z" fill="currentColor"></path></svg>');
 }
 
+.faq_sidebar_header > a::before,
+.faq_sidebar_header > div > a::before {
+  @apply mt-1 mr-2;
+
+  content: url('data:image/svg+xml,<svg fill="currentColor" class="sidebar-icon-header ___12fm75w f1w7gpdv fez10in fg4l7m0" aria-hidden="true" width="1em" height="1em" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm0 1a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm0 2a2.75 2.75 0 0 1 2.75 2.75c0 1.05-.5 1.66-1.34 2.28l-.28.2c-.45.33-.63.58-.63 1.02a.5.5 0 0 1-1 0c0-.86.42-1.36 1.13-1.87l.28-.2c.62-.46.84-.79.84-1.43a1.75 1.75 0 1 0-3.5 0 .5.5 0 0 1-1 0A2.75 2.75 0 0 1 10 5Zm0 8.5a.85.85 0 1 1 0 1.7.85.85 0 0 1 0-1.7Z" fill="currentColor"></path></svg>');
+}
+
 html[data-theme='dark'] .chat_sidebar_header > div > a::before {
   content: url('data:image/svg+xml,<svg fill="red" class=" ___12fm75w f1w7gpdv fez10in fg4l7m0" aria-hidden="true" width="1em" height="1em" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.54 2a6.5 6.5 0 0 0-5.68 9.67l-.8 2.08a1 1 0 0 0 1.21 1.32l2.49-.7A6.5 6.5 0 1 0 8.54 2Zm-5.5 6.5a5.5 5.5 0 1 1 3 4.9l-.18-.09-2.86.8.97-2.53-.13-.21a5.47 5.47 0 0 1-.8-2.87ZM11.5 18a6.49 6.49 0 0 1-4.93-2.26 7.5 7.5 0 0 0 1.76.26 5.47 5.47 0 0 0 5.67.4l.18-.09 2.86.8-.97-2.53.13-.21a5.47 5.47 0 0 0-.16-5.98c-.01-.6-.1-1.2-.24-1.76a6.48 6.48 0 0 1 1.38 8.04l.8 2.08a1 1 0 0 1-1.21 1.32l-2.49-.7c-.84.4-1.79.63-2.78.63Z" fill="white"></path></svg>');
 }
@@ -1954,6 +1961,13 @@ html[data-theme='dark'] .support_sidebar_header > div > a::before {
 html[data-theme='dark'] .security_sidebar_header > div > a::before {
   @apply mt-1 mr-2;
   content: url('data:image/svg+xml,<svg fill="currentColor" class="sidebar-icon-header ___12fm75w f1w7gpdv fez10in fg4l7m0" aria-hidden="true" width="1em" height="1em" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 9c0 .65-.42 1.2-1 1.41v2.09a.5.5 0 0 1-1 0v-2.09a1.5 1.5 0 1 1 2-1.41Zm-1.22-6.92a.5.5 0 0 0-.56 0 15.05 15.05 0 0 1-6.3 2.43A.5.5 0 0 0 3 5v4.5c0 3.9 2.3 6.73 6.82 8.47a.5.5 0 0 0 .36 0C14.69 16.23 17 13.39 17 9.5V5a.5.5 0 0 0-.43-.5 15.05 15.05 0 0 1-6.3-2.42ZM4 5.43a15.97 15.97 0 0 0 5.6-2.08l.4-.25.4.25A15.97 15.97 0 0 0 16 5.43V9.5c0 3.4-1.97 5.86-6 7.46-4.03-1.6-6-4.07-6-7.46V5.43Z" fill="white"></path></svg>');
+}
+
+html[data-theme='dark'] .faq_sidebar_header > a::before,
+html[data-theme='dark'] .faq_sidebar_header > div > a::before {
+  @apply mt-1 mr-2;
+
+  content: url('data:image/svg+xml,<svg fill="currentColor" class="sidebar-icon-header ___12fm75w f1w7gpdv fez10in fg4l7m0" aria-hidden="true" width="1em" height="1em" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm0 1a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm0 2a2.75 2.75 0 0 1 2.75 2.75c0 1.05-.5 1.66-1.34 2.28l-.28.2c-.45.33-.63.58-.63 1.02a.5.5 0 0 1-1 0c0-.86.42-1.36 1.13-1.87l.28-.2c.62-.46.84-.79.84-1.43a1.75 1.75 0 1 0-3.5 0 .5.5 0 0 1-1 0A2.75 2.75 0 0 1 10 5Zm0 8.5a.85.85 0 1 1 0 1.7.85.85 0 0 1 0-1.7Z" fill="white"></path></svg>');
 }
 
 .guides-top-header {
