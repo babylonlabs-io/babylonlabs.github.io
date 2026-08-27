@@ -216,7 +216,7 @@ to specific functions:
 * **Vault Provider** — administers BTC vault creation and redemption for a
   depositor.
 * **Universal Challenger** — monitors the protocol and can challenge invalid
-  claims across all BTC vaults.
+  claims across all BTCVaults.
 * **App Keeper** — performs application-specific actions
   under the rules of an integrated application, such as the arbitrageur role in
   the Aave v4 integration.
@@ -350,7 +350,7 @@ The app sizes the split dynamically from on-chain parameters. See
 
 ### How do I change the vault order?
 
-From the Collateral section, open **Reorder BTC vaults** at any time while
+From the Collateral section, open **Reorder BTCVault** at any time while
 vaults are `InUse`. The vault at the front of the list is seized first during a
 liquidation. Reordering takes one Ethereum transaction. Vaults in `Available`
 status, meaning not part of a position, are not part of any seizure order.
