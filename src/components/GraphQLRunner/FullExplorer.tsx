@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { GraphiQL } from 'graphiql';
 import { useColorMode } from '@docusaurus/theme-common';
 import Link from '@docusaurus/Link';
@@ -95,19 +95,6 @@ export default function FullExplorer(): JSX.Element {
   const [collapsed, setCollapsed] = useState(false);
 
   const groups = useMemo(() => nest(presets), [presets]);
-
-  useEffect(() => {
-    const name = /^query\d+$/.test(window.name) ? window.name : null;
-    if (!name) {
-      return undefined;
-    }
-
-    const previousTitle = document.title;
-    document.title = name;
-    return () => {
-      document.title = previousTitle;
-    };
-  }, []);
 
   if (collapsed) {
     return (
