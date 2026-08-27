@@ -315,6 +315,22 @@ void main(){
 
 const MAX_CLICKS = 10;
 
+/**
+ * Stops the render loop and detaches the context listeners, before the caller
+ * disposes the renderer.
+ *
+ * Cancelling the *pending* frame is the whole point: the loop reschedules
+ * itself every frame, so anything holding the id from the first frame cancels
+ * nothing and lets one more frame run after the context is gone.
+ */
+const stopLoop = t => {
+  cancelAnimationFrame(t.frame.id);
+  t.frame.id = 0;
+  const canvas = t.renderer.domElement;
+  canvas.removeEventListener('webglcontextlost', t.onContextLost);
+  canvas.removeEventListener('webglcontextrestored', t.onContextRestored);
+};
+
 const PixelBlast = ({
   variant = 'square',
   pixelSize = 3,
@@ -364,7 +380,7 @@ const PixelBlast = ({
       if (threeRef.current) {
         const t = threeRef.current;
         t.resizeObserver?.disconnect();
-        cancelAnimationFrame(t.raf);
+        stopLoop(t);
         t.quad?.geometry.dispose();
         t.material.dispose();
         t.composer?.dispose();
@@ -524,10 +540,21 @@ const PixelBlast = ({
       renderer.domElement.addEventListener('pointermove', onPointerMove, {
         passive: true
       });
-      let raf = 0;
+      // The loop reschedules itself every frame, so the pending frame id has to
+      // live somewhere teardown can also see. Snapshotting it once would leave
+      // teardown cancelling a frame that ran long ago, and the loop would draw
+      // one more time after forceContextLoss() — on a dead context three.js
+      // reads a null program log and throws "Cannot read properties of null".
+      const frame = { id: 0 };
       const animate = () => {
+        // A context can also be lost without us asking: a GPU reset, or too
+        // many live contexts on the tab. Stop rather than render into it.
+        if (renderer.getContext().isContextLost()) {
+          frame.id = 0;
+          return;
+        }
         if (autoPauseOffscreen && !visibilityRef.current.visible) {
-          raf = requestAnimationFrame(animate);
+          frame.id = requestAnimationFrame(animate);
           return;
         }
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current;
@@ -544,9 +571,28 @@ const PixelBlast = ({
           });
           composer.render();
         } else renderer.render(scene, camera);
-        raf = requestAnimationFrame(animate);
+        frame.id = requestAnimationFrame(animate);
       };
-      raf = requestAnimationFrame(animate);
+
+      const onContextLost = event => {
+        // Letting the default run makes the loss permanent; preventing it asks
+        // the browser for a restored context instead.
+        event.preventDefault();
+        cancelAnimationFrame(frame.id);
+        frame.id = 0;
+      };
+      const onContextRestored = () => {
+        // three.js rebuilds its own GPU resources on restore, so picking the
+        // loop back up is all this needs.
+        if (!frame.id) frame.id = requestAnimationFrame(animate);
+      };
+      renderer.domElement.addEventListener('webglcontextlost', onContextLost);
+      renderer.domElement.addEventListener(
+        'webglcontextrestored',
+        onContextRestored
+      );
+
+      frame.id = requestAnimationFrame(animate);
       threeRef.current = {
         renderer,
         scene,
@@ -556,7 +602,9 @@ const PixelBlast = ({
         clickIx: 0,
         uniforms,
         resizeObserver: ro,
-        raf,
+        frame,
+        onContextLost,
+        onContextRestored,
         quad,
         timeOffset,
         composer,
@@ -591,7 +639,7 @@ const PixelBlast = ({
       if (!threeRef.current) return;
       const t = threeRef.current;
       t.resizeObserver?.disconnect();
-      cancelAnimationFrame(t.raf);
+      stopLoop(t);
       t.quad?.geometry.dispose();
       t.material.dispose();
       t.composer?.dispose();
