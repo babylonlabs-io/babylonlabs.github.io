@@ -217,9 +217,13 @@
     animation: none !important;
   }
   /* Without motion the scenes must still read as their finished state. */
-  .scene [class*='anim'] {
+  .scene [class*='anim']:not(.animSlideOut):not(.animFadeOut) {
     opacity: 1 !important;
     transform: none !important;
+  }
+  .scene .animSlideOut,
+  .scene .animFadeOut {
+    opacity: 0 !important;
   }
   .animFill {
     width: var(--fill, 100%) !important;
