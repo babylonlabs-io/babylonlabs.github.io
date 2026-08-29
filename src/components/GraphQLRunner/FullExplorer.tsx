@@ -3,7 +3,13 @@ import { GraphiQL } from 'graphiql';
 import { useColorMode } from '@docusaurus/theme-common';
 import Link from '@docusaurus/Link';
 
-import { ENDPOINT, createFetcher, usePresets, useVaultIndexerSchema, type Preset } from './schema';
+import {
+  ENDPOINT,
+  createFetcher,
+  usePresets,
+  useVaultIndexerSchema,
+  type Preset,
+} from './schema';
 
 import 'graphiql/style.css';
 import styles from './FullExplorer.module.css';
@@ -46,9 +52,26 @@ const STARTER = `# Pick an example on the left, or write your own.
   }
 }`;
 
+function initialQuery(): string {
+  try {
+    const linkedQuery = new URLSearchParams(window.location.search).get(
+      'query'
+    );
+    return linkedQuery?.trim() ? linkedQuery : STARTER;
+  } catch {
+    return STARTER;
+  }
+}
+
 function Chevron({ pointsLeft }: { pointsLeft: boolean }): JSX.Element {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      aria-hidden="true"
+      focusable="false"
+    >
       <path
         d={pointsLeft ? 'M7.5 2 4 6l3.5 4' : 'M4.5 2 8 6l-3.5 4'}
         fill="none"
@@ -67,7 +90,7 @@ export default function FullExplorer(): JSX.Element {
   const presets = usePresets();
   const fetcher = useMemo(() => createFetcher(), []);
 
-  const [query, setQuery] = useState(STARTER);
+  const [query, setQuery] = useState(initialQuery);
   const [active, setActive] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -123,8 +146,8 @@ export default function FullExplorer(): JSX.Element {
             </button>
           </div>
           <p className={styles.blurb}>
-            Testnet, read-only, no key required. Every example below is executed against the live
-            endpoint in CI.
+            Testnet, read-only, no key required. Every example below is executed
+            against the live endpoint in CI.
           </p>
           <code className={styles.endpoint}>{ENDPOINT}</code>
         </div>
@@ -135,16 +158,22 @@ export default function FullExplorer(): JSX.Element {
               <h2 className={styles.groupTitle}>{group.group}</h2>
               {group.sections.map((section) => (
                 <div key={section.section ?? '_'} className={styles.section}>
-                  {section.section && <h3 className={styles.sectionTitle}>{section.section}</h3>}
+                  {section.section && (
+                    <h3 className={styles.sectionTitle}>{section.section}</h3>
+                  )}
                   <ul className={styles.steps}>
                     {section.presets.map((preset, i) => {
-                      const key = `${group.group}|${section.section ?? '_'}|${i}`;
+                      const key = `${group.group}|${
+                        section.section ?? '_'
+                      }|${i}`;
                       return (
                         <li key={key}>
                           <button
                             type="button"
                             className={
-                              active === key ? `${styles.preset} ${styles.presetActive}` : styles.preset
+                              active === key
+                                ? `${styles.preset} ${styles.presetActive}`
+                                : styles.preset
                             }
                             onClick={() => {
                               setQuery(preset.query);
@@ -161,13 +190,19 @@ export default function FullExplorer(): JSX.Element {
               ))}
             </section>
           ))}
-          {presets.length === 0 && <p className={styles.blurb}>Loading examples…</p>}
+          {presets.length === 0 && (
+            <p className={styles.blurb}>Loading examples…</p>
+          )}
         </nav>
 
         <footer className={styles.presetsFooter}>
           <Link to="/trustless-bitcoin-vault/apis/use-cases">Use cases</Link>
-          <Link to="/trustless-bitcoin-vault/apis/schema-reference">Schema</Link>
-          <Link to="/trustless-bitcoin-vault/apis/limits-and-gotchas">Limits</Link>
+          <Link to="/trustless-bitcoin-vault/apis/schema-reference">
+            Schema
+          </Link>
+          <Link to="/trustless-bitcoin-vault/apis/limits-and-gotchas">
+            Limits
+          </Link>
         </footer>
       </aside>
 

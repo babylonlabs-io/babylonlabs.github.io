@@ -20,7 +20,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.6;
-  cursor: pointer;
+  text-decoration: none;
   opacity: 0;
   transition: opacity 200ms ease-in-out, color 200ms, border-color 200ms;
 }
@@ -34,37 +34,56 @@
 .runButton:hover {
   color: var(--ifm-color-primary);
   border-color: var(--ifm-color-primary);
+  text-decoration: none;
 }
 
-.loading {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  background: rgb(0 0 0 / 60%);
-  color: #fff;
-  font-size: 0.9rem;
-}
-
+/*
+ * The dialog. Layered above the chat widget's floating launcher (z-index 9999)
+ * so nothing hovers over the explorer while it is open.
+ */
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 10000;
   display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2vh 2vw;
   background: rgb(0 0 0 / 60%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (backdrop-filter: blur(2px)) {
+    .backdrop {
+      backdrop-filter: blur(2px);
+    }
+  }
 }
 
 .panel {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  width: 90vw;
+  max-width: 1200px;
+  height: 85vh;
+  max-height: 900px;
   min-width: 0;
   overflow: hidden;
-  border-radius: 8px;
-  background: var(--ifm-background-color);
-  box-shadow: 0 10px 40px rgb(0 0 0 / 40%);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  background: var(--ifm-background-surface-color);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 60%);
+  color: #fff;
+  font-size: 0.9rem;
 }
 
 .header {
@@ -89,13 +108,36 @@
   color: var(--ifm-color-content-secondary);
 }
 
+/* Link out of the dialog to the dedicated explorer page. */
+.headerLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.headerLink:hover {
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+/* The way out of the dialog, so it carries the larger target of the two. */
 .close {
-  padding: 0.25rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 1.25rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: var(--ifm-global-radius);
   background: var(--ifm-background-surface-color);
   color: var(--ifm-color-content);
-  font-size: 0.8rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -124,21 +166,11 @@
   }
 
   .panel {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    border: none;
     border-radius: 0;
   }
-}
-
-/* Link out of the lightbox to the dedicated explorer page. */
-.headerLink {
-  padding: 0.25rem 0.7rem;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: var(--ifm-global-radius);
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
-
-.headerLink:hover {
-  color: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
-  text-decoration: none;
 }

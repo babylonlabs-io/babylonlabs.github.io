@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { GraphiQL } from 'graphiql';
 import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -15,13 +16,26 @@ type Props = {
   onClose: () => void;
 };
 
-/** The lightbox explorer opened by a code block's Run button. */
+/**
+ * The explorer opened by a code block's Run button.
+ *
+ * It renders through a portal on `document.body` rather than in place. A code
+ * block sits inside the article's stacking and overflow context, so a dialog
+ * mounted there is clipped by the page rather than covering it.
+ */
 export default function Explorer({ query, onClose }: Props): JSX.Element {
   const { colorMode } = useColorMode();
   const { schema, settled } = useVaultIndexerSchema();
   const fetcher = useMemo(() => createFetcher(), []);
-  const fullPage = useBaseUrl('/vault-indexer-explorer');
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // The site sets `trailingSlash: true`, so the slash matters: without it the
+  // host answers with a 301 to the canonical path and drops the query string,
+  // which would silently open the explorer on its default example instead.
+  const explorerPage = useBaseUrl('/vault-indexer-explorer/');
+  const fullPage = `${explorerPage}?${new URLSearchParams({
+    query,
+  }).toString()}`;
 
   useEffect(() => {
     const previousFocus =
@@ -63,7 +77,7 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
     };
     document.addEventListener('keydown', onKey);
     panel?.focus();
-    // Stop the page behind the lightbox from scrolling.
+    // Stop the page behind the dialog from scrolling.
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
@@ -73,7 +87,7 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div
       className={styles.backdrop}
       role="dialog"
@@ -90,7 +104,9 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
           <a
             className={styles.headerLink}
             href={fullPage}
-            title="Open the full explorer, with preset queries"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open this query in the full explorer, with preset queries"
           >
             Full explorer
           </a>
@@ -117,6 +133,7 @@ export default function Explorer({ query, onClose }: Props): JSX.Element {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
