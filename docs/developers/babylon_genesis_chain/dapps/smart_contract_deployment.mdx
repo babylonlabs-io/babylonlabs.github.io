@@ -172,7 +172,7 @@ codeID=$(babylond query wasm list-code \
 This command filters contracts against your wallet address to find the one you just uploaded.
 
 #### Step 3: Instantiate Contract
-Create a new instance of the contrac using `tx wasm instantiate` command:
+Create a new instance of the contract using `tx wasm instantiate` command:
 ```bash
 babylond tx wasm instantiate $codeID '{}' \
 --from=$key \
@@ -242,7 +242,7 @@ hashedData=$(echo -n "$data" | sha256sum | cut -f1 -d' ')
 quer
 ```
 
-As a reault you should see the following output with data store and finalized status and btc_timestamp information:
+As a result you should see the following output with data store and finalized status and btc_timestamp information:
 
 ```bash
 {
