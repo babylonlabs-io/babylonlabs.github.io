@@ -29,7 +29,7 @@ Once the health factor crosses below 1.0, liquidation becomes available. In prac
 
 ## Why a BTC vault is indivisible
 
-A BTC vault is a single Bitcoin UTXO. It can be claimed in full or not at all; the protocol cannot seize half of a vault. This is structural, not a design choice: Bitcoin transactions can only spend whole outputs.
+A BTCVault is a single Bitcoin UTXO. It can be claimed in full or not at all; the protocol cannot seize half of a vault. This is structural, not a design choice: Bitcoin transactions can only spend whole outputs.
 
 This is why liquidation behaves differently here than on a typical Aave market. The mechanism walks a list of whole vaults and decides which ones to seize as a group, rather than scaling a single collateral pool by a fraction.
 
