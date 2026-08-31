@@ -29,7 +29,7 @@ There is no third party that the BTC holder has to trust with custody. That is w
 
 ## Application isolation
 
-A BTC vault is created for one specific application at peg-in and cannot be moved between applications. This limits the effect of an application-specific bug or policy change to the application that received the vault. The BTC remains in its Bitcoin-side script, and the Bitcoin-side refund and self-claim paths remain available when their conditions are met.
+A BTCVault is created for one specific application at peg-in and cannot be moved between applications. This limits the effect of an application-specific bug or policy change to the application that received the vault. The BTC remains in its Bitcoin-side script, and the Bitcoin-side refund and self-claim paths remain available when their conditions are met.
 
 While the vault is used as collateral, the depositor still relies on the chosen application's Ethereum contracts, risk parameters, and oracles for application-level behavior such as health factor calculation, borrowing, repayment, withdrawal eligibility, and liquidation.
 
