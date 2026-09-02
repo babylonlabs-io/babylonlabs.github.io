@@ -38,7 +38,6 @@ interface ChatSession {
 }
 
 const STORAGE_KEY = 'babylon_ai_chat_sessions';
-const OLD_STORAGE_KEY = 'babylon_ai_chat_history'; // For migration
 const CONSENT_KEY = 'babylon_ai_chat_consent';
 
 const PRIVACY_CONSENT_TEXT =
@@ -68,6 +67,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasUserToggledExpand, setHasUserToggledExpand] = useState(false);
+  const openedFromHeaderRef = useRef(false);
   const [isApiHealthy, setIsApiHealthy] = useState<boolean>(false);
   const [hasConsented, setHasConsented] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -76,36 +76,21 @@ export default function ChatWidget() {
     return false;
   });
 
-  // State for sessions
+  // State for sessions (with two-calendar-month expiry to match backend retention policy)
   const [sessions, setSessions] = useState<ChatSession[]>(() => {
     if (typeof window !== 'undefined') {
-      // Try new format first
       const savedSessions = localStorage.getItem(STORAGE_KEY);
       if (savedSessions) {
         try {
-          return JSON.parse(savedSessions);
+          const parsed: ChatSession[] = JSON.parse(savedSessions);
+          // Prune sessions older than two calendar months
+          const cutoff = new Date();
+          cutoff.setMonth(cutoff.getMonth() - 2);
+          const cutoffTs = cutoff.getTime();
+          const fresh = parsed.filter(s => s.timestamp >= cutoffTs);
+          if (fresh.length > 0) return fresh;
         } catch (e) {
           console.error('Failed to parse sessions', e);
-        }
-      }
-
-      // Migration: Check for old format
-      const oldHistory = localStorage.getItem(OLD_STORAGE_KEY);
-      if (oldHistory) {
-        try {
-          const messages = JSON.parse(oldHistory);
-          if (Array.isArray(messages) && messages.length > 0) {
-             const migratedSession: ChatSession = {
-               id: Date.now().toString(),
-               thread_uuid: generateUUID(), // Best effort migration
-               title: 'Previous Chat',
-               messages: messages,
-               timestamp: Date.now()
-             };
-             return [migratedSession];
-          }
-        } catch (e) {
-          console.error('Failed to migrate old history', e);
         }
       }
     }
@@ -140,8 +125,10 @@ export default function ChatWidget() {
   const [editTitle, setEditTitle] = useState('');
   const [tokenLimits, setTokenLimits] = useState<TokenLimits | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
+  const pendingQueryRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const handleSubmitRef = useRef<(e?: React.FormEvent, directQuestion?: string) => Promise<void>>();
   
   // Default fallback limits if API fails
   const DEFAULT_INPUT_LIMIT = 1000;
@@ -206,31 +193,68 @@ export default function ChatWidget() {
       }
     };
 
-    const checkHealth = async () => {
+    // Health check with retry: dense at the start, backing off over ~2 minutes,
+    // then a slow steady poll so a recovered API un-hides the widget without a reload.
+    // Attempt at t=0, then +2s, +5s, +13s, +30s, +60s → 5 retries within ~110s (< 2 min).
+    const RETRY_SCHEDULE = [2000, 5000, 13000, 30000, 60000];
+    const STEADY_POLL_MS = 60000;
+
+    let cancelled = false;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastHealthy = false;
+    // Generation guard: each (re)start bumps `generation`; an attempt whose gen is
+    // stale bails out after its fetch resolves so a focus-triggered restart can't
+    // leave an orphaned polling chain running in parallel with the current one.
+    let generation = 0;
+
+    const attempt = async (n: number, gen: number) => {
+      if (cancelled || gen !== generation) return;
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      let healthy = false;
       try {
         const response = await fetch(`${apiBaseUrl}/health`, {
           signal: controller.signal
         });
-        clearTimeout(timeoutId);
-        
-        const healthy = response.ok;
-        setIsApiHealthy(healthy);
-        setButtonVisible(healthy);
+        healthy = response.ok;
       } catch (error) {
+        console.error(`Health check failed (attempt ${n}):`, error);
+      } finally {
         clearTimeout(timeoutId);
-        console.error('Health check failed:', error);
-        setIsApiHealthy(false);
-        setButtonVisible(false);
       }
+      if (cancelled || gen !== generation) return;
+
+      lastHealthy = healthy;
+      setIsApiHealthy(healthy);
+      setButtonVisible(healthy);
+      if (healthy) return; // stop retrying once the API responds
+
+      const delay = n < RETRY_SCHEDULE.length ? RETRY_SCHEDULE[n] : STEADY_POLL_MS;
+      retryTimer = setTimeout(() => attempt(n + 1, gen), delay);
     };
 
-    checkHealth();
+    attempt(0, generation);
 
-    // Cleanup: remove style tag when component unmounts (optional, keeps it clean)
-    // Note: We don't remove it because we want the button to stay visible across navigations
+    // Re-check when the tab regains focus, so a pod that recovered while the tab
+    // was backgrounded shows the widget without requiring a page reload.
+    const onVisible = () => {
+      if (!document.hidden && !lastHealthy) {
+        generation++;                 // invalidate any in-flight / scheduled chain
+        if (retryTimer) clearTimeout(retryTimer);
+        attempt(0, generation);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+
+    // Cleanup: cancel pending retries + listener on unmount.
+    // Note: we deliberately keep the injected style tag so the button stays
+    // visible across client-side navigations.
+    return () => {
+      cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, [apiBaseUrl]);
 
   // Fetch token limits on mount (only if API is healthy)
@@ -264,7 +288,7 @@ export default function ChatWidget() {
     if (value.trim()) {
       const estimatedTokens = estimateTokens(value);
       if (estimatedTokens > maxTokens) {
-        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens).Please shorten your question.`);
+        setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens). Please shorten your question.`);
       } else if (estimatedTokens > maxTokens * 0.8) {
         setInputError(`Approaching limit (~${estimatedTokens}/${maxTokens} tokens)`);
       } else {
@@ -289,12 +313,10 @@ export default function ChatWidget() {
     scrollToBottom();
   }, [messages, isOpen, isExpanded, currentSessionId]);
 
-  // Persist sessions
+  // Persist sessions (expired sessions pruned on load)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-      // Clean up old key if exists
-      localStorage.removeItem(OLD_STORAGE_KEY);
     }
   }, [sessions]);
 
@@ -304,6 +326,7 @@ export default function ChatWidget() {
       const target = e.target as HTMLElement;
       if (target.closest('.header-ai-chat-link')) {
         e.preventDefault();
+        openedFromHeaderRef.current = true;
         setIsOpen(true);
         setIsExpanded(true);
         setHasUserToggledExpand(true);
@@ -324,7 +347,9 @@ export default function ChatWidget() {
       const isDesktop = width >= 1024;
 
       if (isSmallScreen) {
-        setIsExpanded(false);
+        if (!openedFromHeaderRef.current) {
+          setIsExpanded(false);
+        }
       } else if (isOpen && isDesktop && !hasUserToggledExpand) {
         setIsExpanded(true);
       }
@@ -341,6 +366,42 @@ export default function ChatWidget() {
       abortControllerRef.current?.abort();
     };
   }, []);
+
+  // Keep handleSubmitRef in sync with latest handleSubmit
+  useEffect(() => {
+    handleSubmitRef.current = handleSubmit;
+  });
+
+  // Listen for hero search query events from the landing page
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleHeroQuery = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const question = customEvent.detail?.question;
+      if (!question) return;
+
+      pendingQueryRef.current = question;
+      openedFromHeaderRef.current = true;
+      setIsOpen(true);
+      setIsExpanded(true);
+      setHasUserToggledExpand(true);
+    };
+
+    window.addEventListener('babylon-ai-query', handleHeroQuery);
+    return () => window.removeEventListener('babylon-ai-query', handleHeroQuery);
+  }, []);
+
+  // Auto-submit pending query once the widget is open, consented, and not loading.
+  // Uses a ref (not state) to avoid re-render cleanup killing the submission.
+  useEffect(() => {
+    if (!isOpen || !hasConsented || isLoading) return;
+    const query = pendingQueryRef.current;
+    if (!query) return;
+
+    pendingQueryRef.current = null;
+    handleSubmitRef.current?.(undefined, query);
+  }, [isOpen, hasConsented, isLoading]);
 
   const createNewSession = () => {
     if (sessions.length >= 15) {
@@ -398,14 +459,15 @@ export default function ChatWidget() {
     }));
   };
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent, directQuestion?: string) => {
     e?.preventDefault();
-    if (!input.trim() || isLoading || isInputTooLong) return;
+    const queryText = directQuestion || input;
+    if (!queryText.trim() || isLoading || (!directQuestion && isInputTooLong)) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim()
+      content: queryText.trim()
     };
 
     // Create placeholder for AI response immediately
@@ -461,32 +523,39 @@ export default function ChatWidget() {
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
 
+          // Parse and dispatch are kept apart on purpose. While the `error`
+          // branch lived inside this try, its throw was caught by the very
+          // catch meant to skip malformed JSON, so a server-reported failure
+          // never reached the outer handler: every backend error surfaced as
+          // the empty-answer fallback, and the INPUT_TOO_LONG branch below
+          // was unreachable from the stream.
+          let data: any;
           try {
-            const data = JSON.parse(line.slice(6));
-
-            if (data.type === 'content') {
-              accumulatedContent += data.content;
-
-              updateCurrentSessionMessages(prev =>
-                prev.map(msg =>
-                  msg.id === aiMessageId
-                    ? { ...msg, content: accumulatedContent }
-                    : msg
-                )
-              );
-
-            } else if (data.type === 'metadata') {
-              // Update thread_uuid if backend provides a new one or confirms it
-              if (data.thread_uuid) {
-                setSessions(prev => prev.map(s =>
-                  s.id === currentSessionId ? { ...s, thread_uuid: data.thread_uuid } : s
-                ));
-              }
-            } else if (data.type === 'error') {
-              throw new Error(data.error);
-            }
+            data = JSON.parse(line.slice(6));
           } catch (parseError) {
-            // Skip invalid JSON
+            continue; // Skip invalid JSON
+          }
+
+          if (data.type === 'content') {
+            accumulatedContent += data.content;
+
+            updateCurrentSessionMessages(prev =>
+              prev.map(msg =>
+                msg.id === aiMessageId
+                  ? { ...msg, content: accumulatedContent }
+                  : msg
+              )
+            );
+
+          } else if (data.type === 'metadata') {
+            // Update thread_uuid if backend provides a new one or confirms it
+            if (data.thread_uuid) {
+              setSessions(prev => prev.map(s =>
+                s.id === currentSessionId ? { ...s, thread_uuid: data.thread_uuid } : s
+              ));
+            }
+          } else if (data.type === 'error') {
+            throw new Error(data.error);
           }
         }
       }
@@ -507,24 +576,26 @@ export default function ChatWidget() {
       console.error(error);
 
       let errorMessage = "Sorry, something went wrong. Please try again later.";
-      let isErrorMessage = false;
+      let isErrorMessage = true;
 
       if (error instanceof Error && error.message.startsWith('INPUT_TOO_LONG:')) {
         errorMessage = `⚠️ **Your message is too long.**\n\n${error.message.replace('INPUT_TOO_LONG:', '')}\n\n*Input limits help ensure faster responses and protect against abuse. Please try breaking your question into smaller, focused parts.*`;
         isErrorMessage = true;
       }
 
-      updateCurrentSessionMessages(prev => {
-        const lastMsg = prev[prev.length - 1];
-        if (lastMsg?.role === 'assistant' && lastMsg.content === '') {
-          return prev.map(msg =>
-            msg.id === lastMsg.id
-              ? { ...msg, content: errorMessage, isError: isErrorMessage }
-              : msg
-          );
-        }
-        return prev;
-      });
+      updateCurrentSessionMessages(prev =>
+        prev.map(msg =>
+          msg.id === aiMessageId
+            ? {
+                ...msg,
+                content: msg.content
+                  ? `${msg.content}\n\n${errorMessage}`
+                  : errorMessage,
+                isError: isErrorMessage,
+              }
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
       abortControllerRef.current = null;
@@ -539,13 +610,21 @@ export default function ChatWidget() {
   };
 
   const handleDeclineConsent = () => {
-    // Close the chat widget when the user declines
+    openedFromHeaderRef.current = false;
+    // Drop any question handed over from the landing page. Without this the
+    // question outlives the refusal: it stays in the ref, and the next time
+    // the widget is opened and consent is granted the auto-submit effect
+    // sends it, even though the visitor declined and never asked again.
+    pendingQueryRef.current = null;
     setIsOpen(false);
     setIsExpanded(false);
     setHasUserToggledExpand(false);
   };
 
   const handleClose = () => {
+    openedFromHeaderRef.current = false;
+    // Same reasoning as declining: closing abandons the question.
+    pendingQueryRef.current = null;
     abortControllerRef.current?.abort();
     setIsOpen(false);
     setIsExpanded(false);
@@ -736,29 +815,35 @@ export default function ChatWidget() {
 
                 {/* Privacy Consent Screen */}
                 {!hasConsented ? (
-                  <div className="chat-consent flex-1 flex flex-col items-center justify-center p-6 bg-[var(--ifm-background-color)]">
-                    <div className="consent-icon-wrapper mb-4">
-                      <ShieldCheck className="w-12 h-12 text-[var(--ifm-color-primary)]" />
+                  <div className="chat-consent flex-1 flex flex-col min-h-0 bg-[var(--ifm-background-color)]">
+                    <div className="chat-consent-scroll flex-1 min-h-0 overflow-y-auto flex flex-col items-center p-4 pb-2">
+                      <div className="consent-icon-wrapper mb-4">
+                        <ShieldCheck className="w-12 h-12 text-[var(--ifm-color-primary)]" />
+                      </div>
+                      <h3 className="text-base font-semibold text-[var(--ifm-color-content)] mb-3 text-center">
+                        Before You Begin
+                      </h3>
+                      <div className="consent-text-box rounded-lg p-4 mb-4 text-sm leading-relaxed text-[var(--ifm-color-content-secondary)] bg-[var(--ifm-color-emphasis-100)] border border-[var(--ifm-color-emphasis-200)] w-full">
+                        {PRIVACY_CONSENT_TEXT}
+                      </div>
                     </div>
-                    <h3 className="text-base font-semibold text-[var(--ifm-color-content)] mb-3 text-center">
-                      Before You Begin
-                    </h3>
-                    <div className="consent-text-box rounded-lg p-4 mb-6 text-sm leading-relaxed text-[var(--ifm-color-content-secondary)] bg-[var(--ifm-color-emphasis-100)] border border-[var(--ifm-color-emphasis-200)]">
-                      {PRIVACY_CONSENT_TEXT}
-                    </div>
-                    <div className="flex gap-3 w-full">
-                      <button
-                        onClick={handleDeclineConsent}
-                        className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border border-[var(--ifm-color-emphasis-300)] text-[var(--ifm-color-content-secondary)] bg-transparent hover:bg-[var(--ifm-color-emphasis-100)] transition-colors"
-                      >
-                        Decline
-                      </button>
-                      <button
-                        onClick={handleConsent}
-                        className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 rounded-lg text-sm font-medium bg-[var(--ifm-color-primary)] text-white hover:opacity-90 transition-opacity border-none"
-                      >
-                        I Agree
-                      </button>
+                    <div className="chat-consent-actions flex-shrink-0 p-4 pt-2 safe-area-bottom">
+                      <div className="flex gap-3 w-full">
+                        <button
+                          type="button"
+                          onClick={handleDeclineConsent}
+                          className="consent-btn consent-btn-decline flex-1 px-4 py-2.5 text-sm"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleConsent}
+                          className="consent-btn consent-btn-agree flex-1 px-4 py-2.5 text-sm"
+                        >
+                          I Agree
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -795,32 +880,50 @@ export default function ChatWidget() {
                       <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Input */}
-                    <form onSubmit={handleSubmit} className="chat-input p-4 flex gap-2">
-                      <div className="flex-1 flex flex-col gap-1">
-                        <input
-                          type="text"
+                    {/* Composer. Docked box with an autosizing textarea and the
+                        send control inside it, after the AI Chat 3 block.
+                        Enter sends, Shift+Enter inserts a newline, which the
+                        previous single-line input could not do. */}
+                    <form onSubmit={handleSubmit} className="chat-input p-3">
+                      <div className="chat-composer flex items-end gap-1.5 p-1.5">
+                        <textarea
+                          rows={1}
                           value={input}
-                          onChange={handleInputChange}
-                          placeholder="Ask a question..."
-                          className="flex-1 px-4 py-2 rounded-full"
+                          onChange={(e) => {
+                            handleInputChange(e as any);
+                            const el = e.currentTarget;
+                            el.style.height = 'auto';
+                            el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault();
+                              if (!isLoading && input.trim() && !isInputTooLong) {
+                                handleSubmit();
+                              }
+                            }
+                          }}
+                          placeholder="Ask anything"
+                          aria-label="Ask a question"
                           disabled={isLoading}
+                          className="chat-composer-input block max-h-[140px] min-w-0 flex-1 resize-none bg-transparent px-2 py-1.5 text-sm leading-5 outline-none"
                         />
-                        {inputError && (
-                          <p className={`text-xs px-4 ${
-                            isInputTooLong ? 'text-red-500' : 'text-yellow-600'
-                          }`}>
-                            {inputError}
-                          </p>
-                        )}
+                        <button
+                          type="submit"
+                          disabled={isLoading || !input.trim() || isInputTooLong}
+                          aria-label="Send"
+                          className="chat-composer-send inline-flex h-8 w-8 shrink-0 items-center justify-center transition-opacity hover:opacity-90 disabled:opacity-40"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
                       </div>
-                      <button
-                        type="submit"
-                        disabled={isLoading || !input.trim() || isInputTooLong}
-                        className="w-10 h-10 min-w-[40px] min-h-[40px] bg-[var(--ifm-color-primary)] text-white rounded-full disabled:opacity-50 hover:opacity-90 transition-opacity flex items-center justify-center shrink-0"
-                      >
-                        <Send className="w-5 h-5" />
-                      </button>
+                      {inputError && (
+                        <p className={`mt-1.5 px-1 text-xs ${
+                          isInputTooLong ? 'text-red-500' : 'text-yellow-600'
+                        }`}>
+                          {inputError}
+                        </p>
+                      )}
                     </form>
                   </>
                 )}
@@ -836,11 +939,12 @@ export default function ChatWidget() {
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             if (isOpen) {
+              openedFromHeaderRef.current = false;
               setIsOpen(false);
               setIsExpanded(false);
               setHasUserToggledExpand(false);
             } else {
-              setHasUserToggledExpand(true); 
+              setHasUserToggledExpand(true);
               setIsExpanded(false);
               setIsOpen(true);
             }

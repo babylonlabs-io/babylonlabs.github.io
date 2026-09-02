@@ -1,0 +1,17 @@
+<!-- PLACEHOLDER. Hand-drawn approximation of the UniSat mark, not the official
+     asset. Overwrite this file with the official SVG; no code change needed. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+  <defs>
+    <linearGradient id="unisat" x1="10" y1="8" x2="30" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7a3800"/>
+      <stop offset=".4" stop-color="#ff9500"/>
+      <stop offset=".65" stop-color="#ffbe55"/>
+      <stop offset="1" stop-color="#7a3800"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#unisat)" stroke-width="5.2">
+    <path d="M27 14.5a7 7 0 00-11.5-2.2l-4 4a7 7 0 000 9.9"/>
+    <path d="M13 25.5a7 7 0 0011.5 2.2l4-4a7 7 0 000-9.9"/>
+  </g>
+  <circle cx="17.4" cy="18.6" r="1.9" fill="#ffe0a0"/>
+</svg>

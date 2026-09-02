@@ -1,0 +1,248 @@
+---
+title: Limits and Gotchas
+sidebar_label: Limits and Gotchas
+sidebar_position: 5
+description: Request limits, the 403 user-agent trap, introspection constraints and known data gaps on the Babylon vault indexer.
+---
+
+# Limits and Gotchas
+
+Read this before writing a client. Two of the items here fail in ways that point
+you at the wrong cause.
+
+## Request limits
+
+The deployment sets tighter limits than the indexer framework's defaults.
+
+| Limit | Value | Framework default |
+| --- | --- | --- |
+| Max operation depth | **10** | 100 |
+| Max operation tokens | **500** | 1000 |
+| Max operation aliases | **15** | 30 |
+| Max `limit` per page | **1000** | — |
+
+These bound the cost a single client can impose. Design around them rather than
+against them.
+
+## The 403 trap
+
+**Symptom:** a bare HTTP **403** with no GraphQL error body. It looks like an
+outage, an IP block or a missing API key. It is none of those.
+
+**Cause:** the edge rejects default library user-agents. `Python-urllib/3.11`
+gets a 403; a custom string gets a 200.
+
+**Fix:** always send your own `User-Agent`.
+
+```python
+import json, urllib.request
+
+req = urllib.request.Request(
+    "https://babylon-vault-indexer-api.testnet.babylonlabs.io/",
+    data=json.dumps({"query": "{ statss(limit:1){ items{ availableVaultCount } } }"}).encode(),
+    headers={
+        "Content-Type": "application/json",
+        "User-Agent": "my-app/1.0",  # required — the default gets a 403
+    },
+)
+print(json.load(urllib.request.urlopen(req)))
+```
+
+The same applies to `requests`, `httpx`, Go's `net/http` and any other client
+that sends a recognisable default.
+
+## Introspection is capped, not disabled
+
+**Symptom:** GraphiQL shows `Error fetching schema`. Apollo Sandbox, Postman,
+Insomnia and `graphql-codegen` all fail to load the schema.
+
+**Cause:** the standard `getIntrospectionQuery()` those tools send is **depth
+21**, and the cap is 10. The server replies:
+
+```
+Syntax Error: Query depth limit of 10 exceeded, found 21.
+```
+
+Introspection itself works. Only the standard query is too deep.
+
+**Fix — three options, easiest first.**
+
+**1. Use the committed schema.** This site ships the full SDL at
+[`/schema/vault-indexer.graphql`](pathname:///schema/vault-indexer.graphql). Point codegen
+at that file instead of the endpoint. This is what most builders should do.
+
+**2. Browse the [Schema Reference](./schema-reference.mdx)** for field names.
+
+**3. Introspect with shallower queries.** List every type at depth 4:
+
+```graphql
+{
+  __schema {
+    types {
+      kind
+      name
+    }
+  }
+}
+```
+
+Read one type's fields:
+
+```graphql
+{
+  __type(name: "vault") {
+    name
+    fields {
+      name
+      type {
+        kind
+        name
+        ofType {
+          kind
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+Four such queries — enum values, field types, field arguments, and input fields —
+reconstruct the whole schema. The docs site regenerates its schema page exactly
+this way.
+
+:::note A correction
+Earlier internal tooling recorded that "introspection is disabled" on this
+endpoint. That is not accurate. Introspection is **depth-capped**. The queries
+above work today.
+:::
+
+## Pagination
+
+**Omit `limit` and you get 50 rows, not all of them.** The response still
+reports the full `totalCount`, so a client that ignores `limit` looks like it
+succeeded while holding 50 of several thousand records. Always set `limit`
+explicitly, and always compare what you collected against `totalCount`.
+
+`limit` above 1000 is rejected per resolver, not per operation:
+
+```json
+{
+  "errors": [{ "message": "Invalid limit. Got 1001, expected <=1000." }],
+  "data": null
+}
+```
+
+Note `data` is `null` while the HTTP status stays 200. Check the `errors` key;
+do not rely on the status code alone.
+
+Page with `offset`, and always pass a stable `orderBy`. Without one, rows can
+repeat or disappear between pages.
+
+```graphql
+{
+  vaults(orderBy: "pendingAt", orderDirection: "asc", limit: 1000, offset: 0) {
+    totalCount
+    items {
+      id
+    }
+  }
+}
+```
+
+Stop when the rows you have collected reach `totalCount`.
+
+Every plural resolver also accepts cursors. Read `pageInfo { hasNextPage
+endCursor }` and pass `endCursor` back as `after` for the next page. Pick one
+style and keep to it: when you pass `offset`, `startCursor` and `endCursor`
+both come back `null`, so the two cannot be mixed within a single sweep.
+
+## Aliases
+
+At most **15** aliases per operation. Status breakdowns are the usual place to
+hit this — split into several requests rather than aliasing every enum value at
+once.
+
+## Sustained bursts get a 429
+
+**Symptom:** HTTP **429** after a run of rapid back-to-back requests. There is no
+GraphQL body, so it looks like the endpoint has gone down.
+
+**Cause:** the edge throttles sustained bursts. A handful of requests is fine —
+we saw this only after several dozen queries fired with no gap. It clears within
+seconds.
+
+**Fix:** treat 429 and 5xx as retryable, with exponential backoff, and honour
+`Retry-After` when it is present. Never retry a **GraphQL** error: that means
+your query is wrong, and retrying only hides it.
+
+This distinction matters most in automation. A verification job that sends every
+example on a page one after another will meet this, and a job that cannot tell a
+throttle from a bad field will report a perfectly good query as broken.
+
+## Three ways the API says "no"
+
+They fail differently, and the difference tells you where to look.
+
+| Failure | Shape | Meaning |
+| --- | --- | --- |
+| Depth, token or alias limit | `Syntax Error: …` — the whole operation is rejected before execution | Your query's **shape** is too large |
+| `limit` over 1000 | Per-path error with `data: null`, HTTP 200 | One **resolver argument** is invalid |
+| Burst throttling | HTTP 429, no GraphQL body | Your **rate** is too high — back off and retry |
+
+The first is a query-shape guard applied before execution. The second is a
+per-resolver pagination guard. The third is at the edge, before the API sees the
+request at all — which is why it carries no GraphQL error.
+
+Only the third is worth retrying.
+
+## Known data gaps
+
+Accurate as of the last schema sync.
+
+- **`feeConfig` is empty.** It returns `totalCount: 0`, while `vaultFeeEscrow`
+  holds one row per vault. Escrow records exist without a corresponding fee
+  configuration row. Do not treat an empty `feeConfig` as an error.
+- **Three `vaultActivityType` values are never written.** `withdrawal`,
+  `add_collateral` and `remove_collateral` are declared in the enum, but no
+  indexer code path emits them, so filtering on any of the three returns
+  `totalCount: 0` permanently. That is not a sync delay, and it will not fill in
+  later without an indexer change. In particular, a vault reaching
+  `depositor_withdrawn` produces **no** `withdrawal` row, and collateral moving
+  in or out of an Aave position produces **no** `add_collateral` or
+  `remove_collateral` row. Read `aavePositionCollateral` for collateral state
+  instead — a row with `removedAt: null` is still pledged.
+- **`vaultActivity.vaultId` is null on `borrow` and `repay` rows.** This is by
+  design, not missing data: those events belong to an Aave position rather than
+  to a single vault. They carry a non-null `debtReserveId` instead. Do not
+  filter activity by `vaultId` and expect loan history to appear.
+- **`amount` on `vaultActivity` is not always satoshis.** On `borrow` and
+  `repay` it is denominated in the debt asset. Resolve `debtReserveId` against
+  `aaveReserve` for the decimals before formatting, or a USDT repayment will
+  render as an implausible quantity of BTC.
+- **A `deposit` row appears only once a vault becomes available.** The count
+  tracks vaults that reached `available` at some point, so it is much lower than
+  the total vault count. Vaults that expired before activation never produce
+  one.
+- **`claimExpiredUntil` is a block number, not a timestamp**, despite sitting
+  among timestamp fields. The contract sets it to the expiry block plus a grace
+  period. Compare it against `_meta`'s block number, never against a clock.
+- **The deployed schema can trail the indexer source.** Entities present in the
+  indexer repository are not necessarily deployed. The
+  [Schema Reference](./schema-reference.mdx) and the committed SDL are generated from
+  the **deployed** endpoint, so they are the accurate source. Anything absent
+  there does not exist in production, whatever the source repository shows.
+
+## Freshness
+
+The indexer trails the chain head. Check before trusting a result:
+
+```graphql
+{
+  _meta {
+    status
+  }
+}
+```
+
+`status` carries the last processed block number and timestamp per chain.

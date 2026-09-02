@@ -1,0 +1,143 @@
+---
+title: Safety & trust assumptions
+sidebar_position: 4
+---
+
+# Safety & trust assumptions
+
+[Babylon Trustless Bitcoin Vaults (TBV)](./what-is-tbv.mdx) are designed so that the depositor does not have to trust a third party to keep the deposited BTC safe. The BTC stays on Bitcoin, locked in a script whose spending paths are agreed at vault creation. The depositor relies on the protocol's cryptography, the Bitcoin and Ethereum networks, and the application where the collateral is used, but does not rely on a custodian, bridge operator, wrapper issuer, Vault Provider, App Keeper, Universal Challenger, or Security Council to custody the BTC.
+
+This page describes the protocol's safety guarantees, the roles other parties play, the depositor recovery paths, the operational pause states, the risk surface, and the caveats that apply specifically to the public testnet release.
+
+![TBV trust model: depositor, Vault Provider, App Keepers, Universal Challengers, and Security Council around the Bitcoin vault](/img/trustless-bitcoin-vault/confluence/start-here/safety-and-trust-assumptions/7.png)
+
+## The core property: trust is optional and removable
+
+The protocol's trust model has two principles that distinguish it from custodial or bridge-based alternatives:
+
+* **Trust is optional.** For custody-critical outcomes, the depositor holds the keys and artifacts needed to recover BTC or block an invalid claim without trusting a specific participant. The main paths are self-claim at redemption, self-refund of a stalled peg-in, and depositor-side challenge using the artifacts saved at peg-in. The depositor cannot register as an App Keeper or Universal Challenger, but does not need to do so to protect their own vault.
+* **Trust is removable.** Emergency multisigs and other transitional safety nets are intended to be reduced or retired as the protocol matures. Operator sets are expected to become broader and more independent over time.
+
+The depositor has four practical paths that do not depend on a specific operator:
+
+* **Self-claim during redemption.** Using the WOTS keypair and claimer artifacts held since peg-in, the depositor can broadcast the Claim, Assert, and Payout transactions themselves via a command-line tool the protocol ships. No cooperation from any other participant is required.
+* **Block an invalid claim.** Using the BABE artifacts received at peg-in, the depositor, or any party they delegate, can compose and broadcast the Bitcoin-side challenge path if an invalid claim is posted.
+* **Self-refund a stalled peg-in.** Through the refund path on the Pre-PegIn output (the short-lived Bitcoin output that holds the depositor's BTC during peg-in before activation), the depositor can recover BTC unilaterally if activation never completes.
+* **Choose or run a Vault Provider.** In the public testnet app, depositors choose from the providers surfaced by the portal. Where provider registration is available, an advanced operator can run a Vault Provider node and use it for vaults they create.
+
+There is no third party that the BTC holder has to trust with custody. That is what makes the protocol trustless.
+
+## Application isolation
+
+A BTC vault is created for one specific application at peg-in and cannot be moved between applications. This limits the effect of an application-specific bug or policy change to the application that received the vault. The BTC remains in its Bitcoin-side script, and the Bitcoin-side refund and self-claim paths remain available when their conditions are met.
+
+While the vault is used as collateral, the depositor still relies on the chosen application's Ethereum contracts, risk parameters, and oracles for application-level behavior such as health factor calculation, borrowing, repayment, withdrawal eligibility, and liquidation.
+
+## Non-custodial guarantees
+
+Three mechanisms keep BTC custody with the depositor at all times.
+
+* **Pre-signed exit paths.** Every release path is constructed and signed at vault creation, before any BTC moves into the final vault output. The depositor's signatures are required on depositor-controlled release paths, along with the required participant signatures for the agreed transaction graph. After creation, no participant can fabricate a new spend.
+* **On-chain refund timelock.** The Pre-PegIn output includes a refund leaf with a relative timelock of 2016 BTC blocks (~14 days) for the current public-testnet parameter version. Existing vaults retain the parameter version active at creation.
+* **Protocol-level fraud detection.** The depositor, Universal Challengers, and relevant protocol participants can verify claims against Ethereum state. A claim made without the required Ethereum redemption state cannot defend itself against a valid challenge; the claimer's bond is forfeited and the BTC stays in the vault.
+
+No single party, including the Vault Provider, can unilaterally release a depositor's BTC. Every canonical spend requires either the depositor's signatures or the depositor's pre-committed authorization established at vault creation.
+
+## Where BTC can go
+
+The BTC held in a vault can only be released along the spending paths committed at vault creation. Those paths terminate at a small, pre-agreed set of destinations:
+
+* The depositor's own Bitcoin address, via the withdrawal-after-repayment path, depositor self-claim, or the Pre-PegIn refund.
+* The Bitcoin address of an Arbitrageur (App Keeper), on liquidation paths.
+
+This set is fixed when the vault is created and is enforced by Bitcoin's consensus rules through the Taproot script. Even in a catastrophic bug elsewhere in the system, BTC in an existing vault cannot leave this set: doing so would require a Bitcoin spend that was never signed and is not encoded in any leaf of the script. Bitcoin will not accept such a spend.
+
+As an additional security mechanism, a **Security Council** can block payouts in catastrophic-bug scenarios, such as a total failure of the zero-knowledge proof system, by broadcasting a council no payout transaction. The Security Council can prevent BTC from being released to a fraudulent claimer, but cannot redirect BTC anywhere; its only on-chain power is to block. The Security Council keys are not part of the destination set above. They are signers for blocking, not recipients of BTC.
+
+## No rehypothecation
+
+The collateral cannot be transferred, rehypothecated, lent out, or repurposed by any participant. Each vault is a single Bitcoin output bound by its Taproot script at creation. The Ethereum-side accounting that represents a vault as collateral exists only while the vault is supplied; it is cleared when the vault is withdrawn or liquidated and is never freely transferable. There is no protocol path along which a third party can route a depositor's BTC into a different position, an internal balance sheet, or an off-protocol product.
+
+## What each actor does, and what the depositor can do
+
+The protocol involves four operator types around the depositor. None has custody of BTC. Each one performs an operational role that supports liveness, monitoring, liquidation settlement, or emergency response. The full description of each actor's responsibilities is on [TBV Protocol actors](../technical-details/protocol-actors.mdx).
+
+### Vault Provider
+
+* **What it does:** drives liveness during peg-in and peg-out, generates valid zero-knowledge proofs of redemption, and broadcasts the claim and payout transactions on Bitcoin.
+* **What the depositor can do instead:** self-claim at redemption using the WOTS keypair and claimer artifacts. Advanced operators may also run their own Vault Provider where provider registration is available.
+* **No custody:** a Vault Provider cannot construct any spend that was not committed at vault creation, and cannot release BTC outside the pre-signed paths.
+
+### App Keeper
+
+* **What it does:** participates in peg-in setup for the application and, in the Aave v4 integration, acts as an Arbitrageur during liquidation settlement. The Arbitrageur role is specific to Aave v4 and may differ in future applications.
+* **What the depositor can do instead:** the configured App Keeper set is required during vault creation. At redemption time, the depositor can use the self-claim path with their WOTS keypair, claimer artifacts, and the pre-signed transaction graph.
+* **No custody:** as with the Vault Provider, no App Keeper spend can be assembled that was not committed at vault creation.
+
+### Universal Challenger
+
+* **What it does:** watches claim transactions across applications and broadcasts a challenge if it detects an invalid proof. Universal Challengers are a redundant security countermeasure layered on top of the depositor's own ability to challenge.
+* **What the depositor can do instead:** the depositor, or the depositor's delegated operator, can challenge an invalid claim themselves using the BABE artifacts saved at peg-in. Universal Challengers are useful because they are online and monitor across vaults, but the depositor also has their own challenge path.
+* **Set composition:** the Universal Challenger set is a static, versioned registry. It is not planned to open up to permissionless participation.
+* **Failure mode:** if every Universal Challenger, every relevant protocol participant, and the depositor are offline through the assert timelock, the Security Council can intervene with a council no payout transaction before payout completes.
+
+### Security Council
+
+* **What it does:** signs emergency council no payout transactions by quorum when the protocol cannot resolve a situation algorithmically, for example, a catastrophic failure in the zero-knowledge proof system. The council also acts as the on-chain blocker while an off-chain depositor-recovery procedure runs in the rare case the depositor has lost both the WOTS file and the claimer artifacts and the Vault Provider is also unresponsive.
+* **What removability means:** the Security Council is an early-life safety net. As the protocol matures, the council's powers are intended to be retired.
+* **No custody:** the council has no custody role. Its only on-chain power is to prevent a payout in cases that the standard mechanism cannot resolve. The council cannot direct BTC to any address.
+
+## Depositor recovery paths
+
+### Refund if peg-in does not complete
+
+The Pre-PegIn output has a refund leaf with a relative timelock of 2016 BTC blocks (~14 days) for the current public-testnet parameter version. If off-chain setup does not complete before `pegInAckTimeout` (approximately 24 hours), the vault expires and the peg-in fee is refunded. If setup completes but activation does not occur before `pegInActivationTimeout` (approximately 48 hours), the vault expires and the peg-in fee is non-refundable. In both cases, the depositor can sign the refund path with the depositor key and broadcast a refund transaction on Bitcoin after `tRefund` elapses. Existing vaults retain the parameter version active at creation.
+
+### Self-claim if the Vault Provider does not initiate the claim
+
+At peg-in, the depositor commits a Winternitz One-Time Signature (WOTS) public key on-chain and downloads claimer artifacts, including transaction graph and BABE session data. The protocol generates depositor-as-claimer pre-signed transactions alongside the standard Vault-Provider-as-claimer transactions, and the PegIn transaction produces a small depositor claim output controlled solely by the depositor's key. When a vault is redeemable and the Vault Provider has not initiated the Bitcoin-side claim, the depositor runs a command-line tool the protocol ships with the WOTS keypair file and the artifacts as inputs; the tool broadcasts the Claim, Assert, and Payout transactions. Self-claim follows the same challenge period as a Vault-Provider-initiated claim and reaches the same payout address: the depositor's own.
+
+### Self-challenge if the Universal Challengers do not act
+
+If an invalid claim is posted against a depositor's vault and no Universal Challenger picks it up, the depositor, or any party they delegate, can compose and broadcast a challenge themselves using the BABE artifacts. This is the protocol's last line of defense before the Security Council backstop and is what makes the trust model independent of any specific Universal Challenger being honest.
+
+### Choose or run a Vault Provider
+
+In the public testnet app, the normal user path is to choose a Vault Provider from the portal. Where provider registration is available, an advanced operator can run a Vault Provider node and use it as the vault's provider. This removes dependency on third-party Vault Provider services for the life of that vault. Peg-in coordination, off-chain setup, ZK proof generation at peg-out, and claim broadcasting on Bitcoin are all performed by infrastructure the operator controls.
+
+## Operational pause states
+
+The protocol supports two pause states for operational safety, both governed by the Security Council quorum:
+
+* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and operations on the BTCVault Swap Spoke remain available.
+* **Full pause.** Blocks all on-chain state-changing actions on the Aave application surface. A pause can block starting new Ethereum-side actions, but it cannot block Bitcoin-side depositor recovery paths that are already available, because those paths execute on Bitcoin using pre-signed transactions and the depositor's own keys.
+
+## Risk surface
+
+* **Smart-contract risk.** The Ethereum contracts are subject to standard smart-contract risk.
+* **Smart-contract upgradability and governance.** Several protocol contracts are upgradeable through governance. An upgrade can change protocol behavior and may also be required to follow Ethereum upgrades for compatibility. Mitigations: upgrades go through a Timelock Controller so changes are publicly visible before they take effect; existing vaults retain the parameter version active at their creation, which limits the scope of changes that can affect a live vault.
+* **Oracle risk.** The liquidation health factor depends on a BTC/USD price oracle. Liquidation settlement and fairness payment additionally use a WBTC/USD oracle. A stale or manipulated price could trigger a liquidation at an incorrect price, or fail to trigger one when needed.
+* **Bitcoin reorganization risk.** The peg-in confirmation depth and the timelocks on Pre-PegIn and Vault outputs are calibrated against expected Bitcoin reorg behavior. Deeper-than-expected reorgs would extend timing rather than enable theft.
+* **ZK system soundness.** A bug in the SP1 proof system or the Groth16 proof pipeline could in principle allow a fraudulent proof to pass verification. Mitigations: independent Universal Challenger replay using the BABE garbled circuit instances; the depositor's own self-challenge ability; Security Council intervention before the assert timelock expires.
+* **BABE / BitVM3 construction.** A flaw in the BABE construction or in specific garbled circuit primitives could weaken proof verification on Bitcoin. The protocol generates many candidate GC instances per claimer-challenger pair (307 on the public testnet) and retains 6 after the cut-and-choose; multiple instances provide redundancy. Security Council intervention is the final backstop.
+* **Cross-chain proof pipeline.** The BABE-based challenge that verifies Ethereum redemption events inside Bitcoin Script relies on the Ethereum execution and consensus layers being live and correct, and on the SP1 proof and Groth16 pipeline being implemented correctly. A bug in any of these or a deep Ethereum consensus failure could cause a stuck or incorrect verification. Mitigations: standard Ethereum staking economic security; Universal Challenger replay; Security Council intervention.
+* **Vault Provider unavailability.** Covered by the WOTS self-claim path, plus the option to run a Vault Provider where registration is available. A depositor never depends on a third-party Vault Provider to recover BTC during redemption, provided they have backed up their WOTS file and claimer artifacts.
+* **Universal Challenger collusion or downtime.** Even if every Universal Challenger fails to challenge an invalid claim within the assert timelock, the depositor can self-challenge using the BABE artifacts. If the depositor is also unable to act, the Security Council can broadcast a council no payout transaction.
+* **Security Council compromise.** The council can sign a council no payout but cannot move funds. Compromise of the council reduces emergency-recovery capacity; it does not enable theft of BTC from any vault.
+* **BTCVault Swap Spoke liquidity dependency.** Permissionless liquidations draw WBTC from the Aave Hub. If Hub WBTC liquidity or the BTCVault Swap Spoke allowance is insufficient, permissionless liquidations revert. Liquidations can still proceed via direct redemption by registered Arbitrageurs, but the pool of available liquidators narrows. The protocol mitigates this with an amount-based cap on total BTC onboarded to the Aave application.
+* **Governance risk.** Typical governance risks exist, as the protocol contracts may be upgraded to fix security issues and follow Ethereum upgrades for compatibility.
+
+## Trust set evolution: public testnet to mainnet
+
+Mainnet will expand each set and gradually retire multisig safety nets as system stability allows:
+
+* Multiple independent Vault Providers competing on commission and reliability.
+* Wider App Keeper set per application, including additional external operators.
+* Universal Challenger set may add additional external operators over time; it is not planned to become permissionless.
+* Security Council expanded with independent signers as a transitional measure; long-term path is to retire the council's powers entirely once the protocol matures.
+
+## Related
+
+* [Protocol actors](../technical-details/protocol-actors.mdx): full responsibilities of each operator role.
+* [How it works](./how-it-works.mdx): the conceptual peg-in and peg-out walkthrough.
+* [Community & support](../reference/community-and-support.mdx): where to report bugs and ask questions during the public testnet.

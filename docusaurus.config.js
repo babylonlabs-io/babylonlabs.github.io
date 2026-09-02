@@ -2,7 +2,11 @@ require('dotenv').config();
 const { themes } = require('prism-react-renderer');
 const { languageTabs } = require('./static/languageTabs.cjs');
 const BRANCH_NAME = process.env.BRANCH_NAME;
-const ALGOLIA_INDEX_NAME = BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const ALGOLIA_INDEX_NAME =
+  BRANCH_NAME === 'main' ? 'doc_babylonlabs_io' : 'doc_dev_babylonlabs_io';
+const ENABLE_GTAG =
+  process.env.NODE_ENV === 'production' && Boolean(process.env.TRACKING_ID);
+const ENABLE_LOCAL_GTAG_STUB = process.env.NODE_ENV !== 'production';
 const code_themes = {
   light: themes.github,
   dark: themes.dracula,
@@ -52,18 +56,17 @@ const openapiPlugins = [
           hideSendButton: false,
           showSchemas: false,
         },
-        
-          cometBFT:{
-            specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml'
-          ,outputDir: 'docs/api/comet-bft',
+
+        cometBFT: {
+          specPath: 'static/swagger/comet-bft-rpc-openapi3.yaml',
+          outputDir: 'docs/api/comet-bft',
           sidebarOptions: {
             groupPathsBy: 'tag',
             categoryLinkSource: 'tag',
           },
           hideSendButton: false,
           showSchemas: false,
-
-          }
+        },
       },
     },
   ],
@@ -101,6 +104,7 @@ function create_doc_plugin({
 
 const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
 const webpackReactProvider = require('./plugins/webpack-react-provider.cjs');
+const graphiqlOptionalDeps = require('./plugins/graphiql-optional-deps.cjs');
 const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
 const plugins = [
   [
@@ -110,6 +114,62 @@ const plugins = [
         {
           from: '/guides/baby_stakers/baby_staking_tools/',
           to: '/stakers/baby_stakers/',
+        },
+        // Old Bitcoin Vault overview page → Trustless Bitcoin Vaults Start Here
+        {
+          from: '/guides/overview/bitcoin-vault/',
+          to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+        },
+        // Legacy TBV aliases
+        {
+          from: '/trustless-bitcoin-vault/tbv-vs-alternatives/',
+          to: '/trustless-bitcoin-vault/start-here/tbv-vs-alternatives/',
+        },
+        // TBV FAQ promoted to a top-level page
+        {
+          from: '/trustless-bitcoin-vault/use-for-lending/faq/',
+          to: '/trustless-bitcoin-vault/faq/',
+        },
+        // Staking research/security moved under Bitcoin Staking
+        {
+          from: '/guides/research/',
+          to: '/guides/overview/bitcoin_staking/research/',
+        },
+        {
+          from: '/guides/research/babe_verification/',
+          to: '/trustless-bitcoin-vault/research/babe_verification/',
+        },
+        {
+          from: '/guides/research/btc_staking_litepaper/',
+          to: '/guides/overview/bitcoin_staking/research/btc_staking_litepaper/',
+        },
+        {
+          from: '/guides/research/btc_timestamping/',
+          to: '/guides/overview/bitcoin_staking/research/btc_timestamping/',
+        },
+        {
+          from: '/guides/research/btc_trustless_vault/',
+          to: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
+        },
+        {
+          from: '/guides/overview/bitcoin_staking/research/babe_verification/',
+          to: '/trustless-bitcoin-vault/research/babe_verification/',
+        },
+        {
+          from: '/guides/overview/bitcoin_staking/research/btc_trustless_vault/',
+          to: '/trustless-bitcoin-vault/research/btc_trustless_vault/',
+        },
+        {
+          from: '/guides/security/',
+          to: '/guides/overview/bitcoin_staking/security/',
+        },
+        {
+          from: '/guides/security/audit_reports/',
+          to: '/guides/overview/bitcoin_staking/security/audit_reports/',
+        },
+        {
+          from: '/guides/security/bug_bounties/',
+          to: '/guides/overview/bitcoin_staking/security/bug_bounties/',
         },
         // Architecture redirects (moved under babylon_genesis)
         {
@@ -122,7 +182,90 @@ const plugins = [
         },
         {
           from: '/guides/architecture/vigilantes/',
-          to: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        // Vigilantes moved under btc_staking_program
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/monitor/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/monitor/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/reporter/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/reporter/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/submitter/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/submitter/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/architecture/vigilantes/vigilantes/',
+          to: '/guides/overview/babylon_genesis/architecture/btc_staking_program/vigilantes/',
+        },
+        // Networks removed
+        {
+          from: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/networks/testnet/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/networks/',
+          to: '/guides/overview/babylon_genesis/',
+        },
+        // Governance proposals flattened
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/proposal-review-guide/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/voting-via-cli/',
+          to: '/guides/overview/babylon_genesis/governance/voting-via-cli/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/reviewing_proposals/voting_via_web/',
+          to: '/guides/overview/babylon_genesis/governance/voting_via_web/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/drafting-proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/drafting_proposals/proposal_templates/',
+          to: '/guides/overview/babylon_genesis/governance/proposal_templates/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_via_cli/',
+          to: '/guides/overview/babylon_genesis/governance/submit_via_cli/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/submit_via_web/',
+          to: '/guides/overview/babylon_genesis/governance/submit_via_web/',
+        },
+        {
+          from: '/guides/overview/babylon_genesis/governance/submit_proposals/smart_contract_deployment/',
+          to: '/guides/overview/babylon_genesis/governance/smart_contract_deployment/',
         },
         // Governance redirects
         {
@@ -131,15 +274,15 @@ const plugins = [
         },
         {
           from: '/guides/governance/drafting_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/drafting_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/drafting-proposals/',
         },
         {
           from: '/guides/governance/reviewing_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/reviewing_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/proposal-review-guide/',
         },
         {
           from: '/guides/governance/submit_proposals/',
-          to: '/guides/overview/babylon_genesis/governance/submit_proposals/',
+          to: '/guides/overview/babylon_genesis/governance/submit_proposals_overview/',
         },
         // Specifications redirects
         {
@@ -157,19 +300,19 @@ const plugins = [
         // Network redirects (Babylon Genesis)
         {
           from: '/guides/networks/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/mainnet/',
-          to: '/guides/overview/babylon_genesis/networks/mainnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         {
           from: '/guides/networks/babylon-genesis/testnet/',
-          to: '/guides/overview/babylon_genesis/networks/testnet/',
+          to: '/guides/overview/babylon_genesis/',
         },
         // Network redirects (Bitcoin -> developers)
         {
@@ -222,19 +365,34 @@ const plugins = [
           from: '/guides/architecture/babylon_genesis_modules/',
           to: '/guides/overview/babylon_genesis/architecture/',
         },
+        // Retired top-nav redirects
+        {
+          from: '/stakers/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/developers/',
+          to: '/guides/overview/',
+        },
+        {
+          from: '/operators/',
+          to: '/guides/overview/',
+        },
       ],
     },
   ],
   tailwindPlugin,
   webpackReactProvider,
+  graphiqlOptionalDeps,
   ...docs_plugins,
-  ...openapiPlugins
+  ...openapiPlugins,
 ];
 
 // @ts-ignore
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   ...meta,
+  scripts: ENABLE_LOCAL_GTAG_STUB ? [{ src: '/local-gtag-stub.js' }] : [],
   plugins,
 
   trailingSlash: true,
@@ -267,17 +425,17 @@ const config = {
         },
         blog: false,
         theme: {
-          customCss: [
-            require.resolve('./src/css/custom.css')
-          ],
+          customCss: [require.resolve('./src/css/custom.css')],
         },
         sitemap: {
           ignorePatterns: ['**/tags/**', '/api/*'],
         },
-        gtag: process.env.TRACKING_ID ? {
-          trackingID: process.env.TRACKING_ID,
-          anonymizeIP: true,
-        } : false,
+        gtag: ENABLE_GTAG
+          ? {
+              trackingID: process.env.TRACKING_ID,
+              anonymizeIP: true,
+            }
+          : false,
       }),
     ],
   ],
@@ -287,7 +445,12 @@ const config = {
     ({
       image: '/logo/babylon.svg',
       colorMode: {
+        // Both themes ship, as on the rest of Babylon's sites. Dark is the
+        // default because it is what the TBV app and this reskin were built
+        // against; the OS preference is honoured, and
         defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
       },
       docs: {
         sidebar: {
@@ -296,70 +459,42 @@ const config = {
         },
       },
       navbar: {
+        // The symbol alone, with the word set in type beside it. The full
+        // lockup already reads "babylon docs" as artwork, which left the
+        // navbar saying the same thing twice at a size that could not shrink.
+        // `title` renders as .navbar__title, styled in custom.css to match the
+        // rest of the chrome rather than Infima's bold default.
+        title: 'Docs',
         logo: {
           href: '/',
-          src: '/logo/light.svg',
-          srcDark: '/logo/dark.svg',
-          alt: 'Babylon Documentation | Babylon Docs',
-          height: '40px',
-          width: '101px',
+          // Both themes ship, so each slot takes its own mark: the black
+          // symbol on the light ground, the white one on the dark.
+          src: '/logo/babylon_symbol.svg',
+          srcDark: '/logo/babylon_symbol_dark.svg',
+          alt: 'Babylon',
+          // The source art is 19x18, so the box keeps that ratio.
+          height: '28px',
+          width: '30px',
         },
         items: [
           {
-            label: 'Overview',
-            to: '/guides/overview/',
+            label: 'Trustless Bitcoin Vaults',
+            to: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
+            className: 'trustless-bitcoin-vault-top-header',
+          },
+          {
+            label: 'Bitcoin Staking',
+            to: '/guides/overview/bitcoin_staking/',
             className: 'guides-top-header',
           },
-          {
-            label: 'Stakers',
-            to: '/stakers/',
-            className: 'stakers-top-header',
-          },
-          {
-            label: 'Developers',
-            to: '/developers/',
-            className: 'developers-top-header',
-          },
-          {
-            label: 'Operators',
-            to: '/operators/',
-            className: 'operators-top-header',
-          },
-          {
-            label: 'API',
-            items: [
-              {
-                label: 'Staking API',
-                to: '/api/staking-api/babylon-staking-api',
-              },
-              {
-                label: 'Babylon gRPC',
-                to: '/api/babylon-gRPC/babylon-grpc-api-docs',
-              },
-              {label: 'CometBFT',
-                to:'api/comet-bft/babylon-grpc-api-docs'
-              }
-            ],
-          },
+          // The top-level "API" dropdown was removed: each product section now owns
+          // its own APIs. The Trustless Bitcoin Vaults sidebar carries the Vault
+          // Indexer API, and the Bitcoin Staking sidebar carries the Staking API,
+          // Babylon gRPC and CometBFT. No page URLs changed, so no redirects are
+          // needed — only the navigation moved.
           {
             label: 'Support',
             to: 'https://discord.com/invite/babylonglobal',
-          },
-          {
-            label: 'Ask AI',
-            to: '#',
-            className: 'header-ai-chat-link',
-            position: 'right',
-          },
-          {
-            href: 'https://discord.com/invite/babylonglobal',
-            position: 'right',
-            className: 'header-discord-link',
-          },
-          {
-            href: 'https://github.com/babylonlabs-io/',
-            position: 'right',
-            className: 'header-github-link',
           },
           {
             type: 'search',
@@ -370,6 +505,8 @@ const config = {
       footer: {
         logo: {
           href: '/',
+          // Both themes ship, so each slot takes its own mark: the dark
+          // wordmark on the light ground, the white one on the dark.
           src: '/logo/light.svg',
           srcDark: '/logo/dark.svg',
           alt: 'Babylon Documentation | Babylon Docs',
@@ -390,6 +527,22 @@ const config = {
               {
                 label: 'Project Showcase',
                 href: 'https://dorahacks.io/projects/babylon-labs',
+              },
+            ],
+          },
+          {
+            title: 'For AI agents',
+            items: [
+              {
+                // Machine-readable index of the documentation, served from
+                // static/. Use `to` with the pathname: prefix so Docusaurus
+                // treats it as a static file rather than a route.
+                label: 'llms.txt',
+                to: 'pathname:///llms.txt',
+              },
+              {
+                label: 'llms-full.txt',
+                to: 'pathname:///llms-full.txt',
               },
             ],
           },
@@ -432,7 +585,7 @@ const config = {
     }),
 
   // Conditionally enable custom webpack config only if SWC is available
-  ...((() => {
+  ...(() => {
     try {
       require.resolve('swc-loader');
       require('@swc/core');
@@ -456,10 +609,13 @@ const config = {
         },
       };
     } catch (e) {
-      console.warn('SWC not available, using Docusaurus default Babel loader:', e.message);
+      console.warn(
+        'SWC not available, using Docusaurus default Babel loader:',
+        e.message
+      );
       return {}; // No custom webpack config, use Docusaurus defaults
     }
-  })()),
+  })(),
   customFields: {
     apiBaseUrl: process.env.API_BASE_URL || '',
   },

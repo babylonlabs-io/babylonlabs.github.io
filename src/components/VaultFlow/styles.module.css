@@ -1,0 +1,227 @@
+/*
+ * Choreography for the vault-flow scenes.
+ *
+ * Everything here is pure CSS animation on transform/opacity/width so the
+ * browser can composite it off the main thread — no per-frame React work.
+ * Scenes are sequenced with `animation-delay`, set inline per element, and
+ * restarted by remounting the scene (see the `runKey` in index.tsx).
+ */
+
+.scene {
+  animation-play-state: running;
+}
+
+/*
+ * Measuring guard. Hit positions are read in a layout effect, when entrance
+ * animations are still on their first keyframe — a dialog mid-`pop` reports a
+ * scaled-down, shifted rect, which sent the pointer to the wrong place.
+ * Suppressing animations for the measurement yields settled geometry.
+ */
+.measuring,
+.measuring * {
+  animation: none !important;
+}
+
+/* Pausing the wrapper pauses every descendant animation at once. */
+.paused,
+.paused * {
+  animation-play-state: paused !important;
+}
+
+/* All scene animations hold their final frame and start from their first. */
+.scene [class*='anim'] {
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animFadeUp {
+  animation-name: fade-up;
+  animation-duration: 0.55s;
+}
+
+.animSlideIn {
+  animation-name: slide-in;
+  animation-duration: 0.65s;
+}
+
+/* Popups leave as well as arrive, so this pairs with a later delay. */
+.animSlideOut {
+  animation-name: slide-out;
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.35);
+}
+
+.animPop {
+  animation-name: pop;
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animReveal {
+  animation-name: reveal;
+  animation-duration: 0.4s;
+}
+
+/* Width is driven by a custom property so one keyframe serves every bar. */
+.animFill {
+  animation-name: fill;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.animPress {
+  animation-name: press;
+  animation-duration: 0.4s;
+}
+
+/* Pairs with .animReveal to cross-fade a value that changes mid-scene. */
+.animFadeOut {
+  animation-name: fade-out;
+  animation-duration: 0.3s;
+}
+
+.animGlow {
+  animation-name: glow;
+  animation-duration: 1.8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translate3d(56px, 8px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(40px, 4px, 0) scale(0.98);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--fill, 100%);
+  }
+}
+
+/* The moment a synthetic click "lands" on a button. */
+@keyframes press {
+  0% {
+    transform: none;
+    filter: none;
+  }
+  45% {
+    transform: scale(0.96);
+    filter: brightness(0.9);
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(206, 101, 51, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(206, 101, 51, 0.16);
+  }
+}
+
+/*
+ * The cursor. Its keyframe is generated per scene from that scene's own event
+ * timeline (see ./cursor.ts) and applied by name, so the pointer provably
+ * arrives at a target before the click that triggers the next state.
+ */
+.cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  z-index: 30;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  animation-fill-mode: both;
+  /* Slow-out/slow-in on every hop reads as a hand, not a teleport. */
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dock playback indicator — one animation per scene run. */
+.dockProgress {
+  animation-name: fill;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene *,
+  .cursor,
+  .dockProgress {
+    animation: none !important;
+  }
+  /* Without motion the scenes must still read as their finished state. */
+  .scene [class*='anim'] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .animFill {
+    width: var(--fill, 100%) !important;
+  }
+}

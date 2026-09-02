@@ -1,7 +1,10 @@
 {
-    "position": 2,
-    "label": "Babylon Genesis Validators",
-    "collapsible": true,
-    "collapsed": true
+  "position": 2,
+  "label": "Babylon Genesis Validators",
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "operators/babylon_validators/babylon_validators"
   }
-
+}

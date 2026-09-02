@@ -1,0 +1,153 @@
+---
+title: Vault Indexer API
+sidebar_label: Vault Indexer API
+sidebar_position: 1
+description: The public GraphQL API for Babylon Trustless Bitcoin Vaults (TBV) testnet — endpoint, explorer, schema and limits.
+---
+
+# Vault Indexer API
+
+The vault indexer is a public, read-only GraphQL API over Babylon Trustless
+Bitcoin Vaults (TBV) state. TBV lets native Bitcoin be used as collateral, and
+the indexer serves the resulting on-chain state: BTCVault lifecycle, operator
+sets and Aave position data, read from the vault contracts.
+
+No API key. No authentication. Cross-origin requests are permitted.
+
+## Endpoint
+
+| | |
+| --- | --- |
+| **URL** | `https://babylon-vault-indexer-api.testnet.babylonlabs.io/` |
+| **Method** | `POST` with `Content-Type: application/json` |
+| **Alternate path** | `/graphql` — identical behaviour |
+| **Explorer** | [Open the GraphiQL playground](https://babylon-vault-indexer-api.testnet.babylonlabs.io/) |
+| **Network** | Ethereum Sepolia (chain ID `11155111`) |
+| **Auth** | None |
+| **CORS** | Open |
+
+Testnet only. There is no mainnet endpoint yet.
+
+```bash
+curl -s https://babylon-vault-indexer-api.testnet.babylonlabs.io/ \
+  -H 'Content-Type: application/json' \
+  -H 'User-Agent: my-app/1.0' \
+  -d '{"query":"{ statss(limit:1){ items{ totalAvailableSats availableVaultCount } } }"}'
+```
+
+:::warning Three things that will catch you out
+1. Set a **`User-Agent`**. The default one from `requests`, `urllib` or many HTTP
+   clients gets a bare **403** from the edge.
+2. Query depth is capped at **10**, so standard GraphQL tooling **cannot
+   introspect** this endpoint.
+3. `limit` is capped at **1000**. Page with `offset`.
+
+All three are explained in [Limits and gotchas](./limits-and-gotchas.mdx). Read that
+page before you write a client.
+:::
+
+## What the API covers
+
+The schema splits into two domains.
+
+### Core vault
+
+The BTCVault lifecycle and the operators that secure it — Vault Providers,
+Universal Challengers and App Keepers — independent of any application:
+`vault`, `vaultActivity`, `vaultProvider`, `vaultProviderStats`,
+`vaultKeeper`, `vaultKeeperApplication`, `universalChallenger`,
+`universalChallengerVersion`, `vaultFeeEscrow`, `feeConfig`, `application`,
+`token`, `stats` and `protocolState`.
+
+A BTCVault progresses through:
+
+```
+pending → signatures_collected → verified → available
+                                              ├→ redeemed
+                                              ├→ liquidated
+                                              ├→ expired
+                                              ├→ depositor_withdrawn
+                                              └→ invalid
+```
+
+`status` is the authority on where a BTCVault sits. Timestamps cover only part of
+the path, so do not expect one field per state:
+
+| State | Field that dates it |
+| --- | --- |
+| `pending` | `pendingAt` |
+| `signatures_collected` | `peginSigsPostedAt` |
+| `verified` | `verifiedAt` |
+| `available` | `activatedAt` |
+| `expired` | `expiredAt`, with `expirationReason` |
+| `redeemed`, `liquidated` | none on the vault — read `vaultActivity` |
+| `depositor_withdrawn`, `invalid` | none — `status` is the only signal |
+
+### Aave application
+
+State for the Aave v4 integration, the first application built on TBV:
+`aavePosition`, `aavePositionCollateral`, `aaveVaultStatus`, `aaveUserProxy`,
+`aaveReserve` and `aaveConfig`.
+
+A BTCVault used as Aave collateral appears in both domains — as a `vault` and as an
+`aavePositionCollateral`.
+
+## Query shape
+
+Every entity has two resolvers.
+
+| Form | Example | Returns |
+| --- | --- | --- |
+| Singular | `vault(id: "0x…")` | One record, or `null` |
+| Plural | `vaults(where:, orderBy:, orderDirection:, limit:, offset:)` | A page |
+
+A page always carries `items`, `totalCount` and `pageInfo`. `totalCount` is the
+number of records matching the filter, not the number returned.
+
+Numeric values typed `BigInt` — amounts, block numbers, timestamps — are returned
+as **strings**, and comparison filters on them take strings too.
+
+## Explorer
+
+Use the [Explorer on this site](pathname:///vault-indexer-explorer). It runs
+against the same endpoint and carries every documented example as a preset, so
+you can start from a working query rather than a blank editor.
+
+You can also press **Run** on any query in these pages to open it directly, in an
+explorer over the page. From there, **Full explorer** carries the same query on
+to the dedicated page.
+
+:::caution The endpoint's own playground cannot load the schema
+Opening the endpoint in a browser serves a GraphiQL playground, and queries
+execute there normally. Its **Docs** panel, however, shows
+`Error fetching schema`, and there is no autocomplete or in-editor validation.
+The depth cap is the reason: GraphiQL's introspection query is depth 21, and
+this deployment allows 10.
+
+The Explorer on this site avoids that by reading the committed
+[SDL](pathname:///schema/vault-indexer.graphql) instead of introspecting, so
+autocomplete, validation and the Docs panel all work.
+:::
+
+## Checking indexer freshness
+
+The indexer trails the chain. `_meta` reports the last processed block.
+
+```graphql
+{
+  _meta {
+    status
+  }
+}
+```
+
+Compare that block number against a Sepolia chain head before treating any
+result as current.
+
+## Where to go next
+
+- **[Schema Reference](./schema-reference.mdx)** — every entity, field and type
+- **[Query Cookbook](./query-cookbook.mdx)** — worked queries for depositors,
+  operators and builders, all executed in CI
+- **[Limits and gotchas](./limits-and-gotchas.mdx)** — depth, pagination, the 403
+  trap, and known data gaps

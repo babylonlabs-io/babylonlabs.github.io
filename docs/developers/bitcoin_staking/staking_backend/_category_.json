@@ -1,7 +1,11 @@
 {
-    "position": 5,
-    "label": "Staking Backend",
-    "collapsible": true,
-    "collapsed": true,
-    "className": "staking_backend_sidebar"
+  "position": 5,
+  "label": "Staking Backend",
+  "collapsible": true,
+  "collapsed": true,
+  "className": "staking_backend_sidebar",
+  "link": {
+    "type": "doc",
+    "id": "developers/bitcoin_staking/staking_backend/staking_backend"
+  }
 }

@@ -1,0 +1,80 @@
+/* PixelCard, adapted to this site.
+   Upstream ships a fixed 300x400 card with a 25px radius and a light ground.
+   Here it spans its column, keeps the square corners the rest of the theme
+   uses, and sits on the near-black with a hairline border. */
+
+.pixel-card {
+  position: relative;
+  width: 100%;
+  min-height: 168px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgb(var(--tbv-border));
+  background-color: rgb(var(--tbv-background));
+  transition: border-color 200ms cubic-bezier(0.5, 1, 0.89, 1);
+  user-select: none;
+}
+
+.pixel-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Upstream fades a radial wash in on hover. Kept, in the ground colour, so
+   the pixels read against it rather than over raw text. */
+/* A scrim between the field and the words. Upstream fades this in on hover
+   only, which left the text fighting the pixels the whole time it animated.
+   Here it is always on and merely deepens on hover: the card has to stay
+   readable while the effect runs, not after it settles. */
+.pixel-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to right,
+    rgb(var(--tbv-background) / 0.94) 0%,
+    rgb(var(--tbv-background) / 0.86) 55%,
+    rgb(var(--tbv-background) / 0.55) 100%
+  );
+  opacity: 1;
+  transition: opacity 800ms cubic-bezier(0.5, 1, 0.89, 1);
+  pointer-events: none;
+}
+
+a:hover .pixel-card,
+a:focus-visible .pixel-card {
+  border-color: rgb(var(--tbv-accent));
+}
+
+/* The card is wrapped in an anchor, so the anchor carries the focus ring. */
+.paper-card-link {
+  display: block;
+  text-decoration: none;
+}
+
+.paper-card-link:hover,
+.paper-card-link:focus-visible {
+  text-decoration: none;
+}
+
+.paper-card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-card,
+  .pixel-card::before {
+    transition: none;
+  }
+}

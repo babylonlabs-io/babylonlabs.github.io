@@ -1,7 +1,11 @@
 {
-    "position": 2,
-    "label": "BABY Stakers",
-    "collapsible": false, 
-    "collapsed": true,
-    "className": "baby_stakers_sidebar_header"
-  } 
+  "position": 2,
+  "label": "BABY Stakers",
+  "collapsible": false,
+  "collapsed": true,
+  "className": "baby_stakers_sidebar_header",
+  "link": {
+    "type": "doc",
+    "id": "stakers/baby_stakers/baby_stakers"
+  }
+}
