@@ -344,6 +344,7 @@ const sidebars = {
         'trustless-bitcoin-vault/building-on-tbv/resolver-pausability',
         'trustless-bitcoin-vault/building-on-tbv/resolver-partner-checklist',
         'trustless-bitcoin-vault/building-on-tbv/sdk-and-tooling',
+        'trustless-bitcoin-vault/building-on-tbv/borrow-with-sdk',
         'trustless-bitcoin-vault/building-on-tbv/agents',
       ],
     },
@@ -364,6 +365,7 @@ const sidebars = {
       items: [
         'trustless-bitcoin-vault/technical-details/protocol-architecture',
         'trustless-bitcoin-vault/technical-details/protocol-actors',
+        'trustless-bitcoin-vault/technical-details/governance-and-committees',
         'trustless-bitcoin-vault/technical-details/aave-v4-integration',
       ],
     },

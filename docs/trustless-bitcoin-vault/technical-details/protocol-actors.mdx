@@ -91,16 +91,17 @@ Universal Challengers are registered at the protocol level rather than per appli
 
 The Universal Challenger set is a closed registry. It is not planned to open up to permissionless participation; expansion happens through governance adding additional vetted operators.
 
-## Security Council
+## Bitcoin Security Council
 
-The Security Council is a quorum of off-chain signers whose Bitcoin public keys are committed in the protocol's versioned off-chain parameters. The council is an emergency backstop for situations the standard mechanism cannot resolve. On the current public testnet, the council has 5 keys with a 3-of-5 quorum. It is a transitional safety net intended to be retired as the protocol matures.
+The Bitcoin Security Council signs council no-payout transactions. It can block a malicious BTC claim but cannot choose another payout address.
 
-### What the Security Council does
+Its Bitcoin keys and signature threshold come from the vault's recorded off-chain parameters. Do not substitute a testnet threshold for the mainnet deployment.
 
-* **Emergency intervention.** If the standard challenge mechanism fails to prevent a fraudulent payout, or if a critical protocol issue requires immediate action, the council can act.
-* **Produce council no payout transactions** by quorum, blocking payout on a specific vault. The council cannot direct BTC to any address; it can only prevent release.
-* **Operational pause states.** The council can place the protocol into a soft pause or a full pause. Pauses affect Ethereum-side application actions, but they do not affect Bitcoin-side depositor recovery paths that are already available, such as the Pre-PegIn refund path or WOTS self-claim.
-* **Off-chain depositor-recovery support.** If a depositor loses both their WOTS keypair file and their claimer artifacts, and the Vault Provider is also unresponsive, an off-chain recovery procedure can be initiated. The Security Council's role is to use its council no payout power to block any unauthorized payout while that procedure runs.
+Ethereum pause and freeze permissions belong to separate assigned roles. The Bitcoin parameter `councilQuorum` does not grant those permissions.
+
+The council cannot restore a lost private key or missing recovery artifacts. Its blocking power is not a recovery guarantee.
+
+See [Governance and committees](./governance-and-committees.mdx) for the role model and launch confirmation checklist.
 
 ## Permissioned and permissionless participation
 

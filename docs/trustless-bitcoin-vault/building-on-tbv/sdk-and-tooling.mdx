@@ -4,6 +4,8 @@ title: SDK & tooling
 
 The **Babylon TypeScript SDK** (`@babylonlabs-io/ts-sdk`) is the toolkit for programmatic vault operations: creating and activating vaults, using vaulted BTC as Aave collateral, and reading authoritative on-chain state — all without giving up custody of the BTC. Use it for bots, dashboards, backend services, and agents. It is framework-agnostic and runs on both Node.js and the browser; the only platform-specific pieces are the Bitcoin wallet and Ethereum wallet you supply.
 
+For the end-to-end borrowing path, see [Borrow through the SDK](./borrow-with-sdk.mdx). It covers wallet handoff, receipts, full repayment, and withdrawal checks.
+
 ## Getting started
 
 ### Install
@@ -41,7 +43,7 @@ Import from specific subpaths for the best tree-shaking:
 
 ### Supply your wallets
 
-The SDK defines a `BitcoinWallet` interface (compatible with common wallets such as Unisat, OKX, OneKey, Ledger, Keystone) and uses viem's `WalletClient` for Ethereum. You adapt whatever wallet you already have. Vault state that influences what a user signs — script derivation, amounts, hashlocks, signer sets, protocol-param versions — must come from the on-chain contracts, never from the indexer; the indexer is for display and discovery only.
+The SDK defines a `BitcoinWallet` interface and uses viem's `WalletClient` for Ethereum. A connector does not certify every wallet version or device for mainnet. Check [Mainnet wallet setup](../network-info/mainnet/setup.mdx) and the SDK wallet interface requirements before integration. Vault state that influences what a user signs — script derivation, amounts, hashlocks, signer sets, protocol-param versions — must come from the on-chain contracts, never from the indexer; the indexer is for display and discovery only.
 
 ## Managers, services, and primitives
 
@@ -68,7 +70,7 @@ A vault goes from off-chain to `ACTIVE` through six phases. The critical transit
 
 Optional exit after the refund CSV timelock expires: `buildAndBroadcastRefund()`.
 
-> Persist the 32-byte HTLC secret between registration and activation. Losing it strands the vault until refund. (WOTS key material already derives deterministically from the wallet's `deriveContextHash`; HTLC-secret derivation is moving to the same path — see the SDK reference.)
+> Use the selected release's wallet-derived secret helpers. The referenced SDK derives WOTS material and the HTLC secret from the wallet root. Preserve the vault context and recovery artifacts. Do not generate a replacement secret when resuming an existing vault. See [Borrow through the SDK](./borrow-with-sdk.mdx).
 
 ## Aave integration
 

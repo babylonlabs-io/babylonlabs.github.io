@@ -6,6 +6,8 @@ sidebar_position: 2
 
 # Create a vault
 
+> **Network and release check:** Use [Mainnet setup](../network-info/mainnet/setup.mdx) for Bitcoin Mainnet and Ethereum Mainnet. Use [Testnet setup](../network-info/testnet/setup.mdx) for Signet and Sepolia. Screenshots show the earlier testnet UI, not a confirmed mainnet release. Check the selected network's wallets, assets, caps, fees, and timing before signing.
+
 This page is the full vault-creation walkthrough: every step, what each one does, what to watch for, and how to recover BTC if something stalls. For a 5-minute version of the happy path, see [Quickstart](./quickstart.mdx).
 
 Creating a BTCVault locks BTC on the Bitcoin network and registers a matching vault record on Ethereum. This process is called a **peg-in**. The BTC stays on Bitcoin throughout: it is not bridged, wrapped, or transferred to a custodian. It is held in a Taproot output whose spend paths are committed by all participants before any Bitcoin moves.
@@ -20,9 +22,11 @@ The current public testnet enforces conservative per-vault, per-position, and pe
 
 You need:
 
-* A UniSat Bitcoin wallet with signet support, set to Taproot (P2TR) address type and holding enough BTC for the vault size you want.
-* An Ethereum wallet on Sepolia, with a small balance of Sepolia ETH for gas and the peg-in fee.
-* Signet BTC and Sepolia ETH from the faucets listed in [Setup](../network-info/testnet/setup.mdx).
+* A supported Bitcoin wallet with a Taproot/P2TR account on the chosen network.
+* A supported Ethereum wallet on the matching network.
+* BTC for the deposit and Bitcoin fees, plus ETH for gas and protocol fees.
+
+Use [Mainnet setup](../network-info/mainnet/setup.mdx) for real assets. Faucets apply only to [Testnet setup](../network-info/testnet/setup.mdx).
 
 ## The peg-in flow at a glance
 
@@ -126,7 +130,7 @@ When signing completes, the portal offers a **Download Claimer Artifacts** actio
 ![Download Claimer Artifacts prompt](/img/trustless-bitcoin-vault/confluence/use-for-lending/create-a-vault/screenshot-071-20260601-042534.png)
 
 :::warning Back this up alongside your seed phrase
-Without the claimer artifacts plus the WOTS keypair file, the self-claim fallback is unavailable for this vault. If you also lose access to the Vault Provider, recovery would require Security Council intervention. The bundle is per-vault; cold storage is acceptable.
+Keep the per-vault claimer artifacts and the recovery material required by the selected wallet and SDK release. The Security Council cannot restore lost keys or missing artifacts. If your recovery material is unavailable and the Vault Provider does not respond, contact support. Do not assume that council intervention can recover the BTC.
 :::
 
 Once the artifacts are saved, the off-chain setup completes and the vault transitions to **Verified**.

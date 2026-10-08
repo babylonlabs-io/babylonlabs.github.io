@@ -37,7 +37,7 @@ In response to an incident the protocol can enter one of two pause states, mirro
 - **Soft pause (Frozen).** Triggered by a freeze guardian (`TBV_PROTOCOL_FREEZE_GUARDIAN` / `APPLICATION_FREEZE_GUARDIAN`). Blocks the more sensitive state-changing operations while leaving other functions available.
 - **Full pause (Paused).** Triggered by a pause guardian (`TBV_PROTOCOL_PAUSE_GUARDIAN` / `APPLICATION_PAUSE_GUARDIAN`). The most restrictive state; it halts the guarded operations broadly.
 
-During the beta the transitional **Security Council** can act by quorum (`councilQuorum`) to invoke an emergency pause. A pause is a safety brake, not a seizure: Bitcoin-side depositor recovery paths that are already available to you are not blocked by a pause.
+Assigned Ethereum governance and guardian roles control pause and freeze actions. The Bitcoin `councilQuorum` parameter does not grant Ethereum permissions. Bitcoin recovery paths retain their own keys, artifacts, timelocks, and protocol conditions. See [Governance and committees](../technical-details/governance-and-committees.mdx).
 
 ## Related
 

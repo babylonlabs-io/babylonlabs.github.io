@@ -83,7 +83,7 @@ The protocol involves four operator types around the depositor. None has custody
 
 ### Security Council
 
-* **What it does:** signs emergency council no payout transactions by quorum when the protocol cannot resolve a situation algorithmically, for example, a catastrophic failure in the zero-knowledge proof system. The council also acts as the on-chain blocker while an off-chain depositor-recovery procedure runs in the rare case the depositor has lost both the WOTS file and the claimer artifacts and the Vault Provider is also unresponsive.
+* **What it does:** signs emergency council no payout transactions by quorum when the protocol cannot resolve a situation algorithmically, for example, a catastrophic failure in the zero-knowledge proof system. The council cannot restore lost keys or artifacts. Do not treat its blocking power as a guaranteed recovery service.
 * **What removability means:** the Security Council is an early-life safety net. As the protocol matures, the council's powers are intended to be retired.
 * **No custody:** the council has no custody role. Its only on-chain power is to prevent a payout in cases that the standard mechanism cannot resolve. The council cannot direct BTC to any address.
 
@@ -107,10 +107,13 @@ In the public testnet app, the normal user path is to choose a Vault Provider fr
 
 ## Operational pause states
 
-The protocol supports two pause states for operational safety, both governed by the Security Council quorum:
+Ethereum contracts support freeze and pause controls through assigned governance and guardian roles. The Bitcoin Security Council quorum does not grant Ethereum pause permissions. See [Governance and committees](../technical-details/governance-and-committees.mdx).
 
-* **Soft pause.** Blocks new deposits, borrows, and withdrawals. Repay, liquidate, and operations on the BTCVault Swap Spoke remain available.
-* **Full pause.** Blocks all on-chain state-changing actions on the Aave application surface. A pause can block starting new Ethereum-side actions, but it cannot block Bitcoin-side depositor recovery paths that are already available, because those paths execute on Bitcoin using pre-signed transactions and the depositor's own keys.
+The affected operations depend on the contract and function. Check the deployed permissions and incident notice before assuming that repayment or withdrawal remains available:
+
+* **Freeze.** Restricts selected Ethereum operations. The affected functions depend on the contract and deployment.
+* **Pause.** Restricts a wider set of guarded Ethereum operations. Do not assume that repayment, withdrawal, or liquidation remains available.
+* **Bitcoin recovery.** Ethereum controls do not change the vault's Bitcoin spending conditions. Each recovery path still requires its own keys, artifacts, timelocks, and protocol conditions.
 
 ## Risk surface
 

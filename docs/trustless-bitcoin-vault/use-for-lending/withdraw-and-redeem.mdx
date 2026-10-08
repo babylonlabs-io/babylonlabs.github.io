@@ -6,6 +6,8 @@ sidebar_position: 4
 
 # Withdraw & redeem
 
+> **Network and release check:** Use [Mainnet setup](../network-info/mainnet/setup.mdx) for Bitcoin Mainnet and Ethereum Mainnet. Use [Testnet setup](../network-info/testnet/setup.mdx) for Signet and Sepolia. Screenshots show the earlier testnet UI, not a confirmed mainnet release. Check the selected network's wallets, assets, caps, fees, and timing before signing.
+
 This page covers **both layers** of the exit flow: the application-side withdrawal of collateral from your Aave v4 position, and the protocol-side peg-out that moves BTC back to Bitcoin. The application-side steps are specific to the Aave v4 integration; the Bitcoin-side redemption flow is handled by TBV.
 
 Redemption (peg-out) is the reverse of vault creation. It unlocks the bitcoin sitting in the vault's Taproot output and sends it back to your Bitcoin address. This page covers the two paths you can take to redeem, what each step changes on Ethereum and on Bitcoin, and how long the round trip takes.
@@ -24,7 +26,7 @@ A third path exists but is not under your control: **liquidation redemption**. I
 Check the following on your position:
 
 * **Debt on every borrowed reserve.** A full withdrawal requires zero debt on every reserve you have borrowed from (USDC, USDT, WBTC).
-* **Health factor.** A partial withdrawal is allowed only while the health factor stays above 1.0 after the withdrawal.
+* **Zero debt.** The documented SDK withdrawal path requires all debt to clear, including when withdrawing only some vaults.
 * **Vault status.** Each vault must be either `InUse` (still in your position) or `Available` (already withdrawn from the position).
 
 The portal surfaces all three of these on the Loans section. For programmatic access, query `getUserAccountData()` on the Babylon Core Lending Spoke through your proxy address to read current debt, collateral value, and health factor in one call.
@@ -34,14 +36,14 @@ The portal surfaces all three of these on the Loans section. For programmatic ac
 If you have any outstanding debt, repay it before attempting a full withdrawal. For each borrowed reserve:
 
 1. Approve the AaveAdapter to spend the repayment token (standard ERC-20 approval).
-2. Call `repayToCorePosition(borrower, debtReserveId, amount)` with the borrower address, the debt reserve ID, and an amount slightly larger than the current debt. Interest can accrue between the moment you read the debt balance and the moment the transaction is mined. Any excess from your repayment is refunded.
-3. Confirm the balance is zero by calling `getReserveTotalDebt(reserveId)` on the position proxy for every borrowed reserve.
+2. Use the compatible adapter's full-repayment path with fee-inclusive debt and a bounded token allowance.
+3. Check the successful receipt, then check that no debt shares remain.
 
 Clear debt on every reserve you have borrowed from. A single satoshi of remaining debt on any reserve blocks a full withdrawal. For the full repayment flow, see [Borrow & repay](./borrow-and-repay.mdx).
 
 ## Step 2: Withdraw collateral and start redemption
 
-With debt cleared (full exit) or a healthy buffer left in place (partial exit), call `withdrawCollaterals(bytes32[] vaultsToWithdraw)` on the AaveAdapter with the list of vault IDs to remove. This step is the handoff from the Aave application layer to the TBV protocol layer: the AaveAdapter releases the vaults, and the TBV protocol takes over the Bitcoin-side redemption from here.
+With all debt cleared, call `withdrawCollaterals(bytes32[] vaultsToWithdraw)` on the AaveAdapter with the list of vault IDs to remove. This step is the handoff from the Aave application layer to the TBV protocol layer: the AaveAdapter releases the vaults, and the TBV protocol takes over the Bitcoin-side redemption from here.
 
 From the portal:
 
@@ -63,7 +65,7 @@ From the portal:
 
 ![Withdraw pending on dashboard](/img/trustless-bitcoin-vault/confluence/use-for-lending/withdraw-and-redeem/35-withdraw-pending-dashboard.jpg)
 
-**Partial withdrawal.** Pass a subset of your vault IDs. The contract verifies your health factor stays above 1.0 after the listed vaults are removed. If removing them would push the position into liquidatable territory, the transaction reverts. Use partial withdrawal to free up an over-collateralised vault while keeping the position open.
+**Withdraw selected vaults.** Pass a subset of vault IDs only after all debt clears. The documented SDK flow does not support withdrawal with debt.
 
 **Full withdrawal.** Pass every vault in your position. The contract verifies that all debt — principal and interest — is fully repaid on every borrowed reserve.
 
@@ -125,7 +127,7 @@ The self-claim path is the protocol's bottom-line safety net. Back up both input
 
 If you lose the WOTS file *or* the artifacts (but not both), self-claim is no longer possible for that vault, but the standard path (Vault Provider drives the claim) still works — you only need the self-claim fallback if the VP is also unresponsive.
 
-If you lose *both* the WOTS file and the artifacts, and the Vault Provider is also unresponsive, recovery requires Security Council intervention. Contact the team via the channels listed on [Community & support](../reference/community-and-support.mdx) for the escalation procedure.
+The Security Council cannot restore lost keys or missing artifacts. If your recovery material is unavailable and the Vault Provider does not respond, contact support. Do not assume that council intervention can recover the BTC. See [Community & support](../reference/community-and-support.mdx).
 
 ## What happens to the collateral record
 
@@ -149,9 +151,9 @@ The Ethereum-side actions complete in minutes. The Bitcoin-side challenge window
 
 ## What can go wrong
 
-**Withdrawal reverts with insufficient health factor.** The vault subset you specified would drop the health factor below 1.0. Repay more debt first, or withdraw fewer vaults.
+**Withdrawal fails.** Confirm that all debt clears before withdrawing any vault. Check the receipt and current contract state.
 
-**Withdrawal reverts with non-zero debt.** A full withdrawal requires zero debt on every borrowed reserve. Query `getReserveTotalDebt(reserveId)` on every reserve you have ever borrowed from, including a small buffer for interest accrued since the last query. Very small repayments may not reduce principal due to rounding; repay with a buffer.
+**Withdrawal reverts with non-zero debt.** Query debt shares, not only rounded token amounts. Follow the full-repayment sequence in [Borrow through the SDK](../building-on-tbv/borrow-with-sdk.mdx#repay-and-withdraw).
 
 **The Vault Provider does not initiate the Bitcoin claim.** Move to the self-claim path. The pre-signed transactions for depositor-as-claimer are already in place; no cooperation is needed.
 

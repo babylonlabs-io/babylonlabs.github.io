@@ -6,6 +6,8 @@ sidebar_position: 3
 
 # Borrow & repay
 
+> **Network and release check:** Use [Mainnet setup](../network-info/mainnet/setup.mdx) for Bitcoin Mainnet and Ethereum Mainnet. Use [Testnet setup](../network-info/testnet/setup.mdx) for Signet and Sepolia. Screenshots show the earlier testnet UI, not a confirmed mainnet release. Check the selected network's wallets, assets, caps, fees, and timing before signing.
+
 This page describes borrow and repay flows on the **Aave v4 integration** — the first supported DeFi use case for TBV on the public testnet. TBV handles the Bitcoin vault underneath; the Aave v4 integration handles borrowing, repayment, health factor, and liquidation.
 
 This page covers borrowing USDC, USDT, or WBTC against an active vault, how interest accrues, and how to repay. The vault creation step that comes before is on [Create a vault](./create-a-vault.mdx). The redemption step that comes after is on [Withdraw & redeem](./withdraw-and-redeem.mdx).
@@ -21,7 +23,7 @@ Public-testnet caps on per-address total collateral and per-position vault count
 You need:
 
 * At least one activated vault in `InUse` status. If you don't have one, start at [Create a vault](./create-a-vault.mdx).
-* A small balance of Sepolia ETH for gas on each transaction.
+* ETH for gas on the selected Ethereum network. Sepolia ETH applies only to testnet.
 * Familiarity with basic DeFi borrowing concepts: collateral, health factor, and liquidation.
 
 ## Borrow stablecoins or WBTC
@@ -60,7 +62,7 @@ The borrow is rejected if:
 * The amount exceeds the Hub's draw cap for that asset.
 * The reserve is paused or frozen.
 
-You can borrow from multiple asset reserves at once (up to 4 reserves combined, per `maxUserReservesLimit`). For example, borrow USDC and USDT in parallel against the same BTC collateral. Each debt is tracked independently, but the health factor reflects the aggregate of all debts.
+Borrowing restrictions come from the selected deployment. Do not assume that a position can borrow several assets simultaneously. Check the enabled reserve and repay existing debt before a debt-asset change where the deployment requires it.
 
 You can also return to **Borrow** repeatedly and borrow more as long as the resulting health factor stays above 1.0.
 
@@ -124,9 +126,9 @@ Repaying usually shows an ERC-20 spending cap approval first, then the repayment
 
 For each repay, the portal handles the ERC-20 approval and the repayment transaction.
 
-When fully repaying, approve a slightly larger amount than the displayed debt. Interest accrues between the moment you query the debt and the moment the transaction confirms; a small buffer prevents the transaction from failing on a fractional shortfall. Any excess stays in your wallet.
+For full repayment, use the app's full-repayment option and review the bounded token allowance. The compatible SDK flow queries fee-inclusive debt and uses a repayment sentinel. The sentinel does not require an unlimited token allowance.
 
-If interest accrues in the seconds between querying and confirming, a small residual debt may remain. Repeat repayment with a small buffer until the dashboard shows zero debt across every borrowed reserve.
+After the receipt succeeds, check debt shares before withdrawal. A rounded displayed balance of zero can hide residual shares. See [Borrow through the SDK](../building-on-tbv/borrow-with-sdk.mdx#repay-and-withdraw) for the version-specific sequence.
 
 The protocol allows third-party repayment: anyone can repay debt on your position's behalf. This is the mechanism liquidators use to repay debt during seizure, and it is supported as a general feature. The borrower's debt decreases regardless of who paid.
 
