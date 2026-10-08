@@ -1,0 +1,40 @@
+---
+title: "Beta Mainnet: what to expect"
+---
+
+TBV launches on mainnet as a **capped, allowlisted beta**. Real BTC and real value are involved, the software is still hardening, and access and limits are deliberately conservative and grow over time. This page sets expectations before you commit real funds.
+
+## What "Beta Mainnet" means
+
+- **Real value.** Peg-ins lock real BTC and cost real Bitcoin fees; borrowing and liquidation are economically live. There is no faucet — if you want to rehearse first with no real value, use the [Testnet](../network-info/networks.mdx) section.
+- **Still hardening.** Contracts and off-chain services may be upgraded during Beta. Core contracts use the **UUPS upgradeable proxy** pattern, so upgrades happen without migrating your vault data — but always re-check the [contract addresses](../network-info/mainnet/contract-addresses.mdx) before transacting.
+- **Conservative by design.** Limits start low and rise as the protocol matures and the rollout opens up.
+
+## Access — allowlisted
+
+Phase 1 is **gated by an allowlist / invite.** Peg-in submissions are restricted to allow-listed depositor addresses (enforced by an `AllowListPolicy` gate); the protocol admin onboards depositors in controlled batches and removes the gate once launch confidence is reached. If you're not yet allow-listed, request access through the channels on [Community & support](../reference/community-and-support.mdx).
+
+## Phased rollout with caps
+
+The rollout runs in **phases**. Each phase has a **monthly credit cap** — a launch/operational limit on the new borrowing credit opened against TBV collateral per month — increasing from Phase 1 to Phase 2 as the rollout matures. (The monthly credit cap is managed operationally; it is not a smart-contract parameter.)
+
+| Phase | Access | Monthly credit cap |
+|---|---|---|
+| **Phase 1** | Allowlist / invite | To be announced at launch |
+| **Phase 2** | Broader access (eligibility widens) | To be announced at launch |
+
+On top of the operational credit cap, **conservative exposure caps are enforced on-chain** from day one and grow over time. The `CapPolicy` contract enforces a **total per-application cap** (`totalCapBTC`) and a **per-address cap** (`perAddressCapBTC`) for the Aave v4 application, and `ProtocolParams` enforces a **per-vault maximum** (`maxPegInAmount`) at peg-in. Exact launch values are listed on [Protocol parameters & caps](../network-info/mainnet/protocol-parameters-and-caps.mdx) and are **to be announced at launch**.
+
+## What can change during Beta — and how you're protected
+
+- **Parameters are versioned.** Timelocks, actor sets, and off-chain params are versioned in `ProtocolParams` (and, per application, in `ApplicationRegistry`). **Each vault records the parameter versions live at its creation and keeps them for its lifetime** — a later change does not retroactively alter an existing vault.
+- **Contracts may be redeployed or upgraded.** Changes are role-gated: protocol-level actions require the `TBV_PROTOCOL_ADMIN` role and application-level actions require `APPLICATION_ADMIN`, with a Timelock (proposer / executor / canceller) in front of governance actions and dedicated freeze/pause guardian roles for emergencies. UUPS upgrades are authorized only by the respective contract admin.
+- **Your recovery paths don't depend on us.** If activation stalls you can self-refund the Pre-PegIn output; if the Vault Provider is unresponsive at redemption you can self-claim with your WOTS keypair and artifacts. See [Safety & trust assumptions](./safety-and-trust-assumptions.mdx).
+- **Emergency pause.** The protocol can enter a soft or full pause by Security Council quorum in response to incidents; Bitcoin-side depositor recovery paths that are already available are not blocked by a pause.
+
+## Before you start
+
+1. Confirm you're **allow-listed**.
+2. Read **Safety & trust assumptions** and **back up your WOTS keypair file and claimer artifacts** — they are required for self-recovery.
+3. Check the current **addresses, parameters, and caps**.
+4. If you want to rehearse first, run the flow on **Testnet**.

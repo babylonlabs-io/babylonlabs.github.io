@@ -46,8 +46,8 @@ A **Liquidation Liquidity Provider (LLP)** closes this gap. The LLP supplies ins
 
 Two liquidation paths exist once a position becomes liquidatable:
 
-* **Permissionless (LLP-routed).** The liquidator repays the debt and is settled instantly in a fungible wrapped-BTC asset, WBTC at launch, drawn from the LLP plus the liquidation bonus. The seized vault enters LLP escrow. The first LLP is the **BTC Vault Swap Spoke** (the `BTCVaultSwap` contract), registered as its own WBTC spoke on the Aave v4 Hub.
-* **Permissioned (direct redemption).** Restricted to registered arbitrageurs, also called Application Vault Keepers, that took part in the vault's creation and hold its Bitcoin redeem key. They repay the debt and take the seized vault directly into the BTC redemption flow themselves, without drawing on LLP liquidity.
+* **Permissionless (LLP-routed).** The liquidator repays the debt and is settled instantly in a fungible wrapped-BTC asset, WBTC at launch, drawn from the LLP plus the liquidation bonus. The seized vault enters LLP escrow. The first LLP is the **BTCVault Swap Spoke** (the `BTCVaultSwap` contract), registered as its own WBTC spoke on the Aave v4 Hub.
+* **Permissioned (direct redemption).** Restricted to registered arbitrageurs, also called App Keepers, that took part in the vault's creation and hold its Bitcoin redeem key. They repay the debt and take the seized vault directly into the BTC redemption flow themselves, without drawing on LLP liquidity.
 
 ## What "liquidation" actually seizes
 

@@ -1,0 +1,69 @@
+---
+title: Setup
+---
+
+# Mainnet wallet setup
+
+TBV uses a Bitcoin wallet and an Ethereum wallet. Bitcoin holds the collateral. Ethereum records the vault and borrowing position.
+
+> **Mainnet release check:** The final wallet versions and supported device combinations are not confirmed on this page. Do not fund a new wallet solely because its brand appears in an SDK example.
+
+## Networks and funds
+
+| Side | Network | Wallet purpose | Funds |
+| --- | --- | --- | --- |
+| Bitcoin | Bitcoin Mainnet | Deposit funding, Bitcoin signatures, and recovery | BTC for the deposit and Bitcoin fees |
+| Ethereum | Ethereum Mainnet, chain ID 1 | Registration, activation, borrowing, repayment, and withdrawal | ETH for gas and applicable protocol fees |
+
+Signet BTC and Sepolia ETH are testnet assets. They cannot fund mainnet operations. There is no mainnet faucet.
+
+## Wallet compatibility
+
+The [SDK wallet interface guide](https://github.com/babylonlabs-io/babylon-toolkit/blob/52ae96a4e70bd63875d46808cd22c6b9e29e2cad/packages/babylon-ts-sdk/docs/guides/wallet-interfaces.md) describes integration capabilities. An adapter is not evidence that every device and firmware combination supports the mainnet flow.
+
+| Wallet or path | Available evidence | Mainnet status |
+| --- | --- | --- |
+| UniSat | Existing public-testnet walkthrough | Exact version and device need confirmation |
+| OKX, Xverse, Leather, Keystone, OneKey | SDK connector documentation names these wallets | Full-flow support needs confirmation for each combination |
+| Ethereum browser wallet | App walkthrough and SDK WalletClient integration | Exact supported wallet list needs confirmation |
+| Hardware wallet, Safe, or custody system | Requires a supported signing integration | Do not assume support from brand or Ethereum compatibility alone |
+
+The release matrix must name the wallet version, device, firmware, network, supported operations, limitations, and test date.
+
+A Bitcoin integration needs Taproot/P2TR support, the required PSBT signing modes, and proof-of-possession signing. The current SDK secret flow also needs `deriveContextHash`.
+
+A wallet that connects but cannot complete one of these steps is not ready for the full flow.
+
+## Install and connect
+
+1. Select a wallet and device combination from the confirmed release matrix.
+2. Install the wallet through its official website or verified application store listing.
+3. Complete the wallet's backup process outside the TBV app.
+4. Select Bitcoin Mainnet in the Bitcoin wallet.
+5. Select the Taproot/P2TR account that will fund the deposit.
+6. Select Ethereum Mainnet in the Ethereum wallet.
+7. Open the official TBV app link from the confirmed launch information.
+8. Connect both wallets through the app's wallet picker.
+9. Check both addresses and networks before continuing.
+
+Different Bitcoin address types can have different balances. An address-type change does not move existing BTC.
+
+Do not share seed phrases, private keys, or recovery files with support, an agent, or a website form.
+
+## Before the first deposit
+
+Check the [contract addresses](./contract-addresses.mdx), [caps and parameters](./protocol-parameters-and-caps.mdx), and [beta access rules](../../start-here/beta-mainnet.mdx).
+
+Keep enough BTC and ETH for fees. Review each requested signature in your wallet. Stop if the network, amount, destination, or requested permission differs from your intended action.
+
+Keep the recovery artifacts for each vault. Follow the selected wallet and SDK release instructions for secret recovery. Do not assume another wallet can reproduce the same secrets.
+
+## Waiting and connection problems
+
+Bitcoin confirmation requirements and activation windows come from the deployed protocol parameters. Do not copy testnet timing into a mainnet plan.
+
+If the wallet rejects a PSBT or secret-derivation request, stop before funding a replacement deposit. Check the wallet version and supported signing capabilities.
+
+If the account or network changes during setup, reconnect and check the vault association before resuming.
+
+Continue with the [app quickstart](../../use-for-lending/quickstart.mdx) or [SDK borrowing guide](../../building-on-tbv/borrow-with-sdk.mdx).

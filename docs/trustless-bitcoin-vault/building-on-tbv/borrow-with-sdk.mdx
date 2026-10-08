@@ -1,0 +1,115 @@
+---
+title: Borrow through the SDK
+---
+
+# Borrow through the SDK
+
+This guide connects vault creation to Aave borrowing, repayment, and withdrawal. It describes wallet-controlled execution, not unattended mainnet signing.
+
+> **Release status:** The reference source is toolkit commit `52ae96a4e70bd63875d46808cd22c6b9e29e2cad`. Its SDK manifest reports version `0.63.0`. Mainnet deployment compatibility and a complete example run still need release validation.
+
+## Prepare the integration
+
+Use [SDK and tooling](./sdk-and-tooling.mdx) for installation and runtime setup. Pin the validated SDK and peer dependencies in your lockfile.
+
+Follow the [wallet interface guide](https://github.com/babylonlabs-io/babylon-toolkit/blob/52ae96a4e70bd63875d46808cd22c6b9e29e2cad/packages/babylon-ts-sdk/docs/guides/wallet-interfaces.md). Keep Bitcoin and Ethereum signing inside the user's wallet or custody system. Do not export keys into an example script.
+
+Read the chosen network's addresses, chain ID, adapter, Spoke, token contracts, reserve IDs, and token decimals. Do not copy Sepolia configuration into mainnet.
+
+Read signing-critical state from the deployed contracts. Use the indexer for discovery and display, not as the sole authority for transaction construction.
+
+## Create and activate a vault
+
+The [Managers quickstart](https://github.com/babylonlabs-io/babylon-toolkit/blob/52ae96a4e70bd63875d46808cd22c6b9e29e2cad/packages/babylon-ts-sdk/docs/quickstart/managers.md) supplies the detailed creation flow.
+
+1. Connect the Bitcoin wallet and Ethereum WalletClient.
+2. Select a registered Vault Provider.
+3. Read the protocol versions, participant keys, fees, and caps.
+4. Prepare the peg-in transactions and proof of possession.
+5. Present the registration and Bitcoin requests to the user for signing.
+6. Complete the setup signatures and save the recovery artifacts.
+7. Wait for verification and the configured activation delay.
+8. Present the activation request before its deadline.
+9. Confirm activation and the application's collateral state before borrowing.
+
+Use the release's wallet-derived secret helpers. Do not substitute a new random secret when resuming an existing vault.
+
+Activation and a usable borrowing position are separate checks. A transaction receipt alone does not prove that the expected collateral exists.
+
+## Find the borrowing position
+
+Query `getPosition(publicClient, adapterAddress, borrowerAddress)`. Use its `proxyContract` address when reading the Aave position.
+
+Query `getUserAccountData(publicClient, spokeAddress, proxyAddress)` for account health. Do not query the Spoke with the wallet address in place of the position proxy.
+
+## Prepare a borrow request
+
+The following fragment assumes an active position and validated deployment configuration. It does not sign or broadcast.
+
+```typescript
+import {
+  buildBorrowTx,
+  getPosition,
+  getUserAccountData,
+} from "@babylonlabs-io/ts-sdk/tbv/integrations/aave";
+import { parseUnits } from "viem";
+
+const position = await getPosition(
+  publicClient, adapterAddress, borrowerAddress,
+);
+if (!position) throw new Error("No borrowing position");
+
+const before = await getUserAccountData(
+  publicClient, spokeAddress, position.proxyContract,
+);
+const request = buildBorrowTx(
+  adapterAddress,
+  debtReserveId,
+  parseUnits(amountText, debtTokenDecimals),
+  receiverAddress,
+);
+```
+
+The values in this fragment are caller inputs, not mainnet defaults.
+
+Check the requested asset, reserve, receiver, amount, and projected health factor. Current health alone does not prove that the new borrow is safe.
+
+Simulate the request with the connected borrower account. Stop if the reserve is disabled, the cap is reached, or the request fails.
+
+Show the unsigned request to the user. After wallet approval and broadcast, wait for a successful receipt. Re-read the position and receiver balance.
+
+## Repay and withdraw
+
+Use the [Aave quickstart](https://github.com/babylonlabs-io/babylon-toolkit/blob/52ae96a4e70bd63875d46808cd22c6b9e29e2cad/packages/babylon-ts-sdk/docs/integrations/aave/quickstart.md) for the complete sequences.
+
+For the referenced SDK and compatible adapter:
+
+1. Query `getPositionReserveTotalDebt` for debt including the adapter fee.
+2. Calculate a bounded token allowance with interest headroom.
+3. Ask the user to approve that allowance for the correct adapter.
+4. Wait for the approval receipt.
+5. Build a full repayment with `buildRepayTx` and the `2n ** 256n - 1n` repayment sentinel.
+6. Ask the user to approve the repayment transaction.
+7. Wait for its successful receipt.
+8. Check debt shares with `getUserPosition` and `hasDebtFromPosition`.
+9. Build `buildWithdrawCollateralsTx` only after all debt clears.
+
+The repayment sentinel is not an instruction to grant an unlimited token allowance. For partial repayment, use the intended repayment amount.
+
+A rounded token balance of zero can hide remaining debt shares. Do not treat it as proof that withdrawal is available.
+
+Withdrawal starts Bitcoin redemption. It does not mean that the BTC payout already completed. Track the claim, challenge period, and confirmed payout.
+
+## Failure and recovery
+
+On a timeout, first check the receipt and current state. Do not create a second deposit or send a duplicate transaction blindly.
+
+For a missed activation window, follow the Bitcoin refund conditions. For a stalled redemption, use the documented self-claim path and saved recovery material.
+
+The [borrowing reference gist](https://gist.github.com/0xAleksaOpacic/52e73b43f1b2ea04eb44acdb6565788c) explains the protocol flow. It is not a version-pinned mainnet example.
+
+## Release checks
+
+Test creation, borrowing, full repayment, withdrawal, reconnect, and rejected signatures with the selected wallet pair on testnet.
+
+Record the SDK version, contract deployment, wallet versions, and receipts. Mainnet release review must confirm the same API and contract behavior.

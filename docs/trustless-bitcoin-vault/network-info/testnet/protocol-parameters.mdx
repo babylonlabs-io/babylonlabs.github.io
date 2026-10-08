@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # Protocol parameters
 
-This page lists the live parameter values for the current Trustless Bitcoin Vault (TBV) public testnet release.
+This page lists the live parameter values for the current Babylon Trustless Bitcoin Vaults (TBV) public testnet release.
 
 ## Participant cheat sheet
 
@@ -65,7 +65,7 @@ Timelock parameters governing the claim, assert, and challenge windows during pe
 
 | Parameter | Value | Description |
 | --- | --- | --- |
-| `timelockAssert` | 432 BTC blocks (~3 days) | Challenge window: time for any Universal Challenger (or Application Vault Keeper) to broadcast a `ChallengeAssert` after the claim is posted. |
+| `timelockAssert` | 432 BTC blocks (~3 days) | Challenge window: time for any Universal Challenger (or App Keeper) to broadcast a `ChallengeAssert` after the claim is posted. |
 | `timelockChallengeAssert` | 108 BTC blocks (~18 hours) | Claimer's disprove window: time for the claimer to broadcast a `WronglyChallenged` transaction after a challenge is raised. |
 
 ## Liquidation parameters
@@ -114,5 +114,5 @@ Each Vault Provider sets its own commission per vault, taken in BTC from the red
 ## Related
 
 * [Setup](./setup.mdx): wallets, networks, faucets, and the TBV Testnet app URL.
-* [Create a vault](../use-for-lending/create-a-vault.mdx): how vault caps and timing apply during peg-in.
-* [Liquidation risk](../use-for-lending/liquidation-risk.mdx): how liquidation parameters affect a participant position.
+* [Create a vault](../../use-for-lending/create-a-vault.mdx): how vault caps and timing apply during peg-in.
+* [Liquidation risk](../../use-for-lending/liquidation-risk.mdx): how liquidation parameters affect a participant position.

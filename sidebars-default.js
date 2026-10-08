@@ -14,7 +14,8 @@ const stakingApiSidebar = require('./docs/api/staking-api/sidebar').default;
 const babylongRpcSidebar = require('./docs/api/babylon-gRPC/sidebar').default;
 const cometBFTSidebar = require('./docs/api/comet-bft/sidebar').default;
 
-const showTrustlessBitcoinVaultSecurity = false;
+// The TBV security pages ship with the mainnet (Beta) documentation.
+const showTrustlessBitcoinVaultSecurity = true;
 
 const trustlessBitcoinVaultSecuritySection = showTrustlessBitcoinVaultSecurity
   ? [
@@ -250,6 +251,11 @@ const sidebars = {
     },
   ],
   // Trustless Bitcoin Vault sidebar — top-nav home for the open Testnet docs
+  // Trustless Bitcoin Vault — single collection covering BOTH networks.
+  // Network-specific values (addresses, parameters, caps) live only under
+  // Network Info; every other page is network-neutral.
+  // NOTE: fees/fees.mdx is draft (frontmatter `draft: true`) until the fee
+  // model is finalized, so it is intentionally absent here.
   trustlessBitcoinVault: [
     {
       type: 'category',
@@ -259,30 +265,55 @@ const sidebars = {
       className: 'overview_sidebar_header',
       link: {
         type: 'doc',
-        id: 'trustless-bitcoin-vault/start-here/what-is-tbv',
+        id: 'trustless-bitcoin-vault/index',
       },
       items: [
         'trustless-bitcoin-vault/start-here/what-is-tbv',
         'trustless-bitcoin-vault/start-here/how-it-works',
         'trustless-bitcoin-vault/start-here/tbv-vs-alternatives',
         'trustless-bitcoin-vault/start-here/safety-and-trust-assumptions',
+        'trustless-bitcoin-vault/start-here/use-cases',
+        'trustless-bitcoin-vault/start-here/beta-mainnet',
       ],
     },
     {
       type: 'category',
-      label: 'Testnet Info',
+      label: 'Network Info',
       collapsible: true,
       collapsed: true,
       className: 'specs_sidebar_header',
+      link: {
+        type: 'doc',
+        id: 'trustless-bitcoin-vault/network-info/networks',
+      },
       items: [
-        'trustless-bitcoin-vault/testnet-info/setup',
-        'trustless-bitcoin-vault/testnet-info/contract-addresses',
-        'trustless-bitcoin-vault/testnet-info/protocol-parameters',
+        {
+          type: 'category',
+          label: 'Mainnet',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'trustless-bitcoin-vault/network-info/mainnet/setup',
+            'trustless-bitcoin-vault/network-info/mainnet/contract-addresses',
+            'trustless-bitcoin-vault/network-info/mainnet/protocol-parameters-and-caps',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Testnet',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'trustless-bitcoin-vault/network-info/testnet/setup',
+            'trustless-bitcoin-vault/network-info/testnet/contract-addresses',
+            'trustless-bitcoin-vault/network-info/testnet/protocol-parameters',
+          ],
+        },
       ],
     },
     {
       type: 'category',
-      label: 'Use TBV Testnet For Borrowing',
+      label: 'Borrowing',
       collapsible: true,
       collapsed: true,
       className: 'btc_stakers_sidebar_header',
@@ -297,6 +328,36 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Building on TBV',
+      collapsible: true,
+      collapsed: true,
+      className: 'btc_stakers_sidebar_header',
+      link: {
+        type: 'doc',
+        id: 'trustless-bitcoin-vault/building-on-tbv/overview',
+      },
+      items: [
+        'trustless-bitcoin-vault/building-on-tbv/overview',
+        'trustless-bitcoin-vault/building-on-tbv/application-integration',
+        'trustless-bitcoin-vault/building-on-tbv/resolver-overview',
+        'trustless-bitcoin-vault/building-on-tbv/resolver-upgradability-and-ownership',
+        'trustless-bitcoin-vault/building-on-tbv/resolver-pausability',
+        'trustless-bitcoin-vault/building-on-tbv/resolver-partner-checklist',
+        'trustless-bitcoin-vault/building-on-tbv/sdk-and-tooling',
+        'trustless-bitcoin-vault/building-on-tbv/borrow-with-sdk',
+        'trustless-bitcoin-vault/building-on-tbv/agents',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Operators',
+      collapsible: true,
+      collapsed: true,
+      className: 'specs_sidebar_header',
+      items: ['trustless-bitcoin-vault/operators/overview'],
+    },
+    {
+      type: 'category',
       label: 'Technical Details',
       collapsible: true,
       collapsed: true,
@@ -304,6 +365,7 @@ const sidebars = {
       items: [
         'trustless-bitcoin-vault/technical-details/protocol-architecture',
         'trustless-bitcoin-vault/technical-details/protocol-actors',
+        'trustless-bitcoin-vault/technical-details/governance-and-committees',
         'trustless-bitcoin-vault/technical-details/aave-v4-integration',
       ],
     },
@@ -314,6 +376,7 @@ const sidebars = {
       collapsed: true,
       className: 'research_sidebar_header',
       items: [
+        'trustless-bitcoin-vault/research/research-papers',
         'trustless-bitcoin-vault/research/btc_trustless_vault',
         'trustless-bitcoin-vault/research/babe_verification',
       ],
@@ -327,6 +390,7 @@ const sidebars = {
       items: [
         'trustless-bitcoin-vault/reference/glossary',
         'trustless-bitcoin-vault/reference/community-and-support',
+        'trustless-bitcoin-vault/reference/changelog',
       ],
     },
     ...trustlessBitcoinVaultSecuritySection,

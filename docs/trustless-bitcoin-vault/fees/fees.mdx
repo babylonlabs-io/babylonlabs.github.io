@@ -1,0 +1,20 @@
+---
+title: Fees
+sidebar_position: 99
+draft: true
+---
+
+# Fees
+
+:::caution Not finalized — skipped for now
+This Fees section is **not yet finalized** and is intentionally **skipped** (excluded from the build and sidebar via `draft: true`), mirroring the Testnet docs. The fee model will be decided before Mainnet launch, at which point this page will be completed and the `draft` flag removed.
+:::
+
+TBV involves several distinct fees, enforced on-chain and set as protocol parameters (all values **to be announced at launch**):
+
+- **Peg-in fee** — an anti-spam fee to register a peg-in request (`protocolPegInFeeRate` on `FeeEscrow`; a minimum peg-in fee rate is also enforced by the off-chain params).
+- **Vault Provider commission** — taken in BTC from the redemption payout, fixed in the pre-signed Payout transactions at vault creation and disclosed by the portal before you create a vault.
+- **Protocol interest fee** — accrues on borrowed debt on top of Aave's base rate (`interestFeeBps`).
+- **Liquidation-related fees** — the LLP sell discount (`sellDiscountBps`), the arbitrageur commission (`discountCommissionBps`), and the direct-redemption fee (`liquidationRedemptionFeeBps`). Note the Aave Core Spoke's own liquidation fee is structurally zero for `vaultBTC` collateral.
+
+The exact rates, who pays them, and how they are surfaced in the app are still under review and will be confirmed here before launch.

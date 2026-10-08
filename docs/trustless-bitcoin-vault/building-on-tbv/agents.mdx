@@ -1,0 +1,23 @@
+---
+title: Agents
+---
+
+> **Early preview.** The TBV agent surface is emerging. This page sketches what it is for; the tools and interfaces below will expand as they ship.
+
+## Making vaults consumable by software agents
+
+TBV's defining property — Bitcoin used as collateral **without giving up custody** — is exactly what makes it safe to expose to software agents. Because every legitimate Bitcoin spend is pre-signed at vault creation and the depositor's key is required on every release path, an agent can *operate* around a vault without ever being able to move the underlying BTC outside the agreed paths. The agent surface builds on that guarantee: it lets agents create, monitor, and act on vaults programmatically, while custody stays with the depositor.
+
+## Three kinds of agent
+
+- **User agents** act on behalf of a depositor — creating vaults, tracking position health, and taking routine actions (for example, repaying to keep a position safe) within limits the user sets. They never gain custody of the BTC.
+- **Builder agents** help teams integrate TBV — scaffolding against the SDK, wiring the peg-in and Aave flows, and testing an integration end-to-end.
+- **Operator agents** support the off-chain roles that keep the protocol running (vault providers, keepers, challengers), automating monitoring and routine operational tasks.
+
+## How agents connect
+
+The intended surface is exposed over the **Model Context Protocol (MCP)**, so an agent can call vault operations as tools with the same custody and authorization guarantees a human user has. Under the hood, agents use the same building blocks documented elsewhere in this section — the Babylon TypeScript SDK for vault and Aave operations, and the on-chain contracts for authoritative state.
+
+## Learn more
+
+**See the TBV agent skills and the Vault-API MCP** for the current agent tooling, and **contact the TBV team** if you want to build agent experiences on top of vaults. This surface is under active development; expect it to grow.

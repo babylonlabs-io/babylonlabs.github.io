@@ -1,0 +1,39 @@
+---
+title: Resolvers — partner checklist
+---
+
+Before a Resolver goes live on Mainnet it must be reviewed and registered by TBV governance. This checklist is the bar a partner is expected to clear. Treat it as a pre-flight gate, not a formality — a resolver holds user collateral relationships and is accepted onto the Aave adapter only after review.
+
+## Ownership model
+
+- [ ] **Admin, upgrade, and pause authorities are held by multisigs, not EOAs.** No single key controls a contract in the collateral path.
+- [ ] **Upgrade authority is timelocked** (or the contracts are deliberately immutable). Pending upgrades are observable before they take effect.
+- [ ] **Roles follow least privilege and are separated** — the pause authority is distinct from the upgrade authority; day-to-day operational roles do not carry upgrade power.
+- [ ] **The upgrade posture is documented and justified** — Transparent, UUPS, Beacon, or immutable — per the guidance in [Upgradability & ownership](./resolver-upgradability-and-ownership.mdx).
+- [ ] **Position-account ownership and authorization rules are clearly specified** — for each mode (pooled or position-account), who owns the position, who can borrow, who can withdraw, and how any liquidation surplus is distributed.
+
+## Pause requirements
+
+- [ ] **The resolver has its own pause control**, held by a fast-acting guardian role that is separate from upgrade authority.
+- [ ] **Pause scope is documented** and stops the harmful operations (new activations, new borrows) while **never blocking repay, withdraw, or BTC redemption**.
+- [ ] **The resolver fails safe when a layer below it is paused** — protocol pause (`BTCVaultRegistry`) or Aave application pause — surfacing the halt cleanly rather than leaving positions inconsistent.
+- [ ] **Incident and pause coordination is agreed in advance** with the TBV team and the Security Council: who is notified, how, and when.
+
+## Open source & reproducibility
+
+- [ ] **All on-chain resolver code is published in a public repository** — the resolver and its position-account contracts, not just their interfaces.
+- [ ] **The repository uses an OSI-approved license that is compatible with the protocol's license.**
+- [ ] **Audited code, deployed bytecode, and published source all correspond to a single commit** — the deployed contracts are reproducible from that commit and are identical to what was audited.
+
+## Review gates before going live
+
+- [ ] **Contracts are audited.** The resolver and its position-account contracts have completed an audit appropriate to the value at risk, and findings are resolved.
+- [ ] **The resolver implements `IAaveAdapterPositionResolver` correctly** — `APPLICATION_ADAPTER()` returns the correct adapter; `getPositionAccount` is `view`, never returns `address(0)`, and reverts cleanly on unknown users; `notifyVaultActivation` is safe to be called by the adapter only.
+- [ ] **Activation-metadata encoding is reviewed with TBV devs**, along with any code path that calls the adapter or moves collateral.
+- [ ] **Registration is requested from governance.** An admin registers the resolver via `registerResolver` only after review; the resolver stays unregistered (and unusable) until then.
+- [ ] **Monitoring is in place** for the resolver's positions and for the protocol/Aave pause and freeze signals it must react to.
+- [ ] **Any post-launch change touching TBV or Aave contracts is re-submitted for review** — registration does not extend automatically to a materially changed implementation.
+
+## How to engage
+
+Resolver onboarding is a direct, reviewed process. Reach out to the TBV team early — before audit, ideally at design time — so the ownership, pause, and metadata decisions above are settled before you build, not renegotiated at the registration gate.

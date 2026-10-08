@@ -1,0 +1,48 @@
+---
+title: Application Integration
+---
+
+> **Coming soon.** The full application-integration guide is being finalized and will publish after Beta. This page explains the vision and the interface a new application implements. If you are building a new product on BTC collateral today, **contact the TBV team** — onboarding at Beta is direct.
+
+## TBV is built for many applications
+
+TBV is not a single lending product. It is a Bitcoin-collateral primitive that many DeFi applications can consume. The vault layer locks BTC on Bitcoin behind pre-signed paths and makes it usable on Ethereum without a bridge, a wrapped token, or a custodian — and it is deliberately application-agnostic.
+
+**Aave v4 borrowing is the first application.** It is the reference implementation of how a product plugs into the vault layer. **Morpho Blue is the next planned application.** Stablecoins, perpetual DEXs, options, cross-chain markets, and staking dual-utility are on the roadmap. All of these can integrate without changing the vault layer.
+
+An **application** is the deepest way to build on TBV. Unlike a Resolver (which rides on the existing Aave app), an application registers with the protocol directly and owns its own collateral semantics: how the locked BTC is priced, what borrowing or minting it backs, how liquidation works, and what its own accounting token represents.
+
+## How a new application plugs in
+
+A new application does two things:
+
+1. **Registers with `ApplicationRegistry`.** The protocol's `ApplicationRegistry` gates which applications are allowed to consume vaults. Registration is governance-approved and is expected to follow review and audit of the application's contracts.
+
+2. **Implements `IApplicationEntryPoint`.** Every application entry point implements a single activation hook that `BTCVaultRegistry` calls when a depositor activates a vault into that application:
+
+   ```solidity
+   function activateVault(
+       bytes32 vaultId,
+       BTCVaultTypes.BTCVaultBasicInfo memory vault,
+       bytes memory activationMetadata
+   ) external;
+   ```
+
+   When a depositor activates a vault, `BTCVaultRegistry` forwards the vault ID, the basic vault info, and any application-specific `activationMetadata` to your entry point. From there, your application takes over: it records the collateral, mints or credits whatever internal accounting your product uses, and wires the vault into your risk model. Applications that need protocol-specific vault fields beyond `BTCVaultBasicInfo` query `BTCVaultRegistry` directly.
+
+The `AaveAdapter` is the worked example of an `IApplicationEntryPoint` implementation: on activation it assigns the vault to a position account, supplies it as Aave collateral, and mints its internal `vaultBTC` accounting unit. Your application implements the equivalent for your product.
+
+## What the full guide will cover
+
+The held guide walks through, in detail:
+
+- **When to build an application vs a Resolver vs just using the SDK** — choosing the right integration depth by product type.
+- **The vault-consumer interface** — the activation hook, redemption and liquidation triggers, and the vault ownership and seizure model.
+- **Writing an application adapter** — your equivalent of `AaveAdapter`, including per-depositor position accounting and redemption routing.
+- **Designing your accounting token** — why `vaultBTC` is Aave-internal (not a shared primitive), and the invariants a new app's accounting token must preserve.
+- **`ApplicationRegistry` & governance approval** — the review, audit, and registration path, and how caps are assigned per application.
+- **Security responsibilities** — the exact line between what the protocol guarantees (non-custody, pre-signed paths, fraud monitoring) and what the integrating app must own (oracle, health factor, liquidation economics, upgrade and pause).
+
+## Building a new application?
+
+Beta launches Aave-only and allowlisted, so new-application onboarding is handled directly rather than through open self-service registration. If you are building a new product on BTC collateral, **reach out to the TBV team** — we will share the full integration material and work through registration with you.

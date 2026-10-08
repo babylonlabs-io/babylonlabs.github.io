@@ -1,0 +1,73 @@
+---
+title: Governance and committees
+sidebar_position: 4
+---
+
+# Governance and committees
+
+TBV separates routine governance, emergency controls, and Bitcoin payout protection. A committee name does not grant a permission. The deployed roles, timelocks, and vault parameters define each permission.
+
+> **Mainnet review status:** Membership, signature thresholds, deployment addresses, and timelock delays still need launch confirmation. This page describes the planned role model, not a deployed configuration.
+
+## Who does what
+
+| Group | Layer | Responsibility | Boundary |
+| --- | --- | --- | --- |
+| Interim Governance | Ethereum | Proposes contract and parameter changes through the timelock executors. Uses assigned pause and freeze roles. | Cannot skip a timelock for actions that require it. |
+| Emergency Guardian | Ethereum | Cancels queued proposals and uses assigned pause, unpause, freeze, and unfreeze controls. | Its emergency role does not grant unrestricted upgrade authority. |
+| Freeze Stewards | Ethereum | Use limited freeze controls for incident response. | Do not assume an unfreeze permission. Confirm the deployed role before release. |
+| Bitcoin Security Council | Bitcoin | Signs council no-payout transactions to block a malicious claim. | Cannot choose another BTC destination or restore a lost key. |
+| ETH Light Client Upgrade Committee | Bitcoin | Authorizes verification-key changes through Bitcoin governance transactions and the notice mechanism. | This is separate from an Ethereum contract upgrade. |
+| Aave governance | Aave | Controls the Aave-side permissions and risk controls that apply to the integrated market. | These controls are separate from TBV governance. |
+
+The deployer assigns the initial roles during deployment. The launch review must confirm that the deployer no longer holds temporary privileges.
+
+Vault Providers, App Keepers, and Universal Challengers are protocol operators. They are not governance committees merely because they operate services. See [Protocol actors](./protocol-actors.mdx).
+
+## Routine changes
+
+1. Identify the target contract and the proposed change.
+2. Check the proposer and executor roles for that target.
+3. Read the queued proposal and its execution time.
+4. Check whether an authorized guardian cancels the proposal.
+5. Read the execution receipt before treating the change as active.
+
+A scheduled proposal is not an executed change. Signature thresholds and delays can differ between committees and action types.
+
+## Emergency controls
+
+A **freeze** restricts selected Ethereum operations. A **pause** can restrict a wider set. The exact effect depends on the contract and function.
+
+Do not assume that repayment, withdrawal, or liquidation remains available during every emergency state. Check the affected contract and incident notice.
+
+Ethereum pause permissions do not come from the Bitcoin parameter `councilQuorum`. That parameter defines a Bitcoin council signature threshold.
+
+A Bitcoin council action blocks a payout. It does not move the BTC to a new address. A blocked payout can delay access to funds.
+
+An Ethereum pause does not change Bitcoin spending conditions already committed to a vault. Each recovery path still needs its own keys, artifacts, timing, and protocol conditions.
+
+## Verification-key changes
+
+The ETH Light Client Upgrade Committee and Ethereum governance have different responsibilities. A Bitcoin verification-key authorization does not itself update every Ethereum parameter.
+
+Check the Bitcoin authorization, notice period, and related Ethereum parameter version before using a new circuit version. Existing vaults retain their recorded protocol snapshot. Do not assume that a proposal automatically migrates them.
+
+## What users should check
+
+- The network, contract addresses, and current role holders.
+- The proposal status and applicable delay.
+- The vault's recorded parameter and participant versions.
+- The effect of any freeze, pause, or council action on the requested operation.
+- The recovery material needed for that vault.
+
+Use [Mainnet addresses](../network-info/mainnet/contract-addresses.mdx) and [Mainnet parameters](../network-info/mainnet/protocol-parameters-and-caps.mdx) for confirmed deployment values.
+
+## Launch confirmation checklist
+
+Before release, confirm the member list, threshold, address, and permissions for each group. Confirm each timelock delay and the process for replacing a role holder.
+
+Resolve the Freeze Steward scope before describing unfreeze access. Check the available user actions during each emergency state against the deployed contracts.
+
+Do not publish candidate member lists or proposed thresholds as confirmed values.
+
+See [Safety and trust assumptions](../start-here/safety-and-trust-assumptions.mdx) and [Known limitations](../security/known-limitations.mdx).
