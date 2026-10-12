@@ -79,7 +79,7 @@ a sacrificial vault and a protected vault at peg-in mitigates this. See
 **Collateral factor.** The fraction of a collateral asset's value counted
 toward borrowing capacity. At the current public-testnet collateral factor of
 78%, $60,000 of BTC collateral supports up to $46,800 of borrows. See
-[Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
+[Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/).
 
 **Collateral record.** The on-chain record that recognizes the Bitcoin held in a
 BTCVault, used as collateral by a DeFi application. For the Aave v4 integration
@@ -96,7 +96,7 @@ is also the borrower.
 **Depositor claim output.** A small Bitcoin output produced by the PegIn
 transaction and controlled solely by the depositor's key. It anchors the
 depositor self-claim path during peg-out. See
-[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+[Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/).
 
 **Fairness debt repayment.** Compensation mechanism during partial-position
 liquidation when the over-seizure surplus is less than the depositor's
@@ -166,7 +166,7 @@ liquidation while the sacrificial vault is seized. See
 
 **Redeem.** Unlocking and returning native BTC from a BTCVault to the authorized
 claimer after the redemption claim passes its challenge period. See
-[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+[Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/).
 
 **Sacrificial vault.** In a two-vault position, the vault placed first in the
 liquidation order. It is sized to cover the protocol's expected seizure amount
@@ -239,7 +239,7 @@ position.
 **WOTS (Winternitz One-Time Signature).** Each vault commits a WOTS public key
 hash at peg-in. The corresponding private key can only be used once and is the
 depositor's authorization for the self-claim path. See
-[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+[Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/).
 
 **ZK proof.** A cryptographic proof that a statement is true without revealing
 why. The protocol uses ZK proofs to attest, on Bitcoin, that specific Ethereum

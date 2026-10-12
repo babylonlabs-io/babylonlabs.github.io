@@ -169,7 +169,8 @@ trusted intermediary with cryptographic verification.
 TBV is designed so that redemption and verification do not depend on Babylon
 remaining online. Independent protocol participants, including Universal
 Challengers, can dispute invalid claims. If your Vault Provider becomes
-unresponsive during redemption, use the [self-claim path](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
+unresponsive during redemption, use the depositor self-claim path described in
+[Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/)
 with your WOTS keypair and claimer artifacts. A Security Council exists only as
 an emergency backstop for exceptional protocol failures, such as a proof-system
 bug, and cannot seize user collateral.
@@ -197,7 +198,8 @@ No. A Vault Provider helps administer BTC vault creation and redemption, but
 it cannot spend your Bitcoin outside the protocol's predefined conditions.
 A depositor can also operate their own Vault Provider to remain fully trustless.
 Universal Challengers can dispute invalid claims. If the Vault Provider becomes
-unresponsive during redemption, use the [self-claim path](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
+unresponsive during redemption, use the depositor self-claim path described in
+[Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/)
 with your WOTS keypair and claimer artifacts.
 
 ### What enforces correctness across two chains?
@@ -263,15 +265,9 @@ protocol.
 
 ### I cannot connect my wallets, what next?
 
-1. The UniSat Bitcoin wallet is set to signet, not mainnet.
-2. The Ethereum wallet is on Sepolia (chain ID `11155111`), not another network.
-3. Both wallets are unlocked before opening the test app.
-4. If several Bitcoin extensions are installed, disable the ones not in use so
-   the app detects the correct one.
-5. Refresh the page once and reconnect.
-
-If a multisig setup, for example Safe through WalletConnect, does not produce a
-signing prompt, try a direct extension wallet for the same flow.
+Check that the Bitcoin wallet uses signet and the Ethereum wallet uses Sepolia
+(chain ID `11155111`). For app connection steps and current wallet support, use
+the TBV User Support Portal.
 
 ### Why is my balance not showing?
 
@@ -292,7 +288,7 @@ Taproot-based vault on Bitcoin. A pre-signed transaction graph defines the
 valid ways the vault can be spent under the protocol rules. Once the vault is
 verified, TBV creates a 1:1 collateral record on the integrated chain,
 allowing applications such as Aave v4 to recognize the underlying Bitcoin as
-collateral. See [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/).
+collateral. See [How it works](/trustless-bitcoin-vault/start-here/how-it-works/).
 
 ### What is fixed when a vault is created?
 
@@ -319,23 +315,14 @@ About 2 hours on signet from Deposit click to Active vault, mostly waiting for
 12 Bitcoin confirmations. Off-chain setup runs concurrently and takes 6 to 10
 minutes once confirmations land. Activation itself is one Ethereum transaction.
 
-For the stage-by-stage breakdown, see
-[Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/).
+For current app guides, use the TBV User Support Portal.
 
 ### How many wallet interactions does a deposit take?
 
-You actively interact with your wallets during three sessions:
-
-1. **Start the deposit** — sign the transactions to register the deposit and
-   link your Bitcoin and Ethereum wallets.
-2. **After Bitcoin confirmations** — return to sign the payout and recovery
-   transactions once the required Bitcoin confirmations have been reached.
-3. **Activate the vault** — retrieve the deposit secret, sign the activation
-   transaction, and complete the vault activation.
-
-Between these signing sessions, the protocol waits for Bitcoin confirmations
-and Vault Provider verification. You can safely close the application during
-these waiting periods and return later to continue the deposit.
+Vault creation includes wallet signatures before deposit, after Bitcoin
+confirmations, and at activation. The protocol waits for Bitcoin confirmations
+and Vault Provider verification between these sessions. For current app guides,
+use the TBV User Support Portal.
 
 ### Why splitting BTC into two vaults?
 
@@ -350,10 +337,9 @@ The app sizes the split dynamically from on-chain parameters. See
 
 ### How do I change the vault order?
 
-From the Collateral section, open **Reorder BTC vaults** at any time while
-vaults are `InUse`. The vault at the front of the list is seized first during a
-liquidation. Reordering takes one Ethereum transaction. Vaults in `Available`
-status, meaning not part of a position, are not part of any seizure order.
+The order of `InUse` vaults sets the seizure order during liquidation. Vaults in
+`Available` status are not part of a position and do not have a seizure order.
+For current app steps, use the TBV User Support Portal.
 
 ### What if peg-in stalls or expires?
 
@@ -372,7 +358,7 @@ public-testnet parameter version). Earlier vaults retain their parameter version
 and can use 432 BTC blocks (about 3 days). The refund is unilateral: no
 cooperation from the Vault Provider, App Keepers, or any other
 participant is required. See [Protocol parameters](/trustless-bitcoin-vault/testnet-info/protocol-parameters/)
-and [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/) for the full flow.
+for the active refund parameters. For current app guides, use the TBV User Support Portal.
 
 ### Why am I asked to download claimer artifacts?
 
@@ -383,8 +369,8 @@ unresponsive at redemption.
 
 Back them up at peg-in alongside the wallet seed phrase. Without both inputs,
 and with a non-responsive Vault Provider, recovery requires Security Council
-escalation. See [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/) for the
-self-claim path.
+escalation. See [Safety & trust assumptions](/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/)
+for the recovery assumptions.
 
 ## Borrowing and repaying
 
@@ -393,7 +379,7 @@ self-claim path.
 Through the current TBV integration with Aave v4, you can use your native
 Bitcoin collateral to borrow ERC-20 assets supported by that Aave market. The
 assets available depend on the market configuration. See
-[Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
+[Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/).
 
 ### Where does the borrowing happen and who sets the terms?
 
@@ -408,7 +394,7 @@ rates based on asset utilization within the Aave v4 Hub. Below the
 optimal-utilization pivot, the rate climbs gently. Above it, the rate climbs
 faster. The displayed rate is annual (APR), while interest accrues continuously.
 
-See [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/) for the interest model.
+See [Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/) for the interest model.
 
 ### Why does repayment ask for two wallet confirmations?
 
@@ -510,8 +496,7 @@ You can redeem your Bitcoin after repaying enough debt to satisfy the
 protocol's collateral requirements. Once redemption begins, the protocol
 enters a challenge period of approximately three days. If no valid challenge
 is raised during that period, your BTC is released to the Bitcoin address
-associated with your vault. See
-[Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/).
+associated with your vault. For current app guides, use the TBV User Support Portal.
 
 ### Why does withdrawal take about 3 days? Can it be shortened?
 
@@ -527,9 +512,9 @@ cannot be shortened per user.
 
 ### Why is Withdraw disabled for one of my vaults?
 
-On the current public testnet, the portal disables vault selection if removing
-that vault would drop the health factor below 1.0 with the remaining debt. Repay
-enough debt first and the vault becomes selectable.
+On the current public testnet, the protocol blocks a withdrawal if removing that
+vault would drop the health factor below 1.0 with the remaining debt. For current
+app steps, use the TBV User Support Portal.
 
 For a full withdrawal, debt must be zero on every borrowed reserve: USDC, USDT,
 and WBTC. A single satoshi of remaining debt on any reserve blocks a full
@@ -540,23 +525,14 @@ withdrawal.
 The Ethereum transaction only starts redemption. After it confirms, the protocol
 runs the Bitcoin-side claim, the assert, and the challenge-window wait before
 BTC is released. The dashboard displays **Pending Withdraw** for the full
-duration. Plan for about 3 days from the Withdraw click to BTC arrival on
-Bitcoin.
+duration. Plan for about 3 days for BTC to arrive on Bitcoin.
 
 ### The Vault Provider is unresponsive during redemption. What now?
 
-Use the self-claim path. The protocol pre-signed the Bitcoin transactions for
-both Vault-Provider-as-claimer and depositor-as-claimer at peg-in.
-
-1. Locate the WOTS keypair file and claimer artifacts saved at peg-in.
-2. Run the `watchtower` CLI the protocol ships. It broadcasts the Claim, Assert,
-   and Payout transactions on Bitcoin on the depositor's behalf.
-3. Wait through the same roughly 3-day challenge window.
-4. The payout reaches the Bitcoin address recorded at vault creation.
-
-Self-claim requires no cooperation from any App Keeper, Universal
-Challenger, or Vault Provider. See [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/) for the
-full self-claim walkthrough.
+The self-claim path uses Bitcoin transactions that the protocol pre-signs for
+the Vault Provider and depositor at peg-in. It requires no cooperation from an
+App Keeper, Universal Challenger, or Vault Provider. See [Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/)
+for the mechanism. Use the TBV User Support Portal for current app guides.
 
 ## Trust and recovery
 
@@ -585,32 +561,21 @@ artifacts, at vault creation so you can recover independently.
 
 ### My peg-in appears stuck. What should I do?
 
-1. Save the Pre-PegIn and PegIn transaction hashes.
-2. Confirm the Pre-PegIn transaction is propagated on a Bitcoin block explorer.
-   See [Setup](/trustless-bitcoin-vault/testnet-info/setup/).
-3. Refresh the page once and reconnect the same wallets.
-4. If the portal status still does not update, contact support with both
-   transaction hashes and the current stage name shown on the dashboard.
-
 Signet block times can be irregular. Slow confirmations are usually a property
-of the network, not of the protocol.
+of the network, not of the protocol. For current troubleshooting steps, use the
+TBV User Support Portal. Give support the transaction hashes and the current
+stage name shown on the dashboard.
 
 ### What if I refresh the page while signing?
 
-The flow is resumable. Reopen the portal with the same Bitcoin and Ethereum
-wallets used for the in-flight vault. Refresh once and look for any pending
-deposit or existing vault on the dashboard. Do not switch to a different Bitcoin
-address for a deposit already in progress.
-
-If the flow does not resume, contact support with screenshots, wallet
-addresses, and any transaction hashes.
+The flow is resumable. Use the same Bitcoin and Ethereum wallets for the
+in-flight vault. Do not switch to a different Bitcoin address during a deposit.
+For current app recovery steps, use the TBV User Support Portal.
 
 ## Related guides
 
 * [Setup](/trustless-bitcoin-vault/testnet-info/setup/)
-* [Quickstart](/trustless-bitcoin-vault/use-for-lending/quickstart/)
-* [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/)
-* [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/)
-* [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
 * [Liquidation risk](/trustless-bitcoin-vault/use-for-lending/liquidation-risk/)
+* [Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/)
+* For current app guides, use the TBV User Support Portal.
 * [Glossary](/trustless-bitcoin-vault/reference/glossary/)

@@ -1,7 +1,5 @@
 import {
   DiversityRegular,
-  DocumentChevronDoubleRegular,
-  RocketRegular,
   ShieldCheckmarkRegular,
   WalletCreditCardRegular,
 } from '@fluentui/react-icons';
@@ -26,25 +24,13 @@ export type Product = {
   text: string;
 };
 
-/** The three entry points, in the order they appear on the landing page. */
+/** The docs entry point shown on the landing page. */
 export const PRODUCTS: Product[] = [
   {
     title: 'TBV Testnet docs',
     link: '/trustless-bitcoin-vault/start-here/what-is-tbv/',
     icon: DiversityRegular,
     text: 'Start with the open Testnet documentation for Babylon Trustless Bitcoin Vaults and the Aave v4 lending integration.',
-  },
-  {
-    title: 'Create a vault',
-    link: '/trustless-bitcoin-vault/use-for-lending/create-a-vault',
-    icon: RocketRegular,
-    text: 'Lock signet BTC on Bitcoin, activate the vault, and have it supplied automatically as collateral.',
-  },
-  {
-    title: 'Borrow and redeem',
-    link: '/trustless-bitcoin-vault/use-for-lending/quickstart',
-    icon: DocumentChevronDoubleRegular,
-    text: 'Walk through peg-in, borrow, repay, withdraw, and Bitcoin redemption end to end.',
   },
 ];
 
