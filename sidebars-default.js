@@ -307,20 +307,7 @@ const sidebars = {
         'trustless-bitcoin-vault/testnet-info/protocol-parameters',
       ],
     },
-    {
-      type: 'category',
-      label: 'Use TBV Testnet For Borrowing',
-      collapsible: true,
-      collapsed: true,
-      className: 'btc_stakers_sidebar_header',
-      items: [
-        'trustless-bitcoin-vault/use-for-lending/quickstart',
-        'trustless-bitcoin-vault/use-for-lending/create-a-vault',
-        'trustless-bitcoin-vault/use-for-lending/borrow-and-repay',
-        'trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem',
-        'trustless-bitcoin-vault/use-for-lending/liquidation-risk',
-      ],
-    },
+    'trustless-bitcoin-vault/use-for-lending/liquidation-risk',
     {
       type: 'category',
       label: 'APIs',

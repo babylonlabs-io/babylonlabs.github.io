@@ -78,7 +78,7 @@ If the position becomes liquidatable, the protocol walks your vaults in order. T
 
 Without the split, the same liquidation seizes the full single vault. That is the cliff effect.
 
-You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. See [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/) for the two-vault setup at peg-in.
+You can reorder vaults after creation. If price action changes which vault is the right sacrificial buffer, reorder it before the position becomes unhealthy. Use the TBV User Support Portal for current app guides.
 
 ## Fairness payment
 
@@ -111,12 +111,11 @@ The zones above 1.0 are guidance, not contract values. The only on-chain thresho
 * **Borrow conservatively.** Stay well below the maximum your collateral allows. A health factor above 1.5 leaves headroom for normal BTC volatility.
 * **Use the two-vault split.** It is the most effective protection against the cliff effect, and the portal recommends it by default at peg-in. The portal also sizes the split for current parameters; don't manually undersize the sacrificial vault.
 * **Trust the portal's ordering.** The recommended order (sacrificial first) is what the protocol walks during liquidation. Reordering matters; review your order when parameters change.
-* **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/).
+* **Repay early when the health factor declines.** Partial repayments restore the health factor without closing the position. See [Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/) for the market mechanics.
 * **Add collateral.** Add more vaults to the position. Each added vault raises collateral value and the health factor; reorder afterwards if needed.
 
 ## Related pages
 
-* [Borrow & repay](/trustless-bitcoin-vault/use-for-lending/borrow-and-repay/)
-* [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
-* [Create a vault](/trustless-bitcoin-vault/use-for-lending/create-a-vault/)
+* [Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/)
+* [Safety & trust assumptions](/trustless-bitcoin-vault/start-here/safety-and-trust-assumptions/)
 * [Glossary](/trustless-bitcoin-vault/reference/glossary/)

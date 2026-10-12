@@ -52,7 +52,7 @@ const ITEMS: Item[] = [
         waiting for 12 Bitcoin confirmations. Off-chain setup runs concurrently
         and takes 6 to 10 minutes once confirmations land. Activation itself is
         a single Ethereum transaction.{' '}
-        <Link to={ROUTES.createVault}>Create a vault</Link>
+        <Link to={ROUTES.testnetFaq}>Testnet FAQ</Link>
       </>
     ),
   },
@@ -64,7 +64,7 @@ const ITEMS: Item[] = [
         ratio of borrowed to supplied for that asset on the Aave v4 Hub. Below
         the optimal-utilisation pivot the rate climbs gently, and above it much
         faster. The displayed APR is what the borrower pays.{' '}
-        <Link to={ROUTES.borrowRepay}>Borrow and repay</Link>
+        <Link to={ROUTES.testnetFaq}>Testnet FAQ</Link>
       </>
     ),
   },
@@ -88,7 +88,7 @@ const ITEMS: Item[] = [
         through the BABE construction, with a roughly 3-day challenge window in
         which a Vault Keeper or Universal Challenger can dispute an invalid
         claim. If no challenge appears, the payout finalises.{' '}
-        <Link to={ROUTES.withdrawRedeem}>Withdraw and redeem</Link>
+        <Link to={ROUTES.testnetFaq}>Testnet FAQ</Link>
       </>
     ),
   },
