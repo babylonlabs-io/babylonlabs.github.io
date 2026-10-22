@@ -98,7 +98,11 @@ script on the Bitcoin chain that locks your Bitcoin. It makes sure that:
 
 * You can unilaterally unlock and withdraw your Bitcoin anytime as long as
   doing so will not cause under-collateralization of your loan.
-* No one can move your Bitcoin, unless you are liquidated by Aave.
+* No one can move your Bitcoin unless your position is liquidated under the
+  integrated lending market's rules. In the Aave v4 integration, a liquidated
+  BTCVault is either escrowed in a Liquidation Liquidity Provider (LLP) until
+  an App Keeper redeems it on Bitcoin, or redeemed directly by an App Keeper.
+  See [Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/).
 
 ### Is my collateral segregated or pooled?
 
@@ -181,6 +185,13 @@ to specific functions:
 * **App Keeper:** Every integrated application appoints its own set of App
   Keepers. App Keepers hold both claim and challenge rights for that
   application's BTCVaults, such as the Arbitrageur in the Aave v4 integration.
+* **Security Council:** An emergency backstop. By quorum, it can block payout
+  on a specific BTCVault, but it cannot direct Bitcoin to any address. It can
+  also pause Ethereum-side application actions; pauses do not affect
+  Bitcoin-side depositor recovery paths.
+
+See [Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/)
+for the full role definitions.
 
 ## Deposit and vaults
 
@@ -321,10 +332,11 @@ There may be different situations where:
 
 ### Why does withdrawal take about 3 days?
 
-Bitcoin cannot natively and directly verify Ethereum state. TBV uses BABE
-zero-knowledge proofs together with a challenge period of approximately three
-days before Bitcoin can be released. This allows invalid redemption claims to
-be disputed before settlement is finalized.
+Bitcoin cannot natively and directly verify Ethereum state. Before Bitcoin can
+be released, a BABE zero-knowledge proof verifies the Ethereum redemption
+event on Bitcoin, together with a challenge period of approximately three
+days. This allows invalid redemption claims to be disputed before settlement
+is finalized.
 
 ### Why is Withdraw disabled for one of my vaults?
 
@@ -358,9 +370,9 @@ check the current terms on [Aavescan](https://aavescan.com/).
 
 ### Why is there a 3-day challenge window, and can it be shortened?
 
-TBV uses a ZK proof (via BABE) plus a ~72-hour challenge period to verify
-native Bitcoin on Ethereum, so any Vault Keeper can dispute an invalid claim
-before Bitcoin is released. It is a fixed security parameter tied to the
+TBV uses a ZK proof (via BABE) plus a ~72-hour challenge period to verify an
+Ethereum redemption event on Bitcoin, so any Vault Keeper can dispute an
+invalid claim before Bitcoin is released. It is a fixed security parameter tied to the
 fraud-proof design, which cannot be shortened per user.
 
 ### What happens to my position if Aave DAO freezes or pauses the Spoke?
@@ -416,6 +428,13 @@ Bitcoin than needed. The fairness mechanism compensates you for the
 difference: it either reduces your remaining debt or, if there is surplus left
 after your debt is covered, pays it to you in WBTC.
 
+The surplus is not paid at its raw BTC value. It is discounted using the ratio
+of debt liquidated to collateral liquidated. For example, if \$24,000 of debt
+is cleared for \$25,000 of seized collateral, each dollar of over-seized
+collateral is valued at about \$0.96. See
+[Aave v4 integration](/trustless-bitcoin-vault/technical-details/aave-v4-integration/)
+for details.
+
 ### Who can liquidate my position, and is it discretionary?
 
 Liquidation is rule-based, not discretionary. If your position reaches the
@@ -437,7 +456,9 @@ fairness payment mechanism.
 
 If your position is liquidated, a liquidator repays part or all of your debt
 and receives the required BTCVault collateral according to the protocol rules.
-Any surplus value comes back to you through the fairness payment.
+Any surplus value comes back to you through the fairness payment, discounted
+by the ratio of debt liquidated to collateral liquidated (see
+[What is the fairness payment?](#what-is-the-fairness-payment)).
 
 ## Wallets and setup
 
@@ -448,12 +469,12 @@ testnet app, connect them to Bitcoin Signet and Ethereum Sepolia respectively.
 
 * The Bitcoin wallet must produce Taproot (P2TR) addresses and support PSBT
   signing plus message signing (BIP-322 or ECDSA).
-* The Ethereum wallet must support the Ethereum network.
+* The Ethereum wallet must be compatible with WalletConnect or be an injected
+  browser wallet supported by the testnet app.
 
-Any wallet that meets these requirements works; UniSat is one supported
-example. For the current supported wallets, networks, and faucet links,
-[go to the testnet app](https://btc-vaults.testnet.babylonlabs.io/) and click
-"Connect Wallet".
+UniSat is a supported Bitcoin wallet; other wallets must also be supported by
+the app. For the current supported wallets, networks, and faucet links, see
+[Setup](/trustless-bitcoin-vault/testnet-info/setup/).
 
 ### Why do I need a Taproot address?
 
