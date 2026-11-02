@@ -131,7 +131,8 @@ while it remains locked on Bitcoin.
 ### What enforces the rules?
 
 The protocol's spending conditions are enforced through Bitcoin Script,
-zero-knowledge proofs ([BABE](https://eprint.iacr.org/2026/065.pdf)), and a
+zero-knowledge proofs checked through
+[BABE](https://eprint.iacr.org/2026/065.pdf), and a
 challenge mechanism that allows invalid redemption or liquidation claims to be
 disputed before Bitcoin is released. These mechanisms replace reliance on a
 trusted intermediary with cryptographic verification.
@@ -166,8 +167,8 @@ operate their own Vault Provider if they prefer.
 
 ### What enforces correctness across two chains?
 
-Cross-chain correctness is enforced through Bitcoin Script, BABE
-zero-knowledge proofs, and a challenge period. Before Bitcoin is released from
+Cross-chain correctness is enforced through Bitcoin Script, zero-knowledge
+proofs checked through BABE, and a challenge period. Before Bitcoin is released from
 a BTCVault, the required proof is verified and participants have an
 opportunity to challenge any invalid claim.
 [Read more in the BABE paper](https://eprint.iacr.org/2026/065.pdf).
@@ -186,9 +187,10 @@ to specific functions:
   Keepers. App Keepers hold both claim and challenge rights for that
   application's BTCVaults, such as the Arbitrageur in the Aave v4 integration.
 * **Security Council:** An emergency backstop. By quorum, it can block payout
-  on a specific BTCVault, but it cannot direct Bitcoin to any address. It can
-  also pause Ethereum-side application actions; pauses do not affect
-  Bitcoin-side depositor recovery paths.
+  on a specific BTCVault, but it cannot direct Bitcoin to any address.
+  Protocol governance can pause Ethereum-side actions, including new
+  redemptions. Pauses do not stop Bitcoin-side recovery paths that are already
+  available.
 
 See [Protocol actors](/trustless-bitcoin-vault/technical-details/protocol-actors/)
 for the full role definitions.
@@ -249,29 +251,40 @@ the order you specify, beginning with the first vault in the list. Changing
 the order requires an Ethereum transaction. BTCVaults that are "Available" and
 not securing a borrowing position are not included in the liquidation order.
 
+You cannot reorder vaults once your health factor is below 1.0, or while the
+Spoke is frozen.
+
 ### What if vault creation stalls or expires?
 
 If BTCVault creation does not complete successfully, the protocol provides
 recovery paths depending on where the process stopped.
 
 * If the off-chain setup does not complete within approximately 24 hours, the
-  BTCVault expires and the BTCVault activation fee is refunded automatically.
+  BTCVault expires and the peg-in fee goes to the protocol treasury. The
+  treasury reimburses not-at-fault depositors manually.
 * If activation does not occur within approximately 48 hours after BTCVault
   creation, the fee is non-refundable, but your Bitcoin remains recoverable.
 
 In both cases, you can recover your Bitcoin after the protocol timelock by
-signing with the original Bitcoin key.
+signing with the original Bitcoin key, unless the PegIn transaction has
+already spent your deposit on Bitcoin. In that case a refund is no longer
+possible: redeem the BTCVault before its grace window closes, and the Vault
+Provider claims the Bitcoin and pays it to your payout address, minus its
+commission.
 
 ### Why am I asked to download claimer artifacts?
 
-The WOTS (Winternitz One-Time Signature) keypair and associated claimer
-artifacts enable the self-claim recovery path. If your Vault Provider becomes
-unavailable during redemption, these files allow you to complete the
-redemption process yourself using the protocol's self-claim procedure.
+Claimer artifacts enable the self-claim recovery path. If your Vault
+Provider becomes unavailable during redemption, these files allow you to
+complete the redemption process yourself using the protocol's self-claim
+procedure. The WOTS (Winternitz One-Time Signature) keys used for self-claim
+are re-derived from your Bitcoin wallet, so there is no separate WOTS key file
+to store.
 
 Store these files securely alongside your wallet recovery phrase. If they are
-lost, recovery may require assistance through the protocol's emergency
-procedures and may require Security Council escalation. See
+lost and your Vault Provider is also unavailable, recovery may require
+assistance through the protocol's emergency procedures and may require
+Security Council escalation. See
 [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/#how-to-self-claim)
 for the self-claim path.
 
@@ -333,8 +346,8 @@ There may be different situations where:
 ### Why does withdrawal take about 3 days?
 
 Bitcoin cannot natively and directly verify Ethereum state. Before Bitcoin can
-be released, a BABE zero-knowledge proof verifies the Ethereum redemption
-event on Bitcoin, together with a challenge period of approximately three
+be released, a zero-knowledge proof, checked through BABE, verifies the
+Ethereum redemption event on Bitcoin, together with a challenge period of approximately three
 days. This allows invalid redemption claims to be disputed before settlement
 is finalized.
 
@@ -357,8 +370,8 @@ Bitcoin.
 ### The Vault Provider is unresponsive during redemption. What now?
 
 If your Vault Provider becomes unavailable during redemption, you can use the
-protocol's self-claim process, provided you retained your WOTS keypair and
-claimer artifacts created during BTCVault setup. This allows you to complete
+protocol's self-claim process, provided you retained the claimer artifacts
+created during BTCVault setup. This allows you to complete
 redemption independently without relying on the Vault Provider. See
 [Withdraw & redeem](/trustless-bitcoin-vault/use-for-lending/withdraw-and-redeem/)
 for the full self-claim walkthrough.
@@ -370,10 +383,11 @@ check the current terms on [Aavescan](https://aavescan.com/).
 
 ### Why is there a 3-day challenge window, and can it be shortened?
 
-TBV uses a ZK proof (via BABE) plus a ~72-hour challenge period to verify an
-Ethereum redemption event on Bitcoin, so any Vault Keeper can dispute an
-invalid claim before Bitcoin is released. It is a fixed security parameter tied to the
-fraud-proof design, which cannot be shortened per user.
+TBV uses a zero-knowledge proof, checked through BABE, plus a ~72-hour
+challenge period to verify an Ethereum redemption event on Bitcoin, so any
+Vault Keeper can dispute an invalid claim before Bitcoin is released. It is a
+fixed security parameter tied to the fraud-proof design, which cannot be
+shortened per user.
 
 ### What happens to my position if Aave DAO freezes or pauses the Spoke?
 
@@ -438,9 +452,18 @@ for details.
 ### Who can liquidate my position, and is it discretionary?
 
 Liquidation is rule-based, not discretionary. If your position reaches the
-liquidation threshold defined by the lending market, permissionless
-liquidators repay the debt and receive the vault collateral in return. Neither
-Babylon nor any other party decides when a position is liquidated.
+liquidation threshold defined by the lending market, any address can trigger
+liquidation. In the Aave v4 integration there are two paths:
+
+* **LLP-routed liquidation (permissionless):** The liquidator repays the debt
+  and receives instant settlement (WBTC at launch) from a Liquidation
+  Liquidity Provider (LLP). The seized BTCVault is escrowed in the LLP until
+  an App Keeper acquires it and redeems it on Bitcoin.
+* **Direct-redemption liquidation (permissioned):** A registered App Keeper
+  repays the debt and redeems the seized BTCVault directly to its Bitcoin
+  redeem key.
+
+Neither Babylon nor any other party decides when a position is liquidated.
 
 ### How does partial liquidation work on an asset that has no denominations?
 
@@ -455,7 +478,10 @@ fairness payment mechanism.
 ### What happens if I get liquidated?
 
 If your position is liquidated, a liquidator repays part or all of your debt
-and receives the required BTCVault collateral according to the protocol rules.
+and the required BTCVaults are seized according to the protocol rules and your
+vault order. Seized BTCVaults are either escrowed in an LLP until an App
+Keeper redeems them on Bitcoin, or redeemed directly by an App Keeper. A
+permissionless liquidator receives WBTC from the LLP, not the BTCVault.
 Any surplus value comes back to you through the fairness payment, discounted
 by the ratio of debt liquidated to collateral liquidated (see
 [What is the fairness payment?](#what-is-the-fairness-payment)).
@@ -468,7 +494,8 @@ You need two wallets: a Bitcoin wallet and an Ethereum wallet. To use the
 testnet app, connect them to Bitcoin Signet and Ethereum Sepolia respectively.
 
 * The Bitcoin wallet must produce Taproot (P2TR) addresses and support PSBT
-  signing plus message signing (BIP-322 or ECDSA).
+  signing, message signing (BIP-322 or ECDSA), and `deriveContextHash`, which
+  derives the vault's secrets.
 * The Ethereum wallet must be compatible with WalletConnect or be an injected
   browser wallet supported by the testnet app.
 
@@ -508,12 +535,13 @@ You may be experiencing one of the following issues:
   are required before the balance becomes spendable. This typically takes a
   few minutes on Signet.
 
-### What if I lose my WOTS keypair file and claimer artifacts?
+### What if I lose my claimer artifacts?
 
-If your Vault Provider remains available, losing your WOTS keypair and claimer
-artifacts does not immediately affect normal redemption. However, you would no
-longer be able to use the self-claim recovery path. Recovery in this situation
-may require the Security Council. Visit the
+If your Vault Provider remains available, losing your claimer artifacts does
+not immediately affect normal redemption. However, you would no longer be able
+to use the self-claim recovery path. If you lose your claimer artifacts and
+your Vault Provider is also unavailable, recovery may require the Security
+Council. Visit the
 [Security Council](/trustless-bitcoin-vault/technical-details/protocol-actors/#security-council)
 section to learn more.
 
@@ -535,8 +563,8 @@ Your BTCVault is secured by your Bitcoin private key. If you permanently lose
 that key, you lose access to the Bitcoin in the same way you would lose access
 to any self-custodial Bitcoin wallet.
 
-Back up your wallet seed phrase, along with your WOTS keypair file and claimer
-artifacts, at vault creation so you can recover independently.
+Back up your wallet seed phrase, along with your claimer artifacts, at vault
+creation so you can recover independently.
 
 ## Getting started
 
@@ -554,8 +582,8 @@ We welcome your feedback. Mainnet is targeted for Q4 2026.
 ### What signing capability do I need?
 
 Depositors need a Bitcoin wallet that supports Taproot (P2TR) addresses, PSBT
-signing, and message signing (BIP-322 or ECDSA), together with an Ethereum
-wallet.
+signing, message signing (BIP-322 or ECDSA), and `deriveContextHash`, together
+with an Ethereum wallet.
 
 Operators such as Vault Providers and App Keepers require Bitcoin and Ethereum
 signing infrastructure capable of participating in the protocol's pre-signing
@@ -571,8 +599,9 @@ Usually it takes between 6 and 10 device clicks:
 * **After Bitcoin confirmations:** Return to sign the payout and recovery
   transactions once the required Bitcoin confirmations have been reached.
 * **Activate the vault:** Retrieve the deposit secret, sign the activation
-  transaction, and complete the vault activation. After the final Bitcoin
-  confirmation, the vault is ready to use as collateral.
+  transaction, and complete the vault activation. Activation makes the vault
+  usable as collateral, even before the PegIn transaction confirms on
+  Bitcoin.
 
 Between these signing sessions, the protocol waits for Bitcoin confirmations
 and Vault Provider verification. Users can safely close the application during
@@ -580,6 +609,12 @@ these waiting periods and return later to continue the deposit.
 
 ### Can my users use a hardware wallet?
 
-Yes, provided the hardware wallet supports Taproot (P2TR) addresses together
-with PSBT signing and the required message signing capabilities used by the
-protocol.
+Yes, with a supported device. PSBT and message signing are not enough: the
+device must also support `deriveContextHash`. The supported hardware
+integrations are:
+
+* **Ledger** with the dedicated Babylon Vault app ("Babylon Vault Testnet" on
+  Signet). The standard Ledger Bitcoin app cannot be used for deposits.
+* **Keystone**, signing air-gapped over QR codes.
+
+Trezor is not supported.
