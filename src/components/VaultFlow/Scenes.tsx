@@ -508,7 +508,7 @@ export const SCENES: Scene[] = [
           />
           <StepRow n={2} title="Set up claim" count="0/2" at={CARD_IN + 0.6} />
           <StepRow n={3} title="Sign payout" count="0/4" at={CARD_IN + 0.75} />
-          <StepRow n={4} title="Activate BTC Vault" count="0/3" at={CARD_IN + 0.9} />
+          <StepRow n={4} title="Activate BTCVault" count="0/3" at={CARD_IN + 0.9} />
         </DepositCard>
       </AppShell>
     ),
@@ -557,7 +557,7 @@ export const SCENES: Scene[] = [
             ]}
           />
           <StepRow n={3} title="Sign payout" count="0/4" at={0.9} />
-          <StepRow n={4} title="Activate BTC Vault" count="0/3" at={1.05} />
+          <StepRow n={4} title="Activate BTCVault" count="0/3" at={1.05} />
         </DepositCard>
 
         <WalletPopup
@@ -622,7 +622,7 @@ export const SCENES: Scene[] = [
               { label: 'Awaiting vault provider verification', at: s3b.reactTime + 1.0 },
             ]}
           />
-          <StepRow n={4} title="Activate BTC Vault" count="0/3" at={1.0} />
+          <StepRow n={4} title="Activate BTCVault" count="0/3" at={1.0} />
         </DepositCard>
 
         <WalletPopup
@@ -710,12 +710,12 @@ export const SCENES: Scene[] = [
                   </svg>
 
                   <p className="mb-2.5 text-[22px]" style={{ color: TEAL }}>
-                    Activate your BTC Vault
+                    Activate your BTCVault
                   </p>
                   <p className="mb-5 text-[13px] leading-[18px] text-slate-500">
                     Before activating,{' '}
                     <span style={{ color: TEAL }}>download the recovery artifacts</span>{' '}
-                    of your BTC Vault. These files keep it functional even if your
+                    of your BTCVault. These files keep it functional even if your
                     vault provider becomes unavailable.
                   </p>
 
@@ -807,7 +807,7 @@ export const SCENES: Scene[] = [
               >
                 <Check className="mx-auto mb-4 h-14 w-14 text-emerald-500" />
                 <p className="mb-1.5 text-[20px]" style={{ color: TEAL }}>
-                  BTC Vault active
+                  BTCVault active
                 </p>
                 <p className="mb-0 text-[13px] text-slate-500">
                   The PegIn transaction is broadcasting on Bitcoin. Your vault is now
