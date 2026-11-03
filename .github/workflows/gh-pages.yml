@@ -88,8 +88,12 @@ jobs:
           export API_BASE_URL=$API_BASE_URL
           npm run build
 
+      # Upload only from main and from each environment's own branch. Feature
+      # branches build without uploading. A main commit goes to both buckets
+      # so Deploy Dev in babylonlabs.github.io-actions can stage the same SHA
+      # on dev before it is promoted to production.
       - name: Configure AWS credentials
-        if: github.ref == format('refs/heads/{0}', matrix.branch)
+        if: github.ref == 'refs/heads/main' || github.ref == format('refs/heads/{0}', matrix.branch)
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1 https://github.com/aws-actions/configure-aws-credentials/releases/tag/v4.3.1
         with:
           role-to-assume: arn:aws:iam::${{ matrix.account }}:role/gha-s3-frontend-push
@@ -98,7 +102,7 @@ jobs:
 
       # Upload to S3
       - name: Upload to S3
-        if: github.ref == format('refs/heads/{0}', matrix.branch)
+        if: github.ref == 'refs/heads/main' || github.ref == format('refs/heads/{0}', matrix.branch)
         run: |
           tar -czf docs-${{ github.sha }}.tar.gz -C build .
           aws s3 cp docs-${{ github.sha }}.tar.gz s3://${{ matrix.s3_bucket }}/docs-website/${{ github.sha }}.tar.gz
