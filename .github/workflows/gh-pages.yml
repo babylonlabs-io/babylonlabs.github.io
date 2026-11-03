@@ -10,9 +10,7 @@ on:
     branches:
       - main
 
-# For GitHub OIDC authentication to AWS
 permissions:
-  id-token: write
   contents: read
 
 jobs:
@@ -49,6 +47,11 @@ jobs:
             account: 490721144737
 
     environment: ${{ matrix.environment }}
+
+    # For GitHub OIDC authentication to AWS
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       # Checkout code
