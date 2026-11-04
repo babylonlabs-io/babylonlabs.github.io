@@ -99,9 +99,14 @@ export default function ContentMotion(): null {
     );
 
     const arm = () => {
+      io.disconnect();
       const column = contentColumn();
       if (!column) return;
-      for (const el of candidates(column)) {
+      const pending = Array.from(
+        column.querySelectorAll<HTMLElement>(`.${ARMED}:not(.${REVEALED})`),
+      );
+      const fresh = candidates(column);
+      for (const el of [...pending, ...fresh]) {
         el.classList.add(ARMED);
         io.observe(el);
       }
