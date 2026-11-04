@@ -284,6 +284,41 @@ For urgent production fixes:
 - Supports live code blocks via `@docusaurus/theme-live-codeblock`
 - Code syntax highlighting for: JavaScript, TypeScript, Rust, Swift, Objective-C, JSON, Bash
 
+### TBV Terminology (Canonical)
+
+Canonical source: the Notion page ["Babylon Trustless Bitcoin Vaults (TBV)"](https://app.notion.com/p/Babylon-Trustless-Bitcoin-Vaults-TBV-342f60cc1b5f8040a062c6b0fe7d9f9f) (Babylon 2026 Marketing Strategy → 4. Brand Narrative). Use these names and explainers across all public and internal documents.
+
+**Protocol name**
+- First mention in any document: **Babylon Trustless Bitcoin Vaults (TBV)** — "Vaults" is plural. Every mention after: **TBV**.
+- "Babylon" may be dropped if the name makes a sentence too long, but prefer keeping it on first mention.
+- Re-state the full name in anything that can be screenshotted or shared out of context (social threads, short-form, slides).
+
+**Core terms**
+- **BTCVault** — one on-chain vault holding a depositor's locked native BTC (one UTXO on Bitcoin, linked to a collateral record on the integrated chain). One word, capitals B, T, C, V. Avoid pluralizing.
+- **collateral record** — lowercase (not a brand name); the on-chain record that recognises the Bitcoin in a BTCVault. Never use "vaultBTC" in prose; keep it verbatim where it is the literal identifier (the deployed contract name / ERC-20 symbol, code, and API fields such as `vaultBtcAddress`).
+- **Vault Creation** — locking Bitcoin into a BTCVault. **Vault Redemption** / **Redeem** — releasing native BTC to the authorized claimer. **Withdraw** — removing collateral or borrowed assets from a position.
+- **Challenge period** — the fraud-proof window before Bitcoin is released.
+- Spokes: **Babylon Core Lending Spoke**, **BTCVault Swap Spoke**. Other contracts: **Aave Adapter**, **Application Registry**, **CapPolicy**, **Aave v4 Hub**.
+- **BABE** — Babylon's technique that makes ZK verification on Bitcoin ~1000x cheaper.
+
+**Verbs when describing TBV**
+- USE: enables, unlocks, supports, allows, authorizes, verifies.
+- DO NOT USE: transforms, converts, turns into, mints, issues, wraps.
+
+**Roles**
+- **Vault Keeper** — the operator *set* (Vault Provider, Universal Challenger, App Keeper) that runs a BTCVault. Not a single role.
+- **Vault Provider** — the depositor's operator that sets up, redeems, and defends the BTCVault. A depositor can run their own.
+- **Universal Challenger** — a global operator set with challenge-only rights across every BTCVault.
+- **App Keeper** — an integrated app's operator with claim and challenge rights under that app's rules. Formerly "Application Vault Keeper" (AVK) — do not use the old name.
+- **Arbitrageur** — the App Keeper role in the Aave v4 integration; buys escrowed vaults by repaying the WBTC debt, then redeems the BTC on Bitcoin.
+- **Depositor** — the Bitcoin owner; locks BTC, picks the app and Vault Provider, pre-signs every spend.
+- **Liquidator** — permissionless; repays part of an undercollateralized position's debt and seizes only enough vault collateral to cover it. Lending-specific.
+- **Security Council** — last-resort safeguard; can only block invalid claims, never moves, seizes, or redeems BTC.
+
+**Cautions when applying the Notion page**
+- It is a brand-narrative document, not a protocol spec. Confirm structural claims with the protocol team before publishing them.
+- Treat its numbers (~5% liquidation bonus, ~72h challenge period, ~1.20 target health factor, ~80% collateral factor) as marketing rounding, not parameters. Where the docs already state a testnet parameter (for example, a 10% liquidation bonus), the docs' parameter wins.
+
 ## CI/CD and Deployment Architecture
 
 ### Deployment Pipeline
