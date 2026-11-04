@@ -1,0 +1,7 @@
+/* Let long anchored document headings wrap inside the content column. */
+.markdown h2.anchor,
+.markdown h3.anchor {
+  white-space: normal;
+  text-wrap: wrap;
+  overflow-wrap: anywhere;
+}
