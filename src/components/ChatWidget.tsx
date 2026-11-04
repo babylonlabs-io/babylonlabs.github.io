@@ -5,6 +5,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ChatWidget.css';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { buildPageAwareQuestion } from './chatPageContext';
 
 interface Message {
   id: string;
@@ -42,6 +43,10 @@ const CONSENT_KEY = 'babylon_ai_chat_consent';
 
 const PRIVACY_CONSENT_TEXT =
   'This chatbot is intended for technical and informational purposes only. Please do not provide any personal data, including information that can directly or indirectly identify an individual. Your chat history may be used for improving the bot\'s responses and will be permanently deleted after two months.';
+
+const getCurrentPageUrl = (): string => {
+  return typeof window !== 'undefined' ? window.location.href : '';
+};
 
 // Helper to generate UUID using cryptographically secure random
 const generateUUID = () => {
@@ -286,7 +291,8 @@ export default function ChatWidget() {
       : DEFAULT_INPUT_LIMIT;
 
     if (value.trim()) {
-      const estimatedTokens = estimateTokens(value);
+      const pageAwareQuestion = buildPageAwareQuestion(value, getCurrentPageUrl());
+      const estimatedTokens = estimateTokens(pageAwareQuestion);
       if (estimatedTokens > maxTokens) {
         setInputError(`Message too long (~${estimatedTokens}/${maxTokens} tokens). Please shorten your question.`);
       } else if (estimatedTokens > maxTokens * 0.8) {
@@ -302,7 +308,9 @@ export default function ChatWidget() {
   const maxTokens = tokenLimits?.input_limit.enabled 
     ? tokenLimits.input_limit.max_tokens 
     : DEFAULT_INPUT_LIMIT;
-  const isInputTooLong = estimateTokens(input) > maxTokens;
+  const isInputTooLong = estimateTokens(
+    buildPageAwareQuestion(input, getCurrentPageUrl()),
+  ) > maxTokens;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -462,12 +470,25 @@ export default function ChatWidget() {
   const handleSubmit = async (e?: React.FormEvent, directQuestion?: string) => {
     e?.preventDefault();
     const queryText = directQuestion || input;
-    if (!queryText.trim() || isLoading || (!directQuestion && isInputTooLong)) return;
+    const trimmedQuery = queryText.trim();
+    if (!trimmedQuery || isLoading) return;
+
+    const pageAwareQuestion = buildPageAwareQuestion(
+      trimmedQuery,
+      getCurrentPageUrl(),
+    );
+    const estimatedTokens = estimateTokens(pageAwareQuestion);
+    if (estimatedTokens > maxTokens) {
+      setInputError(
+        `Message too long (~${estimatedTokens}/${maxTokens} tokens). Please shorten your question.`,
+      );
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: queryText.trim()
+      content: trimmedQuery
     };
 
     // Create placeholder for AI response immediately
@@ -490,7 +511,7 @@ export default function ChatWidget() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          question: userMessage.content,
+          question: pageAwareQuestion,
           thread_uuid: currentSession.thread_uuid
         }),
         signal: abortControllerRef.current.signal,
