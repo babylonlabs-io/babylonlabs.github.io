@@ -19,7 +19,7 @@
     "format": "prettier -w src docs",
     "format:docs": "prettier -w docs",
     "typecheck": "tsc",
-    "spell-check": "npx cspell docs/**/*.mdx",
+    "spell-check": "node scripts/validate-cspell-patterns.mjs && npx --yes cspell@8.17.2 \"docs/**/*.mdx\"",
     "verify:vault-indexer-queries": "node scripts/verify-vault-indexer-queries.mjs",
     "validate:vault-indexer-queries": "node scripts/validate-vault-indexer-queries.mjs",
     "genmd": "docusaurus gen-api-docs all",
