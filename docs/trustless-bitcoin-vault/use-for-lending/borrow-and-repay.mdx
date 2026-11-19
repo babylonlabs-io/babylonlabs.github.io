@@ -60,7 +60,7 @@ The borrow is rejected if:
 * The amount exceeds the Hub's draw cap for that asset.
 * The reserve is paused or frozen.
 
-You can borrow from multiple asset reserves at once (up to 4 reserves combined, per `maxUserReservesLimit`). For example, borrow USDC and USDT in parallel against the same BTC collateral. Each debt is tracked independently, but the health factor reflects the aggregate of all debts.
+A position borrows one asset at a time (`MAX_USER_RESERVES_LIMIT` = 1). For example, if you borrow USDC, you must repay the USDC debt in full before you can borrow USDT or WBTC.
 
 You can also return to **Borrow** repeatedly and borrow more as long as the resulting health factor stays above 1.0.
 
@@ -110,7 +110,7 @@ To pay down debt, open the **Loans** section and click **Repay**.
 Choose:
 
 * **Repay partial** pays down a portion of one asset's debt. The position stays open with reduced debt and an improved health factor.
-* **Repay full** closes out one asset's debt entirely. If you have debt across multiple assets, repay each one separately. There is no aggregate "repay everything" call.
+* **Repay full** closes out the debt entirely. After a full repayment you can borrow a different asset.
 
 ![Repay form — enter amount](/img/trustless-bitcoin-vault/confluence/use-for-lending/borrow-and-repay/screenshot-101-20260601-043734.png)
 

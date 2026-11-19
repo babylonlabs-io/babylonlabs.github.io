@@ -32,7 +32,7 @@ A vault moves through these states during creation:
 * **Verified:** setup is complete; the vault is ready for activation.
 * **Active:** the BTC is locked in the vault and the vault is usable.
 
-If the off-chain setup fails to complete within ~24 hours, the vault enters **Expired**. If the depositor never activates an already-Verified vault within ~48 hours of creation, the vault also expires, but the BTC is still recoverable via the Pre-PegIn refund path described later on this page.
+If the off-chain setup fails to complete within ~4 days, the vault enters **Expired**. If the depositor never activates an already-Verified vault within ~6 days of creation, the vault also expires, but the BTC is still recoverable via the Pre-PegIn refund path described later on this page.
 
 ## Step 1: Decide how to split your BTC
 
@@ -149,7 +149,7 @@ After the PegIn transaction confirms on Bitcoin, the vault is fully active. The 
 
 ![Activation confirmation pending](/img/trustless-bitcoin-vault/confluence/use-for-lending/create-a-vault/screenshot-089-20260601-042907.png)
 
-Activate within the 48-hour activation window. The window starts when you submit the peg-in request. If the vault is not activated before `pegInActivationTimeout` closes, the vault enters **Expired** state and BTC recovery moves to the refund path.
+Activate within the ~6-day activation window. The window starts when you submit the peg-in request. If the vault is not activated before `pegInActivationTimeout` closes, the vault enters **Expired** state and BTC recovery moves to the refund path.
 
 ## Step 9: Post activation
 
@@ -187,8 +187,8 @@ The refund is unilateral. It does not require cooperation from the Vault Provide
 
 Two distinct failure modes both lead to refund:
 
-* **Setup didn't complete** (vault expires by `pegInAckTimeout` ≈ 24 hours): the peg-in fee is refunded automatically, and the BTC is recoverable via the refund path after `tRefund` elapses.
-* **You didn't activate** (vault expires by `pegInActivationTimeout` ≈ 48 hours after creation, despite reaching Verified): the peg-in fee is non-refundable, but the BTC remains recoverable via the refund path.
+* **Setup didn't complete** (vault expires by `pegInAckTimeout` ≈ 4 days): the peg-in fee is refunded automatically, and the BTC is recoverable via the refund path after `tRefund` elapses.
+* **You didn't activate** (vault expires by `pegInActivationTimeout` ≈ 6 days after creation, despite reaching Verified): the peg-in fee is non-refundable, but the BTC remains recoverable via the refund path.
 
 ## Timeline summary
 

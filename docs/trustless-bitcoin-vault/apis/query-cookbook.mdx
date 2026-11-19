@@ -10,7 +10,7 @@ description: Worked, tested GraphQL queries for the Babylon vault indexer, group
 Every query on this page is executed against the live testnet endpoint in CI. If
 one stops working, the build fails.
 
-Copy any of them into the [explorer](https://babylon-vault-indexer-api.testnet.babylonlabs.io/)
+Copy any of them into the [explorer](https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/)
 or send them with `curl`. Addresses in the examples are real testnet records, so
 they return data as written.
 
@@ -21,7 +21,7 @@ with a bare **403** and no GraphQL error body. Always set your own. See
 :::
 
 ```bash
-curl -s https://babylon-vault-indexer-api.testnet.babylonlabs.io/ \
+curl -s https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/ \
   -H 'Content-Type: application/json' \
   -H 'User-Agent: my-app/1.0' \
   -d '{"query":"{ statss(limit:1){ items{ totalAvailableSats availableVaultCount } } }"}'
@@ -39,7 +39,7 @@ page size.
 ```graphql
 {
   vaults(
-    where: { depositor: "0x106d71c740aeebf6e72f06dad4129651dc65d810" }
+    where: { depositor: "0xd51d8dda9f8975fbecacd77a93f37a57053642e1" }
     orderBy: "pendingAt"
     orderDirection: "desc"
     limit: 10
@@ -62,7 +62,7 @@ page size.
 
 ```graphql
 {
-  vault(id: "0x002f198c46664c28f0685ba86303256e9833344a54c7b4e34483e7805f5b8d4a") {
+  vault(id: "0xa0e894c80904451c75b0f616b372217224281294d7ad8f2cc9c96738c69e52e0") {
     status
     amount
     depositor
@@ -120,7 +120,7 @@ A `removedAt` of `null` means the collateral is still pledged.
 ```graphql
 {
   vaultActivitys(
-    where: { depositor: "0x106d71c740aeebf6e72f06dad4129651dc65d810" }
+    where: { depositor: "0xd51d8dda9f8975fbecacd77a93f37a57053642e1" }
     orderBy: "timestamp"
     orderDirection: "desc"
     limit: 20

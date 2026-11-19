@@ -23,7 +23,7 @@ A borrow flows through the layers: depositor, AaveAdapter, position proxy, Babyl
 Two supporting contracts handle registration and read access:
 
 * **AaveAdapterConfig.** Manages LLP registration, position-size parameters, and borrow-delegation resolver registration. Gated by the protocol's TimelockController.
-* **AaveAdapterLens.** Read-only contract for aggregated state queries (positions, vaults, reserves).
+* **AaveAdapterLiquidationPreview.** Read-only helper that computes the arguments for `liquidate` or `liquidateWithLLP`: the debt to cover, the exitBTC owed, and the vault that will be seized.
 
 ## Collateral record
 
@@ -65,7 +65,7 @@ Operations on the AaveAdapter, in lifecycle order:
 * `liquidate(...)`. Direct-redemption liquidation path. Restricted: requires the liquidator to be a registered App Keeper (Arbitrageur) with a Bitcoin redeem key.
 * `liquidateWithLLP(borrower, llp, amounts, priorityOrder, requestedTokens)`. Permissionless LLP-routed liquidation path. Triggered when the position's health factor drops below 1.0. The seized vault is escrowed in the LLP (the BTCVault Swap Spoke by default) and the liquidator receives a fungible settlement asset (WBTC at launch).
 
-The `AaveAdapterLens` contract exposes corresponding read-only queries: position state, vault state per vault, reserve state per asset.
+The `AaveAdapterLiquidationPreview` contract computes the inputs a liquidator needs before calling either liquidation path: the debt to cover, the exitBTC owed, and the vault that will be seized.
 
 ## Liquidation model and settlement
 

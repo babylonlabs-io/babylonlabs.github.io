@@ -151,7 +151,7 @@ The 3-day window is inherent to the proof-verification mechanism.
 Common scenarios and where to look:
 
 * **Pre-PegIn still pending after a few hours:** check the Bitcoin block explorer (see [Setup](../testnet-info/setup.mdx)). If the transaction is propagated but not confirmed, wait — signet block times can be irregular.
-* **Vault stuck in Pending past ~24 hours:** the off-chain setup likely failed. The vault will transition to Expired and your peg-in fee will be refunded. See the refund path on [Create a vault](./create-a-vault.mdx) for BTC recovery.
+* **Vault stuck in Pending past ~4 days:** the off-chain setup likely failed. The vault will transition to Expired and your peg-in fee will be refunded. See the refund path on [Create a vault](./create-a-vault.mdx) for BTC recovery.
 * **Wallet won't connect or transaction rejected:** verify the wallet is on the correct network (see [Setup](../testnet-info/setup.mdx) for chain IDs).
 * **Vault Provider not responding during redemption:** the depositor self-claim path applies. See [Withdraw & redeem](./withdraw-and-redeem.mdx).
 

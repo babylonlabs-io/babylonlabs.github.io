@@ -38,7 +38,7 @@ gets a 403; a custom string gets a 200.
 import json, urllib.request
 
 req = urllib.request.Request(
-    "https://babylon-vault-indexer-api.testnet.babylonlabs.io/",
+    "https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/",
     data=json.dumps({"query": "{ statss(limit:1){ items{ availableVaultCount } } }"}).encode(),
     headers={
         "Content-Type": "application/json",

@@ -16,12 +16,12 @@ Core contracts that manage vault accounting, protocol parameters, and the applic
 
 | Contract | Purpose | Address |
 | --- | --- | --- |
-| `BTCVaultRegistry` | Vault lifecycle, state, hashlock and WOTS commitments | [`0xE976a4f2B90E64A9A9374453bC526e67625cC750`](https://sepolia.etherscan.io/address/0xE976a4f2B90E64A9A9374453bC526e67625cC750) |
-| `BTCVaultsMetadataRegistry` | Publishes Vault Provider RPC endpoints | [`0x8F23a8C6Dd0Bd8E55295c60906737fE453626a41`](https://sepolia.etherscan.io/address/0x8F23a8C6Dd0Bd8E55295c60906737fE453626a41) |
-| `ProtocolParams` | Versioned protocol parameters (timelocks, confirmation depth, Security Council keys, off-chain parameters) | [`0x64ccB1F028Ceb186A1f9630C9D58c59E4845CCcB`](https://sepolia.etherscan.io/address/0x64ccB1F028Ceb186A1f9630C9D58c59E4845CCcB) |
-| `ApplicationRegistry` | Lists DeFi applications approved to receive vaults | [`0xC1D604C2221536Ea5811a88f0B8B0367375ef65E`](https://sepolia.etherscan.io/address/0xC1D604C2221536Ea5811a88f0B8B0367375ef65E) |
-| `CapPolicy` | Per-application and per-address BTC exposure caps | [`0x75688dbFe97010bb87B2f764EDf8e65e7924bDBb`](https://sepolia.etherscan.io/address/0x75688dbFe97010bb87B2f764EDf8e65e7924bDBb) |
-| `FeeEscrow` | Collects the peg-in fee and distributes it to participants | [`0xC432348b1e2de21B47977832fc3960f2B58186e1`](https://sepolia.etherscan.io/address/0xC432348b1e2de21B47977832fc3960f2B58186e1) |
+| `BTCVaultRegistry` | Vault lifecycle, state, hashlock and WOTS commitments | [`0x584104DB602B78ae4E8385748c1234de091569da`](https://sepolia.etherscan.io/address/0x584104DB602B78ae4E8385748c1234de091569da) |
+| `BTCVaultsMetadataRegistry` | Publishes Vault Provider RPC endpoints | [`0xa24C539F32848a7694B3c296C49B591d33A8fBDE`](https://sepolia.etherscan.io/address/0xa24C539F32848a7694B3c296C49B591d33A8fBDE) |
+| `ProtocolParams` | Versioned protocol parameters (timelocks, confirmation depth, Security Council keys, off-chain parameters) | [`0xEa49A29f4D236b18aA8d371344d9bEca852208F6`](https://sepolia.etherscan.io/address/0xEa49A29f4D236b18aA8d371344d9bEca852208F6) |
+| `ApplicationRegistry` | Lists DeFi applications approved to receive vaults | [`0xFa218a0BD0A684BFc3E9E8A399F365b6a0A64423`](https://sepolia.etherscan.io/address/0xFa218a0BD0A684BFc3E9E8A399F365b6a0A64423) |
+| `CapPolicy` | Per-application and per-address BTC exposure caps | [`0x33F95C5fA1Bd6ED45c682B9929F1847c3A489847`](https://sepolia.etherscan.io/address/0x33F95C5fA1Bd6ED45c682B9929F1847c3A489847) |
+| `FeeEscrow` | Collects the peg-in fee and distributes it to participants | [`0xED4CfDC79bEAEF1BF50f9A89d5211e9f6425b74d`](https://sepolia.etherscan.io/address/0xED4CfDC79bEAEF1BF50f9A89d5211e9f6425b74d) |
 
 ## Aave v4 integration contracts
 
@@ -29,12 +29,13 @@ Contracts deployed for the Aave v4 integration.
 
 | Contract | Purpose | Address |
 | --- | --- | --- |
-| `vaultBTC` | Internal collateral record (ERC-20 interface): transfer-restricted to protocol contracts, 8 decimals. Not a user asset. | [`0x5BD51C84244fA23a567970cdaC6f655866E58b07`](https://sepolia.etherscan.io/address/0x5BD51C84244fA23a567970cdaC6f655866E58b07) |
-| `BabylonCoreSpoke` | Dedicated Aave v4 market accepting collateral records | [`0x4B7E02c29367d9f8C1825eD38b3BB6386513A725`](https://sepolia.etherscan.io/address/0x4B7E02c29367d9f8C1825eD38b3BB6386513A725) |
-| `AaveAdapter` | User-facing entry point for TBV-on-Aave operations | [`0xb08dfb1D04373a30A33CA64Ae85061e452E5CeF7`](https://sepolia.etherscan.io/address/0xb08dfb1D04373a30A33CA64Ae85061e452E5CeF7) |
-| `AaveAdapterConfig` | LLP registration, position-size parameters, resolver registration | [`0xC89A41e473951cCB9A114B8f7908E2906E2950fd`](https://sepolia.etherscan.io/address/0xC89A41e473951cCB9A114B8f7908E2906E2950fd) |
-| `AaveAdapterLens` | Read-only state queries (positions, vaults, reserves) | [`0xF76c3E3A7c94E73497fdA00CbcDE56dbdcdDD8da`](https://sepolia.etherscan.io/address/0xF76c3E3A7c94E73497fdA00CbcDE56dbdcdDD8da) |
-| `AaveHub` | Aave v4 Hub central liquidity contract | [`0x6ca0d39f8bD5Cf226878DA80BC073227d6E52C34`](https://sepolia.etherscan.io/address/0x6ca0d39f8bD5Cf226878DA80BC073227d6E52C34) |
+| `vaultBTC` | Internal collateral record (ERC-20 interface): transfer-restricted to protocol contracts, 8 decimals. Not a user asset. | [`0x2ba819663bDB2C51205997187e75eb7D092D3444`](https://sepolia.etherscan.io/address/0x2ba819663bDB2C51205997187e75eb7D092D3444) |
+| `BabylonCoreSpoke` | Dedicated Aave v4 market accepting collateral records | [`0xD1E3cE13B8a8Ca9DB5B42eD8b6D3F2CD8FfE9cc5`](https://sepolia.etherscan.io/address/0xD1E3cE13B8a8Ca9DB5B42eD8b6D3F2CD8FfE9cc5) |
+| `AaveAdapter` | User-facing entry point for TBV-on-Aave operations | [`0x6A785E8fdF251E2aA758a6E1841e1470074f46BF`](https://sepolia.etherscan.io/address/0x6A785E8fdF251E2aA758a6E1841e1470074f46BF) |
+| `AaveAdapterConfig` | LLP registration, position-size parameters, resolver registration | [`0x483b7314027044B94fCC3189ef42cC1E9FFb5ee2`](https://sepolia.etherscan.io/address/0x483b7314027044B94fCC3189ef42cC1E9FFb5ee2) |
+| `AaveAdapterLiquidationPreview` | Read-only helper that computes the arguments for `liquidate` or `liquidateWithLLP`: debt to cover, exitBTC owed, and the vault that will be seized | [`0xc4E6A012F0Af0E8c2bc5F5062cC8aaCdA50F584C`](https://sepolia.etherscan.io/address/0xc4E6A012F0Af0E8c2bc5F5062cC8aaCdA50F584C) |
+| `AaveHub` | Main Aave v4 liquidity Hub: holds the collateral-record asset plus USDC and WBTC, drawn on by `BabylonCoreSpoke` | [`0xc551Cc801aCB95F9131A26081E495AEf960a2f37`](https://sepolia.etherscan.io/address/0xc551Cc801aCB95F9131A26081E495AEf960a2f37) |
+| `AaveHubStables` | Separate Aave v4 liquidity Hub for USDC, USDT, and WBTC, also drawn on by `BabylonCoreSpoke` | [`0xf5960351a45633821CD6Fc4A1da2d0f066Dd06Fc`](https://sepolia.etherscan.io/address/0xf5960351a45633821CD6Fc4A1da2d0f066Dd06Fc) |
 
 ## Liquidation Liquidity Provider
 
@@ -42,17 +43,30 @@ The default LLP for BTC collateral liquidations. Other LLPs may be registered ov
 
 | Contract | Purpose | Address |
 | --- | --- | --- |
-| `BTCVaultSwap` | Default LLP. Escrows seized vaults; pays liquidators WBTC immediately; Arbitrageurs later acquire escrowed vaults. | [`0xCaf3DE0ec631e2DEB3b4A33679037488B545f5a2`](https://sepolia.etherscan.io/address/0xCaf3DE0ec631e2DEB3b4A33679037488B545f5a2) |
+| `BTCVaultSwap` | Default LLP. Escrows seized vaults; pays liquidators WBTC immediately; Arbitrageurs later acquire escrowed vaults. | [`0x61cB6Da9380b624FD4133fa42bC3d150a060bDf6`](https://sepolia.etherscan.io/address/0x61cB6Da9380b624FD4133fa42bC3d150a060bDf6) |
 
 ## App Keepers (Aave v4 integration)
 
-Registered per application via `BTCVaultRegistry`.
+Registered per application in `ApplicationRegistry` (current version: 2). The BTC public key is the operator's current operation key, which is the key used to sign vault transactions.
 
 | Operator | ETH address | BTC public key |
 | --- | --- | --- |
-| RockX | [`0x05A4116e57593B1cbcef3C808a447D0F231a9E1e`](https://sepolia.etherscan.io/address/0x05A4116e57593B1cbcef3C808a447D0F231a9E1e) | `0x3f008810e2a03edb7c80005af4324b1eec9adada7846c91885c17ad0e97b1058` |
-| Babylon 0 | [`0xfCfdA934e78c23Aec49adf05996e38E32FDEEAb3`](https://sepolia.etherscan.io/address/0xfCfdA934e78c23Aec49adf05996e38E32FDEEAb3) | `0xa18ab8662c6b11da1efe4af2f42910fe22160c0da8de489ffd4a07ab5035312c` |
-| Babylon 1 | [`0x232A414219d0E6F0B6600dce2b3328f226844d41`](https://sepolia.etherscan.io/address/0x232A414219d0E6F0B6600dce2b3328f226844d41) | `0x346ca66bfaa04da3b0df4ec64b4c6e27fe23017ef404c61e9284ca8e57486d41` |
+| RockX | [`0x86d8e44Ccc4C2CBa6dB981Ba641E06A292D56b58`](https://sepolia.etherscan.io/address/0x86d8e44Ccc4C2CBa6dB981Ba641E06A292D56b58) | `0x0a62868ffd6bca5018ca3e5c38001832497faae501353ab94ed6f591d375f0b1` |
+| Khalani | [`0x25fBCe3357B807407591aADE8284F1a09Bf9d350`](https://sepolia.etherscan.io/address/0x25fBCe3357B807407591aADE8284F1a09Bf9d350) | `0xbc432ab06585cc36476198a3d445c60e46fa74c9bc44e7416428e9ef44330981` |
+| Galaxy | [`0x989871CEff65aF39208CeD99Ff57C99B27176e00`](https://sepolia.etherscan.io/address/0x989871CEff65aF39208CeD99Ff57C99B27176e00) | `0xfe2b360932d2f606eb57f32d502c37da1e4cd678923892ae27baadebe5f72b87` |
+| HashKey | [`0x98e3D8Ff4DcF86f50a34465B22967039b348C2a9`](https://sepolia.etherscan.io/address/0x98e3D8Ff4DcF86f50a34465B22967039b348C2a9) | `0x0fb903767f225a96af187edc7024651e82915aaaa928e7a7e92ab7b27ec5c07c` |
+| Babylon | [`0xB2e8E2C6aeDDe0D5dFec2Eab4c5A5868624E958e`](https://sepolia.etherscan.io/address/0xB2e8E2C6aeDDe0D5dFec2Eab4c5A5868624E958e) | `0xe9fd1ebdeb0fe96f1e8fe66034cdd6ce123487a7544f14ac2df2d7ca8d8bd2d4` |
+
+## Universal Challengers
+
+Protocol-wide challengers registered in `ProtocolParams` (current version: 1). The BTC public key is the operator's current operation key.
+
+| Operator | ETH address | BTC public key |
+| --- | --- | --- |
+| AltLayer | [`0x74575b754dD98859995d3A082fB3db68B614A523`](https://sepolia.etherscan.io/address/0x74575b754dD98859995d3A082fB3db68B614A523) | `0x89ca281701146191f3543b7c5292dfec9942d8da50b66db68055d9fbdbabd12a` |
+| Solva | [`0x4AD16C418daD21AA3AE4E2d15021dD082DC1da45`](https://sepolia.etherscan.io/address/0x4AD16C418daD21AA3AE4E2d15021dD082DC1da45) | `0xc582db50ddd4a69f09007576762585faf357a92cbf91a1d70dc38833306c144b` |
+| Babylon 0 | [`0x8E7A9484eeB4ccB07bc6b95EbD82c35a3C014ACe`](https://sepolia.etherscan.io/address/0x8E7A9484eeB4ccB07bc6b95EbD82c35a3C014ACe) | `0x678c110f8c192f5dfb49b7a247874a33acc4df4c45787d761a2777ab391eac99` |
+| Babylon 1 | [`0xd3bF43040dF44FF65E6b893029a074F2B53b0fa5`](https://sepolia.etherscan.io/address/0xd3bF43040dF44FF65E6b893029a074F2B53b0fa5) | `0x9ddc6301fecebdd207f9af5c5ed5e72170bc383d9832bb8a9fe6ddd1dff99b2a` |
 
 ## Security Council keys
 
@@ -60,11 +74,11 @@ Registered per application via `BTCVaultRegistry`.
 
 | # | BTC public key (x-only) |
 | --- | --- |
-| 1 | `0xe436052c6bae804e930ac87f9e71906f598851efb485bc8ddb5beeb4d43379ea` |
-| 2 | `0x7b5ea27fc2e570e50c0b9c83f58370791e6949a2ce4bba7d286c9f4c3e6feb04` |
-| 3 | `0x85269613458b14596641b986325dfd82369e59e885d6888629fc0be987390476` |
-| 4 | `0xf50cce6148cd50b35c9a3e2bf677cf47312bc2b3465485988e55ddc2f7650eef` |
-| 5 | `0xa58d4ff911faa4cd03248e9953d4a401380c4684bbce73ba8d794c7c60f61c3b` |
+| 1 | `0xe0fbcddda0254f47b95de6356feecb3a4162f99cabca7e8b5ee67dec7f0667a5` |
+| 2 | `0x0dd2cc56f3ef121d4d8a1ee6f83a77c04be76d815fbc4f2860ce997582fc7a54` |
+| 3 | `0x101096dd073f6932fe2202f62fa87a73d5a9ed501e370f9ad405eef41a01cda0` |
+| 4 | `0xe514ceabbf5a37dcc8f2b178b74cc1dfa0490360fcd057dec99b7c901e34f7d3` |
+| 5 | `0x51a27c43116692895e364493e4ddf85c2a15408d3f5dd2f8ade72836d702b9b2` |
 
 ## Test borrowable assets
 
