@@ -19,12 +19,13 @@ Use these values while planning a public-testnet run:
 | Maximum BTC per position | 0.4 BTC |
 | Maximum vaults per position | 10 |
 | BTC confirmations before setup can complete | 12 signet blocks |
-| Peg-in ACK timeout | ~24 hours |
-| Activation timeout | ~48 hours |
-| Refund timelock | ~14 days (2016 BTC blocks) for the current parameter version. Older vaults may use 432 BTC blocks (~3 days). |
+| Peg-in ACK timeout | ~4 days |
+| Activation timeout | ~6 days |
+| Refund timelock | ~14 days (2016 BTC blocks) for the current parameter version. Vaults created under the earlier version use 577 BTC blocks (~4 days). |
 | Redemption challenge window | ~3 days (432 BTC blocks) |
 | BTC collateral factor | 78% |
 | Liquidation threshold | Health factor below 1.0 |
+| Borrowed assets per position | 1 at a time |
 
 ## Vault and position size limits
 
@@ -36,7 +37,7 @@ The public testnet enforces conservative limits on individual vaults, positions,
 | `maxPegInAmount` | 0.4 BTC | Maximum BTC accepted for a single vault |
 | `maxPositionBTC` | 0.4 BTC | Maximum total BTC across all vaults in one position |
 | `maxVaultsPerPosition` | 10 | Maximum number of vaults in one position |
-| `maxUserReservesLimit` | 4 | Maximum number of distinct reserves (collateral + borrowed) a position can use |
+| `MAX_USER_RESERVES_LIMIT` | 1 | A position borrows from one reserve at a time. Borrowing a different asset reverts until the existing debt is repaid in full. |
 | `maxHtlcOutputCount` | 10 | Maximum HTLC outputs in a batched Pre-PegIn transaction (enables multi-vault peg-in in one Bitcoin tx) |
 
 ## Application caps (CapPolicy)
@@ -55,8 +56,8 @@ Two distinct timeouts govern the peg-in flow. The activation timeout always exce
 | Parameter | Value | Description |
 | --- | --- | --- |
 | `minPrepeginDepth` | 12 BTC blocks (signet) | Bitcoin confirmations required before ACK signers will sign the Pre-PegIn. |
-| `pegInAckTimeout` | 7200 Ethereum blocks (~24 hours) | Window for all required ACKs to be submitted (off-chain setup completion). If exceeded, the vault expires and the peg-in fee is refunded. |
-| `pegInActivationTimeout` | 14400 Ethereum blocks (~48 hours) | Window from vault creation for the depositor to call `activateVaultWithSecret`. Must exceed `pegInAckTimeout`. If exceeded, the depositor can refund via the Pre-PegIn refund leaf. |
+| `pegInAckTimeout` | 28800 Ethereum blocks (~4 days) | Window for all required ACKs to be submitted (off-chain setup completion). If exceeded, the vault expires and the peg-in fee is refunded. |
+| `pegInActivationTimeout` | 43200 Ethereum blocks (~6 days) | Window from vault creation for the depositor to call `activateVaultWithSecret`. Must exceed `pegInAckTimeout`. If exceeded, the depositor can refund via the Pre-PegIn refund leaf. |
 | `tRefund` | 2016 BTC blocks (~14 days) | Current Pre-PegIn refund timelock. The value is relative, uses `OP_CHECKSEQUENCEVERIFY` from Pre-PegIn confirmation, and can differ for older vaults. |
 
 ## Redemption timelocks
@@ -70,16 +71,16 @@ Timelock parameters governing the claim, assert, and challenge windows during pe
 
 ## Liquidation parameters
 
-Thresholds used by the Aave v4 integration to determine when a position is liquidatable and how much collateral is seized to restore the health factor.
+Thresholds used by the Aave v4 integration to determine when a position is liquidatable and how large the liquidator bonus is. Each liquidation seizes the position's head vault, so the amount seized is set by that vault's BTC amount rather than by a post-liquidation health target.
 
 | Parameter | Value | Description |
 | --- | --- | --- |
 | `collateralFactor` | 7800 BPS (78%) | Fraction of BTC collateral value counted toward borrowing capacity |
 | `liquidationThreshold` | 10000 BPS (1.0) | Health factor below which a position becomes liquidatable |
-| `targetHealthFactor` | 1.24e18 WAD (1.24) | Health factor the liquidation process aims to restore. With this target, partial-position liquidation seizes roughly 62% of total BTC value when a position becomes liquidatable. |
-| `maxLiquidationBonus` | 11000 BPS (10% bonus) | Maximum discount on collateral granted to the liquidator. On the current public-testnet configuration (`healthFactorForMaxBonus` ≈ 1.0), this max bonus applies immediately when a position becomes liquidatable; no Dutch-auction scaling. |
-| `healthFactorForMaxBonus` | ~1.0 WAD | Health factor at or below which the max bonus applies |
-| `liquidationBonusFactor` | 10000 BPS | Factor for minimum bonus calculation (max bonus applies immediately on liquidation) |
+| `maxLiquidationBonus` | 10555 BPS (5.55% bonus) | Maximum bonus granted to the liquidator, applied at or below `healthFactorForMaxBonus` |
+| `healthFactorForMaxBonus` | 0.9e18 WAD (0.9) | Health factor at or below which the max bonus applies |
+| `liquidationBonusFactor` | 9000 BPS (90%) | Share of the max bonus paid when the health factor first drops below 1.0. On the current configuration the bonus starts at about 5.0% just below 1.0 and rises linearly to 5.55% at a health factor of 0.9. |
+| `targetHealthFactor` | 1.0e18 WAD | Set on the Spoke but not used by this integration: liquidation size is determined by the head vault, not by a target health factor. |
 | `liquidationFee` | 0 BPS | Structurally zero for BTC collateral. UTXOs cannot be partially extracted, so an Aave-style liquidation fee cannot be applied. |
 
 ## Off-chain coordination parameters
@@ -106,8 +107,8 @@ Each Vault Provider sets its own commission per vault, taken in BTC from the red
 
 | Parameter | Value | Description |
 | --- | --- | --- |
-| `name` | BTC Vault | On-chain name of the collateral-record contract |
-| `symbol` | `vaultBTC` | On-chain symbol of the collateral record (internal accounting) |
+| `name` | Native BTC | On-chain ERC-20 name of the collateral record (`vaultBTC` contract) |
+| `symbol` | `BTC` | On-chain ERC-20 symbol of the collateral record (internal accounting) |
 | `decimals` | 8 | Matches Bitcoin's satoshi precision (1 unit = 1 BTC = 100,000,000 satoshis) |
 | Transfer restrictions | Restricted to the Aave v4 integration | The collateral record is not freely transferable. It exists only as an internal accounting unit within the Aave Adapter. |
 

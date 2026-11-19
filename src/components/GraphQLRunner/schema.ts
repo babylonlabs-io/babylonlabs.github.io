@@ -10,7 +10,7 @@ import { FIELD_DESCRIPTIONS, PAGE_FIELD_DESCRIPTIONS, TYPE_DESCRIPTIONS } from '
  * The browser sends its own User-Agent, so the 403 trap that catches default
  * library user-agents does not apply here.
  */
-export const ENDPOINT = 'https://babylon-vault-indexer-api.testnet.babylonlabs.io/';
+export const ENDPOINT = 'https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/';
 
 /** A plain POST fetcher. The endpoint serves no subscriptions. */
 export function createFetcher() {

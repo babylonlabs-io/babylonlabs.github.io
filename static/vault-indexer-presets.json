@@ -27,7 +27,7 @@
     "group": "Use cases",
     "section": "2. Track a peg-in to completion",
     "title": "Step 1 — read the vault",
-    "query": "{\n  vault(id: \"0x822ecce7d8dac56426935b3c344778cb214eec1a368100a190ea2b31d3c56d3f\") {\n    status\n    amount\n    pendingAt\n    peginSigsPostedAt\n    verifiedAt\n    activatedAt\n    expiredAt\n    expirationReason\n    ackCount\n    inUse\n  }\n}"
+    "query": "{\n  vault(id: \"0x578d88754824315e725db3e2929e315bb176c268b3ffa966e22b05d6c761e1f8\") {\n    status\n    amount\n    pendingAt\n    peginSigsPostedAt\n    verifiedAt\n    activatedAt\n    expiredAt\n    expirationReason\n    ackCount\n    inUse\n  }\n}"
   },
   {
     "group": "Use cases",
@@ -69,7 +69,7 @@
     "group": "Use cases",
     "section": "4. Expiry and liquidation watcher",
     "title": "Step 2 — confirm how a vault is being used",
-    "query": "{\n  aaveVaultStatus(\n    vaultId: \"0x822ecce7d8dac56426935b3c344778cb214eec1a368100a190ea2b31d3c56d3f\"\n  ) {\n    status\n    vaultId\n  }\n}"
+    "query": "{\n  aaveVaultStatus(\n    vaultId: \"0x578d88754824315e725db3e2929e315bb176c268b3ffa966e22b05d6c761e1f8\"\n  ) {\n    status\n    vaultId\n  }\n}"
   },
   {
     "group": "Use cases",
@@ -99,13 +99,13 @@
     "group": "Cookbook",
     "section": "For depositors and borrowers",
     "title": "Find all my vaults",
-    "query": "{\n  vaults(\n    where: { depositor: \"0x106d71c740aeebf6e72f06dad4129651dc65d810\" }\n    orderBy: \"pendingAt\"\n    orderDirection: \"desc\"\n    limit: 10\n  ) {\n    totalCount\n    items {\n      id\n      status\n      amount\n      activatedAt\n      inUse\n    }\n  }\n}"
+    "query": "{\n  vaults(\n    where: { depositor: \"0xd51d8dda9f8975fbecacd77a93f37a57053642e1\" }\n    orderBy: \"pendingAt\"\n    orderDirection: \"desc\"\n    limit: 10\n  ) {\n    totalCount\n    items {\n      id\n      status\n      amount\n      activatedAt\n      inUse\n    }\n  }\n}"
   },
   {
     "group": "Cookbook",
     "section": "For depositors and borrowers",
     "title": "Inspect one vault",
-    "query": "{\n  vault(id: \"0x002f198c46664c28f0685ba86303256e9833344a54c7b4e34483e7805f5b8d4a\") {\n    status\n    amount\n    depositor\n    vaultProvider\n    vaultProviderCommissionBps\n    peginTxHash\n    depositorPayoutBtcAddress\n    pendingAt\n    verifiedAt\n    activatedAt\n    expiredAt\n    expirationReason\n  }\n}"
+    "query": "{\n  vault(id: \"0xa0e894c80904451c75b0f616b372217224281294d7ad8f2cc9c96738c69e52e0\") {\n    status\n    amount\n    depositor\n    vaultProvider\n    vaultProviderCommissionBps\n    peginTxHash\n    depositorPayoutBtcAddress\n    pendingAt\n    verifiedAt\n    activatedAt\n    expiredAt\n    expirationReason\n  }\n}"
   },
   {
     "group": "Cookbook",
@@ -117,7 +117,7 @@
     "group": "Cookbook",
     "section": "For depositors and borrowers",
     "title": "Read my activity history",
-    "query": "{\n  vaultActivitys(\n    where: { depositor: \"0x106d71c740aeebf6e72f06dad4129651dc65d810\" }\n    orderBy: \"timestamp\"\n    orderDirection: \"desc\"\n    limit: 20\n  ) {\n    totalCount\n    items {\n      type\n      amount\n      vaultId\n      debtReserveId\n      timestamp\n      transactionHash\n    }\n  }\n}"
+    "query": "{\n  vaultActivitys(\n    where: { depositor: \"0xd51d8dda9f8975fbecacd77a93f37a57053642e1\" }\n    orderBy: \"timestamp\"\n    orderDirection: \"desc\"\n    limit: 20\n  ) {\n    totalCount\n    items {\n      type\n      amount\n      vaultId\n      debtReserveId\n      timestamp\n      transactionHash\n    }\n  }\n}"
   },
   {
     "group": "Cookbook",

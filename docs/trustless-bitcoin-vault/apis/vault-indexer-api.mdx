@@ -18,10 +18,10 @@ No API key. No authentication. Cross-origin requests are permitted.
 
 | | |
 | --- | --- |
-| **URL** | `https://babylon-vault-indexer-api.testnet.babylonlabs.io/` |
+| **URL** | `https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/` |
 | **Method** | `POST` with `Content-Type: application/json` |
 | **Alternate path** | `/graphql` — identical behaviour |
-| **Explorer** | [Open the GraphiQL playground](https://babylon-vault-indexer-api.testnet.babylonlabs.io/) |
+| **Explorer** | [Open the GraphiQL playground](https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/) |
 | **Network** | Ethereum Sepolia (chain ID `11155111`) |
 | **Auth** | None |
 | **CORS** | Open |
@@ -29,7 +29,7 @@ No API key. No authentication. Cross-origin requests are permitted.
 Testnet only. There is no mainnet endpoint yet.
 
 ```bash
-curl -s https://babylon-vault-indexer-api.testnet.babylonlabs.io/ \
+curl -s https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/ \
   -H 'Content-Type: application/json' \
   -H 'User-Agent: my-app/1.0' \
   -d '{"query":"{ statss(limit:1){ items{ totalAvailableSats availableVaultCount } } }"}'

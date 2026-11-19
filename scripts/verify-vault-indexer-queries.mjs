@@ -22,7 +22,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DOCS_DIR = resolve(root, 'docs/trustless-bitcoin-vault/apis');
 const ENDPOINT =
   process.env.VAULT_INDEXER_ENDPOINT ??
-  'https://babylon-vault-indexer-api.testnet.babylonlabs.io/';
+  'https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/';
 const USER_AGENT =
   'babylonlabs-docs-query-verify/1.0 (+https://docs.babylonlabs.io)';
 
