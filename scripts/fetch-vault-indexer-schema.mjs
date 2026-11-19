@@ -24,7 +24,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_PATH = resolve(root, 'static/schema/vault-indexer.graphql');
 const ENDPOINT =
   process.env.VAULT_INDEXER_ENDPOINT ??
-  'https://babylon-vault-indexer-api.testnet.babylonlabs.io/';
+  'https://babylon-vault-indexer-api-t3.testnet.babylonlabs.io/';
 const USER_AGENT = 'babylonlabs-docs-schema-sync/1.0 (+https://docs.babylonlabs.io)';
 
 const TYPE_REF = 'kind name ofType { kind name ofType { kind name ofType { kind name } } }';

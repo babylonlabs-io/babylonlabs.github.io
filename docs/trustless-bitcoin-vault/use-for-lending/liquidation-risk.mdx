@@ -54,9 +54,9 @@ Two liquidation paths exist once a position becomes liquidatable:
 Two terms describe distinct things, and they apply at the same time:
 
 * **Full-vault liquidation.** Each individual vault is seized whole. When a vault is seized, the whole vault moves.
-* **Partial-position liquidation.** When your position contains multiple vaults, the protocol seizes only the subset of vaults needed to restore the health factor to its target. The rest stay in your position.
+* **Partial-position liquidation.** When your position contains multiple vaults, each liquidation seizes only the first vault in your list. The rest stay in your position unless it is still liquidatable and a liquidator seizes the next one.
 
-The protocol walks your vault list in order during liquidation and takes consecutive vaults from the front until their cumulative value covers the protocol's target seizure amount. The target seizure depends on the target health factor (THF) and your collateral and debt sizes.
+Each liquidation seizes exactly one vault: the head of your ordered vault list. A liquidator who wants more liquidates again, and the next vault in order becomes the new head. Liquidators typically continue while the health factor stays below 1.0, but they can stop at any point. The contract does not size seizures against a target health factor.
 
 If your position contains a single vault, partial-position is not possible: that one vault is your entire collateral, and seizing it discharges the whole position in one event. This is the **cliff effect**: a single small price move can take everything backing the position.
 
@@ -64,7 +64,7 @@ If your position contains a single vault, partial-position is not possible: that
 
 The portal recommends splitting your BTC into two vaults at peg-in: a **sacrificial vault** (sized to cover the protocol's expected seizure amount, placed first in the liquidation order) and a **protected vault** (whatever BTC remains, placed second).
 
-The sacrificial vault's size depends on the target health factor (THF) and other protocol parameters. The portal computes the recommended split dynamically from the on-chain values.
+The sacrificial vault's size is a portal sizing choice, not a contract parameter. The portal aims for a health factor of 1.08 after the sacrificial vault is seized (the split target, THF below) and assumes a liquidation lands at a health factor of about 0.99. It reads the collateral factor and the liquidation bonus curve from the chain and computes the recommended split from those values.
 
 ### A worked example
 
@@ -74,7 +74,7 @@ Suppose you peg in the public-testnet maximum and split it as recommended. With 
 * Sacrificial vault: target seizure, placed first
 * Protected vault: remaining BTC, placed second
 
-If the position becomes liquidatable, the protocol walks your vaults in order. The sacrificial vault alone covers the target seizure, so only that one vault is seized. The protected vault stays in your position.
+If the position becomes liquidatable, the first liquidation seizes the sacrificial vault. That brings the health factor back to about 1.08, above the liquidation threshold, so the position is no longer liquidatable and the protected vault stays in your position.
 
 Without the split, the same liquidation seizes the full single vault. That is the cliff effect.
 
