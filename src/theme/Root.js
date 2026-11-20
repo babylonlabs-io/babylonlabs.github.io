@@ -1,6 +1,7 @@
 import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import ChatWidget from '@site/src/components/ChatWidget';
+import TableCopyControls from '@site/src/components/TableCopyControls';
 
 export default function Root({children}) {
   return (
@@ -18,6 +19,7 @@ export default function Root({children}) {
         }}
       </BrowserOnly>
       <ChatWidget />
+      <TableCopyControls />
     </>
   );
 }
