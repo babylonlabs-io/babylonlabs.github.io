@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Github, Linkedin } from '@styled-icons/boxicons-logos';
 import { XIcon } from '@site/src/icons';
 import { ROUTES } from '@site/src/components/tbv/routes';
@@ -91,7 +91,7 @@ function FooterLink({ label, to, href }) {
       <Link
         to={to}
         href={href}
-        className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground hover:no-underline"
+        className="text-sm text-white/75 transition-colors duration-200 hover:text-white hover:no-underline dark:text-muted-foreground"
       >
         {label}
       </Link>
@@ -101,18 +101,20 @@ function FooterLink({ label, to, href }) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border bg-background">
+    // Navy in the light theme, the page ground with a hairline in the dark
+    // (Figma 134:2428, 161:4).
+    <footer className="bg-surface-navy text-white dark:border-t dark:border-border dark:bg-background">
       <div className="mx-auto w-full max-w-[1200px] px-6 pb-10 pt-16 lg:pt-20">
         {/* No statement here. The footer's own top border already separates
             it from the page, so the rule and the top margin that used to sit
             under the headline go with it rather than leaving a gap. */}
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
           <div>
-            <p className="mb-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            <p className="mb-6 max-w-sm text-sm leading-[23px] text-white/75 dark:text-muted-foreground">
               Lock native BTC on Bitcoin and borrow against it on Ethereum. The
               public testnet is live.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-col items-start gap-3">
               <a
                 href={APP_URL}
                 target="_blank"
@@ -124,9 +126,10 @@ export default function Footer() {
               </a>
               <Link
                 to={ROUTES.quickstart}
-                className="focus-ring tbv-btn tbv-btn-secondary"
+                className="focus-ring tbv-btn tbv-btn-inverse"
               >
                 Read the quickstart
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -137,10 +140,10 @@ export default function Footer() {
           >
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <h3 className="mb-4 font-label text-[11px] uppercase tracking-[0.18em] text-foreground">
+                <h3 className="mb-5 font-code text-[11px] font-normal uppercase tracking-[0.14em] text-accent">
                   {col.title}
                 </h3>
-                <ul className="flex list-none flex-col gap-2.5 p-0">
+                <ul className="flex list-none flex-col gap-[19px] p-0">
                   {col.links.map((l) => (
                     <FooterLink key={l.label} {...l} />
                   ))}
@@ -160,22 +163,22 @@ export default function Footer() {
             foreground, "Docs" is what this particular site is and steps back.
             Kept to a heading's size — an oversized watermark was tried and
             read as decoration rather than identification. */}
-        <div className="mt-16 border-t border-border pt-10">
+        <div className="mt-16 border-t border-white/15 pt-10 dark:border-border">
           <p
-            className="mb-8 font-display text-2xl font-medium leading-none tracking-[-0.03em] sm:text-3xl"
+            className="mb-8 font-display text-2xl font-normal leading-none sm:text-3xl"
             aria-label="Babylon Docs"
           >
-            <span className="text-foreground">Babylon</span>
-            <span className="text-muted-foreground"> Docs</span>
+            <span className="text-white">Babylon</span>
+            <span className="text-white/60 dark:text-muted-foreground/80"> Docs</span>
           </p>
 
           {/* Copyright, company and the two legal documents, on one line. */}
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-white/75 dark:text-muted-foreground">
             <span>
               &copy; {new Date().getFullYear()}{' '}
               <Link
                 href="https://babylonlabs.io"
-                className="text-inherit transition-colors duration-200 hover:text-foreground hover:underline"
+                className="text-inherit transition-colors duration-200 hover:text-white hover:underline"
               >
                 Babylon Labs
               </Link>
@@ -185,7 +188,7 @@ export default function Footer() {
                 <span aria-hidden="true">&bull;</span>
                 <Link
                   href={item.href}
-                  className="text-inherit transition-colors duration-200 hover:text-foreground hover:underline"
+                  className="text-inherit transition-colors duration-200 hover:text-white hover:underline"
                 >
                   {item.label}
                 </Link>
@@ -205,7 +208,7 @@ export default function Footer() {
                   href={href}
                   title={label}
                   aria-label={label}
-                  className="focus-ring inline-flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                  className="focus-ring inline-flex h-10 w-10 items-center justify-center text-white/85 transition-colors duration-200 hover:text-white"
                 >
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </Link>

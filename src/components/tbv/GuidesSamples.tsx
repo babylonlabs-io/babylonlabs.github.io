@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Github } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Github } from 'lucide-react';
 import { guides, samples } from './content';
 import { staggerContainer, useEntrance } from './motion';
 import { ROUTES } from './routes';
@@ -22,19 +22,19 @@ function GuideCard({ guide }: { guide: (typeof guides)[number] }): JSX.Element {
     <motion.li variants={variants} transition={transition}>
       <Link
         to={guide.link}
-        className={`group flex h-full flex-col gap-3 border border-border bg-background p-6 text-foreground transition-colors duration-300 hover:border-border-strong hover:no-underline`}
+        className={`group flex h-full flex-col border border-transparent bg-muted px-6 pb-7 pt-5 text-foreground transition-colors duration-300 hover:border-border-strong hover:no-underline`}
       >
-        <Icon className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
-        <h3 className="font-display text-xl font-normal tracking-tight text-foreground">
+        <Icon className="h-11 w-auto self-start text-foreground" aria-hidden="true" />
+        <h3 className="mt-5 font-display text-xl font-normal text-foreground">
           {guide.title}
         </h3>
-        <p className="mb-0 flex-1 text-sm leading-relaxed text-muted-foreground">
+        <p className="mb-0 mt-8 flex-1 text-sm leading-[23px] text-muted-foreground">
           {guide.text}
         </p>
-        <span className="inline-flex items-center gap-1.5 text-sm font-medium">
+        <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold">
           Read guide
-          <ArrowUpRight
-            className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          <ArrowRight
+            className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
             aria-hidden="true"
           />
         </span>
@@ -57,16 +57,16 @@ function SampleRow({
       transition={transition}
       className="border-b border-border"
     >
-      <div className="flex items-center justify-between gap-4 py-5">
+      <div className="flex items-start justify-between gap-4 py-6 pl-0 pr-2 sm:pl-8">
         <div className="min-w-0">
           <Link
             to={href}
-            className="text-base font-medium text-foreground hover:text-accent hover:no-underline"
+            className="text-base font-bold text-foreground hover:text-accent hover:no-underline"
           >
             {sample.title}
           </Link>
           {sample.platform && (
-            <p className="mb-0 mt-1 text-sm text-muted-foreground">
+            <p className="mb-0 mt-2 text-sm text-muted-foreground">
               {sample.platform}
             </p>
           )}
@@ -85,7 +85,7 @@ function SampleRow({
           <Link
             to={href}
             aria-label={`Open ${sample.title}`}
-            className="text-muted-foreground hover:text-accent"
+            className="text-foreground hover:text-accent"
           >
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </Link>
@@ -97,15 +97,14 @@ function SampleRow({
 
 export default function GuidesSamples(): JSX.Element {
   return (
-    <section className="bg-contrast">
+    <section className="bg-background dark:bg-contrast">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-      <SectionRule index="02" label="Documentation" className="mb-12" />
+      <SectionRule index="02" label="Documentation" className="mb-14" />
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
-          <h2 className="mb-8 mt-4 font-display text-3xl font-normal leading-[1.1] tracking-tight text-foreground">
-            Documentation{' '}
-            <span className="font-ui font-medium">by product</span>
+          <h2 className="mb-12 font-display text-3xl font-normal leading-[1.2] tracking-[-0.01em] text-foreground">
+            Documentation by product
           </h2>
 
           <motion.ul
@@ -122,9 +121,8 @@ export default function GuidesSamples(): JSX.Element {
         </div>
 
         <div>
-          <h2 className="mb-8 mt-4 font-display text-3xl font-normal leading-[1.1] tracking-tight text-foreground">
-            Go{' '}
-            <span className="font-ui font-medium">deeper</span>
+          <h2 className="mb-12 font-display text-3xl font-normal leading-[1.2] tracking-[-0.01em] text-foreground">
+            Go deeper
           </h2>
 
           <motion.ul
@@ -132,7 +130,6 @@ export default function GuidesSamples(): JSX.Element {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="border-t border-border"
           >
             {samples.map((s) => (
               <SampleRow key={s.title} sample={s} />
@@ -141,10 +138,10 @@ export default function GuidesSamples(): JSX.Element {
 
           <Link
             to={ROUTES.whatIsTbv}
-            className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent hover:no-underline"
+            className="mt-8 inline-flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-accent hover:no-underline sm:ml-8"
           >
             Explore the vault docs
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </div>

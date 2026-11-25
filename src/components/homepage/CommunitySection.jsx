@@ -2,15 +2,14 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import { Discord, Linkedin } from '@styled-icons/boxicons-logos';
 import { XIcon } from '@site/src/icons';
+import { ArrowUpRight } from 'lucide-react';
 
 /**
  * Community.
  *
- * The design review asked for buttons that are more intuitive and that carry
- * icons, so each destination is now a filled control with its own mark rather
- * than an outlined word. Filled grey, per the same review: outlined styles are
- * out, and orange is reserved for primary calls to action, which these are
- * not.
+ * Each destination is an outlined control carrying its own mark and an
+ * external-link arrow, per the docs redesign (Figma 134:2416). Orange stays
+ * reserved for primary calls to action, which these are not.
  */
 
 const CHANNELS = [
@@ -29,12 +28,12 @@ const CHANNELS = [
 
 export default function CommunitySection() {
   return (
-    <section className="no-underline-links bg-background">
+    <section className="no-underline-links border-b border-border bg-background dark:bg-contrast">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center px-5 py-20 text-center sm:px-8 lg:py-24">
-        <h2 className="mb-3 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mb-3 font-display text-3xl font-normal tracking-[-0.01em] text-foreground sm:text-4xl">
           Join the community
         </h2>
-        <p className="mb-10 max-w-xl text-base leading-relaxed text-muted-foreground">
+        <p className="mb-7 max-w-xl text-base leading-[26px] text-muted-foreground">
           Engage with our ever-growing community to get the latest updates,
           product support, and more.
         </p>
@@ -48,6 +47,7 @@ export default function CommunitySection() {
             >
               <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
               {label}
+              <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
             </Link>
           ))}
         </div>

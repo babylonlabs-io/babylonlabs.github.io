@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from '@docusaurus/Link';
-import { ArrowUpRight, Plus } from 'lucide-react';
+import { ArrowRight, Minus, Plus } from 'lucide-react';
 import { useReducedMotion } from './motion';
 import { ROUTES } from './routes';
 import { SectionRule } from './Rule';
@@ -137,7 +137,7 @@ function Row({
   const reduced = useReducedMotion() ?? false;
 
   return (
-    <li className="border-b border-border">
+    <li className="border-b border-accent dark:border-border">
       <h3 className="m-0">
         <button
           type="button"
@@ -147,15 +147,14 @@ function Row({
           id={`${id}-button`}
           className="focus-ring flex w-full items-start justify-between gap-6 py-6 text-left"
         >
-          <span className="text-lg font-medium tracking-tight text-foreground">
+          <span className="text-xl font-normal leading-6 text-foreground">
             {item.q}
           </span>
-          <Plus
-            aria-hidden="true"
-            className={`mt-1 h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
-              open ? 'rotate-45' : ''
-            }`}
-          />
+          {open ? (
+            <Minus aria-hidden="true" className="h-5 w-5 shrink-0 text-accent dark:text-foreground" />
+          ) : (
+            <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-accent dark:text-foreground" />
+          )}
         </button>
       </h3>
 
@@ -171,7 +170,7 @@ function Row({
             transition={{ duration: reduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="max-w-2xl pb-6 text-sm leading-relaxed text-muted-foreground">
+            <div className="max-w-2xl pb-6 text-sm leading-[23px] text-muted-foreground">
               {item.a}
             </div>
           </motion.div>
@@ -185,26 +184,27 @@ export default function Faq(): JSX.Element {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="bg-background">
+    <section className="bg-muted dark:bg-background">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-      <SectionRule index="03" label="Questions" className="mb-12" />
+      <SectionRule index="03" label="Questions" className="mb-14" />
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16">
         <div>
-          <h2 className="mt-4 font-display text-3xl font-normal leading-[1.1] tracking-tight text-foreground sm:text-4xl">
-            Frequently asked{' '}
-            <span className="font-ui font-medium">questions</span>
+          <h2 className="font-display text-3xl font-normal leading-[1.1] tracking-[-0.01em] text-foreground sm:text-4xl">
+            Frequently asked
+            <br />
+            questions
           </h2>
           <Link
             to={ROUTES.faq}
-            className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent hover:no-underline"
+            className="mt-10 inline-flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-accent hover:no-underline"
           >
             Read the full FAQ
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
 
-        <ul className="border-t border-border">
+        <ul>
           {ITEMS.map((item, i) => (
             <Row
               key={item.q}

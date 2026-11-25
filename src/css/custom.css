@@ -193,14 +193,20 @@
      babylonlabs.io, with the kit's own basic/black/high for text. Dark is the
      TBV app library (Premium Design, node 8469-28288). Neither is invented:
      the toggle moves between two surfaces the company already ships. */
-  --tbv-background: 255 255 255; /* #ffffff basic/white/high */
-  --tbv-foreground: 17 17 17; /* #111111 basic/black/high */
-  --tbv-muted: 245 247 242; /* #f5f7f2, the marketing site's off-white */
-  --tbv-contrast: 237 240 233; /* one step down from muted, for banding */
-  --tbv-muted-foreground: 90 90 90; /* #5a5a5a stroke/primary, as text */
-  --tbv-tertiary-foreground: 124 124 124; /* #7c7c7c text/tertiary */
-  --tbv-border: 224 224 220; /* hairline on the light ground */
-  --tbv-border-strong: 176 176 176; /* #b0b0b0 */
+  /* Light is the brand theme from the docs redesign (Figma file
+     vuhsiAeybWrA4BEYNOMFVL, "Home page" 134:2253): navy #042f40 type on
+     white and warm beige #f4f0ed bands, orange #ce6533 for calls to action
+     and section labels. The design sets secondary text, hairlines and borders
+     as navy at reduced opacity; they are flattened onto white here so the
+     tokens stay plain RGB channels. */
+  --tbv-background: 255 255 255; /* #ffffff */
+  --tbv-foreground: 4 47 64; /* #042f40 navy */
+  --tbv-muted: 244 240 237; /* #f4f0ed beige */
+  --tbv-contrast: 236 230 225; /* one step down from beige, for hover */
+  --tbv-muted-foreground: 74 105 117; /* navy at 72% */
+  --tbv-tertiary-foreground: 104 130 140; /* navy at 60% */
+  --tbv-border: 217 224 226; /* navy at 15% */
+  --tbv-border-strong: 192 203 207; /* navy at 25% */
 
   --tbv-accent: 206 101 51; /* #ce6533 accent/primary, unchanged in both */
   --tbv-accent-foreground: 255 255 255;
@@ -220,18 +226,18 @@
   --tbv-font-serif: 'Px Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Kept so any component still keyed to the attribute resolves to the same
-   single palette. Values are identical to :root by design. */
-/* Dark: the TBV app's library values. */
+/* Dark: the "Home (Dark)" frame of the docs redesign (Figma 161:4). The page
+   ground is #111111, alternate bands #191919, cards and fields #202020,
+   hairlines #282828 and outlined controls #363636. */
 html[data-theme='dark'] {
-  --tbv-background: 17 17 17;
+  --tbv-background: 17 17 17; /* #111111 */
   --tbv-foreground: 255 255 255;
-  --tbv-muted: 32 32 32;
-  --tbv-contrast: 25 25 25;
-  --tbv-muted-foreground: 176 176 176;
+  --tbv-muted: 32 32 32; /* #202020 cards, fields */
+  --tbv-contrast: 25 25 25; /* #191919 alternate band */
+  --tbv-muted-foreground: 176 176 176; /* #b0b0b0 */
   --tbv-tertiary-foreground: 124 124 124;
-  --tbv-border: 47 47 47;
-  --tbv-border-strong: 90 90 90;
+  --tbv-border: 40 40 40; /* #282828 */
+  --tbv-border-strong: 54 54 54; /* #363636 */
 
   --tbv-accent: 206 101 51;
   --tbv-accent-foreground: 255 255 255;
@@ -2729,6 +2735,32 @@ html[data-theme='dark'] .markdown img {
   background: rgb(var(--tbv-foreground) / 0.04) !important;
 }
 
+/* Light theme: the floating Ask AI trigger is a navy block with white bold
+   type, per the docs redesign (Figma 134:2464). */
+html[data-theme='light'] .chat-trigger-btn {
+  background: rgb(var(--tbv-surface-blue)) !important;
+  border-color: rgb(var(--tbv-surface-blue)) !important;
+  color: rgb(255 255 255) !important;
+  font-weight: 700;
+}
+
+html[data-theme='light'] .chat-trigger-btn:hover {
+  background: rgb(var(--tbv-foreground) / 0.9) !important;
+  color: rgb(255 255 255) !important;
+}
+
+/* Dark: a #202020 block, per Figma 161:4. */
+html[data-theme='dark'] .chat-trigger-btn {
+  background: rgb(var(--tbv-muted)) !important;
+  border-color: rgb(var(--tbv-muted)) !important;
+  color: rgb(255 255 255) !important;
+  font-weight: 700;
+}
+
+html[data-theme='dark'] .chat-trigger-btn:hover {
+  background: rgb(var(--tbv-border-strong)) !important;
+}
+
 .navbar__link:hover,
 .navbar__link--active {
   color: rgb(var(--tbv-foreground));
@@ -3256,15 +3288,18 @@ html:root[data-theme='dark'] {
   gap: 0.5rem;
   height: 40px;
   padding-inline: 1.5rem;
-  border: 0;
-  border-radius: 8px;
+  border: 1px solid transparent;
+  /* Square, bold labels: the docs redesign (Figma 134:2274) supersedes the
+     kit's rounded regular-weight buttons on this site. */
+  border-radius: 0;
   font-family: var(--tbv-font-sans);
   font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.15px;
-  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
   text-decoration: none;
-  transition: background-color 200ms ease-out;
+  transition: background-color 200ms ease-out, border-color 200ms ease-out,
+    color 200ms ease-out;
 }
 
 .tbv-btn-sm {
@@ -3278,24 +3313,45 @@ html:root[data-theme='dark'] {
 }
 
 .tbv-btn-primary {
-  background-color: rgb(180 84 40);
+  background-color: rgb(var(--tbv-accent));
   color: rgb(var(--tbv-accent-foreground));
 }
 
-/* The kit darkens the fill on hover rather than fading the whole control. */
+/* Darken the fill on hover rather than fading the whole control. */
 .tbv-btn-primary:hover {
   background-color: rgb(180 84 40);
   color: rgb(var(--tbv-accent-foreground));
 }
 
+/* Outlined in the foreground colour, per the design's "Documentation" and
+   community buttons. */
 .tbv-btn-secondary {
-  background-color: rgb(var(--tbv-muted));
+  background-color: transparent;
+  border-color: rgb(var(--tbv-foreground));
   color: rgb(var(--tbv-foreground));
 }
 
 .tbv-btn-secondary:hover {
-  background-color: rgb(var(--tbv-contrast));
+  background-color: rgb(var(--tbv-foreground) / 0.06);
   color: rgb(var(--tbv-foreground));
+}
+
+/* Dark: the outline steps down to the control grey rather than white. */
+html[data-theme='dark'] .tbv-btn-secondary,
+html[data-theme='dark'] .tbv-btn-inverse {
+  border-color: rgb(var(--tbv-border-strong));
+}
+
+/* Outlined white, for the navy footer. */
+.tbv-btn-inverse {
+  background-color: transparent;
+  border-color: rgb(255 255 255);
+  color: rgb(255 255 255);
+}
+
+.tbv-btn-inverse:hover {
+  background-color: rgb(255 255 255 / 0.08);
+  color: rgb(255 255 255);
 }
 
 .tbv-btn[aria-disabled='true'],
@@ -3317,9 +3373,6 @@ html:root[data-theme='dark'] {
   color: rgb(var(--tbv-muted-foreground));
 }
 
-html[data-theme='dark'] .tbv-status-label {
-  color: rgb(var(--tbv-status));
-}
 
 /* Navbar wordmark. The navbar carries the Babylon symbol and then the word
    "Docs" as text, so the word has to sit in the site's own type rather than
@@ -3327,14 +3380,41 @@ html[data-theme='dark'] .tbv-status-label {
 .navbar__title {
   font-family: var(--tbv-font-sans);
   font-size: 18px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  letter-spacing: 0;
   line-height: 1;
-  color: rgb(var(--tbv-foreground));
+  color: rgb(var(--tbv-foreground) / 0.6);
+}
+
+/* Header per the docs redesign (Figma 134:2254): beige bar in the light
+   theme, bold navigation labels, a white search field. */
+html[data-theme='light'] {
+  --ifm-navbar-background-color: rgb(var(--tbv-muted));
+}
+
+.navbar .navbar__link {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+html[data-theme='light'] .navbar .DocSearch-Button {
+  background: rgb(var(--tbv-background));
+  border-color: rgb(var(--tbv-border-strong));
+}
+
+html[data-theme='dark'] .navbar__title {
+  color: rgb(var(--tbv-muted-foreground) / 0.8);
+}
+
+html[data-theme='dark'] .navbar .DocSearch-Button {
+  background: rgb(var(--tbv-muted));
+  border-color: rgb(var(--tbv-border));
 }
 
 .navbar__logo {
-  margin-right: 0.5rem;
+  /* Infima sets 2rem; the design's wordmark is 26px tall (106px wide). */
+  height: 26px;
+  margin-right: 0.75rem;
 }
 
 /* Infima forces .navbar__logo to a 2rem height and the img to fill it, so the
