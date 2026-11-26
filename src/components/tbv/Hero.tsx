@@ -17,7 +17,7 @@ import { ROUTES } from './routes';
  *
  * The ground is the plain beige band from the docs redesign (Figma 134:2269).
  * The PixelBlast field that used to sit behind it is not part of that design,
- * so it is no longer rendered; the component is kept in tbv/PixelBlast.
+ * so it was removed along with its three/postprocessing dependencies.
  */
 
 /** The live testnet application, not a documentation route. */

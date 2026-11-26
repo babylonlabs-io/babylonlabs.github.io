@@ -167,36 +167,16 @@
 }
 
 /* ─── TBV reskin tokens ─────────────────────────────────────────────────
-   One palette for the launch look. Values are RGB channels, not hex, so
+   Light theme on :root, dark under [data-theme='dark'], both from the docs
+   redesign. Values are RGB channels, not hex, so
    Tailwind's `<alpha-value>` placeholder resolves and opacity modifiers
    such as `border-border/60` keep working.
    ───────────────────────────────────────────────────────────────────── */
 :root {
-  /* The site is dark only, so there is one palette and it lives here rather
-     than in a [data-theme] branch. Declaring it on :root also means the
-     first paint is already dark, with no flash before the theme attribute
-     is applied.
-
-     The ground is a neutral near-black rather than the design's navy: navy
-     at full-page scale reads as a colour cast, and the brief is a simple
-     ground carrying mostly orange with only a little blue. Text keeps the
-     design's warm off-white, so the brand warmth survives.
-
-     Accent #ce6533 is taken from the marketing design, Figma file
-     mqO4c21QpPPz6iJf9SqTQT. On this ground it measures 5.12:1, which is AA
-     for body text, so the true brand colour is used directly for links as
-     well as fills. On the design's own warm ground it managed only 3.35:1
-     and needed a darkened substitute. */
-  /* Two themes, both from Babylon's own values.
-
-     Light is the palette the marketing site runs on, measured from
-     babylonlabs.io, with the kit's own basic/black/high for text. Dark is the
-     TBV app library (Premium Design, node 8469-28288). Neither is invented:
-     the toggle moves between two surfaces the company already ships. */
   /* Light is the brand theme from the docs redesign (Figma file
      vuhsiAeybWrA4BEYNOMFVL, "Home page" 134:2253): navy #042f40 type on
      white and warm beige #f4f0ed bands, orange #ce6533 for calls to action
-     and section labels. The design sets secondary text, hairlines and borders
+     and section labels (darkened where it carries text, see below). The design sets secondary text, hairlines and borders
      as navy at reduced opacity; they are flattened onto white here so the
      tokens stay plain RGB channels. */
   --tbv-background: 255 255 255; /* #ffffff */
@@ -210,8 +190,12 @@
 
   --tbv-accent: 206 101 51; /* #ce6533 accent/primary, unchanged in both */
   --tbv-accent-foreground: 255 255 255;
-  --tbv-status: 239 108 0; /* #ef6c00 warning/main — the amber needs to
-                              darken on white to stay legible */
+  /* #ce6533 reaches only 3.35:1 on beige and 3.79:1 under white text, short
+     of AA (4.5:1) for the 16px section labels and button labels. Text set in
+     orange uses this darker shade instead: 4.72:1 on beige, 5.35:1 on white. */
+  --tbv-accent-text: 169 82 42; /* #a9522a */
+  /* Orange on the navy footer needs to go lighter, not darker: 4.98:1. */
+  --tbv-accent-on-navy: 217 132 91; /* #d9845b */
 
   --tbv-blue: 18 73 94; /* #12495e, the marketing site's deep teal */
   --tbv-surface-blue: 4 47 64; /* #042f40 accent/secondary */
@@ -241,7 +225,10 @@ html[data-theme='dark'] {
 
   --tbv-accent: 206 101 51;
   --tbv-accent-foreground: 255 255 255;
-  --tbv-status: 255 179 0; /* #ffb300 reads on the dark ground */
+  /* The brand orange already clears AA here: 4.98:1 on #111111, 4.63:1 on
+     #191919. The dark footer sits on #111111, so it takes the same value. */
+  --tbv-accent-text: 206 101 51;
+  --tbv-accent-on-navy: 206 101 51;
   --tbv-blue: 74 155 199;
   --tbv-surface-blue: 4 47 64;
 }
@@ -3313,13 +3300,15 @@ html:root[data-theme='dark'] {
 }
 
 .tbv-btn-primary {
-  background-color: rgb(var(--tbv-accent));
+  /* Darker than the brand #ce6533 so the 16px white label clears AA:
+     5.35:1 against 3.79:1. Same value in both themes. */
+  background-color: rgb(169 82 42);
   color: rgb(var(--tbv-accent-foreground));
 }
 
 /* Darken the fill on hover rather than fading the whole control. */
 .tbv-btn-primary:hover {
-  background-color: rgb(180 84 40);
+  background-color: rgb(143 67 32);
   color: rgb(var(--tbv-accent-foreground));
 }
 
@@ -3397,8 +3386,11 @@ html[data-theme='light'] {
   font-weight: 700;
 }
 
+/* !important because the base .DocSearch-Button rule sets a beige
+   background-color with !important; without it the field stays beige on the
+   beige header. Dark keeps that base value, so it only sets the border. */
 html[data-theme='light'] .navbar .DocSearch-Button {
-  background: rgb(var(--tbv-background));
+  background: rgb(var(--tbv-background)) !important;
   border-color: rgb(var(--tbv-border-strong));
 }
 
@@ -3407,7 +3399,6 @@ html[data-theme='dark'] .navbar__title {
 }
 
 html[data-theme='dark'] .navbar .DocSearch-Button {
-  background: rgb(var(--tbv-muted));
   border-color: rgb(var(--tbv-border));
 }
 
@@ -3417,9 +3408,9 @@ html[data-theme='dark'] .navbar .DocSearch-Button {
   margin-right: 0.75rem;
 }
 
-/* Infima forces .navbar__logo to a 2rem height and the img to fill it, so the
-   width attribute on the tag stretched the 19x18 symbol into a 30x32 box.
-   Letting the width follow the art keeps the mark in proportion. */
+/* Infima forces the img to fill .navbar__logo, so a width attribute on the
+   tag would stretch the 106x26 wordmark. Letting the width follow the art
+   keeps it in proportion. */
 .navbar__logo img {
   width: auto;
 }

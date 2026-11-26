@@ -140,7 +140,7 @@ export default function Footer() {
           >
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <h3 className="mb-5 font-code text-[11px] font-normal uppercase tracking-[0.14em] text-accent">
+                <h3 className="mb-5 font-code text-[11px] font-normal uppercase tracking-[0.14em] text-accent-on-navy">
                   {col.title}
                 </h3>
                 <ul className="flex list-none flex-col gap-[19px] p-0">

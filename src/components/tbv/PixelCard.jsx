@@ -9,8 +9,7 @@ import './PixelCard.css';
  * the right to use, modify and distribute the component "as part of an
  * application, website, or product" and forbids only selling or
  * redistributing the components themselves, so a public repository that ships
- * a site is within its terms — the same basis on which this repo already
- * carries PixelBlast. Licence scanners report the upstream repo as
+ * a site is within its terms. Licence scanners report the upstream repo as
  * NOASSERTION because the Commons Clause rider is not an SPDX identifier.
  *
  * Kept close to upstream. The changes are the variant set, which now carries

@@ -22,7 +22,7 @@ export function SectionRule({
 }): JSX.Element {
   return (
     <div
-      className={`inline-flex items-center gap-2.5 text-base font-bold leading-tight text-accent ${className}`}
+      className={`inline-flex items-center gap-2.5 text-base font-bold leading-tight text-accent-text ${className}`}
     >
       <span className="font-code tabular-nums">{index}</span>
       <span>{label}</span>
