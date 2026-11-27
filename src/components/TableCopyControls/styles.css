@@ -1,0 +1,30 @@
+.table-copy-toolbar {
+  position: absolute;
+  transform: translateX(-100%);
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: var(--ifm-background-surface-color);
+  box-shadow: var(--ifm-global-shadow-lw);
+  /* Below the fixed navbar (--ifm-z-index-fixed: 200), above content. */
+  z-index: 100;
+}
+
+.table-copy-button {
+  border: 0;
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  font-family: var(--ifm-font-family-base);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.table-copy-button:hover {
+  background: var(--ifm-color-emphasis-200);
+}
