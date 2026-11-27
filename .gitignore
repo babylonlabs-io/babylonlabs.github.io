@@ -149,3 +149,8 @@ tests/
 .cursor/
 .claude/
 *.patch
+
+# Playwright: MCP screenshots and logs, test run results and reports
+.playwright-mcp/
+test-results/
+playwright-report/

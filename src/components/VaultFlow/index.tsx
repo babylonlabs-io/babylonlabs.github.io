@@ -181,7 +181,7 @@ export default function VaultFlow() {
       <div
         ref={stageRef}
         aria-hidden
-        className="relative w-full overflow-hidden bg-white"
+        className="relative w-full overflow-hidden border border-t-0 border-border bg-white"
         style={{ height: stageHeight }}
       >
         <div
@@ -212,13 +212,14 @@ export default function VaultFlow() {
         </div>
       </div>
 
-      {/* Dock — straddles the frame's bottom edge on desktop. On phones the
-          frame is too small to give away, so it sits below instead. */}
-      <div className="mt-3 flex justify-center px-2 lg:absolute lg:inset-x-0 lg:bottom-0 lg:mt-0 lg:translate-y-1/2">
+      {/* Dock — a bar set below the frame, the width of the frame on desktop:
+          navy in the light theme, #202020 in the dark (Figma 134:2292,
+          161:4). */}
+      <div className="mt-4 flex justify-center lg:mt-7">
         <div
           role="tablist"
           aria-label="Vault walkthrough steps"
-          className="flex max-w-full gap-1 overflow-x-auto rounded-2xl border border-white/10 bg-[#15151c]/85 p-1.5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.9)] backdrop-blur-xl"
+          className="flex w-full max-w-full gap-1 overflow-x-auto bg-surface-navy p-1.5 dark:bg-muted"
         >
           {SCENES.map((item, index) => {
             const isActive = index === active;
@@ -232,12 +233,12 @@ export default function VaultFlow() {
                 aria-selected={isActive}
                 onClick={() => goTo(index)}
                 className={clsx(
-                  'relative flex shrink-0 cursor-pointer items-center gap-2 overflow-hidden rounded-xl border-0 px-3.5 py-2.5 text-sm font-medium transition-colors lg:px-4',
+                  'relative flex shrink-0 cursor-pointer items-center justify-center gap-2.5 overflow-hidden border-0 px-4 py-[11px] text-sm font-bold transition-colors lg:flex-1',
                   // Explicit Babylon orange, not `bg-primary`: the theme token
                   // flips to pale green in light mode and disappears.
                   isActive
-                    ? 'bg-[#ce6533] text-white shadow-[0_4px_16px_-2px_rgba(206,101,51,0.6)]'
-                    : 'bg-transparent text-white/55 hover:bg-white/5 hover:text-white/80',
+                    ? 'bg-[#ce6533] text-white'
+                    : 'bg-transparent text-white/60 hover:bg-white/5 hover:text-white/85 dark:text-muted-foreground/80',
                 )}
               >
                 <StepIcon className="h-4 w-4 shrink-0" />

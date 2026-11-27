@@ -4,11 +4,10 @@ import type { ReactNode } from 'react';
 /**
  * Section heading.
  *
- * The design review asks for one consistent heading style carrying the
- * section number and the section name, so every section is introduced the
- * same way. It is a chip rather than a rule across the column: the review
- * also rules out orange for decoration, and a full-width hairline with a
- * coloured index was doing decorative work the chip does structurally.
+ * One consistent heading style carrying the section number and the section
+ * name, so every section is introduced the same way. Per the docs redesign
+ * (Figma 134:2319) it is set in the accent: the number in Px Grotesk Mono,
+ * the name in Px Grotesk, both bold at 16px.
  *
  * Written for this site. No third-party component source is involved.
  */
@@ -22,11 +21,11 @@ export function SectionRule({
   className?: string;
 }): JSX.Element {
   return (
-    <div className={`inline-flex items-center gap-3 bg-muted px-4 py-2 ${className}`}>
-      <span className="font-label text-[11px] tabular-nums text-tertiary">
-        {index}
-      </span>
-      <span className="font-label text-sm text-foreground">{label}</span>
+    <div
+      className={`inline-flex items-center gap-2.5 text-base font-bold leading-tight text-accent-text ${className}`}
+    >
+      <span className="font-code tabular-nums">{index}</span>
+      <span>{label}</span>
     </div>
   );
 }

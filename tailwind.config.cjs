@@ -74,10 +74,11 @@ module.exports = {
         'border-strong': 'rgb(var(--tbv-border-strong) / <alpha-value>)',
         contrast: 'rgb(var(--tbv-contrast) / <alpha-value>)',
         tertiary: 'rgb(var(--tbv-tertiary-foreground) / <alpha-value>)',
-        status: 'rgb(var(--tbv-status) / <alpha-value>)',
         accent: {
           DEFAULT: 'rgb(var(--tbv-accent) / <alpha-value>)',
           foreground: 'rgb(var(--tbv-accent-foreground) / <alpha-value>)',
+          text: 'rgb(var(--tbv-accent-text) / <alpha-value>)',
+          'on-navy': 'rgb(var(--tbv-accent-on-navy) / <alpha-value>)',
         },
         // Secondary accent, used sparingly for structure. Named `steel`
         // rather than `blue` so it does not shadow Tailwind's built-in blue

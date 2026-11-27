@@ -168,7 +168,7 @@ export default function AskHero(): JSX.Element {
             e.preventDefault();
             send(value);
           }}
-          className="border border-border bg-background/80 backdrop-blur-sm transition-colors focus-within:border-muted-foreground"
+          className="border border-border-strong bg-background transition-colors focus-within:border-muted-foreground dark:border-border dark:bg-muted"
         >
           <div className="flex items-end gap-1.5 p-2">
             <textarea
@@ -201,7 +201,7 @@ export default function AskHero(): JSX.Element {
               type="submit"
               disabled={!value.trim() || value.startsWith('/')}
               aria-label="Send"
-              className={`${btn} bg-accent text-accent-foreground hover:opacity-90 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground`}
+              className={`${btn} bg-accent text-accent-foreground hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70`}
             >
               <ArrowUp className="h-4 w-4" aria-hidden="true" />
             </button>

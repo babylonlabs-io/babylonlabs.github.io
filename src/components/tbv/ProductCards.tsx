@@ -2,7 +2,7 @@ import { SectionRule } from './Rule';
 import React from 'react';
 import Link from '@docusaurus/Link';
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { PRODUCTS } from './content';
 import { staggerContainer, useEntrance } from './motion';
 
@@ -25,22 +25,22 @@ function ProductCard({
     <motion.li variants={variants} transition={transition}>
       <Link
         to={product.link}
-        className={`group flex h-full flex-col gap-4 border border-border bg-background p-6 text-foreground transition-colors duration-300 hover:border-border-strong hover:no-underline`}
+        className={`group flex h-full flex-col border border-transparent bg-background px-6 pb-7 pt-5 dark:bg-muted text-foreground transition-colors duration-300 hover:border-border-strong hover:no-underline`}
       >
-        <Icon className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
+        <Icon className="h-11 w-auto self-start text-foreground" aria-hidden="true" />
 
-        <h3 className="font-display text-2xl font-normal tracking-tight text-foreground">
+        <h3 className="mt-6 font-display text-2xl font-normal text-foreground">
           {product.title}
         </h3>
 
-        <p className="mb-0 flex-1 text-sm leading-relaxed text-muted-foreground">
+        <p className="mb-0 mt-8 flex-1 text-sm leading-[22px] text-muted-foreground">
           {product.text}
         </p>
 
-        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground">
+        <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-foreground">
           Read more
-          <ArrowUpRight
-            className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          <ArrowRight
+            className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
             aria-hidden="true"
           />
         </span>
@@ -53,16 +53,15 @@ export default function ProductCards(): JSX.Element {
   const products = PRODUCTS;
 
   return (
-    <section className="bg-background">
+    <section className="bg-muted dark:bg-background">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 lg:py-28">
-      <SectionRule index="01" label="Start here" className="mb-12" />
+      <SectionRule index="01" label="Start here" className="mb-14" />
 
-      <div className="mb-12 max-w-2xl">
-        <h2 className="mt-4 font-display text-3xl font-normal leading-[1.1] tracking-tight text-foreground sm:text-4xl md:text-5xl">
-          Use native Bitcoin as{' '}
-          <span className="font-ui font-medium">collateral</span>
+      <div className="mb-16 max-w-2xl">
+        <h2 className="font-display text-3xl font-normal leading-[1.2] tracking-[-0.02em] text-foreground sm:text-4xl md:text-5xl">
+          Use native Bitcoin as collateral
         </h2>
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-xl text-base leading-[26px] text-muted-foreground">
           Without bridges, wrapped custody, or pooled BTC. The open Testnet docs
           are the main entry point for creating a vault, borrowing on Aave v4,
           and redeeming back to Bitcoin.

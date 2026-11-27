@@ -459,22 +459,20 @@ const config = {
         },
       },
       navbar: {
-        // The symbol alone, with the word set in type beside it. The full
-        // lockup already reads "babylon docs" as artwork, which left the
-        // navbar saying the same thing twice at a size that could not shrink.
-        // `title` renders as .navbar__title, styled in custom.css to match the
-        // rest of the chrome rather than Infima's bold default.
+        // The orange Babylon wordmark, with "Docs" set in type beside it, per
+        // the docs redesign header (Figma 134:2254). `title` renders as
+        // .navbar__title, styled in custom.css.
         title: 'Docs',
         logo: {
           href: '/',
-          // Both themes ship, so each slot takes its own mark: the black
-          // symbol on the light ground, the white one on the dark.
-          src: '/logo/babylon_symbol.svg',
-          srcDark: '/logo/babylon_symbol_dark.svg',
+          // Orange on the beige light header, white on the dark one, per the
+          // Light and Dark home frames (134:2253, 161:4).
+          src: '/logo/babylon_wordmark.svg',
+          srcDark: '/logo/babylon_wordmark_dark.svg',
           alt: 'Babylon',
-          // The source art is 19x18, so the box keeps that ratio.
-          height: '28px',
-          width: '30px',
+          // The source art is 106x26.
+          height: '26px',
+          width: '106px',
         },
         items: [
           {
